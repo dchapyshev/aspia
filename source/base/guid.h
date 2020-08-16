@@ -21,7 +21,6 @@
 
 #include <string>
 
-
 namespace base {
 
 class Guid

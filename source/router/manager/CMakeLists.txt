@@ -63,8 +63,17 @@ target_link_libraries(aspia_router_manager
     aspia_common
     aspia_proto
     aspia_qt_base
-    ${QT_LIBS}
-    ${PLATFORM_LIBS}
+    crypt32
+    dwmapi
+    imm32
+    netapi32
+    userenv
+    uxtheme
+    version
+    winmm
+    wtsapi32
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)

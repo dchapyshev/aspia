@@ -157,6 +157,8 @@ target_link_libraries(aspia_client
     aspia_base
     aspia_common
     aspia_proto
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_target_properties(aspia_client PROPERTIES COMPILE_DEFINITIONS "CLIENT_IMPLEMENTATION")
 set_property(TARGET aspia_client PROPERTY AUTOMOC ON)

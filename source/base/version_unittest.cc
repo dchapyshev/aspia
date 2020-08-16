@@ -61,7 +61,7 @@ TEST(VersionTest, GetVersionFromString)
     static const struct version_string
     {
         const char* input;
-        std::size_t parts;
+        size_t parts;
         uint32_t firstpart;
         bool success;
     } cases[] =

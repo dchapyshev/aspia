@@ -20,11 +20,10 @@
 #define BASE__SMBIOS_H
 
 #include <cstdint>
-#include <cstddef>
 
 namespace base {
 
-const std::size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
+const size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
 
 struct SmbiosDump
 {

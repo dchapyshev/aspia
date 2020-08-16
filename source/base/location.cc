@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_printf.h"
-#include <cstddef>
 
 #if defined(CC_MSVC)
 #include <intrin.h>
@@ -69,7 +68,7 @@ std::string Location::toString(PathType path_type) const
 
         if (path_type == SHORT_PATH)
         {
-            std::size_t last_slash_pos = file_name.find_last_of("\\/");
+            size_t last_slash_pos = file_name.find_last_of("\\/");
             if (last_slash_pos != std::string_view::npos)
                 file_name.remove_prefix(last_slash_pos + 1);
         }

@@ -26,11 +26,12 @@ package proto;
 
 message Host
 {
-    fixed64 host_id      = 1;
-    string ip_address    = 2;
-    Version version      = 3;
-    string os_name       = 4;
-    string computer_name = 5;
+    fixed64 timepoint    = 1;
+    fixed64 host_id      = 2;
+    string ip_address    = 3;
+    Version version      = 4;
+    string os_name       = 5;
+    string computer_name = 6;
 }
 
 message HostListRequest
@@ -135,11 +136,12 @@ message UserResult
 
 message Relay
 {
-    string address       = 1;
-    uint64 pool_size     = 2;
-    Version version      = 3;
-    string os_name       = 4;
-    string computer_name = 5;
+    fixed64 timepoint    = 1;
+    string address       = 2;
+    uint64 pool_size     = 3;
+    Version version      = 4;
+    string os_name       = 5;
+    string computer_name = 6;
 }
 
 message RelayListRequest

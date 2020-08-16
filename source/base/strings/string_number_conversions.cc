@@ -21,7 +21,6 @@
 #include "base/logging.h"
 
 #include <limits>
-#include <cstddef>
 
 namespace base {
 
@@ -59,7 +58,7 @@ struct IntToStringT
     {
         // log10(2) ~= 0.3 bytes needed per bit or per byte log10(2**8) ~= 2.4.
         // So round up to allocate 3 output characters per byte, plus 1 for '-'.
-        const std::size_t kOutputBufSize = 3 * sizeof(INT) + std::numeric_limits<INT>::is_signed;
+        const size_t kOutputBufSize = 3 * sizeof(INT) + std::numeric_limits<INT>::is_signed;
 
         // Create the string in a temporary buffer, write it back to front, and
         // then return the substr of what we ended up using.

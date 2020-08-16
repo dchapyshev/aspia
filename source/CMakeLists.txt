@@ -25,7 +25,12 @@ option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
-project(aspia LANGUAGES CXX)
+project(aspia)
+
+# Detecting Linux.
+if (UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
 
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -33,24 +38,29 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
-if (WIN32)
-    find_package(Qt5 REQUIRED WinExtras)
-else()
-    find_package(Qt5 REQUIRED X11Extras)
-endif()
-find_package(Qt5LinguistTools)
 find_package(Protobuf REQUIRED)
+find_package(Qt5LinguistTools)
+
+if (WIN32)
+    find_package(Qt5WinExtras REQUIRED)
+
+    # Target version.
+    add_definitions(-DNTDDI_VERSION=0x06010000
+                    -D_WIN32_WINNT=0x0601
+                    -D_WIN32_WINDOWS=_WIN32_WINNT
+                    -DWINVER=_WIN32_WINNT
+                    -D_WIN32_IE=0x0800
+                    -DPSAPI_VERSION=2)
+
+    # Other definitions.
+    add_definitions(-D_UNICODE
+                    -DUNICODE
+                    -DWIN32_LEAN_AND_MEAN
+                    -DNOMINMAX)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
-
-# Target version.
-add_definitions(-DNTDDI_VERSION=0x06010000
-                -D_WIN32_WINNT=0x0601
-                -D_WIN32_WINDOWS=_WIN32_WINNT
-                -DWINVER=_WIN32_WINNT
-                -D_WIN32_IE=0x0800
-                -DPSAPI_VERSION=2)
 
 # For Asio.
 add_definitions(-DASIO_STANDALONE
@@ -64,14 +74,6 @@ add_definitions(-DRAPIDJSON_SSE2)
 add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
-
-if (WIN32)
-# For Windows.
-add_definitions(-D_UNICODE
-                -DUNICODE
-                -DWIN32_LEAN_AND_MEAN
-                -DNOMINMAX)
-endif()
 
 if (USE_TBB)
     add_definitions(-DUSE_TBB)
@@ -103,17 +105,13 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
-set(QT_LIBS
+set(QT_COMMON_LIBS
     Qt5::Core
     Qt5::Gui
     Qt5::Network
     Qt5::PrintSupport
     Qt5::Widgets
-    Qt5::WinMain
     Qt5::Xml
-    Qt5::QWindowsIntegrationPlugin
-    Qt5::QWindowsVistaStylePlugin
-    Qt5::QWindowsPrinterSupportPlugin
     debug Qt5EventDispatcherSupportd
     optimized Qt5EventDispatcherSupport
     debug Qt5FontDatabaseSupportd
@@ -126,42 +124,12 @@ set(QT_LIBS
     optimized qtpcre2)
 
 if (WIN32)
-    set(QT_LIBS
-        ${QT_LIBS}
-        Qt5::WinExtras)
-else()
-    set(QT_LIBS
-        ${QT_LIBS}
-        Qt5::X11Extras)
-endif()
-
-if (WIN32)
-    find_package(Qt5 REQUIRED WinExtras)
-else()
-    find_package(Qt5 REQUIRED X11Extras)
-endif()
-
-if (WIN32)
-    set(PLATFORM_LIBS
-        crypt32
-        dwmapi
-        dxgi
-        d3d11
-        imm32
-        iphlpapi
-        mpr
-        netapi32
-        sas
-        setupapi
-        shlwapi
-        userenv
-        uxtheme
-        version
-        winmm
-        ws2_32
-        wtsapi32)
-else()
-    set(PLATFORM_LIBS)
+    set(QT_PLATFORM_LIBS
+        Qt5::WinMain
+        Qt5::WinExtras
+        Qt5::QWindowsIntegrationPlugin
+        Qt5::QWindowsVistaStylePlugin
+        Qt5::QWindowsPrinterSupportPlugin)
 endif()
 
 set(THIRD_PARTY_LIBS
@@ -181,17 +149,19 @@ set(THIRD_PARTY_LIBS
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
+
+if (MSVC)
+# C++ compliller flags.
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
-
 # C compiller flags.
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
-
 # Linker flags.
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+endif()
 
 # Static runtime library.
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

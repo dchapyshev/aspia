@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 
 #include <string>
-#include <cstddef>
 
 namespace base {
 
@@ -46,14 +45,14 @@ public:
     template <class InputBufferT, class OutputBufferT>
     static OutputBufferT encodeT(const InputBufferT& input)
     {
-        const std::size_t input_length = input.size();
+        const size_t input_length = input.size();
         if (!input_length)
             return OutputBufferT();
 
         OutputBufferT result;
         result.resize(encodedLength(input_length));
 
-        const std::size_t output_size =
+        const size_t output_size =
             encodeImpl(reinterpret_cast<char*>(result.data()),
                        reinterpret_cast<const char*>(input.data()),
                        input_length);
@@ -62,19 +61,19 @@ public:
         return result;
     }
 
-    static const std::size_t kErrorResult = static_cast<std::size_t>(-1);
+    static const size_t kErrorResult = static_cast<size_t>(-1);
 
     template <class InputBufferT, class OutputBufferT>
     static bool decodeT(const InputBufferT& input, OutputBufferT* output)
     {
-        const std::size_t input_length = input.length();
+        const size_t input_length = input.length();
         if (!input_length)
             return false;
 
         OutputBufferT temp;
         temp.resize(decodedLength(input_length));
 
-        const std::size_t output_size =
+        const size_t output_size =
             decodeImpl(reinterpret_cast<char*>(temp.data()),
                        reinterpret_cast<const char*>(input.data()),
                        input_length);
@@ -98,11 +97,11 @@ public:
     }
 
 private:
-    static std::size_t encodeImpl(char* dest, const char* str, std::size_t len);
-    static std::size_t decodeImpl(char* dest, const char* src, std::size_t len);
+    static size_t encodeImpl(char* dest, const char* str, size_t len);
+    static size_t decodeImpl(char* dest, const char* src, size_t len);
 
-    static std::size_t encodedLength(std::size_t len);
-    static std::size_t decodedLength(std::size_t len);
+    static size_t encodedLength(size_t len);
+    static size_t decodedLength(size_t len);
 
     DISALLOW_COPY_AND_ASSIGN(Base64);
 };

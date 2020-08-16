@@ -43,6 +43,10 @@ void Session::start(Delegate* delegate)
     delegate_ = delegate;
     DCHECK(delegate_);
 
+    std::chrono::time_point<std::chrono::system_clock> time_point =
+        std::chrono::system_clock::now();
+    start_time_ = std::chrono::system_clock::to_time_t(time_point);
+
     channel_->setListener(this);
     channel_->resume();
 
@@ -80,6 +84,15 @@ std::u16string Session::address() const
         return std::u16string();
 
     return channel_->peerAddress();
+}
+
+std::chrono::seconds Session::duration() const
+{
+    std::chrono::time_point<std::chrono::system_clock> time_point =
+        std::chrono::system_clock::from_time_t(start_time_);
+
+    return std::chrono::duration_cast<std::chrono::seconds>(
+        std::chrono::system_clock::now() - time_point);
 }
 
 void Session::sendMessage(const google::protobuf::MessageLite& message)

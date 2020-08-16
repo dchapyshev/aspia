@@ -20,17 +20,18 @@ list(APPEND SOURCE_BASE
     base64.cc
     base64.h
     bitset.h
+    command_line.cc
     command_line.h
     compiler_specific.h
     converter.h
-    cpuid_wrapper.cc
-    cpuid_wrapper.h
+    cpuid.cc
+    cpuid.h
     crc32.cc
     crc32.h
     debug.cc
     debug.h
-    endian_util.cc
-    endian_util.h
+    endian.cc
+    endian.h
     guid.cc
     guid.h
     location.cc
@@ -49,11 +50,9 @@ list(APPEND SOURCE_BASE
     smbios_parser.cc
     smbios_parser.h
     smbios_reader.h
-    smbios_reader_win.cc
     stl_util.h
     sys_info.cc
     sys_info.h
-    sys_info_win.cc
     system_error.cc
     system_error.h
     system_time.cc
@@ -68,6 +67,27 @@ list(APPEND SOURCE_BASE
     waitable_timer.h
     xml_sax_writer.cc
     xml_sax_writer.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE
+        power_controller_win.cc
+        smbios_reader_win.cc
+        sys_info_win.cc)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_BASE
+        power_controller_linux.cc
+        smbios_reader_linux.cc
+        sys_info_linux.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_BASE
+        power_controller_mac.mm
+        smbios_reader_mac.mm
+        sys_info_mac.mm)
+endif()
 
 list(APPEND SOURCE_BASE_UNIT_TESTS
     base64_unittest.cc
@@ -173,8 +193,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/capture_scheduler.cc
     desktop/capture_scheduler.h
     desktop/cursor_capturer.h
-    desktop/cursor_capturer_win.cc
-    desktop/cursor_capturer_win.h
     desktop/diff_block_32bpp_avx2.cc
     desktop/diff_block_32bpp_avx2.h
     desktop/diff_block_32bpp_c.cc
@@ -187,8 +205,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/frame.h
     desktop/frame_aligned.cc
     desktop/frame_aligned.h
-    desktop/frame_dib.cc
-    desktop/frame_dib.h
     desktop/frame_rotation.cc
     desktop/frame_rotation.h
     desktop/frame_simple.cc
@@ -203,16 +219,24 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/region.h
     desktop/screen_capturer.cc
     desktop/screen_capturer.h
-    desktop/screen_capturer_dxgi.cc
-    desktop/screen_capturer_dxgi.h
-    desktop/screen_capturer_gdi.cc
-    desktop/screen_capturer_gdi.h
     desktop/screen_capturer_wrapper.cc
     desktop/screen_capturer_wrapper.h
     desktop/shared_frame.cc
     desktop/shared_frame.h
     desktop/shared_memory_frame.cc
     desktop/shared_memory_frame.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_DESKTOP
+        desktop/cursor_capturer_win.cc
+        desktop/cursor_capturer_win.h
+        desktop/frame_dib.cc
+        desktop/frame_dib.h
+        desktop/screen_capturer_dxgi.cc
+        desktop/screen_capturer_dxgi.h
+        desktop/screen_capturer_gdi.cc
+        desktop/screen_capturer_gdi.h)
+endif()
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     desktop/diff_block_32bpp_avx2_unittest.cc
@@ -221,52 +245,58 @@ list(APPEND SOURCE_DESKTOP_UNIT_TESTS
     desktop/geometry_unittest.cc
     desktop/region_unittest.cc)
 
-list(APPEND SOURCE_BASE_DESKTOP_WIN
-    desktop/win/bitmap_info.h
-    desktop/win/cursor.cc
-    desktop/win/cursor.h
-    desktop/win/d3d_device.cc
-    desktop/win/d3d_device.h
-    desktop/win/desktop_environment.cc
-    desktop/win/desktop_environment.h
-    desktop/win/display_configuration_monitor.cc
-    desktop/win/display_configuration_monitor.h
-    desktop/win/dxgi_adapter_duplicator.cc
-    desktop/win/dxgi_adapter_duplicator.h
-    desktop/win/dxgi_context.cc
-    desktop/win/dxgi_context.h
-    desktop/win/dxgi_duplicator_controller.cc
-    desktop/win/dxgi_duplicator_controller.h
-    desktop/win/dxgi_frame.cc
-    desktop/win/dxgi_frame.h
-    desktop/win/dxgi_output_duplicator.cc
-    desktop/win/dxgi_output_duplicator.h
-    desktop/win/dxgi_texture.cc
-    desktop/win/dxgi_texture.h
-    desktop/win/dxgi_texture_mapping.cc
-    desktop/win/dxgi_texture_mapping.h
-    desktop/win/dxgi_texture_staging.cc
-    desktop/win/dxgi_texture_staging.h
-    desktop/win/power_save_blocker.cc
-    desktop/win/power_save_blocker.h
-    desktop/win/screen_capture_utils.cc
-    desktop/win/screen_capture_utils.h)
+if (WIN32)
+    list(APPEND SOURCE_BASE_DESKTOP_WIN
+        desktop/win/bitmap_info.h
+        desktop/win/cursor.cc
+        desktop/win/cursor.h
+        desktop/win/d3d_device.cc
+        desktop/win/d3d_device.h
+        desktop/win/desktop_environment.cc
+        desktop/win/desktop_environment.h
+        desktop/win/display_configuration_monitor.cc
+        desktop/win/display_configuration_monitor.h
+        desktop/win/dxgi_adapter_duplicator.cc
+        desktop/win/dxgi_adapter_duplicator.h
+        desktop/win/dxgi_context.cc
+        desktop/win/dxgi_context.h
+        desktop/win/dxgi_duplicator_controller.cc
+        desktop/win/dxgi_duplicator_controller.h
+        desktop/win/dxgi_frame.cc
+        desktop/win/dxgi_frame.h
+        desktop/win/dxgi_output_duplicator.cc
+        desktop/win/dxgi_output_duplicator.h
+        desktop/win/dxgi_texture.cc
+        desktop/win/dxgi_texture.h
+        desktop/win/dxgi_texture_mapping.cc
+        desktop/win/dxgi_texture_mapping.h
+        desktop/win/dxgi_texture_staging.cc
+        desktop/win/dxgi_texture_staging.h
+        desktop/win/power_save_blocker.cc
+        desktop/win/power_save_blocker.h
+        desktop/win/screen_capture_utils.cc
+        desktop/win/screen_capture_utils.h)
 
-list(APPEND SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS
-    desktop/win/cursor_unittest.cc
-    desktop/win/cursor_unittest_resources.h
-    desktop/win/cursor_unittest_resources.rc)
+    list(APPEND SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS
+        desktop/win/cursor_unittest.cc
+        desktop/win/cursor_unittest_resources.h
+        desktop/win/cursor_unittest_resources.rc)
+endif()
 
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
     files/base_paths.h
     files/file_path_watcher.cc
     files/file_path_watcher.h
-    files/file_path_watcher_win.cc
     files/file_util.cc
     files/file_util.h
     files/scoped_temp_file.cc
     files/scoped_temp_file.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_FILES
+        files/file_path_watcher_win.cc)
+endif()
 
 list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
@@ -305,18 +335,20 @@ list(APPEND SOURCE_BASE_MESSAGE_LOOP
     message_loop/message_pump_default.cc
     message_loop/message_pump_default.h
     message_loop/message_pump_dispatcher.h
-    message_loop/message_pump_win.cc
-    message_loop/message_pump_win.h
     message_loop/pending_task.cc
     message_loop/pending_task.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_MESSAGE_LOOP
+        message_loop/message_pump_win.cc
+        message_loop/message_pump_win.h)
+endif()
 
 list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.cc
     net/adapter_enumerator.h
     net/address.cc
     net/address.h
-    net/firewall_manager.cc
-    net/firewall_manager.h
     net/ip_util.cc
     net/ip_util.h
     net/network_channel.cc
@@ -327,6 +359,12 @@ list(APPEND SOURCE_BASE_NET
     net/network_server.h
     net/variable_size.cc
     net/variable_size.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_NET
+        net/firewall_manager.cc
+        net/firewall_manager.h)
+endif()
 
 list(APPEND SOURCE_BASE_NET_UNIT_TESTS
     net/address_unittest.cc)
@@ -370,9 +408,13 @@ list(APPEND SOURCE_BASE_STRINGS
     strings/string_util.h
     strings/string_util_constants.cc
     strings/string_util_constants.h
-    strings/string_util_win.cc
     strings/unicode.cc
     strings/unicode.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_STRINGS
+        strings/string_util_win.cc)
+endif()
 
 list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
     strings/string_number_conversions_unittest.cc
@@ -387,81 +429,70 @@ list(APPEND SOURCE_BASE_THREADING
     threading/thread_checker.cc
     threading/thread_checker.h)
 
-list(APPEND SOURCE_BASE_LINUX
-    linux/command_line_linux.cc
-    )
-
-list(APPEND SOURCE_BASE_WIN
-    win/power_controller_win.cc
-    win/command_line_win.cc
-    win/desktop.cc
-    win/desktop.h
-    win/drive_enumerator.cc
-    win/drive_enumerator.h
-    win/file_version_info.cc
-    win/file_version_info.h
-    win/message_window.cc
-    win/message_window.h
-    win/object_watcher.cc
-    win/object_watcher.h
-    win/printer_enumerator.cc
-    win/printer_enumerator.h
-    win/process.cc
-    win/process.h
-    win/process_util.cc
-    win/process_util.h
-    win/registry.cc
-    win/registry.h
-    win/resource_util.cc
-    win/resource_util.h
-    win/scoped_clipboard.cc
-    win/scoped_clipboard.h
-    win/scoped_com_initializer.cc
-    win/scoped_com_initializer.h
-    win/scoped_gdi_object.h
-    win/scoped_hdc.h
-    win/scoped_hglobal.h
-    win/scoped_impersonator.cc
-    win/scoped_impersonator.h
-    win/scoped_local.h
-    win/scoped_object.h
-    win/scoped_select_object.h
-    win/scoped_thread_desktop.cc
-    win/scoped_thread_desktop.h
-    win/scoped_user_object.h
-    win/scoped_wts_memory.h
-    win/security_helpers.cc
-    win/security_helpers.h
-    win/service.cc
-    win/service.h
-    win/service_controller.cc
-    win/service_controller.h
-    win/session_enumerator.cc
-    win/session_enumerator.h
-    win/session_info.cc
-    win/session_info.h
-    win/session_status.cc
-    win/session_status.h
-    win/session_watcher.cc
-    win/session_watcher.h
-    win/windows_version.cc
-    win/windows_version.h)
-
 if (WIN32)
-    set(SOURCE_BASE_PLATFORM ${SOURCE_BASE_WIN})
-else()
-    set(SOURCE_BASE_PLATFORM ${SOURCE_BASE_LINUX})
-endif()
+    list(APPEND SOURCE_BASE_WIN
+        win/desktop.cc
+        win/desktop.h
+        win/drive_enumerator.cc
+        win/drive_enumerator.h
+        win/file_version_info.cc
+        win/file_version_info.h
+        win/message_window.cc
+        win/message_window.h
+        win/object_watcher.cc
+        win/object_watcher.h
+        win/printer_enumerator.cc
+        win/printer_enumerator.h
+        win/process.cc
+        win/process.h
+        win/process_util.cc
+        win/process_util.h
+        win/registry.cc
+        win/registry.h
+        win/resource_util.cc
+        win/resource_util.h
+        win/scoped_clipboard.cc
+        win/scoped_clipboard.h
+        win/scoped_com_initializer.cc
+        win/scoped_com_initializer.h
+        win/scoped_gdi_object.h
+        win/scoped_hdc.h
+        win/scoped_hglobal.h
+        win/scoped_impersonator.cc
+        win/scoped_impersonator.h
+        win/scoped_local.h
+        win/scoped_object.h
+        win/scoped_select_object.h
+        win/scoped_thread_desktop.cc
+        win/scoped_thread_desktop.h
+        win/scoped_user_object.h
+        win/scoped_wts_memory.h
+        win/security_helpers.cc
+        win/security_helpers.h
+        win/service.cc
+        win/service.h
+        win/service_controller.cc
+        win/service_controller.h
+        win/session_enumerator.cc
+        win/session_enumerator.h
+        win/session_info.cc
+        win/session_info.h
+        win/session_status.cc
+        win/session_status.h
+        win/session_watcher.cc
+        win/session_watcher.h
+        win/windows_version.cc
+        win/windows_version.h)
 
-list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
-    win/registry_unittest.cc
-    win/scoped_object_unittest.cc)
+    list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
+        win/registry_unittest.cc
+        win/scoped_object_unittest.cc)
+endif()
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_UNIT_TESTS})
 source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_UNIT_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_UNIT_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_UNIT_TESTS})
-source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
 source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
@@ -471,8 +502,11 @@ source_group(peer FILES ${SOURCE_BASE_PEER})
 source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_UNIT_TESTS})
 source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
-source_group(platform FILES ${SOURCE_BASE_PLATFORM})
-source_group(win FILES ${SOURCE_BASE_WIN_UNIT_TESTS})
+
+if (WIN32)
+    source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
+    source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
+endif()
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
@@ -489,7 +523,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
-    ${SOURCE_BASE_PLATFORM})
+    ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base ${THIRD_PARTY_LIBS})
 
 # If the build of unit tests is enabled.
@@ -510,7 +544,9 @@ if (BUILD_UNIT_TESTS)
         aspia_proto
         optimized gtest
         debug gtestd
-        ${WINDOWS_LIBS}
+        crypt32
+        iphlpapi
+        ws2_32
         ${THIRD_PARTY_LIBS})
 
     add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

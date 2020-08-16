@@ -35,7 +35,7 @@ bool resourceFromModule(HMODULE module,
                         int resource_id,
                         const wchar_t* resource_type,
                         void** data,
-                        std::size_t* length);
+                        size_t* length);
 
 // Function for getting a data resource (BINDATA) from a dll. Some resources are optional,
 // especially in unit tests, so this returns false but doesn't raise an error if the resource can't
@@ -43,7 +43,7 @@ bool resourceFromModule(HMODULE module,
 bool dataResourceFromModule(HMODULE module,
                             int resource_id,
                             void** data,
-                            std::size_t* length);
+                            size_t* length);
 
 } // namespace base::win
 

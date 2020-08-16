@@ -43,16 +43,22 @@ list(APPEND SOURCE_ROUTER
     settings.cc
     settings.h)
 
-list(APPEND SOURCE_ROUTER_WIN
-    win/service.cc
-    win/service.h
-    win/service_constants.cc
-    win/service_constants.h)
+if (WIN32)
+    list(APPEND SOURCE_ROUTER_WIN
+        win/router.rc
+        win/service.cc
+        win/service.h
+        win/service_constants.cc
+        win/service_constants.h)
+endif()
 
 source_group("" FILES ${SOURCE_ROUTER})
-source_group(win FILES ${SOURCE_ROUTER_WIN})
 
-add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN} win/router.rc)
+if (WIN32)
+    source_group(win FILES ${SOURCE_ROUTER_WIN})
+endif()
+
+add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
 set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router
     aspia_base

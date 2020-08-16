@@ -19,7 +19,6 @@
 #include "base/strings/strcat.h"
 
 #include <algorithm>
-#include <cstddef>
 
 namespace base {
 
@@ -35,9 +34,9 @@ namespace {
 // calls would have O(n^2) complexity to execute. Instead, we want strAppend() to have the same
 // semantics as std::string::append().
 template <typename String>
-void reserveAdditionalIfNeeded(String* str, typename String::std::size_type additional)
+void reserveAdditionalIfNeeded(String* str, typename String::size_type additional)
 {
-    const std::size_t required = str->size() + additional;
+    const size_t required = str->size() + additional;
 
     // Check whether we need to reserve additional capacity at all.
     if (required <= str->capacity())
@@ -49,7 +48,7 @@ void reserveAdditionalIfNeeded(String* str, typename String::std::size_type addi
 template <typename DestString, typename InputString>
 void strAppendT(DestString* dest, std::initializer_list<InputString> pieces)
 {
-    std::size_t additional_size = 0;
+    size_t additional_size = 0;
 
     for (const auto& cur : pieces)
         additional_size += cur.size();

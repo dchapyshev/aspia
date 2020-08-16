@@ -23,6 +23,11 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
+#if defined(OS_WIN)
+#include <Windows.h>
+#include <shellapi.h>
+#endif // defined(OS_WIN)
+
 namespace base {
 
 namespace {
@@ -31,14 +36,14 @@ const char16_t kSwitchTerminator[] = u"--";
 const char16_t kSwitchValueSeparator = u'=';
 
 const char16_t* const kSwitchPrefixes[] = { u"--", u"-", u"/" };
-const std::size_t kSwitchPrefixesCount = std::size(kSwitchPrefixes);
+const size_t kSwitchPrefixesCount = std::size(kSwitchPrefixes);
 
 const std::u16string kEmptyString;
 const std::filesystem::path kEmptyPath;
 
-std::size_t switchPrefixLength(std::u16string_view string)
+size_t switchPrefixLength(std::u16string_view string)
 {
-    for (std::size_t i = 0; i < kSwitchPrefixesCount; ++i)
+    for (size_t i = 0; i < kSwitchPrefixesCount; ++i)
     {
         const std::u16string_view prefix(kSwitchPrefixes[i]);
 
@@ -58,11 +63,11 @@ bool isSwitch(std::u16string_view string,
     switch_string.clear();
     switch_value.clear();
 
-    const std::size_t prefix_length = switchPrefixLength(string);
+    const size_t prefix_length = switchPrefixLength(string);
     if (prefix_length == 0 || prefix_length == string.length())
         return false;
 
-    const std::size_t equals_position = string.find(kSwitchValueSeparator);
+    const size_t equals_position = string.find(kSwitchValueSeparator);
     switch_string = string.substr(0, equals_position);
 
     if (equals_position != std::u16string::npos)
@@ -76,7 +81,7 @@ void appendSwitchesAndArguments(CommandLine* command_line, const CommandLine::St
 {
     bool parse_switches = true;
 
-    for (std::size_t i = 1; i < argv.size(); ++i)
+    for (size_t i = 1; i < argv.size(); ++i)
     {
         std::u16string arg;
         trimWhitespace(argv[i], TRIM_ALL, &arg);
@@ -113,20 +118,20 @@ std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_
     std::u16string out;
     out.push_back(u'"');
 
-    for (std::size_t i = 0; i < arg.size(); ++i)
+    for (size_t i = 0; i < arg.size(); ++i)
     {
         if (arg[i] == u'\\')
         {
             // Find the extent of this run of backslashes.
-            const std::size_t start = i;
-            std::size_t end = start + 1;
+            const size_t start = i;
+            size_t end = start + 1;
 
             for (; end < arg.size() && arg[end] == u'\\'; ++end)
             {
                 // Nothing
             }
 
-            std::size_t backslash_count = end - start;
+            size_t backslash_count = end - start;
 
             // Backslashes are escapes only if the run is followed by a double quote.
             // Since we also will end the string with a double quote, we escape for
@@ -137,7 +142,7 @@ std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_
                 backslash_count *= 2;
             }
 
-            for (std::size_t j = 0; j < backslash_count; ++j)
+            for (size_t j = 0; j < backslash_count; ++j)
                 out.push_back(u'\\');
 
             // Advance i to one before the end to balance i++ in loop.
@@ -195,7 +200,7 @@ CommandLine::CommandLine(const StringVector& argv)
     initFromArgv(argv);
 }
 
-CommandLine::CommandLine(CommandLine&& other)
+CommandLine::CommandLine(CommandLine&& other) noexcept
     : argv_(std::move(other.argv_)),
       switches_(std::move(other.switches_)),
       begin_args_(other.begin_args_)
@@ -203,7 +208,7 @@ CommandLine::CommandLine(CommandLine&& other)
     // Nothing
 }
 
-CommandLine& CommandLine::operator=(CommandLine&& other)
+CommandLine& CommandLine::operator=(CommandLine&& other) noexcept
 {
     if (this != &other)
     {
@@ -247,7 +252,7 @@ void CommandLine::initFromArgv(int argc, const char* const* argv)
     StringVector new_argv;
 
     for (int i = 0; i < argc; ++i)
-        new_argv.emplace_back(base::utf16FromLocal8Bit(argv[i]));
+        new_argv.emplace_back(utf16FromLocal8Bit(argv[i]));
 
     initFromArgv(new_argv);
 }
@@ -312,7 +317,7 @@ void CommandLine::appendSwitch(std::u16string_view switch_string, std::u16string
     const std::u16string switch_key = toLower(switch_string);
     std::u16string combined_switch_string(switch_key);
 
-    const std::size_t prefix_length = switchPrefixLength(combined_switch_string);
+    const size_t prefix_length = switchPrefixLength(combined_switch_string);
     auto insertion = switches_.insert(make_pair(switch_key.substr(prefix_length), value));
 
     if (!insertion.second)
@@ -372,9 +377,31 @@ void CommandLine::parseFromString(std::u16string_view command_line)
     int num_args = 0;
     wchar_t** args = nullptr;
 
-    args = CommandLineToArgvW(asWide(command_line), &num_args);
+    // When calling CommandLineToArgvW, use the apiset if available.
+    // Doing so will bypass loading shell32.dll on Win8+.
+    HMODULE downlevel_shell32_dll =
+        LoadLibraryExW(L"api-ms-win-downlevel-shell32-l1-1-0.dll",
+                       nullptr,
+                       LOAD_LIBRARY_SEARCH_SYSTEM32);
 
-    auto val = ::base::LS_FATAL;
+    if (downlevel_shell32_dll)
+    {
+        auto command_line_to_argv_w_proc =
+            reinterpret_cast<decltype(CommandLineToArgvW)*>(
+                GetProcAddress(downlevel_shell32_dll, "CommandLineToArgvW"));
+        if (command_line_to_argv_w_proc)
+        {
+            args = command_line_to_argv_w_proc(asWide(command_line), &num_args);
+        }
+
+        FreeLibrary(downlevel_shell32_dll);
+    }
+    else
+    {
+        // Since the apiset is not available, allow the delayload of shell32.dll to take place.
+        args = CommandLineToArgvW(asWide(command_line), &num_args);
+    }
+
     DLOG_IF(LS_FATAL, !args) << "CommandLineToArgvW failed on command line: "
                              << command_line.data();
 
@@ -403,7 +430,7 @@ std::u16string CommandLine::argumentsStringInternal(bool quote_placeholders) con
     // Append switches and arguments.
     bool parse_switches = true;
 
-    for (std::size_t i = 1; i < argv_.size(); ++i)
+    for (size_t i = 1; i < argv_.size(); ++i)
     {
         std::u16string arg = argv_[i];
         std::u16string switch_string;

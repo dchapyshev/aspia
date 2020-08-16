@@ -132,7 +132,7 @@ TEST(StringSplitTest, SplitStringAlongWhitespace)
     struct TestData
     {
         const char* input;
-        const std::size_t expected_result_count;
+        const size_t expected_result_count;
         const char* output1;
         const char* output2;
     } data[] =

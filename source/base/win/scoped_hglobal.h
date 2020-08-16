@@ -21,8 +21,6 @@
 
 #include "base/macros_magic.h"
 
-#include <cstddef>
-
 #include <Windows.h>
 
 namespace base::win {
@@ -46,7 +44,7 @@ public:
         return data_;
     }
 
-    std::size_t size() const
+    size_t size() const
     {
         return GlobalSize(glob_);
     }

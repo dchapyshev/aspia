@@ -183,11 +183,15 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Executable file: " << file_path.c_str();
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
+#if defined(OS_WIN)
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else
     LOG(LS_INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
+#else
+    #warning Not implemented
+#endif
 
     LOG(LS_INFO) << "Logging started";
     return true;
@@ -326,7 +330,7 @@ LogMessage::~LogMessage()
 // Writes the common header info to the stream.
 void LogMessage::init(std::string_view file, int line)
 {
-    std::size_t last_slash_pos = file.find_last_of("\\/");
+    size_t last_slash_pos = file.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
         file.remove_prefix(last_slash_pos + 1);
 
@@ -378,6 +382,7 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
+#endif // defined(OS_WIN)
 
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
 {
@@ -388,6 +393,5 @@ std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
 {
     return out << base::utf8FromUtf16(ustr);
 }
-#endif // defined(OS_WIN)
 
 } // namespace std

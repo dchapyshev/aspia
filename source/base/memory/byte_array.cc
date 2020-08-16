@@ -45,7 +45,7 @@ char hexToChar(int value)
 
 } // namespace
 
-ByteArray fromData(const void* data, std::size_t size)
+ByteArray fromData(const void* data, size_t size)
 {
     if (!data || !size)
         return ByteArray();
@@ -124,7 +124,7 @@ std::string toHex(const ByteArray& in)
 
 base::ByteArray serialize(const google::protobuf::MessageLite& message)
 {
-    const std::size_t size = message.ByteSizeLong();
+    const size_t size = message.ByteSizeLong();
     if (!size)
         return base::ByteArray();
 

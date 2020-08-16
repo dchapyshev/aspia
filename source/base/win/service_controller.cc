@@ -22,7 +22,6 @@
 #include "base/strings/string_util.h"
 
 #include <memory>
-#include <cstddef>
 
 namespace base::win {
 
@@ -323,7 +322,7 @@ std::vector<std::u16string> ServiceController::dependencies() const
         return std::vector<std::u16string>();
 
     std::vector<std::u16string> list;
-    std::size_t len = 0;
+    size_t len = 0;
 
     for (;;)
     {

@@ -20,22 +20,19 @@
 
 namespace base {
 
-#if defined(OS_WIN)
 ProcessHandle currentProcessHandle()
 {
+#if defined(OS_WIN)
     return GetCurrentProcess();
-}
-#elif defined(OS_LINUX)
 #else
 #error Platfrom support not implemented
 #endif
+}
 
 ProcessId currentProcessId()
 {
 #if defined(OS_WIN)
     return GetCurrentProcessId();
-#elif defined(OS_LINUX)
-    return getpid();
 #else
 #error Platfrom support not implemented
 #endif

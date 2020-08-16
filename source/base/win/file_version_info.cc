@@ -18,8 +18,6 @@
 
 #include "base/win/file_version_info.h"
 
-#include <cstddef>
-
 #include "base/logging.h"
 #include "base/win/resource_util.h"
 
@@ -88,7 +86,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfoForModule
     HMODULE module)
 {
     void* data;
-    std::size_t version_info_length;
+    size_t version_info_length;
 
     const bool has_version_resource = base::win::resourceFromModule(
         module, VS_VERSION_INFO, RT_VERSION, &data, &version_info_length);
@@ -210,7 +208,7 @@ bool FileVersionInfo::isOfficialBuild()
 bool FileVersionInfo::value(const wchar_t* name, std::wstring* value_str)
 {
     WORD lang_codepage[8];
-    std::size_t i = 0;
+    size_t i = 0;
 
     // Use the language and codepage from the DLL.
     lang_codepage[i++] = language_;

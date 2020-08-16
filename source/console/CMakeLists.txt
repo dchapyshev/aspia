@@ -96,8 +96,19 @@ target_link_libraries(aspia_console
     aspia_common
     aspia_proto
     aspia_qt_base
-    ${QT_LIBS}
-    ${PLATFORM_LIBS}
+    crypt32
+    dwmapi
+    imm32
+    iphlpapi
+    netapi32
+    shlwapi
+    userenv
+    uxtheme
+    version
+    winmm
+    wtsapi32
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_console PROPERTY AUTOUIC ON)

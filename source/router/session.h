@@ -66,6 +66,9 @@ public:
     proto::RouterSession sessionType() const { return session_type_; }
     std::u16string address() const;
 
+    time_t startTime() const { return start_time_; }
+    std::chrono::seconds duration() const;
+
 protected:
     void sendMessage(const google::protobuf::MessageLite& message);
     std::unique_ptr<Database> openDatabase() const;
@@ -79,6 +82,7 @@ protected:
 private:
     const proto::RouterSession session_type_;
     State state_ = State::NOT_STARTED;
+    time_t start_time_ = 0;
 
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;

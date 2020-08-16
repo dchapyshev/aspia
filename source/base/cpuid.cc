@@ -16,15 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/compiler_specific.h"
-#include "base/cpuid_wrapper.h"
+#include "base/cpuid.h"
+
 #include "base/bitset.h"
 
-#if defined(CC_MSVC)
 #include <intrin.h>
-#else
-#include <cpuid.h>
-#endif // CC_MSVC
 #include <cstring>
 
 namespace base {
@@ -43,8 +39,6 @@ CPUID& CPUID::operator=(const CPUID& other)
     return *this;
 }
 
-#if defined(CC_MSVC)
-
 void CPUID::get(int leaf)
 {
     __cpuid(cpu_info_, leaf);
@@ -54,20 +48,6 @@ void CPUID::get(int leaf, int subleaf)
 {
     __cpuidex(cpu_info_, leaf, subleaf);
 }
-
-#else
-
-void CPUID::get(int leaf)
-{
-    __get_cpuid(leaf, &cpu_info_[0], &cpu_info_[1], &cpu_info_[2], &cpu_info_[3]);
-}
-
-void CPUID::get(int leaf, int subleaf)
-{
-    __get_cpuid_count(leaf, subleaf, & cpu_info_[0], &cpu_info_[1], &cpu_info_[2], &cpu_info_[3]);
-}
-
-#endif // CC_MSVC
 
 // static
 bool CPUID::hasAesNi()

@@ -18,17 +18,16 @@
 
 #include "base/guid.h"
 
-#include "base/endian_util.h"
+#include "base/endian.h"
 #include "base/logging.h"
 
 #include <random>
-#include <cstddef>
 
 namespace base {
 
 namespace {
 
-const std::size_t kGUIDLength = 36U;
+const size_t kGUIDLength = 36U;
 
 bool isHexDigit(char c)
 {
@@ -42,11 +41,11 @@ bool isLowerHexDigit(char c)
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
 }
 
-void numberToHex(char*& target, const char* source, std::size_t source_count)
+void numberToHex(char*& target, const char* source, size_t source_count)
 {
     static const char kTable[] = "0123456789abcdef";
 
-    for (std::size_t i = 0; i < source_count; ++i, target += 2)
+    for (size_t i = 0; i < source_count; ++i, target += 2)
     {
         target[0] = kTable[(source[i] >> 4) & 0x0F];
         target[1] = kTable[source[i] & 0x0F];
@@ -58,7 +57,7 @@ bool isValidGUIDInternal(std::string_view guid, bool strict)
     if (guid.length() != kGUIDLength)
         return false;
 
-    for (std::size_t i = 0; i < guid.length(); ++i)
+    for (size_t i = 0; i < guid.length(); ++i)
     {
         char current = guid[i];
         if (i == 8 || i == 13 || i == 18 || i == 23)

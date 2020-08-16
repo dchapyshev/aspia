@@ -16,36 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/memory/aligned_memory.h"
+#ifndef HOST__INPUT_INJECTOR_MAC_H
+#define HOST__INPUT_INJECTOR_MAC_H
 
-#include "base/logging.h"
+#include "host/input_injector.h"
 
-#if defined(OS_ANDROID)
-#include <malloc.h>
-#endif
+namespace host {
 
-namespace base {
-
-void* alignedAlloc(size_t size, size_t alignment)
+class InputInjectorMac : public InputInjector
 {
-    DCHECK_GT(size, 0U);
-    DCHECK_EQ((alignment & (alignment - 1)), 0U);
-    DCHECK_EQ((alignment % sizeof(void*)), 0U);
+public:
+    InputInjectorMac();
+    ~InputInjectorMac();
 
-#if defined(OS_WIN)
-    void* ptr = _aligned_malloc(size, alignment);
-#elif defined(OS_ANDROID)
-    ptr = memalign(alignment, size);
-#else
-    if (posix_memalign(&ptr, alignment, size))
-        ptr = nullptr;
-#endif
+    // InputInjector implementation.
+    void setScreenOffset(const base::Point& offset) override;
+    void setBlockInput(bool enable) override;
+    void injectKeyEvent(const proto::KeyEvent& event) override;
+    void injectMouseEvent(const proto::MouseEvent& event) override;
 
-    CHECK(ptr);
+private:
+    DISALLOW_COPY_AND_ASSIGN(InputInjectorMac);
+};
 
-    // Sanity check alignment just to be safe.
-    DCHECK_EQ((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)), 0U);
-    return ptr;
-}
+} // namespace host
 
-} // namespace base
+#endif // HOST__INPUT_INJECTOR_MAC_H

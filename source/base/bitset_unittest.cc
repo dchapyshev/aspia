@@ -40,7 +40,7 @@ TEST(BitSetTest, Range64)
 
     const BitSet<uint64_t> set1(0xFFFFFFFFFFFFFFFF);
 
-    for (std::size_t i = 0; i < set1.size(); ++i)
+    for (size_t i = 0; i < set1.size(); ++i)
     {
         EXPECT_EQ(set1.range(i, i), 1);
         EXPECT_TRUE(set1.test(i));
@@ -48,7 +48,7 @@ TEST(BitSetTest, Range64)
 
     const BitSet<uint64_t> set2(0x0000000000000000);
 
-    for (std::size_t i = 0; i < set2.size(); ++i)
+    for (size_t i = 0; i < set2.size(); ++i)
     {
         EXPECT_EQ(set2.range(i, i), 0);
         EXPECT_FALSE(set2.test(i));
@@ -56,7 +56,7 @@ TEST(BitSetTest, Range64)
 
     const BitSet<uint64_t> set3(0xAAAAAAAAAAAAAAAA);
 
-    for (std::size_t i = 0; i < set3.size(); ++i)
+    for (size_t i = 0; i < set3.size(); ++i)
     {
         if (i % 2 == 0)
         {
@@ -87,7 +87,7 @@ TEST(BitSetTest, Range32)
 
     const BitSet<uint32_t> set1(0xFFFFFFFF);
 
-    for (std::size_t i = 0; i < set1.size(); ++i)
+    for (size_t i = 0; i < set1.size(); ++i)
     {
         EXPECT_EQ(set1.range(i, i), 1);
         EXPECT_TRUE(set1.test(i));
@@ -95,7 +95,7 @@ TEST(BitSetTest, Range32)
 
     const BitSet<uint32_t> set2(0x00000000);
 
-    for (std::size_t i = 0; i < set2.size(); ++i)
+    for (size_t i = 0; i < set2.size(); ++i)
     {
         EXPECT_EQ(set2.range(i, i), 0);
         EXPECT_FALSE(set2.test(i));
@@ -103,7 +103,7 @@ TEST(BitSetTest, Range32)
 
     const BitSet<uint32_t> set3(0xAAAAAAAA);
 
-    for (std::size_t i = 0; i < set3.size(); ++i)
+    for (size_t i = 0; i < set3.size(); ++i)
     {
         if (i % 2 == 0)
         {
@@ -134,7 +134,7 @@ TEST(BitSetTest, Range16)
 
     const BitSet<uint16_t> set1(0xFFFF);
 
-    for (std::size_t i = 0; i < set1.size(); ++i)
+    for (size_t i = 0; i < set1.size(); ++i)
     {
         EXPECT_EQ(set1.range(i, i), 1);
         EXPECT_TRUE(set1.test(i));
@@ -142,7 +142,7 @@ TEST(BitSetTest, Range16)
 
     const BitSet<uint16_t> set2(0x0000);
 
-    for (std::size_t i = 0; i < set2.size(); ++i)
+    for (size_t i = 0; i < set2.size(); ++i)
     {
         EXPECT_EQ(set2.range(i, i), 0);
         EXPECT_FALSE(set2.test(i));
@@ -150,7 +150,7 @@ TEST(BitSetTest, Range16)
 
     const BitSet<uint16_t> set3(0xAAAA);
 
-    for (std::size_t i = 0; i < set3.size(); ++i)
+    for (size_t i = 0; i < set3.size(); ++i)
     {
         if (i % 2 == 0)
         {
@@ -179,7 +179,7 @@ TEST(BitSetTest, Range8)
 
     const BitSet<uint8_t> set1(0xFF);
 
-    for (std::size_t i = 0; i < set1.size(); ++i)
+    for (size_t i = 0; i < set1.size(); ++i)
     {
         EXPECT_EQ(set1.range(i, i), 1);
         EXPECT_TRUE(set1.test(i));
@@ -187,7 +187,7 @@ TEST(BitSetTest, Range8)
 
     const BitSet<uint8_t> set2(0x00);
 
-    for (std::size_t i = 0; i < set2.size(); ++i)
+    for (size_t i = 0; i < set2.size(); ++i)
     {
         EXPECT_EQ(set2.range(i, i), 0);
         EXPECT_FALSE(set2.test(i));
@@ -195,7 +195,7 @@ TEST(BitSetTest, Range8)
 
     const BitSet<uint8_t> set3(0xAA);
 
-    for (std::size_t i = 0; i < set3.size(); ++i)
+    for (size_t i = 0; i < set3.size(); ++i)
     {
         if (i % 2 == 0)
         {

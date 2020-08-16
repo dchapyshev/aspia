@@ -23,8 +23,6 @@
 
 #if defined(OS_WIN)
 #include <Windows.h>
-#elif defined(OS_LINUX)
-#include <unistd.h>
 #endif // defined(OS_WIN)
 
 namespace base {
@@ -35,17 +33,11 @@ using ProcessId = DWORD;
 
 const ProcessHandle kNullProcessHandle = nullptr;
 const ProcessId kNullProcessId = 0;
-#elif defined(OS_LINUX)
-using ProcessId = pid_t;
-
-const ProcessId kNullProcessId = 0;
 #else
 #error Platform support not implemented
 #endif
 
-#if defined(OS_WIN)
 ProcessHandle currentProcessHandle();
-#endif
 ProcessId currentProcessId();
 
 } // namespace base

@@ -29,7 +29,6 @@ list(APPEND SOURCE_COMMON
     file_packetizer.cc
     file_packetizer.h
     file_platform_util.h
-    file_platform_util_win.cc
     file_task.cc
     file_task.h
     file_task_consumer.h
@@ -46,6 +45,21 @@ list(APPEND SOURCE_COMMON
     keycode_converter.h
     session_type.cc
     session_type.h)
+
+if (WIN32)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_win.cc)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_linux.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_COMMON
+        file_platform_util_mac.mm)
+endif()
 
 list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc
@@ -66,24 +80,34 @@ list(APPEND SOURCE_COMMON_UI
     ui/update_info.cc
     ui/update_info.h)
 
-list(APPEND SOURCE_COMMON_WIN
-    win/file_enumerator.cc
-    win/file_enumerator.h)
+if (WIN32)
+    list(APPEND SOURCE_COMMON_WIN
+        win/file_enumerator.cc
+        win/file_enumerator.h)
+endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES
     resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
 source_group(ui FILES ${SOURCE_COMMON_UI})
-source_group(win FILES ${SOURCE_COMMON_WIN})
 source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
+
+if (WIN32)
+    source_group(win FILES ${SOURCE_COMMON_WIN})
+endif()
 
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
     ${SOURCE_COMMON_UI}
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_RESOURCES})
-target_link_libraries(aspia_common aspia_base aspia_proto ${QT_LIBS} ${THIRD_PARTY_LIBS})
+target_link_libraries(aspia_common
+    aspia_base
+    aspia_proto
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
+    ${THIRD_PARTY_LIBS})
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)

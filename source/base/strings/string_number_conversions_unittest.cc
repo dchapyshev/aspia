@@ -93,12 +93,12 @@ TEST(StringNumberConversionsTest, Uint64ToString)
 
 TEST(StringNumberConversionsTest, SizeTToString)
 {
-    std::size_t std::size_t_max = std::numeric_limits<std::size_t>::max();
-    std::string std::size_t_max_string = stringPrintf("%Iu", std::size_t_max);
+    size_t size_t_max = std::numeric_limits<size_t>::max();
+    std::string size_t_max_string = stringPrintf("%Iu", size_t_max);
 
     static const struct
     {
-        std::size_t input;
+        size_t input;
         std::string output;
     } cases[] =
     {
@@ -110,7 +110,7 @@ TEST(StringNumberConversionsTest, SizeTToString)
 #if SIZE_MAX > 4294967295U
         { 99999999999U, "99999999999" },
 #endif
-        { std::size_t_max, std::size_t_max_string },
+        { size_t_max, size_t_max_string },
     };
 
     for (const auto& i : cases)

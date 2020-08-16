@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 
 #include <Windows.h>
-#include <cstddef>
 
 namespace base::win {
 
@@ -43,7 +42,7 @@ public:
         // Nothing
     }
 
-    explicit ScopedLocal(std::size_t length)
+    explicit ScopedLocal(SIZE_T length)
     {
         local_ = reinterpret_cast<T>(LocalAlloc(LHND, length));
     }

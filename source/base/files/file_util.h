@@ -22,11 +22,10 @@
 #include "base/memory/byte_array.h"
 
 #include <filesystem>
-#include <cstddef>
 
 namespace base {
 
-bool writeFile(const std::filesystem::path& filename, const void* data, std::size_t size);
+bool writeFile(const std::filesystem::path& filename, const void* data, size_t size);
 bool writeFile(const std::filesystem::path& filename, const ByteArray& buffer);
 bool writeFile(const std::filesystem::path& filename, std::string_view buffer);
 

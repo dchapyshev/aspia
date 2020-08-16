@@ -16,13 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__SAS_INJECTOR_H
-#define HOST__SAS_INJECTOR_H
+#include "host/input_injector_mac.h"
+
+#include "base/logging.h"
 
 namespace host {
 
-void injectSAS();
+InputInjectorMac::InputInjectorMac() = default;
+
+InputInjectorMac::~InputInjectorMac() = default;
+
+void InputInjectorMac::setScreenOffset(const base::Point& /* offset */)
+{
+    NOTIMPLEMENTED();
+}
+
+void InputInjectorMac::setBlockInput(bool /* enable */)
+{
+    NOTIMPLEMENTED();
+}
+
+void InputInjectorMac::injectKeyEvent(const proto::KeyEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
+void InputInjectorMac::injectMouseEvent(const proto::MouseEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
 
 } // namespace host
-
-#endif // HOST__SAS_INJECTOR_H

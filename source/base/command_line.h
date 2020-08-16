@@ -23,7 +23,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <cstddef>
 
 namespace base {
 
@@ -127,7 +126,7 @@ private:
     SwitchMap switches_;
 
     // The index after the program and switches, any arguments start here.
-    std::size_t begin_args_;
+    size_t begin_args_;
 };
 
 } // namespace base

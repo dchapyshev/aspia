@@ -19,8 +19,6 @@
 #include "base/win/registry.h"
 #include "base/logging.h"
 
-#include <cstddef>
-
 namespace base::win {
 
 namespace {
@@ -41,7 +39,7 @@ DWORD to_wchar_size(DWORD byte_size)
 // Mask to pull WOW64 access flags out of REGSAM access.
 constexpr REGSAM kWow64AccessMask = KEY_WOW64_32KEY | KEY_WOW64_64KEY;
 
-wchar_t* writeInto(std::wstring* str, std::size_t length_with_null)
+wchar_t* writeInto(std::wstring* str, size_t length_with_null)
 {
     DCHECK(length_with_null > 1u);
     str->reserve(length_with_null);
@@ -319,7 +317,7 @@ LONG RegistryKey::readValue(const wchar_t* name, std::wstring* out_value) const
 {
     DCHECK(out_value);
 
-    const std::size_t kMaxStringLength = 1024;  // This is after expansion.
+    const size_t kMaxStringLength = 1024;  // This is after expansion.
     // Use the one of the other forms of ReadValue if 1024 is too small for you.
     wchar_t raw_value[kMaxStringLength] = { 0 };
     DWORD type = REG_SZ;
@@ -467,7 +465,7 @@ LONG RegistryKey::deleteKeyRecurse(HKEY root_key, const std::wstring& name, REGS
 
     // Enumerate the keys
     const DWORD kMaxKeyNameLength = MAX_PATH;
-    const std::size_t base_key_length = subkey_name.length();
+    const size_t base_key_length = subkey_name.length();
     std::wstring key_name;
 
     while (result == ERROR_SUCCESS)

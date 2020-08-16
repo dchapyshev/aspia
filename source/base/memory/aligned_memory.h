@@ -60,7 +60,7 @@
 
 namespace base {
 
-void* alignedAlloc(std::size_t size, std::size_t alignment);
+void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {

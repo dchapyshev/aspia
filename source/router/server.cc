@@ -143,6 +143,7 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
         SessionRelay* session_relay = static_cast<SessionRelay*>(session.get());
         proto::Relay* relay = result->add_relay();
 
+        relay->set_timepoint(session_relay->startTime());
         relay->set_address(base::utf8FromUtf16(session_relay->address()));
         relay->set_pool_size(session_relay->poolSize());
         relay->mutable_version()->CopyFrom(session_relay->version().toProto());
@@ -166,6 +167,7 @@ std::unique_ptr<proto::HostList> Server::hostList() const
         SessionHost* session_host = static_cast<SessionHost*>(session.get());
         proto::Host* host = result->add_host();
 
+        host->set_timepoint(session_host->startTime());
         host->set_host_id(session_host->hostId());
         host->set_ip_address(base::utf8FromUtf16(session_host->address()));
         host->mutable_version()->CopyFrom(session_host->version().toProto());

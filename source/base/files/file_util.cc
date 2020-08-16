@@ -33,7 +33,7 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
         return false;
 
     stream.seekg(0, stream.end);
-    std::size_t size = static_cast<std::size_t>(stream.tellg());
+    size_t size = static_cast<size_t>(stream.tellg());
     stream.seekg(0);
 
     buffer->clear();
@@ -49,7 +49,7 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
 
 } // namespace
 
-bool writeFile(const std::filesystem::path& filename, const void* data, std::size_t size)
+bool writeFile(const std::filesystem::path& filename, const void* data, size_t size)
 {
     std::ofstream stream;
     stream.open(filename, std::ofstream::binary | std::ofstream::out | std::ofstream::trunc);

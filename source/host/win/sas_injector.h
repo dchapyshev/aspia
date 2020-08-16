@@ -16,36 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/memory/aligned_memory.h"
+#ifndef HOST__WIN__SAS_INJECTOR_H
+#define HOST__WIN__SAS_INJECTOR_H
 
-#include "base/logging.h"
+namespace host {
 
-#if defined(OS_ANDROID)
-#include <malloc.h>
-#endif
+void injectSAS();
 
-namespace base {
+} // namespace host
 
-void* alignedAlloc(size_t size, size_t alignment)
-{
-    DCHECK_GT(size, 0U);
-    DCHECK_EQ((alignment & (alignment - 1)), 0U);
-    DCHECK_EQ((alignment % sizeof(void*)), 0U);
-
-#if defined(OS_WIN)
-    void* ptr = _aligned_malloc(size, alignment);
-#elif defined(OS_ANDROID)
-    ptr = memalign(alignment, size);
-#else
-    if (posix_memalign(&ptr, alignment, size))
-        ptr = nullptr;
-#endif
-
-    CHECK(ptr);
-
-    // Sanity check alignment just to be safe.
-    DCHECK_EQ((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)), 0U);
-    return ptr;
-}
-
-} // namespace base
+#endif // HOST__WIN__SAS_INJECTOR_H

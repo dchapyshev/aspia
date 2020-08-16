@@ -16,36 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/memory/aligned_memory.h"
+#include "host/input_injector_x11.h"
 
 #include "base/logging.h"
 
-#if defined(OS_ANDROID)
-#include <malloc.h>
-#endif
+namespace host {
 
-namespace base {
+InputInjectorX11::InputInjectorX11() = default;
 
-void* alignedAlloc(size_t size, size_t alignment)
+InputInjectorX11::~InputInjectorX11() = default;
+
+void InputInjectorX11::setScreenOffset(const base::Point& /* offset */)
 {
-    DCHECK_GT(size, 0U);
-    DCHECK_EQ((alignment & (alignment - 1)), 0U);
-    DCHECK_EQ((alignment % sizeof(void*)), 0U);
-
-#if defined(OS_WIN)
-    void* ptr = _aligned_malloc(size, alignment);
-#elif defined(OS_ANDROID)
-    ptr = memalign(alignment, size);
-#else
-    if (posix_memalign(&ptr, alignment, size))
-        ptr = nullptr;
-#endif
-
-    CHECK(ptr);
-
-    // Sanity check alignment just to be safe.
-    DCHECK_EQ((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)), 0U);
-    return ptr;
+    NOTIMPLEMENTED();
 }
 
-} // namespace base
+void InputInjectorX11::setBlockInput(bool /* enable */)
+{
+    NOTIMPLEMENTED();
+}
+
+void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
+void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
+} // namespace host

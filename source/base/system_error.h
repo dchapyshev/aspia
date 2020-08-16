@@ -30,7 +30,7 @@ class SystemError
 public:
 #if defined(OS_WIN)
     using Code = unsigned long;
-#elif defined(OS_LINUX)
+#elif defined(OS_POSIX)
     using Code = int;
 #else
 #error Platform support not implemented
