@@ -19,7 +19,6 @@
 #include "base/desktop/differ.h"
 
 #include "base/logging.h"
-#include "base/desktop/diff_block_32bpp_avx2.h"
 #include "base/desktop/diff_block_32bpp_sse2.h"
 #include "base/desktop/diff_block_32bpp_c.h"
 
@@ -88,16 +87,7 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
 {
     DiffFullBlockFunc func = nullptr;
 
-    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
-    {
-        LOG(LS_INFO) << "AVX2 differ loaded";
-
-        if constexpr (kBlockSize == 16)
-            func = diffFullBlock_32bpp_16x16_AVX2;
-        else if constexpr (kBlockSize == 32)
-            func = diffFullBlock_32bpp_32x32_AVX2;
-    }
-    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
         LOG(LS_INFO) << "SSE2 differ loaded";
 

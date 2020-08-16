@@ -193,8 +193,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/capture_scheduler.cc
     desktop/capture_scheduler.h
     desktop/cursor_capturer.h
-    desktop/diff_block_32bpp_avx2.cc
-    desktop/diff_block_32bpp_avx2.h
     desktop/diff_block_32bpp_c.cc
     desktop/diff_block_32bpp_c.h
     desktop/diff_block_32bpp_sse2.cc
@@ -255,7 +253,6 @@ if (APPLE)
 endif()
 
 list(APPEND SOURCE_DESKTOP_UNIT_TESTS
-    desktop/diff_block_32bpp_avx2_unittest.cc
     desktop/diff_block_32bpp_c_unittest.cc
     desktop/diff_block_32bpp_sse2_unittest.cc
     desktop/geometry_unittest.cc
