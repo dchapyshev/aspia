@@ -35,9 +35,11 @@ using ProcessId = DWORD;
 
 const ProcessHandle kNullProcessHandle = nullptr;
 const ProcessId kNullProcessId = 0;
-#elif defined(OS_LINUX)
+#elif defined(OS_POSIX)
+using ProcessHandle = pid_t;
 using ProcessId = pid_t;
 
+const ProcessHandle kNullProcessHandle = 0;
 const ProcessId kNullProcessId = 0;
 #else
 #error Platform support not implemented
