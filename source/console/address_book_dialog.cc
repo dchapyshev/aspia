@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
+#include "console/router_dialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -58,6 +59,29 @@ bool isSafePassword(const QString& password)
 
     return has_upper && has_lower && has_digit;
 }
+
+class RouterTreeItem : public QTreeWidgetItem
+{
+public:
+    explicit RouterTreeItem(const proto::address_book::Router& router)
+    {
+        setRouter(router);
+    }
+
+    void setRouter(const proto::address_book::Router& router)
+    {
+        router_ = router;
+
+        setText(0, QString::fromStdString(router.name()));
+        setText(1, QString::fromStdString(router.address()));
+        setText(2, QString::number(router.port()));
+    }
+
+    const proto::address_book::Router& router() const { return router_; }
+
+private:
+    proto::address_book::Router router_;
+};
 
 } // namespace
 
@@ -141,11 +165,18 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         ui.edit_password->setEnabled(false);
 
         // Disable Advanced tab.
-        ui.tab_widget->setTabEnabled(1, false);
+        ui.tab_widget->setTabEnabled(2, false);
     }
+
+    reloadRouters();
 
     connect(ui.spinbox_password_salt, QOverload<int>::of(&QSpinBox::valueChanged), this,
             &AddressBookDialog::hashingSaltChanged);
+
+    connect(ui.tree_routers, &QTreeWidget::currentItemChanged, this, &AddressBookDialog::currentRouterChanged);
+    connect(ui.button_add_router, &QPushButton::released, this, &AddressBookDialog::addRouter);
+    connect(ui.button_modify_router, &QPushButton::released, this, &AddressBookDialog::modifyRouter);
+    connect(ui.button_delete_router, &QPushButton::released, this, &AddressBookDialog::deleteRouter);
 
     ui.edit_name->setFocus();
 }
@@ -286,6 +317,15 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
     data_->mutable_root_group()->set_name(name.toStdString());
     data_->mutable_root_group()->set_comment(comment.toStdString());
 
+    data_->mutable_router()->Clear();
+
+    for (int i = 0; i < ui.tree_routers->topLevelItemCount(); ++i)
+    {
+        RouterTreeItem* tree_item = static_cast<RouterTreeItem*>(ui.tree_routers->topLevelItem(i));
+        if (tree_item)
+            data_->add_router()->CopyFrom(tree_item->router());
+    }
+
     file_->set_encryption_type(encryption_type);
 
     accept();
@@ -309,7 +349,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
             ui.edit_password_repeat->clear();
 
             // Disable Advanced tab.
-            ui.tab_widget->setTabEnabled(1, false);
+            ui.tab_widget->setTabEnabled(2, false);
         }
         break;
 
@@ -319,7 +359,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
             ui.edit_password_repeat->setEnabled(true);
 
             // Enable Advanced tab.
-            ui.tab_widget->setTabEnabled(1, true);
+            ui.tab_widget->setTabEnabled(2, true);
         }
         break;
 
@@ -349,6 +389,66 @@ void AddressBookDialog::hashingSaltChanged(int /* value */)
         ui.spinbox_password_salt->setValue(file_->hashing_salt().size());
         value_reverting_ = false;
     }
+}
+
+void AddressBookDialog::currentRouterChanged()
+{
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
+    if (!router_item)
+    {
+        ui.button_modify_router->setEnabled(false);
+        ui.button_delete_router->setEnabled(false);
+    }
+    else
+    {
+        ui.button_modify_router->setEnabled(true);
+        ui.button_delete_router->setEnabled(true);
+    }
+}
+
+void AddressBookDialog::addRouter()
+{
+    RouterDialog dialog(std::nullopt, this);
+    if (dialog.exec() == QDialog::Accepted)
+        ui.tree_routers->addTopLevelItem(new RouterTreeItem(dialog.router().value()));
+}
+
+void AddressBookDialog::modifyRouter()
+{
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
+    if (!router_item)
+        return;
+
+    RouterDialog dialog(router_item->router(), this);
+    if (dialog.exec() == QDialog::Accepted)
+        router_item->setRouter(dialog.router().value());
+}
+
+void AddressBookDialog::deleteRouter()
+{
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
+    if (!router_item)
+        return;
+
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              tr("Are you sure you want to remove router \"%1\"?")
+                                  .arg(router_item->text(0)),
+                              QMessageBox::Yes,
+                              QMessageBox::No) != QMessageBox::Yes)
+    {
+        return;
+    }
+
+    delete router_item;
+}
+
+void AddressBookDialog::reloadRouters()
+{
+    ui.tree_routers->clear();
+
+    for (int i = 0; i < data_->router_size(); ++i)
+        ui.tree_routers->addTopLevelItem(new RouterTreeItem(data_->router(i)));
 }
 
 void AddressBookDialog::setPasswordChanged()

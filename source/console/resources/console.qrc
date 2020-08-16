@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/img">
+    <file>minus.png</file>
+    <file>pencil.png</file>
+    <file>plus.png</file>
     <file>ui-tab-close.png</file>
     <file>computer-copy.png</file>
     <file>ui-tab-multi-close.png</file>

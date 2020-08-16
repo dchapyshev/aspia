@@ -70,6 +70,9 @@ list(APPEND SOURCE_CONSOLE
     open_address_book_dialog.cc
     open_address_book_dialog.h
     open_address_book_dialog.ui
+    router_dialog.cc
+    router_dialog.h
+    router_dialog.ui
     settings.cc
     settings.h
     statusbar.cc
