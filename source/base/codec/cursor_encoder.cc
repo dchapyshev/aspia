@@ -28,8 +28,8 @@ namespace base {
 
 namespace {
 
-// Cache size can be in the range from 2 to 31.
-constexpr size_t kCacheSize = 31;
+// Cache size can be in the range from 2 to 30.
+constexpr size_t kCacheSize = 30;
 
 // The compression ratio can be in the range of 1 to 22.
 constexpr int kCompressionRatio = 8;
@@ -48,7 +48,7 @@ uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 CursorEncoder::CursorEncoder()
     : stream_(ZSTD_createCStream())
 {
-    static_assert(kCacheSize >= 2 && kCacheSize <= 31);
+    static_assert(kCacheSize >= 2 && kCacheSize <= 30);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
 
     // Reserve memory for the maximum number of elements in the cache.
