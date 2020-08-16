@@ -34,7 +34,7 @@ ProcessId currentProcessId()
 {
 #if defined(OS_WIN)
     return GetCurrentProcessId();
-#elif defined(OS_LINUX)
+#elif defined(OS_POSIX)
     return getpid();
 #else
 #error Platfrom support not implemented
