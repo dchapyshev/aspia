@@ -22,6 +22,7 @@
 #include "base/net/network_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
+#include "build/build_config.h"
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
 

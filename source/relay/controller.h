@@ -21,6 +21,7 @@
 
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
+#include "build/build_config.h"
 #include "proto/router_relay.pb.h"
 #include "relay/shared_pool.h"
 
