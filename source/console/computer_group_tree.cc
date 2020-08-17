@@ -167,11 +167,12 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             if (!computer_group)
                 return;
 
-            target_group_item->addChildComputerGroup(computer_group);
+            // After calling takeChildComputerGroup, instance source_group_item is destroyed.
+            // We create a new instance with the same data in a new location.
+            source_group_item = target_group_item->addChildComputerGroup(computer_group);
             target_group_item->setExpanded(true);
 
             setCurrentItem(source_group_item);
-
             emit itemDropped();
         }
     }
