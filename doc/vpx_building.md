@@ -18,6 +18,7 @@ Sequence
 
    <code>
    ../configure --target=x86-win32-vs15 --enable-realtime-only --enable-runtime-cpu-detect --enable-static-msvcrt
-   <br/>make
+   
+   make
    </code>
 5. After that in directory "build" the project for Visual Studio will be generated.
