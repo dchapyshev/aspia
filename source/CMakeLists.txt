@@ -81,7 +81,7 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
-    ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
+    ${Protobuf_INCLUDE_DIRS}
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include
     third_party/asio
     third_party/rapidjson/include)

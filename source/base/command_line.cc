@@ -22,6 +22,8 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
+#include <algorithm>
+
 #if defined(OS_WIN)
 #include <Windows.h>
 #include <shellapi.h>

@@ -24,6 +24,9 @@
 
 #if defined(OS_WIN)
 #include <Windows.h>
+#elif defined(OS_POSIX)
+#include <sys/time.h>
+#include <ctime>
 #endif // defined(OS_WIN)
 
 namespace base {
