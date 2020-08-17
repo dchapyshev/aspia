@@ -113,9 +113,13 @@
         <translation type="vanished">Адрес</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="100"/>
         <source>Address or ID</source>
-        <translation>Адрес или ID</translation>
+        <translation type="vanished">Адрес или ID</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.ui" line="100"/>
+        <source>Address / ID</source>
+        <translation>Адрес / ID</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="105"/>

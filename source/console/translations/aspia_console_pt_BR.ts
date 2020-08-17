@@ -110,7 +110,7 @@
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="100"/>
-        <source>Address or ID</source>
+        <source>Address / ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

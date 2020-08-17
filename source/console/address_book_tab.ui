@@ -97,7 +97,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Address or ID</string>
+        <string>Address / ID</string>
        </property>
       </column>
       <column>
