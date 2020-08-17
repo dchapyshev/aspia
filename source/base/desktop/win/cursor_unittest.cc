@@ -32,7 +32,7 @@ namespace {
 // Loads |left| from resources, converts it to a |MouseCursor| instance and
 // compares pixels with |right|. Returns true of MouseCursor bits match |right|.
 // |right| must be a 32bpp cursor with alpha channel.
-bool ñonvertToMouseShapeAndCompare(unsigned left, unsigned right)
+bool convertToMouseShapeAndCompare(unsigned left, unsigned right)
 {
     HMODULE instance = GetModuleHandleW(nullptr);
 
@@ -81,10 +81,10 @@ bool ñonvertToMouseShapeAndCompare(unsigned left, unsigned right)
 
 TEST(CursorTest, MatchCursors)
 {
-    EXPECT_TRUE(ñonvertToMouseShapeAndCompare(IDD_CURSOR1_24BPP, IDD_CURSOR1_32BPP));
-    EXPECT_TRUE(ñonvertToMouseShapeAndCompare(IDD_CURSOR1_8BPP, IDD_CURSOR1_32BPP));
-    EXPECT_TRUE(ñonvertToMouseShapeAndCompare(IDD_CURSOR2_1BPP, IDD_CURSOR2_32BPP));
-    EXPECT_TRUE(ñonvertToMouseShapeAndCompare(IDD_CURSOR3_4BPP, IDD_CURSOR3_32BPP));
+    EXPECT_TRUE(convertToMouseShapeAndCompare(IDD_CURSOR1_24BPP, IDD_CURSOR1_32BPP));
+    EXPECT_TRUE(convertToMouseShapeAndCompare(IDD_CURSOR1_8BPP, IDD_CURSOR1_32BPP));
+    EXPECT_TRUE(convertToMouseShapeAndCompare(IDD_CURSOR2_1BPP, IDD_CURSOR2_32BPP));
+    EXPECT_TRUE(convertToMouseShapeAndCompare(IDD_CURSOR3_4BPP, IDD_CURSOR3_32BPP));
 }
 
 } // namespace base
