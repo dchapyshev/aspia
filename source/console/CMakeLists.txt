@@ -16,7 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(tbb)
 include(translations)
 
 list(APPEND SOURCE_CONSOLE
@@ -116,10 +115,6 @@ target_link_libraries(aspia_console
 set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_console PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_console PROPERTY AUTORCC ON)
-
-if (USE_TBB)
-    add_tbb(aspia_console ${ASPIA_THIRD_PARTY_DIR}/tbb)
-endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

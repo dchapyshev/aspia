@@ -26,10 +26,6 @@
 #include "router/win/service_constants.h"
 #endif // defined(OS_WIN)
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
-
 #include <iostream>
 
 namespace {

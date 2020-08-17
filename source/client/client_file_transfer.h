@@ -93,7 +93,7 @@ private:
     std::unique_ptr<common::FileTaskFactory> local_task_factory_;
     std::unique_ptr<common::FileTaskFactory> remote_task_factory_;
 
-    base::ScalableQueue<std::shared_ptr<common::FileTask>> remote_task_queue_;
+    std::queue<std::shared_ptr<common::FileTask>> remote_task_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
 
     std::shared_ptr<FileControlProxy> file_control_proxy_;

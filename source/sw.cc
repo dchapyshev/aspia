@@ -68,8 +68,6 @@ void build(Solution &s)
     base.Public += "UNICODE"_def;
     base.Public += "WIN32_LEAN_AND_MEAN"_def;
     base.Public += "NOMINMAX"_def;
-    base.Public += "USE_PCG_GENERATOR"_def;
-    base.Public += "USE_TBB"_def;
     base.Public += protocol;
     base.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
     base.Public += "org.sw.demo.qtproject.qt.base.network"_dep;

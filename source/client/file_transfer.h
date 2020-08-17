@@ -20,10 +20,11 @@
 #define CLIENT__FILE_TRANSFER_H
 
 #include "base/waitable_timer.h"
-#include "base/memory/scalable_queue.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
 #include "proto/file_transfer.pb.h"
+
+#include <deque>
 
 namespace base {
 class TaskRunner;
@@ -151,7 +152,7 @@ public:
         int64_t size_;
     };
 
-    using TaskList = base::ScalableDeque<Task>;
+    using TaskList = std::deque<Task>;
     using FinishCallback = std::function<void()>;
 
     FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,

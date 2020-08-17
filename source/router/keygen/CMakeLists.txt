@@ -16,7 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_KEYGEN
@@ -55,7 +54,3 @@ target_link_libraries(aspia_router_keygen
 set_property(TARGET aspia_router_keygen PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_keygen PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router_keygen PROPERTY AUTORCC ON)
-
-if (USE_TBB)
-    add_tbb(aspia_router_keygen ${ASPIA_THIRD_PARTY_DIR}/tbb)
-endif()

@@ -21,7 +21,6 @@ cmake_minimum_required(VERSION 3.16.0)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(BUILD_UNIT_TESTS "Build unit tests" ON)
-option(USE_TBB "Using Intel TBB" ON)
 
 set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
 
@@ -75,10 +74,6 @@ add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
 
-if (USE_TBB)
-    add_definitions(-DUSE_TBB)
-endif()
-
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
@@ -87,7 +82,6 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
-    ${ASPIA_THIRD_PARTY_DIR}/tbb/include
     ${ASPIA_THIRD_PARTY_DIR}/zstd/include
     third_party/asio
     third_party/rapidjson/include)
@@ -102,7 +96,6 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/printsupport
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
-    ${ASPIA_THIRD_PARTY_DIR}/tbb/lib
     ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
 
 set(QT_COMMON_LIBS
@@ -135,11 +128,9 @@ endif()
 set(THIRD_PARTY_LIBS
     debug vpxmtd
     debug yuv_debug
-    debug tbb_debug
     debug zstd_static_debug
     optimized vpxmt
     optimized yuv
-    optimized tbb
     optimized zstd_static
     ${Protobuf_LITE_LIBRARIES}
     libcrypto

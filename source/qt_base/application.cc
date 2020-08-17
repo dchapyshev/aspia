@@ -37,10 +37,6 @@
 #include <QLockFile>
 #include <QThread>
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
-
 #if defined(OS_WIN)
 #include <Windows.h>
 #include <psapi.h>
@@ -127,30 +123,6 @@ std::filesystem::path loggingDir()
     return path;
 }
 
-void tbbStatusToLog()
-{
-#if defined(USE_TBB)
-    char** func_replacement_log;
-    int func_replacement_status = TBB_malloc_replacement_log(&func_replacement_log);
-
-    if (func_replacement_status != 0)
-    {
-        LOG(LS_WARNING) << "tbbmalloc_proxy cannot replace memory allocation routines";
-
-        for (char** log_string = func_replacement_log; *log_string != 0; ++log_string)
-        {
-            LOG(LS_WARNING) << *log_string;
-        }
-    }
-    else
-    {
-        LOG(LS_INFO) << "tbbmalloc_proxy successfully initialized";
-    }
-#else
-    DLOG(LS_INFO) << "tbbmalloc_proxy is disabled";
-#endif
-}
-
 } // namespace
 
 Application::Application(int& argc, char* argv[])
@@ -167,8 +139,6 @@ Application::Application(int& argc, char* argv[])
 
     base::initLogging(settings);
     qt_base::initQtLogging();
-
-    tbbStatusToLog();
 
 #if defined(OS_WIN)
     DWORD id = 0;

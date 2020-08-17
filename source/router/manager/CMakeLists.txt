@@ -16,7 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(tbb)
 include(translations)
 
 list(APPEND SOURCE_ROUTER_MANAGER
@@ -78,10 +77,6 @@ target_link_libraries(aspia_router_manager
 set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTORCC ON)
-
-if (USE_TBB)
-    add_tbb(aspia_router_manager ${ASPIA_THIRD_PARTY_DIR}/tbb)
-endif()
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(tbb)
-
 list(APPEND SOURCE_ROUTER
     database.h
     database_factory.h
@@ -72,10 +70,6 @@ target_link_libraries(aspia_router
     sqlite
     version
     ${Protobuf_LITE_LIBRARIES})
-
-if (USE_TBB)
-    add_tbb(aspia_router ${ASPIA_THIRD_PARTY_DIR}/tbb)
-endif()
 
 add_subdirectory(keygen)
 add_subdirectory(manager)

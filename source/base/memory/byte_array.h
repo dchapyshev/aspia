@@ -21,23 +21,13 @@
 
 #include <google/protobuf/message_lite.h>
 
-#if defined(USE_TBB)
-#include <tbb/scalable_allocator.h>
-#endif // defined(USE_TBB)
-
 #include <cstdint>
 #include <string>
 #include <vector>
 
 namespace base {
 
-#if defined(USE_TBB)
-using ByteArrayAllocator = tbb::scalable_allocator<uint8_t>;
-#else // defined(USE_TBB)
-using ByteArrayAllocator = std::allocator<uint8_t>;
-#endif // defined(USE_*)
-
-using ByteArray = std::vector<uint8_t, ByteArrayAllocator>;
+using ByteArray = std::vector<uint8_t>;
 
 ByteArray fromData(const void* data, size_t size);
 

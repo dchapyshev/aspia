@@ -16,8 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(tbb)
-
 list(APPEND SOURCE_RELAY
     controller.cc
     controller.h
@@ -60,7 +58,3 @@ target_link_libraries(aspia_relay
     netapi32
     version
     ${THIRD_PARTY_LIBS})
-
-if (USE_TBB)
-    add_tbb(aspia_relay ${ASPIA_THIRD_PARTY_DIR}/tbb)
-endif()

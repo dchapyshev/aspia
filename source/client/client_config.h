@@ -28,12 +28,17 @@ struct Config
     Config();
     ~Config();
 
+    std::u16string router_address;
+    uint16_t router_port = 0;
+    std::u16string router_username;
+    std::u16string router_password;
+
     std::u16string computer_name;
     std::u16string address;
-    uint16_t port;
+    uint16_t port = 0;
     std::u16string username;
     std::u16string password;
-    proto::SessionType session_type;
+    proto::SessionType session_type = proto::SESSION_TYPE_UNKNOWN;
 };
 
 } // namespace client

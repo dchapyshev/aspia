@@ -61,7 +61,7 @@ void NetworkChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool NetworkChannelProxy::reloadWriteQueue(ScalableQueue<ByteArray>* work_queue)
+bool NetworkChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;

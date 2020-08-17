@@ -25,10 +25,6 @@
 #include "console/main_window.h"
 #include "qt_base/qt_logging.h"
 
-#if defined(USE_TBB)
-#include <tbb/tbbmalloc_proxy.h>
-#endif // defined(USE_TBB)
-
 #include <QCommandLineParser>
 #include <QMessageBox>
 
