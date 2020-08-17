@@ -24,9 +24,25 @@ void build(Solution &s)
         t.setRootDirectory(name);
         t += IncludeDirectory("."s);
         t += ".*"_rr;
+
+        //
         t.AllowEmptyRegexes = true;
+
+        // os specific
+        t -= ".*_win.*"_rr;
+        t -= ".*_linux.*"_rr;
+        t -= ".*_mac.*"_rr;
+        if (t.getBuildSettings().TargetOS.Type == OSType::Windows)
+            t += ".*_win.*"_rr;
+        else if (t.getBuildSettings().TargetOS.isApple())
+            t += ".*_mac.*"_rr;
+        else
+            t += ".*_linux.*"_rr;
+
         t -= ".*_unittest.*"_rr;
         t -= ".*tests.*"_rr;
+
+        //
         t.AllowEmptyRegexes = false;
 
         // test
