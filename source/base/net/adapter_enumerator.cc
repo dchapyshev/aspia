@@ -174,6 +174,9 @@ uint32_t AdapterEnumerator::mtu() const
 
 uint64_t AdapterEnumerator::speed() const
 {
+    if (adapter_->TransmitLinkSpeed == std::numeric_limits<ULONG64>::max())
+        return 0;
+
     return adapter_->TransmitLinkSpeed;
 }
 
