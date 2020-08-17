@@ -18,6 +18,8 @@
 
 #include "base/waitable_event.h"
 
+#include <mutex>
+
 namespace base {
 
 WaitableEvent::WaitableEvent(ResetPolicy reset_policy, InitialState initial_state)
