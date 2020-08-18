@@ -22,6 +22,8 @@
 #include "base/macros_magic.h"
 #include "base/crypto/message_decryptor.h"
 
+#include <cstddef>
+
 namespace base {
 
 class MessageDecryptorFake : public MessageDecryptor

@@ -21,6 +21,7 @@
 
 #include "base/desktop/frame.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 

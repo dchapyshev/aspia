@@ -19,14 +19,20 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
-#include "base/desktop/cursor_capturer_win.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
+#include "base/ipc/shared_memory_factory.h"
+
+#if defined(OS_WIN)
+#include "base/desktop/cursor_capturer_win.h"
+
 #include "base/desktop/win/desktop_environment.h"
 #include "base/desktop/win/power_save_blocker.h"
-#include "base/ipc/shared_memory_factory.h"
 #include "base/win/windows_version.h"
+#elif defined(OS_LINUX)
+#else
+#endif
 
 namespace base {
 

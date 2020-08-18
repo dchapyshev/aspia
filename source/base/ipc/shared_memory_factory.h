@@ -20,6 +20,7 @@
 #define BASE__IPC__SHARED_MEMORY_FACTORY_H
 
 #include "base/macros_magic.h"
+#include "base/ipc/shared_memory_factory_proxy.h"
 
 #include <memory>
 
