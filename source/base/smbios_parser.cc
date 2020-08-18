@@ -307,7 +307,17 @@ std::string SmbiosMemoryDevice::partNumber() const
     if (table_->length < 0x1B)
         return std::string();
 
-    return smbiosString(table_, table_->part_number);
+    static const char* kBlackList[] = { "[Empty]" };
+
+    std::string result = smbiosString(table_, table_->part_number);
+
+    for (size_t i = 0; i < std::size(kBlackList); ++i)
+    {
+        if (result == kBlackList[i])
+            return std::string();
+    }
+
+    return result;
 }
 
 uint32_t SmbiosMemoryDevice::speed() const
