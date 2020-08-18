@@ -19,6 +19,7 @@
 #ifndef BASE__DESKTOP__CURSOR_CAPTURER_MAC_H
 #define BASE__DESKTOP__CURSOR_CAPTURER_MAC_H
 
+#include "base/macros_magic.h"
 #include "desktop/cursor_capturer.h"
 
 namespace base {
