@@ -31,6 +31,8 @@ VideoDecoderZstd::VideoDecoderZstd()
     // Nothing
 }
 
+VideoDecoderZstd::~VideoDecoderZstd() = default;
+
 // static
 std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 {

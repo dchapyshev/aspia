@@ -33,7 +33,7 @@ class PixelTranslator;
 class VideoEncoderZstd : public VideoEncoder
 {
 public:
-    ~VideoEncoderZstd() = default;
+    ~VideoEncoderZstd();
 
     static std::unique_ptr<VideoEncoderZstd> create(
         const PixelFormat& target_format, int compression_ratio);
