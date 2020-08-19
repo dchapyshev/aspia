@@ -26,6 +26,7 @@
 namespace base {
 
 class SharedMemory;
+class SharedMemoryFactoryProxy;
 
 class SharedMemoryFactory
 {

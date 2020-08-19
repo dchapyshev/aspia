@@ -21,7 +21,12 @@
 
 #include "base/desktop/screen_capturer.h"
 #include "base/threading/thread_checker.h"
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_thread_desktop.h"
+#elif defined(OS_LINUX)
+#endif
 
 namespace base {
 
