@@ -19,6 +19,7 @@
 #ifndef HOST__INPUT_INJECTOR_H
 #define HOST__INPUT_INJECTOR_H
 
+#include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "proto/desktop.pb.h"
 
