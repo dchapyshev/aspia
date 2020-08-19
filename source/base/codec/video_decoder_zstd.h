@@ -20,10 +20,8 @@
 #define BASE__CODEC__VIDEO_DECODER_ZSTD_H
 
 #include "base/macros_magic.h"
-#include "base/codec/pixel_translator.h"
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/codec/video_decoder.h"
-#include "base/desktop/frame.h"
 
 namespace base {
 
