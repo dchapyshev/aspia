@@ -22,7 +22,6 @@
 #include "base/macros_magic.h"
 #include "base/desktop/region.h"
 
-#include <cstring>
 #include <memory>
 
 namespace base {
