@@ -61,10 +61,8 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
 
     // Peers settings.
     peer_port_ = settings.peerPort();
-    max_peer_count_ = settings.maxPeerCount();
 
     LOG(LS_INFO) << "Peer port: " << peer_port_;
-    LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
 Controller::~Controller()

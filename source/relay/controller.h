@@ -64,7 +64,6 @@ private:
 
     // Peers settings.
     uint16_t peer_port_ = 0;
-    size_t max_peer_count_ = 0;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::WaitableTimer reconnect_timer_;

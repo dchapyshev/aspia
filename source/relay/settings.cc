@@ -65,17 +65,7 @@ void Settings::setPeerPort(uint16_t port)
 
 uint16_t Settings::peerPort() const
 {
-    return impl_.get<uint16_t>("PeerPort", DEFAULT_PROXY_PEER_TCP_PORT);
-}
-
-void Settings::setMaxPeerCount(size_t count)
-{
-    impl_.set<size_t>("MaxPeerCount", count);
-}
-
-size_t Settings::maxPeerCount() const
-{
-    return impl_.get<size_t>("MaxPeerCount", 100);
+    return impl_.get<uint16_t>("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT);
 }
 
 } // namespace relay
