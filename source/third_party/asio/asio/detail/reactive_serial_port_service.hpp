@@ -139,8 +139,9 @@ public:
   asio::error_code send_break(implementation_type& impl,
       asio::error_code& ec)
   {
-    int result = ::tcsendbreak(descriptor_service_.native_handle(impl), 0);
-    descriptor_ops::get_last_error(ec, result < 0);
+    errno = 0;
+    descriptor_ops::error_wrapper(::tcsendbreak(
+          descriptor_service_.native_handle(impl), 0), ec);
     return ec;
   }
 

@@ -16,7 +16,6 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include "asio/any_io_executor.hpp"
 #include "asio/basic_socket.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"
@@ -25,6 +24,7 @@
 #include "asio/detail/type_traits.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
+#include "asio/executor.hpp"
 #include "asio/socket_base.hpp"
 
 #if defined(ASIO_WINDOWS_RUNTIME)
@@ -47,7 +47,7 @@ namespace asio {
 #define ASIO_BASIC_SOCKET_ACCEPTOR_FWD_DECL
 
 // Forward declaration with defaulted arguments.
-template <typename Protocol, typename Executor = any_io_executor>
+template <typename Protocol, typename Executor = executor>
 class basic_socket_acceptor;
 
 #endif // !defined(ASIO_BASIC_SOCKET_ACCEPTOR_FWD_DECL)
@@ -353,7 +353,7 @@ public:
    * constructed using the @c basic_socket_acceptor(const executor_type&)
    * constructor.
    */
-  basic_socket_acceptor(basic_socket_acceptor&& other) ASIO_NOEXCEPT
+  basic_socket_acceptor(basic_socket_acceptor&& other)
     : impl_(std::move(other.impl_))
   {
   }
@@ -1620,7 +1620,6 @@ public:
   accept(const Executor1& ex,
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     asio::error_code ec;
@@ -1703,7 +1702,6 @@ public:
   accept(const Executor1& ex, asio::error_code& ec,
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     typename Protocol::socket::template
@@ -1810,7 +1808,6 @@ public:
         ASIO_DEFAULT_COMPLETION_TOKEN(executor_type),
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     typedef typename Protocol::socket::template rebind_executor<
@@ -2069,7 +2066,6 @@ public:
   accept(const Executor1& ex, endpoint_type& peer_endpoint,
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     asio::error_code ec;
@@ -2165,7 +2161,6 @@ public:
       endpoint_type& peer_endpoint, asio::error_code& ec,
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     typename Protocol::socket::template
@@ -2286,7 +2281,6 @@ public:
         ASIO_DEFAULT_COMPLETION_TOKEN(executor_type),
       typename enable_if<
         is_executor<Executor1>::value
-          || execution::is_executor<Executor1>::value
       >::type* = 0)
   {
     typedef typename Protocol::socket::template rebind_executor<
@@ -2406,8 +2400,8 @@ private:
 
       detail::non_const_lvalue<WaitHandler> handler2(handler);
       self_->impl_.get_service().async_wait(
-          self_->impl_.get_implementation(), w,
-          handler2.value, self_->impl_.get_executor());
+          self_->impl_.get_implementation(), w, handler2.value,
+          self_->impl_.get_implementation_executor());
     }
 
   private:
@@ -2441,7 +2435,7 @@ private:
       detail::non_const_lvalue<AcceptHandler> handler2(handler);
       self_->impl_.get_service().async_accept(
           self_->impl_.get_implementation(), *peer, peer_endpoint,
-          handler2.value, self_->impl_.get_executor());
+          handler2.value, self_->impl_.get_implementation_executor());
     }
 
   private:
@@ -2475,7 +2469,7 @@ private:
       detail::non_const_lvalue<MoveAcceptHandler> handler2(handler);
       self_->impl_.get_service().async_move_accept(
           self_->impl_.get_implementation(), peer_ex, peer_endpoint,
-          handler2.value, self_->impl_.get_executor());
+          handler2.value, self_->impl_.get_implementation_executor());
     }
 
   private:

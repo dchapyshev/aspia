@@ -93,7 +93,7 @@
 
 // Greenhills C++
 
-#elif defined(__BORLANDC__) && !defined(__clang__)
+#elif defined(__BORLANDC__)
 
 // Borland C++
 

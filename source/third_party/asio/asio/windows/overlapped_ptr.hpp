@@ -64,8 +64,7 @@ public:
   explicit overlapped_ptr(const Executor& ex,
       ASIO_MOVE_ARG(Handler) handler,
       typename enable_if<
-        execution::is_executor<Executor>::value
-          || is_executor<Executor>::value
+        is_executor<Executor>::value
       >::type* = 0)
     : impl_(ex, ASIO_MOVE_CAST(Handler)(handler))
   {
@@ -98,8 +97,7 @@ public:
   template <typename Executor, typename Handler>
   void reset(const Executor& ex, ASIO_MOVE_ARG(Handler) handler,
       typename enable_if<
-        execution::is_executor<Executor>::value
-          || is_executor<Executor>::value
+        is_executor<Executor>::value
       >::type* = 0)
   {
     impl_.reset(ex, ASIO_MOVE_CAST(Handler)(handler));

@@ -203,7 +203,7 @@ public:
     typedef reactive_wait_op<Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, handler, io_ex);
+    p.p = new (p.v) op(handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_wait"));
@@ -237,21 +237,11 @@ public:
       const ConstBufferSequence& buffers,
       socket_base::message_flags flags, asio::error_code& ec)
   {
-    typedef buffer_sequence_adapter<asio::const_buffer,
-        ConstBufferSequence> bufs_type;
+    buffer_sequence_adapter<asio::const_buffer,
+        ConstBufferSequence> bufs(buffers);
 
-    if (bufs_type::is_single_buffer)
-    {
-      return socket_ops::sync_send1(impl.socket_,
-          impl.state_, bufs_type::first(buffers).data(),
-          bufs_type::first(buffers).size(), flags, ec);
-    }
-    else
-    {
-      bufs_type bufs(buffers);
-      return socket_ops::sync_send(impl.socket_, impl.state_,
-          bufs.buffers(), bufs.count(), flags, bufs.all_empty(), ec);
-    }
+    return socket_ops::sync_send(impl.socket_, impl.state_,
+        bufs.buffers(), bufs.count(), flags, bufs.all_empty(), ec);
   }
 
   // Wait until data can be sent without blocking.
@@ -279,8 +269,8 @@ public:
         ConstBufferSequence, Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, impl.socket_,
-        impl.state_, buffers, flags, handler, io_ex);
+    p.p = new (p.v) op(impl.socket_, impl.state_,
+        buffers, flags, handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_send"));
@@ -304,7 +294,7 @@ public:
     typedef reactive_null_buffers_op<Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, handler, io_ex);
+    p.p = new (p.v) op(handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_send(null_buffers)"));
@@ -319,21 +309,11 @@ public:
       const MutableBufferSequence& buffers,
       socket_base::message_flags flags, asio::error_code& ec)
   {
-    typedef buffer_sequence_adapter<asio::mutable_buffer,
-        MutableBufferSequence> bufs_type;
+    buffer_sequence_adapter<asio::mutable_buffer,
+        MutableBufferSequence> bufs(buffers);
 
-    if (bufs_type::is_single_buffer)
-    {
-      return socket_ops::sync_recv1(impl.socket_,
-          impl.state_, bufs_type::first(buffers).data(),
-          bufs_type::first(buffers).size(), flags, ec);
-    }
-    else
-    {
-      bufs_type bufs(buffers);
-      return socket_ops::sync_recv(impl.socket_, impl.state_,
-          bufs.buffers(), bufs.count(), flags, bufs.all_empty(), ec);
-    }
+    return socket_ops::sync_recv(impl.socket_, impl.state_,
+        bufs.buffers(), bufs.count(), flags, bufs.all_empty(), ec);
   }
 
   // Wait until data can be received without blocking.
@@ -362,8 +342,8 @@ public:
         MutableBufferSequence, Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, impl.socket_,
-        impl.state_, buffers, flags, handler, io_ex);
+    p.p = new (p.v) op(impl.socket_, impl.state_,
+        buffers, flags, handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_receive"));
@@ -392,7 +372,7 @@ public:
     typedef reactive_null_buffers_op<Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, handler, io_ex);
+    p.p = new (p.v) op(handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_receive(null_buffers)"));
@@ -451,8 +431,8 @@ public:
         MutableBufferSequence, Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, impl.socket_,
-        buffers, in_flags, out_flags, handler, io_ex);
+    p.p = new (p.v) op(impl.socket_, buffers,
+        in_flags, out_flags, handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_receive_with_flags"));
@@ -479,7 +459,7 @@ public:
     typedef reactive_null_buffers_op<Handler, IoExecutor> op;
     typename op::ptr p = { asio::detail::addressof(handler),
       op::ptr::allocate(handler), 0 };
-    p.p = new (p.v) op(success_ec_, handler, io_ex);
+    p.p = new (p.v) op(handler, io_ex);
 
     ASIO_HANDLER_CREATION((reactor_.context(), *p.p, "socket",
           &impl, impl.socket_, "async_receive_with_flags(null_buffers)"));
@@ -521,9 +501,6 @@ protected:
 
   // The selector that performs event demultiplexing for the service.
   reactor& reactor_;
-
-  // Cached success value to avoid accessing category singleton.
-  const asio::error_code success_ec_;
 };
 
 } // namespace detail

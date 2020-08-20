@@ -22,30 +22,7 @@
 
 namespace asio {
 
-#if defined(ASIO_NO_DEPRECATED)
-
-// Places in asio that would have previously called the allocate or deallocate
-// hooks to manage memory, now call them only to check whether the result types
-// are these types. If the result is not the correct type, it indicates that
-// the user code still has the old hooks in place, and if so we want to trigger
-// a compile error.
-enum asio_handler_allocate_is_no_longer_used {};
-enum asio_handler_deallocate_is_no_longer_used {};
-
-typedef asio_handler_allocate_is_no_longer_used
-  asio_handler_allocate_is_deprecated;
-typedef asio_handler_deallocate_is_no_longer_used
-  asio_handler_deallocate_is_deprecated;
-
-#else // defined(ASIO_NO_DEPRECATED)
-
-typedef void* asio_handler_allocate_is_deprecated;
-typedef void asio_handler_deallocate_is_deprecated;
-
-#endif // defined(ASIO_NO_DEPRECATED)
-
-/// (Deprecated: Use the associated_allocator trait.) Default allocation
-/// function for handlers.
+/// Default allocation function for handlers.
 /**
  * Asynchronous operations may need to allocate temporary objects. Since
  * asynchronous operations have a handler function object, these temporary
@@ -77,8 +54,8 @@ typedef void asio_handler_deallocate_is_deprecated;
  * }
  * @endcode
  */
-ASIO_DECL asio_handler_allocate_is_deprecated
-asio_handler_allocate(std::size_t size, ...);
+ASIO_DECL void* asio_handler_allocate(
+    std::size_t size, ...);
 
 /// Default deallocation function for handlers.
 /**
@@ -90,8 +67,8 @@ asio_handler_allocate(std::size_t size, ...);
  *
  * @sa asio_handler_allocate.
  */
-ASIO_DECL asio_handler_deallocate_is_deprecated
-asio_handler_deallocate(void* pointer, std::size_t size, ...);
+ASIO_DECL void asio_handler_deallocate(
+    void* pointer, std::size_t size, ...);
 
 } // namespace asio
 

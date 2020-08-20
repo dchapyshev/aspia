@@ -30,11 +30,6 @@ template <typename ConstBufferSequence>
 class write_op
 {
 public:
-  static ASIO_CONSTEXPR const char* tracking_name()
-  {
-    return "ssl::stream<>::async_write_some";
-  }
-
   write_op(const ConstBufferSequence& buffers)
     : buffers_(buffers)
   {
@@ -44,13 +39,9 @@ public:
       asio::error_code& ec,
       std::size_t& bytes_transferred) const
   {
-    unsigned char storage[
-      asio::detail::buffer_sequence_adapter<asio::const_buffer,
-        ConstBufferSequence>::linearisation_storage_size];
-
     asio::const_buffer buffer =
       asio::detail::buffer_sequence_adapter<asio::const_buffer,
-        ConstBufferSequence>::linearise(buffers_, asio::buffer(storage));
+        ConstBufferSequence>::first(buffers_);
 
     return eng.write(buffer, ec, bytes_transferred);
   }
