@@ -63,6 +63,8 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "any": "cpp",
+        "source_location": "cpp"
     }
 }

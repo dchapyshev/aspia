@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 
+#include <cstring>
+
 namespace base {
 
 Frame::Frame(const Size& size,

@@ -22,6 +22,7 @@
 #include "base/desktop/diff_block_32bpp_sse2.h"
 #include "base/desktop/diff_block_32bpp_c.h"
 
+#include <cstring>
 #include <libyuv/cpu_id.h>
 
 namespace base {
