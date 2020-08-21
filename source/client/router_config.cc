@@ -16,25 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__STATUS_WINDOW_H
-#define CLIENT__STATUS_WINDOW_H
+#include "client/router_config.h"
 
-#include "base/peer/client_authenticator.h"
+#include "base/crypto/secure_memory.h"
+#include "build/build_config.h"
 
 namespace client {
 
-class StatusWindow
+RouterConfig::RouterConfig()
+    : port(DEFAULT_ROUTER_TCP_PORT)
 {
-public:
-    virtual ~StatusWindow() = default;
+    // Nothing
+}
 
-    virtual void onStarted(const std::u16string& address_or_id) = 0;
-    virtual void onStopped() = 0;
-    virtual void onConnected() = 0;
-    virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
-    virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
-};
+RouterConfig::~RouterConfig()
+{
+    base::memZero(&password);
+}
 
 } // namespace client
-
-#endif // CLIENT__STATUS_WINDOW_H

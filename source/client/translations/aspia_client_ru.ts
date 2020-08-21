@@ -990,9 +990,13 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="105"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation>Попытка подключения к %1:%2.</translation>
+        <translation type="vanished">Попытка подключения к %1:%2.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="105"/>
+        <source>Attempt to connect to %1.</source>
+        <translation>Попытка подключения к %1.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="115"/>

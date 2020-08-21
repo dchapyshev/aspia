@@ -39,7 +39,7 @@ public:
 
     void dettach();
 
-    void onStarted(const std::u16string& address, uint16_t port);
+    void onStarted(const std::u16string& address_or_id);
     void onStopped();
     void onConnected();
     void onDisconnected(base::NetworkChannel::ErrorCode error_code);

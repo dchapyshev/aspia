@@ -1015,89 +1015,89 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="230"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Неможливо відкрити файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="237"/>
+        <location filename="../address_book_tab.cc" line="238"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Неможливо прочитати файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="246"/>
+        <location filename="../address_book_tab.cc" line="247"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>Файл адресної книги &quot;%1&quot; пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="290"/>
+        <location filename="../address_book_tab.cc" line="291"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="296"/>
+        <location filename="../address_book_tab.cc" line="297"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="283"/>
+        <location filename="../address_book_tab.cc" line="284"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="499"/>
+        <location filename="../address_book_tab.cc" line="524"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="503"/>
-        <location filename="../address_book_tab.cc" line="525"/>
+        <location filename="../address_book_tab.cc" line="528"/>
+        <location filename="../address_book_tab.cc" line="550"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="521"/>
+        <location filename="../address_book_tab.cc" line="546"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="778"/>
+        <location filename="../address_book_tab.cc" line="803"/>
         <source>Save Address Book</source>
         <translation>Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="780"/>
+        <location filename="../address_book_tab.cc" line="805"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="790"/>
+        <location filename="../address_book_tab.cc" line="815"/>
         <source>Unable to create or open address book file.</source>
         <translation>Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="803"/>
+        <location filename="../address_book_tab.cc" line="828"/>
         <source>Unable to write address book file.</source>
         <translation>Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="831"/>
+        <location filename="../address_book_tab.cc" line="856"/>
         <source>Root Group</source>
         <translation>Корінна група</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="842"/>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="867"/>
+        <location filename="../address_book_tab.cc" line="881"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="844"/>
+        <location filename="../address_book_tab.cc" line="869"/>
         <source>Could not open address book</source>
         <translation>Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="858"/>
+        <location filename="../address_book_tab.cc" line="883"/>
         <source>Failed to save address book</source>
         <translation>Неможливо зберегти адресну книгу</translation>
     </message>
@@ -1337,6 +1337,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="163"/>
+        <location filename="../main_window.cc" line="1100"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1398,6 +1399,11 @@
         <location filename="../main_window.cc" line="858"/>
         <source>Show</source>
         <translation>Показати</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="1101"/>
+        <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;empty&gt;</source>

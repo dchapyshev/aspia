@@ -23,6 +23,7 @@
 #include "base/crypto/data_cryptor_fake.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
+#include "base/strings/unicode.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
@@ -343,6 +344,30 @@ bool AddressBookTab::save()
 bool AddressBookTab::saveAs()
 {
     return saveToFile(QString());
+}
+
+std::optional<client::RouterConfig> AddressBookTab::routerConfig(std::string_view guid) const
+{
+    if (guid.empty())
+        return std::nullopt;
+
+    for (int i = 0; i < data_.router_size(); ++i)
+    {
+        const proto::address_book::Router& router = data_.router(i);
+        if (router.guid() == guid)
+        {
+            client::RouterConfig router_config;
+
+            router_config.address  = base::utf16FromUtf8(router.address());
+            router_config.port     = router.port();
+            router_config.username = base::utf16FromUtf8(router.username());
+            router_config.password = base::utf16FromUtf8(router.password());
+
+            return router_config;
+        }
+    }
+
+    return std::nullopt;
 }
 
 void AddressBookTab::addComputerGroup()

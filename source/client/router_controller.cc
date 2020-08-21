@@ -25,10 +25,10 @@
 
 namespace client {
 
-RouterController::RouterController(const RouterInfo& router_info,
+RouterController::RouterController(const RouterConfig& router_config,
                                    std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
-      router_info_(router_info)
+      router_config_(router_config)
 {
     DCHECK(task_runner_);
 }
@@ -47,7 +47,7 @@ void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
 
     channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
-    channel_->connect(router_info_.address, router_info_.port);
+    channel_->connect(router_config_.address, router_config_.port);
 }
 
 void RouterController::onConnected()
@@ -63,8 +63,8 @@ void RouterController::onConnected()
     authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
 
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
-    authenticator_->setUserName(router_info_.username);
-    authenticator_->setPassword(router_info_.password);
+    authenticator_->setUserName(router_config_.username);
+    authenticator_->setPassword(router_config_.password);
     authenticator_->setSessionType(proto::ROUTER_SESSION_CLIENT);
 
     authenticator_->start(std::move(channel_),

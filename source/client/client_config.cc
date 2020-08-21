@@ -18,8 +18,8 @@
 
 #include "client/client_config.h"
 
-#include "build/build_config.h"
 #include "base/crypto/secure_memory.h"
+#include "build/build_config.h"
 
 namespace client {
 

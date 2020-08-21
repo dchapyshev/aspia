@@ -42,17 +42,17 @@ void StatusWindowProxy::dettach()
     status_window_ = nullptr;
 }
 
-void StatusWindowProxy::onStarted(const std::u16string& address, uint16_t port)
+void StatusWindowProxy::onStarted(const std::u16string& address_or_id)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&StatusWindowProxy::onStarted, shared_from_this(), address, port));
+            std::bind(&StatusWindowProxy::onStarted, shared_from_this(), address_or_id));
         return;
     }
 
     if (status_window_)
-        status_window_->onStarted(address, port);
+        status_window_->onStarted(address_or_id);
 }
 
 void StatusWindowProxy::onStopped()

@@ -799,9 +799,13 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="105"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation type="unfinished">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
+        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="105"/>
+        <source>Attempt to connect to %1.</source>
+        <translation type="unfinished">Versuch, eine Verbindung mit %1:%2 herzustellen. {1.?}</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="115"/>

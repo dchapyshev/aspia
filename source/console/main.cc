@@ -99,9 +99,9 @@ int main(int argc, char *argv[])
     else if (parser.isSet(address_option))
     {
         client::Config config;
-        config.address  = parser.value(address_option).toStdU16String();
-        config.port     = parser.value(port_option).toUShort();
-        config.username = parser.value(username_option).toStdU16String();
+        config.address_or_id = parser.value(address_option).toStdU16String();
+        config.port          = parser.value(port_option).toUShort();
+        config.username      = parser.value(username_option).toStdU16String();
 
         QString session_type = parser.value(session_type_option);
 

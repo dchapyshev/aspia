@@ -37,12 +37,22 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    base::Address address(DEFAULT_HOST_TCP_PORT);
-    address.setHost(base::utf16FromUtf8(computer_->address()));
-    address.setPort(computer_->port());
+    QString address_title;
+    if (computer_->router_guid().empty())
+    {
+        base::Address address(DEFAULT_HOST_TCP_PORT);
+        address.setHost(base::utf16FromUtf8(computer_->address()));
+        address.setPort(computer_->port());
+
+        address_title = QString::fromStdU16String(address.toString());
+    }
+    else
+    {
+        address_title = QString::fromStdString(computer_->address());
+    }
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
-    setText(COLUMN_INDEX_ADDRESS, QString::fromStdU16String(address.toString()));
+    setText(COLUMN_INDEX_ADDRESS, address_title);
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 
     setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(

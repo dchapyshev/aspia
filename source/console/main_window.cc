@@ -431,7 +431,7 @@ void MainWindow::onDesktopManageConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-            connectToComputer(*computer);
+            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
         }
     }
 }
@@ -446,7 +446,7 @@ void MainWindow::onDesktopViewConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
-            connectToComputer(*computer);
+            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
         }
     }
 }
@@ -461,7 +461,7 @@ void MainWindow::onFileTransferConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
-            connectToComputer(*computer);
+            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
         }
     }
 }
@@ -677,7 +677,7 @@ void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer
         return;
     }
 
-    connectToComputer(*computer);
+    connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
 }
 
 void MainWindow::onTabContextMenu(const QPoint& pos)
@@ -1091,12 +1091,24 @@ bool MainWindow::hasUnpinnedTabs() const
     return false;
 }
 
-void MainWindow::connectToComputer(const proto::address_book::Computer& computer)
+void MainWindow::connectToComputer(const proto::address_book::Computer& computer,
+                                   const std::optional<client::RouterConfig>& router_config)
 {
-    client::Config config;
+    if (!computer.router_guid().empty() && !router_config.has_value())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("The computer properties indicate the use of the router, but the "
+                                "specified router was not found in the list. Check if the router "
+                                "is specified correctly."),
+                             QMessageBox::Ok);
+        return;
+    }
 
+    client::Config config;
+    config.router_config = router_config;
     config.computer_name = base::utf16FromUtf8(computer.name());
-    config.address       = base::utf16FromUtf8(computer.address());
+    config.address_or_id = base::utf16FromUtf8(computer.address());
     config.port          = computer.port();
     config.username      = base::utf16FromUtf8(computer.username());
     config.password      = base::utf16FromUtf8(computer.password());

@@ -93,7 +93,7 @@ void ClientWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void ClientWindow::onStarted(const std::u16string& address, uint16_t port)
+void ClientWindow::onStarted(const std::u16string& address_or_id)
 {
     // Create a dialog to display the connection status.
     status_dialog_ = new StatusDialog(this);
@@ -102,7 +102,7 @@ void ClientWindow::onStarted(const std::u16string& address, uint16_t port)
     connect(status_dialog_, &StatusDialog::finished, this, &ClientWindow::close);
 
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
-    status_dialog_->addMessage(tr("Attempt to connect to %1:%2.").arg(address).arg(port));
+    status_dialog_->addMessage(tr("Attempt to connect to %1.").arg(address_or_id));
 }
 
 void ClientWindow::onStopped()
@@ -228,7 +228,12 @@ void ClientWindow::setClientTitle(const Config& config)
 
     QString computer_name = QString::fromStdU16String(config.computer_name);
     if (computer_name.isEmpty())
-        computer_name = QString::fromStdU16String(config.address);
+    {
+        if (config.router_config.has_value())
+            computer_name = QString::fromStdU16String(config.address_or_id);
+        else
+            computer_name = QString("%1:%2").arg(config.address_or_id).arg(config.port);
+    }
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
 }

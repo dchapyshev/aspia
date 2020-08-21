@@ -23,6 +23,7 @@
 #include "base/net/network_channel.h"
 #include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
+#include "client/router_config.h"
 
 namespace base {
 class ClientAuthenticator;
@@ -33,14 +34,6 @@ namespace client {
 class RouterController : public base::NetworkChannel::Listener
 {
 public:
-    struct RouterInfo
-    {
-        std::u16string address;
-        uint16_t port = 0;
-        std::u16string username;
-        std::u16string password;
-    };
-
     enum class ErrorType
     {
         NETWORK,
@@ -64,7 +57,8 @@ public:
         virtual void onErrorOccurred(ErrorType error_type) = 0;
     };
 
-    RouterController(const RouterInfo& router_info, std::shared_ptr<base::TaskRunner> task_runner);
+    RouterController(const RouterConfig& router_config,
+                     std::shared_ptr<base::TaskRunner> task_runner);
     ~RouterController();
 
     void connectTo(base::HostId host_id, Delegate* delegate);
@@ -84,7 +78,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    RouterInfo router_info_;
+    RouterConfig router_config_;
 
     base::HostId host_id_ = base::kInvalidHostId;
     Delegate* delegate_ = nullptr;

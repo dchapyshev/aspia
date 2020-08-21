@@ -20,8 +20,11 @@
 #define CONSOLE__ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
+#include "client/router_config.h"
 #include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
+
+#include <optional>
 
 namespace console {
 
@@ -48,6 +51,8 @@ public:
 
     bool save();
     bool saveAs();
+
+    std::optional<client::RouterConfig> routerConfig(std::string_view guid) const;
 
     void retranslateUi();
 

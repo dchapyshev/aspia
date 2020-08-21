@@ -19,10 +19,13 @@
 #ifndef CONSOLE__MAIN_WINDOW_H
 #define CONSOLE__MAIN_WINDOW_H
 
-#include "console/mru.h"
+#include "client/router_config.h"
 #include "common/ui/update_checker.h"
+#include "console/mru.h"
 #include "proto/address_book.pb.h"
 #include "ui_main_window.h"
+
+#include <optional>
 
 class QSystemTrayIcon;
 
@@ -96,7 +99,8 @@ private:
     AddressBookTab* currentAddressBookTab();
     bool hasChangedTabs() const;
     bool hasUnpinnedTabs() const;
-    void connectToComputer(const proto::address_book::Computer& computer);
+    void connectToComputer(const proto::address_book::Computer& computer,
+                           const std::optional<client::RouterConfig>& router_config);
 
     Ui::ConsoleMainWindow ui;
     Mru mru_;

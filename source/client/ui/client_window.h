@@ -59,7 +59,7 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
     // StatusWindow implementation.
-    void onStarted(const std::u16string& address, uint16_t port) override;
+    void onStarted(const std::u16string& address_or_id) override;
     void onStopped() override;
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;

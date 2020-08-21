@@ -21,6 +21,7 @@
 
 #include "base/version.h"
 #include "client/client_config.h"
+#include "client/router_controller.h"
 #include "base/net/network_channel.h"
 
 namespace base {
@@ -33,7 +34,9 @@ namespace client {
 class StatusWindow;
 class StatusWindowProxy;
 
-class Client : public base::NetworkChannel::Listener
+class Client
+    : public RouterController::Delegate,
+      public base::NetworkChannel::Listener
 {
 public:
     explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
@@ -75,8 +78,15 @@ protected:
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
+    // RouterController::Delegate implementation.
+    void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onErrorOccurred(RouterController::ErrorType error_type) override;
+
 private:
+    void startAuthentication();
+
     std::shared_ptr<base::TaskRunner> io_task_runner_;
+    std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;

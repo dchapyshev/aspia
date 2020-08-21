@@ -680,7 +680,7 @@
     <name>client::ClientWindow</name>
     <message>
         <location filename="../ui/client_window.cc" line="105"/>
-        <source>Attempt to connect to %1:%2.</source>
+        <source>Attempt to connect to %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

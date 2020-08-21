@@ -19,7 +19,10 @@
 #ifndef CLIENT__CLIENT_CONFIG_H
 #define CLIENT__CLIENT_CONFIG_H
 
+#include "client/router_config.h"
 #include "proto/common.pb.h"
+
+#include <optional>
 
 namespace client {
 
@@ -28,17 +31,14 @@ struct Config
     Config();
     ~Config();
 
-    std::u16string router_address;
-    uint16_t router_port = 0;
-    std::u16string router_username;
-    std::u16string router_password;
+    std::optional<RouterConfig> router_config;
 
     std::u16string computer_name;
-    std::u16string address;
-    uint16_t port = 0;
+    std::u16string address_or_id;
+    uint16_t port;
     std::u16string username;
     std::u16string password;
-    proto::SessionType session_type = proto::SESSION_TYPE_UNKNOWN;
+    proto::SessionType session_type;
 };
 
 } // namespace client
