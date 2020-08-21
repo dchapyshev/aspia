@@ -97,7 +97,7 @@ void PendingSession::doReadMessage(PendingSession* session)
             return;
         }
 
-        session->buffer_size_ = base::Endian::fromBig(session->buffer_size_);
+        session->buffer_size_ = base::EndianUtil::fromBig(session->buffer_size_);
         if (!session->buffer_size_ || session->buffer_size_ > session->buffer_.size())
         {
             session->onErrorOccurred();

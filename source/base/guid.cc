@@ -82,8 +82,8 @@ T randomDataToGUIDStringT(const uint64_t bytes[2])
     result.resize(kGUIDLength);
 
     uint64_t big_endian[2];
-    big_endian[0] = Endian::toBig(bytes[0]);
-    big_endian[1] = Endian::toBig(bytes[1]);
+    big_endian[0] = EndianUtil::toBig(bytes[0]);
+    big_endian[1] = EndianUtil::toBig(bytes[1]);
 
     const char* source = reinterpret_cast<const char*>(&big_endian[0]);
     char* target = result.data();

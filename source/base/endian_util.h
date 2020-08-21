@@ -25,7 +25,7 @@
 
 namespace base {
 
-class Endian
+class EndianUtil
 {
 public:
     static bool isLittle();
@@ -72,7 +72,7 @@ public:
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Endian);
+    DISALLOW_COPY_AND_ASSIGN(EndianUtil);
 };
 
 } // namespace base

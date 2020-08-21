@@ -27,7 +27,7 @@
 namespace base {
 
 // static
-bool Endian::isLittle()
+bool EndianUtil::isLittle()
 {
     const union
     {
@@ -39,7 +39,7 @@ bool Endian::isLittle()
 }
 
 // static
-uint16_t Endian::byteSwap(uint16_t value)
+uint16_t EndianUtil::byteSwap(uint16_t value)
 {
 #if defined(CC_MSVC)
     return _byteswap_ushort(value);
@@ -49,7 +49,7 @@ uint16_t Endian::byteSwap(uint16_t value)
 }
 
 // static
-uint32_t Endian::byteSwap(uint32_t value)
+uint32_t EndianUtil::byteSwap(uint32_t value)
 {
 #if defined(CC_MSVC)
     return _byteswap_ulong(value);
@@ -62,7 +62,7 @@ uint32_t Endian::byteSwap(uint32_t value)
 }
 
 // static
-uint64_t Endian::byteSwap(uint64_t value)
+uint64_t EndianUtil::byteSwap(uint64_t value)
 {
 #if defined(CC_MSVC)
     return _byteswap_uint64(value);
