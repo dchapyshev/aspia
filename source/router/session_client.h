@@ -25,13 +25,12 @@
 namespace router {
 
 class ServerProxy;
+class SharedKeyPool;
 
 class SessionClient : public Session
 {
 public:
-    SessionClient(std::unique_ptr<base::NetworkChannel> channel,
-                  std::shared_ptr<DatabaseFactory> database_factory,
-                  std::shared_ptr<ServerProxy> server_proxy);
+    SessionClient();
     ~SessionClient();
 
 protected:
@@ -43,8 +42,6 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
-    std::shared_ptr<ServerProxy> server_proxy_;
-
     DISALLOW_COPY_AND_ASSIGN(SessionClient);
 };
 

@@ -30,20 +30,8 @@ message RelayKeyPool
     repeated RelayKey key = 1;
 }
 
-message RelayKeyPoolRequest
-{
-    // The number of keys requested.
-    uint32 pool_size = 1;
-}
-
 // Sent from proxy to router.
 message RelayToRouter
 {
     RelayKeyPool key_pool = 1;
-}
-
-// Sent from router to proxy.
-message RouterToRelay
-{
-    RelayKeyPoolRequest key_pool_request = 1;
 }

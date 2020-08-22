@@ -30,9 +30,7 @@ class ServerProxy;
 class SessionHost : public Session
 {
 public:
-    SessionHost(std::unique_ptr<base::NetworkChannel> channel,
-                std::shared_ptr<DatabaseFactory> database_factory,
-                std::shared_ptr<ServerProxy> server_proxy);
+    SessionHost();
     ~SessionHost();
 
     base::HostId hostId() const { return host_id_; }
@@ -48,7 +46,6 @@ protected:
 private:
     void readHostIdRequest(const proto::HostIdRequest& host_id_request);
 
-    std::shared_ptr<ServerProxy> server_proxy_;
     base::HostId host_id_ = base::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(SessionHost);

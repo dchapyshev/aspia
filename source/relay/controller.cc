@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_common.pb.h"
-#include "relay/session_manager.h"
 #include "relay/settings.h"
 
 #if defined(OS_WIN)
@@ -61,8 +60,10 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
 
     // Peers settings.
     peer_port_ = settings.peerPort();
+    max_peer_count_ = settings.maxPeerCount();
 
     LOG(LS_INFO) << "Peer port: " << peer_port_;
+    LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
 Controller::~Controller()
@@ -105,7 +106,7 @@ bool Controller::start()
 #endif // defined(OS_WIN)
 
     session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
-    session_manager_->start(shared_pool_->share());
+    session_manager_->start(shared_pool_->share(), this);
 
     connectToRouter();
     return true;
@@ -141,6 +142,8 @@ void Controller::onConnected()
 
             // Now the session will receive incoming messages.
             channel_->resume();
+
+            sendKeyPool(max_peer_count_);
         }
         else
         {
@@ -166,45 +169,21 @@ void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     delayedConnectToRouter();
 }
 
-void Controller::onMessageReceived(const base::ByteArray& buffer)
+void Controller::onMessageReceived(const base::ByteArray& /* buffer */)
 {
-    incoming_message_.Clear();
-
-    if (!base::parse(buffer, &incoming_message_))
-        return;
-
-    // Unsupported messages are ignored.
-    if (!incoming_message_.has_key_pool_request())
-        return;
-
-    outgoing_message_.Clear();
-
-    // Add the requested number of keys to the pool.
-    for (uint32_t i = 0; i < incoming_message_.key_pool_request().pool_size(); ++i)
-    {
-        SessionKey session_key = SessionKey::create();
-        if (!session_key.isValid())
-            return;
-
-        // Add the key to the outgoing message.
-        proto::RelayKey* key = outgoing_message_.mutable_key_pool()->add_key();
-
-        key->set_type(proto::RelayKey::TYPE_X25519);
-        key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
-        key->set_public_key(base::toStdString(session_key.publicKey()));
-        key->set_iv(base::toStdString(session_key.iv()));
-
-        // Add the key to the pool.
-        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
-    }
-
-    // Send a message to the router.
-    channel_->send(base::serialize(outgoing_message_));
+    // Nothing
 }
 
 void Controller::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void Controller::onSessionFinished()
+{
+    // After disconnecting the peer, one key is released.
+    // Send one new key to the router.
+    sendKeyPool(1);
 }
 
 void Controller::connectToRouter()
@@ -225,6 +204,32 @@ void Controller::delayedConnectToRouter()
     reconnect_timer_.start(kReconnectTimeout, std::bind(&Controller::connectToRouter, this));
 }
 
+void Controller::sendKeyPool(uint32_t key_count)
+{
+    proto::RelayToRouter message;
+
+    // Add the requested number of keys to the pool.
+    for (uint32_t i = 0; i < key_count; ++i)
+    {
+        SessionKey session_key = SessionKey::create();
+        if (!session_key.isValid())
+            return;
+
+        // Add the key to the outgoing message.
+        proto::RelayKey* key = message.mutable_key_pool()->add_key();
+
+        key->set_type(proto::RelayKey::TYPE_X25519);
+        key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+        key->set_public_key(base::toStdString(session_key.publicKey()));
+        key->set_iv(base::toStdString(session_key.iv()));
+
+        // Add the key to the pool.
+        key->set_key_id(shared_pool_->addKey(std::move(session_key)));
+    }
+
+    // Send a message to the router.
+    channel_->send(base::serialize(message));
+}
 
 #if defined(OS_WIN)
 void Controller::addFirewallRules(uint16_t port)

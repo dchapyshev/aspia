@@ -21,16 +21,17 @@
 
 #include "proto/router_relay.pb.h"
 #include "router/session.h"
+#include "router/shared_key_pool.h"
 
 namespace router {
 
 class SessionRelay : public Session
 {
 public:
-    SessionRelay(std::unique_ptr<base::NetworkChannel> channel,
-                 std::shared_ptr<DatabaseFactory> database_factory);
+    SessionRelay();
     ~SessionRelay();
 
+    SharedKeyPool::RelayId relayId() const { return relay_id_; }
     uint32_t poolSize() const;
 
 protected:
@@ -42,10 +43,9 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
-    void sendKeyPoolRequest(uint32_t pool_size);
     void readKeyPool(const proto::RelayKeyPool& key_pool);
 
-    std::vector<proto::RelayKey> pool_;
+    const SharedKeyPool::RelayId relay_id_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

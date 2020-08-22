@@ -35,10 +35,18 @@ class SessionManager
       public Session::Delegate
 {
 public:
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onSessionFinished() = 0;
+    };
+
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner, uint16_t port);
     ~SessionManager();
 
-    void start(std::unique_ptr<SharedPool> shared_pool);
+    void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
 
 protected:
     // PendingSession::Delegate implementation.
@@ -61,6 +69,7 @@ private:
     std::vector<std::unique_ptr<Session>> active_sessions_;
 
     std::unique_ptr<SharedPool> shared_pool_;
+    Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };

@@ -25,6 +25,7 @@
 #include "build/build_config.h"
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
+#include "router/shared_key_pool.h"
 
 namespace router {
 
@@ -34,6 +35,7 @@ class ServerProxy;
 
 class Server
     : public base::NetworkServer::Delegate,
+      public SharedKeyPool::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
 {
@@ -52,6 +54,9 @@ protected:
     // base::NetworkServer::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
+    // SharedKeyPool::Delegate implementation.
+    void onKeyPoolEmpty(SharedKeyPool::RelayId relay_id) override;
+
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
@@ -69,6 +74,7 @@ private:
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
+    std::unique_ptr<SharedKeyPool> relay_key_pool_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);

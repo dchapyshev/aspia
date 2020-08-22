@@ -29,9 +29,7 @@ class ServerProxy;
 class SessionAdmin : public Session
 {
 public:
-    SessionAdmin(std::unique_ptr<base::NetworkChannel> channel,
-                 std::shared_ptr<DatabaseFactory> database_factory,
-                 std::shared_ptr<ServerProxy> server_proxy);
+    SessionAdmin();
     ~SessionAdmin();
 
 protected:
@@ -52,8 +50,6 @@ private:
     proto::UserResult::ErrorCode addUser(const proto::User& user);
     proto::UserResult::ErrorCode modifyUser(const proto::User& user);
     proto::UserResult::ErrorCode deleteUser(const proto::User& user);
-
-    std::shared_ptr<ServerProxy> server_proxy_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionAdmin);
 };

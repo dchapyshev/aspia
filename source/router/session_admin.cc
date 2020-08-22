@@ -27,13 +27,10 @@
 
 namespace router {
 
-SessionAdmin::SessionAdmin(std::unique_ptr<base::NetworkChannel> channel,
-                               std::shared_ptr<DatabaseFactory> database_factory,
-                               std::shared_ptr<ServerProxy> server_proxy)
-    : Session(proto::ROUTER_SESSION_ADMIN, std::move(channel), std::move(database_factory)),
-      server_proxy_(std::move(server_proxy))
+SessionAdmin::SessionAdmin()
+    : Session(proto::ROUTER_SESSION_ADMIN)
 {
-    DCHECK(server_proxy_);
+    // Nothing
 }
 
 SessionAdmin::~SessionAdmin() = default;
@@ -131,7 +128,7 @@ void SessionAdmin::doRelayListRequest()
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_relay_list(server_proxy_->relayList().release());
+    message.set_allocated_relay_list(serverProxy().relayList().release());
     if (!message.has_relay_list())
         message.mutable_relay_list()->set_error_code(proto::RelayList::UNKNOWN_ERROR);
 
@@ -142,7 +139,7 @@ void SessionAdmin::doHostListRequest()
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_host_list(server_proxy_->hostList().release());
+    message.set_allocated_host_list(serverProxy().hostList().release());
     if (!message.has_host_list())
         message.mutable_host_list()->set_error_code(proto::HostList::UNKNOWN_ERROR);
 
@@ -166,7 +163,7 @@ void SessionAdmin::doHostRequest(const proto::HostRequest& request)
         }
         else
         {
-            if (!server_proxy_->disconnectHost(host_id))
+            if (!serverProxy().disconnectHost(host_id))
             {
                 LOG(LS_WARNING) << "Host not found: " << host_id;
                 host_result->set_error_code(proto::HostResult::HOST_MISSED);

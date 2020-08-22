@@ -22,13 +22,10 @@
 
 namespace router {
 
-SessionClient::SessionClient(std::unique_ptr<base::NetworkChannel> channel,
-                             std::shared_ptr<DatabaseFactory> database_factory,
-                             std::shared_ptr<ServerProxy> server_proxy)
-    : Session(proto::ROUTER_SESSION_CLIENT, std::move(channel), std::move(database_factory)),
-      server_proxy_(std::move(server_proxy))
+SessionClient::SessionClient()
+    : Session(proto::ROUTER_SESSION_CLIENT)
 {
-    DCHECK(server_proxy_);
+    // Nothing
 }
 
 SessionClient::~SessionClient() = default;

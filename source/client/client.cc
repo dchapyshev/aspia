@@ -87,6 +87,7 @@ void Client::stop()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
 
+    router_controller_.reset();
     authenticator_.reset();
     channel_.reset();
 

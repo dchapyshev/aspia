@@ -125,6 +125,8 @@ bool Server::start()
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);
 
+    relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
+
     server_ = std::make_unique<base::NetworkServer>();
     server_->start(port, this);
 
@@ -229,6 +231,11 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
+void Server::onKeyPoolEmpty(SharedKeyPool::RelayId relay_id)
+{
+    LOG(LS_INFO) << "Key pool for relay " << relay_id << " is empty";
+}
+
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     proto::RouterSession session_type =
@@ -242,32 +249,20 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     switch (session_info.session_type)
     {
         case proto::ROUTER_SESSION_CLIENT:
-        {
-            session = std::make_unique<SessionClient>(
-                std::move(session_info.channel), database_factory_, server_proxy_);
-        }
-        break;
+            session = std::make_unique<SessionClient>();
+            break;
 
         case proto::ROUTER_SESSION_HOST:
-        {
-            session = std::make_unique<SessionHost>(
-                std::move(session_info.channel), database_factory_, server_proxy_);
-        }
-        break;
+            session = std::make_unique<SessionHost>();
+            break;
 
         case proto::ROUTER_SESSION_ADMIN:
-        {
-            session = std::make_unique<SessionAdmin>(
-                std::move(session_info.channel), database_factory_, server_proxy_);
-        }
-        break;
+            session = std::make_unique<SessionAdmin>();
+            break;
 
         case proto::ROUTER_SESSION_RELAY:
-        {
-            session = std::make_unique<SessionRelay>(
-                std::move(session_info.channel), database_factory_);
-        }
-        break;
+            session = std::make_unique<SessionRelay>();
+            break;
 
         default:
             break;
@@ -280,6 +275,10 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
         return;
     }
 
+    session->setChannel(std::move(session_info.channel));
+    session->setDatabaseFactory(database_factory_);
+    session->setServerProxy(server_proxy_);
+    session->setRelayKeyPool(relay_key_pool_->share());
     session->setVersion(session_info.version);
     session->setOsName(session_info.os_name);
     session->setComputerName(session_info.computer_name);

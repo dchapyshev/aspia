@@ -33,13 +33,10 @@ const size_t kPeerKeySize = 512;
 
 } // namespace
 
-SessionHost::SessionHost(std::unique_ptr<base::NetworkChannel> channel,
-                         std::shared_ptr<DatabaseFactory> database_factory,
-                         std::shared_ptr<ServerProxy> server_proxy)
-    : Session(proto::ROUTER_SESSION_HOST, std::move(channel), std::move(database_factory)),
-      server_proxy_(std::move(server_proxy))
+SessionHost::SessionHost()
+    : Session(proto::ROUTER_SESSION_HOST)
 {
-    DCHECK(server_proxy_);
+    // Nothing
 }
 
 SessionHost::~SessionHost() = default;
@@ -134,7 +131,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
     }
 
     // Notify the server that the ID has been assigned.
-    server_proxy_->onHostSessionWithId(this);
+    serverProxy().onHostSessionWithId(this);
 
     host_id_response->set_host_id(host_id_);
     sendMessage(message);

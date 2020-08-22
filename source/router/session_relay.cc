@@ -19,18 +19,24 @@
 #include "router/session_relay.h"
 
 #include "base/logging.h"
+#include "router/shared_key_pool.h"
 
 namespace router {
 
 namespace {
 
-const uint32_t kDefaultPoolSize = 25;
+SharedKeyPool::RelayId createRelayId()
+{
+    static SharedKeyPool::RelayId relay_id = 0;
+    ++relay_id;
+    return relay_id;
+}
 
 } // namespace
 
-SessionRelay::SessionRelay(std::unique_ptr<base::NetworkChannel> channel,
-                           std::shared_ptr<DatabaseFactory> database_factory)
-    : Session(proto::ROUTER_SESSION_RELAY, std::move(channel), std::move(database_factory))
+SessionRelay::SessionRelay()
+    : Session(proto::ROUTER_SESSION_RELAY),
+      relay_id_(createRelayId())
 {
     // Nothing
 }
@@ -39,12 +45,13 @@ SessionRelay::~SessionRelay() = default;
 
 uint32_t SessionRelay::poolSize() const
 {
-    return pool_.size();
+    return relayKeyPool().countForRelay(relay_id_);
 }
 
 void SessionRelay::onSessionReady()
 {
-    sendKeyPoolRequest(kDefaultPoolSize);
+    LOG(LS_INFO) << "Relay session ready (address: " << address()
+                 << " relay_id: " << relay_id_ << ")";
 }
 
 void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
@@ -72,21 +79,15 @@ void SessionRelay::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
-void SessionRelay::sendKeyPoolRequest(uint32_t pool_size)
-{
-    LOG(LS_INFO) << "Send key pool request: " << pool_size;
-
-    proto::RouterToRelay message;
-    message.mutable_key_pool_request()->set_pool_size(pool_size);
-    sendMessage(message);
-}
-
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
-    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size();
+    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size()
+                 << " (relay_id: " << relay_id_ << ")";
+
+    SharedKeyPool& pool = relayKeyPool();
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        pool_.push_back(key_pool.key(i));
+        pool.addKey(relay_id_, std::make_unique<proto::RelayKey>(key_pool.key(i)));
 }
 
 } // namespace router

@@ -93,9 +93,11 @@ SessionManager::~SessionManager()
     acceptor_.close(ignored_code);
 }
 
-void SessionManager::start(std::unique_ptr<SharedPool> shared_pool)
+void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
 {
     shared_pool_ = std::move(shared_pool);
+    delegate_ = delegate;
+
     SessionManager::doAccept(this);
 }
 
@@ -178,6 +180,9 @@ void SessionManager::removePendingSession(PendingSession* session)
 void SessionManager::removeSession(Session* session)
 {
     task_runner_->deleteSoon(removeSessionT(&active_sessions_, session));
+
+    if (delegate_)
+        delegate_->onSessionFinished();
 }
 
 } // namespace relay

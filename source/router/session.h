@@ -27,13 +27,13 @@ namespace router {
 
 class Database;
 class DatabaseFactory;
+class ServerProxy;
+class SharedKeyPool;
 
 class Session : public base::NetworkChannel::Listener
 {
 public:
-    Session(proto::RouterSession session_type,
-            std::unique_ptr<base::NetworkChannel> channel,
-            std::shared_ptr<DatabaseFactory> database_factory);
+    Session(proto::RouterSession session_type);
     virtual ~Session();
 
     class Delegate
@@ -50,6 +50,11 @@ public:
         STARTED,
         FINISHED
     };
+
+    void setChannel(std::unique_ptr<base::NetworkChannel> channel);
+    void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
+    void setDatabaseFactory(std::shared_ptr<DatabaseFactory> database_factory);
+    void setServerProxy(std::shared_ptr<ServerProxy> server_proxy);
 
     void start(Delegate* delegate);
 
@@ -79,6 +84,12 @@ protected:
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
+    SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
+    const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }
+
+    ServerProxy& serverProxy() { return *server_proxy_; }
+    const ServerProxy& serverProxy() const { return *server_proxy_; }
+
 private:
     const proto::RouterSession session_type_;
     State state_ = State::NOT_STARTED;
@@ -86,6 +97,8 @@ private:
 
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;
+    std::unique_ptr<SharedKeyPool> relay_key_pool_;
+    std::shared_ptr<ServerProxy> server_proxy_;
 
     std::u16string username_;
     base::Version version_;

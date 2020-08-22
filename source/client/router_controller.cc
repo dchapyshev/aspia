@@ -77,8 +77,7 @@ void RouterController::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            LOG(LS_INFO) << "Router connected. Sending connection request (host_id: "
-                         << host_id_ << ")";
+            LOG(LS_INFO) << "Sending connection request (host_id: " << host_id_ << ")";
 
             // Now the session will receive incoming messages.
             channel_->resume();

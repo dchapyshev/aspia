@@ -22,23 +22,64 @@
 #include "base/net/network_channel.h"
 #include "router/database.h"
 #include "router/database_factory.h"
+#include "router/shared_key_pool.h"
 
 namespace router {
 
-Session::Session(proto::RouterSession session_type,
-                 std::unique_ptr<base::NetworkChannel> channel,
-                 std::shared_ptr<DatabaseFactory> database_factory)
-    : session_type_(session_type),
-      channel_(std::move(channel)),
-      database_factory_(std::move(database_factory))
+Session::Session(proto::RouterSession session_type)
+    : session_type_(session_type)
 {
-    DCHECK(channel_ && database_factory_);
+    // Nothing
 }
 
 Session::~Session() = default;
 
+void Session::setChannel(std::unique_ptr<base::NetworkChannel> channel)
+{
+    channel_ = std::move(channel);
+}
+
+void Session::setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool)
+{
+    relay_key_pool_ = std::move(relay_key_pool);
+}
+
+void Session::setDatabaseFactory(std::shared_ptr<DatabaseFactory> database_factory)
+{
+    database_factory_ = std::move(database_factory);
+}
+
+void Session::setServerProxy(std::shared_ptr<ServerProxy> server_proxy)
+{
+    server_proxy_ = std::move(server_proxy);
+}
+
 void Session::start(Delegate* delegate)
 {
+    if (!channel_)
+    {
+        LOG(LS_FATAL) << "Invalid network channel";
+        return;
+    }
+
+    if (!relay_key_pool_)
+    {
+        LOG(LS_FATAL) << "Invalid relay key pool";
+        return;
+    }
+
+    if (!database_factory_)
+    {
+        LOG(LS_FATAL) << "Invalid database factory";
+        return;
+    }
+
+    if (!server_proxy_)
+    {
+        LOG(LS_FATAL) << "Invalid server proxy";
+        return;
+    }
+
     state_ = State::STARTED;
     delegate_ = delegate;
     DCHECK(delegate_);

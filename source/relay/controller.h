@@ -23,6 +23,7 @@
 #include "base/net/network_channel.h"
 #include "build/build_config.h"
 #include "proto/router_relay.pb.h"
+#include "relay/session_manager.h"
 #include "relay/shared_pool.h"
 
 namespace base {
@@ -31,9 +32,9 @@ class ClientAuthenticator;
 
 namespace relay {
 
-class SessionManager;
-
-class Controller : public base::NetworkChannel::Listener
+class Controller
+    : public base::NetworkChannel::Listener,
+      public SessionManager::Delegate
 {
 public:
     explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
@@ -48,9 +49,13 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
+    // SessionManager::Delegate implementation.
+    void onSessionFinished() override;
+
 private:
     void connectToRouter();
     void delayedConnectToRouter();
+    void sendKeyPool(uint32_t key_count);
 
 #if defined(OS_WIN)
     void addFirewallRules(uint16_t port);
@@ -64,6 +69,7 @@ private:
 
     // Peers settings.
     uint16_t peer_port_ = 0;
+    uint32_t max_peer_count_ = 0;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::WaitableTimer reconnect_timer_;
@@ -71,9 +77,6 @@ private:
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionManager> session_manager_;
-
-    proto::RouterToRelay incoming_message_;
-    proto::RelayToRouter outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };

@@ -41,6 +41,9 @@ public:
     void setPeerPort(uint16_t port);
     uint16_t peerPort() const;
 
+    void setMaxPeerCount(uint32_t count);
+    uint32_t maxPeerCount() const;
+
 private:
     base::JsonSettings impl_;
 };
