@@ -39,7 +39,9 @@ list(APPEND SOURCE_ROUTER
     session_relay.cc
     session_relay.h
     settings.cc
-    settings.h)
+    settings.h
+    shared_key_pool.cc
+    shared_key_pool.h)
 
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN
