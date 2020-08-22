@@ -20,37 +20,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "router_common.proto";
+
 package proto;
-
-message RelayKey
-{
-    enum Type
-    {
-        TYPE_UNKNOWN = 0;
-        TYPE_X25519  = 1;
-    }
-
-    enum Encryption
-    {
-        ENCRYPTION_UNKNOWN           = 0;
-        ENCRYPTION_CHACHA20_POLY1305 = 1;
-    }
-
-    // Unique key identifier in the proxy pool.
-    uint32 key_id = 1;
-
-    // Key type.
-    Type type = 2;
-
-    // Encryption algorithm.
-    Encryption encryption = 3;
-
-    // Public key of the proxy.
-    bytes public_key = 4;
-
-    // Initialization vector.
-    bytes iv = 5;
-}
 
 message RelayKeyPool
 {
