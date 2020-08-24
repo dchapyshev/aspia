@@ -150,6 +150,7 @@ public:
 
 protected:
     friend class NetworkServer;
+    friend class RelayClient;
 
     // Constructor available for server. An already connected socket is being moved.
     explicit NetworkChannel(asio::ip::tcp::socket&& socket);
