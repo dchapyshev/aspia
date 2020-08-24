@@ -49,9 +49,9 @@ void Session::setDatabaseFactory(std::shared_ptr<DatabaseFactory> database_facto
     database_factory_ = std::move(database_factory);
 }
 
-void Session::setServerProxy(std::shared_ptr<ServerProxy> server_proxy)
+void Session::setServer(Server* server)
 {
-    server_proxy_ = std::move(server_proxy);
+    server_ = server;
 }
 
 void Session::start(Delegate* delegate)
@@ -74,9 +74,9 @@ void Session::start(Delegate* delegate)
         return;
     }
 
-    if (!server_proxy_)
+    if (!server_)
     {
-        LOG(LS_FATAL) << "Invalid server proxy";
+        LOG(LS_FATAL) << "Invalid server";
         return;
     }
 

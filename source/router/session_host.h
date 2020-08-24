@@ -35,6 +35,8 @@ public:
 
     base::HostId hostId() const { return host_id_; }
 
+    void sendConnectionOffer(const proto::ConnectionOffer& offer);
+
 protected:
     // Session implementation.
     void onSessionReady() override;

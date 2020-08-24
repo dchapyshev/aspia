@@ -42,6 +42,8 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
+    void readConnectionRequest(const proto::ConnectionRequest& request);
+
     DISALLOW_COPY_AND_ASSIGN(SessionClient);
 };
 

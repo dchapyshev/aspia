@@ -33,7 +33,7 @@ public:
     void dettach();
 
     void addKey(RelayId relay_id, Key&& key);
-    Key takeKey();
+    bool takeKey(RelayId* relay_id, Key* key);
     void removeKeysForRelay(RelayId relay_id);
     void clear();
     size_t countForRelay(RelayId relay_id) const;
@@ -69,7 +69,7 @@ void SharedKeyPool::Impl::addKey(RelayId relay_id, Key&& key)
     relay->second.emplace_back(std::move(key));
 }
 
-SharedKeyPool::Key SharedKeyPool::Impl::takeKey()
+bool SharedKeyPool::Impl::takeKey(RelayId* relay_id, Key* key)
 {
     auto preffered_relay = pool_.end();
     size_t max_count = 0;
@@ -87,9 +87,10 @@ SharedKeyPool::Key SharedKeyPool::Impl::takeKey()
     }
 
     if (preffered_relay == pool_.end())
-        return nullptr;
+        return false;
 
-    Key result = std::move(preffered_relay->second.back());
+    *relay_id = preffered_relay->first;
+    *key = std::move(preffered_relay->second.back());
 
     // Removing the key from the pool.
     preffered_relay->second.pop_back();
@@ -103,7 +104,7 @@ SharedKeyPool::Key SharedKeyPool::Impl::takeKey()
             delegate_->onKeyPoolEmpty(preffered_relay->first);
     }
 
-    return result;
+    return true;
 }
 
 void SharedKeyPool::Impl::removeKeysForRelay(RelayId relay_id)
@@ -170,9 +171,9 @@ void SharedKeyPool::addKey(RelayId relay_id, Key&& key)
     impl_->addKey(relay_id, std::move(key));
 }
 
-SharedKeyPool::Key SharedKeyPool::takeKey()
+bool SharedKeyPool::takeKey(RelayId* relay_id, Key* key)
 {
-    return impl_->takeKey();
+    return impl_->takeKey(relay_id, key);
 }
 
 void SharedKeyPool::removeKeysForRelay(RelayId relay_id)

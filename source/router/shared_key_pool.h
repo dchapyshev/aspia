@@ -50,7 +50,7 @@ public:
     std::unique_ptr<SharedKeyPool> share();
 
     void addKey(RelayId relay_id, Key&& key);
-    Key takeKey();
+    bool takeKey(RelayId* relay_id, Key* key);
     void removeKeysForRelay(RelayId relay_id);
     void clear();
     size_t countForRelay(RelayId relay_id) const;

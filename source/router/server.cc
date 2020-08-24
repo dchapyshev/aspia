@@ -24,7 +24,6 @@
 #include "base/strings/unicode.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
-#include "router/server_proxy.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
 #include "router/session_host.h"
@@ -69,8 +68,7 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 } // namespace
 
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
-    : server_proxy_(new ServerProxy(this)),
-      task_runner_(std::move(task_runner)),
+    : task_runner_(std::move(task_runner)),
       database_factory_(std::make_shared<DatabaseFactorySqlite>())
 {
     DCHECK(task_runner_);
@@ -81,8 +79,6 @@ Server::~Server()
 #if defined(OS_WIN)
     deleteFirewallRules();
 #endif // defined(OS_WIN)
-
-    server_proxy_->willDestroyCurrentServer();
 }
 
 bool Server::start()
@@ -223,6 +219,38 @@ void Server::onHostSessionWithId(SessionHost* session)
     }
 }
 
+SessionHost* Server::hostSessionById(base::HostId host_id)
+{
+    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    {
+        Session* entry = it->get();
+
+        if (entry->sessionType() == proto::ROUTER_SESSION_HOST &&
+            static_cast<SessionHost*>(entry)->hostId() == host_id)
+        {
+            return static_cast<SessionHost*>(entry);
+        }
+    }
+
+    return nullptr;
+}
+
+SessionRelay* Server::relaySessionById(SharedKeyPool::RelayId relay_id)
+{
+    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
+    {
+        Session* entry = it->get();
+
+        if (entry->sessionType() == proto::ROUTER_SESSION_RELAY &&
+            static_cast<SessionRelay*>(entry)->relayId() == relay_id)
+        {
+            return static_cast<SessionRelay*>(entry);
+        }
+    }
+
+    return nullptr;
+}
+
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
@@ -277,7 +305,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     session->setChannel(std::move(session_info.channel));
     session->setDatabaseFactory(database_factory_);
-    session->setServerProxy(server_proxy_);
+    session->setServer(this);
     session->setRelayKeyPool(relay_key_pool_->share());
     session->setVersion(session_info.version);
     session->setOsName(session_info.os_name);

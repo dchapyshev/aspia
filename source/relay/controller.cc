@@ -207,6 +207,9 @@ void Controller::delayedConnectToRouter()
 void Controller::sendKeyPool(uint32_t key_count)
 {
     proto::RelayToRouter message;
+    proto::RelayKeyPool* relay_key_pool = message.mutable_key_pool();
+
+    relay_key_pool->set_peer_port(peer_port_);
 
     // Add the requested number of keys to the pool.
     for (uint32_t i = 0; i < key_count; ++i)
@@ -216,7 +219,7 @@ void Controller::sendKeyPool(uint32_t key_count)
             return;
 
         // Add the key to the outgoing message.
-        proto::RelayKey* key = message.mutable_key_pool()->add_key();
+        proto::RelayKey* key = relay_key_pool->add_key();
 
         key->set_type(proto::RelayKey::TYPE_X25519);
         key->set_encryption(proto::RelayKey::ENCRYPTION_CHACHA20_POLY1305);

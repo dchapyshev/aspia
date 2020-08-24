@@ -88,6 +88,8 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 
     for (int i = 0; i < key_pool.key_size(); ++i)
         pool.addKey(relay_id_, std::make_unique<proto::RelayKey>(key_pool.key(i)));
+
+    peer_port_ = key_pool.peer_port();
 }
 
 } // namespace router

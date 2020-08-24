@@ -23,7 +23,7 @@
 #include "base/net/network_channel.h"
 #include "base/peer/user.h"
 #include "router/database.h"
-#include "router/server_proxy.h"
+#include "router/server.h"
 
 namespace router {
 
@@ -128,7 +128,7 @@ void SessionAdmin::doRelayListRequest()
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_relay_list(serverProxy().relayList().release());
+    message.set_allocated_relay_list(server().relayList().release());
     if (!message.has_relay_list())
         message.mutable_relay_list()->set_error_code(proto::RelayList::UNKNOWN_ERROR);
 
@@ -139,7 +139,7 @@ void SessionAdmin::doHostListRequest()
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_host_list(serverProxy().hostList().release());
+    message.set_allocated_host_list(server().hostList().release());
     if (!message.has_host_list())
         message.mutable_host_list()->set_error_code(proto::HostList::UNKNOWN_ERROR);
 
@@ -163,7 +163,7 @@ void SessionAdmin::doHostRequest(const proto::HostRequest& request)
         }
         else
         {
-            if (!serverProxy().disconnectHost(host_id))
+            if (!server().disconnectHost(host_id))
             {
                 LOG(LS_WARNING) << "Host not found: " << host_id;
                 host_result->set_error_code(proto::HostResult::HOST_MISSED);

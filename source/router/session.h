@@ -27,7 +27,7 @@ namespace router {
 
 class Database;
 class DatabaseFactory;
-class ServerProxy;
+class Server;
 class SharedKeyPool;
 
 class Session : public base::NetworkChannel::Listener
@@ -54,7 +54,7 @@ public:
     void setChannel(std::unique_ptr<base::NetworkChannel> channel);
     void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
     void setDatabaseFactory(std::shared_ptr<DatabaseFactory> database_factory);
-    void setServerProxy(std::shared_ptr<ServerProxy> server_proxy);
+    void setServer(Server* server);
 
     void start(Delegate* delegate);
 
@@ -87,8 +87,8 @@ protected:
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }
 
-    ServerProxy& serverProxy() { return *server_proxy_; }
-    const ServerProxy& serverProxy() const { return *server_proxy_; }
+    Server& server() { return *server_; }
+    const Server& server() const { return *server_; }
 
 private:
     const proto::RouterSession session_type_;
@@ -98,7 +98,7 @@ private:
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
-    std::shared_ptr<ServerProxy> server_proxy_;
+    Server* server_;
 
     std::u16string username_;
     base::Version version_;

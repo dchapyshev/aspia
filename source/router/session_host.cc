@@ -23,7 +23,7 @@
 #include "base/crypto/random.h"
 #include "base/net/network_channel.h"
 #include "router/database.h"
-#include "router/server_proxy.h"
+#include "router/server.h"
 
 namespace router {
 
@@ -40,6 +40,13 @@ SessionHost::SessionHost()
 }
 
 SessionHost::~SessionHost() = default;
+
+void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
+{
+    proto::RouterToHost message;
+    message.mutable_connection_offer()->CopyFrom(offer);
+    sendMessage(message);
+}
 
 void SessionHost::onSessionReady()
 {
@@ -131,7 +138,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
     }
 
     // Notify the server that the ID has been assigned.
-    serverProxy().onHostSessionWithId(this);
+    server().onHostSessionWithId(this);
 
     host_id_response->set_host_id(host_id_);
     sendMessage(message);

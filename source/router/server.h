@@ -31,7 +31,7 @@ namespace router {
 
 class DatabaseFactory;
 class SessionHost;
-class ServerProxy;
+class SessionRelay;
 
 class Server
     : public base::NetworkServer::Delegate,
@@ -49,6 +49,9 @@ public:
     std::unique_ptr<proto::HostList> hostList() const;
     bool disconnectHost(base::HostId host_id);
     void onHostSessionWithId(SessionHost* session);
+
+    SessionHost* hostSessionById(base::HostId host_id);
+    SessionRelay* relaySessionById(SharedKeyPool::RelayId relay_id);
 
 protected:
     // base::NetworkServer::Delegate implementation.
@@ -69,7 +72,6 @@ private:
     void deleteFirewallRules();
 #endif // defined(OS_WIN)
 
-    std::shared_ptr<ServerProxy> server_proxy_;
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;

@@ -19,6 +19,11 @@
 #include "router/session_client.h"
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
+#include "base/strings/unicode.h"
+#include "router/server.h"
+#include "router/session_host.h"
+#include "router/session_relay.h"
 
 namespace router {
 
@@ -46,7 +51,7 @@ void SessionClient::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_connection_request())
     {
-        LOG(LS_INFO) << "CONNECTION REQUEST: " << message.connection_request().host_id();
+        readConnectionRequest(message.connection_request());
     }
     else
     {
@@ -57,6 +62,51 @@ void SessionClient::onMessageReceived(const base::ByteArray& buffer)
 void SessionClient::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void SessionClient::readConnectionRequest(const proto::ConnectionRequest& request)
+{
+    proto::RouterToClient message;
+    proto::ConnectionOffer* offer = message.mutable_connection_offer();
+
+    SessionHost* host = server().hostSessionById(request.host_id());
+    if (!host)
+    {
+        offer->set_error_code(proto::ConnectionOffer::PEER_NOT_FOUND);
+    }
+    else
+    {
+        SharedKeyPool::RelayId relay_id;
+        SharedKeyPool::Key key;
+
+        if (!relayKeyPool().takeKey(&relay_id, &key))
+        {
+            offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
+        }
+        else
+        {
+            SessionRelay* relay = server().relaySessionById(relay_id);
+            if (!relay)
+            {
+                offer->set_error_code(proto::ConnectionOffer::UNKNOWN_ERROR);
+            }
+            else
+            {
+                offer->set_error_code(proto::ConnectionOffer::SUCCESS);
+
+                proto::RelayCredentials* credentials = offer->mutable_relay();
+
+                credentials->set_host(base::utf8FromUtf16(relay->address()));
+                credentials->set_port(relay->peerPort());
+                credentials->set_allocated_key(key.release());
+                credentials->set_secret(base::Random::string(64));
+
+                host->sendConnectionOffer(*offer);
+            }
+        }
+    }
+
+    sendMessage(message);
 }
 
 } // namespace router

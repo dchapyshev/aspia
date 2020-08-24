@@ -26,8 +26,6 @@ list(APPEND SOURCE_ROUTER
     main.cc
     server.cc
     server.h
-    server_proxy.cc
-    server_proxy.h
     session.cc
     session.h
     session_admin.cc
