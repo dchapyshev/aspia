@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__RELAY_CLIENT_H
-#define BASE__PEER__RELAY_CLIENT_H
+#ifndef BASE__PEER__RELAY_PEER_H
+#define BASE__PEER__RELAY_PEER_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -30,11 +30,11 @@ namespace base {
 class NetworkChannel;
 class Location;
 
-class RelayClient
+class RelayPeer
 {
 public:
-    RelayClient();
-    ~RelayClient();
+    RelayPeer();
+    ~RelayPeer();
 
     class Delegate
     {
@@ -62,9 +62,9 @@ private:
     asio::ip::tcp::socket socket_;
     asio::ip::tcp::resolver resolver_;
 
-    DISALLOW_COPY_AND_ASSIGN(RelayClient);
+    DISALLOW_COPY_AND_ASSIGN(RelayPeer);
 };
 
 } // namespace base
 
-#endif // BASE__PEER__RELAY_CLIENT_H
+#endif // BASE__PEER__RELAY_PEER_H

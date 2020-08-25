@@ -398,8 +398,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/client_authenticator.h
     peer/host_id.cc
     peer/host_id.h
-    peer/relay_client.cc
-    peer/relay_client.h
+    peer/relay_peer.cc
+    peer/relay_peer.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
     peer/server_authenticator_manager.cc

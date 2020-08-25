@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/peer/relay_client.h"
+#include "base/peer/relay_peer.h"
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -33,7 +33,7 @@
 
 namespace base {
 
-RelayClient::RelayClient()
+RelayPeer::RelayPeer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
       resolver_(io_context_)
@@ -41,7 +41,7 @@ RelayClient::RelayClient()
     // Nothing
 }
 
-RelayClient::~RelayClient()
+RelayPeer::~RelayPeer()
 {
     delegate_ = nullptr;
 
@@ -50,7 +50,7 @@ RelayClient::~RelayClient()
     socket_.close(ignored_code);
 }
 
-void RelayClient::start(const proto::RelayCredentials& credentials, Delegate* delegate)
+void RelayPeer::start(const proto::RelayCredentials& credentials, Delegate* delegate)
 {
     delegate_ = delegate;
     DCHECK(delegate_);
@@ -85,7 +85,7 @@ void RelayClient::start(const proto::RelayCredentials& credentials, Delegate* de
     });
 }
 
-void RelayClient::onConnected()
+void RelayPeer::onConnected()
 {
     if (message_.empty())
     {
@@ -136,7 +136,7 @@ void RelayClient::onConnected()
     });
 }
 
-void RelayClient::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Failed to connect to relay server: "
                   << utf16FromLocal8Bit(error_code.message()) << " ("
@@ -147,7 +147,7 @@ void RelayClient::onErrorOccurred(const Location& location, const std::error_cod
 }
 
 // static
-ByteArray RelayClient::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
+ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
 {
     if (key.type() != proto::RelayKey::TYPE_X25519)
     {
