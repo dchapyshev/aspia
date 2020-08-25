@@ -20,28 +20,23 @@
 #define ROUTER__SHARED_KEY_POOL_H
 
 #include "base/macros_magic.h"
+#include "proto/router_common.pb.h"
 
 #include <cstdint>
+#include <optional>
 #include <memory>
-
-namespace proto {
-class RelayKey;
-} // namespace proto
 
 namespace router {
 
 class SharedKeyPool
 {
 public:
-    using RelayId = uint32_t;
-    using Key = std::unique_ptr<proto::RelayKey>;
-
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
-        virtual void onKeyPoolEmpty(RelayId relay_id) = 0;
+        virtual void onKeyPoolEmpty(const std::u16string& host) = 0;
     };
 
     explicit SharedKeyPool(Delegate* delegate);
@@ -49,11 +44,18 @@ public:
 
     std::unique_ptr<SharedKeyPool> share();
 
-    void addKey(RelayId relay_id, Key&& key);
-    bool takeKey(RelayId* relay_id, Key* key);
-    void removeKeysForRelay(RelayId relay_id);
+    struct Credentials
+    {
+        std::u16string host;
+        uint16_t port = 0;
+        proto::RelayKey key;
+    };
+
+    void addKey(const std::u16string& host, uint16_t port, const proto::RelayKey& key);
+    std::optional<Credentials> takeCredentials();
+    void removeKeysForRelay(const std::u16string& host);
     void clear();
-    size_t countForRelay(RelayId relay_id) const;
+    size_t countForRelay(const std::u16string& host) const;
     size_t count() const;
     bool isEmpty() const;
 

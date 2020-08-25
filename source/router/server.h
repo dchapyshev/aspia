@@ -51,14 +51,13 @@ public:
     void onHostSessionWithId(SessionHost* session);
 
     SessionHost* hostSessionById(base::HostId host_id);
-    SessionRelay* relaySessionById(SharedKeyPool::RelayId relay_id);
 
 protected:
     // base::NetworkServer::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // SharedKeyPool::Delegate implementation.
-    void onKeyPoolEmpty(SharedKeyPool::RelayId relay_id) override;
+    void onKeyPoolEmpty(const std::u16string& host) override;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;

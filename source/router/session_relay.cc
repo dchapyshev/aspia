@@ -23,35 +23,17 @@
 
 namespace router {
 
-namespace {
-
-SharedKeyPool::RelayId createRelayId()
-{
-    static SharedKeyPool::RelayId relay_id = 0;
-    ++relay_id;
-    return relay_id;
-}
-
-} // namespace
-
 SessionRelay::SessionRelay()
-    : Session(proto::ROUTER_SESSION_RELAY),
-      relay_id_(createRelayId())
+    : Session(proto::ROUTER_SESSION_RELAY)
 {
     // Nothing
 }
 
 SessionRelay::~SessionRelay() = default;
 
-uint32_t SessionRelay::poolSize() const
-{
-    return relayKeyPool().countForRelay(relay_id_);
-}
-
 void SessionRelay::onSessionReady()
 {
-    LOG(LS_INFO) << "Relay session ready (address: " << address()
-                 << " relay_id: " << relay_id_ << ")";
+    // Nothing
 }
 
 void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
@@ -81,15 +63,13 @@ void SessionRelay::onMessageWritten(size_t /* pending */)
 
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
-    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size()
-                 << " (relay_id: " << relay_id_ << ")";
-
     SharedKeyPool& pool = relayKeyPool();
+    std::u16string host = address();
+
+    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << host << ")";
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        pool.addKey(relay_id_, std::make_unique<proto::RelayKey>(key_pool.key(i)));
-
-    peer_port_ = key_pool.peer_port();
+        pool.addKey(host, key_pool.peer_port(), key_pool.key(i));
 }
 
 } // namespace router

@@ -31,10 +31,6 @@ public:
     SessionRelay();
     ~SessionRelay();
 
-    SharedKeyPool::RelayId relayId() const { return relay_id_; }
-    uint32_t poolSize() const;
-    uint16_t peerPort() const { return peer_port_; }
-
 protected:
     // Session implementation.
     void onSessionReady() override;
@@ -45,9 +41,6 @@ protected:
 
 private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);
-
-    const SharedKeyPool::RelayId relay_id_;
-    uint16_t peer_port_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

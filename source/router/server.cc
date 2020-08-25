@@ -143,7 +143,7 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
 
         relay->set_timepoint(session_relay->startTime());
         relay->set_address(base::utf8FromUtf16(session_relay->address()));
-        relay->set_pool_size(session_relay->poolSize());
+        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->address()));
         relay->mutable_version()->CopyFrom(session_relay->version().toProto());
         relay->set_os_name(base::utf8FromUtf16(session_relay->osName()));
         relay->set_computer_name(base::utf8FromUtf16(session_relay->computerName()));
@@ -235,22 +235,6 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
     return nullptr;
 }
 
-SessionRelay* Server::relaySessionById(SharedKeyPool::RelayId relay_id)
-{
-    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
-    {
-        Session* entry = it->get();
-
-        if (entry->sessionType() == proto::ROUTER_SESSION_RELAY &&
-            static_cast<SessionRelay*>(entry)->relayId() == relay_id)
-        {
-            return static_cast<SessionRelay*>(entry);
-        }
-    }
-
-    return nullptr;
-}
-
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
@@ -259,9 +243,9 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onKeyPoolEmpty(SharedKeyPool::RelayId relay_id)
+void Server::onKeyPoolEmpty(const std::u16string& host)
 {
-    LOG(LS_INFO) << "Key pool for relay " << relay_id << " is empty";
+    LOG(LS_INFO) << "Key pool for relay " << host << " is empty";
 }
 
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)

@@ -23,7 +23,6 @@
 #include "base/strings/unicode.h"
 #include "router/server.h"
 #include "router/session_host.h"
-#include "router/session_relay.h"
 
 namespace router {
 
@@ -76,33 +75,23 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     }
     else
     {
-        SharedKeyPool::RelayId relay_id;
-        SharedKeyPool::Key key;
-
-        if (!relayKeyPool().takeKey(&relay_id, &key))
+        std::optional<SharedKeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
+        if (!credentials.has_value())
         {
             offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
         }
         else
         {
-            SessionRelay* relay = server().relaySessionById(relay_id);
-            if (!relay)
-            {
-                offer->set_error_code(proto::ConnectionOffer::UNKNOWN_ERROR);
-            }
-            else
-            {
-                offer->set_error_code(proto::ConnectionOffer::SUCCESS);
+            offer->set_error_code(proto::ConnectionOffer::SUCCESS);
 
-                proto::RelayCredentials* credentials = offer->mutable_relay();
+            proto::RelayCredentials* offer_credentials = offer->mutable_relay();
 
-                credentials->set_host(base::utf8FromUtf16(relay->address()));
-                credentials->set_port(relay->peerPort());
-                credentials->set_allocated_key(key.release());
-                credentials->set_secret(base::Random::string(64));
+            offer_credentials->set_host(base::utf8FromUtf16(credentials->host));
+            offer_credentials->set_port(credentials->port);
+            offer_credentials->mutable_key()->CopyFrom(credentials->key);
+            offer_credentials->set_secret(base::Random::string(64));
 
-                host->sendConnectionOffer(*offer);
-            }
+            host->sendConnectionOffer(*offer);
         }
     }
 
