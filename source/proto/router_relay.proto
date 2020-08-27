@@ -26,10 +26,9 @@ package proto;
 
 message RelayKeyPool
 {
-    // A pool of one time keys.
-    repeated RelayKey key = 1;
-    string peer_host = 2;
-    uint32 peer_port = 3;
+    string peer_host = 1;
+    uint32 peer_port = 2;
+    repeated RelayKey key = 3; // A pool of one time keys.
 }
 
 // Sent from proxy to router.
