@@ -65,19 +65,27 @@ void SessionClient::onMessageWritten(size_t /* pending */)
 
 void SessionClient::readConnectionRequest(const proto::ConnectionRequest& request)
 {
+    LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
+
     proto::RouterToClient message;
     proto::ConnectionOffer* offer = message.mutable_connection_offer();
 
     SessionHost* host = server().hostSessionById(request.host_id());
     if (!host)
     {
+        LOG(LS_WARNING) << "Host with id " << request.host_id() << " NOT found!";
+
         offer->set_error_code(proto::ConnectionOffer::PEER_NOT_FOUND);
     }
     else
     {
+        LOG(LS_INFO) << "Host with id " << request.host_id() << " found";
+
         std::optional<SharedKeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
         if (!credentials.has_value())
         {
+            LOG(LS_WARNING) << "Empty key pool";
+
             offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
         }
         else
@@ -91,10 +99,12 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
             offer_credentials->mutable_key()->CopyFrom(credentials->key);
             offer_credentials->set_secret(base::Random::string(64));
 
+            LOG(LS_INFO) << "Sending connection offer to host";
             host->sendConnectionOffer(*offer);
         }
     }
 
+    LOG(LS_INFO) << "Sending connection offer to client";
     sendMessage(message);
 }
 
