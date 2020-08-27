@@ -21,6 +21,7 @@
 #include "base/endian_util.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/message_loop/message_loop.h"
@@ -192,12 +193,14 @@ ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std
         return ByteArray();
     }
 
-    ByteArray session_key = key_pair.sessionKey(fromStdString(key.public_key()));
-    if (session_key.empty())
+    ByteArray temp = key_pair.sessionKey(fromStdString(key.public_key()));
+    if (temp.empty())
     {
         LOG(LS_ERROR) << "Failed to create session key";
         return ByteArray();
     }
+
+    ByteArray session_key = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 
     std::unique_ptr<MessageEncryptor> encryptor =
         MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, fromStdString(key.iv()));
