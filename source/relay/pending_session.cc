@@ -19,6 +19,9 @@
 #include "relay/pending_session.h"
 
 #include "base/endian_util.h"
+#include "base/location.h"
+#include "base/logging.h"
+#include "base/strings/unicode.h"
 
 #include <asio/read.hpp>
 
@@ -47,7 +50,10 @@ PendingSession::~PendingSession()
 
 void PendingSession::start()
 {
-    timer_.start(kTimeout, std::bind(&PendingSession::onErrorOccurred, this));
+    LOG(LS_INFO) << "Starting pending session";
+
+    timer_.start(kTimeout, std::bind(
+        &PendingSession::onErrorOccurred, this, FROM_HERE, std::error_code()));
     PendingSession::doReadMessage(this);
 }
 
@@ -86,6 +92,8 @@ asio::ip::tcp::socket PendingSession::takeSocket()
 // static
 void PendingSession::doReadMessage(PendingSession* session)
 {
+    LOG(LS_INFO) << "Reading message size";
+
     asio::async_read(session->socket_,
                      asio::buffer(&session->buffer_size_, sizeof(uint32_t)),
                      [session](const std::error_code& error_code, size_t bytes_transferred)
@@ -93,16 +101,18 @@ void PendingSession::doReadMessage(PendingSession* session)
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
-                session->onErrorOccurred();
+                session->onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
         session->buffer_size_ = base::EndianUtil::fromBig(session->buffer_size_);
         if (!session->buffer_size_ || session->buffer_size_ > session->buffer_.size())
         {
-            session->onErrorOccurred();
+            session->onErrorOccurred(FROM_HERE, error_code);
             return;
         }
+
+        LOG(LS_INFO) << "Reading message";
 
         asio::async_read(session->socket_,
                          asio::buffer(session->buffer_.data(), session->buffer_size_),
@@ -111,7 +121,7 @@ void PendingSession::doReadMessage(PendingSession* session)
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
-                    session->onErrorOccurred();
+                    session->onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
@@ -120,8 +130,11 @@ void PendingSession::doReadMessage(PendingSession* session)
     });
 }
 
-void PendingSession::onErrorOccurred()
+void PendingSession::onErrorOccurred(
+    const base::Location& location, const std::error_code& error_code)
 {
+    LOG(LS_ERROR) << "Connection error: " << base::utf16FromLocal8Bit(error_code.message())
+                  << " (" << location.toString() << ")";
     if (delegate_)
         delegate_->onPendingSessionFailed(this);
 
@@ -133,9 +146,11 @@ void PendingSession::onMessage()
     proto::PeerToRelay message;
     if (!message.ParseFromArray(buffer_.data(), buffer_.size()))
     {
-        onErrorOccurred();
+        onErrorOccurred(FROM_HERE, std::error_code());
         return;
     }
+
+    LOG(LS_INFO) << "Pending session ready";
 
     if (delegate_)
         delegate_->onPendingSessionReady(this, message);

@@ -38,6 +38,9 @@ public:
     void setRouterPublicKey(const base::ByteArray& public_key);
     base::ByteArray routerPublicKey() const;
 
+    void setPeerAddress(const std::u16string& address);
+    std::u16string peerAddress() const;
+
     void setPeerPort(uint16_t port);
     uint16_t peerPort() const;
 

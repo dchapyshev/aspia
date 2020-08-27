@@ -59,9 +59,11 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Router public key: " << base::toHex(router_public_key_);
 
     // Peers settings.
+    peer_address_ = settings.peerAddress();
     peer_port_ = settings.peerPort();
     max_peer_count_ = settings.maxPeerCount();
 
+    LOG(LS_INFO) << "Peer address: " << peer_address_;
     LOG(LS_INFO) << "Peer port: " << peer_port_;
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
@@ -209,6 +211,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     proto::RelayToRouter message;
     proto::RelayKeyPool* relay_key_pool = message.mutable_key_pool();
 
+    relay_key_pool->set_peer_host(base::utf8FromUtf16(peer_address_));
     relay_key_pool->set_peer_port(peer_port_);
 
     // Add the requested number of keys to the pool.

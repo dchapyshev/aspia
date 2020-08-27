@@ -23,6 +23,10 @@
 
 #include <asio/ip/tcp.hpp>
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace relay {
 
 class Session
@@ -47,7 +51,7 @@ public:
 
 private:
     static void doReadSome(Session* session, int source);
-    void onErrorOccurred();
+    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time_;
     int64_t bytes_transferred_ = 0;

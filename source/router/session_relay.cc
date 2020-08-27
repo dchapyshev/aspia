@@ -19,6 +19,7 @@
 #include "router/session_relay.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 #include "router/shared_key_pool.h"
 
 namespace router {
@@ -64,12 +65,15 @@ void SessionRelay::onMessageWritten(size_t /* pending */)
 void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 {
     SharedKeyPool& pool = relayKeyPool();
-    std::u16string host = address();
 
-    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << host << ")";
+    LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        pool.addKey(host, key_pool.peer_port(), key_pool.key(i));
+    {
+        pool.addKey(base::utf16FromUtf8(key_pool.peer_host()),
+                    key_pool.peer_port(),
+                    key_pool.key(i));
+    }
 }
 
 } // namespace router

@@ -123,7 +123,24 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_connection_offer())
     {
-        LOG(LS_INFO) << "CONNECTION OFFER";
+        if (relay_peer_)
+        {
+            LOG(LS_ERROR) << "Re-offer connection detected";
+            return;
+        }
+
+        const proto::ConnectionOffer& connection_offer = message.connection_offer();
+
+        if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS)
+        {
+            // TODO: Handle error.
+            LOG(LS_ERROR) << "ERROR: " << connection_offer.error_code();
+        }
+        else
+        {
+            relay_peer_ = std::make_unique<base::RelayPeer>();
+            relay_peer_->start(connection_offer.relay(), this);
+        }
     }
     else
     {
@@ -134,6 +151,17 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 void RouterController::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void RouterController::onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel)
+{
+    if (delegate_)
+        delegate_->onHostConnected(std::move(channel));
+}
+
+void RouterController::onRelayConnectionError()
+{
+    // TODO: Handle error.
 }
 
 } // namespace client

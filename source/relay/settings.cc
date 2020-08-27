@@ -58,6 +58,16 @@ base::ByteArray Settings::routerPublicKey() const
     return impl_.get<base::ByteArray>("RouterPublicKey");
 }
 
+void Settings::setPeerAddress(const std::u16string& address)
+{
+    impl_.set<std::u16string>("PeerAddress", address);
+}
+
+std::u16string Settings::peerAddress() const
+{
+    return impl_.get<std::u16string>("PeerAddress");
+}
+
 void Settings::setPeerPort(uint16_t port)
 {
     impl_.set<uint16_t>("PeerPort", port);

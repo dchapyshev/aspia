@@ -18,6 +18,7 @@
 
 #include "base/peer/relay_peer.h"
 
+#include "base/endian_util.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
@@ -57,6 +58,8 @@ void RelayPeer::start(const proto::RelayCredentials& credentials, Delegate* dele
 
     message_ = authenticationMessage(credentials.key(), credentials.secret());
 
+    LOG(LS_INFO) << "Start resolving for " << credentials.host() << ":" << credentials.port();
+
     resolver_.async_resolve(local8BitFromUtf16(utf16FromUtf8(credentials.host())),
                             std::to_string(credentials.port()),
         [this](const std::error_code& error_code,
@@ -69,6 +72,8 @@ void RelayPeer::start(const proto::RelayCredentials& credentials, Delegate* dele
             return;
         }
 
+        LOG(LS_INFO) << "Start connecting...";
+
         asio::async_connect(socket_, endpoints,
                             [this](const std::error_code& error_code,
                                    const asio::ip::tcp::endpoint& /* endpoint */)
@@ -80,6 +85,7 @@ void RelayPeer::start(const proto::RelayCredentials& credentials, Delegate* dele
                 return;
             }
 
+            LOG(LS_INFO) << "Connected";
             onConnected();
         });
     });
@@ -93,7 +99,7 @@ void RelayPeer::onConnected()
         return;
     }
 
-    message_size_ = message_.size();
+    message_size_ = base::EndianUtil::toBig(message_.size());
 
     asio::async_write(socket_, asio::const_buffer(&message_size_, sizeof(message_size_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -121,7 +127,7 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            if (bytes_transferred != message_size_)
+            if (bytes_transferred != message_.size())
             {
                 onErrorOccurred(FROM_HERE, std::error_code());
                 return;

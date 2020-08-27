@@ -23,6 +23,7 @@
 #include "base/net/network_channel.h"
 #include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
+#include "base/peer/relay_peer.h"
 #include "client/router_config.h"
 
 namespace base {
@@ -31,7 +32,9 @@ class ClientAuthenticator;
 
 namespace client {
 
-class RouterController : public base::NetworkChannel::Listener
+class RouterController
+    : public base::NetworkChannel::Listener,
+      public base::RelayPeer::Delegate
 {
 public:
     enum class ErrorType
@@ -74,10 +77,15 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
+    // base::RelayPeer::Delegate implementation.
+    void onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onRelayConnectionError() override;
+
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    std::unique_ptr<base::RelayPeer> relay_peer_;
     RouterConfig router_config_;
 
     base::HostId host_id_ = base::kInvalidHostId;

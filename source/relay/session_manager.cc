@@ -24,6 +24,7 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/peer/host_id.h"
+#include "base/strings/unicode.h"
 
 namespace relay {
 
@@ -159,13 +160,21 @@ void SessionManager::doAccept(SessionManager* session_manager)
     session_manager->acceptor_.async_accept(
         [session_manager](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
-        if (error_code)
-            return;
+        if (!error_code)
+        {
+            LOG(LS_INFO) << "New accepted connection: " << base::utf16FromLocal8Bit(
+                socket.remote_endpoint().address().to_string());
 
-        // A new peer is connected. Create and start the pending session.
-        session_manager->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
-            session_manager->task_runner_, std::move(socket), session_manager));
-        session_manager->pending_sessions_.back()->start();
+            // A new peer is connected. Create and start the pending session.
+            session_manager->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
+                session_manager->task_runner_, std::move(socket), session_manager));
+            session_manager->pending_sessions_.back()->start();
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Error while accepting connection: "
+                          << base::utf16FromLocal8Bit(error_code.message());
+        }
 
         // Waiting for the next connection.
         SessionManager::doAccept(session_manager);

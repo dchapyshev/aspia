@@ -27,6 +27,7 @@
 #include <asio/ip/tcp.hpp>
 
 namespace base {
+class Location;
 class TaskRunner;
 } // namespace base
 
@@ -72,7 +73,7 @@ public:
 
 private:
     static void doReadMessage(PendingSession* pending_session);
-    void onErrorOccurred();
+    void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
     void onMessage();
 
     Delegate* delegate_;
