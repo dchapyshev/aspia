@@ -18,6 +18,8 @@
 
 #include "router/shared_key_pool.h"
 
+#include "base/logging.h"
+
 #include <map>
 
 namespace router {
@@ -60,7 +62,7 @@ private:
 SharedKeyPool::Impl::Impl(Delegate* delegate)
     : delegate_(delegate)
 {
-    // Nothing
+    DCHECK(delegate_);
 }
 
 void SharedKeyPool::Impl::dettach()
@@ -71,15 +73,30 @@ void SharedKeyPool::Impl::dettach()
 void SharedKeyPool::Impl::addKey(
     const std::u16string& host, uint16_t port, const proto::RelayKey& key)
 {
+    if (host.empty() || !port)
+    {
+        LOG(LS_ERROR) << "Empty host name or invalid port";
+        return;
+    }
+
     auto relay = pool_.find(host);
     if (relay == pool_.end())
+    {
+        LOG(LS_INFO) << "Host not found in pool. It will be added";
         relay = pool_.emplace(host, RelayInfo(port)).first;
+    }
 
     relay->second.keys.emplace_back(std::move(key));
 }
 
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 {
+    if (pool_.empty())
+    {
+        LOG(LS_WARNING) << "Empty key pool";
+        return std::nullopt;
+    }
+
     auto preffered_relay = pool_.end();
     size_t max_count = 0;
 
@@ -91,12 +108,21 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
             preffered_relay = it;
             max_count = count;
         }
-
-        ++it;
     }
 
     if (preffered_relay == pool_.end())
+    {
+        LOG(LS_WARNING) << "Empty key pool";
         return std::nullopt;
+    }
+
+    LOG(LS_INFO) << "Preffered relay: " << preffered_relay->first;
+
+    if (preffered_relay->second.keys.empty())
+    {
+        LOG(LS_ERROR) << "Empty key pool for relay";
+        return std::nullopt;
+    }
 
     Credentials credentials;
     credentials.host = preffered_relay->first;
@@ -108,6 +134,8 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     if (preffered_relay->second.keys.empty())
     {
+        LOG(LS_INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
+
         pool_.erase(preffered_relay->first);
 
         // Notify that the pool for the relay is empty.
