@@ -79,6 +79,9 @@ void PendingSession::setIdentify(uint32_t key_id, const base::ByteArray& secret)
 
 bool PendingSession::isPeerFor(const PendingSession& other) const
 {
+    if (&other == this)
+        return false;
+
     if (secret_.empty() || other.secret_.empty())
         return false;
 
@@ -93,8 +96,6 @@ asio::ip::tcp::socket PendingSession::takeSocket()
 // static
 void PendingSession::doReadMessage(PendingSession* session)
 {
-    LOG(LS_INFO) << "Reading message size";
-
     asio::async_read(session->socket_,
                      asio::buffer(&session->buffer_size_, sizeof(uint32_t)),
                      [session](const std::error_code& error_code, size_t bytes_transferred)
@@ -114,8 +115,6 @@ void PendingSession::doReadMessage(PendingSession* session)
         }
 
         session->buffer_.resize(session->buffer_size_);
-
-        LOG(LS_INFO) << "Reading message";
 
         asio::async_read(session->socket_,
                          asio::buffer(session->buffer_.data(), session->buffer_.size()),

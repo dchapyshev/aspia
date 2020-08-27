@@ -40,6 +40,8 @@ Session::~Session()
 
 void Session::start(Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting peers session";
+
     start_time_ = std::chrono::high_resolution_clock::now();
     delegate_ = delegate;
 
@@ -60,6 +62,8 @@ void Session::stop()
         socket_[i].cancel(ignored_code);
         socket_[i].close(ignored_code);
     }
+
+    LOG(LS_INFO) << "Session stopped";
 }
 
 std::chrono::seconds Session::duration() const
