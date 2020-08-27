@@ -153,8 +153,6 @@ void PendingSession::onMessage()
         return;
     }
 
-    LOG(LS_INFO) << "Pending session ready";
-
     if (delegate_)
         delegate_->onPendingSessionReady(this, message);
 }

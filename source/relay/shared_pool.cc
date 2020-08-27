@@ -18,6 +18,8 @@
 
 #include "relay/shared_pool.h"
 
+#include "base/logging.h"
+
 namespace relay {
 
 namespace {
@@ -48,6 +50,8 @@ uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 {
     uint32_t key_id = current_key_id_++;
     map_.emplace(key_id, std::move(session_key));
+
+    LOG(LS_INFO) << "Key with id " << key_id << " added to pool";
     return key_id;
 }
 
@@ -56,6 +60,7 @@ bool SharedPool::Pool::removeKey(uint32_t key_id)
     auto result = map_.find(key_id);
     if (result != map_.end())
     {
+        LOG(LS_INFO) << "Key with id " << key_id << " removed from pool";
         map_.erase(result);
         return true;
     }
@@ -74,6 +79,7 @@ const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
 
 void SharedPool::Pool::clear()
 {
+    LOG(LS_INFO) << "Key pool cleared";
     map_.clear();
 }
 

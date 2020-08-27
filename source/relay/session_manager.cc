@@ -33,21 +33,36 @@ namespace {
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SessionKey& session_key)
 {
-    std::unique_ptr<base::MessageDecryptor> decryptor =
-        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(
-            session_key.sessionKey(message.public_key()), session_key.iv());
-    if (!decryptor)
+    base::ByteArray key = session_key.sessionKey(message.public_key());
+    if (key.empty())
+    {
+        LOG(LS_ERROR) << "Invalid session key";
         return base::ByteArray();
+    }
+
+    std::unique_ptr<base::MessageDecryptor> decryptor =
+        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(key, session_key.iv());
+    if (!decryptor)
+    {
+        LOG(LS_ERROR) << "Decryptor not created";
+        return base::ByteArray();
+    }
 
     const std::string& source = message.data();
     if (source.empty())
+    {
+        LOG(LS_ERROR) << "Empty 'data' field";
         return base::ByteArray();
+    }
 
     base::ByteArray target;
     target.resize(decryptor->decryptedDataSize(source.size()));
 
     if (!decryptor->decrypt(source.data(), source.size(), target.data()))
+    {
+        LOG(LS_ERROR) << "Failed to decrypt shared secret";
         return base::ByteArray();
+    }
 
     return target;
 }
@@ -111,7 +126,7 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
 void SessionManager::onPendingSessionReady(
     PendingSession* session, const proto::PeerToRelay& message)
 {
-    LOG(LS_INFO) << "Pending session ready";
+    LOG(LS_INFO) << "Pending session ready for key_id: " << message.key_id();
 
     // Looking for a key with the specified identifier.
     const SessionKey& session_key = shared_pool_->key(message.key_id());
@@ -129,6 +144,8 @@ void SessionManager::onPendingSessionReady(
             {
                 if (session->isPeerFor(*other_session))
                 {
+                    LOG(LS_INFO) << "Both peers are connected with key " << message.key_id();
+
                     // Delete the key from the pool. It can no longer be used.
                     shared_pool_->removeKey(message.key_id());
 
@@ -144,8 +161,17 @@ void SessionManager::onPendingSessionReady(
                 }
             }
 
+            LOG(LS_INFO) << "Second peer has not connected yet";
             return;
         }
+        else
+        {
+            LOG(LS_WARNING) << "Failed to decrypt shared secret. Connection will be completed";
+        }
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Key with id " << message.key_id() << " NOT found!";
     }
 
     // The key was not found in the pool.
