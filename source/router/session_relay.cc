@@ -68,11 +68,12 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 
+    std::u16string host = base::utf16FromUtf8(key_pool.peer_host());
+    uint16_t port = key_pool.peer_port();
+
     for (int i = 0; i < key_pool.key_size(); ++i)
     {
-        pool.addKey(base::utf16FromUtf8(key_pool.peer_host()),
-                    key_pool.peer_port(),
-                    key_pool.key(i));
+        pool.addKey(host, port, key_pool.key(i));
     }
 }
 
