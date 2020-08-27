@@ -85,6 +85,8 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner, ui
                 asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 {
     DCHECK(task_runner_);
+
+    LOG(LS_INFO) << "Session manager port: " << port;
 }
 
 SessionManager::~SessionManager()
@@ -96,8 +98,12 @@ SessionManager::~SessionManager()
 
 void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting session manager";
+
     shared_pool_ = std::move(shared_pool);
     delegate_ = delegate;
+
+    DCHECK(delegate_ && shared_pool_);
 
     SessionManager::doAccept(this);
 }
@@ -105,6 +111,8 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
 void SessionManager::onPendingSessionReady(
     PendingSession* session, const proto::PeerToRelay& message)
 {
+    LOG(LS_INFO) << "Pending session ready";
+
     // Looking for a key with the specified identifier.
     const SessionKey& session_key = shared_pool_->key(message.key_id());
     if (session_key.isValid())
