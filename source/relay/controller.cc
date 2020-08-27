@@ -97,6 +97,12 @@ bool Controller::start()
         return false;
     }
 
+    if (peer_address_.empty())
+    {
+        LOG(LS_ERROR) << "Empty peer address";
+        return false;
+    }
+
     if (peer_port_ == 0)
     {
         LOG(LS_ERROR) << "Invalid peer port";

@@ -68,7 +68,7 @@ private:
     base::ByteArray router_public_key_;
 
     // Peers settings.
-    std::u16string peer_address_ = 0;
+    std::u16string peer_address_;
     uint16_t peer_port_ = 0;
     uint32_t max_peer_count_ = 0;
 
