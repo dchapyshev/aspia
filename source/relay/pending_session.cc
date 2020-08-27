@@ -30,6 +30,7 @@ namespace relay {
 namespace {
 
 constexpr std::chrono::seconds kTimeout{ 30 };
+constexpr uint32_t kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
 
 } // namespace
 
@@ -106,16 +107,18 @@ void PendingSession::doReadMessage(PendingSession* session)
         }
 
         session->buffer_size_ = base::EndianUtil::fromBig(session->buffer_size_);
-        if (!session->buffer_size_ || session->buffer_size_ > session->buffer_.size())
+        if (!session->buffer_size_ || session->buffer_size_ > kMaxMessageSize)
         {
-            session->onErrorOccurred(FROM_HERE, error_code);
+            session->onErrorOccurred(FROM_HERE, std::error_code());
             return;
         }
+
+        session->buffer_.resize(session->buffer_size_);
 
         LOG(LS_INFO) << "Reading message";
 
         asio::async_read(session->socket_,
-                         asio::buffer(session->buffer_.data(), session->buffer_size_),
+                         asio::buffer(session->buffer_.data(), session->buffer_.size()),
                          [session](const std::error_code& error_code, size_t bytes_transferred)
         {
             if (error_code)

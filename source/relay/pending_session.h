@@ -82,7 +82,7 @@ private:
     asio::ip::tcp::socket socket_;
 
     uint32_t buffer_size_ = 0;
-    std::array<uint8_t, 8192> buffer_;
+    base::ByteArray buffer_;
 
     base::ByteArray secret_;
     uint32_t key_id_ = -1;
