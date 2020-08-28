@@ -69,7 +69,7 @@ public:
     void setUserName(const std::u16string& username);
     const std::u16string& userName() const { return username_; }
     proto::RouterSession sessionType() const { return session_type_; }
-    std::u16string address() const;
+    const std::u16string& address() const { return address_; }
 
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
@@ -100,6 +100,7 @@ private:
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_;
 
+    std::u16string address_;
     std::u16string username_;
     base::Version version_;
     std::u16string os_name_;

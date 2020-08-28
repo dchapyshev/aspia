@@ -88,6 +88,7 @@ void Session::start(Delegate* delegate)
         std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
+    address_ = channel_->peerAddress();
     channel_->setListener(this);
     channel_->resume();
 
@@ -117,14 +118,6 @@ void Session::setComputerName(const std::u16string& computer_name)
 void Session::setUserName(const std::u16string& username)
 {
     username_ = username;
-}
-
-std::u16string Session::address() const
-{
-    if (!channel_)
-        return std::u16string();
-
-    return channel_->peerAddress();
 }
 
 std::chrono::seconds Session::duration() const

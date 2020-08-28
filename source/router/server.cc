@@ -303,8 +303,13 @@ void Server::onSessionFinished()
 {
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        if (it->get()->state() == Session::State::FINISHED)
+        Session* session = it->get();
+        if (session->state() == Session::State::FINISHED)
         {
+            // The relay is disconnected, remove the keys from the pool.
+            if (session->sessionType() == proto::ROUTER_SESSION_RELAY)
+                relay_key_pool_->removeKeysForRelay(session->address());
+
             // Session will be destroyed after completion of the current call.
             task_runner_->deleteSoon(std::move(*it));
 
