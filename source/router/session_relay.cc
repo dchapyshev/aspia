@@ -30,7 +30,10 @@ SessionRelay::SessionRelay()
     // Nothing
 }
 
-SessionRelay::~SessionRelay() = default;
+SessionRelay::~SessionRelay()
+{
+    relayKeyPool().removeKeysForRelay(host_);
+}
 
 void SessionRelay::onSessionReady()
 {
@@ -68,12 +71,12 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 
-    std::u16string host = base::utf16FromUtf8(key_pool.peer_host());
+    host_ = base::utf16FromUtf8(key_pool.peer_host());
     uint16_t port = key_pool.peer_port();
 
     for (int i = 0; i < key_pool.key_size(); ++i)
     {
-        pool.addKey(host, port, key_pool.key(i));
+        pool.addKey(host_, port, key_pool.key(i));
     }
 }
 
