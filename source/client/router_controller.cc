@@ -92,9 +92,14 @@ void RouterController::onConnected()
             LOG(LS_WARNING) << "Authentication failed: "
                             << base::ClientAuthenticator::errorToString(error_code);
 
-            authentication_error_ = error_code;
             if (delegate_)
-                delegate_->onErrorOccurred(ErrorType::AUTHENTICATION);
+            {
+                Error error;
+                error.type = ErrorType::AUTHENTICATION;
+                error.code.authentication = error_code;
+
+                delegate_->onErrorOccurred(error);
+            }
         }
 
         // Authenticator is no longer needed.
@@ -107,9 +112,14 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
-    network_error_ = error_code;
-    if (delegate_)
-        delegate_->onErrorOccurred(ErrorType::NETWORK);
+    if (!delegate_)
+        return;
+
+    Error error;
+    error.type = ErrorType::NETWORK;
+    error.code.network = error_code;
+
+    delegate_->onErrorOccurred(error);
 }
 
 void RouterController::onMessageReceived(const base::ByteArray& buffer)
@@ -133,8 +143,32 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
         if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS)
         {
-            // TODO: Handle error.
-            LOG(LS_ERROR) << "ERROR: " << connection_offer.error_code();
+            if (delegate_)
+            {
+                Error error;
+                error.type = ErrorType::ROUTER;
+
+                switch (connection_offer.error_code())
+                {
+                    case proto::ConnectionOffer::PEER_NOT_FOUND:
+                        error.code.router = ErrorCode::PEER_NOT_FOUND;
+                        break;
+
+                    case proto::ConnectionOffer::ACCESS_DENIED:
+                        error.code.router = ErrorCode::ACCESS_DENIED;
+                        break;
+
+                    case proto::ConnectionOffer::KEY_POOL_EMPTY:
+                        error.code.router = ErrorCode::KEY_POOL_EMPTY;
+                        break;
+
+                    default:
+                        error.code.router = ErrorCode::UNKNOWN_ERROR;
+                        break;
+                }
+
+                delegate_->onErrorOccurred(error);
+            }
         }
         else
         {
@@ -161,7 +195,14 @@ void RouterController::onRelayConnectionReady(std::unique_ptr<base::NetworkChann
 
 void RouterController::onRelayConnectionError()
 {
-    // TODO: Handle error.
+    if (!delegate_)
+        return;
+
+    Error error;
+    error.type = ErrorType::ROUTER;
+    error.code.router = ErrorCode::RELAY_ERROR;
+
+    delegate_->onErrorOccurred(error);
 }
 
 } // namespace client

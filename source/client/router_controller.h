@@ -47,8 +47,23 @@ public:
     enum class ErrorCode
     {
         SUCCESS,
+        UNKNOWN_ERROR,
         PEER_NOT_FOUND,
-        ACCESS_DENIED
+        ACCESS_DENIED,
+        KEY_POOL_EMPTY,
+        RELAY_ERROR
+    };
+
+    struct Error
+    {
+        ErrorType type;
+
+        union Code
+        {
+            base::NetworkChannel::ErrorCode network;
+            base::Authenticator::ErrorCode authentication;
+            ErrorCode router;
+        } code;
     };
 
     class Delegate
@@ -57,7 +72,7 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
-        virtual void onErrorOccurred(ErrorType error_type) = 0;
+        virtual void onErrorOccurred(const Error& error) = 0;
     };
 
     RouterController(const RouterConfig& router_config,
@@ -65,10 +80,6 @@ public:
     ~RouterController();
 
     void connectTo(base::HostId host_id, Delegate* delegate);
-
-    base::NetworkChannel::ErrorCode networkError() const { return network_error_; }
-    base::Authenticator::ErrorCode authenticationError() const { return authentication_error_; }
-    ErrorCode routerError() const { return router_error_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -90,10 +101,6 @@ private:
 
     base::HostId host_id_ = base::kInvalidHostId;
     Delegate* delegate_ = nullptr;
-
-    base::NetworkChannel::ErrorCode network_error_ = base::NetworkChannel::ErrorCode::SUCCESS;
-    base::Authenticator::ErrorCode authentication_error_ = base::Authenticator::ErrorCode::SUCCESS;
-    ErrorCode router_error_ = ErrorCode::SUCCESS;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

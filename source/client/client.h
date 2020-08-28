@@ -80,7 +80,7 @@ protected:
 
     // RouterController::Delegate implementation.
     void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) override;
-    void onErrorOccurred(RouterController::ErrorType error_type) override;
+    void onErrorOccurred(const RouterController::Error& error) override;
 
 private:
     void startAuthentication();
