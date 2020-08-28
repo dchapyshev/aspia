@@ -18,6 +18,7 @@
 
 #include "relay/win/service.h"
 
+#include "base/logging.h"
 #include "relay/controller.h"
 #include "relay/win/service_constants.h"
 
@@ -33,13 +34,21 @@ Service::~Service() = default;
 
 void Service::onStart()
 {
+    LOG(LS_INFO) << "Starting service...";
+
     controller_ = std::make_unique<Controller>(taskRunner());
     controller_->start();
+
+    LOG(LS_INFO) << "Service started";
 }
 
 void Service::onStop()
 {
+    LOG(LS_INFO) << "Stopping service...";
+
     controller_.reset();
+
+    LOG(LS_INFO) << "Service stopped";
 }
 
 void Service::onSessionEvent(
