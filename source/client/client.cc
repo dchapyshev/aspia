@@ -174,6 +174,9 @@ void Client::onHostConnected(std::unique_ptr<base::NetworkChannel> channel)
     channel_->setListener(this);
 
     startAuthentication();
+
+    // Router controller is no longer needed.
+    io_task_runner_->deleteSoon(std::move(router_controller_));
 }
 
 void Client::onErrorOccurred(RouterController::ErrorType error_type)
