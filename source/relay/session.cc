@@ -63,7 +63,8 @@ void Session::stop()
         socket_[i].close(ignored_code);
     }
 
-    LOG(LS_INFO) << "Session stopped";
+    LOG(LS_INFO) << "Session stopped (duration: " << duration().count()
+                 << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
 
 std::chrono::seconds Session::duration() const
