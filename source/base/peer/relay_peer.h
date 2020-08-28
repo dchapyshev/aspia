@@ -46,6 +46,7 @@ public:
     };
 
     void start(const proto::RelayCredentials& credentials, Delegate* delegate);
+    bool isFinished() const { return is_finished_; }
 
 private:
     void onConnected();
@@ -54,6 +55,7 @@ private:
     static ByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
 
     Delegate* delegate_ = nullptr;
+    bool is_finished_ = false;
 
     uint32_t message_size_ = 0;
     ByteArray message_;

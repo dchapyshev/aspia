@@ -400,6 +400,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/host_id.h
     peer/relay_peer.cc
     peer/relay_peer.h
+    peer/relay_peer_manager.cc
+    peer/relay_peer_manager.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
     peer/server_authenticator_manager.cc

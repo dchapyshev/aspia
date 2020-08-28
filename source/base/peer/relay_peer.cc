@@ -134,6 +134,7 @@ void RelayPeer::onConnected()
                 return;
             }
 
+            is_finished_ = true;
             if (delegate_)
             {
                 delegate_->onRelayConnectionReady(
@@ -149,6 +150,7 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
                   << utf16FromLocal8Bit(error_code.message()) << " ("
                   << location.toString() << ")";
 
+    is_finished_ = true;
     if (delegate_)
         delegate_->onRelayConnectionError();
 }
