@@ -33,7 +33,7 @@ namespace {
 
 const User kInvalidUser;
 const size_t kSaltSize = 64; // In bytes.
-const char kDefaultGroup[] = "8192";
+const char kDefaultGroup[] = "4096";
 
 bool isValidUserNameChar(char16_t username_char)
 {
