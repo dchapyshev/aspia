@@ -44,6 +44,7 @@ public:
     void onConnected();
     void onDisconnected(base::NetworkChannel::ErrorCode error_code);
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
+    void onRouterError(const RouterController::Error& error);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;

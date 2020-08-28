@@ -179,9 +179,9 @@ void Client::onHostConnected(std::unique_ptr<base::NetworkChannel> channel)
     io_task_runner_->deleteSoon(std::move(router_controller_));
 }
 
-void Client::onErrorOccurred(const RouterController::Error& error_type)
+void Client::onErrorOccurred(const RouterController::Error& error)
 {
-    // TODO: Handle error.
+    status_window_proxy_->onRouterError(error);
 }
 
 void Client::startAuthentication()

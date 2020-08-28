@@ -996,88 +996,123 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="126"/>
+        <location filename="../ui/client_window.cc" line="135"/>
+        <source>Network error when connecting to the router: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="142"/>
+        <source>Authentication error when connecting to the router: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="130"/>
+        <location filename="../ui/client_window.cc" line="220"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="134"/>
+        <location filename="../ui/client_window.cc" line="224"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="138"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="142"/>
+        <location filename="../ui/client_window.cc" line="232"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">Адресу хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="146"/>
+        <location filename="../ui/client_window.cc" line="236"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">Вийшов час операції сокета.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="150"/>
+        <location filename="../ui/client_window.cc" line="240"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="154"/>
+        <location filename="../ui/client_window.cc" line="244"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">Введена адреса не належить хосту.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="164"/>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="254"/>
+        <location filename="../ui/client_window.cc" line="290"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">Виникла невідома помилка.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="179"/>
+        <location filename="../ui/client_window.cc" line="270"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="183"/>
+        <location filename="../ui/client_window.cc" line="274"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="187"/>
+        <location filename="../ui/client_window.cc" line="278"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">Порушення в протоколі передачі даних.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="191"/>
+        <location filename="../ui/client_window.cc" line="282"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="195"/>
+        <location filename="../ui/client_window.cc" line="286"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">Обраний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="213"/>
+        <location filename="../ui/client_window.cc" line="305"/>
+        <source>No host with the specified ID was found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="309"/>
+        <source>There are no relays available or the key pool is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="313"/>
+        <source>Failed to connect to the relay server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="317"/>
+        <source>Access is denied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="321"/>
+        <source>Unknown error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="166"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="217"/>
+        <location filename="../ui/client_window.cc" line="170"/>
         <source>Desktop View</source>
         <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="221"/>
+        <location filename="../ui/client_window.cc" line="174"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>

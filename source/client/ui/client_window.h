@@ -64,10 +64,15 @@ protected:
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
+    void onRouterError(const RouterController::Error& error) override;
 
 private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
+
+    static QString netErrorToString(base::NetworkChannel::ErrorCode error_code);
+    static QString authErrorToString(base::ClientAuthenticator::ErrorCode error_code);
+    static QString routerErrorToString(RouterController::ErrorCode error_code);
 
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
     std::unique_ptr<ClientProxy> client_proxy_;

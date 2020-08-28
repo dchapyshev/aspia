@@ -20,6 +20,7 @@
 #define CLIENT__STATUS_WINDOW_H
 
 #include "base/peer/client_authenticator.h"
+#include "client/router_controller.h"
 
 namespace client {
 
@@ -33,6 +34,7 @@ public:
     virtual void onConnected() = 0;
     virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
+    virtual void onRouterError(const RouterController::Error& error) = 0;
 };
 
 } // namespace client

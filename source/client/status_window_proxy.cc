@@ -108,4 +108,17 @@ void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode erro
         status_window_->onAccessDenied(error_code);
 }
 
+void StatusWindowProxy::onRouterError(const RouterController::Error& error)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onRouterError, shared_from_this(), error));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onRouterError(error);
+}
+
 } // namespace client

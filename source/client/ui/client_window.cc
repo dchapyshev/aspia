@@ -118,89 +118,42 @@ void ClientWindow::onConnected()
 
 void ClientWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    const char* message;
-
-    switch (error_code)
-    {
-        case base::NetworkChannel::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
-            break;
-
-        case base::NetworkChannel::ErrorCode::NETWORK_ERROR:
-            message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
-            break;
-
-        case base::NetworkChannel::ErrorCode::CONNECTION_REFUSED:
-            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
-            break;
-
-        case base::NetworkChannel::ErrorCode::REMOTE_HOST_CLOSED:
-            message = QT_TR_NOOP("Remote host closed the connection.");
-            break;
-
-        case base::NetworkChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
-            message = QT_TR_NOOP("Host address was not found.");
-            break;
-
-        case base::NetworkChannel::ErrorCode::SOCKET_TIMEOUT:
-            message = QT_TR_NOOP("Socket operation timed out.");
-            break;
-
-        case base::NetworkChannel::ErrorCode::ADDRESS_IN_USE:
-            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
-            break;
-
-        case base::NetworkChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
-            message = QT_TR_NOOP("Address specified does not belong to the host.");
-            break;
-
-        default:
-        {
-            if (error_code != base::NetworkChannel::ErrorCode::UNKNOWN)
-            {
-                LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
-            }
-
-            message = QT_TR_NOOP("An unknown error occurred.");
-        }
-        break;
-    }
-
-    onErrorOccurred(tr(message));
+    onErrorOccurred(netErrorToString(error_code));
 }
 
 void ClientWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
-    const char* message;
+    onErrorOccurred(authErrorToString(error_code));
+}
 
-    switch (error_code)
+void ClientWindow::onRouterError(const RouterController::Error& error)
+{
+    switch (error.type)
     {
-        case base::ClientAuthenticator::ErrorCode::SUCCESS:
-            message = QT_TR_NOOP("Authentication successfully completed.");
-            break;
+        case RouterController::ErrorType::NETWORK:
+        {
+            onErrorOccurred(tr("Network error when connecting to the router: %1")
+                            .arg(netErrorToString(error.code.network)));
+        }
+        break;
 
-        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
-            message = QT_TR_NOOP("Network authentication error.");
-            break;
+        case RouterController::ErrorType::AUTHENTICATION:
+        {
+            onErrorOccurred(tr("Authentication error when connecting to the router: %1")
+                            .arg(authErrorToString(error.code.authentication)));
+        }
+        break;
 
-        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
-            message = QT_TR_NOOP("Violation of the data exchange protocol.");
-            break;
-
-        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
-            break;
-
-        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
-            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
-            break;
+        case RouterController::ErrorType::ROUTER:
+        {
+            onErrorOccurred(routerErrorToString(error.code.router));
+        }
+        break;
 
         default:
-            message = QT_TR_NOOP("An unknown error occurred.");
+            NOTREACHED();
             break;
     }
-
-    onErrorOccurred(tr(message));
 }
 
 void ClientWindow::setClientTitle(const Config& config)
@@ -250,6 +203,126 @@ void ClientWindow::onErrorOccurred(const QString& message)
     }
 
     status_dialog_->addMessage(message);
+}
+
+// static
+QString ClientWindow::netErrorToString(base::NetworkChannel::ErrorCode error_code)
+{
+    const char* message;
+
+    switch (error_code)
+    {
+        case base::NetworkChannel::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
+            break;
+
+        case base::NetworkChannel::ErrorCode::NETWORK_ERROR:
+            message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
+            break;
+
+        case base::NetworkChannel::ErrorCode::CONNECTION_REFUSED:
+            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
+            break;
+
+        case base::NetworkChannel::ErrorCode::REMOTE_HOST_CLOSED:
+            message = QT_TR_NOOP("Remote host closed the connection.");
+            break;
+
+        case base::NetworkChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+            message = QT_TR_NOOP("Host address was not found.");
+            break;
+
+        case base::NetworkChannel::ErrorCode::SOCKET_TIMEOUT:
+            message = QT_TR_NOOP("Socket operation timed out.");
+            break;
+
+        case base::NetworkChannel::ErrorCode::ADDRESS_IN_USE:
+            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
+            break;
+
+        case base::NetworkChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
+            message = QT_TR_NOOP("Address specified does not belong to the host.");
+            break;
+
+        default:
+        {
+            if (error_code != base::NetworkChannel::ErrorCode::UNKNOWN)
+            {
+                LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
+            }
+
+            message = QT_TR_NOOP("An unknown error occurred.");
+        }
+        break;
+    }
+
+    return tr(message);
+}
+
+// static
+QString ClientWindow::authErrorToString(base::ClientAuthenticator::ErrorCode error_code)
+{
+    const char* message;
+
+    switch (error_code)
+    {
+        case base::ClientAuthenticator::ErrorCode::SUCCESS:
+            message = QT_TR_NOOP("Authentication successfully completed.");
+            break;
+
+        case base::ClientAuthenticator::ErrorCode::NETWORK_ERROR:
+            message = QT_TR_NOOP("Network authentication error.");
+            break;
+
+        case base::ClientAuthenticator::ErrorCode::PROTOCOL_ERROR:
+            message = QT_TR_NOOP("Violation of the data exchange protocol.");
+            break;
+
+        case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            break;
+
+        case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:
+            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
+            break;
+
+        default:
+            message = QT_TR_NOOP("An unknown error occurred.");
+            break;
+    }
+
+    return tr(message);
+}
+
+// static
+QString ClientWindow::routerErrorToString(RouterController::ErrorCode error_code)
+{
+    const char* message;
+
+    switch (error_code)
+    {
+        case RouterController::ErrorCode::PEER_NOT_FOUND:
+            message = QT_TR_NOOP("No host with the specified ID was found.");
+            break;
+
+        case RouterController::ErrorCode::KEY_POOL_EMPTY:
+            message = QT_TR_NOOP("There are no relays available or the key pool is empty.");
+            break;
+
+        case RouterController::ErrorCode::RELAY_ERROR:
+            message = QT_TR_NOOP("Failed to connect to the relay server.");
+            break;
+
+        case RouterController::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("Access is denied.");
+            break;
+
+        default:
+            message = QT_TR_NOOP("Unknown error.");
+            break;
+    }
+
+    return tr(message);
 }
 
 } // namespace client

@@ -1004,88 +1004,123 @@
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="126"/>
+        <location filename="../ui/client_window.cc" line="135"/>
+        <source>Network error when connecting to the router: %1</source>
+        <translation>Сетевая ошибка при подключении к маршрутизатору: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="142"/>
+        <source>Authentication error when connecting to the router: %1</source>
+        <translation>Ошибка аутентификации при подключении к маршрутизатору: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="130"/>
+        <location filename="../ui/client_window.cc" line="220"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="134"/>
+        <location filename="../ui/client_window.cc" line="224"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="138"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="142"/>
+        <location filename="../ui/client_window.cc" line="232"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="146"/>
+        <location filename="../ui/client_window.cc" line="236"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="150"/>
+        <location filename="../ui/client_window.cc" line="240"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="154"/>
+        <location filename="../ui/client_window.cc" line="244"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="164"/>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="254"/>
+        <location filename="../ui/client_window.cc" line="290"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="179"/>
+        <location filename="../ui/client_window.cc" line="270"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="183"/>
+        <location filename="../ui/client_window.cc" line="274"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="187"/>
+        <location filename="../ui/client_window.cc" line="278"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="191"/>
+        <location filename="../ui/client_window.cc" line="282"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="195"/>
+        <location filename="../ui/client_window.cc" line="286"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="213"/>
+        <location filename="../ui/client_window.cc" line="305"/>
+        <source>No host with the specified ID was found.</source>
+        <translation>Хост с указанным ID не найден.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="309"/>
+        <source>There are no relays available or the key pool is empty.</source>
+        <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="313"/>
+        <source>Failed to connect to the relay server.</source>
+        <translation>Не удалось подключиться к серверу ретрансляции.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="317"/>
+        <source>Access is denied.</source>
+        <translation>Доступ запрещен.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="321"/>
+        <source>Unknown error.</source>
+        <translation>Неизвестная ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="166"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="217"/>
+        <location filename="../ui/client_window.cc" line="170"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="221"/>
+        <location filename="../ui/client_window.cc" line="174"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
