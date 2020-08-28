@@ -53,6 +53,8 @@ public:
     static User parseFrom(const proto::User& serialized_user);
     proto::User serialize() const;
 
+    static const User kInvalidUser;
+
     int64_t entry_id = 0;
     std::u16string name;
     std::string group;
@@ -60,50 +62,6 @@ public:
     ByteArray verifier;
     uint32_t sessions = 0;
     uint32_t flags = 0;
-};
-
-class UserList
-{
-public:
-    UserList() = default;
-
-    UserList(const UserList& other) = default;
-    UserList& operator=(const UserList& other) = default;
-
-    UserList(UserList&& other) noexcept = default;
-    UserList& operator=(UserList&& other) noexcept = default;
-
-    void add(const User& user);
-    void add(User&& user);
-    void merge(const UserList& user_list);
-    void merge(UserList&& user_list);
-
-    const User& find(std::u16string_view username) const;
-    size_t count() const { return list_.size(); }
-    bool empty() const { return list_.empty(); }
-
-    const ByteArray& seedKey() const { return seed_key_; }
-    void setSeedKey(const ByteArray& seed_key);
-    void setSeedKey(ByteArray&& seed_key);
-
-    class Iterator
-    {
-    public:
-        Iterator(const UserList& list);
-        ~Iterator();
-
-        const User& user() const;
-        bool isAtEnd() const;
-        void advance();
-
-    private:
-        const std::vector<User>& list_;
-        std::vector<User>::const_iterator pos_;
-    };
-
-private:
-    ByteArray seed_key_;
-    std::vector<User> list_;
 };
 
 } // namespace base

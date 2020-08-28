@@ -22,7 +22,6 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
-#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
 #include <cwctype>
@@ -31,7 +30,6 @@ namespace base {
 
 namespace {
 
-const User kInvalidUser;
 const size_t kSaltSize = 64; // In bytes.
 const char kDefaultGroup[] = "4096";
 
@@ -51,6 +49,9 @@ bool isValidUserNameChar(char16_t username_char)
 }
 
 } // namespace
+
+// static
+const User User::kInvalidUser;
 
 // static
 bool User::isValidUserName(std::u16string_view username)
@@ -170,80 +171,6 @@ proto::User User::serialize() const
     user.set_flags(flags);
 
     return user;
-}
-
-void UserList::add(const User& user)
-{
-    if (user.isValid())
-        list_.emplace_back(user);
-}
-
-void UserList::add(User&& user)
-{
-    if (user.isValid())
-        list_.emplace_back(std::move(user));
-}
-
-void UserList::merge(const UserList& user_list)
-{
-    for (const auto& user : user_list.list_)
-        add(user);
-}
-
-void UserList::merge(UserList&& user_list)
-{
-    for (auto& user : user_list.list_)
-        add(std::move(user));
-}
-
-const User& UserList::find(std::u16string_view username) const
-{
-    const User* user = &kInvalidUser;
-
-    for (const auto& item : list_)
-    {
-        if (compareCaseInsensitive(username, item.name) == 0)
-            user = &item;
-    }
-
-    return *user;
-}
-
-void UserList::setSeedKey(const ByteArray& seed_key)
-{
-    seed_key_ = seed_key;
-}
-
-void UserList::setSeedKey(ByteArray&& seed_key)
-{
-    seed_key_ = std::move(seed_key);
-}
-
-UserList::Iterator::Iterator(const UserList& list)
-    : list_(list.list_),
-      pos_(list.list_.cbegin())
-{
-    // Nothing
-}
-
-UserList::Iterator::~Iterator() = default;
-
-const User& UserList::Iterator::user() const
-{
-    if (isAtEnd())
-        return kInvalidUser;
-
-    return *pos_;
-}
-
-bool UserList::Iterator::isAtEnd() const
-{
-    return pos_ == list_.cend();
-}
-
-void UserList::Iterator::advance()
-{
-    ++pos_;
 }
 
 } // namespace base

@@ -23,7 +23,7 @@
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/user.h"
+#include "base/peer/user_list.h"
 #include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"

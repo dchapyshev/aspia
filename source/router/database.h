@@ -20,7 +20,7 @@
 #define ROUTER__DATABASE_H
 
 #include "base/peer/host_id.h"
-#include "base/peer/user.h"
+#include "base/peer/user_list.h"
 
 namespace router {
 

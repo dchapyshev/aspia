@@ -27,7 +27,7 @@
 #include "base/crypto/random.h"
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
-#include "base/peer/user.h"
+#include "base/peer/user_list.h"
 #include "base/strings/unicode.h"
 #include "build/version.h"
 

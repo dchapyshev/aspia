@@ -19,7 +19,7 @@
 #include "host/system_settings.h"
 
 #include "base/crypto/random.h"
-#include "base/peer/user.h"
+#include "base/peer/user_list.h"
 
 namespace host {
 

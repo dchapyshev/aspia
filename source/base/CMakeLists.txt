@@ -407,7 +407,9 @@ list(APPEND SOURCE_BASE_PEER
     peer/server_authenticator_manager.cc
     peer/server_authenticator_manager.h
     peer/user.cc
-    peer/user.h)
+    peer/user.h
+    peer/user_list.cc
+    peer/user_list.h)
 
 list(APPEND SOURCE_BASE_SETTINGS
     settings/json_settings.cc
