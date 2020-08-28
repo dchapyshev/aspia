@@ -206,6 +206,9 @@ void SessionManager::doAccept(SessionManager* session_manager)
         }
         else
         {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
             LOG(LS_ERROR) << "Error while accepting connection: "
                           << base::utf16FromLocal8Bit(error_code.message());
         }

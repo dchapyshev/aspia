@@ -116,7 +116,7 @@ void Session::doReadSome(Session* session, int source)
 
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(LS_ERROR) << "Connection error: " << base::utf16FromLocal8Bit(error_code.message())
+    LOG(LS_ERROR) << "Connection finished: " << base::utf16FromLocal8Bit(error_code.message())
                   << " (" << location.toString() << ")";
     if (delegate_)
         delegate_->onSessionFinished(this);
