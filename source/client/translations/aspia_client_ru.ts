@@ -1076,8 +1076,12 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="282"/>
+        <source>Wrong user name or password.</source>
+        <translation>Неправильное имя пользователя или пароль.</translation>
+    </message>
+    <message>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
+        <translation type="vanished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="286"/>

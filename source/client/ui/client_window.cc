@@ -279,7 +279,7 @@ QString ClientWindow::authErrorToString(base::ClientAuthenticator::ErrorCode err
             break;
 
         case base::ClientAuthenticator::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            message = QT_TR_NOOP("Wrong user name or password.");
             break;
 
         case base::ClientAuthenticator::ErrorCode::SESSION_DENIED:

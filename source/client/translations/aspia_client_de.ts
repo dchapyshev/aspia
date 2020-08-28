@@ -885,7 +885,7 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="282"/>
-        <source>An error occured while authenticating: wrong user name or password.</source>
+        <source>Wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

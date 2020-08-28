@@ -1064,8 +1064,12 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="282"/>
+        <source>Wrong user name or password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="unfinished">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
+        <translation type="obsolete">Er is een error opgetreden bij het authenticeren: verkeerde gebruikers naam of wachtwoord.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="286"/>
