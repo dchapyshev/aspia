@@ -33,6 +33,7 @@ const std::chrono::seconds kReconnectTimeout{ 15 };
 
 RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
+      peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
       reconnect_timer_(task_runner)
 {
     // TODO
@@ -173,24 +174,10 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
         if (message.has_connection_offer())
         {
-            if (relay_peer_)
-            {
-                LOG(LS_ERROR) << "Re-offer connection detected";
-                return;
-            }
-
             const proto::ConnectionOffer& connection_offer = message.connection_offer();
 
-            if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS)
-            {
-                // TODO: Handle error.
-                LOG(LS_ERROR) << "ERROR: " << connection_offer.error_code();
-            }
-            else
-            {
-                relay_peer_ = std::make_unique<base::RelayPeer>();
-                relay_peer_->start(connection_offer.relay(), this);
-            }
+            if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS)
+                peer_manager_->addConnectionOffer(connection_offer.relay());
         }
         else
         {
@@ -204,15 +191,10 @@ void RouterController::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
-void RouterController::onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel)
+void RouterController::onNewPeerConnected(std::unique_ptr<base::NetworkChannel> channel)
 {
     if (delegate_)
         delegate_->onClientConnected(std::move(channel));
-}
-
-void RouterController::onRelayConnectionError()
-{
-    // TODO: Handle error.
 }
 
 void RouterController::connectToRouter()

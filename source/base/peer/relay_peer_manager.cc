@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/net/network_channel.h"
 
 namespace base {
 

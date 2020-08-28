@@ -22,7 +22,7 @@
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/relay_peer.h"
+#include "base/peer/relay_peer_manager.h"
 
 namespace base {
 class ClientAuthenticator;
@@ -32,7 +32,7 @@ namespace host {
 
 class RouterController
     : public base::NetworkChannel::Listener,
-      public base::RelayPeer::Delegate
+      public base::RelayPeerManager::Delegate
 {
 public:
     explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
@@ -72,9 +72,8 @@ protected:
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
-    // base::RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel) override;
-    void onRelayConnectionError() override;
+    // base::RelayPeerManager::Delegate implementation.
+    void onNewPeerConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 
 private:
     void connectToRouter();
@@ -85,7 +84,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
-    std::unique_ptr<base::RelayPeer> relay_peer_;
+    std::unique_ptr<base::RelayPeerManager> peer_manager_;
     base::WaitableTimer reconnect_timer_;
     base::HostId host_id_ = base::kInvalidHostId;
     RouterInfo router_info_;
