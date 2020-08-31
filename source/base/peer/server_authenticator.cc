@@ -47,7 +47,7 @@ ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner
 
 ServerAuthenticator::~ServerAuthenticator() = default;
 
-void ServerAuthenticator::setUserList(std::shared_ptr<UserList> user_list)
+void ServerAuthenticator::setUserList(std::shared_ptr<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);
@@ -117,8 +117,6 @@ bool ServerAuthenticator::setAnonymousAccess(
 
 bool ServerAuthenticator::onStarted()
 {
-    DCHECK(user_list_);
-
     internal_state_ = InternalState::READ_CLIENT_HELLO;
 
     // We do not allow anonymous access without a private key.
@@ -354,7 +352,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Username:" << identify.username();
+    LOG(LS_INFO) << "Username: " << identify.username();
 
     user_name_ = utf16FromUtf8(identify.username());
     if (user_name_.empty())
@@ -365,7 +363,32 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
 
     do
     {
-        const User& user = user_list_->find(user_name_);
+        ByteArray seed_key;
+        User user;
+
+        if (user_list_)
+        {
+            user = user_list_->find(user_name_);
+            seed_key = user_list_->seedKey();
+        }
+        else
+        {
+            LOG(LS_INFO) << "UserList is nullptr";
+        }
+
+        if (seed_key.empty())
+            seed_key = base::Random::byteArray(64);
+
+        if (user.isValid())
+        {
+            LOG(LS_INFO) << "User '" << user_name_ << "' found (enabled: "
+                         << ((user.flags & User::ENABLED) != 0) << ")";
+        }
+        else
+        {
+            LOG(LS_INFO) << "User '" << user_name_ << "' NOT found";
+        }
+
         if (user.isValid() && (user.flags & User::ENABLED))
         {
             session_types_ = user.sessions;
@@ -388,13 +411,13 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         session_types_ = 0;
 
         GenericHash hash(GenericHash::BLAKE2b512);
-        hash.addData(user_list_->seedKey());
+        hash.addData(seed_key);
         hash.addData(identify.username());
 
         N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
         g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
         s_ = BigNum::fromByteArray(hash.result());
-        v_ = SrpMath::calc_v(user_name_, user_list_->seedKey(), s_, N_, g_);
+        v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
     }
     while (false);
 

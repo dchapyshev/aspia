@@ -93,9 +93,9 @@ void SessionAdmin::doUserListRequest()
     proto::RouterToAdmin message;
     proto::UserList* list = message.mutable_user_list();
 
-    base::UserList users = database->userList();
-    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
-        list->add_user()->CopyFrom(it.user().serialize());
+    std::vector<base::User> users = database->userList();
+    for (const auto& user : users)
+        list->add_user()->CopyFrom(user.serialize());
 
     sendMessage(message);
 }

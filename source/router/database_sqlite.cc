@@ -272,7 +272,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-base::UserList DatabaseSqlite::userList() const
+std::vector<base::User> DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -281,10 +281,10 @@ base::UserList DatabaseSqlite::userList() const
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
-        return base::UserList();
+        return std::vector<base::User>();
     }
 
-    base::UserList users;
+    std::vector<base::User> users;
     for (;;)
     {
         if (sqlite3_step(statement) != SQLITE_ROW)
@@ -292,7 +292,7 @@ base::UserList DatabaseSqlite::userList() const
 
         std::optional<base::User> user = readUser(statement);
         if (user.has_value())
-            users.add(std::move(user.value()));
+            users.emplace_back(std::move(user.value()));
     }
 
     sqlite3_finalize(statement);
@@ -450,6 +450,37 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
 
     sqlite3_finalize(statement);
     return result;
+}
+
+base::User DatabaseSqlite::findUser(std::u16string_view username)
+{
+    const char kQuery[] = "SELECT * FROM users WHERE name=?";
+
+    sqlite3_stmt* statement = nullptr;
+    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    if (error_code != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
+        return base::User::kInvalidUser;
+    }
+
+    std::string username_utf8 = base::utf8FromUtf16(username);
+    std::optional<base::User> user;
+
+    do
+    {
+        if (!writeText(statement, username_utf8, 1))
+            break;
+
+        if (sqlite3_step(statement) != SQLITE_ROW)
+            break;
+
+        user = readUser(statement);
+    }
+    while (false);
+
+    sqlite3_finalize(statement);
+    return user.value_or(base::User::kInvalidUser);
 }
 
 base::HostId DatabaseSqlite::hostId(const base::ByteArray& keyHash) const

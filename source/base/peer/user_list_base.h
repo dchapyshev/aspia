@@ -16,28 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_H
-#define ROUTER__DATABASE_H
+#ifndef BASE__PEER__USER_LIST_BASE_H
+#define BASE__PEER__USER_LIST_BASE_H
 
-#include "base/peer/host_id.h"
-#include "base/peer/user_list.h"
+#include "base/peer/user.h"
 
-namespace router {
+namespace base {
 
-class Database
+class UserListBase
 {
 public:
-    virtual ~Database() = default;
+    virtual ~UserListBase() = default;
 
-    virtual std::vector<base::User> userList() const = 0;
-    virtual bool addUser(const base::User& user) = 0;
-    virtual bool modifyUser(const base::User& user) = 0;
-    virtual bool removeUser(int64_t entry_id) = 0;
-    virtual base::User findUser(std::u16string_view username) = 0;
-    virtual base::HostId hostId(const base::ByteArray& keyHash) const = 0;
-    virtual bool addHost(const base::ByteArray& keyHash) = 0;
+    virtual void add(const User& user) = 0;
+    virtual User find(std::u16string_view username) const = 0;
+    virtual const ByteArray& seedKey() const = 0;
+    virtual void setSeedKey(const ByteArray& seed_key) = 0;
+    virtual std::vector<User> list() const = 0;
 };
 
-} // namespace router
+} // namespace base
 
-#endif // ROUTER__DATABASE_H
+#endif // BASE__PEER__USER_LIST_BASE_H

@@ -107,9 +107,9 @@ void SystemSettings::setHostKey(const base::ByteArray& key)
     settings_.flush();
 }
 
-base::UserList SystemSettings::userList() const
+std::unique_ptr<base::UserList> SystemSettings::userList() const
 {
-    base::UserList users;
+    std::unique_ptr<base::UserList> users = base::UserList::createEmpty();
 
     for (const auto& item : settings_.getArray("Users"))
     {
@@ -122,14 +122,14 @@ base::UserList SystemSettings::userList() const
         user.sessions = item.get<uint32_t>("Sessions");
         user.flags    = item.get<uint32_t>("Flags");
 
-        users.add(std::move(user));
+        users->add(user);
     }
 
     base::ByteArray seed_key = settings_.get<base::ByteArray>("SeedKey");
     if (seed_key.empty())
         seed_key = base::Random::byteArray(64);
 
-    users.setSeedKey(seed_key);
+    users->setSeedKey(seed_key);
     return users;
 }
 
@@ -140,10 +140,8 @@ void SystemSettings::setUserList(const base::UserList& users)
 
     base::Settings::Array users_array;
 
-    for (base::UserList::Iterator it(users); !it.isAtEnd(); it.advance())
+    for (const auto& user : users.list())
     {
-        const base::User& user = it.user();
-
         base::Settings item;
         item.set("Name", user.name);
         item.set("Group", user.group);

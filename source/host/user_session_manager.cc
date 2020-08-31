@@ -285,12 +285,12 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
     }
 }
 
-base::UserList UserSessionManager::userList() const
+std::unique_ptr<base::UserList> UserSessionManager::userList() const
 {
-    base::UserList user_list;
+    std::unique_ptr<base::UserList> user_list = base::UserList::createEmpty();
 
     for (const auto& session : sessions_)
-        user_list.add(session->user());
+        user_list->add(session->user());
 
     return user_list;
 }

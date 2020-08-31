@@ -22,16 +22,32 @@
 
 namespace base {
 
+UserList::UserList() = default;
+
+UserList::UserList(const std::vector<User>& list, const ByteArray& seed_key)
+    : list_(list),
+      seed_key_(seed_key)
+{
+    // Nothing
+}
+
+UserList::~UserList() = default;
+
+// static
+std::unique_ptr<UserList> UserList::createEmpty()
+{
+    return std::unique_ptr<UserList>(new UserList());
+}
+
+std::unique_ptr<UserList> UserList::duplicate() const
+{
+    return std::unique_ptr<UserList>(new UserList(list_, seed_key_));
+}
+
 void UserList::add(const User& user)
 {
     if (user.isValid())
         list_.emplace_back(user);
-}
-
-void UserList::add(User&& user)
-{
-    if (user.isValid())
-        list_.emplace_back(std::move(user));
 }
 
 void UserList::merge(const UserList& user_list)
@@ -40,13 +56,7 @@ void UserList::merge(const UserList& user_list)
         add(user);
 }
 
-void UserList::merge(UserList&& user_list)
-{
-    for (auto& user : user_list.list_)
-        add(std::move(user));
-}
-
-const User& UserList::find(std::u16string_view username) const
+User UserList::find(std::u16string_view username) const
 {
     const User* user = &User::kInvalidUser;
 
@@ -62,38 +72,6 @@ const User& UserList::find(std::u16string_view username) const
 void UserList::setSeedKey(const ByteArray& seed_key)
 {
     seed_key_ = seed_key;
-}
-
-void UserList::setSeedKey(ByteArray&& seed_key)
-{
-    seed_key_ = std::move(seed_key);
-}
-
-UserList::Iterator::Iterator(const UserList& list)
-    : list_(list.list_),
-    pos_(list.list_.cbegin())
-{
-    // Nothing
-}
-
-UserList::Iterator::~Iterator() = default;
-
-const User& UserList::Iterator::user() const
-{
-    if (isAtEnd())
-        return User::kInvalidUser;
-
-    return *pos_;
-}
-
-bool UserList::Iterator::isAtEnd() const
-{
-    return pos_ == list_.cend();
-}
-
-void UserList::Iterator::advance()
-{
-    ++pos_;
 }
 
 } // namespace base

@@ -26,7 +26,7 @@
 
 namespace base {
 
-class UserList;
+class UserListBase;
 
 class ServerAuthenticator : public Authenticator
 {
@@ -41,7 +41,7 @@ public:
     };
 
     // Sets the user list.
-    void setUserList(std::shared_ptr<UserList> user_list);
+    void setUserList(std::shared_ptr<UserListBase> user_list);
 
     // Sets the private key.
     [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
@@ -66,7 +66,7 @@ private:
     void onSessionResponse(const ByteArray& buffer);
     [[nodiscard]] ByteArray createSrpKey();
 
-    std::shared_ptr<UserList> user_list_;
+    std::shared_ptr<UserListBase> user_list_;
 
     enum class InternalState
     {

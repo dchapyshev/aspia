@@ -36,10 +36,11 @@ public:
     static std::filesystem::path filePath();
 
     // Database implementation.
-    base::UserList userList() const override;
+    std::vector<base::User> userList() const override;
     bool addUser(const base::User& user) override;
     bool modifyUser(const base::User& user) override;
     bool removeUser(int64_t entry_id) override;
+    base::User findUser(std::u16string_view username) override;
     base::HostId hostId(const base::ByteArray& keyHash) const override;
     bool addHost(const base::ByteArray& keyHash) override;
 

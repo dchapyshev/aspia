@@ -58,7 +58,7 @@ public:
     base::ByteArray hostKey() const;
     void setHostKey(const base::ByteArray& key);
 
-    base::UserList userList() const;
+    std::unique_ptr<base::UserList> userList() const;
     void setUserList(const base::UserList& user_list);
 
     std::u16string updateServer() const;

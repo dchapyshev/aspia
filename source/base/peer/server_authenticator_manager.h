@@ -56,7 +56,7 @@ public:
     ServerAuthenticatorManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
     ~ServerAuthenticatorManager();
 
-    void setUserList(std::shared_ptr<UserList> user_list);
+    void setUserList(std::unique_ptr<UserListBase> user_list);
 
     void setPrivateKey(const ByteArray& private_key);
 
@@ -72,7 +72,7 @@ private:
     void onComplete();
 
     std::shared_ptr<TaskRunner> task_runner_;
-    std::shared_ptr<UserList> user_list_;
+    std::shared_ptr<UserListBase> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
     ByteArray private_key_;

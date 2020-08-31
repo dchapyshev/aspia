@@ -29,6 +29,7 @@
 #include "router/session_host.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
+#include "router/user_list_db.h"
 
 #if defined(OS_WIN)
 #include "base/files/base_paths.h"
@@ -113,10 +114,12 @@ bool Server::start()
     addFirewallRules(port);
 #endif // defined(OS_WIN)
 
+    std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
+
     authenticator_manager_ =
         std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
     authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(std::make_shared<base::UserList>(database->userList()));
+    authenticator_manager_->setUserList(std::move(user_list));
     authenticator_manager_->setAnonymousAccess(
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::ROUTER_SESSION_HOST | proto::ROUTER_SESSION_RELAY);

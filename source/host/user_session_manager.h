@@ -48,7 +48,7 @@ public:
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void setHostId(base::HostId host_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
-    base::UserList userList() const;
+    std::unique_ptr<base::UserList> userList() const;
 
 protected:
     // base::IpcServer::Delegate implementation.

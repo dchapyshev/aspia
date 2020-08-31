@@ -235,14 +235,13 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 void Server::reloadUserList()
 {
     // Read the list of regular users.
-    std::shared_ptr<base::UserList> user_list =
-        std::make_shared<base::UserList>(settings_.userList());
+    std::unique_ptr<base::UserList> user_list(settings_.userList().release());
 
     // Add a list of one-time users to the list of regular users.
-    user_list->merge(user_session_manager_->userList());
+    user_list->merge(*user_session_manager_->userList());
 
     // Updating the list of users.
-    authenticator_manager_->setUserList(user_list);
+    authenticator_manager_->setUserList(std::move(user_list));
 }
 
 void Server::connectToRouter()

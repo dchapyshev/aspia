@@ -19,52 +19,35 @@
 #ifndef BASE__PEER__USER_LIST_H
 #define BASE__PEER__USER_LIST_H
 
-#include "base/peer/user.h"
+#include "base/macros_magic.h"
+#include "base/peer/user_list_base.h"
 
 namespace base {
 
-class UserList
+class UserList : public UserListBase
 {
 public:
-    UserList() = default;
+    ~UserList();
 
-    UserList(const UserList& other) = default;
-    UserList& operator=(const UserList& other) = default;
-
-    UserList(UserList&& other) noexcept = default;
-    UserList& operator=(UserList&& other) noexcept = default;
-
-    void add(const User& user);
-    void add(User&& user);
+    static std::unique_ptr<UserList> createEmpty();
+    std::unique_ptr<UserList> duplicate() const;
     void merge(const UserList& user_list);
-    void merge(UserList&& user_list);
 
-    const User& find(std::u16string_view username) const;
-    size_t count() const { return list_.size(); }
-    bool empty() const { return list_.empty(); }
-
-    const ByteArray& seedKey() const { return seed_key_; }
-    void setSeedKey(const ByteArray& seed_key);
-    void setSeedKey(ByteArray&& seed_key);
-
-    class Iterator
-    {
-    public:
-        Iterator(const UserList& list);
-        ~Iterator();
-
-        const User& user() const;
-        bool isAtEnd() const;
-        void advance();
-
-    private:
-        const std::vector<User>& list_;
-        std::vector<User>::const_iterator pos_;
-    };
+    // UserListBase implementation.
+    void add(const User& user) override;
+    User find(std::u16string_view username) const override;
+    const ByteArray& seedKey() const override { return seed_key_; }
+    void setSeedKey(const ByteArray& seed_key) override;
+    std::vector<User> list() const override { return list_; }
 
 private:
+    UserList();
+    UserList(const std::vector<User>& list, const ByteArray& seed_key);
+
     ByteArray seed_key_;
     std::vector<User> list_;
+
+    DISALLOW_COPY_AND_ASSIGN(UserList);
 };
 
 } // namespace base

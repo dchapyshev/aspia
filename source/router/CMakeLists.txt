@@ -39,7 +39,9 @@ list(APPEND SOURCE_ROUTER
     settings.cc
     settings.h
     shared_key_pool.cc
-    shared_key_pool.h)
+    shared_key_pool.h
+    user_list_db.cc
+    user_list_db.h)
 
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN

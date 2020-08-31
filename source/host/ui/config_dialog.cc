@@ -384,19 +384,19 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             settings.setRouterPublicKey(router_public_key);
         }
 
-        base::UserList user_list;
+        std::unique_ptr<base::UserList> user_list = base::UserList::createEmpty();
 
         for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
         {
             UserTreeItem* user_tree_item =
                 static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
 
-            user_list.add(user_tree_item->user());
+            user_list->add(user_tree_item->user());
         }
 
         // Update the parameters.
         settings.setTcpPort(ui.spinbox_port->value());
-        settings.setUserList(user_list);
+        settings.setUserList(*user_list);
         settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
 
         setConfigChanged(false);
@@ -450,7 +450,7 @@ void ConfigDialog::reloadAll()
     SystemSettings settings;
 
     reloadServiceStatus();
-    reloadUserList(settings.userList());
+    reloadUserList(*settings.userList());
 
     ui.spinbox_port->setValue(settings.tcpPort());
     ui.checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
@@ -465,8 +465,8 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
 {
     ui.tree_users->clear();
 
-    for (base::UserList::Iterator it(user_list); !it.isAtEnd(); it.advance())
-        ui.tree_users->addTopLevelItem(new UserTreeItem(it.user()));
+    for (const auto& user : user_list.list())
+        ui.tree_users->addTopLevelItem(new UserTreeItem(user));
 
     ui.button_modify->setEnabled(false);
     ui.button_delete->setEnabled(false);

@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/peer/user_list_base.h"
 
 namespace base {
 
@@ -33,9 +34,9 @@ ServerAuthenticatorManager::ServerAuthenticatorManager(
 
 ServerAuthenticatorManager::~ServerAuthenticatorManager() = default;
 
-void ServerAuthenticatorManager::setUserList(std::shared_ptr<UserList> user_list)
+void ServerAuthenticatorManager::setUserList(std::unique_ptr<UserListBase> user_list)
 {
-    user_list_ = std::move(user_list);
+    user_list_.reset(user_list.release());
     DCHECK(user_list_);
 }
 
