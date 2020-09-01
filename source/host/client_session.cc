@@ -83,7 +83,7 @@ void ClientSession::setVersion(const base::Version& version)
     version_ = version;
 }
 
-void ClientSession::setUserName(std::u16string_view username)
+void ClientSession::setUserName(std::string_view username)
 {
     username_ = username;
 }

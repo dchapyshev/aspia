@@ -94,7 +94,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 
             proto::RelayCredentials* offer_credentials = offer->mutable_relay();
 
-            offer_credentials->set_host(base::utf8FromUtf16(credentials->host));
+            offer_credentials->set_host(credentials->host);
             offer_credentials->set_port(credentials->port);
             offer_credentials->mutable_key()->CopyFrom(credentials->key);
             offer_credentials->set_secret(base::Random::string(16));

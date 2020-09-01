@@ -57,7 +57,7 @@ protected:
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // SharedKeyPool::Delegate implementation.
-    void onKeyPoolEmpty(const std::u16string& host) override;
+    void onKeyPoolEmpty(const std::string& host) override;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;

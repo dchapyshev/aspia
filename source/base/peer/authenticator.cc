@@ -22,7 +22,6 @@
 #include "base/logging.h"
 #include "base/crypto/message_decryptor_openssl.h"
 #include "base/crypto/message_encryptor_openssl.h"
-#include "base/strings/unicode.h"
 
 namespace base {
 
@@ -154,12 +153,12 @@ void Authenticator::setPeerVersion(const proto::Version& version)
 
 void Authenticator::setPeerOsName(const std::string& name)
 {
-    peer_os_name_ = utf16FromUtf8(name);
+    peer_os_name_ = name;
 }
 
 void Authenticator::setPeerComputerName(const std::string& name)
 {
-    peer_computer_name_ = utf16FromUtf8(name);
+    peer_computer_name_ = name;
 }
 
 void Authenticator::onConnected()

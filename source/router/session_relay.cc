@@ -19,7 +19,6 @@
 #include "router/session_relay.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "router/shared_key_pool.h"
 
 namespace router {
@@ -71,7 +70,7 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 
-    host_ = base::utf16FromUtf8(key_pool.peer_host());
+    host_ = key_pool.peer_host();
     uint16_t port = key_pool.peer_port();
 
     for (int i = 0; i < key_pool.key_size(); ++i)

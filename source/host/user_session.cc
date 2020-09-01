@@ -372,7 +372,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     // Stop one-time desktop clients.
     for (const auto& client : desktop_clients_)
     {
-        if (base::startsWith(client->userName(), u"#"))
+        if (base::startsWith(client->userName(), "#"))
             client->stop();
     }
 
@@ -408,7 +408,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
     event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
-    event->set_username(base::utf8FromUtf16(client_session.userName()));
+    event->set_username(client_session.userName());
     event->set_session_type(client_session.sessionType());
     event->set_uuid(client_session.id());
 

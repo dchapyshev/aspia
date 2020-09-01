@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/net/network_channel.h"
+#include "base/strings/unicode.h"
 #include "router/database.h"
 #include "router/database_factory.h"
 #include "router/shared_key_pool.h"
@@ -88,7 +89,7 @@ void Session::start(Delegate* delegate)
         std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
-    address_ = channel_->peerAddress();
+    address_ = base::utf8FromUtf16(channel_->peerAddress());
     channel_->setListener(this);
     channel_->resume();
 
@@ -105,17 +106,17 @@ void Session::setVersion(const base::Version& version)
     version_ = version;
 }
 
-void Session::setOsName(const std::u16string& os_name)
+void Session::setOsName(const std::string& os_name)
 {
     os_name_ = os_name;
 }
 
-void Session::setComputerName(const std::u16string& computer_name)
+void Session::setComputerName(const std::string& computer_name)
 {
     computer_name_ = computer_name;
 }
 
-void Session::setUserName(const std::u16string& username)
+void Session::setUserName(const std::string& username)
 {
     username_ = username;
 }

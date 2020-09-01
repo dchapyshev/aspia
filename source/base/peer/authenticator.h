@@ -59,10 +59,10 @@ public:
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
     [[nodiscard]] const Version& peerVersion() const { return peer_version_; }
-    [[nodiscard]] const std::u16string& peerOsName() const { return peer_os_name_; }
-    [[nodiscard]] const std::u16string& peerComputerName() const { return peer_computer_name_; }
+    [[nodiscard]] const std::string& peerOsName() const { return peer_os_name_; }
+    [[nodiscard]] const std::string& peerComputerName() const { return peer_computer_name_; }
     [[nodiscard]] uint32_t sessionType() const { return session_type_; }
-    [[nodiscard]] const std::u16string& userName() const { return user_name_; }
+    [[nodiscard]] const std::string& userName() const { return user_name_; }
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
@@ -99,7 +99,7 @@ protected:
     ByteArray decrypt_iv_;
 
     uint32_t session_type_ = 0; // Selected session type.
-    std::u16string user_name_;
+    std::string user_name_;
 
 private:
     WaitableTimer timer_;
@@ -107,8 +107,8 @@ private:
     Callback callback_;
     State state_ = State::STOPPED;
     Version peer_version_; // Remote peer version.
-    std::u16string peer_os_name_;
-    std::u16string peer_computer_name_;
+    std::string peer_os_name_;
+    std::string peer_computer_name_;
 };
 
 } // namespace base

@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/net/network_channel.h"
-#include "base/strings/unicode.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
 #include "router/session_admin.h"
@@ -145,11 +144,11 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
         proto::Relay* relay = result->add_relay();
 
         relay->set_timepoint(session_relay->startTime());
-        relay->set_address(base::utf8FromUtf16(session_relay->address()));
+        relay->set_address(session_relay->address());
         relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->address()));
         relay->mutable_version()->CopyFrom(session_relay->version().toProto());
-        relay->set_os_name(base::utf8FromUtf16(session_relay->osName()));
-        relay->set_computer_name(base::utf8FromUtf16(session_relay->computerName()));
+        relay->set_os_name(session_relay->osName());
+        relay->set_computer_name(session_relay->computerName());
     }
 
     result->set_error_code(proto::RelayList::SUCCESS);
@@ -170,10 +169,10 @@ std::unique_ptr<proto::HostList> Server::hostList() const
 
         host->set_timepoint(session_host->startTime());
         host->set_host_id(session_host->hostId());
-        host->set_ip_address(base::utf8FromUtf16(session_host->address()));
+        host->set_ip_address(session_host->address());
         host->mutable_version()->CopyFrom(session_host->version().toProto());
-        host->set_os_name(base::utf8FromUtf16(session_host->osName()));
-        host->set_computer_name(base::utf8FromUtf16(session_host->computerName()));
+        host->set_os_name(session_host->osName());
+        host->set_computer_name(session_host->computerName());
     }
 
     result->set_error_code(proto::HostList::SUCCESS);
@@ -246,7 +245,7 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onKeyPoolEmpty(const std::u16string& host)
+void Server::onKeyPoolEmpty(const std::string& host)
 {
     LOG(LS_INFO) << "Key pool for relay " << host << " is empty";
 }

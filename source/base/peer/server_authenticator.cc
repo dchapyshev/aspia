@@ -352,23 +352,24 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Username: " << identify.username();
-
-    user_name_ = utf16FromUtf8(identify.username());
+    user_name_ = std::move(*identify.mutable_username());
     if (user_name_.empty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
+    LOG(LS_INFO) << "Username: " << identify.username();
+
     do
     {
+        std::u16string user_name_utf16 = base::utf16FromUtf8(user_name_);
         ByteArray seed_key;
         User user;
 
         if (user_list_)
         {
-            user = user_list_->find(user_name_);
+            user = user_list_->find(user_name_utf16);
             seed_key = user_list_->seedKey();
         }
         else
@@ -417,7 +418,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
         g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
         s_ = BigNum::fromByteArray(hash.result());
-        v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
+        v_ = SrpMath::calc_v(user_name_utf16, seed_key, s_, N_, g_);
     }
     while (false);
 

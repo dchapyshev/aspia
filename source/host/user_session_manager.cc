@@ -238,8 +238,8 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
 
     base::SessionId session_id;
 
-    std::u16string username = client_session->userName();
-    if (base::startsWith(username, u"#"))
+    std::string username = client_session->userName();
+    if (base::startsWith(username, "#"))
     {
         username.erase(username.begin());
 

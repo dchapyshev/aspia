@@ -42,7 +42,7 @@ protected:
 private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);
 
-    std::u16string host_;
+    std::string host_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

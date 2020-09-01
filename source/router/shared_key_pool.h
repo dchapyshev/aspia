@@ -36,7 +36,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onKeyPoolEmpty(const std::u16string& host) = 0;
+        virtual void onKeyPoolEmpty(const std::string& host) = 0;
     };
 
     explicit SharedKeyPool(Delegate* delegate);
@@ -46,16 +46,16 @@ public:
 
     struct Credentials
     {
-        std::u16string host;
+        std::string host;
         uint16_t port = 0;
         proto::RelayKey key;
     };
 
-    void addKey(const std::u16string& host, uint16_t port, const proto::RelayKey& key);
+    void addKey(const std::string& host, uint16_t port, const proto::RelayKey& key);
     std::optional<Credentials> takeCredentials();
-    void removeKeysForRelay(const std::u16string& host);
+    void removeKeysForRelay(const std::string& host);
     void clear();
-    size_t countForRelay(const std::u16string& host) const;
+    size_t countForRelay(const std::string& host) const;
     size_t count() const;
     bool isEmpty() const;
 

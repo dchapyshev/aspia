@@ -62,14 +62,14 @@ public:
 
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
-    void setOsName(const std::u16string& os_name);
-    const std::u16string& osName() const { return os_name_; }
-    void setComputerName(const std::u16string& computer_name);
-    const std::u16string& computerName() const { return computer_name_; }
-    void setUserName(const std::u16string& username);
-    const std::u16string& userName() const { return username_; }
+    void setOsName(const std::string& os_name);
+    const std::string& osName() const { return os_name_; }
+    void setComputerName(const std::string& computer_name);
+    const std::string& computerName() const { return computer_name_; }
+    void setUserName(const std::string& username);
+    const std::string& userName() const { return username_; }
     proto::RouterSession sessionType() const { return session_type_; }
-    const std::u16string& address() const { return address_; }
+    const std::string& address() const { return address_; }
 
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
@@ -100,11 +100,11 @@ private:
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_;
 
-    std::u16string address_;
-    std::u16string username_;
+    std::string address_;
+    std::string username_;
     base::Version version_;
-    std::u16string os_name_;
-    std::u16string computer_name_;
+    std::string os_name_;
+    std::string computer_name_;
 
     Delegate* delegate_ = nullptr;
 };
