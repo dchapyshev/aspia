@@ -101,16 +101,15 @@ enum LoggingDestination
     LOG_DEFAULT = LOG_TO_FILE,
 };
 
-enum LoggingSeverity : int
-{
-    LS_INFO    = 0,
-    LS_WARNING = 1,
-    LS_ERROR   = 2,
-    LS_FATAL   = 3,
-    LS_NUMBER  = 4,
-    LS_DFATAL  = LS_FATAL,
-    LS_DCHECK  = LS_FATAL
-};
+using LoggingSeverity = int;
+
+const LoggingSeverity LS_INFO = 0;
+const LoggingSeverity LS_WARNING = 1;
+const LoggingSeverity LS_ERROR = 2;
+const LoggingSeverity LS_FATAL = 3;
+const LoggingSeverity LS_NUMBER = 4;
+const LoggingSeverity LS_DFATAL = LS_FATAL;
+const LoggingSeverity LS_DCHECK = LS_FATAL;
 
 struct LoggingSettings
 {

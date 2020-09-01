@@ -24,6 +24,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
+#include <filesystem>
 #include <optional>
 
 namespace base {
@@ -77,6 +78,21 @@ struct ConverterImpl<ByteArray>
     static std::string toString(const ByteArray& value)
     {
         return toHex(value);
+    }
+};
+
+template <>
+struct ConverterImpl<std::filesystem::path>
+{
+    static bool fromString(std::string_view str, std::filesystem::path* value)
+    {
+        *value = std::filesystem::u8path(str);
+        return true;
+    }
+
+    static std::string toString(const std::filesystem::path& value)
+    {
+        return value.u8string();
     }
 };
 
