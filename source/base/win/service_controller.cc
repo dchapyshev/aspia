@@ -339,6 +339,23 @@ std::vector<std::u16string> ServiceController::dependencies() const
     return list;
 }
 
+bool ServiceController::setAccount(std::u16string_view username, std::u16string_view password)
+{
+    if (!ChangeServiceConfigW(service_,
+                              SERVICE_NO_CHANGE,
+                              SERVICE_NO_CHANGE,
+                              SERVICE_NO_CHANGE,
+                              nullptr, nullptr, nullptr, nullptr,
+                              asWide(username), asWide(password),
+                              nullptr))
+    {
+        PLOG(LS_WARNING) << "ChangeServiceConfigW failed";
+        return false;
+    }
+
+    return true;
+}
+
 std::filesystem::path ServiceController::filePath() const
 {
     DWORD bytes_needed = 0;

@@ -53,6 +53,8 @@ public:
     bool setDependencies(const std::vector<std::u16string>& dependencies);
     std::vector<std::u16string> dependencies() const;
 
+    bool setAccount(std::u16string_view username, std::u16string_view password);
+
     std::filesystem::path filePath() const;
 
     bool isValid() const;
