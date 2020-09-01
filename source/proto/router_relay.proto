@@ -31,8 +31,19 @@ message RelayKeyPool
     repeated RelayKey key = 3; // A pool of one time keys.
 }
 
-// Sent from proxy to router.
+message RelayKeyUsed
+{
+    uint32 key_id = 1;
+}
+
+// Sent from relay to router.
 message RelayToRouter
 {
     RelayKeyPool key_pool = 1;
+}
+
+// Sent from router to relay.
+message RouterToRelay
+{
+    RelayKeyUsed key_used = 1;
 }

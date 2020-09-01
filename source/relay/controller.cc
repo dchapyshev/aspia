@@ -24,11 +24,6 @@
 #include "proto/router_common.pb.h"
 #include "relay/settings.h"
 
-#if defined(OS_WIN)
-#include "base/files/base_paths.h"
-#include "base/net/firewall_manager.h"
-#endif // defined(OS_WIN)
-
 namespace relay {
 
 namespace {
@@ -40,12 +35,36 @@ const wchar_t kFirewallRuleName[] = L"Aspia Relay Service";
 const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 #endif // defined(OS_WIN)
 
+class KeyDeleter
+{
+public:
+    KeyDeleter(std::unique_ptr<SharedPool> pool, uint32_t key_id)
+        : pool_(std::move(pool)),
+          key_id_(key_id)
+    {
+        DCHECK(pool_);
+    }
+
+    ~KeyDeleter() = default;
+
+    void deleteKey()
+    {
+        pool_->setKeyExpired(key_id_);
+    }
+
+private:
+    std::unique_ptr<SharedPool> pool_;
+    const uint32_t key_id_;
+
+    DISALLOW_COPY_AND_ASSIGN(KeyDeleter);
+};
+
 } // namespace
 
 Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       reconnect_timer_(task_runner),
-      shared_pool_(std::make_unique<SharedPool>())
+      shared_pool_(std::make_unique<SharedPool>(this))
 {
     Settings settings;
 
@@ -68,12 +87,7 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
-Controller::~Controller()
-{
-#if defined(OS_WIN)
-    deleteFirewallRules();
-#endif // defined(OS_WIN)
-}
+Controller::~Controller() = default;
 
 bool Controller::start()
 {
@@ -108,10 +122,6 @@ bool Controller::start()
         LOG(LS_ERROR) << "Invalid peer port";
         return false;
     }
-
-#if defined(OS_WIN)
-    addFirewallRules(peer_port_);
-#endif // defined(OS_WIN)
 
     session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
     session_manager_->start(shared_pool_->share(), this);
@@ -177,9 +187,29 @@ void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     delayedConnectToRouter();
 }
 
-void Controller::onMessageReceived(const base::ByteArray& /* buffer */)
+void Controller::onMessageReceived(const base::ByteArray& buffer)
 {
-    // Nothing
+    proto::RouterToRelay message;
+    if (!base::parse(buffer, &message))
+    {
+        LOG(LS_ERROR) << "Invalid message from router";
+        return;
+    }
+
+    if (message.has_key_used())
+    {
+        std::shared_ptr<KeyDeleter> key_deleter =
+            std::make_shared<KeyDeleter>(shared_pool_->share(), message.key_used().key_id());
+
+        // The router gave the key to the peers. They are required to use it within 30 seconds.
+        // If it is not used during this time, then it will be removed from the pool.
+        task_runner_->postDelayedTask(
+            std::bind(&KeyDeleter::deleteKey, key_deleter), std::chrono::seconds(30));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled message from router";
+    }
 }
 
 void Controller::onMessageWritten(size_t /* pending */)
@@ -190,7 +220,14 @@ void Controller::onMessageWritten(size_t /* pending */)
 void Controller::onSessionFinished()
 {
     // After disconnecting the peer, one key is released.
-    // Send one new key to the router.
+    // Add a new key to the pool and send it to the router.
+    sendKeyPool(1);
+}
+
+void Controller::onPoolKeyExpired(uint32_t /* key_id */)
+{
+    // The key has expired and has been removed from the pool.
+    // Add a new key to the pool and send it to the router.
     sendKeyPool(1);
 }
 
@@ -242,36 +279,5 @@ void Controller::sendKeyPool(uint32_t key_count)
     // Send a message to the router.
     channel_->send(base::serialize(message));
 }
-
-#if defined(OS_WIN)
-void Controller::addFirewallRules(uint16_t port)
-{
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-        return;
-
-    base::FirewallManager firewall(file_path);
-    if (!firewall.isValid())
-        return;
-
-    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, port))
-        return;
-
-    LOG(LS_INFO) << "Rule is added to the firewall";
-}
-
-void Controller::deleteFirewallRules()
-{
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-        return;
-
-    base::FirewallManager firewall(file_path);
-    if (!firewall.isValid())
-        return;
-
-    firewall.deleteRuleByName(kFirewallRuleName);
-}
-#endif // defined(OS_WIN)
 
 } // namespace relay

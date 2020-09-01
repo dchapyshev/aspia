@@ -36,7 +36,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onKeyPoolEmpty(const std::string& host) = 0;
+        virtual void onPoolKeyUsed(const std::string& host, uint32_t key_id) = 0;
     };
 
     explicit SharedKeyPool(Delegate* delegate);

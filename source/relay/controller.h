@@ -34,7 +34,8 @@ namespace relay {
 
 class Controller
     : public base::NetworkChannel::Listener,
-      public SessionManager::Delegate
+      public SessionManager::Delegate,
+      public SharedPool::Delegate
 {
 public:
     explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
@@ -52,15 +53,13 @@ protected:
     // SessionManager::Delegate implementation.
     void onSessionFinished() override;
 
+    // SharedPool::Delegate implementation.
+    void onPoolKeyExpired(uint32_t key_id) override;
+
 private:
     void connectToRouter();
     void delayedConnectToRouter();
     void sendKeyPool(uint32_t key_count);
-
-#if defined(OS_WIN)
-    void addFirewallRules(uint16_t port);
-    void deleteFirewallRules();
-#endif // defined(OS_WIN)
 
     // Router settings.
     std::u16string router_address_;

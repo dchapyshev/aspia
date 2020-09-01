@@ -26,13 +26,22 @@ namespace relay {
 class SharedPool
 {
 public:
-    SharedPool();
+    class Delegate
+    {
+    public:
+        virtual ~Delegate() = default;
+
+        virtual void onPoolKeyExpired(uint32_t key_id) = 0;
+    };
+
+    explicit SharedPool(Delegate* delegate);
     ~SharedPool();
 
     std::unique_ptr<SharedPool> share();
 
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
+    void setKeyExpired(uint32_t key_id);
     const SessionKey& key(uint32_t key_id) const;
     void clear();
 
@@ -41,6 +50,7 @@ private:
     explicit SharedPool(std::shared_ptr<Pool> pool);
 
     std::shared_ptr<Pool> pool_;
+    bool is_primary_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedPool);
 };

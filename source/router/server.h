@@ -57,7 +57,7 @@ protected:
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // SharedKeyPool::Delegate implementation.
-    void onKeyPoolEmpty(const std::string& host) override;
+    void onPoolKeyUsed(const std::string& host, uint32_t key_id) override;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
@@ -66,11 +66,6 @@ protected:
     void onSessionFinished() override;
 
 private:
-#if defined(OS_WIN)
-    void addFirewallRules(uint16_t port);
-    void deleteFirewallRules();
-#endif // defined(OS_WIN)
-
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;

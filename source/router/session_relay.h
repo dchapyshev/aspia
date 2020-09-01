@@ -31,6 +31,9 @@ public:
     SessionRelay();
     ~SessionRelay();
 
+    const std::string& host() const { return host_; }
+    void sendKeyUsed(uint32_t key_id);
+
 protected:
     // Session implementation.
     void onSessionReady() override;

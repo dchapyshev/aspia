@@ -30,11 +30,6 @@
 #include "router/settings.h"
 #include "router/user_list_db.h"
 
-#if defined(OS_WIN)
-#include "base/files/base_paths.h"
-#include "base/net/firewall_manager.h"
-#endif // defined(OS_WIN)
-
 namespace router {
 
 namespace {
@@ -74,12 +69,7 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
-Server::~Server()
-{
-#if defined(OS_WIN)
-    deleteFirewallRules();
-#endif // defined(OS_WIN)
-}
+Server::~Server() = default;
 
 bool Server::start()
 {
@@ -108,10 +98,6 @@ bool Server::start()
         LOG(LS_ERROR) << "Invalid port specified in configuration file";
         return false;
     }
-
-#if defined(OS_WIN)
-    addFirewallRules(port);
-#endif // defined(OS_WIN)
 
     std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
 
@@ -245,9 +231,17 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onKeyPoolEmpty(const std::string& host)
+void Server::onPoolKeyUsed(const std::string& host, uint32_t key_id)
 {
-    LOG(LS_INFO) << "Key pool for relay " << host << " is empty";
+    for (const auto& session : sessions_)
+    {
+        if (session->sessionType() == proto::ROUTER_SESSION_RELAY)
+        {
+            SessionRelay* relay_session = static_cast<SessionRelay*>(session.get());
+            if (relay_session->host() == host)
+                relay_session->sendKeyUsed(key_id);
+        }
+    }
 }
 
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
@@ -320,36 +314,5 @@ void Server::onSessionFinished()
         }
     }
 }
-
-#if defined(OS_WIN)
-void Server::addFirewallRules(uint16_t port)
-{
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-        return;
-
-    base::FirewallManager firewall(file_path);
-    if (!firewall.isValid())
-        return;
-
-    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, port))
-        return;
-
-    LOG(LS_INFO) << "Rule is added to the firewall";
-}
-
-void Server::deleteFirewallRules()
-{
-    std::filesystem::path file_path;
-    if (!base::BasePaths::currentExecFile(&file_path))
-        return;
-
-    base::FirewallManager firewall(file_path);
-    if (!firewall.isValid())
-        return;
-
-    firewall.deleteRuleByName(kFirewallRuleName);
-}
-#endif // defined(OS_WIN)
 
 } // namespace router

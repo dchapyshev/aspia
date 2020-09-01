@@ -34,6 +34,13 @@ SessionRelay::~SessionRelay()
     relayKeyPool().removeKeysForRelay(host_);
 }
 
+void SessionRelay::sendKeyUsed(uint32_t key_id)
+{
+    proto::RouterToRelay message;
+    message.mutable_key_used()->set_key_id(key_id);
+    sendMessage(message);
+}
+
 void SessionRelay::onSessionReady()
 {
     // Nothing

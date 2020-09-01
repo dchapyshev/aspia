@@ -31,20 +31,35 @@ const SessionKey kInvalidKey;
 class SharedPool::Pool
 {
 public:
-    Pool() = default;
+    explicit Pool(Delegate* delegate);
     ~Pool() = default;
+
+    void dettach();
 
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
+    void setKeyExpired(uint32_t key_id);
     const SessionKey& key(uint32_t key_id) const;
     void clear();
 
 private:
+    Delegate* delegate_;
     std::map<uint32_t, SessionKey> map_;
     uint32_t current_key_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Pool);
 };
+
+SharedPool::Pool::Pool(Delegate* delegate)
+    : delegate_(delegate)
+{
+    DCHECK(delegate_);
+}
+
+void SharedPool::Pool::dettach()
+{
+    delegate_ = nullptr;
+}
 
 uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 {
@@ -60,12 +75,24 @@ bool SharedPool::Pool::removeKey(uint32_t key_id)
     auto result = map_.find(key_id);
     if (result != map_.end())
     {
-        LOG(LS_INFO) << "Key with id " << key_id << " removed from pool";
         map_.erase(result);
+
+        LOG(LS_INFO) << "Key with id " << key_id << " removed from pool";
         return true;
     }
 
     return false;
+}
+
+void SharedPool::Pool::setKeyExpired(uint32_t key_id)
+{
+    if (removeKey(key_id))
+    {
+        LOG(LS_INFO) << "Key with ID " << key_id << " expired. It has been removed";
+
+        if (delegate_)
+            delegate_->onPoolKeyExpired(key_id);
+    }
 }
 
 const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
@@ -83,19 +110,25 @@ void SharedPool::Pool::clear()
     map_.clear();
 }
 
-SharedPool::SharedPool()
-    : pool_(std::make_shared<Pool>())
+SharedPool::SharedPool(Delegate* delegate)
+    : pool_(std::make_shared<Pool>(delegate)),
+      is_primary_(true)
 {
     // Nothing
 }
 
 SharedPool::SharedPool(std::shared_ptr<Pool> pool)
-    : pool_(std::move(pool))
+    : pool_(std::move(pool)),
+      is_primary_(false)
 {
     // Nothing
 }
 
-SharedPool::~SharedPool() = default;
+SharedPool::~SharedPool()
+{
+    if (is_primary_)
+        pool_->dettach();
+}
 
 std::unique_ptr<SharedPool> SharedPool::share()
 {
@@ -110,6 +143,11 @@ uint32_t SharedPool::addKey(SessionKey&& session_key)
 bool SharedPool::removeKey(uint32_t key_id)
 {
     return pool_->removeKey(key_id);
+}
+
+void SharedPool::setKeyExpired(uint32_t key_id)
+{
+    return pool_->setKeyExpired(key_id);
 }
 
 const SessionKey& SharedPool::key(uint32_t key_id) const

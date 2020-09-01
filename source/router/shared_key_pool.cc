@@ -134,13 +134,11 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
     if (preffered_relay->second.keys.empty())
     {
         LOG(LS_INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
-
         pool_.erase(preffered_relay->first);
-
-        // Notify that the pool for the relay is empty.
-        if (delegate_)
-            delegate_->onKeyPoolEmpty(preffered_relay->first);
     }
+
+    if (delegate_)
+        delegate_->onPoolKeyUsed(credentials.host, credentials.key.key_id());
 
     return credentials;
 }
