@@ -4,5 +4,8 @@
 	"RouterPublicKey": "",
 	"PeerAddress": "",
 	"PeerPort": "8070",
-	"MaxPeerCount": "100"
+	"MaxPeerCount": "100",
+	"LogPath": "",
+	"MinLogLevel": "1",
+	"MaxLogAge": "7"
 }

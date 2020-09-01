@@ -47,6 +47,15 @@ public:
     void setMaxPeerCount(uint32_t count);
     uint32_t maxPeerCount() const;
 
+    void setLogPath(const std::filesystem::path& path);
+    std::filesystem::path logPath() const;
+
+    void setMinLogLevel(int level);
+    int minLogLevel() const;
+
+    void setMaxLogAge(int age);
+    int maxLogAge() const;
+
 private:
     base::JsonSettings impl_;
 };

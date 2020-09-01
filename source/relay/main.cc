@@ -19,6 +19,7 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "relay/settings.h"
 
 #if defined(OS_WIN)
 #include "base/win/service_controller.h"
@@ -32,21 +33,15 @@ namespace {
 
 void initLogging()
 {
-    std::filesystem::path path;
+    relay::Settings settings;
 
-#if defined(OS_WIN)
-    if (!base::BasePaths::commonAppData(&path))
-        return;
-    path.append("Aspia/Logs");
-#else
-#error Not implemented
-#endif
+    base::LoggingSettings logging_settings;
+    logging_settings.destination = base::LOG_TO_FILE;
+    logging_settings.log_dir = settings.logPath();
+    logging_settings.min_log_level = settings.minLogLevel();
+    logging_settings.max_log_age = settings.maxLogAge();
 
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = path;
-
-    base::initLogging(settings);
+    base::initLogging(logging_settings);
 }
 
 void shutdownLogging()

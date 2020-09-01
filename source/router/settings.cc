@@ -18,6 +18,9 @@
 
 #include "router/settings.h"
 
+#include "base/files/base_paths.h"
+#include "build/build_config.h"
+
 namespace router {
 
 Settings::Settings()
@@ -46,6 +49,48 @@ void Settings::setPrivateKey(const base::ByteArray& private_key)
 base::ByteArray Settings::privateKey() const
 {
     return base::fromHex(impl_.get<std::string>("PrivateKey"));
+}
+
+void Settings::setLogPath(const std::filesystem::path& path)
+{
+    impl_.set<std::filesystem::path>("LogPath", path);
+}
+
+std::filesystem::path Settings::logPath() const
+{
+    std::filesystem::path path = impl_.get<std::filesystem::path>("LogPath");
+    if (path.empty())
+    {
+#if defined(OS_WIN)
+        if (!base::BasePaths::commonAppData(&path))
+            return std::filesystem::path();
+        path.append("Aspia/Logs");
+#else
+#error Not implemented
+#endif
+    }
+
+    return path;
+}
+
+void Settings::setMinLogLevel(int level)
+{
+    impl_.set<int>("MinLogLevel", level);
+}
+
+int Settings::minLogLevel() const
+{
+    return impl_.get<int>("MinLogLevel", 1);
+}
+
+void Settings::setMaxLogAge(int age)
+{
+    impl_.set<int>("MaxLogAge", age);
+}
+
+int Settings::maxLogAge() const
+{
+    return impl_.get<int>("MaxLogAge", 7);
 }
 
 } // namespace router
