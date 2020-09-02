@@ -31,7 +31,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
 
     update_timer_ = new QTimer(this);
     connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::metricsRequired);
-    update_timer_->start(std::chrono::milliseconds(500));
+    update_timer_->start(std::chrono::seconds(1));
 }
 
 StatisticsDialog::~StatisticsDialog() = default;
