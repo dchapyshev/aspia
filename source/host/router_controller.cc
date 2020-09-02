@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
+#include "base/strings/unicode.h"
 #include "proto/router_host.pb.h"
 
 namespace host {
@@ -86,7 +87,7 @@ void RouterController::onConnected()
 
             LOG(LS_INFO) << "Router connected. Receiving host ID...";
 
-            delegate_->onRouterConnected();
+            routerStateChanged(proto::internal::RouterState::CONNECTED);
 
             proto::HostToRouter message;
             proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
@@ -124,9 +125,11 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
-    delegate_->onHostIdAssigned(base::kInvalidHostId, base::ByteArray());
-    delegate_->onRouterDisconnected(error_code);
     host_id_ = base::kInvalidHostId;
+    routerStateChanged(proto::internal::RouterState::FAILED);
+
+    if (delegate_)
+        delegate_->onHostIdAssigned(base::kInvalidHostId, base::ByteArray());
 
     delayedConnectToRouter();
 }
@@ -201,6 +204,8 @@ void RouterController::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
 
+    routerStateChanged(proto::internal::RouterState::CONNECTING);
+
     channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
     channel_->connect(router_info_.address, router_info_.port);
@@ -210,6 +215,20 @@ void RouterController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
     reconnect_timer_.start(kReconnectTimeout, std::bind(&RouterController::connectToRouter, this));
+}
+
+void RouterController::routerStateChanged(proto::internal::RouterState::State state)
+{
+    if (!delegate_)
+        return;
+
+    proto::internal::RouterState router_state;
+    router_state.set_state(state);
+
+    router_state.set_host_name(base::utf8FromUtf16(router_info_.address));
+    router_state.set_host_port(router_info_.port);
+
+    delegate_->onRouterStateChanged(router_state);
 }
 
 } // namespace host

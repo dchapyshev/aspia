@@ -169,6 +169,7 @@ UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_ru
     : task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
+    router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
 UserSessionManager::~UserSessionManager() = default;
@@ -221,6 +222,15 @@ void UserSessionManager::setSessionEvent(
         }
         break;
     }
+}
+
+void UserSessionManager::setRouterState(const proto::internal::RouterState& router_state)
+{
+    router_state_ = router_state;
+
+    // Send an event of each session.
+    for (const auto& session : sessions_)
+        session->setRouterState(router_state);
 }
 
 void UserSessionManager::setHostId(base::HostId host_id)
@@ -388,8 +398,13 @@ void UserSessionManager::addUserSession(
         }
     }
 
-    sessions_.emplace_back(std::make_unique<UserSession>(
-        task_runner_, session_id, std::move(channel)));
+    std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
+        task_runner_, session_id, std::move(channel));
+
+    user_session->setRouterState(router_state_);
+    user_session->setHostId(host_id_);
+
+    sessions_.emplace_back(std::move(user_session));
     sessions_.back()->start(host_id_, this);
 }
 

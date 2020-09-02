@@ -99,14 +99,9 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
     startAuthentication(std::move(channel));
 }
 
-void Server::onRouterConnected()
+void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "ROUTER CONNECTED";
-}
-
-void Server::onRouterDisconnected(base::NetworkChannel::ErrorCode error_code)
-{
-    LOG(LS_INFO) << "ROUTER DISCONNECTED";
+    user_session_manager_->setRouterState(router_state);
 }
 
 void Server::onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key)
@@ -222,6 +217,10 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
                 // Destroy the controller.
                 LOG(LS_INFO) << "The router is now disabled";
                 router_controller_.reset();
+
+                proto::internal::RouterState router_state;
+                router_state.set_state(proto::internal::RouterState::DISABLED);
+                user_session_manager_->setRouterState(router_state);
             }
         }
         else

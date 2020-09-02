@@ -46,6 +46,7 @@ public:
 
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setRouterState(const proto::internal::RouterState& router_state);
     void setHostId(base::HostId host_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
@@ -68,6 +69,8 @@ private:
     std::unique_ptr<base::IpcServer> ipc_server_;
     std::vector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
+
+    proto::internal::RouterState router_state_;
     base::HostId host_id_ = base::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);

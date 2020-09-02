@@ -46,6 +46,8 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
     if (session_id_ != base::activeConsoleSessionId())
         type_ = UserSession::Type::RDP;
+
+    router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
 UserSession::~UserSession() = default;
@@ -103,6 +105,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
         send_connection_list(desktop_clients_);
         send_connection_list(file_transfer_clients_);
+        sendRouterState();
     }
 
     state_ = State::STARTED;
@@ -194,6 +197,12 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
         }
         break;
     }
+}
+
+void UserSession::setRouterState(const proto::internal::RouterState& router_state)
+{
+    router_state_ = router_state;
+    sendRouterState();
 }
 
 void UserSession::setHostId(base::HostId host_id)
@@ -488,6 +497,20 @@ void UserSession::killClientSession(uint32_t id)
 
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&file_transfer_clients_, id);
+}
+
+void UserSession::sendRouterState()
+{
+    if (!channel_)
+        return;
+
+    LOG(LS_INFO) << "Sending router state to UI";
+    LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();
+    LOG(LS_INFO) << "New state: " << router_state_.state();
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

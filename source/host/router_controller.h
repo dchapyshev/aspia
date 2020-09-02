@@ -23,6 +23,7 @@
 #include "base/net/network_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer_manager.h"
+#include "proto/host_internal.pb.h"
 
 namespace base {
 class ClientAuthenticator;
@@ -51,8 +52,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onRouterConnected() = 0;
-        virtual void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
+        virtual void onRouterStateChanged(const proto::internal::RouterState& router_state) = 0;
         virtual void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) = 0;
         virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
@@ -78,6 +78,7 @@ protected:
 private:
     void connectToRouter();
     void delayedConnectToRouter();
+    void routerStateChanged(proto::internal::RouterState::State state);
 
     Delegate* delegate_ = nullptr;
 

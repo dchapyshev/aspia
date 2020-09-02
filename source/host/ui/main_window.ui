@@ -324,7 +324,11 @@
    <addaction name="menu_language"/>
    <addaction name="menu_help"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <action name="action_exit">
    <property name="icon">
     <iconset resource="resources.qrc">

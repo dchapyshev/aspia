@@ -31,6 +31,7 @@ public:
     virtual void onStatusChanged(UserSessionAgent::Status status) = 0;
     virtual void onClientListChanged(const UserSessionAgent::ClientList& clients) = 0;
     virtual void onCredentialsChanged(const proto::internal::Credentials& credentials) = 0;
+    virtual void onRouterStateChanged(const proto::internal::RouterState& state) = 0;
 };
 
 } // namespace host

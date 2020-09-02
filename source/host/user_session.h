@@ -75,6 +75,7 @@ public:
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setRouterState(const proto::internal::RouterState& router_state);
     void setHostId(base::HostId host_id);
 
 protected:
@@ -100,6 +101,7 @@ private:
     void updateCredentials();
     void sendCredentials();
     void killClientSession(uint32_t id);
+    void sendRouterState();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
@@ -109,6 +111,7 @@ private:
     base::WaitableTimer attach_timer_;
 
     base::SessionId session_id_;
+    proto::internal::RouterState router_state_;
     base::HostId host_id_ = base::kInvalidHostId;
     std::string username_;
     std::string password_;

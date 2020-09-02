@@ -61,7 +61,7 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
     if (!base::parse(buffer, &incoming_message_))
     {
-        DLOG(LS_ERROR) << "Invalid message from service";
+        LOG(LS_ERROR) << "Invalid message from service";
         return;
     }
 
@@ -87,9 +87,13 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     {
         window_proxy_->onCredentialsChanged(incoming_message_.credentials());
     }
+    else if (incoming_message_.has_router_state())
+    {
+        window_proxy_->onRouterStateChanged(incoming_message_.router_state());
+    }
     else
     {
-        DLOG(LS_ERROR) << "Unhandled message from service";
+        LOG(LS_ERROR) << "Unhandled message from service";
     }
 }
 

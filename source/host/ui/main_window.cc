@@ -18,7 +18,9 @@
 
 #include "host/ui/main_window.h"
 
+#include "base/net/address.h"
 #include "base/peer/host_id.h"
+#include "base/strings/unicode.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "host/user_session_agent.h"
@@ -47,6 +49,10 @@ MainWindow::MainWindow(QWidget* parent)
     QString text = tr("Not available");
     ui.edit_id->setText(text);
     ui.edit_ip->setText(text);
+
+    status_label_ = new QLabel(ui.statusbar);
+    status_label_->setText(tr("Router is disabled"));
+    ui.statusbar->addWidget(status_label_);
 
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
@@ -224,6 +230,47 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     ui.edit_password->setEnabled(has_password);
     ui.edit_password->setText(
         has_password ? QString::fromStdString(credentials.password()) : QString());
+}
+
+void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
+{
+    QString router;
+
+    if (state.state() != proto::internal::RouterState::DISABLED)
+    {
+        base::Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(base::utf16FromUtf8(state.host_name()));
+        address.setPort(state.host_port());
+
+        router = QString::fromStdU16String(address.toString());
+    }
+
+    QString message;
+
+    switch (state.state())
+    {
+        case proto::internal::RouterState::DISABLED:
+            message = tr("Router is disabled");
+            break;
+
+        case proto::internal::RouterState::CONNECTING:
+            message = tr("Connecting to router %1...").arg(router);
+            break;
+
+        case proto::internal::RouterState::CONNECTED:
+            message = tr("Connected to router %1").arg(router);
+            break;
+
+        case proto::internal::RouterState::FAILED:
+            message = tr("Failed to connect to router %1").arg(router);
+            break;
+
+        default:
+            NOTREACHED();
+            return;
+    }
+
+    status_label_->setText(message);
 }
 
 void MainWindow::realClose()

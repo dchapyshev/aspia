@@ -50,8 +50,7 @@ protected:
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // RouterController::Delegate implementation.
-    void onRouterConnected() override;
-    void onRouterDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onRouterStateChanged(const proto::internal::RouterState& router_state) override;
     void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) override;
     void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 

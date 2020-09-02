@@ -41,6 +41,7 @@ public:
     void onStatusChanged(UserSessionAgent::Status status);
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void onCredentialsChanged(const proto::internal::Credentials& credentials);
+    void onRouterStateChanged(const proto::internal::RouterState& state);
 
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;

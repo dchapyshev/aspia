@@ -261,27 +261,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="334"/>
+        <location filename="../main_window.ui" line="338"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="343"/>
+        <location filename="../main_window.ui" line="347"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="355"/>
+        <location filename="../main_window.ui" line="359"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="364"/>
+        <location filename="../main_window.ui" line="368"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="369"/>
+        <location filename="../main_window.ui" line="373"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -608,35 +608,56 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="57"/>
+        <location filename="../main_window.cc" line="63"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="112"/>
-        <location filename="../main_window.cc" line="262"/>
+        <location filename="../main_window.cc" line="118"/>
+        <location filename="../main_window.cc" line="309"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="47"/>
-        <location filename="../main_window.cc" line="203"/>
-        <location filename="../main_window.cc" line="210"/>
+        <location filename="../main_window.cc" line="49"/>
+        <location filename="../main_window.cc" line="209"/>
+        <location filename="../main_window.cc" line="216"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="267"/>
+        <location filename="../main_window.cc" line="54"/>
+        <location filename="../main_window.cc" line="253"/>
+        <source>Router is disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="257"/>
+        <source>Connecting to router %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="261"/>
+        <source>Connected to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="265"/>
+        <source>Failed to connect to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="314"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="299"/>
+        <location filename="../main_window.cc" line="346"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="300"/>
+        <location filename="../main_window.cc" line="347"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>

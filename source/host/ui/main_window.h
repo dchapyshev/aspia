@@ -54,6 +54,7 @@ protected:
     void onStatusChanged(UserSessionAgent::Status status) override;
     void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
     void onCredentialsChanged(const proto::internal::Credentials& credentials) override;
+    void onRouterStateChanged(const proto::internal::RouterState& state) override;
 
 private slots:
     void realClose();
@@ -73,6 +74,7 @@ private:
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
+    QLabel* status_label_ = nullptr;
     QPointer<NotifierWindow> notifier_;
 
     std::unique_ptr<UserSessionAgentProxy> agent_proxy_;

@@ -337,6 +337,22 @@
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Router is disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connecting to router %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to connect to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>host::NotifierWindow</name>

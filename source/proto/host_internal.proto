@@ -65,6 +65,22 @@ message KillSession
     uint32 id = 1;
 }
 
+message RouterState
+{
+    enum State
+    {
+        UNKNOWN    = 0;
+        DISABLED   = 1;
+        CONNECTING = 2;
+        CONNECTED  = 3;
+        FAILED     = 4;
+    }
+
+    string host_name = 1;
+    uint32 host_port = 2;
+    State state      = 3;
+}
+
 message UiToService
 {
     CredentialsRequest credentials_request = 1;
@@ -73,7 +89,8 @@ message UiToService
 
 message ServiceToUi
 {
-    Credentials credentials          = 1;
-    ConnectEvent connect_event       = 2;
-    DisconnectEvent disconnect_event = 3;
+    RouterState router_state         = 1;
+    Credentials credentials          = 2;
+    ConnectEvent connect_event       = 3;
+    DisconnectEvent disconnect_event = 4;
 }

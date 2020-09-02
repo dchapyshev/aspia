@@ -453,27 +453,27 @@
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="334"/>
+        <location filename="../main_window.ui" line="338"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="343"/>
+        <location filename="../main_window.ui" line="347"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="355"/>
+        <location filename="../main_window.ui" line="359"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="364"/>
+        <location filename="../main_window.ui" line="368"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="369"/>
+        <location filename="../main_window.ui" line="373"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
@@ -884,35 +884,68 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="57"/>
+        <location filename="../main_window.cc" line="63"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="112"/>
-        <location filename="../main_window.cc" line="262"/>
+        <location filename="../main_window.cc" line="118"/>
+        <location filename="../main_window.cc" line="309"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="47"/>
-        <location filename="../main_window.cc" line="203"/>
-        <location filename="../main_window.cc" line="210"/>
+        <location filename="../main_window.cc" line="49"/>
+        <location filename="../main_window.cc" line="209"/>
+        <location filename="../main_window.cc" line="216"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="267"/>
+        <source>Connecting to router %1:%2...</source>
+        <translation type="vanished">Подключение к маршрутизатору %1:%2...</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="54"/>
+        <location filename="../main_window.cc" line="253"/>
+        <source>Router is disabled</source>
+        <translation>Маршрутизатор отключен</translation>
+    </message>
+    <message>
+        <source>Connected to router %1:%2</source>
+        <translation type="vanished">Подключено к маршрутизатору %1:%2</translation>
+    </message>
+    <message>
+        <source>Failed to connect to router %1:%2</source>
+        <translation type="vanished">Не удалось подключиться к маршрутизатору %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="257"/>
+        <source>Connecting to router %1...</source>
+        <translation>Подключение к маршрутизатору %1...</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="261"/>
+        <source>Connected to router %1</source>
+        <translation>Подключено к маршрутизатору %1</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="265"/>
+        <source>Failed to connect to router %1</source>
+        <translation>Не удалось подключиться к маршрутизатору %1</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="314"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="299"/>
+        <location filename="../main_window.cc" line="346"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="300"/>
+        <location filename="../main_window.cc" line="347"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

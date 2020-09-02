@@ -84,4 +84,17 @@ void UserSessionWindowProxy::onCredentialsChanged(const proto::internal::Credent
         window_->onCredentialsChanged(credentials);
 }
 
+void UserSessionWindowProxy::onRouterStateChanged(const proto::internal::RouterState& state)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &UserSessionWindowProxy::onRouterStateChanged, shared_from_this(), state));
+        return;
+    }
+
+    if (window_)
+        window_->onRouterStateChanged(state);
+}
+
 } // namespace host
