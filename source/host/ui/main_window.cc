@@ -187,20 +187,20 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 {
     std::string ip;
 
-    for (int i = 0; i < credentials.ip_size(); ++i)
+    for (int i = 0; i < credentials.host_ip_size(); ++i)
     {
         if (!ip.empty())
             ip += ", ";
 
-        ip += credentials.ip(i);
+        ip += credentials.host_ip(i);
     }
 
-    bool has_id = credentials.id() != base::kInvalidHostId;
+    bool has_id = credentials.host_id() != base::kInvalidHostId;
 
     ui.label_icon_id->setEnabled(has_id);
     ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
-    ui.edit_id->setText(has_id ? QString::number(credentials.id()) : tr("Not available"));
+    ui.edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
 
     bool has_ip = !ip.empty();
 

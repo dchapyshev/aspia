@@ -453,7 +453,7 @@ void UserSession::sendCredentials()
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
-    credentials->set_id(host_id_);
+    credentials->set_host_id(host_id_);
     credentials->set_username(username_);
     credentials->set_password(password_);
 
@@ -465,7 +465,7 @@ void UserSession::sendCredentials()
             std::string ip = addresses.address();
 
             if (ip != "127.0.0.1")
-                credentials->add_ip(std::move(ip));
+                credentials->add_host_ip(std::move(ip));
         }
     }
 

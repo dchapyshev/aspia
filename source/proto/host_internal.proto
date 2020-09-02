@@ -41,10 +41,10 @@ message CredentialsRequest
 
 message Credentials
 {
-    repeated string ip = 1;
-    fixed64 id         = 2;
-    string username    = 3;
-    string password    = 4;
+    repeated string host_ip = 1;
+    fixed64 host_id         = 2;
+    string username         = 3;
+    string password         = 4;
 }
 
 message ConnectEvent
