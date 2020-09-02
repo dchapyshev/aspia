@@ -74,7 +74,7 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     {
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
-            if (it->uuid == incoming_message_.disconnect_event().uuid())
+            if (it->id == incoming_message_.disconnect_event().id())
             {
                 clients_.erase(it);
                 break;
@@ -100,10 +100,10 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
-void UserSessionAgent::killClient(const std::string& uuid)
+void UserSessionAgent::killClient(uint32_t id)
 {
     outgoing_message_.Clear();
-    outgoing_message_.mutable_kill_session()->set_uuid(uuid);
+    outgoing_message_.mutable_kill_session()->set_id(id);
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 

@@ -235,7 +235,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_kill_session())
     {
-        killClientSession(incoming_message_.kill_session().uuid());
+        killClientSession(incoming_message_.kill_session().id());
     }
     else
     {
@@ -410,18 +410,18 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
     event->set_username(client_session.userName());
     event->set_session_type(client_session.sessionType());
-    event->set_uuid(client_session.id());
+    event->set_id(client_session.id());
 
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void UserSession::sendDisconnectEvent(const std::string& session_id)
+void UserSession::sendDisconnectEvent(uint32_t session_id)
 {
     if (!channel_)
         return;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_disconnect_event()->set_uuid(session_id);
+    outgoing_message_.mutable_disconnect_event()->set_id(session_id);
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -472,9 +472,9 @@ void UserSession::sendCredentials()
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void UserSession::killClientSession(std::string_view id)
+void UserSession::killClientSession(uint32_t id)
 {
-    auto stop_by_id = [](ClientSessionList* list, std::string_view id)
+    auto stop_by_id = [](ClientSessionList* list, uint32_t id)
     {
         for (const auto& client_session : *list)
         {

@@ -33,7 +33,7 @@ public:
     void start();
     void stop();
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
+    void killClient(uint32_t id);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -92,16 +92,16 @@ void UserSessionAgentProxy::Impl::updateCredentials(
         agent_->updateCredentials(request_type);
 }
 
-void UserSessionAgentProxy::Impl::killClient(const std::string& uuid)
+void UserSessionAgentProxy::Impl::killClient(uint32_t id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::killClient, shared_from_this(), uuid));
+        io_task_runner_->postTask(std::bind(&Impl::killClient, shared_from_this(), id));
         return;
     }
 
     if (agent_)
-        agent_->killClient(uuid);
+        agent_->killClient(id);
 }
 
 UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
@@ -132,9 +132,9 @@ void UserSessionAgentProxy::updateCredentials(
     impl_->updateCredentials(request_type);
 }
 
-void UserSessionAgentProxy::killClient(const std::string& uuid)
+void UserSessionAgentProxy::killClient(uint32_t id)
 {
-    impl_->killClient(uuid);
+    impl_->killClient(id);
 }
 
 } // namespace host

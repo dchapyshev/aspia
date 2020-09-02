@@ -40,7 +40,7 @@ public:
     struct Client
     {
         explicit Client(const proto::internal::ConnectEvent& event)
-            : uuid(event.uuid()),
+            : id(event.id()),
               address(event.remote_address()),
               username(event.username()),
               session_type(event.session_type())
@@ -48,7 +48,7 @@ public:
             // Nothing
         }
 
-        std::string uuid;
+        uint32_t id;
         std::string address;
         std::string username;
         proto::SessionType session_type;
@@ -70,7 +70,7 @@ private:
     friend class UserSessionAgentProxy;
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
+    void killClient(uint32_t id);
 
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;

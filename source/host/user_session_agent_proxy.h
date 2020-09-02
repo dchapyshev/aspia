@@ -38,7 +38,7 @@ public:
     void stop();
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
-    void killClient(const std::string& uuid);
+    void killClient(uint32_t id);
 
 private:
     class Impl;

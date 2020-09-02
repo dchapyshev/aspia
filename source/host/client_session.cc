@@ -18,7 +18,6 @@
 
 #include "host/client_session.h"
 
-#include "base/guid.h"
 #include "base/logging.h"
 #include "base/net/network_channel_proxy.h"
 #include "host/client_session_desktop.h"
@@ -33,7 +32,10 @@ ClientSession::ClientSession(
 {
     DCHECK(channel_);
 
-    id_ = base::Guid::create().toStdString();
+    // All sessions are executed in one thread. We can safely use a global counter to get session IDs.
+    // Session IDs must start with 1.
+    static uint32_t id_counter = 0;
+    id_ = ++id_counter;
 }
 
 // static

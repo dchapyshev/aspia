@@ -34,7 +34,7 @@ class SessionTreeItem : public QTreeWidgetItem
 {
 public:
     SessionTreeItem(const UserSessionAgent::Client& client)
-        : uuid_(client.uuid)
+        : id_(client.id)
     {
         switch (client.session_type)
         {
@@ -60,10 +60,10 @@ public:
                 .arg(QString::fromStdString(client.address)));
     }
 
-    const std::string& uuid() const { return uuid_; }
+    uint32_t id() const { return id_; }
 
 private:
-    const std::string uuid_;
+    const uint32_t id_;
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
@@ -116,7 +116,7 @@ void NotifierWindow::disconnectAll()
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
-            emit killSession(item->uuid());
+            emit killSession(item->id());
     }
 }
 
@@ -188,7 +188,7 @@ void NotifierWindow::onContextMenu(const QPoint& point)
     menu.addAction(&disconnect_action);
 
     if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
-        emit killSession(item->uuid());
+        emit killSession(item->id());
 }
 
 void NotifierWindow::updateWindowPosition()

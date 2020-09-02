@@ -60,7 +60,7 @@ public:
     void stop();
 
     State state() const { return state_; }
-    std::string id() const { return id_; }
+    uint32_t id() const { return id_; }
 
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
@@ -90,7 +90,7 @@ protected:
 private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
-    std::string id_;
+    uint32_t id_;
     proto::SessionType session_type_;
     base::Version version_;
     std::string username_;

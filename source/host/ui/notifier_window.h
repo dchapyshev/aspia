@@ -37,7 +37,7 @@ public slots:
     void disconnectAll();
 
 signals:
-    void killSession(const std::string& uuid);
+    void killSession(uint32_t id);
     void finished();
 
 protected:

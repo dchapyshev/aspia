@@ -169,10 +169,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     {
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, [this](const std::string& uuid)
+        connect(notifier_, &NotifierWindow::killSession, [this](uint32_t id)
         {
             if (agent_proxy_)
-                agent_proxy_->killClient(uuid);
+                agent_proxy_->killClient(id);
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);

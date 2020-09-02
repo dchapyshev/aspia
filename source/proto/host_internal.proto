@@ -49,7 +49,7 @@ message Credentials
 
 message ConnectEvent
 {
-    string uuid              = 1;
+    uint32 id                = 1;
     string remote_address    = 2;
     string username          = 3;
     SessionType session_type = 4;
@@ -57,12 +57,12 @@ message ConnectEvent
 
 message DisconnectEvent
 {
-    string uuid = 1;
+    uint32 id = 1;
 }
 
 message KillSession
 {
-    string uuid = 1;
+    uint32 id = 1;
 }
 
 message UiToService

@@ -96,10 +96,10 @@ protected:
 private:
     void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
-    void sendDisconnectEvent(const std::string& session_id);
+    void sendDisconnectEvent(uint32_t session_id);
     void updateCredentials();
     void sendCredentials();
-    void killClientSession(std::string_view id);
+    void killClientSession(uint32_t id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
