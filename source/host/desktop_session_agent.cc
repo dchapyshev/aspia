@@ -302,7 +302,7 @@ void DesktopSessionAgent::captureBegin()
     screen_capturer_->captureFrame();
 }
 
-void DesktopSessionAgent::captureEnd(std::chrono::milliseconds update_interval)
+void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_interval)
 {
     if (!capture_scheduler_)
         return;
