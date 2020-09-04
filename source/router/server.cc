@@ -176,7 +176,7 @@ bool Server::disconnectHost(base::HostId host_id)
 
         if (static_cast<SessionHost*>(entry)->hostId() == host_id)
         {
-            it = sessions_.erase(it);
+            sessions_.erase(it);
             return true;
         }
     }
