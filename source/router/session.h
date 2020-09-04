@@ -98,7 +98,7 @@ private:
     std::unique_ptr<base::NetworkChannel> channel_;
     std::shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
-    Server* server_;
+    Server* server_ = nullptr;
 
     std::string address_;
     std::string username_;
