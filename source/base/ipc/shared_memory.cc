@@ -202,7 +202,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
     if (!file.isValid())
         return nullptr;
 
-    void* memory;
+    void* memory = nullptr;
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
@@ -220,7 +220,7 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
     if (!openFileMapping(mode, id, &file))
         return nullptr;
 
-    void* memory;
+    void* memory = nullptr;
     if (!mapViewOfFile(mode, file, &memory))
         return nullptr;
 
