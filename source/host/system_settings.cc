@@ -18,15 +18,82 @@
 
 #include "host/system_settings.h"
 
+#include "base/base64.h"
+#include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/peer/user_list.h"
+#include "base/settings/xml_settings.h"
 
 namespace host {
+
+namespace {
+
+// This should be removed in the next release.
+void settingsMigration(base::JsonSettings* json_settings)
+{
+    std::filesystem::path old_file = base::XmlSettings::filePath(
+        base::XmlSettings::Scope::SYSTEM, "aspia", "host");
+
+    std::error_code ignored_error;
+    if (!std::filesystem::exists(old_file, ignored_error))
+    {
+        // There is no old parameter file, exit.
+        return;
+    }
+
+    base::XmlSettings xml_settings(base::XmlSettings::Scope::SYSTEM, "aspia", "host");
+
+    // TcpPort
+    json_settings->set<uint16_t>(
+        "TcpPort", xml_settings.get<uint16_t>("TcpPort", DEFAULT_HOST_TCP_PORT));
+
+    // AddFirewallRules
+    json_settings->set<bool>(
+        "AddFirewallRules", xml_settings.get<bool>("AddFirewallRules", true));
+
+    // UpdateServer
+    json_settings->set<std::u16string>(
+        "UpdateServer", xml_settings.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER));
+
+    // Users
+    base::Settings::Array users_array;
+    for (const auto& old_item : xml_settings.getArray("Users"))
+    {
+        base::Settings new_item;
+        new_item.set<std::string>("Name", old_item.get<std::string>("Name"));
+        new_item.set<std::string>("Group", "8192");
+
+        new_item.set<base::ByteArray>("Salt",
+            base::Base64::decodeT<std::string, base::ByteArray>(
+                old_item.get<std::string>("Salt")));
+
+        new_item.set<base::ByteArray>("Verifier",
+            base::Base64::decodeT<std::string, base::ByteArray>(
+                old_item.get<std::string>("Verifier")));
+
+        new_item.set<uint32_t>("Sessions", old_item.get<uint32_t>("Sessions"));
+        new_item.set<uint32_t>("Flags", old_item.get<uint32_t>("Flags"));
+        users_array.emplace_back(std::move(new_item));
+    }
+
+    json_settings->remove("Users");
+    json_settings->setArray("Users", users_array);
+    json_settings->set("SeedKey",
+        base::Base64::decodeT<std::string, base::ByteArray>(
+            xml_settings.get<std::string>("SeedKey")));
+
+    if (!std::filesystem::remove(old_file, ignored_error))
+    {
+        LOG(LS_WARNING) << "Failed to delete old settings file";
+    }
+}
+
+} // namespace
 
 SystemSettings::SystemSettings()
     : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
 {
-    // Nothing
+    settingsMigration(&settings_);
 }
 
 SystemSettings::~SystemSettings() = default;
@@ -116,7 +183,7 @@ std::unique_ptr<base::UserList> SystemSettings::userList() const
         base::User user;
 
         user.name     = item.get<std::u16string>("Name");
-        user.group    = item.get<std::string>("Group", "8192");
+        user.group    = item.get<std::string>("Group");
         user.salt     = item.get<base::ByteArray>("Salt");
         user.verifier = item.get<base::ByteArray>("Verifier");
         user.sessions = item.get<uint32_t>("Sessions");
