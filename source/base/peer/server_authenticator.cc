@@ -413,7 +413,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
 
         GenericHash hash(GenericHash::BLAKE2b512);
         hash.addData(seed_key);
-        hash.addData(identify.username());
+        hash.addData(user_name_);
 
         N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
         g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
