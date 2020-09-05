@@ -60,7 +60,7 @@ Settings::Array Settings::getArray(std::string_view key) const
     for (size_t i = 0; i < array_size; ++i)
     {
         result.emplace_back(getGroup(
-            strCat({ key, kSeparator, numberToString(i) })));
+            strCat({ key, kSeparator, numberToString(i + 1) })));
     }
 
     return result;
@@ -69,7 +69,7 @@ Settings::Array Settings::getArray(std::string_view key) const
 void Settings::setArray(std::string_view key, const Array& array)
 {
     for (size_t i = 0; i < array.size(); ++i)
-        setGroup(strCat({ key, kSeparator, numberToString(i) }), array[i]);
+        setGroup(strCat({ key, kSeparator, numberToString(i + 1) }), array[i]);
 
     set(strCat({ key, kSeparator, "size" }), array.size());
 }
