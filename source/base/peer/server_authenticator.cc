@@ -359,7 +359,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Username: " << identify.username();
+    LOG(LS_INFO) << "Username: " << user_name_;
 
     do
     {
