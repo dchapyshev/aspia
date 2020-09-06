@@ -85,6 +85,7 @@ void SharedKeyPool::Impl::addKey(const std::string& host, uint16_t port, const p
         relay = pool_.emplace(host, RelayInfo(port)).first;
     }
 
+    LOG(LS_INFO) << "Added key with id " << key.key_id() << " for host '" << host << "'";
     relay->second.keys.emplace_back(std::move(key));
 }
 
@@ -145,11 +146,13 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
 void SharedKeyPool::Impl::removeKeysForRelay(const std::string& host)
 {
+    LOG(LS_INFO) << "All keys for relay '" << host << "' removed";
     pool_.erase(host);
 }
 
 void SharedKeyPool::Impl::clear()
 {
+    LOG(LS_INFO) << "Key pool cleared";
     pool_.clear();
 }
 
