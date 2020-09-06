@@ -131,7 +131,7 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
 
         relay->set_timepoint(session_relay->startTime());
         relay->set_address(session_relay->address());
-        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->address()));
+        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->host()));
         relay->mutable_version()->CopyFrom(session_relay->version().toProto());
         relay->set_os_name(session_relay->osName());
         relay->set_computer_name(session_relay->computerName());
