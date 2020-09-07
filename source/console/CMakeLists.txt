@@ -80,8 +80,7 @@ list(APPEND SOURCE_CONSOLE
     update_settings_dialog.h
     update_settings_dialog.ui)
 
-list(APPEND SOURCE_CONSOLE_RESOURCES
-    resources/console.qrc)
+list(APPEND SOURCE_CONSOLE_RESOURCES resources/console.qrc)
 
 source_group("" FILES ${SOURCE_CONSOLE})
 source_group(moc FILES ${SOURCE_CONSOLE_MOC})

@@ -86,8 +86,7 @@ if (WIN32)
         win/file_enumerator.h)
 endif()
 
-list(APPEND SOURCE_COMMON_RESOURCES
-    resources/common.qrc)
+list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
 source_group("" FILES ${SOURCE_COMMON})
 source_group(ui FILES ${SOURCE_COMMON_UI})

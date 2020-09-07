@@ -45,8 +45,7 @@ list(APPEND SOURCE_ROUTER_MANAGER
     user_dialog.h
     user_dialog.ui)
 
-list(APPEND SOURCE_ROUTER_MANAGER_RESOURCES
-    resources/router_manager.qrc)
+list(APPEND SOURCE_ROUTER_MANAGER_RESOURCES resources/router_manager.qrc)
 
 source_group("" FILES ${SOURCE_ROUTER_MANAGER})
 source_group(moc FILES ${SOURCE_ROUTER_MANAGER_MOC})
