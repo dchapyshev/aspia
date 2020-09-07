@@ -115,6 +115,11 @@ target_link_libraries(aspia_console
 set_property(TARGET aspia_console PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_console PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_console PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_console
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

@@ -111,7 +111,6 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
-        win/dll_main.cc
         win/sas_injector.cc
         win/sas_injector.h
         win/service.cc
@@ -129,6 +128,21 @@ source_group(ui FILES ${SOURCE_HOST_CORE_UI})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_HOST_CORE_WIN})
+
+    set(HOST_PLATFORM_LIBS
+        crypt32
+        dwmapi
+        dxgi
+        d3d11
+        imm32
+        iphlpapi
+        netapi32
+        sas
+        userenv
+        uxtheme
+        version
+        winmm
+        wtsapi32)
 endif()
 
 add_library(aspia_host_core SHARED
@@ -140,19 +154,7 @@ target_link_libraries(aspia_host_core PRIVATE
     aspia_common
     aspia_proto
     aspia_qt_base
-    crypt32
-    dwmapi
-    dxgi
-    d3d11
-    imm32
-    iphlpapi
-    netapi32
-    sas
-    userenv
-    uxtheme
-    version
-    winmm
-    wtsapi32
+    ${HOST_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
@@ -160,6 +162,11 @@ set_target_properties(aspia_host_core PROPERTIES COMPILE_DEFINITIONS "HOST_IMPLE
 set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_host_core
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

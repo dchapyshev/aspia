@@ -54,3 +54,8 @@ target_link_libraries(aspia_router_keygen
 set_property(TARGET aspia_router_keygen PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_keygen PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router_keygen PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_router_keygen
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)

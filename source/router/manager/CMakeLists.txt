@@ -77,6 +77,11 @@ target_link_libraries(aspia_router_manager
 set_property(TARGET aspia_router_manager PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router_manager PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_router_manager
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.

@@ -310,42 +310,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="43"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="57"/>
+        <location filename="../main.cc" line="44"/>
         <source>address</source>
         <translation>adres</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="61"/>
+        <location filename="../main.cc" line="48"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="49"/>
         <source>port</source>
         <translation>poort</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="67"/>
+        <location filename="../main.cc" line="54"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="55"/>
         <source>username</source>
         <translation>gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="72"/>
+        <location filename="../main.cc" line="59"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="78"/>
+        <location filename="../main.cc" line="65"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,27 +354,27 @@
         <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="81"/>
+        <location filename="../main.cc" line="68"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="84"/>
+        <location filename="../main.cc" line="71"/>
         <source>file</source>
         <translation>bestand</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="85"/>
+        <location filename="../main.cc" line="72"/>
         <source>The file to open.</source>
         <translation>Het bestand om te openen.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="124"/>
+        <location filename="../main.cc" line="111"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="125"/>
+        <location filename="../main.cc" line="112"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>

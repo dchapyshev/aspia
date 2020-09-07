@@ -20,18 +20,6 @@
 #include "qt_base/application.h"
 #include "router/keygen/main_window.h"
 
-#if defined(QT_STATIC)
-
-#include <QtPlugin>
-
-#if defined(Q_OS_WIN)
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
-#else
-#error Platform support needed
-#endif // defined(Q_OS_WIN)
-#endif // defined(QT_STATIC)
-
 int main(int argc, char *argv[])
 {
     qt_base::Application application(argc, argv);

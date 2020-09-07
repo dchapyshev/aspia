@@ -20,18 +20,6 @@
 #include "qt_base/application.h"
 #include "router/manager/router_dialog.h"
 
-#if defined(QT_STATIC)
-
-#include <QtPlugin>
-
-#if defined(Q_OS_WIN)
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
-#else
-#error Platform support needed
-#endif // defined(Q_OS_WIN)
-#endif // defined(QT_STATIC)
-
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(qt_translations);
