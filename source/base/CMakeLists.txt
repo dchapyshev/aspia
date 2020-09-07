@@ -560,6 +560,10 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS})
 
+if (WIN32)
+    set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)
+endif()
+
 add_executable(aspia_base_tests
     ${SOURCE_BASE_UNIT_TESTS}
     ${SOURCE_BASE_CODEC_UNIT_TESTS}
@@ -575,9 +579,7 @@ target_link_libraries(aspia_base_tests
     aspia_base
     aspia_proto
     GTest::gtest
-    crypt32
-    iphlpapi
-    ws2_32
+    ${BASE_TESTS_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
 
 add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

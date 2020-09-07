@@ -46,6 +46,12 @@ source_group("" FILES ${SOURCE_RELAY})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_RELAY_WIN})
+
+    set(RELAY_PLATFORM_LIBS
+        comsupp
+        crypt32
+        netapi32
+        version)
 endif()
 
 add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
@@ -53,8 +59,6 @@ set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_relay
     aspia_base
     aspia_proto
-    comsupp
-    crypt32
-    netapi32
-    version
-    ${THIRD_PARTY_LIBS})
+    OpenSSL::Crypto
+    ${Protobuf_LITE_LIBRARIES}
+    ${RELAY_PLATFORM_LIBS})

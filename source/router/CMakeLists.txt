@@ -56,6 +56,12 @@ source_group("" FILES ${SOURCE_ROUTER})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_ROUTER_WIN})
+
+    set(ROUTER_PLATFORM_LIBS
+        comsupp
+        crypt32
+        netapi32
+        version)
 endif()
 
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
@@ -64,13 +70,10 @@ target_link_libraries(aspia_router
     aspia_base
     aspia_proto
     OpenSSL::Crypto
-    comsupp
-    crypt32
     modp_b64
-    netapi32
-    version
     ${Protobuf_LITE_LIBRARIES}
-    unofficial::sqlite3::sqlite3)
+    unofficial::sqlite3::sqlite3
+    ${ROUTER_PLATFORM_LIBS})
 
 add_subdirectory(keygen)
 add_subdirectory(manager)
