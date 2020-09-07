@@ -143,8 +143,3 @@ if(Qt5LinguistTools_FOUND)
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
-
-if(NOT TARGET BUILD_CONSOLE)
-    add_custom_target(BUILD_CONSOLE)
-    add_dependencies(BUILD_CONSOLE aspia_console)
-endif()
