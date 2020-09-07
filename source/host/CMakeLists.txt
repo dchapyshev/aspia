@@ -135,7 +135,7 @@ add_library(aspia_host_core SHARED
     ${SOURCE_HOST_CORE}
     ${SOURCE_HOST_CORE_UI}
     ${SOURCE_HOST_CORE_WIN})
-target_link_libraries(aspia_host_core
+target_link_libraries(aspia_host_core PRIVATE
     aspia_base
     aspia_common
     aspia_proto
