@@ -89,7 +89,7 @@ if (APPLE)
         sys_info_mac.mm)
 endif()
 
-list(APPEND SOURCE_BASE_UNIT_TESTS
+list(APPEND SOURCE_BASE_TESTS
     base64_unittest.cc
     bitset_unittest.cc
     converter_unittest.cc
@@ -134,7 +134,7 @@ list(APPEND SOURCE_BASE_CODEC
     codec/weighted_samples.cc
     codec/weighted_samples.h)
 
-list(APPEND SOURCE_BASE_CODEC_UNIT_TESTS
+list(APPEND SOURCE_BASE_CODEC_TESTS
     codec/running_samples_unittest.cc
     codec/weighted_samples_unittest.cc)
 
@@ -179,7 +179,7 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/srp_math.cc
     crypto/srp_math.h)
 
-list(APPEND SOURCE_BASE_CRYPTO_UNIT_TESTS
+list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/cryptor_unittest.cc
     crypto/data_cryptor_unittest.cc
     crypto/generic_hash_unittest.cc
@@ -252,7 +252,7 @@ if (APPLE)
         desktop/screen_capturer_mac.h)
 endif()
 
-list(APPEND SOURCE_DESKTOP_UNIT_TESTS
+list(APPEND SOURCE_DESKTOP_TESTS
     desktop/diff_block_32bpp_c_unittest.cc
     desktop/diff_block_32bpp_sse2_unittest.cc
     desktop/geometry_unittest.cc
@@ -290,7 +290,7 @@ if (WIN32)
         desktop/win/screen_capture_utils.cc
         desktop/win/screen_capture_utils.h)
 
-    list(APPEND SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS
+    list(APPEND SOURCE_BASE_DESKTOP_WIN_TESTS
         desktop/win/cursor_unittest.cc
         desktop/win/cursor_unittest_resources.h
         desktop/win/cursor_unittest_resources.rc)
@@ -342,7 +342,7 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/byte_array.h
     memory/typed_buffer.h)
 
-list(APPEND SOURCE_BASE_MEMORY_UNIT_TESTS
+list(APPEND SOURCE_BASE_MEMORY_TESTS
     memory/aligned_memory_unittest.cc
     memory/byte_array_unittest.cc)
 
@@ -388,7 +388,7 @@ if (WIN32)
         net/firewall_manager.h)
 endif()
 
-list(APPEND SOURCE_BASE_NET_UNIT_TESTS
+list(APPEND SOURCE_BASE_NET_TESTS
     net/address_unittest.cc)
 
 list(APPEND SOURCE_BASE_PEER
@@ -420,7 +420,7 @@ list(APPEND SOURCE_BASE_SETTINGS
     settings/xml_settings.cc
     settings/xml_settings.h)
 
-list(APPEND SOURCE_BASE_SETTINGS_UNIT_TESTS
+list(APPEND SOURCE_BASE_SETTINGS_TESTS
     settings/json_settings_unittest.cc
     settings/xml_settings_unittest.cc)
 
@@ -450,7 +450,7 @@ if (UNIX)
         strings/string_util_icu.cc)
 endif()
 
-list(APPEND SOURCE_BASE_STRINGS_UNIT_TESTS
+list(APPEND SOURCE_BASE_STRINGS_TESTS
     strings/string_number_conversions_unittest.cc
     strings/string_printf_unittest.cc
     strings/string_split_unittest.cc)
@@ -518,28 +518,28 @@ if (WIN32)
         win/windows_version.cc
         win/windows_version.h)
 
-    list(APPEND SOURCE_BASE_WIN_UNIT_TESTS
+    list(APPEND SOURCE_BASE_WIN_TESTS
         win/registry_unittest.cc
         win/scoped_object_unittest.cc)
 endif()
 
-source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_UNIT_TESTS})
-source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_UNIT_TESTS})
-source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_UNIT_TESTS})
-source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_UNIT_TESTS})
+source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
+source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
+source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
+source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
 source_group(ipc FILES ${SOURCE_BASE_IPC})
-source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_UNIT_TESTS})
+source_group(memory FILES ${SOURCE_BASE_MEMORY} ${SOURCE_BASE_MEMORY_TESTS})
 source_group(message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
-source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_UNIT_TESTS})
+source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER})
-source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_UNIT_TESTS})
-source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_UNIT_TESTS})
+source_group(settings FILES ${SOURCE_BASE_SETTINGS} ${SOURCE_BASE_SETTINGS_TESTS})
+source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 
 if (WIN32)
-    source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS})
-    source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_UNIT_TESTS})
+    source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
+    source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
 add_library(aspia_base STATIC
@@ -565,16 +565,16 @@ if (WIN32)
 endif()
 
 add_executable(aspia_base_tests
-    ${SOURCE_BASE_UNIT_TESTS}
-    ${SOURCE_BASE_CODEC_UNIT_TESTS}
-    ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
-    ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
-    ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
-    ${SOURCE_BASE_MEMORY_UNIT_TESTS}
-    ${SOURCE_BASE_NET_UNIT_TESTS}
-    ${SOURCE_BASE_SETTINGS_UNIT_TESTS}
-    ${SOURCE_BASE_STRINGS_UNIT_TESTS}
-    ${SOURCE_BASE_WIN_UNIT_TESTS})
+    ${SOURCE_BASE_TESTS}
+    ${SOURCE_BASE_CODEC_TESTS}
+    ${SOURCE_BASE_CRYPTO_TESTS}
+    ${SOURCE_BASE_DESKTOP_TESTS}
+    ${SOURCE_BASE_DESKTOP_WIN_TESTS}
+    ${SOURCE_BASE_MEMORY_TESTS}
+    ${SOURCE_BASE_NET_TESTS}
+    ${SOURCE_BASE_SETTINGS_TESTS}
+    ${SOURCE_BASE_STRINGS_TESTS}
+    ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests
     aspia_base
     aspia_proto
