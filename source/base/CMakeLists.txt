@@ -560,29 +560,24 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_WIN})
 target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS})
 
-# If the build of unit tests is enabled.
-if (BUILD_UNIT_TESTS)
-    add_executable(aspia_base_tests
-        ${SOURCE_BASE_UNIT_TESTS}
-        ${SOURCE_BASE_CODEC_UNIT_TESTS}
-        ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
-        ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
-        ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
-        ${SOURCE_BASE_MEMORY_UNIT_TESTS}
-        ${SOURCE_BASE_NET_UNIT_TESTS}
-        ${SOURCE_BASE_SETTINGS_UNIT_TESTS}
-        ${SOURCE_BASE_STRINGS_UNIT_TESTS}
-        ${SOURCE_BASE_WIN_UNIT_TESTS})
-    target_link_libraries(aspia_base_tests
-        aspia_base
-        aspia_proto
-        optimized gtest
-        debug gtestd
-        crypt32
-        iphlpapi
-        ws2_32
-        ${THIRD_PARTY_LIBS})
+add_executable(aspia_base_tests
+    ${SOURCE_BASE_UNIT_TESTS}
+    ${SOURCE_BASE_CODEC_UNIT_TESTS}
+    ${SOURCE_BASE_CRYPTO_UNIT_TESTS}
+    ${SOURCE_BASE_DESKTOP_UNIT_TESTS}
+    ${SOURCE_BASE_DESKTOP_WIN_UNIT_TESTS}
+    ${SOURCE_BASE_MEMORY_UNIT_TESTS}
+    ${SOURCE_BASE_NET_UNIT_TESTS}
+    ${SOURCE_BASE_SETTINGS_UNIT_TESTS}
+    ${SOURCE_BASE_STRINGS_UNIT_TESTS}
+    ${SOURCE_BASE_WIN_UNIT_TESTS})
+target_link_libraries(aspia_base_tests
+    aspia_base
+    aspia_proto
+    GTest::gtest
+    crypt32
+    iphlpapi
+    ws2_32
+    ${THIRD_PARTY_LIBS})
 
-    add_test(NAME aspia_base_tests COMMAND aspia_base_tests)
-endif()
-
+add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

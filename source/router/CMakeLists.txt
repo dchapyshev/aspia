@@ -63,10 +63,9 @@ set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_router
     aspia_base
     aspia_proto
+    OpenSSL::Crypto
     comsupp
     crypt32
-    libcrypto
-    libssl
     modp_b64
     netapi32
     sqlite

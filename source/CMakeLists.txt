@@ -20,10 +20,6 @@ cmake_minimum_required(VERSION 3.16.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-option(BUILD_UNIT_TESTS "Build unit tests" ON)
-
-set(ASPIA_THIRD_PARTY_DIR "$ENV{ASPIA_THIRD_PARTY_DIR}")
-
 project(aspia)
 
 # Detecting Linux.
@@ -34,11 +30,14 @@ endif()
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt;${ASPIA_THIRD_PARTY_DIR}/protobuf")
-
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
-find_package(Protobuf REQUIRED)
 find_package(Qt5LinguistTools)
+find_package(GTest REQUIRED)
+find_package(libyuv REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(Protobuf REQUIRED)
+find_package(unofficial-libvpx REQUIRED)
+find_package(zstd REQUIRED)
 
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
@@ -77,94 +76,70 @@ add_definitions(-DQT_NO_CAST_TO_ASCII
 include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_BINARY_DIR}
-    ${ASPIA_THIRD_PARTY_DIR}/googletest/include
-    ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
-    ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
-    ${ASPIA_THIRD_PARTY_DIR}/openssl/include
-    ${Protobuf_INCLUDE_DIRS}
-    ${ASPIA_THIRD_PARTY_DIR}/zstd/include
     third_party/asio
     third_party/rapidjson/include)
 
-link_directories(
-    ${ASPIA_THIRD_PARTY_DIR}/googletest/lib
-    ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
-    ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
-    ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
-    ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
-    ${ASPIA_THIRD_PARTY_DIR}/qt/lib
-    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
-    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/printsupport
-    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
-    ${ASPIA_THIRD_PARTY_DIR}/zstd/lib)
-
 set(QT_COMMON_LIBS
     Qt5::Core
+    Qt5::CorePrivate
+    Qt5::QGenericEnginePlugin
     Qt5::Gui
+    Qt5::GuiPrivate
+    Qt5::QGifPlugin
+    Qt5::QICOPlugin
     Qt5::Network
+    Qt5::NetworkPrivate
     Qt5::PrintSupport
+    Qt5::PrintSupportPrivate
     Qt5::Widgets
+    Qt5::WidgetsPrivate
     Qt5::Xml
-    debug Qt5EventDispatcherSupportd
-    optimized Qt5EventDispatcherSupport
-    debug Qt5FontDatabaseSupportd
-    optimized Qt5FontDatabaseSupport
-    debug Qt5ThemeSupportd
-    optimized Qt5ThemeSupport
-    debug qtlibpngd
-    debug qtpcre2d
-    optimized qtlibpng
-    optimized qtpcre2)
+    Qt5::XmlPrivate)
 
 if (WIN32)
     set(QT_PLATFORM_LIBS
         Qt5::WinMain
         Qt5::WinExtras
+        Qt5::WinExtrasPrivate
         Qt5::QWindowsIntegrationPlugin
         Qt5::QWindowsVistaStylePlugin
         Qt5::QWindowsPrinterSupportPlugin)
 endif()
 
 set(THIRD_PARTY_LIBS
-    debug vpxmtd
-    debug yuv_debug
-    debug zstd_static_debug
-    optimized vpxmt
-    optimized yuv
-    optimized zstd_static
     ${Protobuf_LITE_LIBRARIES}
-    libcrypto
-    libssl
+    libzstd
+    OpenSSL::Crypto
+    OpenSSL::SSL
     modp_b64
-    x11region)
+    unofficial::libvpx::libvpx
+    x11region
+    yuv)
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
 
 if (MSVC)
-# C++ compliller flags.
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
-# C compiller flags.
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
-# Linker flags.
-set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
-set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
-endif()
+    # C++ compliller flags.
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
+    # C compiller flags.
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
+    # Linker flags.
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
+    set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 
-# Static runtime library.
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    # Static runtime library.
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-# If the build of unit tests is enabled.
-if (BUILD_UNIT_TESTS)
-    enable_testing()
-endif()
+enable_testing()
 
 add_subdirectory(base)
 add_subdirectory(client)
