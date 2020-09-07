@@ -32,12 +32,17 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
+find_package(asio REQUIRED)
 find_package(GTest REQUIRED)
 find_package(libyuv REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(RapidJSON REQUIRED)
 find_package(unofficial-libvpx REQUIRED)
+find_package(unofficial-sqlite3 REQUIRED)
 find_package(zstd REQUIRED)
+
+find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
@@ -73,11 +78,7 @@ add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_BINARY_DIR}
-    third_party/asio
-    third_party/rapidjson/include)
+include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 
 set(QT_COMMON_LIBS
     Qt5::Core
@@ -123,9 +124,11 @@ if (MSVC)
     # C++ compliller flags.
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MP /W3")
+
     # C compiller flags.
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /W3 /MP /arch:SSE2")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MP /W3")
+
     # Linker flags.
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
     set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")

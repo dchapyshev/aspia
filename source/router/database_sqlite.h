@@ -21,9 +21,10 @@
 
 #include "base/macros_magic.h"
 #include "router/database.h"
-#include "third_party/sqlite/sqlite3.h"
 
 #include <filesystem>
+
+#include <sqlite3.h>
 
 namespace router {
 

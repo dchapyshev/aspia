@@ -68,9 +68,9 @@ target_link_libraries(aspia_router
     crypt32
     modp_b64
     netapi32
-    sqlite
     version
-    ${Protobuf_LITE_LIBRARIES})
+    ${Protobuf_LITE_LIBRARIES}
+    unofficial::sqlite3::sqlite3)
 
 add_subdirectory(keygen)
 add_subdirectory(manager)
