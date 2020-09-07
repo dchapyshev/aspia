@@ -87,6 +87,21 @@ source_group("" FILES ${SOURCE_CONSOLE})
 source_group(moc FILES ${SOURCE_CONSOLE_MOC})
 source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
 
+if (WIN32)
+    set(CONSOLE_PLATFORM_LIBS
+        crypt32
+        dwmapi
+        imm32
+        iphlpapi
+        netapi32
+        shlwapi
+        userenv
+        uxtheme
+        version
+        winmm
+        wtsapi32)
+endif()
+
 add_executable(aspia_console
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})
@@ -98,17 +113,7 @@ target_link_libraries(aspia_console
     aspia_common
     aspia_proto
     aspia_qt_base
-    crypt32
-    dwmapi
-    imm32
-    iphlpapi
-    netapi32
-    shlwapi
-    userenv
-    uxtheme
-    version
-    winmm
-    wtsapi32
+    ${CONSOLE_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
