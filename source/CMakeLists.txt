@@ -86,7 +86,6 @@ set(QT_COMMON_LIBS
     Qt5::QGenericEnginePlugin
     Qt5::Gui
     Qt5::GuiPrivate
-    Qt5::QGifPlugin
     Qt5::QICOPlugin
     Qt5::Network
     Qt5::NetworkPrivate
