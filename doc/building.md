@@ -4,18 +4,29 @@ Instructions for building the project
 
    1.1. **Desktop development with C++** workload should be selected when installing.
 
-   1.2. **SDK 10.0.17763.0** should be selected when installing.
+   1.2. **SDK 10.0.17763.0 and 8.1** should be selected when installing.
 
 2. Download and install [CMake](https://cmake.org/download).
-3. Download pre-compiled [third-party libraries](https://files.aspia.org/dev/third_party.7z).
-   If you want to compile these libraries yourself, then you must follow the instructions for compiling these libraries.
-4. Extract the archive with third-party libraries (for example to "C:\third_party")
-5. Add an environment variable named **ASPIA_THIRD_PARTY_DIR**. For the value, specify a directory with third-party libraries.
-6. Download Aspia source code (for example to "C:\aspia").
+3. Download and install [vcpkg](https://github.com/microsoft/vcpkg).
+4. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
+* asio
+* gtest
+* libvpx
+* libyuv
+* openssl
+* protobuf
+* qt5-base
+* qt5-translations
+* qt5-winextras (only for Windows)
+* rapidjson
+* rapidxml
+* sqlite3
+* zstd
 7. Go to the source directory and run the following commands:
    **<br/>mkdir build
    <br/>cd build
-   <br/>cmake ..\source -G "Visual Studio 15 2017"**
+   <br/>cmake ..\source -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
+   <br/>(replace <vcpkg_path> with real path to vcpkg)
 
    You can also use CMake GUI for these purposes.
    <br/>After these actions, the **aspia.sln** file will be generated in directory "build".
