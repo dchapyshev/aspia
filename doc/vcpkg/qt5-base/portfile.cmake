@@ -162,7 +162,6 @@ set(RELEASE_OPTIONS
             "ZLIB_LIBS=${ZLIB_RELEASE}"
             "LIBPNG_LIBS=${LIBPNG_RELEASE} ${ZLIB_RELEASE}"
             "PCRE2_LIBS=${PCRE2_RELEASE}"
-            "FREETYPE_LIBS=${FREETYPE_RELEASE_ALL}"
             "QMAKE_LIBS_PRIVATE+=${BZ2_RELEASE}"
             "QMAKE_LIBS_PRIVATE+=${LIBPNG_RELEASE}"
             )
@@ -170,7 +169,6 @@ set(DEBUG_OPTIONS
             "ZLIB_LIBS=${ZLIB_DEBUG}"
             "LIBPNG_LIBS=${LIBPNG_DEBUG} ${ZLIB_DEBUG}"
             "PCRE2_LIBS=${PCRE2_DEBUG}"
-            "FREETYPE_LIBS=${FREETYPE_DEBUG_ALL}"
             "QMAKE_LIBS_PRIVATE+=${BZ2_DEBUG}"
             "QMAKE_LIBS_PRIVATE+=${LIBPNG_DEBUG}"
             )
@@ -187,17 +185,19 @@ if(VCPKG_TARGET_IS_WINDOWS)
     endif()
     list(APPEND RELEASE_OPTIONS
             "SQLITE_LIBS=${SQLITE_RELEASE}"
+            "FREETYPE_LIBS=${FREETYPE_RELEASE_ALL}"
             "HARFBUZZ_LIBS=${HARFBUZZ_RELEASE} ${FREETYPE_RELEASE_ALL}"
             "OPENSSL_LIBS=${SSL_RELEASE} ${EAY_RELEASE} ws2_32.lib secur32.lib advapi32.lib shell32.lib crypt32.lib user32.lib gdi32.lib"
         )
         
     list(APPEND DEBUG_OPTIONS
             "SQLITE_LIBS=${SQLITE_DEBUG}"
+            "FREETYPE_LIBS=${FREETYPE_DEBUG_ALL}"
             "HARFBUZZ_LIBS=${HARFBUZZ_DEBUG} ${FREETYPE_DEBUG_ALL}"
             "OPENSSL_LIBS=${SSL_DEBUG} ${EAY_DEBUG} ws2_32.lib secur32.lib advapi32.lib shell32.lib crypt32.lib user32.lib gdi32.lib"
         )
 elseif(VCPKG_TARGET_IS_LINUX)
-    list(APPEND CORE_OPTIONS -fontconfig -xcb-xlib -xcb -linuxfb)
+    list(APPEND CORE_OPTIONS -fontconfig -xcb-xlib -xcb)
     if (NOT EXISTS "/usr/include/GL/glu.h")
         message(FATAL_ERROR "qt5 requires libgl1-mesa-dev and libglu1-mesa-dev, please use your distribution's package manager to install them.\nExample: \"apt-get install libgl1-mesa-dev libglu1-mesa-dev\"")
     endif()
@@ -205,13 +205,11 @@ elseif(VCPKG_TARGET_IS_LINUX)
             "SQLITE_LIBS=${SQLITE_RELEASE} -ldl -lpthread"
             "HARFBUZZ_LIBS=${HARFBUZZ_RELEASE} ${FREETYPE_RELEASE_ALL} ${GLIB_RELEASE} -lpthread"
             "OPENSSL_LIBS=${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread"
-            "FONTCONFIG_LIBS=${FONTCONFIG_RELEASE} ${FREETYPE_RELEASE} ${EXPAT_RELEASE}"
         )
     list(APPEND DEBUG_OPTIONS
             "SQLITE_LIBS=${SQLITE_DEBUG} -ldl -lpthread"
             "HARFBUZZ_LIBS=${HARFBUZZ_DEBUG} ${FREETYPE_DEBUG_ALL} ${GLIB_DEBUG} -lpthread"
             "OPENSSL_LIBS=${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread"
-            "FONTCONFIG_LIBS=${FONTCONFIG_DEBUG} ${FREETYPE_DEBUG} ${EXPAT_DEBUG}"
         )
 elseif(VCPKG_TARGET_IS_OSX)
     list(APPEND CORE_OPTIONS -fontconfig)
@@ -239,12 +237,14 @@ elseif(VCPKG_TARGET_IS_OSX)
     #list(APPEND QT_PLATFORM_CONFIGURE_OPTIONS HOST_PLATFORM ${TARGET_MKSPEC})
     list(APPEND RELEASE_OPTIONS
             "SQLITE_LIBS=${SQLITE_RELEASE} -ldl -lpthread"
+            "FREETYPE_LIBS=${FREETYPE_RELEASE_ALL}"
             "HARFBUZZ_LIBS=${HARFBUZZ_RELEASE} ${FREETYPE_RELEASE_ALL} -framework ApplicationServices"
             "OPENSSL_LIBS=${SSL_RELEASE} ${EAY_RELEASE} -ldl -lpthread"
             "FONTCONFIG_LIBS=${FONTCONFIG_RELEASE} ${FREETYPE_RELEASE} ${EXPAT_RELEASE} -liconv"
         )
     list(APPEND DEBUG_OPTIONS
             "SQLITE_LIBS=${SQLITE_DEBUG} -ldl -lpthread"
+            "FREETYPE_LIBS=${FREETYPE_DEBUG_ALL}"
             "HARFBUZZ_LIBS=${HARFBUZZ_DEBUG} ${FREETYPE_DEBUG_ALL} -framework ApplicationServices"
             "OPENSSL_LIBS=${SSL_DEBUG} ${EAY_DEBUG} -ldl -lpthread"
             "FONTCONFIG_LIBS=${FONTCONFIG_DEBUG} ${FREETYPE_DEBUG} ${EXPAT_DEBUG} -liconv"
