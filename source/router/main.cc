@@ -111,7 +111,6 @@ void installService()
         }
         else
         {
-            controller.setAccount(u"NT AUTHORITY\\NetworkService", std::u16string());
             controller.setDescription(router::kServiceDescription);
             std::cout << "The service has been successfully installed." << std::endl;
         }
