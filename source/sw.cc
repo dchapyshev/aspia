@@ -93,8 +93,6 @@ void build(Solution &s)
     base.Public += "org.sw.demo.chriskohlhoff.asio"_dep;
     base.Public += "org.sw.demo.rapidxml"_dep;
     base.Public += "org.sw.demo.miloyip.rapidjson"_dep;
-    base.Public += "org.sw.demo.intel.tbb"_dep;
-    base.Public += "org.sw.demo.intel.tbb.malloc.proxy"_dep;
     base.Public += "org.sw.demo.google.protobuf.protobuf_lite"_dep;
     base.Public += "org.sw.demo.chromium.libyuv-master"_dep;
     base.Public += "org.sw.demo.webmproject.vpx"_dep;
