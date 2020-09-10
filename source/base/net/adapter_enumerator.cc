@@ -18,16 +18,20 @@
 
 #include "base/net/adapter_enumerator.h"
 
+#include "base/logging.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
+#if defined(OS_WIN)
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
+#endif // defined(OS_WIN)
 
 namespace base {
 
 namespace {
 
+#if defined(OS_WIN)
 std::string addressToString(const SOCKET_ADDRESS& address)
 {
     if (!address.lpSockaddr || address.iSockaddrLength <= 0)
@@ -61,6 +65,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
 
     return buffer;
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -70,6 +75,7 @@ std::string addressToString(const SOCKET_ADDRESS& address)
 
 AdapterEnumerator::AdapterEnumerator()
 {
+#if defined(OS_WIN)
     const ULONG flags = GAA_FLAG_INCLUDE_GATEWAYS | GAA_FLAG_SKIP_ANYCAST |
         GAA_FLAG_SKIP_MULTICAST;
 
@@ -101,38 +107,61 @@ AdapterEnumerator::AdapterEnumerator()
             return;
         }
     }
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 AdapterEnumerator::~AdapterEnumerator() = default;
 
 bool AdapterEnumerator::isAtEnd() const
 {
+#if defined(OS_WIN)
     return adapter_ == nullptr;
+#else
+    NOTIMPLEMENTED();
+    return true;
+#endif
 }
 
 void AdapterEnumerator::advance()
 {
+#if defined(OS_WIN)
     adapter_ = adapter_->Next;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 std::string AdapterEnumerator::adapterName() const
 {
+#if defined(OS_WIN)
     if (!adapter_->Description)
         return std::string();
 
     return base::utf8FromWide(adapter_->Description);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 std::string AdapterEnumerator::connectionName() const
 {
+#if defined(OS_WIN)
     if (!adapter_->FriendlyName)
         return std::string();
 
     return base::utf8FromWide(adapter_->FriendlyName);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 std::string AdapterEnumerator::interfaceType() const
 {
+#if defined(OS_WIN)
     switch (adapter_->IfType)
     {
         case IF_TYPE_OTHER:
@@ -165,23 +194,38 @@ std::string AdapterEnumerator::interfaceType() const
         default:
             return std::string();
     }
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 uint32_t AdapterEnumerator::mtu() const
 {
+#if defined(OS_WIN)
     return adapter_->Mtu;
+#else
+    NOTIMPLEMENTED();
+    return 0;
+#endif
 }
 
 uint64_t AdapterEnumerator::speed() const
 {
+#if defined(OS_WIN)
     if (adapter_->TransmitLinkSpeed == std::numeric_limits<ULONG64>::max())
         return 0;
 
     return adapter_->TransmitLinkSpeed;
+#else
+    NOTIMPLEMENTED();
+    return 0;
+#endif
 }
 
 std::string AdapterEnumerator::macAddress() const
 {
+#if defined(OS_WIN)
     if (!adapter_->PhysicalAddressLength)
         return std::string();
 
@@ -193,16 +237,30 @@ std::string AdapterEnumerator::macAddress() const
                               adapter_->PhysicalAddress[4],
                               adapter_->PhysicalAddress[5],
                               adapter_->PhysicalAddress[6]);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 bool AdapterEnumerator::isDhcp4Enabled() const
 {
+#if defined(OS_WIN)
     return !!adapter_->Dhcpv4Enabled;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 std::string AdapterEnumerator::dhcp4Server() const
 {
+#if defined(OS_WIN)
     return addressToString(adapter_->Dhcpv4Server);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 //
@@ -210,28 +268,45 @@ std::string AdapterEnumerator::dhcp4Server() const
 //
 
 AdapterEnumerator::IpAddressEnumerator::IpAddressEnumerator(const AdapterEnumerator& adapter)
+#if defined(OS_WIN)
     : address_(adapter.adapter_->FirstUnicastAddress)
+#endif // defined(OS_WIN)
 {
     // Nothing
 }
 
 bool AdapterEnumerator::IpAddressEnumerator::isAtEnd() const
 {
+#if defined(OS_WIN)
     return address_ == nullptr;
+#else
+    NOTIMPLEMENTED();
+    return true;
+#endif
 }
 
 void AdapterEnumerator::IpAddressEnumerator::advance()
 {
+#if defined(OS_WIN)
     address_ = address_->Next;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 std::string AdapterEnumerator::IpAddressEnumerator::address() const
 {
+#if defined(OS_WIN)
     return addressToString(address_->Address);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 {
+#if defined(OS_WIN)
     in_addr addr;
 
     if (ConvertLengthToIpv4Mask(address_->OnLinkPrefixLength, &addr.s_addr) != NO_ERROR)
@@ -243,6 +318,10 @@ std::string AdapterEnumerator::IpAddressEnumerator::mask() const
         return std::string();
 
     return buffer;
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 //
@@ -250,24 +329,40 @@ std::string AdapterEnumerator::IpAddressEnumerator::mask() const
 //
 
 AdapterEnumerator::GatewayEnumerator::GatewayEnumerator(const AdapterEnumerator& adapter)
+#if defined(OS_WIN)
     : address_(adapter.adapter_->FirstGatewayAddress)
+#endif
 {
     // Nothing
 }
 
 bool AdapterEnumerator::GatewayEnumerator::isAtEnd() const
 {
+#if defined(OS_WIN)
     return address_ == nullptr;
+#else
+    NOTIMPLEMENTED();
+    return true;
+#endif
 }
 
 void AdapterEnumerator::GatewayEnumerator::advance()
 {
+#if defined(OS_WIN)
     address_ = address_->Next;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 std::string AdapterEnumerator::GatewayEnumerator::address() const
 {
+#if defined(OS_WIN)
     return addressToString(address_->Address);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 //
@@ -275,24 +370,40 @@ std::string AdapterEnumerator::GatewayEnumerator::address() const
 //
 
 AdapterEnumerator::DnsEnumerator::DnsEnumerator(const AdapterEnumerator& adapter)
+#if defined(OS_WIN)
     : address_(adapter.adapter_->FirstDnsServerAddress)
+#endif
 {
     // Nothing
 }
 
 bool AdapterEnumerator::DnsEnumerator::isAtEnd() const
 {
+#if defined(OS_WIN)
     return address_ == nullptr;
+#else
+    NOTIMPLEMENTED();
+    return true;
+#endif
 }
 
 void AdapterEnumerator::DnsEnumerator::advance()
 {
+#if defined(OS_WIN)
     address_ = address_->Next;
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 std::string AdapterEnumerator::DnsEnumerator::address() const
 {
+#if defined(OS_WIN)
     return addressToString(address_->Address);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 } // namespace base

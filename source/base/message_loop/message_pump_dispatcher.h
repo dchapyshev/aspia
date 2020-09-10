@@ -19,11 +19,31 @@
 #ifndef BASE__MESSAGE_LOOP__MESSAGE_PUMP_DISPATCHER_H
 #define BASE__MESSAGE_LOOP__MESSAGE_PUMP_DISPATCHER_H
 
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
 #include <Windows.h>
+#elif defined(OS_LINUX)
+typedef union _XEvent XEvent;
+#elif defined(OS_MAC)
+#if defined(__OBJC__)
+@class NSEvent;
+#else  // __OBJC__
+class NSEvent;
+#endif // __OBJC__
+#endif // OS_*
 
 namespace base {
 
+#if defined(OS_WIN)
 using NativeEvent = MSG;
+#elif defined(OS_LINUX)
+using NativeEvent = XEvent*;
+#elif defined(OS_MAC)
+using NativeEvent = NSEvent*;
+#else
+#error Not implemented
+#endif
 
 // Dispatcher is used during a nested invocation of Run to dispatch events when
 // |RunLoop(dispatcher).run()| is used.  If |RunLoop().run()| is invoked,

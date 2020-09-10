@@ -20,10 +20,13 @@
 
 #include "base/logging.h"
 
+#if defined(OS_WIN)
 #include <shlobj.h>
+#endif // defined(OS_WIN)
 
 namespace base {
 
+#if defined(OS_WIN)
 // static
 bool BasePaths::windowsDir(std::filesystem::path* result)
 {
@@ -57,12 +60,14 @@ bool BasePaths::systemDir(std::filesystem::path* result)
     result->assign(buffer);
     return true;
 }
+#endif // defined(OS_WIN)
 
 // static
 bool BasePaths::userAppData(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, buffer);
@@ -74,6 +79,10 @@ bool BasePaths::userAppData(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 // static
@@ -81,6 +90,7 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY,
@@ -93,6 +103,10 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 // static
@@ -100,6 +114,7 @@ bool BasePaths::userHome(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_PROFILE, nullptr, SHGFP_TYPE_CURRENT, buffer);
@@ -111,6 +126,10 @@ bool BasePaths::userHome(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 // static
@@ -118,6 +137,7 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA,
@@ -130,6 +150,10 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 // static
@@ -137,6 +161,7 @@ bool BasePaths::commonDesktop(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_DESKTOPDIRECTORY,
@@ -149,6 +174,10 @@ bool BasePaths::commonDesktop(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 // static
@@ -170,6 +199,7 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
 {
     DCHECK(result);
 
+#if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (!GetModuleFileNameW(nullptr, buffer, std::size(buffer)))
@@ -180,6 +210,10 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 } // namespace base

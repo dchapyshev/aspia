@@ -21,6 +21,8 @@
 
 #include "base/desktop/frame.h"
 
+#include <memory>
+
 namespace base {
 
 class SharedMemoryFactory;

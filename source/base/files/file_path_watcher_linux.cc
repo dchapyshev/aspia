@@ -27,18 +27,26 @@ namespace {
 class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate
 {
 public:
-    FilePathWatcherImpl();
+    FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
     ~FilePathWatcherImpl() override;
 
     bool watch(const std::filesystem::path& path,
                bool recursive,
-               const Callback& callback) override;
+               const FilePathWatcher::Callback& callback) override;
     void cancel() override;
 };
 
+FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner)
+    : FilePathWatcher::PlatformDelegate(task_runner)
+{
+    // Nothing
+}
+
+FilePathWatcherImpl::~FilePathWatcherImpl() = default;
+
 bool FilePathWatcherImpl::watch(const std::filesystem::path& /* path */,
                                 bool /* recursive */,
-                                const Callback& /* callback */)
+                                const FilePathWatcher::Callback& /* callback */)
 {
     NOTIMPLEMENTED();
     return false;

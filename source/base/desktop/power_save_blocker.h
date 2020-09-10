@@ -19,6 +19,7 @@
 #ifndef BASE__DESKTOP__POWER_SAVE_BLOCKER_H
 #define BASE__DESKTOP__POWER_SAVE_BLOCKER_H
 
+#include "base/macros_magic.h"
 #include "build/build_config.h"
 
 #if defined(OS_WIN)

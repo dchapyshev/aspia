@@ -74,7 +74,7 @@ PowerSaveBlocker::PowerSaveBlocker()
     handle_.reset(createPowerRequest(PowerRequestDisplayRequired, kDescription));
 #else // defined(OS_WIN)
     NOTIMPLEMENTED();
-#endif defined(OS_*)
+#endif // defined(OS_*)
 }
 
 PowerSaveBlocker::~PowerSaveBlocker()

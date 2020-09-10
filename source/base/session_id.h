@@ -21,6 +21,10 @@
 
 #include "build/build_config.h"
 
+#if defined(OS_LINUX)
+#include <unistd.h>
+#endif
+
 namespace base {
 
 #if defined(OS_WIN)
@@ -32,6 +36,9 @@ const SessionId kServiceSessionId = 0;
 SessionId activeConsoleSessionId();
 
 #elif defined(OS_LINUX)
+
+using SessionId = pid_t;
+const SessionId kInvalidSessionId = -1;
 
 #else // defined(OS_*)
 

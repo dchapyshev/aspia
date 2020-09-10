@@ -20,6 +20,7 @@
 #define BASE__FILES__BASE_PATHS_H
 
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 
 #include <filesystem>
 
@@ -28,11 +29,13 @@ namespace base {
 class BasePaths
 {
 public:
+#if defined(OS_WIN)
     // Windows directory, usually "c:\windows".
     static bool windowsDir(std::filesystem::path* result);
 
     // Usually c:\windows\system32".
     static bool systemDir(std::filesystem::path* result);
+#endif // defined(OS_WIN)
 
     // Application Data directory under the user profile.
     static bool userAppData(std::filesystem::path* result);

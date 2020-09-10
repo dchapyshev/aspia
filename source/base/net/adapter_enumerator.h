@@ -20,14 +20,17 @@
 #define BASE__NET__ADAPTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 
 #include <memory>
 #include <string>
 
+#if defined(OS_WIN)
 struct _IP_ADAPTER_ADDRESSES_LH;
 struct _IP_ADAPTER_UNICAST_ADDRESS_LH;
 struct _IP_ADAPTER_DNS_SERVER_ADDRESS_XP;
 struct _IP_ADAPTER_GATEWAY_ADDRESS_LH;
+#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -62,7 +65,9 @@ public:
         std::string mask() const;
 
     private:
+#if defined(OS_WIN)
         const _IP_ADAPTER_UNICAST_ADDRESS_LH* address_;
+#endif
 
         DISALLOW_COPY_AND_ASSIGN(IpAddressEnumerator);
     };
@@ -77,7 +82,9 @@ public:
         std::string address() const;
 
     private:
+#if defined(OS_WIN)
         const _IP_ADAPTER_GATEWAY_ADDRESS_LH* address_;
+#endif
 
         DISALLOW_COPY_AND_ASSIGN(GatewayEnumerator);
     };
@@ -92,14 +99,18 @@ public:
         std::string address() const;
 
     private:
+#if defined(OS_WIN)
         const _IP_ADAPTER_DNS_SERVER_ADDRESS_XP* address_ = nullptr;
+#endif
 
         DISALLOW_COPY_AND_ASSIGN(DnsEnumerator);
     };
 
 private:
+#if defined(OS_WIN)
     std::unique_ptr<uint8_t[]> adapters_buffer_;
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
+#endif
 
     DISALLOW_COPY_AND_ASSIGN(AdapterEnumerator);
 };

@@ -19,6 +19,8 @@
 #ifndef BASE__IPC__SHARED_MEMORY_H
 #define BASE__IPC__SHARED_MEMORY_H
 
+#include "base/macros_magic.h"
+#include "base/logging.h"
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
@@ -44,15 +46,37 @@ public:
     };
 
 #if defined(OS_WIN)
-    using Handle = HANDLE;
+    using PlatformHandle = HANDLE;
+    using ScopedPlatformHandle = win::ScopedHandle;
 #else
-    using Handle = int;
+    using PlatformHandle = int;
+
+    class ScopedPlatformHandle
+    {
+    public:
+        ScopedPlatformHandle(PlatformHandle handle)
+            : handle_(handle)
+        {
+            NOTIMPLEMENTED();
+        }
+
+        ~ScopedPlatformHandle()
+        {
+            NOTIMPLEMENTED();
+        }
+
+        PlatformHandle get() const { return handle_; }
+
+    private:
+        PlatformHandle handle_;
+    };
+
 #endif
 
-    static const Handle kInvalidHandle;
+    static const PlatformHandle kInvalidHandle;
 
     virtual void* data()  = 0;
-    virtual Handle handle() const = 0;
+    virtual PlatformHandle handle() const = 0;
     virtual int id() const = 0;
 };
 
@@ -68,17 +92,17 @@ public:
 
     // SharedMemoryBase implementation.
     void* data() override { return data_; }
-    Handle handle() const override { return handle_.get(); }
+    PlatformHandle handle() const override { return handle_.get(); }
     int id() const override { return id_; }
 
 private:
     SharedMemory(int id,
-                 win::ScopedHandle&& handle,
+                 ScopedPlatformHandle&& handle,
                  void* data,
                  std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
 
     std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
-    win::ScopedHandle handle_;
+    ScopedPlatformHandle handle_;
     void* data_;
     int id_;
 

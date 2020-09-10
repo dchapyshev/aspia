@@ -24,7 +24,11 @@
 #include "base/memory/byte_array.h"
 #include "base/threading/thread_checker.h"
 
+#if defined(OS_WIN)
 #include <asio/windows/stream_handle.hpp>
+#elif defined(OS_POSIX)
+#include <asio/posix/stream_descriptor.hpp>
+#endif
 
 #include <filesystem>
 #include <queue>
@@ -77,7 +81,13 @@ private:
     friend class IpcServer;
     friend class IpcChannelProxy;
 
-    IpcChannel(std::u16string_view channel_name, asio::windows::stream_handle&& stream);
+#if defined(OS_WIN)
+    using Stream = asio::windows::stream_handle;
+#elif defined(OS_POSIX)
+    using Stream = asio::posix::stream_descriptor;
+#endif
+
+    IpcChannel(std::u16string_view channel_name, Stream&& stream);
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
@@ -86,7 +96,7 @@ private:
     void onMessageReceived();
 
     std::u16string channel_name_;
-    asio::windows::stream_handle stream_;
+    Stream stream_;
 
     std::shared_ptr<IpcChannelProxy> proxy_;
     Listener* listener_ = nullptr;

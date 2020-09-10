@@ -18,7 +18,6 @@
 
 #include "base/ipc/shared_memory.h"
 
-#include "base/logging.h"
 #include "base/ipc/shared_memory_factory_proxy.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
@@ -26,7 +25,9 @@
 #include <atomic>
 #include <random>
 
+#if defined(OS_WIN)
 #include <AclAPI.h>
+#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -52,6 +53,8 @@ std::u16string createFilePath(int id)
     static const char16_t kPrefix[] = u"Global\\aspia_";
     return kPrefix + numberToString16(id);
 }
+
+#if defined(OS_WIN)
 
 bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
 {
@@ -154,16 +157,18 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
     return true;
 }
 
+#endif // defined(OS_WIN)
+
 } // namespace
 
 #if defined(OS_WIN)
-const SharedMemory::Handle kInvalidHandle = nullptr;
+const SharedMemory::PlatoformHandle kInvalidHandle = nullptr;
 #else
-const SharedMemory::Handle kInvalidHandle = -1;
+const SharedMemory::PlatformHandle kInvalidHandle = -1;
 #endif
 
 SharedMemory::SharedMemory(int id,
-                           win::ScopedHandle&& handle,
+                           ScopedPlatformHandle&& handle,
                            void* data,
                            std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
     : factory_proxy_(std::move(factory_proxy)),
@@ -180,16 +185,19 @@ SharedMemory::~SharedMemory()
     if (factory_proxy_)
         factory_proxy_->onSharedMemoryDestroy(id_);
 
+#if defined(OS_WIN)
     UnmapViewOfFile(data_);
+#endif // defined(OS_WIN)
 }
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::create(
     Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
+#if defined(OS_WIN)
     static const int kRetryCount = 10;
 
-    win::ScopedHandle file;
+    ScopedPlatformHandle file;
     int id = -1;
 
     for (int i = 0; i < kRetryCount; ++i)
@@ -210,13 +218,18 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
     return std::unique_ptr<SharedMemory>(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
+#else
+    NOTIMPLEMENTED();
+    return nullptr;
+#endif
 }
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::open(
     Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
-    win::ScopedHandle file;
+#if defined(OS_WIN)
+    ScopedPlatformHandle file;
     if (!openFileMapping(mode, id, &file))
         return nullptr;
 
@@ -226,6 +239,10 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
 
     return std::unique_ptr<SharedMemory>(
         new SharedMemory(id, std::move(file), memory, std::move(factory_proxy)));
+#else
+    NOTIMPLEMENTED();
+    return nullptr;
+#endif
 }
 
 } // namespace base

@@ -24,6 +24,7 @@
 #include "base/message_loop/pending_task.h"
 
 #include <shared_mutex>
+#include <thread>
 
 namespace base {
 

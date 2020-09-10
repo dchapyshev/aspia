@@ -99,11 +99,13 @@ void MessageLoop::run(Dispatcher* dispatcher)
 {
     DCHECK_EQ(this, current());
 
+#if defined(OS_WIN)
     if (dispatcher && type() == Type::WIN)
     {
         pumpWin()->runWithDispatcher(this, dispatcher);
         return;
     }
+#endif // defined(OS_WIN)
 
     pump_->run(this);
 }

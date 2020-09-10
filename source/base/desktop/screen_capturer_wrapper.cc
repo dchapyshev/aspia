@@ -163,7 +163,7 @@ void ScreenCapturerWrapper::selectCapturer()
     }
 #elif defined(OS_LINUX)
     NOTIMPLEMENTED();
-#elif defined(OS_MACOSX)
+#elif defined(OS_MAC)
     NOTIMPLEMENTED();
 #else
     NOTIMPLEMENTED();

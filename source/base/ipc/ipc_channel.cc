@@ -24,21 +24,26 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/unicode.h"
-#include "base/win/scoped_object.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
 #include <functional>
 
+#if defined(OS_WIN)
+#include "base/win/scoped_object.h"
 #include <psapi.h>
+#endif // defined(OS_WIN)
 
 namespace base {
 
 namespace {
 
-const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+
+#if defined(OS_WIN)
+
+const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
 ProcessId clientProcessIdImpl(HANDLE pipe_handle)
@@ -93,6 +98,8 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
     return session_id;
 }
 
+#endif // defined(OS_WIN)
+
 } // namespace
 
 IpcChannel::IpcChannel()
@@ -102,14 +109,16 @@ IpcChannel::IpcChannel()
     // Nothing
 }
 
-IpcChannel::IpcChannel(std::u16string_view channel_name, asio::windows::stream_handle&& stream)
+IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
       is_connected_(true)
 {
+#if defined(OS_WIN)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
+#endif
 }
 
 IpcChannel::~IpcChannel()
@@ -136,6 +145,7 @@ void IpcChannel::setListener(Listener* listener)
 
 bool IpcChannel::connect(std::u16string_view channel_id)
 {
+#if defined(OS_WIN)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
@@ -182,6 +192,10 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
     is_connected_ = true;
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 void IpcChannel::disconnect()
@@ -250,6 +264,7 @@ void IpcChannel::send(ByteArray&& buffer)
 
 std::filesystem::path IpcChannel::peerFilePath() const
 {
+#if defined(OS_WIN)
     win::ScopedHandle process(
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
@@ -267,14 +282,23 @@ std::filesystem::path IpcChannel::peerFilePath() const
     }
 
     return buffer;
+#else
+    NOTIMPLEMENTED();
+    return std::filesystem::path();
+#endif
 }
 
 // static
 std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 {
+#if defined(OS_WIN)
     std::u16string name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
+#else
+    NOTIMPLEMENTED();
+    return std::u16string();
+#endif
 }
 
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)

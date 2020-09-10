@@ -32,8 +32,10 @@ void* alignedAlloc(size_t size, size_t alignment)
     DCHECK_EQ((alignment & (alignment - 1)), 0U);
     DCHECK_EQ((alignment % sizeof(void*)), 0U);
 
+    void* ptr = nullptr;
+
 #if defined(OS_WIN)
-    void* ptr = _aligned_malloc(size, alignment);
+    ptr = _aligned_malloc(size, alignment);
 #elif defined(OS_ANDROID)
     ptr = memalign(alignment, size);
 #else

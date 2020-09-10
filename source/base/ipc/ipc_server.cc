@@ -26,18 +26,23 @@
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
+#endif // defined(OS_WIN)
 
 namespace base {
 
 namespace {
 
+#if defined(OS_WIN)
 const DWORD kAcceptTimeout = 5000; // ms
 const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
+#endif
 
 } // namespace
 
@@ -56,8 +61,12 @@ private:
     IpcServer* server_;
     const size_t index_;
 
+#if defined(OS_WIN)
     std::unique_ptr<asio::windows::stream_handle> handle_;
     std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
+#elif defined(OS_POSIX)
+    std::unique_ptr<asio::posix::stream_descriptor> handle_;
+#endif
 
     DISALLOW_COPY_AND_ASSIGN(Listener);
 };
@@ -73,6 +82,7 @@ IpcServer::Listener::~Listener() = default;
 
 bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
 {
+#if defined(OS_WIN)
     std::wstring user_sid;
 
     if (!win::userSidString(&user_sid))
@@ -147,6 +157,10 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
 
     overlapped_->complete(std::error_code(), 0);
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 void IpcServer::Listener::onNewConnetion(
@@ -185,8 +199,17 @@ std::u16string IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
 
+    uint32_t process_id;
+
+#if defined(OS_WIN)
+    process_id = GetCurrentProcessId();
+#elif defined(OS_POSIX)
+    process_id = getpid();
+#else
+#error Not implemented
+#endif
+
     uint32_t channel_id = last_channel_id++;
-    uint32_t process_id = GetCurrentProcessId();
     uint32_t random_number = Random::number32();
 
     return utf16FromAscii(
