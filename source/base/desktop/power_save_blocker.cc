@@ -16,13 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/win/power_save_blocker.h"
+#include "base/desktop/power_save_blocker.h"
 
 #include "base/logging.h"
 
 namespace base {
 
 namespace {
+
+#if defined(OS_WIN)
 
 HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& description)
 {
@@ -59,19 +61,27 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
     DCHECK(success);
 }
 
+#endif // defined(OS_WIN)
+
 } // namespace
 
 PowerSaveBlocker::PowerSaveBlocker()
 {
+#if defined(OS_WIN)
     static const wchar_t kDescription[] = L"Aspia session is active";
 
     // The display will always be on as long as the class instance exists.
     handle_.reset(createPowerRequest(PowerRequestDisplayRequired, kDescription));
+#else // defined(OS_WIN)
+    NOTIMPLEMENTED();
+#endif defined(OS_*)
 }
 
 PowerSaveBlocker::~PowerSaveBlocker()
 {
+#if defined(OS_WIN)
     deletePowerRequest(PowerRequestDisplayRequired, handle_.release());
+#endif // defined(OS_WIN)
 }
 
 } // namespace base

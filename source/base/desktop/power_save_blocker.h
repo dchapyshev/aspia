@@ -16,10 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__POWER_SAVE_BLOCKER_H
-#define BASE__DESKTOP__WIN__POWER_SAVE_BLOCKER_H
+#ifndef BASE__DESKTOP__POWER_SAVE_BLOCKER_H
+#define BASE__DESKTOP__POWER_SAVE_BLOCKER_H
 
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_object.h"
+#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -30,7 +34,9 @@ public:
     ~PowerSaveBlocker();
 
 private:
+#if defined(OS_WIN)
     win::ScopedHandle handle_;
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(PowerSaveBlocker);
 };

@@ -215,6 +215,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/mouse_cursor.h
     desktop/pixel_format.cc
     desktop/pixel_format.h
+    desktop/power_save_blocker.cc
+    desktop/power_save_blocker.h
     desktop/region.cc
     desktop/region.h
     desktop/screen_capturer.cc
@@ -288,8 +290,6 @@ if (WIN32)
         desktop/win/dxgi_texture_mapping.h
         desktop/win/dxgi_texture_staging.cc
         desktop/win/dxgi_texture_staging.h
-        desktop/win/power_save_blocker.cc
-        desktop/win/power_save_blocker.h
         desktop/win/screen_capture_utils.cc
         desktop/win/screen_capture_utils.h)
 
