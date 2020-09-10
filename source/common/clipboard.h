@@ -26,11 +26,13 @@
 #include <memory>
 
 #if defined(OS_WIN)
+
 namespace base::win {
 class MessageWindow;
 } // namespace base::win
 
 #include <Windows.h>
+
 #endif // defined(OS_WIN)
 
 namespace common {
@@ -53,6 +55,18 @@ public:
 
     // Receiving the incoming clipboard.
     void injectClipboardEvent(const proto::ClipboardEvent& event);
+
+    static const char kMimeTypeTextUtf8[];
+    static const char kMimeTypeCompressedTextUtf8[];
+
+    // The compression ratio can be in the range of 1 to 22.
+    static const int kCompressionRatio;
+
+    // Smaller data will not be compressed.
+    static const size_t kMinSizeToCompress;
+
+    static bool compress(const std::string& in, std::string* out);
+    static bool decompress(const std::string& in, std::string* out);
 
 private:
     void stop();

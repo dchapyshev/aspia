@@ -19,6 +19,7 @@
 include(translations)
 
 list(APPEND SOURCE_COMMON
+    clipboard.cc
     clipboard.h
     desktop_session_constants.cc
     desktop_session_constants.h
