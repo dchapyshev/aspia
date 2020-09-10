@@ -22,6 +22,24 @@
 
 namespace common {
 
+namespace {
+
+// Minimal path name is 2 characters (for example: "/").
+const int kMinPathLength = 1;
+
+// Under Window the length of a full path is 260 characters.
+const int kMaxPathLength = 260;
+
+// The file name can not be shorter than 1 character.
+const int kMinFileNameLength = 1;
+
+// For FAT: file and folder names may be up to 255 characters long.
+// For NTFS: file and folder names may be up to 256 characters long.
+// We use FAT variant: 255 characters long.
+const int kMaxFileNameLength = (kMaxPathLength - 5);
+
+} // namespace
+
 // static
 QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {

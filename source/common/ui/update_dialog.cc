@@ -18,11 +18,15 @@
 
 #include "common/ui/update_dialog.h"
 
-#include "base/win/process_util.h"
+#include "build/build_config.h"
 #include "build/version.h"
 #include "common/ui/download_dialog.h"
 #include "common/ui/update_checker.h"
 #include "ui_update_dialog.h"
+
+#if defined(OS_WIN)
+#include "base/win/process_util.h"
+#endif // defined(OS_WIN)
 
 #include <QCloseEvent>
 #include <QDir>
@@ -131,7 +135,10 @@ void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
             ui->label_available->setText(QString::fromStdString(new_version.toString()));
             ui->edit_description->setText(update_info.description());
             ui->label_url->setText(makeUrl(update_info.url()));
+
+#if defined(OS_WIN)
             ui->button_update->setEnabled(true);
+#endif // defined(OS_WIN)
         }
         else
         {
@@ -145,6 +152,7 @@ void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
 
 void UpdateDialog::onUpdateNow()
 {
+#if defined(OS_WIN)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
                           "application will automatically close.");
     QString message2 = tr("All connected sessions will be terminated. You cannot establish a "
@@ -209,6 +217,7 @@ void UpdateDialog::onUpdateNow()
             }
         }
     }
+#endif // defined(OS_WIN)
 }
 
 void UpdateDialog::initialize()

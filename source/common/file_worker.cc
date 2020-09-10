@@ -138,6 +138,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
 
     proto::DriveList* drive_list = reply->mutable_drive_list();
 
+#if defined(OS_WIN)
     for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         proto::DriveList::Item* item = drive_list->add_item();
@@ -174,6 +175,9 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
         item->set_total_space(drive_info.totalSpace());
         item->set_free_space(drive_info.freeSpace());
     }
+#endif
+
+    // TODO: Add root directory?
 
     std::filesystem::path desktop_path;
     if (base::BasePaths::userDesktop(&desktop_path))
