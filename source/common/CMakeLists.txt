@@ -25,6 +25,8 @@ list(APPEND SOURCE_COMMON
     desktop_session_constants.h
     file_depacketizer.cc
     file_depacketizer.h
+    file_enumerator.cc
+    file_enumerator.h
     file_packet.h
     file_packetizer.cc
     file_packetizer.h
@@ -82,12 +84,6 @@ list(APPEND SOURCE_COMMON_UI
     ui/update_dialog.ui
     ui/update_info.cc
     ui/update_info.h)
-
-if (WIN32)
-    list(APPEND SOURCE_COMMON_WIN
-        win/file_enumerator.cc
-        win/file_enumerator.h)
-endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 

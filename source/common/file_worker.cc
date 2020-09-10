@@ -24,12 +24,12 @@
 #include "build/build_config.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
+#include "common/file_enumerator.h"
 #include "common/file_platform_util.h"
 #include "common/file_task.h"
 
 #if defined(OS_WIN)
 #include "base/win/drive_enumerator.h"
-#include "common/win/file_enumerator.h"
 #endif // defined(OS_WIN)
 
 namespace common {
