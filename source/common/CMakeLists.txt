@@ -19,7 +19,6 @@
 include(translations)
 
 list(APPEND SOURCE_COMMON
-    clipboard.cc
     clipboard.h
     desktop_session_constants.cc
     desktop_session_constants.h
@@ -48,16 +47,19 @@ list(APPEND SOURCE_COMMON
 
 if (WIN32)
     list(APPEND SOURCE_COMMON
+        clipboard_win.cc
         file_platform_util_win.cc)
 endif()
 
 if (LINUX)
     list(APPEND SOURCE_COMMON
+        clipboard_x11.cc
         file_platform_util_linux.cc)
 endif()
 
 if (APPLE)
     list(APPEND SOURCE_COMMON
+        clipboard_mac.cc
         file_platform_util_mac.mm)
 endif()
 

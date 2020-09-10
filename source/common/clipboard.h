@@ -20,15 +20,18 @@
 #define COMMON__CLIPBOARD_H
 
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 #include "proto/desktop.pb.h"
 
 #include <memory>
 
+#if defined(OS_WIN)
 namespace base::win {
 class MessageWindow;
 } // namespace base::win
 
 #include <Windows.h>
+#endif // defined(OS_WIN)
 
 namespace common {
 
@@ -54,14 +57,20 @@ public:
 private:
     void stop();
 
+#if defined(OS_WIN)
     // Handles messages received by |window_|.
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
+#endif // defined(OS_WIN)
+
     void onClipboardUpdate();
 
     Delegate* delegate_ = nullptr;
 
+#if defined(OS_WIN)
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::win::MessageWindow> window_;
+#endif // defined(OS_WIN)
+
     std::string last_data_;
 
     DISALLOW_COPY_AND_ASSIGN(Clipboard);
