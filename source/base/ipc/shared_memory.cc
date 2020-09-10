@@ -162,7 +162,7 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
 } // namespace
 
 #if defined(OS_WIN)
-const SharedMemory::PlatoformHandle kInvalidHandle = nullptr;
+const SharedMemory::PlatformHandle kInvalidHandle = nullptr;
 #else
 const SharedMemory::PlatformHandle kInvalidHandle = -1;
 #endif
