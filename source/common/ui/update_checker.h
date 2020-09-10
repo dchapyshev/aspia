@@ -26,11 +26,11 @@
 
 class QThread;
 
+Q_DECLARE_METATYPE(common::UpdateInfo);
+
 namespace common {
 
 class UpdateCheckerImpl;
-
-Q_DECLARE_METATYPE(UpdateInfo);
 
 class UpdateChecker : public QObject
 {
