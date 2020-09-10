@@ -93,14 +93,14 @@ void build(Solution &s)
     base.Public += "org.sw.demo.chriskohlhoff.asio"_dep;
     base.Public += "org.sw.demo.rapidxml"_dep;
     base.Public += "org.sw.demo.miloyip.rapidjson"_dep;
-    base.Public += "org.sw.demo.intel.tbb"_dep;
-    base.Public += "org.sw.demo.intel.tbb.malloc.proxy"_dep;
     base.Public += "org.sw.demo.google.protobuf.protobuf_lite"_dep;
     base.Public += "org.sw.demo.chromium.libyuv-master"_dep;
     base.Public += "org.sw.demo.webmproject.vpx"_dep;
-    base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
     if (base.getBuildSettings().TargetOS.Type == OSType::Windows)
+    {
+        base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
         base += "comsuppw.lib"_slib, "Winspool.lib"_slib;
+    }
     automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, base);
 
     auto &relay = aspia.addExecutable("relay");
