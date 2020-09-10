@@ -47,7 +47,7 @@ public:
         return shared_memory_->data();
     }
 
-    Handle handle() const override
+    PlatformHandle handle() const override
     {
         return shared_memory_->handle();
     }
