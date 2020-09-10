@@ -1,9 +1,12 @@
 # VS build folders
 /.vs/
 /build/
+/debug/
+/release/
 /installer/.vs/
 /installer/bin/
 /installer/obj/
+/source/CMakeLists.txt.user
 
 # VS generated files
 *.obj
