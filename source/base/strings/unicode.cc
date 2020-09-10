@@ -18,7 +18,7 @@
 
 #include "base/strings/unicode.h"
 
-#include "build/build_config.h"
+#include "base/logging.h"
 
 #if defined(OS_WIN)
 #include <Windows.h>
@@ -139,7 +139,35 @@ bool utf8ToWideImpl(std::string_view in, OutputType* out)
 }
 
 #else
-#error Platform support not implemented
+
+template <class InputType>
+bool utf16ToLocalImpl(InputType in, std::string* out)
+{
+    NOTIMPLEMENTED();
+    return false;
+}
+
+template <class OutputType>
+bool localToUtf16Impl(std::string_view in, OutputType* out)
+{
+    NOTIMPLEMENTED();
+    return false;
+}
+
+template <class InputType>
+bool utf16ToUtf8Impl(InputType in, std::string* out)
+{
+    NOTIMPLEMENTED();
+    return false;
+}
+
+template <class OutputType>
+bool utf8ToUtf16Impl(std::string_view in, OutputType* out)
+{
+    NOTIMPLEMENTED();
+    return false;
+}
+
 #endif
 
 template <class InputString, class OutputString>
@@ -149,7 +177,7 @@ OutputString asciiConverter(InputString in)
     out.resize(in.size());
 
     for (size_t i = 0; i < out.size(); ++i)
-        out[i] = static_cast<OutputString::value_type>(in[i]);
+        out[i] = static_cast<typename OutputString::value_type>(in[i]);
 
     return out;
 }
@@ -161,7 +189,7 @@ bool utf16ToUtf8(std::u16string_view in, std::string* out)
 #if defined(WCHAR_T_IS_UTF16)
     return wideToUtf8Impl(in, out);
 #else
-#error Implement me!
+    return utf16ToUtf8Impl(in, out);
 #endif
 }
 
@@ -170,7 +198,7 @@ bool utf8ToUtf16(std::string_view in, std::u16string* out)
 #if defined(WCHAR_T_IS_UTF16)
     return utf8ToWideImpl(in, out);
 #else
-#error Implement me!
+    return utf8ToUtf16Impl(in, out);
 #endif
 }
 
@@ -187,6 +215,8 @@ std::string utf8FromUtf16(std::u16string_view in)
     utf16ToUtf8(in, &out);
     return out;
 }
+
+#if defined(OS_WIN)
 
 bool wideToUtf8(std::wstring_view in, std::string* out)
 {
@@ -246,6 +276,8 @@ std::u16string utf16FromWide(std::wstring_view in)
     return out;
 }
 
+#endif // defined(OS_WIN)
+
 std::string asciiFromUtf16(std::u16string_view in)
 {
     return asciiConverter<std::u16string_view, std::string>(in);
@@ -255,6 +287,8 @@ std::u16string utf16FromAscii(std::string_view in)
 {
     return asciiConverter<std::string_view, std::u16string>(in);
 }
+
+#if defined(OS_WIN)
 
 std::string asciiFromWide(std::wstring_view in)
 {
@@ -266,12 +300,14 @@ std::wstring wideFromAscii(std::string_view in)
     return asciiConverter<std::string_view, std::wstring>(in);
 }
 
+#endif // defined(OS_WIN)
+
 bool utf16ToLocal8Bit(std::u16string_view in, std::string* out)
 {
 #if defined(WCHAR_T_IS_UTF16)
     return wideToLocalImpl(in, out);
 #else
-#error Implement me!
+    return utf16ToLocalImpl(in, out);
 #endif
 }
 
@@ -280,7 +316,7 @@ bool local8BitToUtf16(std::string_view in, std::u16string* out)
 #if defined(WCHAR_T_IS_UTF16)
     return localToWideImpl(in, out);
 #else
-#error Implement me!
+    return localToUtf16Impl(in, out);
 #endif
 }
 
@@ -297,6 +333,8 @@ std::string local8BitFromUtf16(std::u16string_view in)
     utf16ToLocal8Bit(in, &out);
     return out;
 }
+
+#if defined(OS_WIN)
 
 bool wideToLocal8Bit(std::wstring_view in, std::string* out)
 {
@@ -321,5 +359,7 @@ std::string local8BitFromWide(std::wstring_view in)
     wideToLocal8Bit(in, &out);
     return out;
 }
+
+#endif // defined(OS_WIN)
 
 } // namespace base

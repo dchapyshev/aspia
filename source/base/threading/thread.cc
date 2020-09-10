@@ -146,19 +146,17 @@ void Thread::threadMain(MessageLoop::Type message_loop_type)
     message_loop_ = nullptr;
 }
 
+#if defined(OS_WIN)
 bool Thread::setPriority(Priority priority)
 {
-#if defined(OS_WIN)
     if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
     {
         DPLOG(LS_ERROR) << "Unable to set thread priority";
         return false;
     }
-#else // defined(OS_WIN)
-#warning Not implemented
-#endif // defined(OS_*)
 
     return true;
 }
+#endif // defined(OS_WIN)
 
 } // namespace base

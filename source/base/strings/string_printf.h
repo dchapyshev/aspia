@@ -19,21 +19,26 @@
 #ifndef BASE__STRINGS__STRING_PRINTF_H
 #define BASE__STRINGS__STRING_PRINTF_H
 
+#include "build/build_config.h"
+
 #include <string>
 
 namespace base {
 
 // Return a C++ string given vprintf-like input.
 std::string stringPrintfV(const char* format, va_list args);
-std::wstring stringPrintfV(const wchar_t* format, va_list args);
 
 // Return a C++ string given printf-like input.
 std::string stringPrintf(const char* format, ...);
-std::wstring stringPrintf(const wchar_t* format, ...);
 
 // Store result into a supplied string and return it.
 const std::string& sStringPrintf(std::string* dst, const char* format, ...);
+
+#if defined(OS_WIN)
+std::wstring stringPrintfV(const wchar_t* format, va_list args);
+std::wstring stringPrintf(const wchar_t* format, ...);
 const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...);
+#endif // defined(OS_WIN)
 
 } // namespace base
 

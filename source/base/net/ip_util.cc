@@ -23,6 +23,8 @@
 
 #if defined(OS_WIN)
 #include <ws2tcpip.h>
+#elif defined(OS_LINUX)
+#include <arpa/inet.h>
 #else
 #error Platform support not implemented
 #endif // defined(OS_*)

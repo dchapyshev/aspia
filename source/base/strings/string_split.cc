@@ -106,7 +106,7 @@ std::vector<OutputStringType> splitStringT(InputStringType str,
         }
 
         if (whitespace == TRIM_WHITESPACE)
-            piece = trimString(piece, whitespaceForType<InputStringType::value_type>(), TRIM_ALL);
+            piece = trimString(piece, whitespaceForType<typename InputStringType::value_type>(), TRIM_ALL);
 
         if (result_type == SPLIT_WANT_ALL || !piece.empty())
             result.emplace_back(piece);

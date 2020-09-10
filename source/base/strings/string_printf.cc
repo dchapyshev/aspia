@@ -24,25 +24,44 @@ namespace base {
 
 namespace {
 
+#if defined(OS_POSIX)
+int _vscprintf(const char* format, va_list pargs)
+{
+    va_list argcopy;
+    va_copy(argcopy, pargs);
+    int ret = vsnprintf(nullptr, 0, format, argcopy);
+    va_end(argcopy);
+    return ret;
+}
+#endif // defined(OS_POSIX)
+
 int vsnprintfT(char* buffer, size_t buffer_size, const char* format, va_list args)
 {
+#if defined(OS_WIN)
     return _vsnprintf_s(buffer, buffer_size, _TRUNCATE, format, args);
+#elif (OS_POSIX)
+    return vsnprintf(buffer, buffer_size, format, args);
+#endif
 }
 
+#if defined(OS_WIN)
 int vsnprintfT(wchar_t* buffer, size_t buffer_size, const wchar_t* format, va_list args)
 {
     return _vsnwprintf_s(buffer, buffer_size, _TRUNCATE, format, args);
 }
+#endif // defined(OS_WIN)
 
 int vscprintfT(const char* format, va_list args)
 {
     return _vscprintf(format, args);
 }
 
+#if defined(OS_WIN)
 int vscprintfT(const wchar_t* format, va_list args)
 {
     return _vscwprintf(format, args);
 }
+#endif // defined(OS_WIN)
 
 template<class StringType>
 StringType stringPrintfVT(const typename StringType::value_type* format, va_list args)
@@ -76,28 +95,12 @@ std::string stringPrintfV(const char* format, va_list args)
     return stringPrintfVT<std::string>(format, args);
 }
 
-std::wstring stringPrintfV(const wchar_t* format, va_list args)
-{
-    return stringPrintfVT<std::wstring>(format, args);
-}
-
 std::string stringPrintf(const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
     std::string result = stringPrintfV(format, args);
-    va_end(args);
-
-    return result;
-}
-
-std::wstring stringPrintf(const wchar_t* format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    std::wstring result = stringPrintfV(format, args);
     va_end(args);
 
     return result;
@@ -114,6 +117,23 @@ const std::string& sStringPrintf(std::string* dst, const char* format, ...)
     return *dst;
 }
 
+#if defined(OS_WIN)
+std::wstring stringPrintfV(const wchar_t* format, va_list args)
+{
+    return stringPrintfVT<std::wstring>(format, args);
+}
+
+std::wstring stringPrintf(const wchar_t* format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    std::wstring result = stringPrintfV(format, args);
+    va_end(args);
+
+    return result;
+}
+
 const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 {
     va_list args;
@@ -124,5 +144,6 @@ const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 
     return *dst;
 }
+#endif // defined(OS_WIN)
 
 } // namespace base

@@ -113,6 +113,17 @@ bool doIsStringASCII(const Char* characters, size_t length)
     return !(all_char_bits & non_ascii_bit_mask);
 }
 
+bool isUnicodeWhitespace(char16_t c)
+{
+    // kWhitespaceWide is a NULL-terminated string
+    for (const char16_t* cur = kWhitespaceUtf16; *cur; ++cur)
+    {
+        if (*cur == c)
+            return true;
+    }
+    return false;
+}
+
 template<typename CharType>
 std::basic_string<CharType> collapseWhitespaceT(
     std::basic_string_view<CharType> text, bool trim_sequences_with_line_breaks)
@@ -126,7 +137,8 @@ std::basic_string<CharType> collapseWhitespaceT(
     bool already_trimmed = true;
 
     int chars_written = 0;
-    for (std::basic_string_view<CharType>::const_iterator i(text.begin()); i != text.end(); ++i)
+    for (typename std::basic_string_view<CharType>::const_iterator i(text.begin());
+         i != text.end(); ++i)
     {
         if (isUnicodeWhitespace(*i))
         {
@@ -134,7 +146,7 @@ std::basic_string<CharType> collapseWhitespaceT(
             {
                 // Reduce all whitespace sequences to a single space.
                 in_whitespace = true;
-                result[chars_written++] = L' ';
+                result[chars_written++] = u' ';
             }
             if (trim_sequences_with_line_breaks && !already_trimmed &&
                 ((*i == '\n') || (*i == '\r')))
@@ -284,35 +296,24 @@ bool isStringASCII(std::u16string_view string)
     return doIsStringASCII(string.data(), string.length());
 }
 
-bool isUnicodeWhitespace(wchar_t c)
-{
-    // kWhitespaceWide is a NULL-terminated string
-    for (const wchar_t* cur = kWhitespaceWide; *cur; ++cur)
-    {
-        if (*cur == c)
-            return true;
-    }
-    return false;
-}
-
 std::u16string collapseWhitespace(std::u16string_view text,
                                   bool trim_sequences_with_line_breaks)
 {
-    return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
+    return collapseWhitespaceT<char16_t>(text, trim_sequences_with_line_breaks);
 }
 
 #if defined(OS_WIN)
 std::wstring collapseWhitespace(std::wstring_view text,
                                 bool trim_sequences_with_line_breaks)
 {
-    return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
+    return collapseWhitespaceT<wchar_t>(text, trim_sequences_with_line_breaks);
 }
 #endif // defined(OS_WIN)
 
 std::string collapseWhitespaceASCII(std::string_view text,
                                     bool trim_sequences_with_line_breaks)
 {
-    return collapseWhitespaceT(text, trim_sequences_with_line_breaks);
+    return collapseWhitespaceT<char>(text, trim_sequences_with_line_breaks);
 }
 
 namespace {

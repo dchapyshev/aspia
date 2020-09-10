@@ -19,6 +19,8 @@
 #ifndef BASE__STRINGS__UNICODE_H
 #define BASE__STRINGS__UNICODE_H
 
+#include "build/build_config.h"
+
 #include <string>
 
 namespace base {
@@ -32,6 +34,8 @@ bool utf8ToUtf16(std::string_view in, std::u16string* out);
 
 std::u16string utf16FromUtf8(std::string_view in);
 std::string utf8FromUtf16(std::u16string_view in);
+
+#if defined(OS_WIN)
 
 //
 // Wide <-> UTF-8.
@@ -53,6 +57,8 @@ bool utf16ToWide(std::u16string_view in, std::wstring* out);
 std::wstring wideFromUtf16(std::u16string_view in);
 std::u16string utf16FromWide(std::wstring_view in);
 
+#endif // #if defined(OS_WIN)
+
 //
 // ASCII <-> UTF-16.
 //
@@ -60,12 +66,16 @@ std::u16string utf16FromWide(std::wstring_view in);
 std::string asciiFromUtf16(std::u16string_view in);
 std::u16string utf16FromAscii(std::string_view in);
 
+#if defined(OS_WIN)
+
 //
 // ASCII <-> Wide.
 //
 
 std::string asciiFromWide(std::wstring_view in);
 std::wstring wideFromAscii(std::string_view in);
+
+#endif // defined(OS_WIN)
 
 //
 // Local 8 bit <-> UTF-16.
@@ -77,6 +87,8 @@ bool local8BitToUtf16(std::string_view in, std::u16string* out);
 std::u16string utf16FromLocal8Bit(std::string_view in);
 std::string local8BitFromUtf16(std::u16string_view in);
 
+#if defined(OS_WIN)
+
 //
 // Local 8 bit <-> Wide.
 //
@@ -86,6 +98,8 @@ bool local8BitToWide(std::string_view in, std::wstring* out);
 
 std::wstring wideFromLocal8Bit(std::string_view in);
 std::string local8BitFromWide(std::wstring_view in);
+
+#endif // defined(OS_WIN)
 
 } // namespace base
 

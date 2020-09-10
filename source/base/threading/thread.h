@@ -77,6 +77,7 @@ public:
         return message_loop_ ? message_loop_->taskRunner() : nullptr;
     }
 
+#if defined(OS_WIN)
     uint32_t threadId() const { return thread_id_; }
 
     enum class Priority
@@ -90,6 +91,8 @@ public:
     };
 
     bool setPriority(Priority priority);
+
+#endif // defined(OS_WIN)
 
 private:
     void threadMain(MessageLoop::Type message_loop_type);
