@@ -25,7 +25,6 @@ list(APPEND SOURCE_COMMON
     desktop_session_constants.h
     file_depacketizer.cc
     file_depacketizer.h
-    file_enumerator.cc
     file_enumerator.h
     file_packet.h
     file_packetizer.cc
@@ -51,6 +50,7 @@ list(APPEND SOURCE_COMMON
 if (WIN32)
     list(APPEND SOURCE_COMMON
         clipboard_win.cc
+        file_enumerator_win.cc
         file_platform_util_win.cc)
 endif()
 
@@ -64,6 +64,10 @@ if (APPLE)
     list(APPEND SOURCE_COMMON
         clipboard_mac.cc
         file_platform_util_mac.mm)
+endif()
+
+if (UNIX)
+    list(APPEND SOURCE_COMMON file_enumerator_fs.cc)
 endif()
 
 list(APPEND SOURCE_COMMON_UI

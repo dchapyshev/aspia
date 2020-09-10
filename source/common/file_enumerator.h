@@ -20,11 +20,14 @@
 #define COMMON__FILE_ENUMERATOR_H
 
 #include "base/macros_magic.h"
+#include "build/build_config.h"
 #include "proto/file_transfer.pb.h"
 
 #include <filesystem>
 
+#if defined(OS_WIN)
 #include <Windows.h>
+#endif // defined(OS_WIN)
 
 namespace common {
 
@@ -45,7 +48,9 @@ public:
 
     private:
         friend class FileEnumerator;
+#if defined(OS_WIN)
         WIN32_FIND_DATA find_data_;
+#endif // defined(OS_WIN)
     };
 
     explicit FileEnumerator(const std::filesystem::path& root_path);
@@ -59,8 +64,11 @@ public:
 
 private:
     proto::FileError error_code_ = proto::FILE_ERROR_SUCCESS;
-    HANDLE find_handle_ = INVALID_HANDLE_VALUE;
     FileInfo file_info_;
+
+#if defined(OS_WIN)
+    HANDLE find_handle_ = INVALID_HANDLE_VALUE;
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(FileEnumerator);
 };
