@@ -19,16 +19,16 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
+#include "base/desktop/cursor_capturer.h"
+#include "base/desktop/desktop_environment.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/desktop/screen_capturer_dxgi.h"
-#include "base/desktop/screen_capturer_gdi.h"
+#include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
 
 #if defined(OS_WIN)
 #include "base/desktop/cursor_capturer_win.h"
-
-#include "base/desktop/win/desktop_environment.h"
-#include "base/desktop/win/power_save_blocker.h"
+#include "base/desktop/screen_capturer_dxgi.h"
+#include "base/desktop/screen_capturer_gdi.h"
 #include "base/win/windows_version.h"
 #elif defined(OS_LINUX)
 #else
@@ -38,11 +38,13 @@ namespace base {
 
 ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
     : delegate_(delegate),
-      environment_(std::make_unique<DesktopEnvironment>()),
-      power_save_blocker_(std::make_unique<PowerSaveBlocker>())
+      power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
+      environment_(std::make_unique<DesktopEnvironment>())
 {
+#if defined(OS_WIN)
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
+#endif // defined(OS_WIN)
 
     switchToInputDesktop();
     selectCapturer();
@@ -66,6 +68,9 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 void ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    if (!screen_capturer_)
+        return;
 
     switchToInputDesktop();
 
@@ -137,6 +142,7 @@ void ScreenCapturerWrapper::selectCapturer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
+#if defined(OS_WIN)
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
     if (win::windowsVersion() >= win::VERSION_WIN8)
@@ -155,12 +161,19 @@ void ScreenCapturerWrapper::selectCapturer()
         LOG(LS_INFO) << "Using GDI capturer";
         screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
+#elif defined(OS_LINUX)
+    NOTIMPLEMENTED();
+#elif defined(OS_MACOSX)
+    NOTIMPLEMENTED();
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
+#if defined(OS_WIN)
     // Switch to the desktop receiving user input if different from the current one.
     Desktop input_desktop(Desktop::inputDesktop());
 
@@ -176,6 +189,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
     }
+#endif // defined(OS_WIN)
 }
 
 } // namespace base

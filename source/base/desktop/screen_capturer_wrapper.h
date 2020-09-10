@@ -65,7 +65,10 @@ private:
 
     Delegate* delegate_;
 
+#if defined(OS_WIN)
     ScopedThreadDesktop desktop_;
+#endif // defined(OS_WIN)
+
     int screen_count_ = 0;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
