@@ -38,8 +38,8 @@ public:
         DIGITS     = 4
     };
 
-    static const uint32_t kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
-    static const size_t kDefaultLength = 8;
+    static const uint32_t kDefaultCharacters;
+    static const size_t kDefaultLength;
 
     void setCharacters(uint32_t value);
     uint32_t characters() const { return characters_; }

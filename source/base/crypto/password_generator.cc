@@ -24,6 +24,9 @@
 
 namespace base {
 
+const uint32_t PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
+const size_t PasswordGenerator::kDefaultLength = 8;
+
 void PasswordGenerator::setCharacters(uint32_t value)
 {
     if (value)

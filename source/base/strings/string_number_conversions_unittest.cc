@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include <cerrno>
+#include <climits>
 #include <cmath>
 #include <cstdint>
 #include <cstddef>

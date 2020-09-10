@@ -42,8 +42,8 @@ TEST(JsonSettingsTest, SettingsTest)
 
     struct TestUser
     {
-        char* name;
-        char* salt;
+        const char* name;
+        const char* salt;
         uint32_t flags;
     } const kUserList[] =
     {

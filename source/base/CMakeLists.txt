@@ -567,6 +567,10 @@ if (WIN32)
     set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)
 endif()
 
+if (LINUX)
+    set(BASE_TESTS_PLATFORM_LIBS stdc++fs)
+endif()
+
 add_executable(aspia_base_tests
     ${SOURCE_BASE_TESTS}
     ${SOURCE_BASE_CODEC_TESTS}
