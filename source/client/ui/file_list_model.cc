@@ -38,7 +38,8 @@ enum Column
 template<class T>
 void sortByName(T& list, Qt::SortOrder order)
 {
-    std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
+    std::sort(list.begin(), list.end(),
+              [order](const typename T::value_type& f1, const typename T::value_type& f2)
     {
         const QString& f1_name = f1.name;
         const QString& f2_name = f2.name;
@@ -53,7 +54,8 @@ void sortByName(T& list, Qt::SortOrder order)
 template<class T>
 void sortBySize(T& list, Qt::SortOrder order)
 {
-    std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
+    std::sort(list.begin(), list.end(),
+              [order](const typename T::value_type& f1, const typename T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
             return f1.size < f2.size;
@@ -65,7 +67,8 @@ void sortBySize(T& list, Qt::SortOrder order)
 template<class T>
 void sortByType(T& list, Qt::SortOrder order)
 {
-    std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
+    std::sort(list.begin(), list.end(),
+              [order](const typename T::value_type& f1, const typename T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
             return f1.type < f2.type;
@@ -77,7 +80,8 @@ void sortByType(T& list, Qt::SortOrder order)
 template<class T>
 void sortByTime(T& list, Qt::SortOrder order)
 {
-    std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
+    std::sort(list.begin(), list.end(),
+              [order](const typename T::value_type& f1, const typename T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
             return f1.last_write < f2.last_write;

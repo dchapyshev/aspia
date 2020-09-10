@@ -35,7 +35,8 @@ bool isNumLockActivated()
 #if defined(OS_WIN)
     return GetKeyState(VK_NUMLOCK) != 0;
 #else
-#error Platform support not implemented
+#warning Platform support not implemented
+    return false;
 #endif // defined(OS_WIN)
 }
 
@@ -44,7 +45,8 @@ bool isCapsLockActivated()
 #if defined(OS_WIN)
     return GetKeyState(VK_CAPITAL) != 0;
 #else
-#error Platform support not implemented
+#warning Platform support not implemented
+    return false;
 #endif // defined(OS_WIN)
 }
 

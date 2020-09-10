@@ -20,12 +20,12 @@
 
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/files/base_paths.h"
-#include "base/win/process_util.h"
 #include "build/build_config.h"
 #include "qt_base/qt_logging.h"
 #include "qt_base/qt_task_runner.h"
 
 #if defined(OS_WIN)
+#include "base/win/process_util.h"
 #include "base/win/scoped_object.h"
 #endif // defined(OS_WIN)
 
@@ -41,6 +41,10 @@
 #include <Windows.h>
 #include <psapi.h>
 #endif // defined(OS_WIN)
+
+#if defined(OS_POSIX)
+#include <unistd.h>
+#endif // defined(OS_POSIX)
 
 namespace qt_base {
 
@@ -117,7 +121,7 @@ std::filesystem::path loggingDir()
 
     path.append("Aspia/Logs");
 #else
-#error Not implemented
+#warning Not implemented
 #endif
 
     return path;

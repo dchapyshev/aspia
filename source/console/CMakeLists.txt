@@ -101,11 +101,19 @@ if (WIN32)
         wtsapi32)
 endif()
 
+if (LINUX)
+    set(CONSOLE_PLATFORM_LIBS stdc++fs)
+endif()
+
 add_executable(aspia_console
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+
+if (WIN32)
+    set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
 target_link_libraries(aspia_console
     aspia_base
     aspia_client

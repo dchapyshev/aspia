@@ -225,7 +225,7 @@ void MainWindow::openAddressBook(const QString& file_path)
 #if defined(OS_WIN)
             if (file_path.compare(tab->filePath(), Qt::CaseInsensitive) == 0)
 #else
-            if (file_path.compare(tab->addressBookPath(), Qt::CaseSensitive) == 0)
+            if (file_path.compare(tab->filePath(), Qt::CaseSensitive) == 0)
 #endif // defined(OS_WIN)
             {
                 QMessageBox::information(this,

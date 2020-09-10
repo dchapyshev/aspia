@@ -20,10 +20,7 @@
 
 #include "base/debug.h"
 #include "base/system_time.h"
-
-#if defined(OS_WIN)
 #include "base/strings/unicode.h"
-#endif // defined(OS_WIN)
 
 #include <fstream>
 #include <iomanip>
@@ -382,6 +379,7 @@ std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
+#endif // defined(OS_WIN)
 
 std::ostream& operator<<(std::ostream& out, const char16_t* ustr)
 {
@@ -392,6 +390,5 @@ std::ostream& operator<<(std::ostream& out, const std::u16string& ustr)
 {
     return out << base::utf8FromUtf16(ustr);
 }
-#endif // defined(OS_WIN)
 
 } // namespace std
