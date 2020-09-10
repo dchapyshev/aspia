@@ -193,6 +193,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/capture_scheduler.cc
     desktop/capture_scheduler.h
     desktop/cursor_capturer.h
+    desktop/desktop_environment.cc
+    desktop/desktop_environment.h
     desktop/diff_block_32bpp_c.cc
     desktop/diff_block_32bpp_c.h
     desktop/diff_block_32bpp_sse2.cc
@@ -228,6 +230,7 @@ if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/cursor_capturer_win.cc
         desktop/cursor_capturer_win.h
+        desktop/desktop_environment_win.cc
         desktop/frame_dib.cc
         desktop/frame_dib.h
         desktop/screen_capturer_dxgi.cc
@@ -240,6 +243,7 @@ if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/cursor_capturer_x11.cc
         desktop/cursor_capturer_x11.h
+        desktop/desktop_environment_linux.cc
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()
@@ -248,6 +252,7 @@ if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/cursor_capturer_mac.mm
         desktop/cursor_capturer_mac.h
+        desktop/desktop_environment_mac.mm
         desktop/screen_capturer_mac.mm
         desktop/screen_capturer_mac.h)
 endif()
@@ -265,8 +270,6 @@ if (WIN32)
         desktop/win/cursor.h
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
-        desktop/win/desktop_environment.cc
-        desktop/win/desktop_environment.h
         desktop/win/display_configuration_monitor.cc
         desktop/win/display_configuration_monitor.h
         desktop/win/dxgi_adapter_duplicator.cc

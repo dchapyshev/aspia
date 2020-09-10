@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/win/desktop_environment.h"
+#include "base/desktop/desktop_environment.h"
 
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
@@ -25,49 +25,6 @@
 #include <wtsapi32.h>
 
 namespace base {
-
-DesktopEnvironment::DesktopEnvironment()
-{
-    applyNewSettings();
-}
-
-DesktopEnvironment::~DesktopEnvironment()
-{
-    revertAll();
-}
-
-void DesktopEnvironment::setWallpaper(bool enable)
-{
-    if (wallpaper_ == enable)
-        return;
-
-    wallpaper_ = enable;
-
-    revertAll();
-    applyNewSettings();
-}
-
-void DesktopEnvironment::setFontSmoothing(bool enable)
-{
-    if (font_smoothing_ == enable)
-        return;
-
-    font_smoothing_ = enable;
-
-    revertAll();
-    applyNewSettings();
-}
-
-void DesktopEnvironment::setEffects(bool enable)
-{
-    if (effects_ == enable)
-        return;
-
-    effects_ = enable;
-
-    revertAll();
-    applyNewSettings();
-}
 
 void DesktopEnvironment::disableWallpaper()
 {
@@ -156,18 +113,6 @@ void DesktopEnvironment::revertAll()
             update_per_user_system_parameters(0x06);
         }
     }
-}
-
-void DesktopEnvironment::applyNewSettings()
-{
-    if (!wallpaper_)
-        disableWallpaper();
-
-    if (!font_smoothing_)
-        disableFontSmoothing();
-
-    if (!effects_)
-        disableEffects();
 }
 
 } // namespace base
