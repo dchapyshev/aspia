@@ -54,10 +54,10 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, in
 } // namespace
 
 NetworkChannel::NetworkChannel()
-    : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
+    : proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
-      proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
       encryptor_(std::make_unique<MessageEncryptorFake>()),
       decryptor_(std::make_unique<MessageDecryptorFake>())
 {
@@ -65,12 +65,12 @@ NetworkChannel::NetworkChannel()
 }
 
 NetworkChannel::NetworkChannel(asio::ip::tcp::socket&& socket)
-    : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
+    : proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(std::move(socket)),
-      proxy_(new NetworkChannelProxy(MessageLoop::current()->taskRunner(), this)),
+      connected_(true),
       encryptor_(std::make_unique<MessageEncryptorFake>()),
-      decryptor_(std::make_unique<MessageDecryptorFake>()),
-      connected_(true)
+      decryptor_(std::make_unique<MessageDecryptorFake>())
 {
     DCHECK(socket_.is_open());
 }
@@ -227,11 +227,45 @@ bool NetworkChannel::setKeepAlive(bool enable,
         PLOG(LS_WARNING) << "WSAIoctl failed";
         return false;
     }
-#else
-    #warning Not implemented
-#endif
 
     return true;
+#elif defined(OS_POSIX)
+    int yes = enable ? 1 : 0;
+    if (setsockopt(socket_.native_handle(), SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(int)) == -1)
+    {
+        PLOG(LS_WARNING) << "setsockopt(SO_KEEPALIVE) failed";
+        return false;
+    }
+
+    if (!enable)
+        return true;
+
+    int idle = std::chrono::duration_cast<std::chrono::seconds>(time).count();
+    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int)) == -1)
+    {
+        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPIDLE) failed";
+        return false;
+    }
+
+    int ival = std::chrono::duration_cast<std::chrono::seconds>(interval).count();
+    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPINTVL, &ival, sizeof(int)) == -1)
+    {
+        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPINTVL) failed";
+        return false;
+    }
+
+    int maxpkt = 10;
+    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) == -1)
+    {
+        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPCNT) failed";
+        return false;
+    }
+
+    return true;
+#else
+    #warning Not implemented
+    return false;
+#endif
 }
 
 bool NetworkChannel::setReadBufferSize(size_t size)
