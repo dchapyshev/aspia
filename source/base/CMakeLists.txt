@@ -456,7 +456,8 @@ endif()
 list(APPEND SOURCE_BASE_STRINGS_TESTS
     strings/string_number_conversions_unittest.cc
     strings/string_printf_unittest.cc
-    strings/string_split_unittest.cc)
+    strings/string_split_unittest.cc
+    strings/string_util_unittest.cc)
 
 list(APPEND SOURCE_BASE_THREADING
     threading/simple_thread.cc

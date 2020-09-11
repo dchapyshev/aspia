@@ -158,10 +158,10 @@ bool utf16ToUtf8Impl(std::u16string_view in, std::string* out)
         return false;
 
     int32_t target_capacity =
-        UCNV_GET_MAX_BYTES_FOR_STRING(in.length(), ucnv_getMaxCharSize_67(conv));
+        UCNV_GET_MAX_BYTES_FOR_STRING(in.length(), ucnv_getMaxCharSize(conv));
     out->resize(target_capacity);
 
-    int32_t len = ucnv_fromUChars_67(
+    int32_t len = ucnv_fromUChars(
         conv, out->data(), out->size(), in.data(), in.length(), &error_code);
 
     ucnv_close(conv);
@@ -187,7 +187,7 @@ bool utf8ToUtf16Impl(std::string_view in, std::u16string* out)
 
     out->resize(2 * in.length());
 
-    int32_t len = ucnv_toUChars_67(
+    int32_t len = ucnv_toUChars(
         conv, out->data(), out->size(), in.data(), in.length(), &error_code);
 
     ucnv_close(conv);
