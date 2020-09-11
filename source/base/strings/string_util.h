@@ -113,6 +113,18 @@ void removeChars(std::wstring* str, std::wstring_view substr);
 
 // ASCII-specific tolower.  The standard library's tolower is locale sensitive, so we don't want to
 // use it here.
+
+template <typename Char>
+inline bool isUpperASCII(Char c)
+{
+    return c >= 'A' && c <= 'Z';
+}
+template <typename Char>
+inline bool isLowerASCII(Char c)
+{
+    return c >= 'a' && c <= 'z';
+}
+
 inline char toLowerASCII(char c)
 {
     return (c >= 'A' && c <= 'Z') ? (c + ('a' - 'A')) : c;
