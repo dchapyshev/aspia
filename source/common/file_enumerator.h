@@ -51,6 +51,10 @@ public:
 #if defined(OS_WIN)
         WIN32_FIND_DATA find_data_;
 #endif // defined(OS_WIN)
+
+#if defined(OS_POSIX)
+    std::filesystem::directory_iterator it_;
+#endif // defined(OS_POSIX)
     };
 
     explicit FileEnumerator(const std::filesystem::path& root_path);

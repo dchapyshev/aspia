@@ -24,59 +24,55 @@ namespace common {
 
 // FileEnumerator::FileInfo ----------------------------------------------------------------------
 
-FileEnumerator::FileInfo::FileInfo()
-{
-    NOTIMPLEMENTED();
-}
+FileEnumerator::FileInfo::FileInfo() = default;
 
 bool FileEnumerator::FileInfo::isDirectory() const
 {
-    NOTIMPLEMENTED();
-    return false;
+    std::error_code ignored_error;
+    return it_->is_directory(ignored_error);
 }
 
 std::filesystem::path FileEnumerator::FileInfo::name() const
 {
-    NOTIMPLEMENTED();
-    return std::filesystem::path();
+    return it_->path().filename();
 }
 
 std::string FileEnumerator::FileInfo::u8name() const
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    return it_->path().filename();
 }
 
 int64_t FileEnumerator::FileInfo::size() const
 {
-    NOTIMPLEMENTED();
-    return 0;
+    std::error_code ignored_error;
+    return it_->file_size(ignored_error);
 }
 
 time_t FileEnumerator::FileInfo::lastWriteTime() const
 {
-    NOTIMPLEMENTED();
-    return 0;
+    std::error_code ignored_error;
+    auto file_time = it_->last_write_time(ignored_error);
+    return decltype(file_time)::clock::to_time_t(file_time);
 }
 
 // FileEnumerator --------------------------------------------------------------
 
 FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
 {
-    NOTIMPLEMENTED();
+    std::error_code ignored_code;
+    file_info_.it_ = std::filesystem::directory_iterator(root_path, ignored_code);
 }
 
 FileEnumerator::~FileEnumerator() = default;
 
 bool FileEnumerator::isAtEnd() const
 {
-    NOTIMPLEMENTED();
-    return true;
+    return file_info_.it_ == std::filesystem::directory_iterator();
 }
 
 void FileEnumerator::advance()
 {
-    NOTIMPLEMENTED();
+    ++file_info_.it_;
 }
 
 } // namespace common
