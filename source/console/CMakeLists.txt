@@ -102,7 +102,12 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(CONSOLE_PLATFORM_LIBS stdc++fs)
+    set(CONSOLE_PLATFORM_LIBS
+        stdc++fs
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
 endif()
 
 add_executable(aspia_console

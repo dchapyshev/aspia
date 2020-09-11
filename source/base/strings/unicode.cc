@@ -24,6 +24,11 @@
 #include <Windows.h>
 #endif // defined(OS_WIN)
 
+#if defined(OS_LINUX) || defined(OS_MAC)
+#include <unicode/utypes.h>
+#include <unicode/ucnv.h>
+#endif // OS_POSIX || OS_MAC
+
 namespace base {
 
 namespace {
@@ -140,32 +145,68 @@ bool utf8ToWideImpl(std::string_view in, OutputType* out)
 
 #else
 
-template <class InputType>
-bool utf16ToLocalImpl(InputType in, std::string* out)
+bool utf16ToUtf8Impl(std::u16string_view in, std::string* out)
 {
-    NOTIMPLEMENTED();
-    return false;
+    out->clear();
+
+    if (!in.length())
+        return true;
+
+    UErrorCode error_code = U_ZERO_ERROR;
+    UConverter *conv = ucnv_open("UTF-8", &error_code);
+    if (!U_SUCCESS(error_code))
+        return false;
+
+    int32_t target_capacity =
+        UCNV_GET_MAX_BYTES_FOR_STRING(in.length(), ucnv_getMaxCharSize_67(conv));
+    out->resize(target_capacity);
+
+    int32_t len = ucnv_fromUChars_67(
+        conv, out->data(), out->size(), in.data(), in.length(), &error_code);
+
+    ucnv_close(conv);
+
+    if (!U_SUCCESS(error_code))
+        return false;
+
+    out->resize(len);
+    return true;
 }
 
-template <class OutputType>
-bool localToUtf16Impl(std::string_view in, OutputType* out)
+bool utf8ToUtf16Impl(std::string_view in, std::u16string* out)
 {
-    NOTIMPLEMENTED();
-    return false;
+    out->clear();
+
+    if (!in.length())
+        return true;
+
+    UErrorCode error_code = U_ZERO_ERROR;
+    UConverter *conv = ucnv_open("UTF-8", &error_code);
+    if (!U_SUCCESS(error_code))
+        return false;
+
+    out->resize(2 * in.length());
+
+    int32_t len = ucnv_toUChars_67(
+        conv, out->data(), out->size(), in.data(), in.length(), &error_code);
+
+    ucnv_close(conv);
+
+    if (!U_SUCCESS(error_code))
+        return false;
+
+    out->resize(len);
+    return true;
 }
 
-template <class InputType>
-bool utf16ToUtf8Impl(InputType in, std::string* out)
+bool utf16ToLocalImpl(std::u16string_view in, std::string* out)
 {
-    NOTIMPLEMENTED();
-    return false;
+    return utf16ToUtf8Impl(in, out);
 }
 
-template <class OutputType>
-bool utf8ToUtf16Impl(std::string_view in, OutputType* out)
+bool localToUtf16Impl(std::string_view in, std::u16string* out)
 {
-    NOTIMPLEMENTED();
-    return false;
+    return utf8ToUtf16Impl(in, out);
 }
 
 #endif
