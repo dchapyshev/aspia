@@ -24,8 +24,6 @@
 #include <unicode/utypes.h>
 #include <unicode/ustring.h>
 
-#include <iostream>
-
 namespace base {
 
 int compareCaseInsensitive(std::u16string_view first, std::u16string_view second)

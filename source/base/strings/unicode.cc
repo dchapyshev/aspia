@@ -26,7 +26,7 @@
 
 #if defined(OS_LINUX) || defined(OS_MAC)
 #include <unicode/utypes.h>
-#include <unicode/ucnv.h>
+#include <unicode/ustring.h>
 #endif // OS_POSIX || OS_MAC
 
 namespace base {
@@ -153,23 +153,18 @@ bool utf16ToUtf8Impl(std::u16string_view in, std::string* out)
         return true;
 
     UErrorCode error_code = U_ZERO_ERROR;
-    UConverter *conv = ucnv_open("UTF-8", &error_code);
-    if (!U_SUCCESS(error_code))
+    int32_t out_len = 0;
+    u_strToUTF8(nullptr, 0, &out_len, in.data(), in.length(), &error_code);
+    if (error_code != U_BUFFER_OVERFLOW_ERROR || out_len <= 0)
         return false;
 
-    int32_t target_capacity =
-        UCNV_GET_MAX_BYTES_FOR_STRING(in.length(), ucnv_getMaxCharSize(conv));
-    out->resize(target_capacity);
+    error_code = U_ZERO_ERROR;
+    out->resize(out_len);
 
-    int32_t len = ucnv_fromUChars(
-        conv, out->data(), out->size(), in.data(), in.length(), &error_code);
-
-    ucnv_close(conv);
-
-    if (!U_SUCCESS(error_code))
+    u_strToUTF8(out->data(), out->length(), &out_len, in.data(), in.length(), &error_code);
+    if (!U_SUCCESS(error_code) || out_len <= 0)
         return false;
 
-    out->resize(len);
     return true;
 }
 
@@ -181,21 +176,18 @@ bool utf8ToUtf16Impl(std::string_view in, std::u16string* out)
         return true;
 
     UErrorCode error_code = U_ZERO_ERROR;
-    UConverter *conv = ucnv_open("UTF-8", &error_code);
-    if (!U_SUCCESS(error_code))
+    int32_t out_len = 0;
+    u_strFromUTF8(nullptr, 0, &out_len, in.data(), in.length(), &error_code);
+    if (error_code != U_BUFFER_OVERFLOW_ERROR || out_len <= 0)
         return false;
 
-    out->resize(2 * in.length());
+    error_code = U_ZERO_ERROR;
+    out->resize(out_len);
 
-    int32_t len = ucnv_toUChars(
-        conv, out->data(), out->size(), in.data(), in.length(), &error_code);
-
-    ucnv_close(conv);
-
-    if (!U_SUCCESS(error_code))
+    u_strFromUTF8(out->data(), out->length(), &out_len, in.data(), in.length(), &error_code);
+    if (!U_SUCCESS(error_code) || out_len <= 0)
         return false;
 
-    out->resize(len);
     return true;
 }
 
