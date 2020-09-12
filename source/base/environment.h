@@ -19,6 +19,7 @@
 #ifndef BASE__ENVIRONMENT_H
 #define BASE__ENVIRONMENT_H
 
+#include "base/macros_magic.h"
 #include "build/build_config.h"
 
 #include <map>
@@ -38,25 +39,23 @@ extern const char kHome[];
 class Environment
 {
 public:
-    virtual ~Environment();
-
-    // Returns the appropriate platform-specific instance.
-    static std::unique_ptr<Environment> create();
-
     // Gets an environment variable's value and stores it in |result|.
     // Returns false if the key is unset.
-    virtual bool get(std::string_view variable_name, std::string* result) = 0;
+    static bool get(std::string_view variable_name, std::string* result);
 
     // Syntactic sugar for GetVar(variable_name, nullptr);
-    virtual bool has(std::string_view variable_name);
+    static bool has(std::string_view variable_name);
 
     // Returns true on success, otherwise returns false. This method should not
     // be called in a multi-threaded process.
-    virtual bool set(std::string_view variable_name, const std::string& new_value) = 0;
+    static bool set(std::string_view variable_name, const std::string& new_value);
 
     // Returns true on success, otherwise returns false. This method should not
     // be called in a multi-threaded process.
-    virtual bool unSet(std::string_view variable_name) = 0;
+    static bool unSet(std::string_view variable_name);
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(Environment);
 };
 
 } // namespace base
