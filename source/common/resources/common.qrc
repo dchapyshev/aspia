@@ -1,5 +1,13 @@
 <RCC>
   <qresource prefix="/img">
+    <file>computer.png</file>
+    <file>desktop.png</file>
+    <file>document.png</file>
+    <file>drive.png</file>
+    <file>drive-disc.png</file>
+    <file>drive-network.png</file>
+    <file>folder.png</file>
+    <file>home.png</file>
     <file>globe-green.png</file>
     <file>heart.png</file>
   </qresource>
