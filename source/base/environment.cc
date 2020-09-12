@@ -83,7 +83,7 @@ private:
             *result = utf8FromWide(value.get());
         }
         return true;
-#elif defined(OS_POSIX) || defined(OS_FUCHSIA)
+#elif defined(OS_POSIX)
         const char* env_value = getenv(variable_name.data());
         if (!env_value)
             return false;
