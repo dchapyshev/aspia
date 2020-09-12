@@ -60,11 +60,11 @@ void UpdateCheckerImpl::start()
         if (reply->error())
         {
             LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString();
-            emit finished(UpdateInfo());
+            emit finished(QByteArray());
         }
         else
         {
-            emit finished(UpdateInfo::fromXml(reply->readAll()));
+            emit finished(reply->readAll());
         }
 
         reply->deleteLater();

@@ -89,7 +89,7 @@ private slots:
     void onLanguageChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
-    void onUpdateChecked(const common::UpdateInfo& update_info);
+    void onUpdateChecked(const QByteArray& result);
 
 private:
     void createLanguageMenu(const QString& current_locale);

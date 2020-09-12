@@ -27,8 +27,6 @@ namespace common {
 UpdateChecker::UpdateChecker(QObject* parent)
     : QObject(parent)
 {
-    qRegisterMetaType<UpdateInfo>();
-
     thread_ = new QThread(this);
     impl_ = new UpdateCheckerImpl();
 

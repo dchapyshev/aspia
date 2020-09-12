@@ -932,8 +932,9 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::onUpdateChecked(const common::UpdateInfo& update_info)
+void MainWindow::onUpdateChecked(const QByteArray& result)
 {
+    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
     if (!update_info.isValid() || !update_info.hasUpdate())
         return;
 

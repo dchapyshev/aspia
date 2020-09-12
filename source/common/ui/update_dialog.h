@@ -50,7 +50,7 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private slots:
-    void onUpdateChecked(const UpdateInfo& update_info);
+    void onUpdateChecked(const QByteArray& result);
     void onUpdateNow();
 
 private:

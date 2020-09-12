@@ -26,8 +26,6 @@
 
 class QThread;
 
-Q_DECLARE_METATYPE(common::UpdateInfo);
-
 namespace common {
 
 class UpdateCheckerImpl;
@@ -46,7 +44,7 @@ public:
     void start();
 
 signals:
-    void finished(const UpdateInfo& update_info);
+    void finished(const QByteArray& result);
 
 private:
     QPointer<QThread> thread_;

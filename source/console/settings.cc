@@ -187,8 +187,8 @@ void Settings::setCheckUpdates(bool check)
 
 QString Settings::updateServer() const
 {
-    return settings_.value("UpdateServer", DEFAULT_UPDATE_SERVER)
-        .toString().toLower();
+    return settings_.value(
+        "UpdateServer", QString::fromStdU16String(DEFAULT_UPDATE_SERVER)).toString().toLower();
 }
 
 void Settings::setUpdateServer(const QString& server)

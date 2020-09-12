@@ -42,6 +42,9 @@ QString parseElement(QXmlStreamReader& xml)
 // static
 UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
 {
+    if (buffer.isEmpty())
+        return UpdateInfo();
+
     UpdateInfo update_info;
 
     QXmlStreamReader xml(buffer);

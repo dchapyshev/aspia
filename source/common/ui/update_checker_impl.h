@@ -41,7 +41,7 @@ public:
     void setPackageName(const QString& package_name);
 
 signals:
-    void finished(const UpdateInfo& update_info);
+    void finished(const QByteArray& result);
 
 public slots:
     void start();

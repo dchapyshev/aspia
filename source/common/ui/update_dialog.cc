@@ -117,8 +117,9 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
-void UpdateDialog::onUpdateChecked(const UpdateInfo& update_info)
+void UpdateDialog::onUpdateChecked(const QByteArray& result)
 {
+    UpdateInfo update_info = UpdateInfo::fromXml(result);
     if (!update_info.isValid())
     {
         ui->label_available->setText(tr("Unknown"));
