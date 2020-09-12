@@ -18,11 +18,19 @@
 
 #include "client/ui/desktop_widget.h"
 
+#include "base/logging.h"
 #include "common/keycode_converter.h"
 #include "client/ui/frame_qimage.h"
 
 #include <QApplication>
 #include <QWheelEvent>
+
+#if defined(OS_LINUX)
+#include <X11/XKBlib.h>
+#if defined(KeyPress)
+#undef KeyPress
+#endif // defined(KeyPress)
+#endif // defined(OS_LINUX)
 
 namespace client {
 
@@ -34,6 +42,19 @@ bool isNumLockActivated()
 {
 #if defined(OS_WIN)
     return GetKeyState(VK_NUMLOCK) != 0;
+#elif defined(OS_LINUX)
+    Display* display = XOpenDisplay(nullptr);
+    if (!display)
+    {
+        LOG(LS_WARNING) << "XOpenDisplay failed";
+        return false;
+    }
+
+    unsigned state = 0;
+    XkbGetIndicatorState(display, XkbUseCoreKbd, &state);
+    XCloseDisplay(display);
+
+    return (state & 2) != 0;
 #else
 #warning Platform support not implemented
     return false;
@@ -44,6 +65,19 @@ bool isCapsLockActivated()
 {
 #if defined(OS_WIN)
     return GetKeyState(VK_CAPITAL) != 0;
+#elif defined(OS_LINUX)
+    Display* display = XOpenDisplay(nullptr);
+    if (!display)
+    {
+        LOG(LS_WARNING) << "XOpenDisplay failed";
+        return false;
+    }
+
+    unsigned state = 0;
+    XkbGetIndicatorState(display, XkbUseCoreKbd, &state);
+    XCloseDisplay(display);
+
+    return (state & 1) != 0;
 #else
 #warning Platform support not implemented
     return false;
