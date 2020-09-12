@@ -232,15 +232,19 @@ int Version::compareToWildcardString(std::string_view wildcard_string) const
 
 int Version::compareTo(const Version& other) const
 {
-    DCHECK(isValid());
-    DCHECK(other.isValid());
+    if (!other.isValid() && !isValid())
+        return true;
+
+    if (!other.isValid() || !isValid())
+        return false;
 
     return compareVersionComponents(components_, other.components_);
 }
 
 const std::string Version::toString() const
 {
-    DCHECK(isValid());
+    if (!isValid())
+        return std::string();
 
     std::string version_str;
 
