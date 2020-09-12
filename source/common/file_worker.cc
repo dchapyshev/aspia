@@ -175,9 +175,11 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
         item->set_total_space(drive_info.totalSpace());
         item->set_free_space(drive_info.freeSpace());
     }
+#elif (OS_POSIX)
+    proto::DriveList::Item* root_drive = drive_list->add_item();
+    root_drive->set_type(proto::DriveList::Item::TYPE_FIXED);
+    root_drive->set_path("/");
 #endif
-
-    // TODO: Add root directory?
 
     std::filesystem::path desktop_path;
     if (base::BasePaths::userDesktop(&desktop_path))
