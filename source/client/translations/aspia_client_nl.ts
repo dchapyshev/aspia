@@ -1238,52 +1238,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="94"/>
+        <location filename="../ui/file_list_model.cc" line="98"/>
         <source>Folder</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="356"/>
+        <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="359"/>
+        <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="362"/>
+        <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="365"/>
+        <location filename="../ui/file_list_model.cc" line="369"/>
         <source>Modified</source>
         <translation>Aangepast</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="522"/>
+        <location filename="../ui/file_list_model.cc" line="526"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="527"/>
+        <location filename="../ui/file_list_model.cc" line="531"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="532"/>
+        <location filename="../ui/file_list_model.cc" line="536"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="537"/>
+        <location filename="../ui/file_list_model.cc" line="541"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="542"/>
+        <location filename="../ui/file_list_model.cc" line="546"/>
         <source>B</source>
         <translation>B</translation>
     </message>

@@ -1035,52 +1035,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="94"/>
+        <location filename="../ui/file_list_model.cc" line="98"/>
         <source>Folder</source>
         <translation type="unfinished">Ordner</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="356"/>
+        <location filename="../ui/file_list_model.cc" line="360"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="359"/>
+        <location filename="../ui/file_list_model.cc" line="363"/>
         <source>Size</source>
         <translation type="unfinished">Größe</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="362"/>
+        <location filename="../ui/file_list_model.cc" line="366"/>
         <source>Type</source>
         <translation type="unfinished">Typ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="365"/>
+        <location filename="../ui/file_list_model.cc" line="369"/>
         <source>Modified</source>
         <translation type="unfinished">Geändert</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="522"/>
+        <location filename="../ui/file_list_model.cc" line="526"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="527"/>
+        <location filename="../ui/file_list_model.cc" line="531"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="532"/>
+        <location filename="../ui/file_list_model.cc" line="536"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="537"/>
+        <location filename="../ui/file_list_model.cc" line="541"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="542"/>
+        <location filename="../ui/file_list_model.cc" line="546"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
