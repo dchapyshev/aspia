@@ -529,6 +529,12 @@ if (WIN32)
         win/scoped_object_unittest.cc)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_BASE_X11
+        x11/x_server_clipboard.cc
+        x11/x_server_clipboard.h)
+endif()
+
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
 source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
@@ -548,6 +554,10 @@ if (WIN32)
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
+if (LINUX)
+    source_group(x11 FILES ${SOURCE_BASE_X11})
+endif()
+
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_CODEC}
@@ -563,7 +573,8 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}
-    ${SOURCE_BASE_WIN})
+    ${SOURCE_BASE_WIN}
+    ${SOURCE_BASE_X11})
 target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS})
 
 if (WIN32)
