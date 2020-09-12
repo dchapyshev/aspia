@@ -22,8 +22,6 @@
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
-#include <map>
-#include <memory>
 #include <string>
 
 namespace base {

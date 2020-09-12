@@ -20,6 +20,10 @@
 
 #include "base/logging.h"
 
+#if defined(OS_POSIX)
+#include "base/environment.h"
+#endif // defined(OS_POSIX)
+
 #if defined(OS_WIN)
 #include <shlobj.h>
 #endif // defined(OS_WIN)
@@ -103,6 +107,12 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#elif defined(OS_POSIX)
+    if (!userHome(result))
+        return false;
+
+    result->append("Desktop");
+    return true;
 #else
     NOTIMPLEMENTED();
     return false;
@@ -125,6 +135,13 @@ bool BasePaths::userHome(std::filesystem::path* result)
     }
 
     result->assign(buffer);
+    return true;
+#elif (OS_POSIX)
+    std::string value;
+    if (!Environment::get("HOME", &value))
+        return false;
+
+    result->assign(value);
     return true;
 #else
     NOTIMPLEMENTED();
