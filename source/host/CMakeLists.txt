@@ -189,7 +189,7 @@ endif()
 add_executable(aspia_host host_entry_point.cc host.rc)
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host aspia_host_core)
+target_link_libraries(aspia_host aspia_host_core Qt5::WinMain)
 
 add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
