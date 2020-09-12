@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 
+#include <QMimeDatabase>
+
 namespace common {
 
 namespace {
@@ -43,29 +45,54 @@ const int kMaxFileNameLength = (kMaxPathLength - 5);
 // static
 QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
-    NOTIMPLEMENTED();
-    return QPair<QIcon, QString>(QIcon(), QString());
+    static QMimeDatabase mime_database;
+    QMimeType mime_type = mime_database.mimeTypeForFile(file_name, QMimeDatabase::MatchExtension);
+    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")), mime_type.comment());
 }
 
 // static
 QIcon FilePlatformUtil::computerIcon()
 {
-    NOTIMPLEMENTED();
-    return QIcon();
+    return QIcon(QStringLiteral(":/img/computer.png"));
 }
 
 // static
 QIcon FilePlatformUtil::directoryIcon()
 {
-    NOTIMPLEMENTED();
-    return QIcon();
+    return QIcon(QStringLiteral(":/img/folder.png"));
 }
 
 // static
 QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 {
-    NOTIMPLEMENTED();
-    return QIcon();
+    QString icon_name;
+
+    switch (type)
+    {
+        case proto::DriveList::Item::TYPE_CDROM:
+            icon_name = QStringLiteral(":/img/drive-disc.png");
+            break;
+
+        case proto::DriveList::Item::TYPE_REMOTE:
+            icon_name = QStringLiteral(":/img/drive-network.png");
+            break;
+
+        case proto::DriveList::Item::TYPE_HOME_FOLDER:
+            icon_name = QStringLiteral(":/img/home.png");
+            break;
+
+        case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
+            icon_name = QStringLiteral(":/img/desktop.png");
+            break;
+
+        case proto::DriveList::Item::TYPE_RAM:
+        case proto::DriveList::Item::TYPE_FIXED:
+        default:
+            icon_name = QStringLiteral(":/img/drive.png");
+            break;
+    }
+
+    return QIcon(icon_name);
 }
 
 // static
