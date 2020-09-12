@@ -22,6 +22,9 @@
 
 #if defined(OS_POSIX)
 #include "base/environment.h"
+
+#include <linux/limits.h>
+#include <unistd.h>
 #endif // defined(OS_POSIX)
 
 #if defined(OS_WIN)
@@ -83,6 +86,19 @@ bool BasePaths::userAppData(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#elif (OS_LINUX)
+    std::string value;
+    if (!Environment::get("XDG_DATA_HOME", &value) || value.empty())
+    {
+        if (!userHome(result))
+            return false;
+
+        result->append(".local/share");
+        return true;
+    }
+
+    result->assign(value);
+    return true;
 #else
     NOTIMPLEMENTED();
     return false;
@@ -107,7 +123,7 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
-#elif defined(OS_POSIX)
+#elif defined(OS_LINUX)
     if (!userHome(result))
         return false;
 
@@ -167,6 +183,8 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#elif defined(OS_LINUX)
+    return userAppData(result);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -191,6 +209,8 @@ bool BasePaths::commonDesktop(std::filesystem::path* result)
 
     result->assign(buffer);
     return true;
+#elif defined(OS_LINUX)
+    return userDesktop(result);
 #else
     NOTIMPLEMENTED();
     return false;
@@ -224,6 +244,14 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
         PLOG(LS_ERROR) << "GetModuleFileNameW failed";
         return false;
     }
+
+    result->assign(buffer);
+    return true;
+#elif defined(OS_LINUX)
+    char buffer[PATH_MAX] = { 0 };
+    ssize_t count = readlink("/proc/self/exe", buffer, std::size(buffer));
+    if (count == -1)
+        return false;
 
     result->assign(buffer);
     return true;
