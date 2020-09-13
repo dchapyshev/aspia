@@ -45,6 +45,7 @@ namespace {
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
+std::filesystem::path g_log_file_path;
 std::ofstream g_log_file;
 std::mutex g_log_file_lock;
 
@@ -147,6 +148,7 @@ bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::pat
     if (!error_code)
         removeOldFiles(file_dir, file_time, settings.max_log_age);
 
+    g_log_file_path = std::move(file_path);
     return true;
 }
 
@@ -167,7 +169,7 @@ LoggingSettings::LoggingSettings()
 
 bool initLogging(const LoggingSettings& settings)
 {
-    std::filesystem::path file_path;
+    std::filesystem::path exec_file_path;
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
@@ -175,18 +177,19 @@ bool initLogging(const LoggingSettings& settings)
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
     readlink("/proc/self/exe", buffer, std::size(buffer));
-    file_path = buffer;
+    exec_file_path = buffer;
 #else
-    file_path = "unknown";
+    exec_file_path = "unknown";
 #endif
 
-    std::filesystem::path file_name = file_path.filename();
+    std::filesystem::path file_name = exec_file_path.filename();
     file_name.replace_extension();
 
     if (!initLoggingImpl(settings, file_name))
         return false;
 
-    LOG(LS_INFO) << "Executable file: " << file_path.c_str();
+    LOG(LS_INFO) << "Executable file: " << exec_file_path.c_str();
+    LOG(LS_INFO) << "Logging file: " << g_log_file_path;
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
 #if defined(OS_WIN) || defined(OS_LINUX)
