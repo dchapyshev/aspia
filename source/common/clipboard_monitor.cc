@@ -23,7 +23,7 @@
 
 #if defined(OS_WIN)
 #include "common/clipboard_win.h"
-#elif defined(OS_LINIX)
+#elif defined(OS_LINUX)
 #include "common/clipboard_x11.h"
 #elif defined(OS_MAC)
 #include "common/clipboard_mac.h"

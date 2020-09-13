@@ -19,6 +19,7 @@
 #ifndef COMMON__CLIPBOARD_X11_H
 #define COMMON__CLIPBOARD_X11_H
 
+#include "base/macros_magic.h"
 #include "common/clipboard.h"
 
 struct _XDisplay;
