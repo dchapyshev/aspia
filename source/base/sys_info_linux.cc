@@ -20,20 +20,31 @@
 
 #include "base/logging.h"
 
+#include <sys/param.h>
+#include <sys/sysinfo.h>
+#include <sys/utsname.h>
+#include <unistd.h>
+
 namespace base {
 
 //static
 std::string SysInfo::operatingSystemName()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    struct utsname info;
+    if (uname(&info) < 0)
+        return std::string();
+
+    return std::string(info.sysname);
 }
 
 // static
 std::string SysInfo::operatingSystemVersion()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    struct utsname info;
+    if (uname(&info) < 0)
+        return std::string();
+
+    return std::string(info.release);
 }
 
 // static
@@ -53,15 +64,21 @@ std::string SysInfo::operatingSystemDir()
 // static
 uint64_t SysInfo::uptime()
 {
-    NOTIMPLEMENTED();
-    return 0;
+    struct sysinfo info;
+    if (sysinfo(&info) < 0)
+        return 0;
+
+    return info.uptime;
 }
 
 // static
 std::string SysInfo::computerName()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    char buffer[256];
+    if (gethostname(buffer, std::size(buffer)) < 0)
+        return std::string();
+
+    return std::string(buffer);
 }
 
 // static
