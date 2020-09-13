@@ -205,9 +205,6 @@ void QtDesktopWindow::showWindow(
     desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
-    clipboard_ = std::make_unique<common::Clipboard>(qt_base::Application::uiTaskRunner());
-    clipboard_->start(this);
-
     show();
     activateWindow();
 }
@@ -342,11 +339,6 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
         QPixmap::fromImage(image), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
-void QtDesktopWindow::injectClipboardEvent(const proto::ClipboardEvent& event)
-{
-    clipboard_->injectClipboardEvent(event);
-}
-
 void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
@@ -478,11 +470,6 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
-}
-
-void QtDesktopWindow::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    desktop_control_proxy_->onClipboardEvent(event);
 }
 
 void QtDesktopWindow::changeSettings()

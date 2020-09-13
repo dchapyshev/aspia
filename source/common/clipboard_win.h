@@ -19,6 +19,7 @@
 #ifndef COMMON__CLIPBOARD_WIN_H
 #define COMMON__CLIPBOARD_WIN_H
 
+#include "base/macros_magic.h"
 #include "common/clipboard.h"
 
 #include <Windows.h>

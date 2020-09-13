@@ -16,21 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/clipboard_monitor.h"
+#include "common/clipboard_monitor.h"
 
 #include "base/logging.h"
+#include "build/build_config.h"
 
-namespace host {
+#if defined(OS_WIN)
+#include "common/clipboard_win.h"
+#elif defined(OS_LINIX)
+#include "common/clipboard_x11.h"
+#elif defined(OS_MAC)
+#include "common/clipboard_mac.h"
+#else
+#error Not implemented
+#endif
+
+namespace common {
 
 ClipboardMonitor::ClipboardMonitor()
-    : ui_thread_(std::make_unique<base::Thread>())
+    : thread_(std::make_unique<base::Thread>())
 {
     // Nothing
 }
 
 ClipboardMonitor::~ClipboardMonitor()
 {
-    ui_thread_->stop();
+    thread_->stop();
 }
 
 void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
@@ -42,17 +53,28 @@ void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runne
     DCHECK(caller_task_runner_);
     DCHECK(delegate_);
 
-    ui_thread_->start(base::MessageLoop::Type::WIN, this);
+    base::MessageLoop::Type message_loop_type;
+
+#if defined(OS_WIN)
+    message_loop_type = base::MessageLoop::Type::WIN;
+#elif defined(OS_LINUX)
+    message_loop_type = base::MessageLoop::Type::ASIO;
+#else
+#error Not implemented
+#endif
+
+    thread_->start(message_loop_type, this);
 }
 
 void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    if (!ui_task_runner_)
+    if (!self_task_runner_)
         return;
 
-    if (!ui_task_runner_->belongsToCurrentThread())
+    if (!self_task_runner_->belongsToCurrentThread())
     {
-        ui_task_runner_->postTask(std::bind(&ClipboardMonitor::injectClipboardEvent, this, event));
+        self_task_runner_->postTask(
+            std::bind(&ClipboardMonitor::injectClipboardEvent, this, event));
         return;
     }
 
@@ -62,10 +84,18 @@ void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
 
 void ClipboardMonitor::onBeforeThreadRunning()
 {
-    ui_task_runner_ = ui_thread_->taskRunner();
-    DCHECK(ui_task_runner_);
+    self_task_runner_ = thread_->taskRunner();
+    DCHECK(self_task_runner_);
 
-    clipboard_ = std::make_unique<common::Clipboard>();
+#if defined(OS_WIN)
+    clipboard_ = std::make_unique<common::ClipboardWin>();
+#elif defined(OS_LINUX)
+    clipboard_ = std::make_unique<common::ClipboardX11>();
+#elif defined(OS_MAC)
+    clipboard_ = std::make_unique<common::ClipboardMac>();
+#else
+#error Not implemented
+#endif
     clipboard_->start(this);
 }
 
@@ -86,4 +116,4 @@ void ClipboardMonitor::onClipboardEvent(const proto::ClipboardEvent& event)
         delegate_->onClipboardEvent(event);
 }
 
-} // namespace host
+} // namespace common

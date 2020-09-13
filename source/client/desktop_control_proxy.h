@@ -45,7 +45,6 @@ public:
     void setPreferredSize(int width, int height);
     void onKeyEvent(const proto::KeyEvent& event);
     void onMouseEvent(const proto::MouseEvent& event);
-    void onClipboardEvent(const proto::ClipboardEvent& event);
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();
     void onSystemInfoRequest();

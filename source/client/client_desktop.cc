@@ -76,6 +76,9 @@ void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 
     input_event_filter_.setSessionType(sessionType());
     desktop_window_proxy_->showWindow(desktop_control_proxy_, peer_version);
+
+    clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
+    clipboard_monitor_->start(ioTaskRunner(), this);
 }
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
@@ -118,6 +121,17 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 void ClientDesktop::onMessageWritten(size_t /* pending */)
 {
     // Nothing
+}
+
+void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
+{
+    std::optional<proto::ClipboardEvent> out_event = input_event_filter_.sendClipboardEvent(event);
+    if (!out_event.has_value())
+        return;
+
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_clipboard_event()->CopyFrom(out_event.value());
+    sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
@@ -189,17 +203,6 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     outgoing_message_.Clear();
     outgoing_message_.mutable_mouse_event()->CopyFrom(out_event.value());
 
-    sendMessage(outgoing_message_);
-}
-
-void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    std::optional<proto::ClipboardEvent> out_event = input_event_filter_.sendClipboardEvent(event);
-    if (!out_event.has_value())
-        return;
-
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(out_event.value());
     sendMessage(outgoing_message_);
 }
 
@@ -378,11 +381,14 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 {
+    if (!clipboard_monitor_)
+        return;
+
     std::optional<proto::ClipboardEvent> out_event = input_event_filter_.readClipboardEvent(event);
     if (!out_event.has_value())
         return;
 
-    desktop_window_proxy_->injectClipboardEvent(out_event.value());
+    clipboard_monitor_->injectClipboardEvent(out_event.value());
 }
 
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)

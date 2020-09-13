@@ -24,7 +24,6 @@
 #include "client/desktop_window.h"
 #include "client/ui/client_window.h"
 #include "client/ui/desktop_widget.h"
-#include "common/clipboard.h"
 
 #include <QPointer>
 
@@ -46,8 +45,7 @@ class StatisticsDialog;
 class QtDesktopWindow :
     public ClientWindow,
     public DesktopWindow,
-    public DesktopWidget::Delegate,
-    public common::Clipboard::Delegate
+    public DesktopWidget::Delegate
 {
     Q_OBJECT
 
@@ -72,7 +70,6 @@ public:
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
     void drawFrame() override;
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
-    void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
     // DesktopWidget::Delegate implementation.
     void onMouseEvent(const proto::MouseEvent& event) override;
@@ -84,9 +81,6 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
-
-    // common::Clipboard::Delegate implementation.
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private slots:
     void changeSettings();
@@ -105,8 +99,6 @@ private:
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     base::Version peer_version_;
     uint32_t video_encodings_ = 0;
-
-    std::unique_ptr<common::Clipboard> clipboard_;
 
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;

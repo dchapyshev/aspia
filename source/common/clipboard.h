@@ -19,8 +19,6 @@
 #ifndef COMMON__CLIPBOARD_H
 #define COMMON__CLIPBOARD_H
 
-#include "base/macros_magic.h"
-#include "build/build_config.h"
 #include "proto/desktop.pb.h"
 
 #include <memory>
@@ -30,8 +28,7 @@ namespace common {
 class Clipboard
 {
 public:
-    Clipboard();
-    ~Clipboard();
+    virtual ~Clipboard() = default;
 
     class Delegate
     {
@@ -52,12 +49,8 @@ protected:
     void onData(const std::string& data);
 
 private:
-    void stop();
-
     Delegate* delegate_ = nullptr;
     std::string last_data_;
-
-    DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
 
 } // namespace common

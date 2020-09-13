@@ -23,6 +23,7 @@
 #include "client/client.h"
 #include "client/desktop_control.h"
 #include "client/input_event_filter.h"
+#include "common/clipboard_monitor.h"
 
 namespace base {
 class CursorDecoder;
@@ -38,7 +39,8 @@ class DesktopWindowProxy;
 
 class ClientDesktop
     : public Client,
-      public DesktopControl
+      public DesktopControl,
+      public common::Clipboard::Delegate
 {
 public:
     explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner);
@@ -52,7 +54,6 @@ public:
     void setPreferredSize(int width, int height) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
     void onMouseEvent(const proto::MouseEvent& event) override;
-    void onClipboardEvent(const proto::ClipboardEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
     void onSystemInfoRequest() override;
@@ -65,6 +66,9 @@ protected:
     // net::Channel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
+
+    // common::Clipboard::Delegate implementation.
+    void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);
@@ -86,6 +90,7 @@ private:
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<base::VideoDecoder> video_decoder_;
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;
+    std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
 
     InputEventFilter input_event_filter_;
 

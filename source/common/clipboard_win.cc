@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/clipboard.h"
+#include "common/clipboard_win.h"
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"
@@ -36,7 +36,6 @@ ClipboardWin::~ClipboardWin()
 
     RemoveClipboardFormatListener(window_->hwnd());
     window_.reset();
-    last_data_.clear();
 }
 
 void ClipboardWin::init()
@@ -46,7 +45,7 @@ void ClipboardWin::init()
 
     window_ = std::make_unique<base::win::MessageWindow>();
 
-    if (!window_->create(std::bind(&Clipboard::onMessage,
+    if (!window_->create(std::bind(&ClipboardWin::onMessage,
                                    this,
                                    std::placeholders::_1, std::placeholders::_2,
                                    std::placeholders::_3, std::placeholders::_4)))

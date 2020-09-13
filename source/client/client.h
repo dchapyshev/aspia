@@ -58,6 +58,8 @@ public:
     Config config() const { return config_; }
 
 protected:
+    std::shared_ptr<base::TaskRunner> ioTaskRunner() const { return io_task_runner_; }
+
     std::u16string computerName() const;
     proto::SessionType sessionType() const;
 

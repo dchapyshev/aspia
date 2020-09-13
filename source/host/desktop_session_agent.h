@@ -22,7 +22,7 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "host/clipboard_monitor.h"
+#include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
@@ -78,7 +78,7 @@ private:
     proto::internal::ServiceToDesktop incoming_message_;
     proto::internal::DesktopToService outgoing_message_;
 
-    std::unique_ptr<ClipboardMonitor> clipboard_monitor_;
+    std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;
 
     std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;

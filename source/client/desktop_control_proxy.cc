@@ -109,19 +109,6 @@ void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
         desktop_control_->onMouseEvent(event);
 }
 
-void DesktopControlProxy::onClipboardEvent(const proto::ClipboardEvent& event)
-{
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onClipboardEvent, shared_from_this(), event));
-        return;
-    }
-
-    if (desktop_control_)
-        desktop_control_->onClipboardEvent(event);
-}
-
 void DesktopControlProxy::onPowerControl(proto::PowerControl::Action action)
 {
     if (!io_task_runner_->belongsToCurrentThread())

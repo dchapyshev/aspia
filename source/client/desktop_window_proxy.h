@@ -56,8 +56,6 @@ public:
     void drawFrame();
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);
 
-    void injectClipboardEvent(const proto::ClipboardEvent& event);
-
 private:
     std::shared_ptr<base::TaskRunner> ui_task_runner_;
     std::unique_ptr<FrameFactory> frame_factory_;

@@ -31,7 +31,6 @@ class Version;
 } // namespace base
 
 namespace proto {
-class ClipboardEvent;
 class DesktopConfig;
 class ScreenList;
 class SystemInfo;
@@ -80,8 +79,6 @@ public:
                           std::shared_ptr<base::Frame> frame) = 0;
     virtual void drawFrame() = 0;
     virtual void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) = 0;
-
-    virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 };
 
 } // namespace client

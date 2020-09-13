@@ -256,7 +256,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
         // thread. Create a separate thread.
-        clipboard_monitor_ = std::make_unique<ClipboardMonitor>();
+        clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
         clipboard_monitor_->start(task_runner_, this);
 
         // Create a shared memory factory.

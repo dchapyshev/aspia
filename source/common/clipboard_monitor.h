@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIPBOARD_MONITOR_H
-#define HOST__CLIPBOARD_MONITOR_H
+#ifndef COMMON__CLIPBOARD_MONITOR_H
+#define COMMON__CLIPBOARD_MONITOR_H
 
 #include "base/threading/thread.h"
 #include "common/clipboard.h"
 
-namespace host {
+namespace common {
 
 class ClipboardMonitor
     : public base::Thread::Delegate,
@@ -48,14 +48,14 @@ protected:
 private:
     common::Clipboard::Delegate* delegate_ = nullptr;
 
-    std::unique_ptr<base::Thread> ui_thread_;
+    std::unique_ptr<base::Thread> thread_;
     std::shared_ptr<base::TaskRunner> caller_task_runner_;
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    std::shared_ptr<base::TaskRunner> self_task_runner_;
     std::unique_ptr<common::Clipboard> clipboard_;
 
     DISALLOW_COPY_AND_ASSIGN(ClipboardMonitor);
 };
 
-} // namespace host
+} // namespace common
 
-#endif // HOST__CLIPBOARD_MONITOR_H
+#endif // COMMON__CLIPBOARD_MONITOR_H

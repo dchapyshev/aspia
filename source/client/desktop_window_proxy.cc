@@ -177,17 +177,4 @@ void DesktopWindowProxy::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse
         desktop_window_->setMouseCursor(mouse_cursor);
 }
 
-void DesktopWindowProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
-{
-    if (!ui_task_runner_->belongsToCurrentThread())
-    {
-        ui_task_runner_->postTask(
-            std::bind(&DesktopWindowProxy::injectClipboardEvent, shared_from_this(), event));
-        return;
-    }
-
-    if (desktop_window_)
-        desktop_window_->injectClipboardEvent(event);
-}
-
 } // namespace client
