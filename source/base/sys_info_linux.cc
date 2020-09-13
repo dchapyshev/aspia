@@ -19,6 +19,7 @@
 #include "base/sys_info.h"
 
 #include "base/logging.h"
+#include "base/files/file_util.h"
 
 #include <sys/param.h>
 #include <sys/sysinfo.h>
@@ -50,8 +51,25 @@ std::string SysInfo::operatingSystemVersion()
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    struct utsname info;
+    if (uname(&info) < 0)
+        return std::string();
+
+    std::string arch(info.machine);
+    if (arch == "i386" || arch == "i486" || arch == "i586" || arch == "i686")
+    {
+        arch = "x86";
+    }
+    else if (arch == "amd64")
+    {
+        arch = "x86_64";
+    }
+    else if (std::string(info.sysname) == "AIX")
+    {
+        arch = "ppc64";
+    }
+
+    return arch;
 }
 
 // static
@@ -98,8 +116,22 @@ std::string SysInfo::computerWorkgroup()
 // static
 int SysInfo::processorPackages()
 {
-    NOTIMPLEMENTED();
-    return 0;
+    std::string contents;
+    if (!readFile("/proc/cpuinfo", &contents) || contents.empty())
+        return 0;
+
+    const char kCpuModelPrefix[] = "model name";
+    std::istringstream iss(contents);
+    std::string line;
+    int modelNameCount = 0;
+
+    while (std::getline(iss, line))
+    {
+        if (line.compare(0, strlen(kCpuModelPrefix), kCpuModelPrefix) == 0)
+            ++modelNameCount;
+    }
+
+    return modelNameCount;
 }
 
 // static
@@ -112,8 +144,11 @@ int SysInfo::processorCores()
 // static
 int SysInfo::processorThreads()
 {
-    NOTIMPLEMENTED();
-    return 0;
+    long res = sysconf(_SC_NPROCESSORS_CONF);
+    if (res == -1)
+        return 1;
+
+    return static_cast<int>(res);
 }
 
 } // namespace base
