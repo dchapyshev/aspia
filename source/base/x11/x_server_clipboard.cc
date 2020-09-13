@@ -349,10 +349,11 @@ bool XServerClipboard::handleSelectionStringEvent(XSelectionEvent* event,
     if (event->property != selection_string_atom_ || !data || format != 8)
         return true;
 
-    std::string text(static_cast<char*>(data), item_count);
-
     if (event->target == XA_STRING || event->target == utf8_string_atom_)
+    {
+        std::string text(static_cast<char*>(data), item_count);
         notifyClipboardText(text);
+    }
 
     return true;
 }

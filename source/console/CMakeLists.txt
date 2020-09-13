@@ -104,6 +104,7 @@ endif()
 if (LINUX)
     set(CONSOLE_PLATFORM_LIBS
         stdc++fs
+        Xfixes
         optimized ${ICUUC_RELEASE}
         optimized ${ICUDATA_RELEASE}
         debug ${ICUUC_DEBUG}

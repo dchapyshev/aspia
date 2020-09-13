@@ -73,7 +73,7 @@ private:
                                void* data);
 
     // These methods return true if selection processing is complete, false otherwise. They are
-    // called from HandleSelectionNotify(), and take the same arguments.
+    // called from handleSelectionNotify(), and take the same arguments.
     bool handleSelectionTargetsEvent(XSelectionEvent* event,
                                      int format,
                                      int item_count,

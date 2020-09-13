@@ -27,20 +27,22 @@
 
 namespace common {
 
-Clipboard::Clipboard() = default;
+ClipboardWin::ClipboardWin() = default;
 
-Clipboard::~Clipboard()
+ClipboardWin::~ClipboardWin()
 {
-    stop();
+    if (!window_)
+        return;
+
+    RemoveClipboardFormatListener(window_->hwnd());
+    window_.reset();
+    last_data_.clear();
 }
 
-void Clipboard::start(Delegate* delegate)
+void ClipboardWin::init()
 {
     if (window_)
         return;
-
-    delegate_ = delegate;
-    DCHECK(delegate_);
 
     window_ = std::make_unique<base::win::MessageWindow>();
 
@@ -60,33 +62,13 @@ void Clipboard::start(Delegate* delegate)
     }
 }
 
-void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
+void ClipboardWin::setData(const std::string& data)
 {
     if (!window_)
         return;
 
-    if (event.mime_type() == kMimeTypeCompressedTextUtf8)
-    {
-        std::string decompressed_data;
-        if (!decompress(event.data(), &decompressed_data))
-            return;
-
-        // Store last injected data.
-        last_data_ = std::move(decompressed_data);
-    }
-    else if (event.mime_type() == kMimeTypeTextUtf8)
-    {
-        // Store last injected data.
-        last_data_ = event.data();
-    }
-    else
-    {
-        LOG(LS_WARNING) << "Unsupported mime type: " << event.mime_type();
-        return;
-    }
-
     std::wstring text;
-    if (!base::utf8ToWide(base::replaceLfByCrLf(last_data_), &text))
+    if (!base::utf8ToWide(base::replaceLfByCrLf(data), &text))
     {
         LOG(LS_WARNING) << "Couldn't convert data to unicode";
         return;
@@ -124,18 +106,7 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     clipboard.setData(CF_UNICODETEXT, text_global);
 }
 
-void Clipboard::stop()
-{
-    if (!window_)
-        return;
-
-    RemoveClipboardFormatListener(window_->hwnd());
-    window_.reset();
-    last_data_.clear();
-    delegate_ = nullptr;
-}
-
-bool Clipboard::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
+bool ClipboardWin::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
     {
@@ -151,7 +122,7 @@ bool Clipboard::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */
     return true;
 }
 
-void Clipboard::onClipboardUpdate()
+void ClipboardWin::onClipboardUpdate()
 {
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
         return;
@@ -192,32 +163,7 @@ void Clipboard::onClipboardUpdate()
     }
 
     if (!data.empty())
-    {
-        data = base::replaceCrLfByLf(data);
-
-        if (last_data_ != data)
-        {
-            proto::ClipboardEvent event;
-
-            if (data.size() > kMinSizeToCompress)
-            {
-                std::string compressed_data;
-                if (!compress(data, &compressed_data))
-                    return;
-
-                event.set_mime_type(kMimeTypeCompressedTextUtf8);
-                event.set_data(std::move(compressed_data));
-            }
-            else
-            {
-                event.set_mime_type(kMimeTypeTextUtf8);
-                event.set_data(std::move(data));
-            }
-
-            if (delegate_)
-                delegate_->onClipboardEvent(event);
-        }
-    }
+        onData(base::replaceCrLfByLf(data));
 }
 
 } // namespace common

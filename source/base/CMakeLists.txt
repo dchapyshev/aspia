@@ -326,6 +326,12 @@ if (APPLE)
         files/file_path_watcher_mac.cc)
 endif()
 
+if (UNIX)
+    list(APPEND SOURCE_BASE_FILES
+        files/file_descriptor_watcher_posix.cc
+        files/file_descriptor_watcher_posix.h)
+endif()
+
 list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
     ipc/ipc_channel.h

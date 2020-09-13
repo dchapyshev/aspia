@@ -25,16 +25,6 @@
 
 #include <memory>
 
-#if defined(OS_WIN)
-
-namespace base::win {
-class MessageWindow;
-} // namespace base::win
-
-#include <Windows.h>
-
-#endif // defined(OS_WIN)
-
 namespace common {
 
 class Clipboard
@@ -56,35 +46,15 @@ public:
     // Receiving the incoming clipboard.
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
-    static const char kMimeTypeTextUtf8[];
-    static const char kMimeTypeCompressedTextUtf8[];
-
-    // The compression ratio can be in the range of 1 to 22.
-    static const int kCompressionRatio;
-
-    // Smaller data will not be compressed.
-    static const size_t kMinSizeToCompress;
-
-    static bool compress(const std::string& in, std::string* out);
-    static bool decompress(const std::string& in, std::string* out);
+protected:
+    virtual void init() = 0;
+    virtual void setData(const std::string& data) = 0;
+    void onData(const std::string& data);
 
 private:
     void stop();
 
-#if defined(OS_WIN)
-    // Handles messages received by |window_|.
-    bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
-#endif // defined(OS_WIN)
-
-    void onClipboardUpdate();
-
     Delegate* delegate_ = nullptr;
-
-#if defined(OS_WIN)
-    // Used to subscribe to WM_CLIPBOARDUPDATE messages.
-    std::unique_ptr<base::win::MessageWindow> window_;
-#endif // defined(OS_WIN)
-
     std::string last_data_;
 
     DISALLOW_COPY_AND_ASSIGN(Clipboard);

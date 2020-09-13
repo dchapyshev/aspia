@@ -16,37 +16,68 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/clipboard.h"
+#include "common/clipboard_x11.h"
 
 #include "base/logging.h"
+#include "base/files/file_descriptor_watcher_posix.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "base/x11/x_server_clipboard.h"
 
 namespace common {
 
-Clipboard::Clipboard() = default;
-
-Clipboard::~Clipboard()
+ClipboardX11::ClipboardX11()
 {
-    stop();
+    // Nothing
 }
 
-void Clipboard::start(Delegate* delegate)
+ClipboardX11::~ClipboardX11()
 {
-    NOTIMPLEMENTED();
+    if (display_)
+    {
+        XCloseDisplay(display_);
+        display_ = nullptr;
+    }
 }
 
-void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
+void ClipboardX11::init()
 {
-    NOTIMPLEMENTED();
+    display_ = XOpenDisplay(nullptr);
+    if (!display_)
+    {
+        LOG(LS_ERROR) << "Couldn't open X display";
+        return;
+    }
+
+    x_server_clipboard_ = std::make_unique<base::XServerClipboard>();
+    x_server_clipboard_->init(
+        display_, std::bind(&ClipboardX11::onData, this, std::placeholders::_1));
+
+    x_connection_watcher_ = std::make_unique<base::FileDescriptorWatcher>();
+    x_connection_watcher_->startWatching(
+        ConnectionNumber(display_),
+        base::FileDescriptorWatcher::Mode::WATCH_READ,
+        std::bind(&ClipboardX11::pumpXEvents, this));
+
+    pumpXEvents();
 }
 
-void Clipboard::stop()
+void ClipboardX11::setData(const std::string& data)
 {
-    NOTIMPLEMENTED();
+    if (x_server_clipboard_)
+        x_server_clipboard_->setClipboard(data);
 }
 
-void Clipboard::onClipboardUpdate()
+void ClipboardX11::pumpXEvents()
 {
-    NOTIMPLEMENTED();
+    DCHECK(display_ && x_server_clipboard_);
+
+    while (XPending(display_))
+    {
+        XEvent event;
+        XNextEvent(display_, &event);
+        x_server_clipboard_->processXEvent(&event);
+    }
 }
 
 } // namespace common

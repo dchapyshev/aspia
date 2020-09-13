@@ -50,6 +50,7 @@ list(APPEND SOURCE_COMMON
 if (WIN32)
     list(APPEND SOURCE_COMMON
         clipboard_win.cc
+        clipboard_win.h
         file_enumerator_win.cc
         file_platform_util_win.cc)
 endif()
@@ -57,12 +58,14 @@ endif()
 if (LINUX)
     list(APPEND SOURCE_COMMON
         clipboard_x11.cc
+        clipboard_x11.h
         file_platform_util_linux.cc)
 endif()
 
 if (APPLE)
     list(APPEND SOURCE_COMMON
         clipboard_mac.cc
+        clipboard_mac.h
         file_platform_util_mac.mm)
 endif()
 

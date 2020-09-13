@@ -16,24 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/clipboard.h"
+#ifndef COMMON__CLIPBOARD_MAC_H
+#define COMMON__CLIPBOARD_MAC_H
 
-#include "base/logging.h"
+#include "common/clipboard.h"
 
 namespace common {
 
-ClipboardMac::ClipboardMac() = default;
-
-ClipboardMac::~ClipboardMac() = default;
-
-void ClipboardMac::init()
+class ClipboardMac : public Clipboard
 {
-    NOTIMPLEMENTED();
-}
+public:
+    ClipboardMac();
+    ~ClipboardMac();
 
-void ClipboardMac::setData(const std::string& /* data */)
-{
-    NOTIMPLEMENTED();
-}
+protected:
+    // Clipboard implementation.
+    void init() override;
+    void setData(const std::string& data) override;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(ClipboardMac);
+};
 
 } // namespace common
+
+#endif // COMMON__CLIPBOARD_MAC_H

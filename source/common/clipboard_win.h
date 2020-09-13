@@ -16,24 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#ifndef COMMON__CLIPBOARD_WIN_H
+#define COMMON__CLIPBOARD_WIN_H
+
 #include "common/clipboard.h"
 
-#include "base/logging.h"
+#include <Windows.h>
+
+namespace base::win {
+class MessageWindow;
+} // namespace base::win
 
 namespace common {
 
-ClipboardMac::ClipboardMac() = default;
-
-ClipboardMac::~ClipboardMac() = default;
-
-void ClipboardMac::init()
+class ClipboardWin : public Clipboard
 {
-    NOTIMPLEMENTED();
-}
+public:
+    ClipboardWin();
+    ~ClipboardWin();
 
-void ClipboardMac::setData(const std::string& /* data */)
-{
-    NOTIMPLEMENTED();
-}
+protected:
+    // Clipboard implementation.
+    void init() override;
+    void setData(const std::string& data) override;
+
+private:
+    void onClipboardUpdate();
+
+    // Handles messages received by |window_|.
+    bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
+
+    // Used to subscribe to WM_CLIPBOARDUPDATE messages.
+    std::unique_ptr<base::win::MessageWindow> window_;
+
+    DISALLOW_COPY_AND_ASSIGN(ClipboardWin);
+};
 
 } // namespace common
+
+#endif // COMMON__CLIPBOARD_WIN_H

@@ -16,24 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/clipboard.h"
+#ifndef BASE__FILES__FILE_DESCRIPTOR_WATCHER_POSIX_H
+#define BASE__FILES__FILE_DESCRIPTOR_WATCHER_POSIX_H
 
-#include "base/logging.h"
+#include "base/macros_magic.h"
 
-namespace common {
+#include <functional>
+#include <memory>
 
-ClipboardMac::ClipboardMac() = default;
+namespace base {
 
-ClipboardMac::~ClipboardMac() = default;
-
-void ClipboardMac::init()
+class FileDescriptorWatcher
 {
-    NOTIMPLEMENTED();
-}
+public:
+    FileDescriptorWatcher();
+    ~FileDescriptorWatcher();
 
-void ClipboardMac::setData(const std::string& /* data */)
-{
-    NOTIMPLEMENTED();
-}
+    enum class Mode
+    {
+        WATCH_READ,
+        WATCH_WRITE
+    };
 
-} // namespace common
+    using Callback = std::function<void()>;
+
+    void startWatching(int fd, Mode mode, const Callback& callback);
+
+private:
+    class Watcher;
+    std::unique_ptr<Watcher> impl_;
+
+    DISALLOW_COPY_AND_ASSIGN(FileDescriptorWatcher);
+};
+
+} // namespace base
+
+#endif // BASE__FILES__FILE_DESCRIPTOR_WATCHER_POSIX_H

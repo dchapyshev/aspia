@@ -205,7 +205,7 @@ void QtDesktopWindow::showWindow(
     desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
-    clipboard_ = std::make_unique<common::Clipboard>();
+    clipboard_ = std::make_unique<common::Clipboard>(qt_base::Application::uiTaskRunner());
     clipboard_->start(this);
 
     show();
