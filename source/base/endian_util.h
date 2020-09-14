@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__ENDIAN_H
-#define BASE__ENDIAN_H
+#ifndef BASE__ENDIAN_UTIL_H
+#define BASE__ENDIAN_UTIL_H
 
 #include "base/macros_magic.h"
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__ENDIAN_H
+#endif // BASE__ENDIAN_UTIL_H
