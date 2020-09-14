@@ -107,6 +107,12 @@ void PendingSession::doReadMessage(PendingSession* session)
             return;
         }
 
+        if (bytes_transferred != sizeof(uint32_t))
+        {
+            session->onErrorOccurred(FROM_HERE, std::error_code());
+            return;
+        }
+
         session->buffer_size_ = base::EndianUtil::fromBig(session->buffer_size_);
         if (!session->buffer_size_ || session->buffer_size_ > kMaxMessageSize)
         {
@@ -124,6 +130,12 @@ void PendingSession::doReadMessage(PendingSession* session)
             {
                 if (error_code != asio::error::operation_aborted)
                     session->onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            if (bytes_transferred != session->buffer_.size())
+            {
+                session->onErrorOccurred(FROM_HERE, std::error_code());
                 return;
             }
 
