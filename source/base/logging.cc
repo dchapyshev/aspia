@@ -173,7 +173,7 @@ bool initLogging(const LoggingSettings& settings)
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
-    file_path = buffer;
+    exec_file_path = buffer;
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
     readlink("/proc/self/exe", buffer, std::size(buffer));
