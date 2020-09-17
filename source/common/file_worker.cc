@@ -176,9 +176,11 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
         item->set_free_space(drive_info.freeSpace());
     }
 #elif (OS_POSIX)
-    proto::DriveList::Item* root_drive = drive_list->add_item();
-    root_drive->set_type(proto::DriveList::Item::TYPE_FIXED);
-    root_drive->set_path("/");
+    proto::DriveList::Item* root_directory = drive_list->add_item();
+    root_directory->set_type(proto::DriveList::Item::TYPE_ROOT_DIRECTORY);
+    root_directory->set_path("/");
+    root_directory->set_total_space(-1);
+    root_directory->set_free_space(-1);
 #endif
 
     std::filesystem::path desktop_path;

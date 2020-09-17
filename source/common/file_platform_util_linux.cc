@@ -85,6 +85,10 @@ QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
             icon_name = QStringLiteral(":/img/desktop.png");
             break;
 
+        case proto::DriveList::Item::TYPE_ROOT_DIRECTORY:
+            icon_name = QStringLiteral(":/img/folder.png");
+            break;
+
         case proto::DriveList::Item::TYPE_RAM:
         case proto::DriveList::Item::TYPE_FIXED:
         default:

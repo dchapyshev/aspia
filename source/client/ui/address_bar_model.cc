@@ -448,6 +448,9 @@ QString AddressBarModel::typeToString(proto::DriveList::Item::Type type)
         case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
             return tr("Desktop Folder");
 
+        case proto::DriveList::Item::TYPE_ROOT_DIRECTORY:
+            return tr("Root Directory");
+
         default:
             return tr("Unknown Drive");
     }

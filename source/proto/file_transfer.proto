@@ -36,6 +36,7 @@ message DriveList
             TYPE_RAM            = 5;
             TYPE_HOME_FOLDER    = 6;
             TYPE_DESKTOP_FOLDER = 7;
+            TYPE_ROOT_DIRECTORY = 8;
         }
 
         Type type         = 1;

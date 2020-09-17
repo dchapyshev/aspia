@@ -731,31 +731,36 @@
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="452"/>
+        <source>Root Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/address_bar_model.cc" line="455"/>
         <source>Unknown Drive</source>
         <translation type="unfinished">Unbekanntes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="469"/>
+        <location filename="../ui/address_bar_model.cc" line="472"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="474"/>
+        <location filename="../ui/address_bar_model.cc" line="477"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="479"/>
+        <location filename="../ui/address_bar_model.cc" line="482"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="484"/>
+        <location filename="../ui/address_bar_model.cc" line="487"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="489"/>
+        <location filename="../ui/address_bar_model.cc" line="492"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
