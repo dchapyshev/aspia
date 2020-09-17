@@ -49,11 +49,7 @@
     </widget>
    </item>
    <item>
-    <widget class="client::AddressBar" name="address_bar">
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
+    <widget class="client::AddressBar" name="address_bar"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

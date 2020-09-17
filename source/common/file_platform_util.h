@@ -46,10 +46,6 @@ public:
     static bool isValidPath(const QString& path);
     static bool isValidFileName(const QString& file_name);
 
-    static bool isRelativePath(const QString& path);
-    static bool isNetworkPath(const QString& path);
-    static bool isRootPath(const QString& path);
-
 private:
     DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
 };

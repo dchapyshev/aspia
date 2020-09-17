@@ -106,25 +106,4 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
     return true;
 }
 
-// static
-bool FilePlatformUtil::isRelativePath(const QString& /* path */)
-{
-    NOTIMPLEMENTED();
-    return false;
-}
-
-// static
-bool FilePlatformUtil::isNetworkPath(const QString& /* path */)
-{
-    NOTIMPLEMENTED();
-    return false;
-}
-
-// static
-bool FilePlatformUtil::isRootPath(const QString& /* path */)
-{
-    NOTIMPLEMENTED();
-    return false;
-}
-
 } // namespace common

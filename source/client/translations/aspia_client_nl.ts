@@ -381,52 +381,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="169"/>
+        <location filename="../ui/file_panel.ui" line="165"/>
         <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="172"/>
+        <location filename="../ui/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Navigeer naar bovenliggende map (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="181"/>
+        <location filename="../ui/file_panel.ui" line="177"/>
         <source>Refresh</source>
         <translation type="unfinished">Vernieuwen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="184"/>
+        <location filename="../ui/file_panel.ui" line="180"/>
         <source>Refresh (F5)</source>
         <translation>Vernieuwen (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="196"/>
+        <location filename="../ui/file_panel.ui" line="192"/>
         <source>New Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="199"/>
+        <location filename="../ui/file_panel.ui" line="195"/>
         <source>Create a new folder</source>
         <translation>Nieuwe map maken</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="211"/>
+        <location filename="../ui/file_panel.ui" line="207"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="214"/>
+        <location filename="../ui/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Verwijder geselecteerde object(en) (Delete)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="229"/>
+        <location filename="../ui/file_panel.ui" line="225"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Geselecteerde object(en) versturen (F11)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="226"/>
+        <location filename="../ui/file_panel.ui" line="222"/>
         <source>Send</source>
         <translation>Stuur</translation>
     </message>
@@ -674,26 +674,25 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="56"/>
+        <location filename="../ui/address_bar.cc" line="57"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="57"/>
+        <location filename="../ui/address_bar.cc" line="58"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>Er is een ongeldig pad voor de map opgegeven.</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="77"/>
         <source>The path can not contain characters %1.</source>
-        <translation>Het pad mag de karakters %1 niet bevatten.</translation>
+        <translation type="vanished">Het pad mag de karakters %1 niet bevatten.</translation>
     </message>
 </context>
 <context>
     <name>client::AddressBarModel</name>
     <message>
         <location filename="../ui/address_bar_model.cc" line="81"/>
-        <location filename="../ui/address_bar_model.cc" line="454"/>
+        <location filename="../ui/address_bar_model.cc" line="441"/>
         <source>Home Folder</source>
         <translation>Thuismap</translation>
     </message>
@@ -703,87 +702,87 @@
         <translation>Bureablad</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="286"/>
+        <location filename="../ui/address_bar_model.cc" line="273"/>
         <source>Computer</source>
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="399"/>
+        <location filename="../ui/address_bar_model.cc" line="386"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="402"/>
+        <location filename="../ui/address_bar_model.cc" line="389"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="405"/>
+        <location filename="../ui/address_bar_model.cc" line="392"/>
         <source>Total Space</source>
         <translation>Totale Ruimte</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="408"/>
+        <location filename="../ui/address_bar_model.cc" line="395"/>
         <source>Free Space</source>
         <translation>Vrije Ruimte</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="439"/>
+        <location filename="../ui/address_bar_model.cc" line="426"/>
         <source>Optical Drive</source>
         <translation>Optische Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="442"/>
+        <location filename="../ui/address_bar_model.cc" line="429"/>
         <source>Removable Drive</source>
         <translation>Verwijderbare Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="445"/>
+        <location filename="../ui/address_bar_model.cc" line="432"/>
         <source>Fixed Drive</source>
         <translation>Vaste Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="448"/>
+        <location filename="../ui/address_bar_model.cc" line="435"/>
         <source>Network Drive</source>
         <translation>Netwerk Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="451"/>
+        <location filename="../ui/address_bar_model.cc" line="438"/>
         <source>RAM Drive</source>
         <translation>RAM Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="457"/>
+        <location filename="../ui/address_bar_model.cc" line="444"/>
         <source>Desktop Folder</source>
         <translation>Bureablad Map</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="460"/>
+        <location filename="../ui/address_bar_model.cc" line="447"/>
         <source>Unknown Drive</source>
         <translation>Onbekende Schijf</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="477"/>
+        <location filename="../ui/address_bar_model.cc" line="464"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="482"/>
+        <location filename="../ui/address_bar_model.cc" line="469"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="487"/>
+        <location filename="../ui/address_bar_model.cc" line="474"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="492"/>
+        <location filename="../ui/address_bar_model.cc" line="479"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="497"/>
+        <location filename="../ui/address_bar_model.cc" line="484"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -1306,69 +1305,69 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="433"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="96"/>
+        <location filename="../ui/file_panel.cc" line="91"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="111"/>
+        <location filename="../ui/file_panel.cc" line="106"/>
         <source>Failed to get list of files: %1</source>
         <translation>Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="135"/>
+        <location filename="../ui/file_panel.cc" line="130"/>
         <source>Failed to create directory: %1</source>
         <translation>Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="146"/>
+        <location filename="../ui/file_panel.cc" line="141"/>
         <source>Failed to rename item: %1</source>
         <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="268"/>
+        <location filename="../ui/file_panel.cc" line="257"/>
         <source>%1 object(s) selected</source>
         <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="287"/>
-        <location filename="../ui/file_panel.cc" line="305"/>
+        <location filename="../ui/file_panel.cc" line="276"/>
+        <location filename="../ui/file_panel.cc" line="294"/>
         <source>Folder name can not be empty.</source>
         <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="293"/>
-        <location filename="../ui/file_panel.cc" line="311"/>
+        <location filename="../ui/file_panel.cc" line="282"/>
+        <location filename="../ui/file_panel.cc" line="300"/>
         <source>Name contains invalid characters.</source>
         <translation>De naam bevat ongeldige karakters.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="331"/>
+        <location filename="../ui/file_panel.cc" line="320"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="321"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="342"/>
+        <location filename="../ui/file_panel.cc" line="331"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Map maken</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="399"/>
+        <location filename="../ui/file_panel.cc" line="388"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="400"/>
+        <location filename="../ui/file_panel.cc" line="389"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>

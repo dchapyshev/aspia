@@ -114,8 +114,6 @@ list(APPEND SOURCE_CLIENT_UI
     ui/file_manager_settings.h
     ui/file_mime_data.cc
     ui/file_mime_data.h
-    ui/file_path_validator.cc
-    ui/file_path_validator.h
     ui/file_panel.cc
     ui/file_panel.h
     ui/file_panel.ui

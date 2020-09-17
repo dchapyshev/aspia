@@ -19,7 +19,6 @@
 #include "client/ui/address_bar.h"
 
 #include "client/ui/address_bar_model.h"
-#include "client/ui/file_path_validator.h"
 
 #include <QLineEdit>
 #include <QMessageBox>
@@ -34,6 +33,8 @@ AddressBar::AddressBar(QWidget* parent)
     edit_ = new QLineEdit(this);
     view_ = new QTreeView(this);
     model_ = new AddressBarModel(this);
+
+    edit_->setReadOnly(true);
 
     view_->setHeaderHidden(true);
     view_->setRootIsDecorated(false);
@@ -56,26 +57,6 @@ AddressBar::AddressBar(QWidget* parent)
                              tr("Warning"),
                              tr("An incorrect path to the folder was entered."),
                              QMessageBox::Ok);
-    });
-
-    FilePathValidator* validator = new FilePathValidator(this);
-    edit_->setValidator(validator);
-
-    connect(validator, &FilePathValidator::invalidPathEntered, [this]()
-    {
-        QString characters;
-
-        for (const auto& character : common::FilePlatformUtil::invalidPathCharacters())
-        {
-            if (!characters.isEmpty())
-                characters += QLatin1String(", ");
-
-            characters += character;
-        }
-
-        QToolTip::showText(mapToGlobal(QPoint(0, 0)),
-                           tr("The path can not contain characters %1.").arg(characters),
-                           this);
     });
 
     connect(this, QOverload<int>::of(&AddressBar::activated), [this](int /* index */)

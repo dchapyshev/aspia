@@ -45,12 +45,7 @@ QString parentPath(const QString& path)
     if (last_slash == -1)
         return AddressBarModel::computerPath();
 
-    QString result = path.left(last_slash);
-
-    if (common::FilePlatformUtil::isRootPath(result))
-        return AddressBarModel::computerPath();
-
-    return result;
+    return path.left(last_slash);
 }
 
 } // namespace
@@ -219,14 +214,8 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_F4:
-        {
-            QLineEdit* line_edit = ui.address_bar->lineEdit();
-            line_edit->selectAll();
-            line_edit->setFocus();
-
             ui.address_bar->showPopup();
-        }
-        break;
+            break;
 
         case Qt::Key_F5:
             refresh();
