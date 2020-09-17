@@ -89,6 +89,7 @@ std::filesystem::path defaultLogFileDir()
     if (error_code)
         return std::filesystem::path();
 
+    path.append("aspia");
     return path;
 }
 
