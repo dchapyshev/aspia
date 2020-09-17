@@ -427,7 +427,7 @@ void ClientAuthenticator::sendSessionResponse()
 
     response.set_os_name(SysInfo::operatingSystemName());
     response.set_computer_name(SysInfo::computerName());
-    response.set_cpu_cores(SysInfo::processorCores());
+    response.set_cpu_cores(SysInfo::processorThreads());
 
     LOG(LS_INFO) << "Sending: SessionResponse";
     sendMessage(response);
