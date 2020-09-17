@@ -326,13 +326,18 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRemoveRequest(
 
     std::filesystem::path path = std::filesystem::u8path(request.path());
 
-    std::error_code ignored_code;
-    if (!std::filesystem::exists(path, ignored_code))
+    std::error_code error_code;
+    if (!std::filesystem::exists(path, error_code))
     {
-        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+        if (error_code)
+            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+        else
+            reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+
         return reply;
     }
 
+    std::error_code ignored_code;
     std::filesystem::permissions(
         path,
         std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
