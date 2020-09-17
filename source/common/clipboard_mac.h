@@ -19,6 +19,7 @@
 #ifndef COMMON__CLIPBOARD_MAC_H
 #define COMMON__CLIPBOARD_MAC_H
 
+#include "base/macros_magic.h"
 #include "common/clipboard.h"
 
 namespace common {

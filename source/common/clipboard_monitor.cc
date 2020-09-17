@@ -59,6 +59,8 @@ void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runne
     message_loop_type = base::MessageLoop::Type::WIN;
 #elif defined(OS_LINUX)
     message_loop_type = base::MessageLoop::Type::ASIO;
+#elif defined(OS_MAC)
+    message_loop_type = base::MessageLoop::Type::DEFAULT;
 #else
 #error Not implemented
 #endif
