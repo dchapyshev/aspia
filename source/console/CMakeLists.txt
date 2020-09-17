@@ -111,6 +111,14 @@ if (LINUX)
         debug ${ICUDATA_DEBUG})
 endif()
 
+if (APPLE)
+    set(CONSOLE_PLATFORM_LIBS
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
 add_executable(aspia_console
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})

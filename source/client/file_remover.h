@@ -24,6 +24,7 @@
 
 #include <functional>
 #include <deque>
+#include <string>
 
 namespace base {
 class TaskRunner;
