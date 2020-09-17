@@ -22,6 +22,8 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
+#include <memory>
+
 #if defined(OS_WIN)
 #include <Windows.h>
 #elif defined(OS_POSIX)
