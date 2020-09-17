@@ -293,22 +293,32 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRenameRequest(
         return reply;
     }
 
-    std::error_code ignored_code;
-    if (!std::filesystem::exists(old_name, ignored_code))
+    std::error_code error_code;
+    if (!std::filesystem::exists(old_name, error_code))
     {
-        reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+        if (error_code)
+            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+        else
+            reply->set_error_code(proto::FILE_ERROR_PATH_NOT_FOUND);
+
         return reply;
     }
 
-    if (std::filesystem::exists(new_name, ignored_code))
+    if (std::filesystem::exists(new_name, error_code))
     {
         reply->set_error_code(proto::FILE_ERROR_PATH_ALREADY_EXISTS);
         return reply;
     }
+    else
+    {
+        if (error_code)
+        {
+            reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
+            return reply;
+        }
+    }
 
-    std::error_code error_code;
     std::filesystem::rename(old_name, new_name, error_code);
-
     if (error_code)
     {
         reply->set_error_code(proto::FILE_ERROR_ACCESS_DENIED);
