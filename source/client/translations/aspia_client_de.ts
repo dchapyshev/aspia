@@ -664,98 +664,98 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="81"/>
-        <location filename="../ui/address_bar_model.cc" line="441"/>
+        <location filename="../ui/address_bar_model.cc" line="82"/>
+        <location filename="../ui/address_bar_model.cc" line="446"/>
         <source>Home Folder</source>
         <translation type="unfinished">Home-Ordner</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="85"/>
+        <location filename="../ui/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
         <translation type="unfinished">Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="273"/>
+        <location filename="../ui/address_bar_model.cc" line="278"/>
         <source>Computer</source>
         <translation type="unfinished">Computer</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="386"/>
+        <location filename="../ui/address_bar_model.cc" line="391"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="389"/>
+        <location filename="../ui/address_bar_model.cc" line="394"/>
         <source>Type</source>
         <translation type="unfinished">Typ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="392"/>
+        <location filename="../ui/address_bar_model.cc" line="397"/>
         <source>Total Space</source>
         <translation type="unfinished">Gesamter Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="395"/>
+        <location filename="../ui/address_bar_model.cc" line="400"/>
         <source>Free Space</source>
         <translation type="unfinished">Freier Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="426"/>
+        <location filename="../ui/address_bar_model.cc" line="431"/>
         <source>Optical Drive</source>
         <translation type="unfinished">Optisches Laufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="429"/>
+        <location filename="../ui/address_bar_model.cc" line="434"/>
         <source>Removable Drive</source>
         <translation type="unfinished">Wechsellaufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="432"/>
+        <location filename="../ui/address_bar_model.cc" line="437"/>
         <source>Fixed Drive</source>
         <translation type="unfinished">Festes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="435"/>
+        <location filename="../ui/address_bar_model.cc" line="440"/>
         <source>Network Drive</source>
         <translation type="unfinished">Netzlaufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="438"/>
+        <location filename="../ui/address_bar_model.cc" line="443"/>
         <source>RAM Drive</source>
         <translation type="unfinished">RAM-Laufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="444"/>
+        <location filename="../ui/address_bar_model.cc" line="449"/>
         <source>Desktop Folder</source>
         <translation type="unfinished">Desktopordner</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="447"/>
+        <location filename="../ui/address_bar_model.cc" line="452"/>
         <source>Unknown Drive</source>
         <translation type="unfinished">Unbekanntes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="464"/>
+        <location filename="../ui/address_bar_model.cc" line="469"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="469"/>
+        <location filename="../ui/address_bar_model.cc" line="474"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="474"/>
+        <location filename="../ui/address_bar_model.cc" line="479"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="479"/>
+        <location filename="../ui/address_bar_model.cc" line="484"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="484"/>
+        <location filename="../ui/address_bar_model.cc" line="489"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
@@ -1102,69 +1102,69 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_panel.cc" line="427"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="91"/>
+        <location filename="../ui/file_panel.cc" line="92"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="106"/>
+        <location filename="../ui/file_panel.cc" line="107"/>
         <source>Failed to get list of files: %1</source>
         <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="130"/>
+        <location filename="../ui/file_panel.cc" line="131"/>
         <source>Failed to create directory: %1</source>
         <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="141"/>
+        <location filename="../ui/file_panel.cc" line="142"/>
         <source>Failed to rename item: %1</source>
         <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="257"/>
+        <location filename="../ui/file_panel.cc" line="258"/>
         <source>%1 object(s) selected</source>
         <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="276"/>
-        <location filename="../ui/file_panel.cc" line="294"/>
+        <location filename="../ui/file_panel.cc" line="277"/>
+        <location filename="../ui/file_panel.cc" line="295"/>
         <source>Folder name can not be empty.</source>
         <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="282"/>
-        <location filename="../ui/file_panel.cc" line="300"/>
+        <location filename="../ui/file_panel.cc" line="283"/>
+        <location filename="../ui/file_panel.cc" line="301"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="320"/>
+        <location filename="../ui/file_panel.cc" line="321"/>
         <source>&amp;Send	F11</source>
         <translation type="unfinished">&amp;Senden F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_panel.cc" line="322"/>
         <source>&amp;Delete	Delete</source>
         <translation type="unfinished">&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="331"/>
+        <location filename="../ui/file_panel.cc" line="332"/>
         <source>&amp;Create Folder</source>
         <translation type="unfinished">&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="388"/>
+        <location filename="../ui/file_panel.cc" line="393"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="389"/>
+        <location filename="../ui/file_panel.cc" line="394"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>

@@ -18,6 +18,7 @@
 
 #include "client/ui/file_panel.h"
 
+#include "base/logging.h"
 #include "client/file_remover.h"
 #include "client/ui/address_bar_model.h"
 #include "client/ui/file_error_code.h"
@@ -45,7 +46,7 @@ QString parentPath(const QString& path)
     if (last_slash == -1)
         return AddressBarModel::computerPath();
 
-    return path.left(last_slash);
+    return path.left(last_slash + 1);
 }
 
 } // namespace
@@ -346,12 +347,16 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
 void FilePanel::toChildFolder(const QString& child_name)
 {
+    LOG(LS_INFO) << "toChildFolder called: " << child_name.toStdString();
+
     ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
     ui.action_up->setEnabled(true);
 }
 
 void FilePanel::toParentFolder()
 {
+    LOG(LS_INFO) << "toParentFolder called";
+
     if (ui.action_up->isEnabled())
     {
         QString parent_path = parentPath(ui.address_bar->currentPath());
