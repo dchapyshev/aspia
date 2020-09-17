@@ -22,10 +22,12 @@
 
 #if defined(OS_POSIX)
 #include "base/environment.h"
-
-#include <linux/limits.h>
 #include <unistd.h>
 #endif // defined(OS_POSIX)
+
+#if defined(OS_LINUX)
+#include <linux/limits.h>
+#endif // defined(OS_LINUX)
 
 #if defined(OS_WIN)
 #include <shlobj.h>

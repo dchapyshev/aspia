@@ -21,7 +21,7 @@
 
 #include "build/build_config.h"
 
-#if defined(OS_LINUX)
+#if defined(OS_POSIX)
 #include <unistd.h>
 #endif
 
@@ -35,7 +35,7 @@ const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
 
-#elif defined(OS_LINUX)
+#elif defined(OS_POSIX)
 
 using SessionId = pid_t;
 const SessionId kInvalidSessionId = -1;

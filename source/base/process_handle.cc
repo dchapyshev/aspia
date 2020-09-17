@@ -25,9 +25,6 @@ ProcessHandle currentProcessHandle()
 {
     return GetCurrentProcess();
 }
-#elif defined(OS_LINUX)
-#else
-#error Platfrom support not implemented
 #endif
 
 ProcessId currentProcessId()

@@ -25,12 +25,12 @@
 #elif defined(linux) || defined(__linux__)
 #define OS_LINUX 1
 #elif defined(__APPLE__)
-#define OS_MACOSX 1
+#define OS_MAC 1
 #else
 #error Unknown OS
 #endif
 
-#if defined(OS_LINUX) || defined(OS_MACOSX)
+#if defined(OS_LINUX) || defined(OS_MAC)
 #define OS_POSIX 1
 #endif
 

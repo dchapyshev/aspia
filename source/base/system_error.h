@@ -55,7 +55,7 @@ public:
     static std::string toString(Code code);
 
 private:
-    const Code code_;
+    Code code_;
 };
 
 } // namespace base

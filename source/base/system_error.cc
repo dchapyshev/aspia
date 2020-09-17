@@ -28,6 +28,7 @@
 #include <Windows.h>
 #elif defined(OS_POSIX)
 #include <cstring>
+#include <cerrno>
 #endif // defined(OS_WIN)
 
 namespace base {

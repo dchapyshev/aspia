@@ -23,7 +23,7 @@
 
 #if defined(OS_WIN)
 #include <Windows.h>
-#elif defined(OS_LINUX)
+#elif defined(OS_POSIX)
 #include <unistd.h>
 #endif // defined(OS_WIN)
 
