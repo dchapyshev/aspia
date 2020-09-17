@@ -1329,72 +1329,72 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="167"/>
-        <location filename="../main_window.cc" line="1105"/>
+        <location filename="../main_window.cc" line="163"/>
+        <location filename="../main_window.cc" line="1101"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="168"/>
+        <location filename="../main_window.cc" line="164"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Het vastgepinde adres boek bestand &quot;%1&quot; is niet gevonden.&lt;br/&gt;Het bestand zal ge-unpind worden.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="264"/>
+        <location filename="../main_window.cc" line="260"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="266"/>
+        <location filename="../main_window.cc" line="262"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="512"/>
-        <location filename="../main_window.cc" line="813"/>
-        <location filename="../main_window.cc" line="890"/>
+        <location filename="../main_window.cc" line="508"/>
+        <location filename="../main_window.cc" line="809"/>
+        <location filename="../main_window.cc" line="886"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="513"/>
-        <location filename="../main_window.cc" line="891"/>
+        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="887"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="716"/>
+        <location filename="../main_window.cc" line="712"/>
         <source>Close other tabs</source>
         <translation>Sluit andere tabs</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
+        <location filename="../main_window.cc" line="719"/>
         <source>Close tab</source>
         <translation>Sluit tab</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="724"/>
-        <location filename="../main_window.cc" line="729"/>
+        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Pin tab</source>
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="814"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="847"/>
+        <location filename="../main_window.cc" line="843"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="862"/>
+        <location filename="../main_window.cc" line="858"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1106"/>
+        <location filename="../main_window.cc" line="1102"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1403,17 +1403,17 @@
         <translation type="vanished">&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="998"/>
+        <location filename="../main_window.cc" line="994"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="236"/>
+        <location filename="../main_window.cc" line="232"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="237"/>
+        <location filename="../main_window.cc" line="233"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>

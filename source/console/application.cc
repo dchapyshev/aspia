@@ -21,6 +21,8 @@
 #include "build/version.h"
 #include "qt_base/qt_logging.h"
 
+#include <QIcon>
+
 namespace console {
 
 namespace {
@@ -38,6 +40,10 @@ Application::Application(int& argc, char* argv[])
     setApplicationVersion(ASPIA_VERSION_STRING);
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
     setQuitOnLastWindowClosed(false);
+
+#if !defined(OS_WIN)
+    setWindowIcon(QIcon(":/img/main.png"));
+#endif // !defined(OS_WIN)
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {

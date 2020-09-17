@@ -47,10 +47,6 @@ MainWindow::MainWindow(const QString& file_path)
 
     ui.setupUi(this);
 
-#if !defined(OS_WIN)
-    setWindowIcon(QIcon(":/img/main.png"));
-#endif // !defined(OS_WIN)
-
     createLanguageMenu(settings.locale());
 
     bool enable_recent_open = settings.isRecentOpenEnabled();
