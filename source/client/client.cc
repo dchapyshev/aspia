@@ -44,7 +44,14 @@ void Client::start(const Config& config)
     DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(status_window_proxy_);
 
+    if (state_ != State::CREATED)
+    {
+        LOG(LS_ERROR) << "Client already started before";
+        return;
+    }
+
     config_ = config;
+    state_ = State::STARTED;
 
     if (config_.router_config.has_value())
     {
@@ -85,15 +92,21 @@ void Client::start(const Config& config)
 
 void Client::stop()
 {
-    LOG(LS_INFO) << "Stopping client...";
     DCHECK(io_task_runner_->belongsToCurrentThread());
 
-    router_controller_.reset();
-    authenticator_.reset();
-    channel_.reset();
+    if (state_ != State::STOPPPED)
+    {
+        LOG(LS_INFO) << "Stopping client...";
+        state_ = State::STOPPPED;
 
-    status_window_proxy_->onStopped();
-    LOG(LS_INFO) << "Client stopped";
+        router_controller_.reset();
+        authenticator_.reset();
+        channel_.reset();
+
+        status_window_proxy_->onStopped();
+
+        LOG(LS_INFO) << "Client stopped";
+    }
 }
 
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)

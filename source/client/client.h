@@ -94,6 +94,9 @@ private:
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 
     Config config_;
+
+    enum class State { CREATED, STARTED, STOPPPED };
+    State state_ = State::CREATED;
 };
 
 } // namespace client
