@@ -241,7 +241,12 @@ bool NetworkChannel::setKeepAlive(bool enable,
         return true;
 
     int idle = std::chrono::duration_cast<std::chrono::seconds>(time).count();
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int)) == -1)
+#if defined(OS_LINUX)
+    int option_name = TCP_KEEPIDLE;
+#elif defined(OS_MAC)
+    int option_name = TCP_KEEPALIVE;
+#endif
+    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, option_name, &idle, sizeof(int)) == -1)
     {
         PLOG(LS_WARNING) << "setsockopt(TCP_KEEPIDLE) failed";
         return false;
