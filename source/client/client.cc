@@ -85,6 +85,7 @@ void Client::start(const Config& config)
 
 void Client::stop()
 {
+    LOG(LS_INFO) << "Stopping client...";
     DCHECK(io_task_runner_->belongsToCurrentThread());
 
     router_controller_.reset();
@@ -92,6 +93,7 @@ void Client::stop()
     channel_.reset();
 
     status_window_proxy_->onStopped();
+    LOG(LS_INFO) << "Client stopped";
 }
 
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
@@ -118,7 +120,10 @@ proto::SessionType Client::sessionType() const
 void Client::sendMessage(const google::protobuf::MessageLite& message)
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "sendMessage called but channel not initialized";
         return;
+    }
 
     channel_->send(base::serialize(message));
 }
@@ -126,7 +131,10 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
 int64_t Client::totalRx() const
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "totalRx called but channel not initialized";
         return 0;
+    }
 
     return channel_->totalRx();
 }
@@ -134,7 +142,10 @@ int64_t Client::totalRx() const
 int64_t Client::totalTx() const
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "totalTx called but channel not initialized";
         return 0;
+    }
 
     return channel_->totalTx();
 }
@@ -142,7 +153,10 @@ int64_t Client::totalTx() const
 int Client::speedRx()
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "speedRx called but channel not initialized";
         return 0;
+    }
 
     return channel_->speedRx();
 }
@@ -150,7 +164,10 @@ int Client::speedRx()
 int Client::speedTx()
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "speedTx called but channel not initialized";
         return 0;
+    }
 
     return channel_->speedTx();
 }

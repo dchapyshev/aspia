@@ -71,6 +71,8 @@ void ClientDesktop::setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop
 
 void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 {
+    LOG(LS_INFO) << "Desktop session started";
+
     start_time_ = Clock::now();
     started_ = true;
 
@@ -136,28 +138,38 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 {
+    LOG(LS_INFO) << "setDesktopConfig called";
     desktop_config_ = desktop_config;
 
     ConfigFactory::fixupDesktopConfig(&desktop_config_);
 
     // If the session is not already running, then we do not need to send the configuration.
     if (!started_)
+    {
+        LOG(LS_INFO) << "Session not started yet";
         return;
+    }
 
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
+    {
+        LOG(LS_INFO) << "Cursor shape disabled";
         cursor_decoder_.reset();
+    }
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::ENABLE_CLIPBOARD);
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_config()->CopyFrom(desktop_config_);
+
+    LOG(LS_INFO) << "Send new config to host";
     sendMessage(outgoing_message_);
 }
 
 void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 {
-    outgoing_message_.Clear();
+    LOG(LS_INFO) << "Current screen changed: " << screen.id();
 
+    outgoing_message_.Clear();
     proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
 
     extension->set_name(common::kSelectScreenExtension);
@@ -168,6 +180,8 @@ void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 
 void ClientDesktop::setPreferredSize(int width, int height)
 {
+    LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
+
     outgoing_message_.Clear();
 
     proto::PreferredSize preferred_size;
@@ -209,7 +223,10 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
 void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        LOG(LS_INFO) << "Power control supported only for desktop manage session";
         return;
+    }
 
     outgoing_message_.Clear();
 
@@ -274,6 +291,8 @@ void ClientDesktop::onMetricsRequest()
 
 void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
 {
+    LOG(LS_INFO) << "Config request received";
+
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
     desktop_window_proxy_->setCapabilities(
@@ -282,6 +301,8 @@ void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_
     // If current video encoding not supported.
     if (!(config_request.video_encodings() & desktop_config_.video_encoding()))
     {
+        LOG(LS_WARNING) << "Current video encoding not supported";
+
         // We tell the window about the need to change the encoding.
         desktop_window_proxy_->configRequired();
     }
@@ -298,6 +319,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     {
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
+
+        LOG(LS_INFO) << "Video encoding changed to: " << video_encoding_;
     }
 
     if (!video_decoder_)
@@ -334,6 +357,9 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
             }
         }
 
+        LOG(LS_INFO) << "New video size: " << video_size.width() << "x" << video_size.height();
+        LOG(LS_INFO) << "New screen size: " << screen_size.width() << "x" << screen_size.height();
+
         desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);
         desktop_window_proxy_->setFrame(screen_size, desktop_frame_);
     }
@@ -364,13 +390,22 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        LOG(LS_WARNING) << "Cursor shape received not session type not desktop manage";
         return;
+    }
 
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
+    {
+        LOG(LS_WARNING) << "Cursor shape received not disabled in client";
         return;
+    }
 
     if (!cursor_decoder_)
+    {
+        LOG(LS_INFO) << "Cursor decoder initialization";
         cursor_decoder_ = std::make_unique<base::CursorDecoder>();
+    }
 
     std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)
@@ -382,7 +417,10 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (!clipboard_monitor_)
+    {
+        LOG(LS_WARNING) << "Clipboard received not disabled in client";
         return;
+    }
 
     std::optional<proto::ClipboardEvent> out_event = input_event_filter_.readClipboardEvent(event);
     if (!out_event.has_value())

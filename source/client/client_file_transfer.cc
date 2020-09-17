@@ -31,10 +31,10 @@ namespace client {
 
 ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
-      file_control_proxy_(std::make_shared<FileControlProxy>(io_task_runner, this)),
       task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
-      local_worker_(std::make_unique<common::FileWorker>(io_task_runner))
+      local_worker_(std::make_unique<common::FileWorker>(io_task_runner)),
+      file_control_proxy_(std::make_shared<FileControlProxy>(io_task_runner, this))
 {
     // Nothing
 }
@@ -57,6 +57,8 @@ void ClientFileTransfer::setFileManagerWindow(
 
 void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
 {
+    LOG(LS_INFO) << "File transfer session started";
+
     local_task_factory_ = std::make_unique<common::FileTaskFactory>(
         task_producer_proxy_, common::FileTask::Target::LOCAL);
 

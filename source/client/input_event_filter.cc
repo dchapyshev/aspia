@@ -18,6 +18,8 @@
 
 #include "client/input_event_filter.h"
 
+#include "base/logging.h"
+
 namespace client {
 
 InputEventFilter::InputEventFilter()
@@ -29,11 +31,13 @@ InputEventFilter::~InputEventFilter() = default;
 
 void InputEventFilter::setSessionType(proto::SessionType session_type)
 {
+    LOG(LS_INFO) << "Session type changed: " << session_type;
     session_type_ = session_type;
 }
 
 void InputEventFilter::setClipboardEnabled(bool enable)
 {
+    LOG(LS_INFO) << "Clipboard enabled: " << enable;
     clipboard_enabled_ = enable;
 }
 
