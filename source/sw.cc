@@ -32,12 +32,19 @@ void build(Solution &s)
         t -= ".*_win.*"_rr;
         t -= ".*_linux.*"_rr;
         t -= ".*_mac.*"_rr;
+        t -= ".*_posix.*"_rr;
+        t -= ".*_x11.*"_rr;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows)
             t += ".*_win.*"_rr;
         else if (t.getBuildSettings().TargetOS.isApple())
             t += ".*_mac.*"_rr;
         else
+        {
             t += ".*_linux.*"_rr;
+            t += ".*_x11.*"_rr;
+        }
+        if (t.getBuildSettings().TargetOS.Type != OSType::Windows)
+            t += ".*_posix.*"_rr;
 
         t -= ".*_unittest.*"_rr;
         t -= ".*tests.*"_rr;
@@ -98,6 +105,7 @@ void build(Solution &s)
     base.Public += "org.sw.demo.webmproject.vpx"_dep;
     if (base.getBuildSettings().TargetOS.Type == OSType::Windows)
     {
+        base -= "x11/.*"_rr;
         base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
         base += "comsuppw.lib"_slib, "Winspool.lib"_slib;
     }
@@ -162,7 +170,10 @@ void build(Solution &s)
 
     auto &common = add_lib("common");
     if (common.getBuildSettings().TargetOS.Type == OSType::Windows)
+    {
+        common -= "file_enumerator_fs.cc";
         common.Public += "Shlwapi.lib"_slib;
+    }
     common.Public += base, protocol;
     common.Public += "org.sw.demo.openssl.crypto"_dep;
     common.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
