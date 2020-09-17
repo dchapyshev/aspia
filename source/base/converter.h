@@ -153,28 +153,42 @@ struct ConverterImpl<int8_t>
 };
 
 template <>
-struct ConverterImpl<uint64_t>
+struct ConverterImpl<unsigned long long>
 {
-    static bool fromString(std::string_view str, uint64_t* value)
+    static bool fromString(std::string_view str, unsigned long long* value)
     {
         return stringToUint64(str, value);
     }
 
-    static std::string toString(uint64_t value)
+    static std::string toString(unsigned long long value)
     {
         return numberToString(value);
     }
 };
 
 template <>
-struct ConverterImpl<uint32_t>
+struct ConverterImpl<unsigned int>
 {
-    static bool fromString(std::string_view str, uint32_t* value)
+    static bool fromString(std::string_view str, unsigned int* value)
     {
         return stringToUint(str, value);
     }
 
-    static std::string toString(uint32_t value)
+    static std::string toString(unsigned int value)
+    {
+        return numberToString(value);
+    }
+};
+
+template <>
+struct ConverterImpl<unsigned long>
+{
+    static bool fromString(std::string_view str, unsigned long* value)
+    {
+        return stringToULong(str, value);
+    }
+
+    static std::string toString(unsigned long value)
     {
         return numberToString(value);
     }
