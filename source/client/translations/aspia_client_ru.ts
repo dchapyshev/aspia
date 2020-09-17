@@ -771,7 +771,7 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="452"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Корневая директория</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="455"/>
