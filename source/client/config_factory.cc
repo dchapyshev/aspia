@@ -61,6 +61,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
 
     base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    fixupDesktopConfig(config);
 }
 
 // static
@@ -77,6 +78,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_compress_ratio(kDefCompressRatio);
 
     base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    fixupDesktopConfig(config);
 }
 
 // static
