@@ -66,7 +66,7 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_COMMON
-        clipboard_mac.cc
+        clipboard_mac.mm
         clipboard_mac.h
         file_platform_util_mac.mm)
 endif()
