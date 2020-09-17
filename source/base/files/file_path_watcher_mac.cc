@@ -18,6 +18,8 @@
 
 #include "base/files/file_path_watcher.h"
 
+#include "base/logging.h"
+
 namespace base {
 
 namespace {
@@ -25,18 +27,29 @@ namespace {
 class FilePathWatcherImpl : public FilePathWatcher::PlatformDelegate
 {
 public:
-    FilePathWatcherImpl();
+    FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
     ~FilePathWatcherImpl() override;
 
     bool watch(const std::filesystem::path& path,
                bool recursive,
-               const Callback& callback) override;
+               const FilePathWatcher::Callback& callback) override;
     void cancel() override;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);
 };
+
+FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner)
+    : FilePathWatcher::PlatformDelegate(std::move(task_runner))
+{
+    // Nothing
+}
+
+FilePathWatcherImpl::~FilePathWatcherImpl() = default;
 
 bool FilePathWatcherImpl::watch(const std::filesystem::path& /* path */,
                                 bool /* recursive */,
-                                const Callback& /* callback */)
+                                const FilePathWatcher::Callback& /* callback */)
 {
     NOTIMPLEMENTED();
     return false;
