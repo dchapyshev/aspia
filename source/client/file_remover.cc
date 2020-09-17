@@ -67,7 +67,7 @@ void FileRemover::start(const TaskList& items, const FinishCallback& callback)
             tasks_ = queue_builder_->takeQueue();
             tasks_count_ = tasks_.size();
 
-            doNextTask();
+            doCurrentTask();
         }
         else
         {
@@ -150,14 +150,19 @@ void FileRemover::onTaskDone(std::shared_ptr<common::FileTask> task)
         return;
     }
 
-    // The task is completed. We delete it.
-    if (!tasks_.empty())
-        tasks_.pop_front();
-
     doNextTask();
 }
 
 void FileRemover::doNextTask()
+{
+    // The task is completed. We delete it.
+    if (!tasks_.empty())
+        tasks_.pop_front();
+
+    doCurrentTask();
+}
+
+void FileRemover::doCurrentTask()
 {
     if (tasks_.empty())
     {

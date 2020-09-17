@@ -93,6 +93,7 @@ protected:
 
 private:
     void doNextTask();
+    void doCurrentTask();
     void onFinished();
 
     std::shared_ptr<FileRemoverProxy> remover_proxy_;
