@@ -119,12 +119,14 @@ if (APPLE)
         debug ${ICUDATA_DEBUG})
 endif()
 
-add_executable(aspia_console
-    ${SOURCE_CONSOLE}
-    ${SOURCE_CONSOLE_RESOURCES})
-set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
+add_executable(aspia_console MACOSX_BUNDLE ${SOURCE_CONSOLE} ${SOURCE_CONSOLE_RESOURCES})
+
+if (APPLE)
+    set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/console/Info.plist")
+endif()
 
 if (WIN32)
+    set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 

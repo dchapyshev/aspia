@@ -39,6 +39,8 @@ Application::Application(int& argc, char* argv[])
     setApplicationName("Console");
     setApplicationVersion(ASPIA_VERSION_STRING);
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+    setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     setQuitOnLastWindowClosed(false);
 
 #if !defined(OS_WIN)
