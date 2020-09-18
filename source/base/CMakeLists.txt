@@ -346,6 +346,14 @@ list(APPEND SOURCE_BASE_IPC
     ipc/shared_memory_factory_proxy.cc
     ipc/shared_memory_factory_proxy.h)
 
+if (APPLE)
+    list(APPEND SOURCE_BASE_MAC
+        mac/app_nap_blocker.cc
+        mac/app_nap_blocker.h
+        mac/nsstring_conversions.cc
+        mac/nsstring_conversions.h)
+endif()
+
 list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.cc
     memory/aligned_memory.h
@@ -564,6 +572,10 @@ if (LINUX)
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
+if (APPLE)
+   source_group(mac FILES ${SOURCE_BASE_MAC})
+endif()
+
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_CODEC}
@@ -572,6 +584,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
+    ${SOURCE_BASE_MAC}
     ${SOURCE_BASE_MEMORY}
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
