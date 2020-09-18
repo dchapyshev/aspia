@@ -19,28 +19,53 @@
 #include "base/sys_info.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
+
+#include <sys/utsname.h>
+#include <unistd.h>
+
+#import <Foundation/Foundation.h>
 
 namespace base {
 
 //static
 std::string SysInfo::operatingSystemName()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    return "Mac OS X";
 }
 
 // static
 std::string SysInfo::operatingSystemVersion()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    return stringPrintf("%d.%d.%d",
+                        static_cast<int32_t>(version.majorVersion),
+                        static_cast<int32_t>(version.minorVersion),
+                        static_cast<int32_t>(version.patchVersion));
 }
 
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    struct utsname info;
+    if (uname(&info) < 0)
+        return std::string();
+
+    std::string arch(info.machine);
+    if (arch == "i386" || arch == "i486" || arch == "i586" || arch == "i686")
+    {
+        arch = "x86";
+    }
+    else if (arch == "amd64")
+    {
+        arch = "x86_64";
+    }
+    else if (std::string(info.sysname) == "AIX")
+    {
+        arch = "ppc64";
+    }
+
+    return arch;
 }
 
 // static
@@ -60,8 +85,11 @@ uint64_t SysInfo::uptime()
 // static
 std::string SysInfo::computerName()
 {
-    NOTIMPLEMENTED();
-    return std::string();
+    char buffer[256];
+    if (gethostname(buffer, std::size(buffer)) < 0)
+        return std::string();
+
+    return std::string(buffer);
 }
 
 // static
@@ -95,8 +123,11 @@ int SysInfo::processorCores()
 // static
 int SysInfo::processorThreads()
 {
-    NOTIMPLEMENTED();
-    return 0;
+    long res = sysconf(_SC_NPROCESSORS_CONF);
+    if (res == -1)
+        return 1;
+
+    return static_cast<int>(res);
 }
 
 } // namespace base
