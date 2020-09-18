@@ -42,10 +42,7 @@ Application::Application(int& argc, char* argv[])
     setAttribute(Qt::AA_EnableHighDpiScaling, true);
     setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     setQuitOnLastWindowClosed(false);
-
-#if !defined(OS_WIN)
-    setWindowIcon(QIcon(":/img/main.png"));
-#endif // !defined(OS_WIN)
+    setWindowIcon(QIcon(":/img/main.ico"));
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {
