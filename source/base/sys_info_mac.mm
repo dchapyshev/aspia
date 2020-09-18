@@ -37,11 +37,19 @@ std::string SysInfo::operatingSystemName()
 // static
 std::string SysInfo::operatingSystemVersion()
 {
-    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
-    return stringPrintf("%d.%d.%d",
-                        static_cast<int32_t>(version.majorVersion),
-                        static_cast<int32_t>(version.minorVersion),
-                        static_cast<int32_t>(version.patchVersion));
+    if (@available(macOS 10.10, *))
+    {
+        NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+        return stringPrintf("%d.%d.%d",
+                            static_cast<int32_t>(version.majorVersion),
+                            static_cast<int32_t>(version.minorVersion),
+                            static_cast<int32_t>(version.patchVersion));
+    }
+    else
+    {
+        NOTREACHED();
+        return std::string();
+    }
 }
 
 // static

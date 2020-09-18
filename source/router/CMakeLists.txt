@@ -64,6 +64,24 @@ if (WIN32)
         version)
 endif()
 
+if (LINUX)
+    set(ROUTER_PLATFORM_LIBS
+        stdc++fs
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
+if (APPLE)
+    set(ROUTER_PLATFORM_LIBS
+        ${FOUNDATION_LIB}
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
 
 if (WIN32)
