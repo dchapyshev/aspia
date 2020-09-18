@@ -51,25 +51,51 @@ source_group("" FILES ${SOURCE_ROUTER_MANAGER})
 source_group(moc FILES ${SOURCE_ROUTER_MANAGER_MOC})
 source_group(resources FILES ${SOURCE_ROUTER_MANAGER_RESOURCES})
 
+if (WIN32)
+    set(ROUTER_MANAGER_PLATFORM_LIBS
+        crypt32
+        dwmapi
+        imm32
+        netapi32
+        userenv
+        uxtheme
+        version
+        winmm
+        wtsapi32)
+endif()
+
+if (LINUX)
+    set(ROUTER_MANAGER_PLATFORM_LIBS
+        stdc++fs
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
+if (APPLE)
+    set(ROUTER_MANAGER_PLATFORM_LIBS
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
 add_executable(aspia_router_manager
     ${SOURCE_ROUTER_MANAGER}
     ${SOURCE_ROUTER_MANAGER_RESOURCES})
 set_target_properties(aspia_router_manager PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_router_manager PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+
+if (WIN32)
+    set_target_properties(aspia_router_manager PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
 target_link_libraries(aspia_router_manager
     aspia_base
     aspia_common
     aspia_proto
     aspia_qt_base
-    crypt32
-    dwmapi
-    imm32
-    netapi32
-    userenv
-    uxtheme
-    version
-    winmm
-    wtsapi32
+    ${ROUTER_MANAGER_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
