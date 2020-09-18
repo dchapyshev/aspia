@@ -348,9 +348,9 @@ list(APPEND SOURCE_BASE_IPC
 
 if (APPLE)
     list(APPEND SOURCE_BASE_MAC
-        mac/app_nap_blocker.cc
+        mac/app_nap_blocker.mm
         mac/app_nap_blocker.h
-        mac/nsstring_conversions.cc
+        mac/nsstring_conversions.mm
         mac/nsstring_conversions.h)
 endif()
 

@@ -19,8 +19,28 @@
 #ifndef BASE__MAC__NSSTRING_CONVERSIONS_H
 #define BASE__MAC__NSSTRING_CONVERSIONS_H
 
+#include <string>
+
+#include <CoreFoundation/CoreFoundation.h>
+#ifdef __OBJC__
+@class NSString;
+#else
+class NSString;
+#endif
+
 namespace base {
 
+CFStringRef utf8ToCFStringRef(std::string_view utf8);
+CFStringRef utf16ToCFStringRef(std::u16string_view utf16);
+
+NSString* utf8ToNSString(std::string_view utf8);
+NSString* utf16ToNSString(std::u16string_view utf16);
+
+std::string CFStringRefToUtf8(CFStringRef ref);
+std::u16string CFStringRefToUtf16(CFStringRef ref);
+
+std::string NSStringToUtf8(NSString* nsstring);
+std::u16string NSStringToUtf16(NSString* nsstring);
 
 } // namespace base
 
