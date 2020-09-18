@@ -33,6 +33,11 @@
 #include <shlobj.h>
 #endif // defined(OS_WIN)
 
+#if defined(OS_MAC)
+#include <mach-o/dyld.h>
+#include <sys/syslimits.h>
+#endif // defined(OS_MAC)
+
 namespace base {
 
 #if defined(OS_WIN)
@@ -251,8 +256,18 @@ bool BasePaths::currentExecFile(std::filesystem::path* result)
     return true;
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
+
     ssize_t count = readlink("/proc/self/exe", buffer, std::size(buffer));
     if (count == -1)
+        return false;
+
+    result->assign(buffer);
+    return true;
+#elif defined(OS_MAC)
+    char buffer[PATH_MAX] = { 0 };
+    uint32_t buffer_size = std::size(buffer);
+
+    if (_NSGetExecutablePath(buffer, &buffer_size) != 0)
         return false;
 
     result->assign(buffer);
