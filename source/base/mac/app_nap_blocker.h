@@ -19,25 +19,11 @@
 #ifndef BASE__MAC__APP_NAP_BLOCKER_H
 #define BASE__MAC__APP_NAP_BLOCKER_H
 
-#include "base/macros_magic.h"
-
-#include <objc/objc.h>
-
 namespace base {
 
-class AppNapBlocker
-{
-public:
-    AppNapBlocker();
-    ~AppNapBlocker();
-
-    void block();
-    void unblock();
-
-private:
-    id id_ = nullptr;
-    DISALLOW_COPY_AND_ASSIGN(AppNapBlocker);
-};
+void addAppNapBlock();
+void releaseAppNapBlock();
+bool isAppNapBlocked();
 
 } // namespace base
 
