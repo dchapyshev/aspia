@@ -20,6 +20,7 @@
 #define COMMON__CLIPBOARD_MAC_H
 
 #include "base/macros_magic.h"
+#include "base/waitable_timer.h"
 #include "common/clipboard.h"
 
 namespace common {
@@ -36,6 +37,12 @@ protected:
     void setData(const std::string& data) override;
 
 private:
+    void startTimer();
+    void checkForChanges();
+
+    base::WaitableTimer timer_;
+    int current_change_count_ = 0;
+
     DISALLOW_COPY_AND_ASSIGN(ClipboardMac);
 };
 
