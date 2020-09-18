@@ -32,6 +32,10 @@
 #endif // defined(KeyPress)
 #endif // defined(OS_LINUX)
 
+#if defined(OS_MAC)
+#include <CoreGraphics/CGEventSource.h>
+#endif // defined(OS_MAC)
+
 namespace client {
 
 namespace {
@@ -55,6 +59,9 @@ bool isNumLockActivated()
     XCloseDisplay(display);
 
     return (state & 2) != 0;
+#elif defined(OS_MAC)
+    // Without NumLock.
+    return false;
 #else
 #warning Platform support not implemented
     return false;
@@ -78,6 +85,9 @@ bool isCapsLockActivated()
     XCloseDisplay(display);
 
     return (state & 1) != 0;
+#elif defined(OS_MAC)
+    CGEventFlags event_flags = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
+    return (event_flags & kCGEventFlagMaskAlphaShift) != 0;
 #else
 #warning Platform support not implemented
     return false;
