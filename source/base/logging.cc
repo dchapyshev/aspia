@@ -38,6 +38,11 @@
 #include <unistd.h>
 #endif // defined(OS_LINUX)
 
+#if defined(OS_MAC)
+#include <mach-o/dyld.h>
+#include <sys/syslimits.h>
+#endif // defined(OS_MAC)
+
 namespace base {
 
 namespace {
@@ -179,8 +184,13 @@ bool initLogging(const LoggingSettings& settings)
     char buffer[PATH_MAX] = { 0 };
     readlink("/proc/self/exe", buffer, std::size(buffer));
     exec_file_path = buffer;
+#elif defined(OS_MAC)
+    char buffer[PATH_MAX] = { 0 };
+    uint32_t buffer_size = std::size(buffer);
+    _NSGetExecutablePath(buffer, &buffer_size);
+    exec_file_path = buffer;
 #else
-    exec_file_path = "unknown";
+#error Not implemented
 #endif
 
     std::filesystem::path file_name = exec_file_path.filename();
@@ -193,15 +203,11 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Logging file: " << g_log_file_path;
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
-#if defined(OS_WIN) || defined(OS_LINUX)
 #if defined(NDEBUG)
     LOG(LS_INFO) << "Debug build: No";
 #else
     LOG(LS_INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
-#else
-    #warning Not implemented
-#endif
 
     LOG(LS_INFO) << "Logging started";
     return true;
