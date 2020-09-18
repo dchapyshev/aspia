@@ -323,6 +323,7 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE_FILES
+        files/base_paths_mac.mm
         files/file_path_watcher_mac.cc)
 endif()
 
