@@ -1313,7 +1313,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="163"/>
-        <location filename="../main_window.cc" line="1101"/>
+        <location filename="../main_window.cc" line="1121"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1334,14 +1334,14 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="508"/>
-        <location filename="../main_window.cc" line="809"/>
-        <location filename="../main_window.cc" line="886"/>
+        <location filename="../main_window.cc" line="819"/>
+        <location filename="../main_window.cc" line="896"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="887"/>
+        <location filename="../main_window.cc" line="897"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1362,22 +1362,22 @@
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="810"/>
+        <location filename="../main_window.cc" line="820"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="843"/>
+        <location filename="../main_window.cc" line="853"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="858"/>
+        <location filename="../main_window.cc" line="868"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1102"/>
+        <location filename="../main_window.cc" line="1122"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation>В свойствах компьютера указано использование маршрутизатора, но указанный маршрутизатор не найден в списке. Проверьте, правильно ли указан маршрутизатор.</translation>
     </message>
@@ -1386,7 +1386,7 @@
         <translation type="vanished">&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="1004"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
