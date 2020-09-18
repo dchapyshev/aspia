@@ -18,7 +18,36 @@
 
 #include "base/mac/app_nap_blocker.h"
 
+#include <Cocoa/Cocoa.h>
+
 namespace base {
 
+AppNapBlocker::AppNapBlocker() = default;
+
+AppNapBlocker::~AppNapBlocker()
+{
+    unblock();
+}
+
+void AppNapBlocker::block()
+{
+    if (id_)
+        return;
+
+    id_ = [[NSProcessInfo processInfo]
+        beginActivityWithOptions: NSActivityUserInitiated
+        reason: @"Aspia connection"];
+    [id_ retain];
+}
+
+void AppNapBlocker::unblock()
+{
+    if (!id_)
+        return;
+
+    [[NSProcessInfo processInfo] endActivity:id_];
+    [id_ release];
+    id_ = nullptr;
+}
 
 } // namespace base
