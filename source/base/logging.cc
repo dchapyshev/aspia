@@ -19,6 +19,7 @@
 #include "base/logging.h"
 
 #include "base/debug.h"
+#include "base/endian_util.h"
 #include "base/system_time.h"
 #include "base/strings/unicode.h"
 
@@ -209,6 +210,7 @@ bool initLogging(const LoggingSettings& settings)
     LOG(LS_INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
 
+    LOG(LS_INFO) << "Little endian: " << (EndianUtil::isLittle() ? "Yes" : "No");
     LOG(LS_INFO) << "Logging started";
     return true;
 }
