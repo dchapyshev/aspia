@@ -54,6 +54,24 @@ if (WIN32)
         version)
 endif()
 
+if (LINUX)
+    set(RELAY_PLATFORM_LIBS
+        stdc++fs
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
+if (APPLE)
+    set(RELAY_PLATFORM_LIBS
+        ${FOUNDATION_LIB}
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
 add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
 
 if (WIN32)

@@ -25,7 +25,11 @@
 #include "base/win/service_controller.h"
 #include "relay/win/service.h"
 #include "relay/win/service_constants.h"
-#endif // defined(OS_WIN)
+#else
+#include "base/crypto/scoped_crypto_initializer.h"
+#include "base/message_loop/message_loop.h"
+#include "relay/controller.h"
+#endif
 
 #include <iostream>
 
@@ -48,6 +52,8 @@ void shutdownLogging()
 {
     base::shutdownLogging();
 }
+
+#if defined(OS_WIN)
 
 void startService()
 {
@@ -180,10 +186,36 @@ void entryPoint(int argc, const char* const* argv)
     shutdownLogging();
 }
 
+#endif // defined(OS_WIN)
+
 } // namespace
 
+#if defined(OS_WIN)
 int wmain()
 {
     entryPoint(0, nullptr); // On Windows ignores arguments.
     return 0;
 }
+#else
+int main(int /* argc */, const char* const* /* argv */)
+{
+    initLogging();
+
+    std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
+        std::make_unique<base::ScopedCryptoInitializer>();
+
+    std::unique_ptr<base::MessageLoop> message_loop =
+        std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
+
+    std::unique_ptr<relay::Controller> controller =
+        std::make_unique<relay::Controller>(message_loop->taskRunner());
+
+    message_loop->run();
+
+    controller.reset();
+    message_loop.reset();
+    crypto_initializer.reset();
+
+    shutdownLogging();
+}
+#endif
