@@ -65,7 +65,11 @@ if (WIN32)
 endif()
 
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
-set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+
+if (WIN32)
+    set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
 target_link_libraries(aspia_router
     aspia_base
     aspia_proto
