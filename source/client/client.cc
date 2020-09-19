@@ -22,8 +22,13 @@
 #include "base/task_runner.h"
 #include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"
+#include "build/build_config.h"
 #include "build/version.h"
 #include "client/status_window_proxy.h"
+
+#if defined(OS_MAC)
+#include "base/mac/app_nap_blocker.h"
+#endif // defined(OS_MAC)
 
 namespace client {
 
@@ -31,12 +36,20 @@ Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner))
 {
     DCHECK(io_task_runner_);
+
+#if defined(OS_MAC)
+    base::addAppNapBlock();
+#endif // defined(OS_MAC)
 }
 
 Client::~Client()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
     stop();
+
+#if defined(OS_MAC)
+    base::releaseAppNapBlock();
+#endif // defined(OS_MAC)
 }
 
 void Client::start(const Config& config)

@@ -119,12 +119,25 @@ if (APPLE)
         debug ${ICUDATA_DEBUG})
 endif()
 
-add_executable(aspia_console
+if (APPLE)
+    set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/console/resources/main.icns)
+    set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/console/Info.plist)
+
+    set_source_files_properties(${aspia_console_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+endif()
+
+add_executable(aspia_console MACOSX_BUNDLE
+    ${aspia_console_ICON}
     ${SOURCE_CONSOLE}
     ${SOURCE_CONSOLE_RESOURCES})
-set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
+
+if (APPLE)
+    set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_console_PLIST})
+    set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_console_ICON})
+endif()
 
 if (WIN32)
+    set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_console PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 

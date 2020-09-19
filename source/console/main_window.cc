@@ -774,7 +774,17 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
         }
 
         QWidget* close_button = ui.tab_widget->tabBar()->tabButton(tab_index, QTabBar::RightSide);
-        close_button->setVisible(!pin_action->isChecked());
+        if (!close_button)
+            close_button = ui.tab_widget->tabBar()->tabButton(tab_index, QTabBar::LeftSide);
+
+        if (close_button)
+        {
+            close_button->setVisible(!pin_action->isChecked());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "No close button";
+        }
 
         bool has_unpinned_tabs = hasUnpinnedTabs();
         ui.action_close->setEnabled(has_unpinned_tabs);
@@ -1044,10 +1054,20 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 
     QWidget* close_button = ui.tab_widget->tabBar()->tabButton(index, QTabBar::RightSide);
-    if (mru_.isPinnedFile(file_path))
-        close_button->hide();
+    if (!close_button)
+        close_button = ui.tab_widget->tabBar()->tabButton(index, QTabBar::LeftSide);
+
+    if (close_button)
+    {
+        if (mru_.isPinnedFile(file_path))
+            close_button->hide();
+        else
+            close_button->show();
+    }
     else
-        close_button->show();
+    {
+        LOG(LS_WARNING) << "No close button";
+    }
 
     bool has_unpinned_tabs = hasUnpinnedTabs();
     ui.action_close->setEnabled(has_unpinned_tabs);

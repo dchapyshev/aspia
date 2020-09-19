@@ -76,6 +76,7 @@ bool BasePaths::systemDir(std::filesystem::path* result)
 }
 #endif // defined(OS_WIN)
 
+#if !defined(OS_MAC)
 // static
 bool BasePaths::userAppData(std::filesystem::path* result)
 {
@@ -111,7 +112,9 @@ bool BasePaths::userAppData(std::filesystem::path* result)
     return false;
 #endif
 }
+#endif
 
+#if !defined(OS_MAC)
 // static
 bool BasePaths::userDesktop(std::filesystem::path* result)
 {
@@ -141,6 +144,7 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
     return false;
 #endif
 }
+#endif
 
 // static
 bool BasePaths::userHome(std::filesystem::path* result)
@@ -172,6 +176,7 @@ bool BasePaths::userHome(std::filesystem::path* result)
 #endif
 }
 
+#if !defined(OS_MAC)
 // static
 bool BasePaths::commonAppData(std::filesystem::path* result)
 {
@@ -197,7 +202,9 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
     return false;
 #endif
 }
+#endif
 
+#if !defined(OS_MAC)
 // static
 bool BasePaths::commonDesktop(std::filesystem::path* result)
 {
@@ -223,6 +230,7 @@ bool BasePaths::commonDesktop(std::filesystem::path* result)
     return false;
 #endif
 }
+#endif
 
 // static
 bool BasePaths::currentExecDir(std::filesystem::path* result)

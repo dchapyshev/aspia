@@ -18,7 +18,109 @@
 
 #include "base/mac/app_nap_blocker.h"
 
+#include "base/macros_magic.h"
+
+#include <mutex>
+
+#include <Cocoa/Cocoa.h>
+
 namespace base {
 
+namespace {
+
+class AppNapBlocker
+{
+public:
+    AppNapBlocker();
+    ~AppNapBlocker();
+
+    void addBlock();
+    void releaseBlock();
+    bool isBlocked() const;
+
+private:
+    void setBlocked(bool enable);
+
+    mutable std::mutex id_lock_;
+    id id_ = nullptr;
+    uint32_t counter_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(AppNapBlocker);
+};
+
+AppNapBlocker::AppNapBlocker() = default;
+
+AppNapBlocker::~AppNapBlocker()
+{
+    setBlocked(false);
+}
+
+void AppNapBlocker::addBlock()
+{
+    std::scoped_lock lock(id_lock_);
+
+    if (!counter_)
+        setBlocked(true);
+
+    ++counter_;
+}
+
+void AppNapBlocker::releaseBlock()
+{
+    std::scoped_lock lock(id_lock_);
+
+    if (!counter_)
+        return;
+
+    --counter_;
+
+    if (!counter_)
+        setBlocked(false);
+}
+
+bool AppNapBlocker::isBlocked() const
+{
+    std::scoped_lock lock(id_lock_);
+    return id_ != nullptr;
+}
+
+void AppNapBlocker::setBlocked(bool enable)
+{
+    if (enable == (id_ != nullptr))
+        return;
+
+    if (enable)
+    {
+        id_ = [[NSProcessInfo processInfo]
+            beginActivityWithOptions: NSActivityUserInitiated
+            reason: @"Aspia connection"];
+        [id_ retain];
+    }
+    else
+    {
+        [[NSProcessInfo processInfo] endActivity:id_];
+        [id_ release];
+        id_ = nullptr;
+    }
+}
+
+AppNapBlocker g_app_nap_blocker;
+
+} // namespace
+
+void addAppNapBlock()
+{
+    g_app_nap_blocker.addBlock();
+}
+
+void releaseAppNapBlock()
+{
+    g_app_nap_blocker.releaseBlock();
+}
+
+bool isAppNapBlocked()
+{
+    return g_app_nap_blocker.isBlocked();
+}
 
 } // namespace base

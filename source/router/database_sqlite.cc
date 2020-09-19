@@ -266,7 +266,10 @@ std::filesystem::path DatabaseSqlite::filePath()
 
     file_path.append(u"aspia_router.db3");
 #else // defined(OS_*)
-#error Not implemented
+    if (!base::BasePaths::userAppData(&file_path))
+        return std::filesystem::path();
+
+    file_path.append("aspia_router.db3");
 #endif // defined(OS_*)
 
     return file_path;

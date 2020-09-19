@@ -76,7 +76,7 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionAdmin::onMessageWritten(size_t pending)
+void SessionAdmin::onMessageWritten(size_t /* pending */)
 {
     // Nothing
 }
@@ -119,6 +119,10 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
         case proto::USER_REQUEST_DELETE:
             result->set_error_code(deleteUser(request.user()));
             break;
+
+        default:
+            LOG(LS_ERROR) << "Unknown request type: " << request.type();
+            return;
     }
 
     sendMessage(message);

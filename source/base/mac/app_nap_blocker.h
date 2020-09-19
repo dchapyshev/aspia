@@ -21,6 +21,9 @@
 
 namespace base {
 
+void addAppNapBlock();
+void releaseAppNapBlock();
+bool isAppNapBlocked();
 
 } // namespace base
 

@@ -54,8 +54,30 @@ if (WIN32)
         version)
 endif()
 
+if (LINUX)
+    set(RELAY_PLATFORM_LIBS
+        stdc++fs
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
+if (APPLE)
+    set(RELAY_PLATFORM_LIBS
+        ${FOUNDATION_LIB}
+        optimized ${ICUUC_RELEASE}
+        optimized ${ICUDATA_RELEASE}
+        debug ${ICUUC_DEBUG}
+        debug ${ICUDATA_DEBUG})
+endif()
+
 add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
-set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+
+if (WIN32)
+    set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
 target_link_libraries(aspia_relay
     aspia_base
     aspia_proto

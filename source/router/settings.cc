@@ -65,8 +65,6 @@ std::filesystem::path Settings::logPath() const
         if (!base::BasePaths::commonAppData(&path))
             return std::filesystem::path();
         path.append("Aspia/Logs");
-#else
-#error Not implemented
 #endif
     }
 

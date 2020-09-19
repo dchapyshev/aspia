@@ -72,6 +72,10 @@ if (UNIX)
     find_library(ICUDATA_DEBUG NAMES icudata PATHS "${INSTALLED_DIR}/debug/lib" NO_DEFAULT_PATH)
 endif()
 
+if (APPLE)
+    find_library(FOUNDATION_LIB Foundation)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 

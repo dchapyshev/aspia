@@ -1330,7 +1330,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="163"/>
-        <location filename="../main_window.cc" line="1101"/>
+        <location filename="../main_window.cc" line="1121"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1351,14 +1351,14 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="508"/>
-        <location filename="../main_window.cc" line="809"/>
-        <location filename="../main_window.cc" line="886"/>
+        <location filename="../main_window.cc" line="819"/>
+        <location filename="../main_window.cc" line="896"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="887"/>
+        <location filename="../main_window.cc" line="897"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1379,22 +1379,22 @@
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="810"/>
+        <location filename="../main_window.cc" line="820"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="843"/>
+        <location filename="../main_window.cc" line="853"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="858"/>
+        <location filename="../main_window.cc" line="868"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1102"/>
+        <location filename="../main_window.cc" line="1122"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1403,7 +1403,7 @@
         <translation type="vanished">&lt;leeg&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="1004"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
