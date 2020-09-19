@@ -52,20 +52,26 @@ private:
 };
 
 DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+    : task_runner_(std::move(task_runner)),
+      frame_(base::FrameSimple::create(
+          base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB()))
+
 {
     DCHECK(task_runner_);
+
+    if (!frame_)
+    {
+        LOG(LS_ERROR) << "Frame not created";
+        return;
+    }
+
+    memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 }
 
 void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
 {
     delegate_ = delegate;
     DCHECK(delegate);
-
-    frame_ = base::FrameSimple::create(
-        base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB());
-
-    memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
 
     generateFrame();
 }
@@ -77,6 +83,12 @@ void DesktopSessionFake::FrameGenerator::stop()
 
 void DesktopSessionFake::FrameGenerator::generateFrame()
 {
+    if (!frame_)
+    {
+        LOG(LS_ERROR) << "No frame generated";
+        return;
+    }
+
     base::Region* updated_region = frame_->updatedRegion();
     updated_region->clear();
     updated_region->addRect(base::Rect::makeWH(kFrameWidth, kFrameHeight));
