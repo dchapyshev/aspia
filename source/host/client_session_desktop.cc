@@ -149,22 +149,23 @@ void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCur
     if (frame && video_encoder_ && scale_reducer_)
     {
         const base::Size& source_size = frame->size();
+        base::Size current_size = preferred_size_;
 
-        if (preferred_size_.width() > source_size.width() ||
-            preferred_size_.height() > source_size.height())
+        if (current_size.width() > source_size.width() ||
+            current_size.height() > source_size.height())
         {
             LOG(LS_INFO) << "Preferred size is larger than the original. "
                             "Original frame size will be used";
-            preferred_size_ = source_size;
+            current_size = source_size;
         }
 
-        if (preferred_size_.isEmpty())
+        if (current_size.isEmpty())
         {
             LOG(LS_INFO) << "Preferred size has not been set. Original frame size will be used";
-            preferred_size_ = source_size;
+            current_size = source_size;
         }
 
-        const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
+        const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
         if (!scaled_frame)
         {
             LOG(LS_ERROR) << "No scaled frame";
