@@ -33,7 +33,7 @@ TEST(BigNumTest, Conversions)
     base::BigNum salt_bn = base::BigNum::fromByteArray(salt);
     std::string salt_str = salt_bn.toStdString();
 
-    EXPECT_EQ(salt_str.size(), 64);
+    EXPECT_EQ(salt_str.size(), 63);
 }
 
 } // namespace base
