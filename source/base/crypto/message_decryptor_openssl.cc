@@ -48,7 +48,10 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForAes256Gcm(
     const ByteArray& key, const ByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
+    {
+        LOG(LS_ERROR) << "Key size: " << key.size() << " IV size: " << iv.size();
         return nullptr;
+    }
 
     EVP_CIPHER_CTX_ptr ctx =
         createCipher(CipherType::AES256_GCM, CipherMode::DECRYPT, key, kIVSize);
@@ -63,7 +66,10 @@ std::unique_ptr<MessageDecryptor> MessageDecryptorOpenssl::createForChaCha20Poly
     const ByteArray& key, const ByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
+    {
+        LOG(LS_ERROR) << "Key size: " << key.size() << " IV size: " << iv.size();
         return nullptr;
+    }
 
     EVP_CIPHER_CTX_ptr ctx =
         createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
