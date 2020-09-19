@@ -21,7 +21,9 @@
 
 namespace base {
 
-using HostId = unsigned long int;
+using HostId = unsigned long long;
+
+static_assert(sizeof(HostId) == 8);
 
 extern const HostId kInvalidHostId;
 

@@ -77,7 +77,7 @@ void Client::start(const Config& config)
             std::make_unique<RouterController>(config_.router_config.value(), io_task_runner_);
 
         base::HostId host_id = base::kInvalidHostId;
-        if (!base::stringToUint64(config_.address_or_id, &host_id))
+        if (!base::stringToULong64(config_.address_or_id, &host_id))
         {
             LOG(LS_ERROR) << "Invalid host id: " << config_.address_or_id;
         }
