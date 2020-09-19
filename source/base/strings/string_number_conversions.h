@@ -58,8 +58,11 @@ bool stringToULong(std::u16string_view input, unsigned long* output);
 bool stringToInt64(std::string_view input, int64_t* output);
 bool stringToInt64(std::u16string_view input, int64_t* output);
 
-bool stringToUint64(std::string_view input, uint64_t* output);
-bool stringToUint64(std::u16string_view input, uint64_t* output);
+bool stringToUint64(std::string_view input, unsigned long int* output);
+bool stringToUint64(std::u16string_view input, unsigned long int* output);
+
+bool stringToULong64(std::string_view input, unsigned long long* output);
+bool stringToULong64(std::u16string_view input, unsigned long long* output);
 
 // Functions to convert a number to a string.
 

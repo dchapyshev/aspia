@@ -157,7 +157,7 @@ struct ConverterImpl<unsigned long long>
 {
     static bool fromString(std::string_view str, unsigned long long* value)
     {
-        return stringToUint64(str, value);
+        return stringToULong64(str, value);
     }
 
     static std::string toString(unsigned long long value)

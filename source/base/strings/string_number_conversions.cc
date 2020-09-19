@@ -449,12 +449,22 @@ bool stringToInt64(std::u16string_view input, int64_t* output)
     return string16ToIntImpl(input, output);
 }
 
-bool stringToUint64(std::string_view input, uint64_t* output)
+bool stringToUint64(std::string_view input, unsigned long int* output)
 {
     return stringToIntImpl(input, output);
 }
 
-bool stringToUint64(std::u16string_view input, uint64_t* output)
+bool stringToUint64(std::u16string_view input, unsigned long int* output)
+{
+    return string16ToIntImpl(input, output);
+}
+
+bool stringToULong64(std::string_view input, unsigned long long* output)
+{
+    return stringToIntImpl(input, output);
+}
+
+bool stringToULong64(std::u16string_view input, unsigned long long* output)
 {
     return string16ToIntImpl(input, output);
 }
