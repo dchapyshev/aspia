@@ -28,7 +28,7 @@ BigNum::BigNum(const uint8_t* buffer, size_t buffer_size)
     if (!buffer || !buffer_size)
         return;
 
-    num_.reset(BN_bin2bn(buffer, buffer_size, nullptr));
+    num_.reset(BN_bin2bn(buffer, static_cast<int>(buffer_size), nullptr));
 }
 
 BigNum::BigNum(BigNum&& other) noexcept
