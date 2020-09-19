@@ -330,6 +330,9 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 
     if (server_key_exchange.salt().size() < 64 || server_key_exchange.b().size() < 128)
     {
+        LOG(LS_ERROR) << "Salt size: " << server_key_exchange.salt().size();
+        LOG(LS_ERROR) << "B size: " << server_key_exchange.b().size();
+
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
