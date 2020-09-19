@@ -134,6 +134,10 @@ void ClientSessionDesktop::onStarted()
     request->set_extensions(extensions);
     request->set_video_encodings(common::kSupportedVideoEncodings);
 
+    LOG(LS_INFO) << "Sending config request";
+    LOG(LS_INFO) << "Supported extensions: " << request->extensions();
+    LOG(LS_INFO) << "Supported video encodings: " << request->video_encodings();
+
     // Send the request.
     sendMessage(base::serialize(outgoing_message_));
 }
@@ -149,15 +153,23 @@ void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCur
         if (preferred_size_.width() > source_size.width() ||
             preferred_size_.height() > source_size.height())
         {
+            LOG(LS_INFO) << "Preferred size is larger than the original. "
+                            "Original frame size will be used";
             preferred_size_ = source_size;
         }
 
         if (preferred_size_.isEmpty())
+        {
+            LOG(LS_INFO) << "Preferred size has not been set. Original frame size will be used";
             preferred_size_ = source_size;
+        }
 
         const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, preferred_size_);
         if (!scaled_frame)
+        {
+            LOG(LS_ERROR) << "No scaled frame";
             return;
+        }
 
         proto::VideoPacket* packet = outgoing_message_.mutable_video_packet();
 
@@ -169,6 +181,11 @@ void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCur
             proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
             screen_size->set_width(frame->size().width());
             screen_size->set_height(frame->size().height());
+
+            LOG(LS_INFO) << "Video packet has format";
+            LOG(LS_INFO) << "Screen size: " << screen_size->width() << "x" << screen_size->height();
+            LOG(LS_INFO) << "Video size: " << packet->format().video_rect().width() << "x"
+                         << packet->format().video_rect().height();
         }
     }
 
@@ -229,6 +246,16 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
             return;
         }
 
+        static const int kMaxScreenSize = std::numeric_limits<int16_t>::max();
+
+        if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
+            preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
+        {
+            LOG(LS_ERROR) << "Invalid preferred size: "
+                          << preferred_size.width() << "x" << preferred_size.height();
+            return;
+        }
+
         LOG(LS_INFO) << "Preferred size changed: "
                      << preferred_size.width() << "x" << preferred_size.height();
 
@@ -238,7 +265,10 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     else if (extension.name() == common::kPowerControlExtension)
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            LOG(LS_WARNING) << "Power management is only accessible from a desktop manage session";
             return;
+        }
 
         proto::PowerControl power_control;
 
@@ -274,7 +304,13 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+        {
             launchUpdater(sessionId());
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Update can only be launched from a desktop manage session";
+        }
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
