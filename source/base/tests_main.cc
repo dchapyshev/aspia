@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
 
 #include <gtest/gtest.h>
@@ -23,10 +24,14 @@
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
+    base::initLogging();
+
+    int ret = 1;
 
     base::ScopedCryptoInitializer crypto_initializer;
-    if (!crypto_initializer.isSucceeded())
-        return 1;
+    if (crypto_initializer.isSucceeded())
+        ret = RUN_ALL_TESTS();
 
-    return RUN_ALL_TESTS();
+    base::shutdownLogging();
+    return ret;
 }
