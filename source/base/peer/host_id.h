@@ -19,12 +19,9 @@
 #ifndef BASE__PEER__HOST_ID_H
 #define BASE__PEER__HOST_ID_H
 
-#include <cstdint>
-#include <utility>
-
 namespace base {
 
-using HostId = uint64_t;
+using HostId = unsigned long int;
 
 extern const HostId kInvalidHostId;
 
