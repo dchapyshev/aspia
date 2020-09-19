@@ -66,6 +66,7 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
     }
 
     memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
+    frame_->setDpi(base::Point(96, 96));
 }
 
 void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
