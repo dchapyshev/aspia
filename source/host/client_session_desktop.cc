@@ -229,6 +229,9 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
             return;
         }
 
+        LOG(LS_INFO) << "Preferred size changed: "
+                     << preferred_size.width() << "x" << preferred_size.height();
+
         preferred_size_.set(preferred_size.width(), preferred_size.height());
         desktop_session_proxy_->captureScreen();
     }

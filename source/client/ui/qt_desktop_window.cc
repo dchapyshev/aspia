@@ -319,7 +319,10 @@ void QtDesktopWindow::setFrame(
     scaleDesktop();
 
     if (resize)
+    {
+        LOG(LS_INFO) << "Resize window (first frame)";
         autosizeWindow();
+    }
 }
 
 void QtDesktopWindow::drawFrame()
@@ -547,7 +550,10 @@ void QtDesktopWindow::takeScreenshot()
 void QtDesktopWindow::scaleDesktop()
 {
     if (screen_size_.isEmpty())
+    {
+        LOG(LS_INFO) << "No screen size";
         return;
+    }
 
     QSize source_size(screen_size_);
     QSize target_size(size());
@@ -561,12 +567,18 @@ void QtDesktopWindow::scaleDesktop()
     if (resize_timer_->isActive())
         resize_timer_->stop();
 
+    LOG(LS_INFO) << "Starting resize timer";
     resize_timer_->start(std::chrono::milliseconds(500));
 }
 
 void QtDesktopWindow::onResizeTimer()
 {
-    desktop_control_proxy_->setPreferredSize(desktop_->width(), desktop_->height());
+    int width = desktop_->width();
+    int height = desktop_->height();
+
+    LOG(LS_INFO) << "Resize timer: " << width << "x" << height;
+
+    desktop_control_proxy_->setPreferredSize(width, height);
     resize_timer_->stop();
 }
 
