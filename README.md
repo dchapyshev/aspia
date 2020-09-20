@@ -15,9 +15,20 @@ Currently supported
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
 
+Plans
+-----
+The next stable release will include
+- NAT traversal
+- Console for MacOS X and Linux
+
 System requirements
 -------------------
 x86 or x86_64 CPU with SSE2 support, Windows 7/2008 R2 or higher.
+
+Night builds
+------------
+Nightly builds are [available](https://files.aspia.org/nightly) for Windows, MacOS X, Linux.
+Please note that nightly builds are not a release and may contain bugs.
 
 Contacts
 --------
