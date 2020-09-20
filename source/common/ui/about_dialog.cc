@@ -18,6 +18,7 @@
 
 #include "common/ui/about_dialog.h"
 
+#include "build/build_config.h"
 #include "build/version.h"
 #include "ui_about_dialog.h"
 
@@ -31,6 +32,10 @@
 #include <rapidjson/rapidjson.h>
 #include <vpx/vpx_codec.h>
 #include <zstd.h>
+
+#if !defined(OS_WIN)
+#include <unicode/uversion.h>
+#endif
 
 namespace common {
 
@@ -54,6 +59,9 @@ const char* kTranslators[] =
 const char* kThirdParty[] =
 {
     "asio &copy; 2003-2018 Christopher M. Kohlhoff, Boost Software License 1.0",
+#if !defined(OS_WIN)
+    "icu &copy; 2016 and later Unicode, Inc. and others, ICU License"
+#endif
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
@@ -134,13 +142,23 @@ AboutDialog::AboutDialog(QWidget* parent)
     list->addItem(tr("Compilation date: %1").arg(__DATE__));
     list->addItem(tr("Compilation time: %1").arg(__TIME__));
 
-    auto add_version = [this, list](const char* name, const QString& version)
+    auto add_version = [list](const char* name, const QString& version)
     {
         list->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
     add_version("asio", QString("%1.%2.%3")
         .arg(ASIO_VERSION / 100000).arg(ASIO_VERSION / 100 % 1000).arg(ASIO_VERSION % 100));
+
+#if !defined(OS_WIN)
+    UVersionInfo icu_version;
+    u_getVersion(icu_version);
+
+    char icu_version_string[64];
+    u_versionToString(icu_version, icu_version_string);
+    add_version("icu", icu_version_string);
+#endif
+
     add_version("libvpx", vpx_codec_version_str());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
     add_version("openssl", OpenSSL_version(OPENSSL_VERSION));
@@ -153,11 +171,11 @@ AboutDialog::AboutDialog(QWidget* parent)
     add_version("rapidjson", RAPIDJSON_VERSION_STRING);
     add_version("zstd", ZSTD_versionString());
 
-    QFile file(QLatin1String(":/txt/license.txt"));
+    QFile file(":/txt/license.txt");
     if (file.open(QFile::ReadOnly))
         ui->edit_license->setPlainText(file.readAll());
 
-    connect(ui->push_button_donate, &QPushButton::released, [this]()
+    connect(ui->push_button_donate, &QPushButton::released, []()
     {
         QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
     });
