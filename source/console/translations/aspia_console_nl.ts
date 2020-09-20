@@ -144,42 +144,37 @@
 <context>
     <name>ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="36"/>
+        <location filename="../computer_dialog_desktop.ui" line="32"/>
         <source>Codec</source>
         <translation>Codec</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="42"/>
         <source>Name:</source>
-        <translation>Naam:</translation>
+        <translation type="vanished">Naam:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="52"/>
         <source>Color depth:</source>
-        <translation>Kleur diepte:</translation>
+        <translation type="vanished">Kleur diepte:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="62"/>
         <source>Compression ratio:</source>
-        <translation>Compressie ratio:</translation>
+        <translation type="vanished">Compressie ratio:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="71"/>
         <source>Fast</source>
-        <translation>Snel</translation>
+        <translation type="vanished">Snel</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="100"/>
         <source>Best</source>
-        <translation>Beste</translation>
+        <translation type="vanished">Beste</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="129"/>
+        <location filename="../computer_dialog_desktop.ui" line="50"/>
         <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="171"/>
+        <location filename="../computer_dialog_desktop.ui" line="92"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -200,32 +195,36 @@
         <translation type="vanished">ms</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="123"/>
         <source>Advanced</source>
-        <translation>Geavanceerd</translation>
+        <translation type="vanished">Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="136"/>
+        <location filename="../computer_dialog_desktop.ui" line="44"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="57"/>
         <source>Block remote input</source>
         <translation>Blokkeer input op afstand</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="143"/>
+        <location filename="../computer_dialog_desktop.ui" line="64"/>
         <source>Enable cursor shape</source>
         <translation>Cursor vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="71"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="78"/>
         <source>Disable desktop effects</source>
         <translation>Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="164"/>
+        <location filename="../computer_dialog_desktop.ui" line="85"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaublad achtergrond verbergen</translation>
     </message>
@@ -1131,34 +1130,28 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="60"/>
         <source>True color (32 bit)</source>
-        <translation>Ware kleuren (32 bit)</translation>
+        <translation type="vanished">Ware kleuren (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="61"/>
         <source>High color (16 bit)</source>
-        <translation>Hoge kleuren (16 bit)</translation>
+        <translation type="vanished">Hoge kleuren (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="62"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 kleuren (8 bit)</translation>
+        <translation type="vanished">256 kleuren (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="63"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 kleuren (6 bit)</translation>
+        <translation type="vanished">64 kleuren (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="64"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 kleuren (3 bit)</translation>
+        <translation type="vanished">8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="212"/>
         <source>Compression ratio: %1</source>
-        <translation>Compressie ratio: %1</translation>
+        <translation type="vanished">Compressie ratio: %1</translation>
     </message>
 </context>
 <context>

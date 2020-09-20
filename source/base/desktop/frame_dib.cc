@@ -26,12 +26,11 @@
 namespace base {
 
 FrameDib::FrameDib(const Size& size,
-                   const PixelFormat& format,
                    int stride,
                    uint8_t* data,
                    std::unique_ptr<SharedMemory> shared_memory,
                    HBITMAP bitmap)
-    : Frame(size, format, stride, data, shared_memory.get()),
+    : Frame(size, stride, data, shared_memory.get()),
       bitmap_(bitmap),
       owned_shared_memory_(std::move(shared_memory))
 {
@@ -40,44 +39,23 @@ FrameDib::FrameDib(const Size& size,
 
 // static
 std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
-                                           const PixelFormat& format,
                                            SharedMemoryFactory* shared_memory_factory,
                                            HDC hdc)
 {
-    const int bytes_per_row = size.width() * format.bytesPerPixel();
-    const int buffer_size = calcMemorySize(size, format.bytesPerPixel());
+    const int bytes_per_row = size.width() * kBytesPerPixel;
+    const int buffer_size = calcMemorySize(size, kBytesPerPixel);
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);
-    bmi.header.biBitCount  = format.bitsPerPixel();
+    bmi.header.biBitCount  = kBitsPerPixel;
     bmi.header.biSizeImage = buffer_size;
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = size.width();
     bmi.header.biHeight    = -size.height();
-
-    if (format.bitsPerPixel() == 32 || format.bitsPerPixel() == 16)
-    {
-        bmi.header.biCompression = BI_BITFIELDS;
-
-        bmi.u.mask.red   = format.redMax()   << format.redShift();
-        bmi.u.mask.green = format.greenMax() << format.greenShift();
-        bmi.u.mask.blue  = format.blueMax()  << format.blueShift();
-    }
-    else
-    {
-        bmi.header.biCompression = BI_RGB;
-
-        for (uint32_t i = 0; i < 256; ++i)
-        {
-            const uint32_t red   = (i >> format.redShift())   & format.redMax();
-            const uint32_t green = (i >> format.greenShift()) & format.greenMax();
-            const uint32_t blue  = (i >> format.blueShift())  & format.blueMax();
-
-            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.redMax());
-            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.greenMax());
-            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.blueMax());
-        }
-    }
+    bmi.header.biCompression = BI_BITFIELDS;
+    bmi.u.mask.red   = 255 << 16;
+    bmi.u.mask.green = 255 << 8;
+    bmi.u.mask.blue  = 255 << 0;
 
     std::unique_ptr<SharedMemory> shared_memory;
     HANDLE section_handle = nullptr;
@@ -103,7 +81,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
     }
 
     return std::unique_ptr<FrameDib>(new FrameDib(
-        size, format, bytes_per_row, reinterpret_cast<uint8_t*>(data),
+        size, bytes_per_row, reinterpret_cast<uint8_t*>(data),
         std::move(shared_memory), bitmap));
 }
 

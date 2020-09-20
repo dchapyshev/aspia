@@ -50,72 +50,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="36"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="42"/>
-        <source>Name:</source>
+        <location filename="../ui/desktop_config_dialog.ui" line="44"/>
+        <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="52"/>
-        <source>Color depth:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
-        <source>Compression ratio:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
-        <source>Fast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="100"/>
-        <source>Best</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="57"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
         <source>Enable cursor shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="78"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="85"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -807,39 +782,6 @@
     <message>
         <location filename="../ui/client_window.cc" line="174"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
-        <source>True color (32 bit)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
-        <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
-        <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
-        <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
-        <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
-        <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

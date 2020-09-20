@@ -20,15 +20,12 @@
 #define BASE__CODEC__VIDEO_UTIL_H
 
 #include "base/desktop/geometry.h"
-#include "base/desktop/pixel_format.h"
 #include "proto/desktop.pb.h"
 
 namespace base {
 
 Rect parseRect(const proto::Rect& rect);
 void serializeRect(const Rect& from, proto::Rect* to);
-PixelFormat parsePixelFormat(const proto::PixelFormat& format);
-void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to);
 
 } // namespace base
 

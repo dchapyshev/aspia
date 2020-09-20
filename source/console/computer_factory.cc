@@ -26,9 +26,6 @@ namespace console {
 
 namespace {
 
-const int kDefUpdateInterval = 30;
-const int kDefCompressRatio = 8;
-
 void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
@@ -39,10 +36,7 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->set_update_interval(kDefUpdateInterval);
-
-    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    config->set_update_interval(30);
 }
 
 void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
@@ -55,10 +49,7 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->set_update_interval(kDefUpdateInterval);
-
-    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
+    config->set_update_interval(30);
 }
 
 } // namespace

@@ -453,8 +453,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(Context* context, SharedFrame
     }
     else
     {
-        fallback_frame = SharedFrame::wrap(
-            FrameAligned::create(desktopSize(), PixelFormat::ARGB(), 32));
+        fallback_frame = SharedFrame::wrap(FrameAligned::create(desktopSize(), 32));
         shared_frame = fallback_frame.get();
     }
 

@@ -70,42 +70,37 @@
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="36"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="42"/>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation type="vanished">Имя:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="52"/>
         <source>Color depth:</source>
-        <translation>Глубина цвета:</translation>
+        <translation type="vanished">Глубина цвета:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
         <source>Compression ratio:</source>
-        <translation>Уровень сжатия:</translation>
+        <translation type="vanished">Уровень сжатия:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Fast</source>
-        <translation>Быстрее</translation>
+        <translation type="vanished">Быстрее</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="100"/>
         <source>Best</source>
-        <translation>Сильнее</translation>
+        <translation type="vanished">Сильнее</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Lock at disconnect</source>
         <translation>Блокировать при отключении</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
@@ -126,32 +121,36 @@
         <translation type="vanished">мс</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Advanced</source>
-        <translation>Дополнительно</translation>
+        <translation type="vanished">Дополнительно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="44"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="57"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="78"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="85"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
@@ -1140,34 +1139,28 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
         <source>True color (32 bit)</source>
-        <translation>True color (32 бита)</translation>
+        <translation type="vanished">True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>High color (16 bit)</source>
-        <translation>High color (16 бит)</translation>
+        <translation type="vanished">High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 цветов (8 бит)</translation>
+        <translation type="vanished">256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 цвета (6 бит)</translation>
+        <translation type="vanished">64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 цветов (3 бита)</translation>
+        <translation type="vanished">8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Уровень сжатия: %1</translation>
+        <translation type="vanished">Уровень сжатия: %1</translation>
     </message>
 </context>
 <context>

@@ -30,10 +30,10 @@ class FrameSimple : public Frame
 public:
     ~FrameSimple();
 
-    static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
+    static std::unique_ptr<FrameSimple> create(const Size& size);
 
 private:
-    FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data);
+    FrameSimple(const Size& size, uint8_t* data);
 
     DISALLOW_COPY_AND_ASSIGN(FrameSimple);
 };

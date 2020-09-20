@@ -35,7 +35,6 @@ class DxgiDesktopFrame : public Frame
 public:
     explicit DxgiDesktopFrame(const DxgiTexture& texture)
         : Frame(texture.desktopSize(),
-                PixelFormat::ARGB(),
                 texture.pitch(),
                 texture.bits(),
                 nullptr)

@@ -109,8 +109,6 @@ list(APPEND SOURCE_BASE_CODEC
     codec/cursor_encoder.h
     codec/encoder_bitrate_filter.cc
     codec/encoder_bitrate_filter.h
-    codec/pixel_translator.cc
-    codec/pixel_translator.h
     codec/running_samples.cc
     codec/running_samples.h
     codec/scale_reducer.cc
@@ -123,14 +121,10 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_decoder.h
     codec/video_decoder_vpx.cc
     codec/video_decoder_vpx.h
-    codec/video_decoder_zstd.cc
-    codec/video_decoder_zstd.h
     codec/video_encoder.cc
     codec/video_encoder.h
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
-    codec/video_encoder_zstd.cc
-    codec/video_encoder_zstd.h
     codec/video_util.cc
     codec/video_util.h
     codec/weighted_samples.cc
@@ -216,8 +210,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/geometry.h
     desktop/mouse_cursor.cc
     desktop/mouse_cursor.h
-    desktop/pixel_format.cc
-    desktop/pixel_format.h
     desktop/power_save_blocker.cc
     desktop/power_save_blocker.h
     desktop/region.cc

@@ -33,7 +33,6 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
-    DCHECK(source_frame->format() == PixelFormat::ARGB());
 
     const Size& source_size = source_frame->size();
 
@@ -61,7 +60,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
 
     if (!target_frame_)
     {
-        target_frame_ = FrameSimple::create(target_size, source_frame->format());
+        target_frame_ = FrameSimple::create(target_size);
         if (!target_frame_)
             return nullptr;
 

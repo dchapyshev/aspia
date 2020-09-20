@@ -53,8 +53,7 @@ private:
 
 DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
-      frame_(base::FrameSimple::create(
-          base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB()))
+      frame_(base::FrameSimple::create(base::Size(kFrameWidth, kFrameHeight)))
 
 {
     DCHECK(task_runner_);

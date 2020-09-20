@@ -19,17 +19,8 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
-#include "base/codec/video_util.h"
 
 namespace client {
-
-namespace {
-
-const int kDefCompressRatio = 8;
-const int kMinCompressRatio = 1;
-const int kMaxCompressRatio = 22;
-
-} // namespace
 
 // static
 proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
@@ -57,10 +48,8 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    config->set_compress_ratio(kDefCompressRatio);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
 
-    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
@@ -74,10 +63,8 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
         proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP9);
-    config->set_compress_ratio(kDefCompressRatio);
+    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
 
-    base::serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
@@ -86,9 +73,6 @@ void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
     config->set_scale_factor(100);
     config->set_update_interval(30);
-
-    if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
-        config->set_compress_ratio(kDefCompressRatio);
 }
 
 } // namespace client

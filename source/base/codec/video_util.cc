@@ -33,29 +33,4 @@ void serializeRect(const Rect& from, proto::Rect* to)
     to->set_height(from.height());
 }
 
-PixelFormat parsePixelFormat(const proto::PixelFormat& format)
-{
-    return PixelFormat(
-        static_cast<uint8_t>(format.bits_per_pixel()),
-        static_cast<uint16_t>(format.red_max()),
-        static_cast<uint16_t>(format.green_max()),
-        static_cast<uint16_t>(format.blue_max()),
-        static_cast<uint8_t>(format.red_shift()),
-        static_cast<uint8_t>(format.green_shift()),
-        static_cast<uint8_t>(format.blue_shift()));
-}
-
-void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to)
-{
-    to->set_bits_per_pixel(from.bitsPerPixel());
-
-    to->set_red_max(from.redMax());
-    to->set_green_max(from.greenMax());
-    to->set_blue_max(from.blueMax());
-
-    to->set_red_shift(from.redShift());
-    to->set_green_shift(from.greenShift());
-    to->set_blue_shift(from.blueShift());
-}
-
 } // namespace base

@@ -24,7 +24,6 @@ namespace client {
 
 FrameQImage::FrameQImage(QImage&& img)
     : Frame(base::Size(img.size().width(), img.size().height()),
-            base::PixelFormat::ARGB(),
             img.bytesPerLine(),
             img.bits(),
             nullptr),

@@ -19,7 +19,6 @@
 #include "base/codec/video_decoder.h"
 
 #include "base/codec/video_decoder_vpx.h"
-#include "base/codec/video_decoder_zstd.h"
 
 namespace base {
 
@@ -28,9 +27,6 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::VideoEncoding encoding
 {
     switch (encoding)
     {
-        case proto::VIDEO_ENCODING_ZSTD:
-            return VideoDecoderZstd::create();
-
         case proto::VIDEO_ENCODING_VP8:
             return VideoDecoderVPX::createVP8();
 

@@ -20,7 +20,6 @@
 #define BASE__DESKTOP__FRAME_H
 
 #include "base/macros_magic.h"
-#include "base/desktop/pixel_format.h"
 #include "base/desktop/region.h"
 
 namespace base {
@@ -32,13 +31,15 @@ class Frame
 public:
     virtual ~Frame() = default;
 
+    static const int kBytesPerPixel = 4;
+    static const int kBitsPerPixel = 32;
+
     SharedMemoryBase* sharedMemory() const { return shared_memory_; }
 
     uint8_t* frameDataAtPos(const Point& pos) const;
     uint8_t* frameDataAtPos(int x, int y) const;
     uint8_t* frameData() const { return data_; }
     const Size& size() const { return size_; }
-    const PixelFormat& format() const { return format_; }
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
@@ -61,7 +62,6 @@ public:
 
 protected:
     Frame(const Size& size,
-          const PixelFormat& format,
           int stride,
           uint8_t* data,
           SharedMemoryBase* shared_memory);
@@ -75,7 +75,6 @@ protected:
 
 private:
     const Size size_;
-    const PixelFormat format_;
     const int stride_;
 
     Region updated_region_;

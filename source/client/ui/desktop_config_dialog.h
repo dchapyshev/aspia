@@ -47,13 +47,10 @@ signals:
     void configChanged(const proto::DesktopConfig& config);
 
 private slots:
-    void onCodecChanged(int item_index);
-    void onCompressionRatioChanged(int value);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     Ui::DesktopConfigDialog ui;
-
     proto::DesktopConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);

@@ -70,42 +70,37 @@
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="36"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="42"/>
         <source>Name:</source>
-        <translation>Ім&apos;я:</translation>
+        <translation type="vanished">Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="52"/>
         <source>Color depth:</source>
-        <translation>Глибина кольору:</translation>
+        <translation type="vanished">Глибина кольору:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
         <source>Compression ratio:</source>
-        <translation>Стиснення:</translation>
+        <translation type="vanished">Стиснення:</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Fast</source>
-        <translation>Швидко</translation>
+        <translation type="vanished">Швидко</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="100"/>
         <source>Best</source>
-        <translation>Якісно</translation>
+        <translation type="vanished">Якісно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Lock at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="171"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,32 +121,36 @@
         <translation type="vanished">мс</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="123"/>
         <source>Advanced</source>
-        <translation>Додатково</translation>
+        <translation type="vanished">Додатково</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="136"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="44"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="57"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="143"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
         <source>Enable cursor shape</source>
         <translation>Показати курсор</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="150"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="157"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="78"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="164"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="85"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
@@ -1132,34 +1131,28 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="70"/>
         <source>True color (32 bit)</source>
-        <translation>True color (32 біти)</translation>
+        <translation type="vanished">True color (32 біти)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="71"/>
         <source>High color (16 bit)</source>
-        <translation>High color (16 біт)</translation>
+        <translation type="vanished">High color (16 біт)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="72"/>
         <source>256 colors (8 bit)</source>
-        <translation>256 кольорів (8 біт)</translation>
+        <translation type="vanished">256 кольорів (8 біт)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="73"/>
         <source>64 colors (6 bit)</source>
-        <translation>64 кольори (6 біт)</translation>
+        <translation type="vanished">64 кольори (6 біт)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="74"/>
         <source>8 colors (3 bit)</source>
-        <translation>8 кольорів (3 біти)</translation>
+        <translation type="vanished">8 кольорів (3 біти)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="155"/>
         <source>Compression ratio: %1</source>
-        <translation>Стиснення: %1</translation>
+        <translation type="vanished">Стиснення: %1</translation>
     </message>
 </context>
 <context>

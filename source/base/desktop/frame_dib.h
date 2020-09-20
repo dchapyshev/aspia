@@ -35,7 +35,6 @@ public:
     ~FrameDib() = default;
 
     static std::unique_ptr<FrameDib> create(const Size& size,
-                                            const PixelFormat& format,
                                             SharedMemoryFactory* shared_memory_factory,
                                             HDC hdc);
 
@@ -43,7 +42,6 @@ public:
 
 private:
     FrameDib(const Size& size,
-             const PixelFormat& format,
              int stride,
              uint8_t* data,
              std::unique_ptr<SharedMemory> shared_memory,
