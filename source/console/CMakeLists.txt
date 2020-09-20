@@ -117,9 +117,7 @@ if (APPLE)
         optimized ${ICUDATA_RELEASE}
         debug ${ICUUC_DEBUG}
         debug ${ICUDATA_DEBUG})
-endif()
 
-if (APPLE)
     set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/console/resources/main.icns)
     set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/console/Info.plist)
 

@@ -79,15 +79,26 @@ if (APPLE)
         optimized ${ICUDATA_RELEASE}
         debug ${ICUUC_DEBUG}
         debug ${ICUDATA_DEBUG})
+
+    set(aspia_router_manager_ICON ${PROJECT_SOURCE_DIR}/router/manager/resources/main.icns)
+    set(aspia_router_manager_PLIST ${PROJECT_SOURCE_DIR}/router/manager/Info.plist)
+
+    set_source_files_properties(${aspia_router_manager_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
 
-add_executable(aspia_router_manager
+add_executable(aspia_router_manager MACOSX_BUNDLE
+    ${aspia_router_manager_ICON}
     ${SOURCE_ROUTER_MANAGER}
     ${SOURCE_ROUTER_MANAGER_RESOURCES})
-set_target_properties(aspia_router_manager PROPERTIES WIN32_EXECUTABLE TRUE)
 
 if (WIN32)
+    set_target_properties(aspia_router_manager PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_router_manager PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+if (APPLE)
+    set_target_properties(aspia_router_manager PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_router_manager_PLIST})
+    set_target_properties(aspia_router_manager PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_router_manager_ICON})
 endif()
 
 target_link_libraries(aspia_router_manager
