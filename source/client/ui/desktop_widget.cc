@@ -206,8 +206,13 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
+#if !defined(OS_MAC)
     uint32_t usb_keycode =
         common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+#else
+    uint32_t usb_keycode = common::KeycodeConverter::qtKeycodeToUsbKeycode(key);
+#endif
+
     if (usb_keycode == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
