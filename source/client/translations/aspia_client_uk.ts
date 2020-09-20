@@ -675,6 +675,29 @@
     </message>
 </context>
 <context>
+    <name>client</name>
+    <message>
+        <source>Confirmation</source>
+        <translation type="obsolete">Підтвердження</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation type="obsolete">Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation type="obsolete">Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation type="obsolete">Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation type="obsolete">Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
+    </message>
+</context>
+<context>
     <name>client::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
@@ -1158,45 +1181,45 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="190"/>
+        <location filename="../ui/desktop_panel.cc" line="192"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="192"/>
+        <location filename="../ui/desktop_panel.cc" line="194"/>
         <source>Monitor %1</source>
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="310"/>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="308"/>
+        <location filename="../ui/desktop_panel.cc" line="319"/>
+        <location filename="../ui/desktop_panel.cc" line="330"/>
+        <location filename="../ui/desktop_panel.cc" line="341"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="309"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="320"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="331"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <location filename="../ui/desktop_panel.cc" line="342"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="366"/>
+        <location filename="../ui/desktop_panel.cc" line="364"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1571,19 +1594,19 @@
         <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="217"/>
-        <location filename="../ui/qt_desktop_window.cc" line="225"/>
-        <location filename="../ui/qt_desktop_window.cc" line="547"/>
+        <location filename="../ui/qt_desktop_window.cc" line="218"/>
+        <location filename="../ui/qt_desktop_window.cc" line="226"/>
+        <location filename="../ui/qt_desktop_window.cc" line="553"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="218"/>
+        <location filename="../ui/qt_desktop_window.cc" line="219"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="226"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
@@ -1592,17 +1615,17 @@
         <translation type="obsolete">Вибір підтримуваного кодування відео відмінено користувачем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="525"/>
+        <location filename="../ui/qt_desktop_window.cc" line="531"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="527"/>
+        <location filename="../ui/qt_desktop_window.cc" line="533"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="547"/>
+        <location filename="../ui/qt_desktop_window.cc" line="553"/>
         <source>Could not save image</source>
         <translation type="unfinished">Неможливо зберегти зображення</translation>
     </message>

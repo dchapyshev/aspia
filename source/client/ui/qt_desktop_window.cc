@@ -92,6 +92,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     layout_->addWidget(scroll_area_);
 
     panel_ = new DesktopPanel(session_type_, this);
+    panel_->installEventFilter(this);
 
     resize_timer_ = new QTimer(this);
     connect(resize_timer_, &QTimer::timeout, this, &QtDesktopWindow::onResizeTimer);
@@ -470,6 +471,11 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
                                    wheel_event->angleDelta());
             return true;
         }
+    }
+    else if (object == panel_)
+    {
+        if (event->type() == QEvent::Resize)
+            panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
     }
 
     return QWidget::eventFilter(object, event);

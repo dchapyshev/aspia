@@ -24,6 +24,7 @@
 
 #include <QMenu>
 #include <QMessageBox>
+#include <QPropertyAnimation>
 #include <QTimer>
 #include <QToolButton>
 
@@ -78,7 +79,8 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     ui.frame->hide();
     showFullScreenButtons(false);
 
-    hide_timer_->start(std::chrono::seconds(1));
+    hide_timer_->start(std::chrono::seconds(2));
+    adjustSize();
 }
 
 DesktopPanel::~DesktopPanel()
@@ -204,8 +206,7 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     {
         allow_hide_ = true;
 
-        QPoint cursor_pos = mapToGlobal(QCursor::pos());
-        if (!rect().contains(cursor_pos))
+        if (!rect().contains(mapToGlobal(QCursor::pos())))
             leaved_ = true;
 
         if (leaved_)
@@ -245,10 +246,8 @@ void DesktopPanel::enterEvent(QEvent* event)
         ui.toolbar->show();
         ui.frame->hide();
 
-        adjustSize();
+        startAnimation();
     }
-
-    QFrame::enterEvent(event);
 }
 
 void DesktopPanel::leaveEvent(QEvent* event)
@@ -257,18 +256,17 @@ void DesktopPanel::leaveEvent(QEvent* event)
 
     if (allow_hide_)
         delayedHide();
-
-    QFrame::leaveEvent(event);
 }
 
 void DesktopPanel::onHideTimer()
 {
     hide_timer_->stop();
 
-    ui.frame->setFixedWidth(ui.toolbar->width());
+    ui.frame->setFixedWidth(50);
     ui.toolbar->hide();
     ui.frame->show();
 
+    startAnimation();
     adjustSize();
 }
 
@@ -514,6 +512,22 @@ void DesktopPanel::delayedHide()
 {
     if (!ui.action_pin->isChecked() && !hide_timer_->isActive())
         hide_timer_->start(std::chrono::seconds(1));
+}
+
+void DesktopPanel::startAnimation()
+{
+    QSize parent_size = parentWidget()->size();
+    QSize start_panel_size = size();
+    QSize end_panel_size = sizeHint();
+
+    int start_x = (parent_size.width() / 2) - (start_panel_size.width() / 2);
+    int end_x = (parent_size.width() / 2) - (end_panel_size.width() / 2);
+
+    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
+    animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
+    animation->setDuration(200);
+    animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 } // namespace client

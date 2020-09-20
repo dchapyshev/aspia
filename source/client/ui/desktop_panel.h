@@ -82,6 +82,7 @@ private:
     void updateScaleMenu();
     void updateSize();
     void delayedHide();
+    void startAnimation();
 
     Ui::DesktopPanel ui;
 
