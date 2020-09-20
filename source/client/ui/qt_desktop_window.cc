@@ -68,10 +68,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
     : ClientWindow(parent),
-      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this)),
       session_type_(session_type),
-      desktop_config_(desktop_config)
+      desktop_config_(desktop_config),
+      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
+          qt_base::Application::uiTaskRunner(), this))
 {
     setMinimumSize(400, 300);
 
