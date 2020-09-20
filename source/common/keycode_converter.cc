@@ -29,7 +29,7 @@ namespace {
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, win, qt}
 #elif defined(OS_LINUX)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, xkb, qt}
-#elif defined(OS_MACOS)
+#elif defined(OS_MAC)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, mac, qt}
 #elif defined(OS_ANDROID)
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, evdev, qt}

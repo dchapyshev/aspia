@@ -18,7 +18,7 @@
 
 USB_KEYMAP_DECLARATION
 {
-    //            USB     evdev    XKB     Win     Mac
+    //            USB     evdev    XKB     Win     Mac     Qt
     USB_KEYMAP(0x000000, 0x0000, 0x0000, 0x0000, 0xffff, Qt::Key_unknown),      // Invalid
     USB_KEYMAP(0x010082, 0x008e, 0x0096, 0x015f, 0xffff, Qt::Key_Sleep),        // SystemSleep
     USB_KEYMAP(0x010083, 0x008f, 0x0097, 0x0163, 0xffff, Qt::Key_WakeUp),       // WakeUp

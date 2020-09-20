@@ -206,11 +206,15 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
+    uint32_t usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
+
 #if !defined(OS_MAC)
-    uint32_t usb_keycode =
-        common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
 #else
-    uint32_t usb_keycode = common::KeycodeConverter::qtKeycodeToUsbKeycode(key);
+    if (isModifierKey(key))
+        usb_keycode = common::KeycodeConverter::qtKeycodeToUsbKeycode(key);
+    else
+        usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeVirtualKey());
 #endif
 
     if (usb_keycode == common::KeycodeConverter::invalidUsbKeycode())
