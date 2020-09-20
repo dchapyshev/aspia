@@ -24,9 +24,11 @@
 #include <QDesktopServices>
 #include <QFile>
 
+#include <asio/version.hpp>
 #include <google/protobuf/stubs/common.h>
 #include <libyuv.h>
 #include <openssl/crypto.h>
+#include <rapidjson/rapidjson.h>
 #include <vpx/vpx_codec.h>
 #include <zstd.h>
 
@@ -51,11 +53,13 @@ const char* kTranslators[] =
 
 const char* kThirdParty[] =
 {
+    "asio &copy; 2003-2018 Christopher M. Kohlhoff, Boost Software License 1.0",
     "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
     "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
     "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
     "qt &copy; 2015 The Qt Company Ltd., GNU General Public License 3.0",
+    "rapidjson &copy; 2015 THL A29 Limited, a Tencent company, and Milo Yip, MIT License",
     "zstd &copy; 2016 Yann Collet, Facebook, Inc., BSD License",
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 };
@@ -135,6 +139,8 @@ AboutDialog::AboutDialog(QWidget* parent)
         list->addItem(tr("%1 version: %2").arg(name).arg(version));
     };
 
+    add_version("asio", QString("%1.%2.%3")
+        .arg(ASIO_VERSION / 100000).arg(ASIO_VERSION / 100 % 1000).arg(ASIO_VERSION % 100));
     add_version("libvpx", vpx_codec_version_str());
     add_version("libyuv", QString::number(LIBYUV_VERSION));
     add_version("openssl", OpenSSL_version(OPENSSL_VERSION));
@@ -144,6 +150,7 @@ AboutDialog::AboutDialog(QWidget* parent)
     add_version("protobuf", protobuf_version);
 
     add_version("qt", qVersion());
+    add_version("rapidjson", RAPIDJSON_VERSION_STRING);
     add_version("zstd", ZSTD_versionString());
 
     QFile file(QLatin1String(":/txt/license.txt"));
