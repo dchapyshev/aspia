@@ -125,8 +125,6 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_encoder.h
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
-    codec/video_util.cc
-    codec/video_util.h
     codec/weighted_samples.cc
     codec/weighted_samples.h)
 

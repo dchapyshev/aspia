@@ -19,7 +19,6 @@
 #include "base/codec/video_decoder_vpx.h"
 
 #include "base/logging.h"
-#include "base/codec/video_util.h"
 #include "base/desktop/frame.h"
 
 #include <libyuv/convert_from.h>
@@ -49,7 +48,9 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        Rect rect = parseRect(packet.dirty_rect(i));
+        const proto::Rect& dirty_rect = packet.dirty_rect(i);
+        Rect rect = Rect::makeXYWH(
+            dirty_rect.x(), dirty_rect.y(), dirty_rect.width(), dirty_rect.height());
 
         if (!frame_rect.containsRect(rect))
         {

@@ -23,7 +23,6 @@
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
-#include "base/codec/video_util.h"
 #include "base/desktop/frame.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"

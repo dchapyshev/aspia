@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
-#include "base/codec/video_util.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"

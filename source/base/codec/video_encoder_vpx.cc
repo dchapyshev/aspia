@@ -19,7 +19,6 @@
 #include "base/codec/video_encoder_vpx.h"
 
 #include "base/logging.h"
-#include "base/codec/video_util.h"
 #include "base/desktop/frame.h"
 
 #include <libyuv/convert.h>
@@ -429,7 +428,15 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
         regionFromActiveMap(&updated_region);
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
-        serializeRect(it.rect(), packet->add_dirty_rect());
+    {
+        proto::Rect* dirty_rect = packet->add_dirty_rect();
+        Rect rect = it.rect();
+
+        dirty_rect->set_x(rect.x());
+        dirty_rect->set_y(rect.y());
+        dirty_rect->set_width(rect.width());
+        dirty_rect->set_height(rect.height());
+    }
 
     return updated_area;
 }

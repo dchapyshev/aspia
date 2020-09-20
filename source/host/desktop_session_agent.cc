@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
-#include "base/codec/video_util.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
@@ -208,7 +207,15 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_dpi_y(frame->dpi().y());
 
         for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
-            base::serializeRect(it.rect(), serialized_frame->add_dirty_rect());
+        {
+            proto::Rect* dirty_rect = serialized_frame->add_dirty_rect();
+            base::Rect rect = it.rect();
+
+            dirty_rect->set_x(rect.x());
+            dirty_rect->set_y(rect.y());
+            dirty_rect->set_width(rect.width());
+            dirty_rect->set_height(rect.height());
+        }
     }
 
     if (mouse_cursor)
