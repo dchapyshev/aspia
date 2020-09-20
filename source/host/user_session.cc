@@ -416,7 +416,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     outgoing_message_.Clear();
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
-    event->set_remote_address(base::utf8FromUtf16(client_session.peerAddress()));
+    event->set_computer_name(client_session.computerName());
     event->set_username(client_session.userName());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());

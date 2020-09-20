@@ -90,9 +90,14 @@ void ClientSession::setUserName(std::string_view username)
     username_ = username;
 }
 
-std::u16string ClientSession::peerAddress() const
+void ClientSession::setComputerName(std::string_view computer_name)
 {
-    return channel_->peerAddress();
+    computer_name_ = computer_name;
+}
+
+std::string ClientSession::computerName() const
+{
+    return computer_name_;
 }
 
 void ClientSession::setSessionId(base::SessionId session_id)

@@ -41,7 +41,7 @@ public:
     {
         explicit Client(const proto::internal::ConnectEvent& event)
             : id(event.id()),
-              address(event.remote_address()),
+              computer_name(event.computer_name()),
               username(event.username()),
               session_type(event.session_type())
         {
@@ -49,7 +49,7 @@ public:
         }
 
         uint32_t id;
-        std::string address;
+        std::string computer_name;
         std::string username;
         proto::SessionType session_type;
     };

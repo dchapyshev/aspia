@@ -50,7 +50,7 @@ message Credentials
 message ConnectEvent
 {
     uint32 id                = 1;
-    string remote_address    = 2;
+    string computer_name     = 2;
     string username          = 3;
     SessionType session_type = 4;
 }

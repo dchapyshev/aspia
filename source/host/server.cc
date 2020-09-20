@@ -69,8 +69,7 @@ void Server::start()
     settings_watcher_->watch(settings_.filePath(), false,
         std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
-    authenticator_manager_ =
-        std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
+    authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);
 
     user_session_manager_ = std::make_unique<UserSessionManager>(task_runner_);
     user_session_manager_->start(this);
@@ -131,6 +130,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     if (session)
     {
         session->setVersion(session_info.version);
+        session->setComputerName(session_info.computer_name);
         session->setUserName(session_info.user_name);
     }
 
