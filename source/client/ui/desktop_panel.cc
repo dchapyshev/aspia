@@ -234,7 +234,7 @@ bool DesktopPanel::sendKeyCombinations() const
     return ui.action_send_key_combinations->isChecked();
 }
 
-void DesktopPanel::enterEvent(QEvent* event)
+void DesktopPanel::enterEvent(QEvent* /* event */)
 {
     leaved_ = false;
 
@@ -250,7 +250,7 @@ void DesktopPanel::enterEvent(QEvent* event)
     }
 }
 
-void DesktopPanel::leaveEvent(QEvent* event)
+void DesktopPanel::leaveEvent(QEvent* /* event */)
 {
     leaved_ = true;
 
