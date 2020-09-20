@@ -127,7 +127,7 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="44"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Опции</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="57"/>

@@ -205,7 +205,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="44"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Опции</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="57"/>
