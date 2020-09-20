@@ -22,6 +22,12 @@
 
 namespace client {
 
+namespace {
+
+const proto::VideoEncoding kDefaultVideoEncoding = proto::VIDEO_ENCODING_VP8;
+
+} // namespace
+
 // static
 proto::DesktopConfig ConfigFactory::defaultDesktopManageConfig()
 {
@@ -48,7 +54,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_WALLPAPER | proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(kDefaultVideoEncoding);
 
     fixupDesktopConfig(config);
 }
@@ -63,7 +69,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
         proto::DISABLE_FONT_SMOOTHING;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(kDefaultVideoEncoding);
 
     fixupDesktopConfig(config);
 }
@@ -71,8 +77,13 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 // static
 void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 {
+    DCHECK(config);
+
     config->set_scale_factor(100);
     config->set_update_interval(30);
+
+    if (config->video_encoding() == proto::VIDEO_ENCODING_DEFAULT)
+        config->set_video_encoding(kDefaultVideoEncoding);
 }
 
 } // namespace client
