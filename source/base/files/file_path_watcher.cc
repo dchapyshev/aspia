@@ -31,7 +31,7 @@ FilePathWatcher::~FilePathWatcher()
 // static
 bool FilePathWatcher::recursiveWatchAvailable()
 {
-#if (defined(OS_MACOSX) && !defined(OS_IOS)) || defined(OS_WIN) || \
+#if (defined(OS_MAC) && !defined(OS_IOS)) || defined(OS_WIN) || \
     defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_AIX)
     return true;
 #else
