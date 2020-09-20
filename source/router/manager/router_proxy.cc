@@ -196,7 +196,7 @@ void RouterProxy::refreshHostList()
     impl_->refreshHostList();
 }
 
-void RouterProxy::disconnectHost(uint64_t host_id)
+void RouterProxy::disconnectHost(base::HostId host_id)
 {
     impl_->disconnectHost(host_id);
 }
