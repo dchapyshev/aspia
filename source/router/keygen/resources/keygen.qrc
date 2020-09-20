@@ -1,7 +1,8 @@
 <RCC>
-  <qresource prefix="img">
-    <file>disk.png</file>
-    <file>key.png</file>
-    <file>clipboard-arrow.png</file>
-  </qresource>
+    <qresource prefix="/img">
+        <file>disk.png</file>
+        <file>key.png</file>
+        <file>clipboard-arrow.png</file>
+        <file>main.ico</file>
+    </qresource>
 </RCC>

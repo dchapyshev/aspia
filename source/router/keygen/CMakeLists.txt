@@ -59,15 +59,26 @@ if (APPLE)
         optimized ${ICUDATA_RELEASE}
         debug ${ICUUC_DEBUG}
         debug ${ICUDATA_DEBUG})
+
+    set(aspia_router_keygen_ICON ${PROJECT_SOURCE_DIR}/router/keygen/resources/main.icns)
+    set(aspia_router_keygen_PLIST ${PROJECT_SOURCE_DIR}/router/keygen/Info.plist)
+
+    set_source_files_properties(${aspia_router_keygen_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
 
-add_executable(aspia_router_keygen
+add_executable(aspia_router_keygen MACOSX_BUNDLE
+    ${aspia_router_keygen_ICON}
     ${SOURCE_ROUTER_KEYGEN}
     ${SOURCE_ROUTER_KEYGEN_RESOURCES})
-set_target_properties(aspia_router_keygen PROPERTIES WIN32_EXECUTABLE TRUE)
 
 if (WIN32)
+    set_target_properties(aspia_router_keygen PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_router_keygen PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+if (APPLE)
+    set_target_properties(aspia_router_keygen PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_router_keygen_PLIST})
+    set_target_properties(aspia_router_keygen PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_router_keygen_ICON})
 endif()
 
 target_link_libraries(aspia_router_keygen
