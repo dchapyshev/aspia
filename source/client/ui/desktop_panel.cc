@@ -204,6 +204,10 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     {
         allow_hide_ = true;
 
+        QPoint cursor_pos = mapToGlobal(QCursor::pos());
+        if (!rect().contains(cursor_pos))
+            leaved_ = true;
+
         if (leaved_)
             delayedHide();
     });

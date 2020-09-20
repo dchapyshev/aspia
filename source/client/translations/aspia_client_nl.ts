@@ -1164,35 +1164,35 @@
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="306"/>
-        <location filename="../ui/desktop_panel.cc" line="317"/>
-        <location filename="../ui/desktop_panel.cc" line="328"/>
-        <location filename="../ui/desktop_panel.cc" line="339"/>
+        <location filename="../ui/desktop_panel.cc" line="310"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="307"/>
+        <location filename="../ui/desktop_panel.cc" line="311"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="318"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="329"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="340"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="362"/>
+        <location filename="../ui/desktop_panel.cc" line="366"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
