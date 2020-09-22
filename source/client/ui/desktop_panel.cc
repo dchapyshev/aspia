@@ -526,7 +526,7 @@ void DesktopPanel::startAnimation()
     QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
     animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
     animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
-    animation->setDuration(200);
+    animation->setDuration(150);
     animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
