@@ -22,6 +22,8 @@ You need to translate the following modules:
 These modules contain directory "translations".
 Open your language file from this directory in Qt Linguist and perform the translation.
 
+<b>ATTENTION! It is important to use Qt Linguist to complete the translation. Do not try to edit translation files in a text editor. The download link is provided above.</b>
+
 For assistance with Qt Linguist, refer to the [documentation](http://doc.qt.io/qt-5/qtlinguist-index.html).
 
 If there is no translation file for your language, create a [issue](https://github.com/dchapyshev/aspia/issues) on GitHub.
