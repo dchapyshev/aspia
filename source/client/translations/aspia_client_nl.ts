@@ -9,12 +9,12 @@
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="27"/>
+        <location filename="../ui/authorization_dialog.ui" line="29"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="34"/>
+        <location filename="../ui/authorization_dialog.ui" line="43"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
@@ -31,7 +31,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="31"/>
+        <location filename="../ui/client_dialog.ui" line="35"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -44,9 +44,8 @@
         <translation type="obsolete">Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="126"/>
         <source>Connect</source>
-        <translation>Verbinden</translation>
+        <translation type="vanished">Verbinden</translation>
     </message>
     <message>
         <source>Server Address:</source>
@@ -976,12 +975,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="165"/>
+        <location filename="../ui/client_dialog.cc" line="171"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="166"/>
+        <location filename="../ui/client_dialog.cc" line="172"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

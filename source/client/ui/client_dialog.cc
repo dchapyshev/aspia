@@ -92,8 +92,7 @@ ClientDialog::ClientDialog(QWidget* parent)
     connect(ui->button_session_config, &QPushButton::released,
             this, &ClientDialog::sessionConfigButtonPressed);
 
-    connect(ui->button_connect, &QPushButton::released,
-            this, &ClientDialog::connectButtonPressed);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &ClientDialog::onButtonBoxClicked);
 
     combo_address->setFocus();
 }
@@ -152,8 +151,15 @@ void ClientDialog::sessionConfigButtonPressed()
     }
 }
 
-void ClientDialog::connectButtonPressed()
+void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
 {
+    if (ui->button_box->standardButton(button) == QDialogButtonBox::Cancel)
+    {
+        reject();
+        close();
+        return;
+    }
+
     QComboBox* combo_address = ui->combo_address;
     QString current_address = combo_address->currentText();
 

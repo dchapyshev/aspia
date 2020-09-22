@@ -25,6 +25,8 @@
 
 #include <QDialog>
 
+class QAbstractButton;
+
 namespace Ui {
 class ClientDialog;
 } // namespace Ui
@@ -42,7 +44,7 @@ public:
 private slots:
     void sessionTypeChanged(int item_index);
     void sessionConfigButtonPressed();
-    void connectButtonPressed();
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     std::unique_ptr<Ui::ClientDialog> ui;

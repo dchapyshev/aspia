@@ -9,12 +9,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="27"/>
+        <location filename="../ui/authorization_dialog.ui" line="29"/>
         <source>User Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="34"/>
+        <location filename="../ui/authorization_dialog.ui" line="43"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27,18 +27,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="31"/>
+        <location filename="../ui/client_dialog.ui" line="35"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.ui" line="69"/>
         <source>Session Type:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="126"/>
-        <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -641,12 +636,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="165"/>
+        <location filename="../ui/client_dialog.cc" line="171"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="166"/>
+        <location filename="../ui/client_dialog.cc" line="172"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
