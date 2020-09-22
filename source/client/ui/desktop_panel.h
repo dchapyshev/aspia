@@ -96,7 +96,7 @@ private:
     QMenu* scale_menu_ = nullptr;
     QActionGroup* scale_group_ = nullptr;
 
-    QScopedPointer<QMenu> screens_menu_;
+    QMenu* screens_menu_ = nullptr;
     QActionGroup* screens_group_ = nullptr;
 
     QTimer* hide_timer_ = nullptr;
