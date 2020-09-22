@@ -127,6 +127,10 @@ void DesktopSessionIpc::captureScreen()
     if (last_frame_)
     {
         last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
+
+        if (last_screen_list_)
+            delegate_->onScreenListChanged(*last_screen_list_);
+
         delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
     }
     else
@@ -183,7 +187,8 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_screen_list())
     {
-        delegate_->onScreenListChanged(incoming_message_.screen_list());
+        last_screen_list_.reset(incoming_message_.release_screen_list());
+        delegate_->onScreenListChanged(*last_screen_list_);
     }
     else if (incoming_message_.has_shared_buffer())
     {

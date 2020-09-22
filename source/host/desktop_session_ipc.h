@@ -61,6 +61,7 @@ private:
     SharedBuffers shared_buffers_;
     std::unique_ptr<base::Frame> last_frame_;
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
+    std::unique_ptr<proto::ScreenList> last_screen_list_;
 
     proto::internal::ServiceToDesktop outgoing_message_;
     proto::internal::DesktopToService incoming_message_;
