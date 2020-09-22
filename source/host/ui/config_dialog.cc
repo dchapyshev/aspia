@@ -274,7 +274,7 @@ void ConfigDialog::onServiceStartStop()
 void ConfigDialog::onImport()
 {
     QString file_path =
-        QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("XML-files (*.xml)"));
+        QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("JSON-files (*.json)"));
     if (file_path.isEmpty())
         return;
 
@@ -304,7 +304,7 @@ void ConfigDialog::onImport()
 void ConfigDialog::onExport()
 {
     QString file_path =
-        QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("XML-files (*.xml)"));
+        QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("JSON-files (*.json)"));
     if (file_path.isEmpty())
         return;
 

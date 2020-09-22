@@ -18,7 +18,7 @@
 
 #include "host/ui/settings_util.h"
 
-#include "base/settings/xml_settings.h"
+#include "base/settings/json_settings.h"
 #include "host/system_settings.h"
 
 #include <QMessageBox>
@@ -63,9 +63,9 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
                                 bool silent,
                                 QWidget* parent)
 {
-    base::XmlSettings::Map settings_map;
+    base::JsonSettings::Map settings_map;
 
-    if (!base::XmlSettings::readFile(source_path, settings_map))
+    if (!base::JsonSettings::readFile(source_path, settings_map))
     {
         if (!silent)
         {
@@ -79,7 +79,7 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         return false;
     }
 
-    if (!base::XmlSettings::writeFile(target_path, settings_map))
+    if (!base::JsonSettings::writeFile(target_path, settings_map))
     {
         if (!silent)
         {

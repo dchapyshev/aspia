@@ -227,10 +227,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,6 +306,10 @@
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>JSON-files (*.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>host::MainWindow</name>
@@ -383,7 +383,6 @@
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -393,7 +392,6 @@
     <message numerus="yes">
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>

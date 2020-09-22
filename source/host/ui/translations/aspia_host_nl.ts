@@ -482,10 +482,14 @@
         <translation>Importeren</translation>
     </message>
     <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-bestanden (*.xml)</translation>
+    </message>
+    <message>
         <location filename="../config_dialog.cc" line="277"/>
         <location filename="../config_dialog.cc" line="307"/>
-        <source>XML-files (*.xml)</source>
-        <translation>XML-bestanden (*.xml)</translation>
+        <source>JSON-files (*.json)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="286"/>

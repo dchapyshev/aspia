@@ -396,7 +396,7 @@
     <message>
         <location filename="../config_dialog.cc" line="277"/>
         <location filename="../config_dialog.cc" line="307"/>
-        <source>XML-files (*.xml)</source>
+        <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

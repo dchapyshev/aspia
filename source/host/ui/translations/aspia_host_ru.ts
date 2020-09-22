@@ -614,10 +614,14 @@
         <translation>Импорт</translation>
     </message>
     <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-файлы (*.xml)</translation>
+    </message>
+    <message>
         <location filename="../config_dialog.cc" line="277"/>
         <location filename="../config_dialog.cc" line="307"/>
-        <source>XML-files (*.xml)</source>
-        <translation>XML-файлы (*.xml)</translation>
+        <source>JSON-files (*.json)</source>
+        <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="286"/>

@@ -227,10 +227,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,6 +304,10 @@
     </message>
     <message>
         <source>Incorrect router public key entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
