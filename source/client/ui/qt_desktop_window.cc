@@ -43,9 +43,11 @@
 #include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
+#include <QScreen>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QTimer>
+#include <QWindow>
 
 namespace client {
 
@@ -68,10 +70,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
     : ClientWindow(parent),
-      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
-          qt_base::Application::uiTaskRunner(), this)),
       session_type_(session_type),
-      desktop_config_(desktop_config)
+      desktop_config_(desktop_config),
+      desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
+          qt_base::Application::uiTaskRunner(), this))
 {
     setMinimumSize(400, 300);
 
@@ -579,12 +581,15 @@ void QtDesktopWindow::scaleDesktop()
 
 void QtDesktopWindow::onResizeTimer()
 {
-    int width = desktop_->width();
-    int height = desktop_->height();
+    QSize desktop_size = desktop_->size();
 
-    LOG(LS_INFO) << "Resize timer: " << width << "x" << height;
+    QScreen* current_screen = window()->windowHandle()->screen();
+    if (current_screen)
+        desktop_size *= current_screen->devicePixelRatio();
 
-    desktop_control_proxy_->setPreferredSize(width, height);
+    LOG(LS_INFO) << "Resize timer: " << desktop_size.width() << "x" << desktop_size.height();
+
+    desktop_control_proxy_->setPreferredSize(desktop_size.width(), desktop_size.height());
     resize_timer_->stop();
 }
 
