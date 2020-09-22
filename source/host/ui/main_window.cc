@@ -220,16 +220,14 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     ui.label_icon_user->setEnabled(has_username);
     ui.label_user->setEnabled(has_username);
     ui.edit_user->setEnabled(has_username);
-    ui.edit_user->setText(
-        has_username ? QString::fromStdString(credentials.username()) : QString());
+    ui.edit_user->setText(QString::fromStdString(credentials.username()));
 
     bool has_password = !credentials.password().empty();
 
     ui.label_icon_password->setEnabled(has_password);
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
-    ui.edit_password->setText(
-        has_password ? QString::fromStdString(credentials.password()) : QString());
+    ui.edit_password->setText(QString::fromStdString(credentials.password()));
 }
 
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)

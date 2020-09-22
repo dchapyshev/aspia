@@ -614,7 +614,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="118"/>
-        <location filename="../main_window.cc" line="309"/>
+        <location filename="../main_window.cc" line="307"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -627,37 +627,37 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="54"/>
-        <location filename="../main_window.cc" line="253"/>
+        <location filename="../main_window.cc" line="251"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="257"/>
+        <location filename="../main_window.cc" line="255"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="261"/>
+        <location filename="../main_window.cc" line="259"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="265"/>
+        <location filename="../main_window.cc" line="263"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="314"/>
+        <location filename="../main_window.cc" line="312"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="346"/>
+        <location filename="../main_window.cc" line="344"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="347"/>
+        <location filename="../main_window.cc" line="345"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -665,7 +665,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="185"/>
+        <location filename="../notifier_window.cc" line="190"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>

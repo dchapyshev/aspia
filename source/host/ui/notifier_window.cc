@@ -18,8 +18,8 @@
 
 #include "host/ui/notifier_window.h"
 
-#include "base/logging.h"
 #include "build/build_config.h"
+#include "qt_base/qt_logging.h"
 
 #include <QMenu>
 #include <QMouseEvent>
@@ -105,6 +105,8 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     }
     else
     {
+        LOG(LS_INFO) << "Empty session list. Notifier closed";
+
         emit finished();
         close();
     }
@@ -116,7 +118,10 @@ void NotifierWindow::disconnectAll()
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
+        {
+            LOG(LS_INFO) << "Disconnect session with ID: " << item->id();
             emit killSession(item->id());
+        }
     }
 }
 
@@ -198,12 +203,19 @@ void NotifierWindow::updateWindowPosition()
     QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
     QSize window_size = frameSize();
 
-    move(screen_rect.x() + (screen_rect.width() - window_size.width()) - 1,
-         screen_rect.y() + (screen_rect.height() - window_size.height()) - 1);
+    int x = screen_rect.x() + (screen_rect.width() - window_size.width()) - 1;
+    int y = screen_rect.y() + (screen_rect.height() - window_size.height()) - 1;
+
+    LOG(LS_INFO) << "Available geometry for primary screen has been changed: " << screen_rect;
+    LOG(LS_INFO) << "Notifier window moved to: " << x << "x" << y;
+
+    move(x, y);
 }
 
 void NotifierWindow::showNotifier()
 {
+    LOG(LS_INFO) << "showNotifier called";
+
     if (ui.content->isHidden() && ui.title->isHidden())
     {
         ui.content->show();
@@ -218,6 +230,8 @@ void NotifierWindow::showNotifier()
 
 void NotifierWindow::hideNotifier()
 {
+    LOG(LS_INFO) << "hideNotifier called";
+
     QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
     QSize content_size = ui.content->frameSize();
     window_rect_ = frameGeometry();
