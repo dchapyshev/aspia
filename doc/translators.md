@@ -17,7 +17,6 @@ You need to translate the following modules:
 - [common](https://github.com/dchapyshev/aspia/tree/master/source/common)
 - [console](https://github.com/dchapyshev/aspia/tree/master/source/console)
 - [host](https://github.com/dchapyshev/aspia/tree/master/source/host)
-- [updater](https://github.com/dchapyshev/aspia/tree/master/source/updater)
 
 These modules contain directory "translations".
 Open your language file from this directory in Qt Linguist and perform the translation.
