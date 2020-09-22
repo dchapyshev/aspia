@@ -206,21 +206,13 @@ void NotifierWindow::updateWindowPosition()
 {
     showNotifier();
 
-    QScreen* primary_screen = QApplication::primaryScreen();
-    if (!primary_screen)
-    {
-        LOG(LS_ERROR) << "Primary screen not available";
-        return;
-    }
-
-    QRect available_rect = primary_screen->availableGeometry();
+    QRect available_rect = currentAvailableRect();
     QSize window_size = frameSize();
 
     int x = available_rect.x() + (available_rect.width() - window_size.width());
     int y = available_rect.y() + (available_rect.height() - window_size.height());
 
-    LOG(LS_INFO) << "Available geometry for primary screen has been changed: " << available_rect;
-    LOG(LS_INFO) << "Full primary screen geometry: " << primary_screen->geometry();
+    LOG(LS_INFO) << "Available geometry for primary screen: " << available_rect;
     LOG(LS_INFO) << "Notifier window size: " << window_size;
     LOG(LS_INFO) << "Notifier window moved to: " << x << "x" << y;
 
@@ -257,14 +249,7 @@ void NotifierWindow::hideNotifier()
 {
     LOG(LS_INFO) << "hideNotifier called";
 
-    QScreen* primary_screen = QApplication::primaryScreen();
-    if (!primary_screen)
-    {
-        LOG(LS_ERROR) << "Primary screen not available";
-        return;
-    }
-
-    QRect screen_rect = primary_screen->availableGeometry();
+    QRect screen_rect = currentAvailableRect();
     QSize content_size = ui.content->frameSize();
     window_rect_ = frameGeometry();
 
@@ -281,6 +266,30 @@ void NotifierWindow::hideNotifier()
     setFixedSize(window_size);
 
     ui.button_show_hide->setIcon(QIcon(":/img/arrow-right-gray.png"));
+}
+
+QRect NotifierWindow::currentAvailableRect()
+{
+#if defined(OS_WIN)
+    RECT work_area;
+    if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, &work_area, 0))
+    {
+        LOG(LS_ERROR) << "SystemParametersInfoW failed";
+        return QRect();
+    }
+
+    return QRect(QPoint(work_area.left, work_area.top),
+                 QSize(work_area.right - work_area.left, work_area.bottom - work_area.top));
+#else
+    QScreen* primary_screen = QApplication::primaryScreen();
+    if (!primary_screen)
+    {
+        LOG(LS_ERROR) << "Primary screen not available";
+        return QRect();
+    }
+
+    return primary_screen->availableGeometry();
+#endif
 }
 
 } // namespace host

@@ -53,6 +53,7 @@ private slots:
 private:
     void showNotifier();
     void hideNotifier();
+    QRect currentAvailableRect();
 
     Ui::NotifierWindow ui;
 
