@@ -79,7 +79,10 @@ public:
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
 
+    // Called when the session is ready to send and receive data. When this method is called, the
+    // session should start initializing (for example, making a configuration request).
     virtual void onStarted() = 0;
+
     std::shared_ptr<base::NetworkChannelProxy> channelProxy();
     void sendMessage(base::ByteArray&& buffer);
 

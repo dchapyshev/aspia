@@ -141,7 +141,6 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
             desktop_session_proxy_->control(proto::internal::Control::ENABLE);
-            desktop_session_proxy_->captureScreen();
         }
         break;
 
@@ -332,6 +331,7 @@ void UserSession::onClientSessionConfigured()
     }
 
     desktop_session_proxy_->configure(system_config);
+    desktop_session_proxy_->captureScreen();
 }
 
 void UserSession::onClientSessionFinished()
