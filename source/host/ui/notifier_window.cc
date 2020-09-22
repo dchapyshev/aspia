@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
+#include <QTimer>
 #include <QTranslator>
 
 namespace host {
@@ -91,8 +92,10 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, &NotifierWindow::updateWindowPosition);
 
-    updateWindowPosition();
+    QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::updateWindowPosition);
 }
+
+NotifierWindow::~NotifierWindow() = default;
 
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
@@ -193,20 +196,32 @@ void NotifierWindow::onContextMenu(const QPoint& point)
     menu.addAction(&disconnect_action);
 
     if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
+    {
+        LOG(LS_INFO) << "Disconnect session with ID: " << item->id();
         emit killSession(item->id());
+    }
 }
 
 void NotifierWindow::updateWindowPosition()
 {
     showNotifier();
 
-    QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
+    QScreen* primary_screen = QApplication::primaryScreen();
+    if (!primary_screen)
+    {
+        LOG(LS_ERROR) << "Primary screen not available";
+        return;
+    }
+
+    QRect available_rect = primary_screen->availableGeometry();
     QSize window_size = frameSize();
 
-    int x = screen_rect.x() + (screen_rect.width() - window_size.width()) - 1;
-    int y = screen_rect.y() + (screen_rect.height() - window_size.height()) - 1;
+    int x = available_rect.x() + (available_rect.width() - window_size.width());
+    int y = available_rect.y() + (available_rect.height() - window_size.height());
 
-    LOG(LS_INFO) << "Available geometry for primary screen has been changed: " << screen_rect;
+    LOG(LS_INFO) << "Available geometry for primary screen has been changed: " << available_rect;
+    LOG(LS_INFO) << "Full primary screen geometry: " << primary_screen->geometry();
+    LOG(LS_INFO) << "Notifier window size: " << window_size;
     LOG(LS_INFO) << "Notifier window moved to: " << x << "x" << y;
 
     move(x, y);
@@ -221,10 +236,20 @@ void NotifierWindow::showNotifier()
         ui.content->show();
         ui.title->show();
 
-        move(window_rect_.topLeft());
-        setFixedSize(window_rect_.size());
+        QPoint window_pos = window_rect_.topLeft();
+        QSize window_size = window_rect_.size();
+
+        LOG(LS_INFO) << "Notifier window size: " << window_size;
+        LOG(LS_INFO) << "Notifier window moved to: " << window_pos;
+
+        move(window_pos);
+        setFixedSize(window_size);
 
         ui.button_show_hide->setIcon(QIcon(":/img/arrow-left-gray.png"));
+    }
+    else
+    {
+        LOG(LS_INFO) << "Notifier already visibled";
     }
 }
 
@@ -232,17 +257,28 @@ void NotifierWindow::hideNotifier()
 {
     LOG(LS_INFO) << "hideNotifier called";
 
-    QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
+    QScreen* primary_screen = QApplication::primaryScreen();
+    if (!primary_screen)
+    {
+        LOG(LS_ERROR) << "Primary screen not available";
+        return;
+    }
+
+    QRect screen_rect = primary_screen->availableGeometry();
     QSize content_size = ui.content->frameSize();
     window_rect_ = frameGeometry();
 
     ui.content->hide();
     ui.title->hide();
 
-    move(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
+    QPoint window_pos(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
+    QSize window_size(window_rect_.width() - content_size.width(), window_rect_.height());
 
-    setFixedSize(window_rect_.width() - content_size.width(),
-                 window_rect_.height());
+    LOG(LS_INFO) << "Notifier window size: " << window_size;
+    LOG(LS_INFO) << "Notifier window moved to: " << window_pos;
+
+    move(window_pos);
+    setFixedSize(window_size);
 
     ui.button_show_hide->setIcon(QIcon(":/img/arrow-right-gray.png"));
 }

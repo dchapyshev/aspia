@@ -79,7 +79,7 @@ std::ostream& operator<<(std::ostream& out, const QRect& qrect)
 {
     return out << "QRect("
                << qrect.left()  << ' ' << qrect.top() << ' '
-               << qrect.right() << ' ' << qrect.bottom()
+               << qrect.width() << 'x' << qrect.height()
                << ')';
 }
 

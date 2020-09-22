@@ -813,7 +813,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="190"/>
+        <location filename="../notifier_window.cc" line="193"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
     </message>

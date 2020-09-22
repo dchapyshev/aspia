@@ -30,7 +30,7 @@ class NotifierWindow : public QWidget
 
 public:
     explicit NotifierWindow(QWidget* parent = nullptr);
-    ~NotifierWindow() = default;
+    ~NotifierWindow();
 
 public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
