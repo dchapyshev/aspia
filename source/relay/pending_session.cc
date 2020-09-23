@@ -53,6 +53,16 @@ void PendingSession::start()
 {
     LOG(LS_INFO) << "Starting pending session";
 
+    asio::ip::tcp::no_delay option(true);
+    asio::error_code error_code;
+
+    socket_.set_option(option, error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+    }
+
     timer_.start(kTimeout, std::bind(
         &PendingSession::onErrorOccurred, this, FROM_HERE, std::error_code()));
     PendingSession::doReadMessage(this);
