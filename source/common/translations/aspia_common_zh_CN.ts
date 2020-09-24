@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh-CN">
+<TS version="2.1" language="pt_BR">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="64"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation>常规</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="91"/>
         <source>License</source>
-        <translation>Licença</translation>
+        <translation>许可证</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="108"/>
         <source>Service Information</source>
-        <translation>Informação do Serviço</translation>
+        <translation>服务模块信息</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="123"/>
         <source>Donate!</source>
-        <translation>Doe!</translation>
+        <translation>捐赠！</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="147"/>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -39,12 +39,12 @@
     <message>
         <location filename="../ui/download_dialog.ui" line="14"/>
         <source>Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>正在下载</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在下载更新...</translation>
     </message>
 </context>
 <context>
@@ -52,17 +52,17 @@
     <message>
         <location filename="../session_type.cc" line="30"/>
         <source>Desktop Manage</source>
-        <translation>Gerenciar Desktops</translation>
+        <translation>桌面管理</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="33"/>
         <source>Desktop View</source>
-        <translation>Visualizar Desktop</translation>
+        <translation>桌面查看</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation>Transferência de Arquivo</translation>
+        <translation>文件传输</translation>
     </message>
 </context>
 <context>
@@ -70,42 +70,42 @@
     <message>
         <location filename="../ui/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>更新</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="47"/>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>正在检查更新</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="62"/>
         <source>Current version:</source>
-        <translation type="unfinished"></translation>
+        <translation>当前版本：</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="69"/>
         <source>Available version:</source>
-        <translation type="unfinished"></translation>
+        <translation>可用版本：</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="78"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>网址:</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="139"/>
         <source>Update description:</source>
-        <translation type="unfinished"></translation>
+        <translation>更新说明：</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="184"/>
         <source>Update now!</source>
-        <translation type="unfinished"></translation>
+        <translation>立即更新！</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="191"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -186,12 +186,12 @@
     <message>
         <location filename="../ui/download_dialog.cc" line="51"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.cc" line="52"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>下载更新时出错：%1</translation>
     </message>
 </context>
 <context>
@@ -199,62 +199,62 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="55"/>
         <source>Receiving information...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在接收信息...</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="106"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消检查更新。请稍候。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="125"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="126"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished"></translation>
+        <translation>检索更新信息时出错。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="147"/>
         <source>No updates available.</source>
-        <translation type="unfinished"></translation>
+        <translation>没有可用的更新。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="157"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished"></translation>
+        <translation>将下载更新。下载完成后，应用程序将自动关闭。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="159"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>将终止所有会话。更新完成后才能建立连接。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="161"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>所有未保存的数据都将丢失。</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="162"/>
         <source>Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>继续吗？</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="165"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="175"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>安装更新时出错：%1</translation>
     </message>
 </context>
 </TS>

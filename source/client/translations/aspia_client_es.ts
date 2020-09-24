@@ -9,12 +9,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="27"/>
+        <location filename="../ui/authorization_dialog.ui" line="29"/>
         <source>User Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="34"/>
+        <location filename="../ui/authorization_dialog.ui" line="43"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27,18 +27,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="31"/>
+        <location filename="../ui/client_dialog.ui" line="35"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_dialog.ui" line="69"/>
         <source>Session Type:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="126"/>
-        <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -641,12 +636,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="165"/>
+        <location filename="../ui/client_dialog.cc" line="171"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="166"/>
+        <location filename="../ui/client_dialog.cc" line="172"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1083,34 +1078,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="218"/>
-        <location filename="../ui/qt_desktop_window.cc" line="226"/>
-        <location filename="../ui/qt_desktop_window.cc" line="553"/>
+        <location filename="../ui/qt_desktop_window.cc" line="220"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
+        <location filename="../ui/qt_desktop_window.cc" line="555"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="219"/>
+        <location filename="../ui/qt_desktop_window.cc" line="221"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="229"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="531"/>
+        <location filename="../ui/qt_desktop_window.cc" line="533"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="533"/>
+        <location filename="../ui/qt_desktop_window.cc" line="535"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="553"/>
+        <location filename="../ui/qt_desktop_window.cc" line="555"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
