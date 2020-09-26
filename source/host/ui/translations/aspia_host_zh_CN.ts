@@ -285,10 +285,14 @@
         <translation>导入</translation>
     </message>
     <message>
+        <source>XML-files (*.xml)</source>
+        <translation type="vanished">XML-文件 (*.xml)</translation>
+    </message>
+    <message>
         <location filename="../config_dialog.cc" line="277"/>
         <location filename="../config_dialog.cc" line="307"/>
-        <source>XML-files (*.xml)</source>
-        <translation>XML-文件 (*.xml)</translation>
+        <source>JSON-files (*.json)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="286"/>
@@ -412,7 +416,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="118"/>
-        <location filename="../main_window.cc" line="309"/>
+        <location filename="../main_window.cc" line="307"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
@@ -425,37 +429,37 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="54"/>
-        <location filename="../main_window.cc" line="253"/>
+        <location filename="../main_window.cc" line="251"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="257"/>
+        <location filename="../main_window.cc" line="255"/>
         <source>Connecting to router %1...</source>
         <translation>连接到路由器 %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="261"/>
+        <location filename="../main_window.cc" line="259"/>
         <source>Connected to router %1</source>
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="265"/>
+        <location filename="../main_window.cc" line="263"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="314"/>
+        <location filename="../main_window.cc" line="312"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="346"/>
+        <location filename="../main_window.cc" line="344"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="347"/>
+        <location filename="../main_window.cc" line="345"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>
@@ -463,7 +467,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="185"/>
+        <location filename="../notifier_window.cc" line="193"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
