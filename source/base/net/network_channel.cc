@@ -25,17 +25,13 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/net/network_channel_proxy.h"
+#include "base/net/tcp_keep_alive.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
 #include <asio/connect.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
-
-#if defined(OS_WIN)
-#include <winsock2.h>
-#include <mstcpip.h>
-#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -211,66 +207,7 @@ bool NetworkChannel::setKeepAlive(bool enable,
                                   const std::chrono::milliseconds& time,
                                   const std::chrono::milliseconds& interval)
 {
-#if defined(OS_WIN)
-    struct tcp_keepalive alive;
-
-    alive.onoff = enable ? TRUE : FALSE;
-    alive.keepalivetime = static_cast<ULONG>(time.count());
-    alive.keepaliveinterval = static_cast<ULONG>(interval.count());
-
-    DWORD bytes_returned;
-
-    if (WSAIoctl(socket_.native_handle(), SIO_KEEPALIVE_VALS,
-                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
-                 nullptr, nullptr) == SOCKET_ERROR)
-    {
-        PLOG(LS_WARNING) << "WSAIoctl failed";
-        return false;
-    }
-
-    return true;
-#elif defined(OS_POSIX)
-    int yes = enable ? 1 : 0;
-    if (setsockopt(socket_.native_handle(), SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(int)) == -1)
-    {
-        PLOG(LS_WARNING) << "setsockopt(SO_KEEPALIVE) failed";
-        return false;
-    }
-
-    if (!enable)
-        return true;
-
-    int idle = std::chrono::duration_cast<std::chrono::seconds>(time).count();
-#if defined(OS_LINUX)
-    int option_name = TCP_KEEPIDLE;
-#elif defined(OS_MAC)
-    int option_name = TCP_KEEPALIVE;
-#endif
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, option_name, &idle, sizeof(int)) == -1)
-    {
-        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPIDLE) failed";
-        return false;
-    }
-
-    int ival = std::chrono::duration_cast<std::chrono::seconds>(interval).count();
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPINTVL, &ival, sizeof(int)) == -1)
-    {
-        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPINTVL) failed";
-        return false;
-    }
-
-    int maxpkt = 10;
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) == -1)
-    {
-        PLOG(LS_WARNING) << "setsockopt(TCP_KEEPCNT) failed";
-        return false;
-    }
-
-    return true;
-#else
-    #warning Not implemented
-    return false;
-#endif
+    return setTcpKeepAlive(socket_.native_handle(), enable, time, interval);
 }
 
 bool NetworkChannel::setReadBufferSize(size_t size)
