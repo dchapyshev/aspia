@@ -21,6 +21,7 @@
 #include "base/endian_util.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/net/tcp_keep_alive.h"
 #include "base/strings/unicode.h"
 
 #include <asio/read.hpp>
@@ -62,6 +63,9 @@ void PendingSession::start()
         LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: "
                       << base::utf16FromLocal8Bit(error_code.message());
     }
+
+    base::setTcpKeepAlive(
+        socket_.native_handle(), true, std::chrono::seconds(30), std::chrono::seconds(5));
 
     timer_.start(kTimeout, std::bind(
         &PendingSession::onErrorOccurred, this, FROM_HERE, std::error_code()));
