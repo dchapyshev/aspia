@@ -21,6 +21,8 @@
 
 #include "relay/session_key.h"
 
+#include <optional>
+
 namespace relay {
 
 class SharedPool
@@ -34,6 +36,8 @@ public:
         virtual void onPoolKeyExpired(uint32_t key_id) = 0;
     };
 
+    using Key = std::pair<base::ByteArray, base::ByteArray>;
+
     explicit SharedPool(Delegate* delegate);
     ~SharedPool();
 
@@ -42,7 +46,7 @@ public:
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
     void setKeyExpired(uint32_t key_id);
-    const SessionKey& key(uint32_t key_id) const;
+    std::optional<Key> key(uint32_t key_id, std::string_view peer_public_key) const;
     void clear();
 
 private:

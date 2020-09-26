@@ -123,8 +123,8 @@ bool Controller::start()
         return false;
     }
 
-    session_manager_ = std::make_unique<SessionManager>(task_runner_, peer_port_);
-    session_manager_->start(shared_pool_->share(), this);
+    sessions_worker_ = std::make_unique<SessionsWorker>(peer_port_, shared_pool_->share());
+    sessions_worker_->start(task_runner_, this);
 
     connectToRouter();
     return true;

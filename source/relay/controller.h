@@ -23,7 +23,7 @@
 #include "base/net/network_channel.h"
 #include "build/build_config.h"
 #include "proto/router_relay.pb.h"
-#include "relay/session_manager.h"
+#include "relay/sessions_worker.h"
 #include "relay/shared_pool.h"
 
 namespace base {
@@ -76,7 +76,7 @@ private:
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
-    std::unique_ptr<SessionManager> session_manager_;
+    std::unique_ptr<SessionsWorker> sessions_worker_;
 
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };

@@ -20,13 +20,9 @@
 
 #include "base/logging.h"
 
+#include <mutex>
+
 namespace relay {
-
-namespace {
-
-const SessionKey kInvalidKey;
-
-} // namespace
 
 class SharedPool::Pool
 {
@@ -39,11 +35,13 @@ public:
     uint32_t addKey(SessionKey&& session_key);
     bool removeKey(uint32_t key_id);
     void setKeyExpired(uint32_t key_id);
-    const SessionKey& key(uint32_t key_id) const;
+    std::optional<Key> key(uint32_t key_id, std::string_view peer_public_key) const;
     void clear();
 
 private:
     Delegate* delegate_;
+
+    mutable std::mutex pool_lock_;
     std::map<uint32_t, SessionKey> map_;
     uint32_t current_key_id_ = 0;
 
@@ -63,6 +61,8 @@ void SharedPool::Pool::dettach()
 
 uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 {
+    std::scoped_lock lock(pool_lock_);
+
     uint32_t key_id = current_key_id_++;
     map_.emplace(key_id, std::move(session_key));
 
@@ -72,6 +72,8 @@ uint32_t SharedPool::Pool::addKey(SessionKey&& session_key)
 
 bool SharedPool::Pool::removeKey(uint32_t key_id)
 {
+    std::scoped_lock lock(pool_lock_);
+
     auto result = map_.find(key_id);
     if (result != map_.end())
     {
@@ -95,17 +97,23 @@ void SharedPool::Pool::setKeyExpired(uint32_t key_id)
     }
 }
 
-const SessionKey& SharedPool::Pool::key(uint32_t key_id) const
+std::optional<SharedPool::Key> SharedPool::Pool::key(
+    uint32_t key_id, std::string_view peer_public_key) const
 {
+    std::scoped_lock lock(pool_lock_);
+
     auto result = map_.find(key_id);
     if (result == map_.end())
-        return kInvalidKey;
+        return std::nullopt;
 
-    return result->second;
+    const SessionKey& session_key = result->second;
+    return std::make_pair(session_key.sessionKey(peer_public_key), session_key.iv());
 }
 
 void SharedPool::Pool::clear()
 {
+    std::scoped_lock lock(pool_lock_);
+
     LOG(LS_INFO) << "Key pool cleared";
     map_.clear();
 }
@@ -150,9 +158,10 @@ void SharedPool::setKeyExpired(uint32_t key_id)
     return pool_->setKeyExpired(key_id);
 }
 
-const SessionKey& SharedPool::key(uint32_t key_id) const
+std::optional<SharedPool::Key> SharedPool::key(
+    uint32_t key_id, std::string_view peer_public_key) const
 {
-    return pool_->key(key_id);
+    return pool_->key(key_id, peer_public_key);
 }
 
 void SharedPool::clear()

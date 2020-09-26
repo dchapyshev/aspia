@@ -31,17 +31,16 @@ namespace relay {
 namespace {
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SessionKey& session_key)
+base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
 {
-    base::ByteArray key = session_key.sessionKey(message.public_key());
-    if (key.empty())
+    if (key.first.empty() || key.second.empty())
     {
         LOG(LS_ERROR) << "Invalid session key";
         return base::ByteArray();
     }
 
     std::unique_ptr<base::MessageDecryptor> decryptor =
-        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(key, session_key.iv());
+        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(key.first, key.second);
     if (!decryptor)
     {
         LOG(LS_ERROR) << "Decryptor not created";
@@ -129,11 +128,11 @@ void SessionManager::onPendingSessionReady(
     LOG(LS_INFO) << "Pending session ready for key_id: " << message.key_id();
 
     // Looking for a key with the specified identifier.
-    const SessionKey& session_key = shared_pool_->key(message.key_id());
-    if (session_key.isValid())
+    std::optional<SharedPool::Key> key = shared_pool_->key(message.key_id(), message.public_key());
+    if (key.has_value())
     {
         // Decrypt the identifiers of peers.
-        base::ByteArray secret = decryptSecret(message, session_key);
+        base::ByteArray secret = decryptSecret(message, key.value());
         if (!secret.empty())
         {
             // Save the identifiers of peers and the identifier of their shared key.
