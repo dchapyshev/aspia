@@ -27,8 +27,16 @@
 
 namespace router {
 
+Session::SessionId createSessionId()
+{
+    static Session::SessionId last_session_id = 0;
+    ++last_session_id;
+    return last_session_id;
+}
+
 Session::Session(proto::RouterSession session_type)
-    : session_type_(session_type)
+    : session_type_(session_type),
+      session_id_(createSessionId())
 {
     // Nothing
 }
@@ -81,7 +89,6 @@ void Session::start(Delegate* delegate)
         return;
     }
 
-    state_ = State::STARTED;
     delegate_ = delegate;
     DCHECK(delegate_);
 
@@ -145,9 +152,8 @@ void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
 
-    state_ = State::FINISHED;
     if (delegate_)
-        delegate_->onSessionFinished();
+        delegate_->onSessionFinished(session_id_, session_type_);
 }
 
 } // namespace router

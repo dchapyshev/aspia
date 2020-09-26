@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "proto/router_common.pb.h"
+#include "router/session.h"
 
 #include <cstdint>
 #include <optional>
@@ -36,7 +37,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onPoolKeyUsed(const std::string& host, uint32_t key_id) = 0;
+        virtual void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) = 0;
     };
 
     explicit SharedKeyPool(Delegate* delegate);
@@ -46,16 +47,15 @@ public:
 
     struct Credentials
     {
-        std::string host;
-        uint16_t port = 0;
+        Session::SessionId session_id;
         proto::RelayKey key;
     };
 
-    void addKey(const std::string& host, uint16_t port, const proto::RelayKey& key);
+    void addKey(Session::SessionId session_id, const proto::RelayKey& key);
     std::optional<Credentials> takeCredentials();
-    void removeKeysForRelay(const std::string& host);
+    void removeKeysForRelay(Session::SessionId session_id);
     void clear();
-    size_t countForRelay(const std::string& host) const;
+    size_t countForRelay(Session::SessionId session_id) const;
     size_t count() const;
     bool isEmpty() const;
 

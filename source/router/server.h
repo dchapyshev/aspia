@@ -51,19 +51,21 @@ public:
     void onHostSessionWithId(SessionHost* session);
 
     SessionHost* hostSessionById(base::HostId host_id);
+    Session* sessionById(Session::SessionId session_id);
 
 protected:
     // base::NetworkServer::Delegate implementation.
     void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // SharedKeyPool::Delegate implementation.
-    void onPoolKeyUsed(const std::string& host, uint32_t key_id) override;
+    void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) override;
 
     // base::ServerAuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // Session::Delegate implementation.
-    void onSessionFinished() override;
+    void onSessionFinished(Session::SessionId session_id,
+                           proto::RouterSession session_type) override;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;

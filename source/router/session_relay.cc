@@ -31,7 +31,7 @@ SessionRelay::SessionRelay()
 
 SessionRelay::~SessionRelay()
 {
-    relayKeyPool().removeKeysForRelay(host_);
+    relayKeyPool().removeKeysForRelay(sessionId());
 }
 
 void SessionRelay::sendKeyUsed(uint32_t key_id)
@@ -77,13 +77,11 @@ void SessionRelay::readKeyPool(const proto::RelayKeyPool& key_pool)
 
     LOG(LS_INFO) << "Received key pool: " << key_pool.key_size() << " (" << address() << ")";
 
-    host_ = key_pool.peer_host();
-    uint16_t port = key_pool.peer_port();
+    peer_data_.emplace(std::make_pair(
+        key_pool.peer_host(), static_cast<uint16_t>(key_pool.peer_port())));
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-    {
-        pool.addKey(host_, port, key_pool.key(i));
-    }
+        pool.addKey(sessionId(), key_pool.key(i));
 }
 
 } // namespace router

@@ -131,7 +131,7 @@ std::unique_ptr<proto::RelayList> Server::relayList() const
 
         relay->set_timepoint(session_relay->startTime());
         relay->set_address(session_relay->address());
-        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->host()));
+        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->sessionId()));
         relay->mutable_version()->CopyFrom(session_relay->version().toProto());
         relay->set_os_name(session_relay->osName());
         relay->set_computer_name(session_relay->computerName());
@@ -223,34 +223,45 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
     return nullptr;
 }
 
+Session* Server::sessionById(Session::SessionId session_id)
+{
+    for (auto& session : sessions_)
+    {
+        if (session->sessionId() == session_id)
+            return session.get();
+    }
+
+    return nullptr;
+}
+
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
+
+    channel->setKeepAlive(true, std::chrono::seconds(30), std::chrono::seconds(5));
+    channel->setNoDelay(true);
 
     if (authenticator_manager_)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
-void Server::onPoolKeyUsed(const std::string& host, uint32_t key_id)
+void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 {
     for (const auto& session : sessions_)
     {
-        if (session->sessionType() == proto::ROUTER_SESSION_RELAY)
-        {
-            SessionRelay* relay_session = static_cast<SessionRelay*>(session.get());
-            if (relay_session->host() == host)
-                relay_session->sendKeyUsed(key_id);
-        }
+        SessionRelay* relay_session = static_cast<SessionRelay*>(session.get());
+        if (relay_session->sessionId() == session_id)
+            relay_session->sendKeyUsed(key_id);
     }
 }
 
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
+    std::string address = base::utf8FromUtf16(session_info.channel->peerAddress());
     proto::RouterSession session_type =
         static_cast<proto::RouterSession>(session_info.session_type);
 
-    LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type)
-                 << " (" << session_info.channel->peerAddress() << ")";
+    LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
 
     std::unique_ptr<Session> session;
 
@@ -295,22 +306,18 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     sessions_.back()->start(this);
 }
 
-void Server::onSessionFinished()
+void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession session_type)
 {
-    for (auto it = sessions_.begin(); it != sessions_.end();)
+    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
     {
-        Session* session = it->get();
-        if (session->state() == Session::State::FINISHED)
+        if (it->get()->sessionId() == session_id)
         {
             // Session will be destroyed after completion of the current call.
             task_runner_->deleteSoon(std::move(*it));
 
             // Delete a session from the list.
-            it = sessions_.erase(it);
-        }
-        else
-        {
-            ++it;
+            sessions_.erase(it);
+            break;
         }
     }
 }

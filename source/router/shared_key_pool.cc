@@ -32,28 +32,18 @@ public:
 
     void dettach();
 
-    void addKey(const std::string& host, uint16_t port, const proto::RelayKey& key);
+    void addKey(Session::SessionId session_id, const proto::RelayKey& key);
     std::optional<Credentials> takeCredentials();
-    void removeKeysForRelay(const std::string& host);
+    void removeKeysForRelay(Session::SessionId session_id);
     void clear();
-    size_t countForRelay(const std::string& host) const;
+    size_t countForRelay(Session::SessionId session_id) const;
     size_t count() const;
     bool isEmpty() const;
 
 private:
-    struct RelayInfo
-    {
-        explicit RelayInfo(uint16_t port)
-            : port(port)
-        {
-            // Nothing
-        }
+    using Keys = std::vector<proto::RelayKey>;
 
-        uint16_t port = 0;
-        std::vector<proto::RelayKey> keys;
-    };
-
-    std::map<std::string, RelayInfo> pool_;
+    std::map<Session::SessionId, Keys> pool_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);
@@ -70,23 +60,17 @@ void SharedKeyPool::Impl::dettach()
     delegate_ = nullptr;
 }
 
-void SharedKeyPool::Impl::addKey(const std::string& host, uint16_t port, const proto::RelayKey& key)
+void SharedKeyPool::Impl::addKey(Session::SessionId session_id, const proto::RelayKey& key)
 {
-    if (host.empty() || !port)
-    {
-        LOG(LS_ERROR) << "Empty host name or invalid port";
-        return;
-    }
-
-    auto relay = pool_.find(host);
+    auto relay = pool_.find(session_id);
     if (relay == pool_.end())
     {
         LOG(LS_INFO) << "Host not found in pool. It will be added";
-        relay = pool_.emplace(host, RelayInfo(port)).first;
+        relay = pool_.emplace(session_id, Keys()).first;
     }
 
-    LOG(LS_INFO) << "Added key with id " << key.key_id() << " for host '" << host << "'";
-    relay->second.keys.emplace_back(std::move(key));
+    LOG(LS_INFO) << "Added key with id " << key.key_id() << " for host '" << session_id << "'";
+    relay->second.emplace_back(std::move(key));
 }
 
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
@@ -102,7 +86,7 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     for (auto it = pool_.begin(); it != pool_.end(); ++it)
     {
-        size_t count = it->second.keys.size();
+        size_t count = it->second.size();
         if (count > max_count)
         {
             preffered_relay = it;
@@ -118,36 +102,35 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     LOG(LS_INFO) << "Preffered relay: " << preffered_relay->first;
 
-    if (preffered_relay->second.keys.empty())
+    if (preffered_relay->second.empty())
     {
         LOG(LS_ERROR) << "Empty key pool for relay";
         return std::nullopt;
     }
 
     Credentials credentials;
-    credentials.host = preffered_relay->first;
-    credentials.port = preffered_relay->second.port;
-    credentials.key = std::move(preffered_relay->second.keys.back());
+    credentials.session_id = preffered_relay->first;
+    credentials.key = std::move(preffered_relay->second.back());
 
     // Removing the key from the pool.
-    preffered_relay->second.keys.pop_back();
+    preffered_relay->second.pop_back();
 
-    if (preffered_relay->second.keys.empty())
+    if (preffered_relay->second.empty())
     {
         LOG(LS_INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
         pool_.erase(preffered_relay->first);
     }
 
     if (delegate_)
-        delegate_->onPoolKeyUsed(credentials.host, credentials.key.key_id());
+        delegate_->onPoolKeyUsed(credentials.session_id, credentials.key.key_id());
 
     return credentials;
 }
 
-void SharedKeyPool::Impl::removeKeysForRelay(const std::string& host)
+void SharedKeyPool::Impl::removeKeysForRelay(Session::SessionId session_id)
 {
-    LOG(LS_INFO) << "All keys for relay '" << host << "' removed";
-    pool_.erase(host);
+    LOG(LS_INFO) << "All keys for relay '" << session_id << "' removed";
+    pool_.erase(session_id);
 }
 
 void SharedKeyPool::Impl::clear()
@@ -156,13 +139,13 @@ void SharedKeyPool::Impl::clear()
     pool_.clear();
 }
 
-size_t SharedKeyPool::Impl::countForRelay(const std::string& host) const
+size_t SharedKeyPool::Impl::countForRelay(Session::SessionId session_id) const
 {
-    auto result = pool_.find(host);
+    auto result = pool_.find(session_id);
     if (result == pool_.end())
         return 0;
 
-    return result->second.keys.size();
+    return result->second.size();
 }
 
 size_t SharedKeyPool::Impl::count() const
@@ -170,7 +153,7 @@ size_t SharedKeyPool::Impl::count() const
     size_t result = 0;
 
     for (const auto& relay : pool_)
-        result += relay.second.keys.size();
+        result += relay.second.size();
 
     return result;
 }
@@ -205,9 +188,9 @@ std::unique_ptr<SharedKeyPool> SharedKeyPool::share()
     return std::unique_ptr<SharedKeyPool>(new SharedKeyPool(impl_));
 }
 
-void SharedKeyPool::addKey(const std::string& host, uint16_t port, const proto::RelayKey& key)
+void SharedKeyPool::addKey(Session::SessionId session_id, const proto::RelayKey& key)
 {
-    impl_->addKey(host, port, key);
+    impl_->addKey(session_id, key);
 }
 
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::takeCredentials()
@@ -215,9 +198,9 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::takeCredentials()
     return impl_->takeCredentials();
 }
 
-void SharedKeyPool::removeKeysForRelay(const std::string& host)
+void SharedKeyPool::removeKeysForRelay(Session::SessionId session_id)
 {
-    impl_->removeKeysForRelay(host);
+    impl_->removeKeysForRelay(session_id);
 }
 
 void SharedKeyPool::clear()
@@ -225,9 +208,9 @@ void SharedKeyPool::clear()
     impl_->clear();
 }
 
-size_t SharedKeyPool::countForRelay(const std::string& host) const
+size_t SharedKeyPool::countForRelay(Session::SessionId session_id) const
 {
-    return impl_->countForRelay(host);
+    return impl_->countForRelay(session_id);
 }
 
 size_t SharedKeyPool::count() const

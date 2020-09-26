@@ -23,6 +23,7 @@
 #include "base/strings/unicode.h"
 #include "router/server.h"
 #include "router/session_host.h"
+#include "router/session_relay.h"
 
 namespace router {
 
@@ -74,7 +75,6 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     if (!host)
     {
         LOG(LS_WARNING) << "Host with id " << request.host_id() << " NOT found!";
-
         offer->set_error_code(proto::ConnectionOffer::PEER_NOT_FOUND);
     }
     else
@@ -85,22 +85,41 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
         if (!credentials.has_value())
         {
             LOG(LS_WARNING) << "Empty key pool";
-
             offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
         }
         else
         {
-            offer->set_error_code(proto::ConnectionOffer::SUCCESS);
+            SessionRelay* relay = static_cast<SessionRelay*>(
+                server().sessionById(credentials->session_id));
+            if (!relay)
+            {
+                LOG(LS_ERROR) << "No relay with session id " << credentials->session_id;
+                offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
+            }
+            else
+            {
+                const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
+                if (!peer_data.has_value())
+                {
+                    LOG(LS_ERROR) << "No peer data for relay with session id "
+                                  << credentials->session_id;
+                    offer->set_error_code(proto::ConnectionOffer::KEY_POOL_EMPTY);
+                }
+                else
+                {
+                    offer->set_error_code(proto::ConnectionOffer::SUCCESS);
 
-            proto::RelayCredentials* offer_credentials = offer->mutable_relay();
+                    proto::RelayCredentials* offer_credentials = offer->mutable_relay();
 
-            offer_credentials->set_host(credentials->host);
-            offer_credentials->set_port(credentials->port);
-            offer_credentials->mutable_key()->CopyFrom(credentials->key);
-            offer_credentials->set_secret(base::Random::string(16));
+                    offer_credentials->set_host(relay->peerData()->first);
+                    offer_credentials->set_port(relay->peerData()->second);
+                    offer_credentials->mutable_key()->Swap(&credentials->key);
+                    offer_credentials->set_secret(base::Random::string(16));
 
-            LOG(LS_INFO) << "Sending connection offer to host";
-            host->sendConnectionOffer(*offer);
+                    LOG(LS_INFO) << "Sending connection offer to host";
+                    host->sendConnectionOffer(*offer);
+                }
+            }
         }
     }
 

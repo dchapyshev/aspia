@@ -31,21 +31,23 @@ public:
     SessionRelay();
     ~SessionRelay();
 
-    const std::string& host() const { return host_; }
+    using PeerData = std::pair<std::string, uint16_t>;
+
+    const std::optional<PeerData>& peerData() const { return peer_data_; }
     void sendKeyUsed(uint32_t key_id);
 
 protected:
     // Session implementation.
     void onSessionReady() override;
 
-    // net::Channel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onMessageReceived(const base::ByteArray& buffer) override;
     void onMessageWritten(size_t pending) override;
 
 private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);
 
-    std::string host_;
+    std::optional<PeerData> peer_data_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

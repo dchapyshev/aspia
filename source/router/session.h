@@ -33,22 +33,18 @@ class SharedKeyPool;
 class Session : public base::NetworkChannel::Listener
 {
 public:
-    Session(proto::RouterSession session_type);
+    explicit Session(proto::RouterSession session_type);
     virtual ~Session();
+
+    using SessionId = uint64_t;
 
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
-        virtual void onSessionFinished() = 0;
-    };
-
-    enum class State
-    {
-        NOT_STARTED,
-        STARTED,
-        FINISHED
+        virtual void onSessionFinished(
+            SessionId session_id, proto::RouterSession session_type) = 0;
     };
 
     void setChannel(std::unique_ptr<base::NetworkChannel> channel);
@@ -58,8 +54,6 @@ public:
 
     void start(Delegate* delegate);
 
-    State state() const { return state_; }
-
     void setVersion(const base::Version& version);
     const base::Version& version() const { return version_; }
     void setOsName(const std::string& os_name);
@@ -68,9 +62,10 @@ public:
     const std::string& computerName() const { return computer_name_; }
     void setUserName(const std::string& username);
     const std::string& userName() const { return username_; }
-    proto::RouterSession sessionType() const { return session_type_; }
-    const std::string& address() const { return address_; }
 
+    proto::RouterSession sessionType() const { return session_type_; }
+    SessionId sessionId() const { return session_id_; }
+    const std::string& address() const { return address_; }
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
 
@@ -80,7 +75,7 @@ protected:
 
     virtual void onSessionReady() = 0;
 
-    // net::Channel::Listener implementation.
+    // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
@@ -92,7 +87,7 @@ protected:
 
 private:
     const proto::RouterSession session_type_;
-    State state_ = State::NOT_STARTED;
+    const SessionId session_id_;
     time_t start_time_ = 0;
 
     std::unique_ptr<base::NetworkChannel> channel_;
