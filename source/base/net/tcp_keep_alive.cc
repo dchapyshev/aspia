@@ -25,6 +25,13 @@
 #include <mstcpip.h>
 #endif // defined(OS_WIN)
 
+#if defined(OS_POSIX)
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#endif // defined(OS_POSIX)
+
 namespace base {
 
 bool setTcpKeepAlive(NativeSocket socket,
@@ -52,7 +59,7 @@ bool setTcpKeepAlive(NativeSocket socket,
     return true;
 #elif defined(OS_POSIX)
     int yes = enable ? 1 : 0;
-    if (setsockopt(socket_.native_handle(), SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(int)) == -1)
+    if (setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(int)) == -1)
     {
         PLOG(LS_WARNING) << "setsockopt(SO_KEEPALIVE) failed";
         return false;
@@ -67,21 +74,21 @@ bool setTcpKeepAlive(NativeSocket socket,
 #elif defined(OS_MAC)
     int option_name = TCP_KEEPALIVE;
 #endif
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, option_name, &idle, sizeof(int)) == -1)
+    if (setsockopt(socket, IPPROTO_TCP, option_name, &idle, sizeof(int)) == -1)
     {
         PLOG(LS_WARNING) << "setsockopt(TCP_KEEPIDLE) failed";
         return false;
     }
 
     int ival = std::chrono::duration_cast<std::chrono::seconds>(interval).count();
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPINTVL, &ival, sizeof(int)) == -1)
+    if (setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &ival, sizeof(int)) == -1)
     {
         PLOG(LS_WARNING) << "setsockopt(TCP_KEEPINTVL) failed";
         return false;
     }
 
     int maxpkt = 10;
-    if (setsockopt(socket_.native_handle(), IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) == -1)
+    if (setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) == -1)
     {
         PLOG(LS_WARNING) << "setsockopt(TCP_KEEPCNT) failed";
         return false;
