@@ -20,6 +20,9 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/crypto/key_pair.h"
+#include "base/files/base_paths.h"
+#include "base/files/file_util.h"
 #include "base/net/network_channel.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
@@ -88,8 +91,54 @@ bool Server::start()
     base::ByteArray private_key = settings.privateKey();
     if (private_key.empty())
     {
-        LOG(LS_ERROR) << "The private key is not specified in the configuration file";
-        return false;
+        LOG(LS_INFO) << "The private key is not specified in the configuration file";
+
+        base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
+        if (!key_pair.isValid())
+        {
+            LOG(LS_ERROR) << "Failed to generate keys";
+            return false;
+        }
+
+        std::filesystem::path public_key_path;
+        if (!base::BasePaths::currentExecDir(&public_key_path))
+        {
+            LOG(LS_ERROR) << "Failed to get the path to the current directory";
+            return false;
+        }
+
+        public_key_path.append("aspia_router.pub");
+
+        std::error_code error_code;
+        if (std::filesystem::exists(public_key_path))
+        {
+            if (!std::filesystem::remove(public_key_path, error_code))
+            {
+                LOG(LS_ERROR) << "Failed to delete old public key: "
+                              << base::utf16FromLocal8Bit(error_code.message());
+                return false;
+            }
+        }
+
+        std::string public_key = base::toHex(key_pair.publicKey());
+        private_key = key_pair.privateKey();
+
+        if (public_key.empty() || private_key.empty())
+        {
+            LOG(LS_ERROR) << "Empty keys generated";
+            return false;
+        }
+
+        if (!base::writeFile(public_key_path, public_key))
+        {
+            LOG(LS_ERROR) << "Failed to write public key to file: " << public_key_path;
+            return false;
+        }
+
+        settings.setPrivateKey(private_key);
+        settings.flush();
+
+        LOG(LS_INFO) << "New public key: " << public_key;
     }
 
     uint16_t port = settings.port();

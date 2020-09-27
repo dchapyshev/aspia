@@ -29,6 +29,8 @@ public:
     Settings();
     ~Settings();
 
+    void flush();
+
     void setPort(uint16_t port);
     uint16_t port() const;
 

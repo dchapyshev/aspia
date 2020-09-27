@@ -31,6 +31,11 @@ Settings::Settings()
 
 Settings::~Settings() = default;
 
+void Settings::flush()
+{
+    impl_.flush();
+}
+
 void Settings::setPort(uint16_t port)
 {
     impl_.set<uint16_t>("Port", port);
