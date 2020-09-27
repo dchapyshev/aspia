@@ -7,7 +7,7 @@ Instructions for building the project
    1.2. **SDK 10.0.17763.0 and 8.1** should be selected when installing.
 
 2. Download and install [CMake](https://cmake.org/download).
-3. Download and install [vcpkg](https://github.com/microsoft/vcpkg).
+3. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg).
 4. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
 * asio
 * gtest
