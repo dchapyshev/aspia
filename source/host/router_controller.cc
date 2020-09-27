@@ -28,7 +28,7 @@ namespace host {
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 15 };
+const std::chrono::seconds kReconnectTimeout{ 10 };
 
 } // namespace
 

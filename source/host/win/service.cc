@@ -19,6 +19,7 @@
 #include "host/win/service.h"
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/win/session_status.h"
 #include "host/win/service_constants.h"
 #include "host/server.h"
@@ -26,6 +27,44 @@
 #include <Windows.h>
 
 namespace host {
+
+namespace {
+
+std::string powerEventToString(uint32_t event)
+{
+    const char* name;
+
+    switch (event)
+    {
+        case PBT_APMPOWERSTATUSCHANGE:
+            name = "PBT_APMPOWERSTATUSCHANGE";
+            break;
+
+        case PBT_APMRESUMEAUTOMATIC:
+            name = "PBT_APMRESUMEAUTOMATIC";
+            break;
+
+        case PBT_APMRESUMESUSPEND:
+            name = "PBT_APMRESUMESUSPEND";
+            break;
+
+        case PBT_APMSUSPEND:
+            name = "PBT_APMSUSPEND";
+            break;
+
+        case PBT_POWERSETTINGCHANGE:
+            name = "PBT_POWERSETTINGCHANGE";
+            break;
+
+        default:
+            name = "UNKNOWN";
+            break;
+    }
+
+    return base::stringPrintf("%s (%d)", name, static_cast<int>(event));
+}
+
+} // namespace
 
 Service::Service()
     : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
@@ -59,6 +98,14 @@ void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId se
 
     if (server_)
         server_->setSessionEvent(status, session_id);
+}
+
+void Service::onPowerEvent(uint32_t event)
+{
+    LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);
+
+    if (server_)
+        server_->setPowerEvent(event);
 }
 
 } // namespace host

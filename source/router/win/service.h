@@ -36,6 +36,7 @@ protected:
     void onStart() override;
     void onStop() override;
     void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
+    void onPowerEvent(uint32_t event) override;
 
 private:
     std::unique_ptr<Server> server_;

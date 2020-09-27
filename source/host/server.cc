@@ -92,6 +92,29 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
         user_session_manager_->setSessionEvent(status, session_id);
 }
 
+void Server::setPowerEvent(uint32_t power_event)
+{
+    switch (power_event)
+    {
+        case PBT_APMSUSPEND:
+        {
+            disconnectFromRouter();
+        }
+        break;
+
+        case PBT_APMRESUMEAUTOMATIC:
+        {
+            if (settings_.isRouterEnabled())
+                connectToRouter();
+        }
+        break;
+
+        default:
+            // Ignore other events.
+            break;
+    }
+}
+
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New DIRECT connection";
@@ -245,7 +268,7 @@ void Server::reloadUserList()
 
 void Server::connectToRouter()
 {
-    LOG(LS_INFO) << "Connecting to the router...";
+    LOG(LS_INFO) << "Connecting to router...";
 
     // Destroy the previous instance.
     router_controller_.reset();
@@ -260,6 +283,15 @@ void Server::connectToRouter()
     // Connect to the router.
     router_controller_ = std::make_unique<RouterController>(task_runner_);
     router_controller_->start(router_info, this);
+}
+
+void Server::disconnectFromRouter()
+{
+    if (router_controller_)
+    {
+        router_controller_.reset();
+        LOG(LS_INFO) << "Disconnected from router";
+    }
 }
 
 } // namespace host

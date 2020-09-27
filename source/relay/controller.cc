@@ -28,7 +28,7 @@ namespace relay {
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 30 };
+const std::chrono::seconds kReconnectTimeout{ 15 };
 
 #if defined(OS_WIN)
 const wchar_t kFirewallRuleName[] = L"Aspia Relay Service";

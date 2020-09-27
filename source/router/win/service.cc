@@ -63,4 +63,9 @@ void Service::onSessionEvent(
     // Nothing
 }
 
+void Service::onPowerEvent(uint32_t /* event */)
+{
+    // Nothing
+}
+
 } // namespace router

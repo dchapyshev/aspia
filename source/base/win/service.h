@@ -47,6 +47,7 @@ protected:
     virtual void onStart() = 0;
     virtual void onStop() = 0;
     virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
+    virtual void onPowerEvent(uint32_t event) = 0;
 
 private:
     MessageLoop::Type type_;

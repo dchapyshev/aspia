@@ -44,6 +44,7 @@ public:
 
     void start();
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void setPowerEvent(uint32_t power_event);
 
 protected:
     // net::Server::Delegate implementation.
@@ -67,6 +68,7 @@ private:
     void updateConfiguration(const std::filesystem::path& path, bool error);
     void reloadUserList();
     void connectToRouter();
+    void disconnectFromRouter();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
 

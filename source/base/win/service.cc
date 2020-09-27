@@ -144,7 +144,8 @@ void ServiceThread::setStatus(DWORD status)
     if (status == SERVICE_RUNNING)
     {
         status_.dwControlsAccepted =
-            SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_SESSIONCHANGE;
+            SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_SESSIONCHANGE |
+            SERVICE_ACCEPT_POWEREVENT;
     }
 
     if (status != SERVICE_RUNNING && status != SERVICE_STOPPED)
@@ -274,6 +275,15 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 
             self->doEvent(std::bind(
                 &Service::onSessionEvent, self->service_, session_status, session_id));
+        }
+        return NO_ERROR;
+
+        case SERVICE_CONTROL_POWEREVENT:
+        {
+            if (!self)
+                return NO_ERROR;
+
+            self->doEvent(std::bind(&Service::onPowerEvent, self->service_, event_type));
         }
         return NO_ERROR;
 
