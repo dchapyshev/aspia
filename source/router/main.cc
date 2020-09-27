@@ -18,6 +18,7 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
 #include "router/settings.h"
 
@@ -51,6 +52,19 @@ void initLogging()
 void shutdownLogging()
 {
     base::shutdownLogging();
+}
+
+void generateAndPrintKeys()
+{
+    base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
+    if (!key_pair.isValid())
+    {
+        std::cout << "Failed to generate keys" << std::endl;
+        return;
+    }
+
+    std::cout << "Private key: " << base::toHex(key_pair.privateKey()) << std::endl;
+    std::cout << "Public key: " << base::toHex(key_pair.publicKey()) << std::endl;
 }
 
 #if defined(OS_WIN)
@@ -148,6 +162,7 @@ void showHelp()
         << '\t' << "--remove" << '\t' << "Remove service" << std::endl
         << '\t' << "--start" << '\t' << "Start service" << std::endl
         << '\t' << "--stop" << '\t' << "Stop service" << std::endl
+        << '\t' << "--keygen" << '\t' << "Generating public and private keys" << std::endl
         << '\t' << "--help" << '\t' << "Show help" << std::endl;
 }
 
@@ -174,6 +189,10 @@ void entryPoint(int argc, const char* const* argv)
     {
         stopService();
     }
+    else if (command_line->hasSwitch(u"keygen"))
+    {
+        generateAndPrintKeys();
+    }
     else if (command_line->hasSwitch(u"help"))
     {
         showHelp();
@@ -197,26 +216,43 @@ int wmain()
     return 0;
 }
 #else
-int main(int /* argc */, const char* const* /* argv */)
+int main(int argc, const char* const* argv)
 {
     initLogging();
+
+    base::CommandLine::init(argc, argv);
+    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<base::ScopedCryptoInitializer>();
 
-    std::unique_ptr<base::MessageLoop> message_loop =
-        std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
+    if (command_line->hasSwitch(u"keygen"))
+    {
+        generateAndPrintKeys();
+    }
+    else if (command_line->hasSwitch(u"help"))
+    {
+        std::cout << "aspia_router [switch]" << std::endl
+            << "Available switches:" << std::endl
+            << '\t' << "--keygen" << '\t' << "Generating public and private keys" << std::endl
+            << '\t' << "--help" << '\t' << "Show help" << std::endl;
+    }
+    else
+    {
+        std::unique_ptr<base::MessageLoop> message_loop =
+            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
 
-    std::unique_ptr<router::Server> server =
-        std::make_unique<router::Server>(message_loop->taskRunner());
+        std::unique_ptr<router::Server> server =
+            std::make_unique<router::Server>(message_loop->taskRunner());
 
-    server->start();
-    message_loop->run();
+        server->start();
+        message_loop->run();
 
-    server.reset();
-    message_loop.reset();
+        server.reset();
+        message_loop.reset();
+    }
+
     crypto_initializer.reset();
-
     shutdownLogging();
 }
 #endif
