@@ -1,8 +1,14 @@
 <RCC>
   <qresource prefix="/tr">
     <file>aspia_client_de.qm</file>
+    <file>aspia_client_el.qm</file>
+    <file>aspia_client_es.qm</file>
+    <file>aspia_client_fa.qm</file>
+    <file>aspia_client_fr.qm</file>
     <file>aspia_client_it.qm</file>
     <file>aspia_client_nl.qm</file>
+    <file>aspia_client_pt_BR.qm</file>
+    <file>aspia_client_pt_PT.qm</file>
     <file>aspia_client_ru.qm</file>
     <file>aspia_client_uk.qm</file>
     <file>aspia_client_zh_CN.qm</file>

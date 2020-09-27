@@ -1,9 +1,16 @@
 <RCC>
   <qresource prefix="/tr">
     <file>aspia_host_de.qm</file>
+    <file>aspia_host_el.qm</file>
+    <file>aspia_host_es.qm</file>
+    <file>aspia_host_fa.qm</file>
+    <file>aspia_host_fr.qm</file>
     <file>aspia_host_it.qm</file>
     <file>aspia_host_nl.qm</file>
+    <file>aspia_host_pt-BR.qm</file>
+    <file>aspia_host_pt-PT.qm</file>
     <file>aspia_host_ru.qm</file>
     <file>aspia_host_uk.qm</file>
+    <file>aspia_host_zh-CN.qm</file>
   </qresource>
 </RCC>
