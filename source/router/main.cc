@@ -210,6 +210,7 @@ int main(int /* argc */, const char* const* /* argv */)
     std::unique_ptr<router::Server> server =
         std::make_unique<router::Server>(message_loop->taskRunner());
 
+    server->start();
     message_loop->run();
 
     server.reset();

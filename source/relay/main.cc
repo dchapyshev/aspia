@@ -210,6 +210,7 @@ int main(int /* argc */, const char* const* /* argv */)
     std::unique_ptr<relay::Controller> controller =
         std::make_unique<relay::Controller>(message_loop->taskRunner());
 
+    controller->start();
     message_loop->run();
 
     controller.reset();
