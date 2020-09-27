@@ -1,0 +1,16 @@
+[Unit]
+Description=Aspia Router
+Before=runlevel2.target runlevel3.target runlevel4.target runlevel5.target shutdown.target
+After=network-online.target network.service ntp.service
+Conflicts=shutdown.target
+
+[Service]
+WorkingDirectory=/opt/aspia
+#EnvironmentFile=/opt/aspia/env.sh
+#Environment=SVC=aspia-router
+Restart=always
+ExecStart=/opt/aspia/aspia_router
+RestartSec=1000ms
+
+[Install]
+WantedBy=multi-user.target
