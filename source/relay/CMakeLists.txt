@@ -51,30 +51,15 @@ source_group("" FILES ${SOURCE_RELAY})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_RELAY_WIN})
-
-    set(RELAY_PLATFORM_LIBS
-        comsupp
-        crypt32
-        netapi32
-        version)
+    set(RELAY_PLATFORM_LIBS comsupp crypt32 netapi32 version)
 endif()
 
 if (LINUX)
-    set(RELAY_PLATFORM_LIBS
-        stdc++fs
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(RELAY_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
-    set(RELAY_PLATFORM_LIBS
-        ${FOUNDATION_LIB}
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(RELAY_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
 endif()
 
 add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})

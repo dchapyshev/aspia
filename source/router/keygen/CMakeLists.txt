@@ -45,21 +45,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(ROUTER_KEYGEN_PLATFORM_LIBS
-        stdc++fs
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(ROUTER_KEYGEN_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
-    set(ROUTER_KEYGEN_PLATFORM_LIBS
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
-
+    set(ROUTER_KEYGEN_PLATFORM_LIBS ICU::uc ICU::dt)
     set(aspia_router_keygen_ICON ${PROJECT_SOURCE_DIR}/router/keygen/resources/main.icns)
     set(aspia_router_keygen_PLIST ${PROJECT_SOURCE_DIR}/router/keygen/Info.plist)
 

@@ -63,13 +63,7 @@ if (WIN32)
 endif()
 
 if (UNIX)
-    set(INSTALLED_DIR "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}")
-
-    find_library(ICUUC_RELEASE NAMES icuuc PATHS "${INSTALLED_DIR}/lib" NO_DEFAULT_PATH)
-    find_library(ICUUC_DEBUG NAMES icuuc PATHS "${INSTALLED_DIR}/debug/lib" NO_DEFAULT_PATH)
-
-    find_library(ICUDATA_RELEASE NAMES icudata PATHS "${INSTALLED_DIR}/lib" NO_DEFAULT_PATH)
-    find_library(ICUDATA_DEBUG NAMES icudata PATHS "${INSTALLED_DIR}/debug/lib" NO_DEFAULT_PATH)
+    find_package(icu REQUIRED uc dt)
 endif()
 
 if (APPLE)

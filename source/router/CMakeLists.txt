@@ -56,30 +56,15 @@ source_group("" FILES ${SOURCE_ROUTER})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_ROUTER_WIN})
-
-    set(ROUTER_PLATFORM_LIBS
-        comsupp
-        crypt32
-        netapi32
-        version)
+    set(ROUTER_PLATFORM_LIBS comsupp crypt32 netapi32 version)
 endif()
 
 if (LINUX)
-    set(ROUTER_PLATFORM_LIBS
-        stdc++fs
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(ROUTER_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
-    set(ROUTER_PLATFORM_LIBS
-        ${FOUNDATION_LIB}
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
 endif()
 
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})

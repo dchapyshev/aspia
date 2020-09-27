@@ -65,21 +65,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(ROUTER_MANAGER_PLATFORM_LIBS
-        stdc++fs
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(ROUTER_MANAGER_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
-    set(ROUTER_MANAGER_PLATFORM_LIBS
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
-
+    set(ROUTER_MANAGER_PLATFORM_LIBS ICU::uc ICU::dt)
     set(aspia_router_manager_ICON ${PROJECT_SOURCE_DIR}/router/manager/resources/main.icns)
     set(aspia_router_manager_PLIST ${PROJECT_SOURCE_DIR}/router/manager/Info.plist)
 
