@@ -18,9 +18,11 @@
 
 #include "qt_base/locale_loader.h"
 
+#include "qt_base/qt_logging.h"
+
 #include <QCoreApplication>
 #include <QDir>
-#include "QLocale"
+#include <QLocale>
 #include <QTranslator>
 
 namespace qt_base {
@@ -29,26 +31,36 @@ namespace {
 
 const QString kTranslationsDir = QLatin1String(":/tr/");
 
+
+
 } // namespace
 
 LocaleLoader::LocaleLoader()
 {
-    QStringList qm_file_list =
-        QDir(kTranslationsDir).entryList(QStringList() << QLatin1String("*.qm"));
-
-    QRegExp regexp(QLatin1String("([a-zA-Z0-9-_]+)_([^.]*).qm"));
+    const QStringList qm_file_list =
+        QDir(kTranslationsDir).entryList(QStringList(QLatin1String("*.qm")), QDir::Files);
 
     for (const auto& qm_file : qm_file_list)
     {
-        if (regexp.exactMatch(qm_file))
-        {
-            const QString locale_name = regexp.cap(2);
+        QString locale_name = qm_file.chopped(3); // Remove file extension (*.qm).
 
-            if (locale_list_.contains(locale_name))
-                locale_list_[locale_name].push_back(qm_file);
-            else
-                locale_list_.insert(locale_name, QStringList() << qm_file);
+        if (locale_name.right(2).isUpper())
+        {
+            // xx_XX (language / country).
+            locale_name = locale_name.right(5);
         }
+        else
+        {
+            // xx (language only).
+            locale_name = locale_name.right(2);
+        }
+
+        LOG(LS_INFO) << "Translation file added: " << qm_file << " (" << locale_name << ")";
+
+        if (locale_list_.contains(locale_name))
+            locale_list_[locale_name].push_back(qm_file);
+        else
+            locale_list_.insert(locale_name, QStringList(qm_file));
     }
 }
 
@@ -63,8 +75,20 @@ LocaleLoader::LocaleList LocaleLoader::localeList() const
 
     auto add_locale = [&](const QString& locale_code)
     {
-        list.push_back(
-            Locale(locale_code, QLocale::languageToString(QLocale(locale_code).language())));
+        QLocale locale(locale_code);
+        QString name;
+
+        if (locale_code.length() == 2)
+        {
+            name = QLocale::languageToString(locale.language());
+        }
+        else
+        {
+            name = QLocale::languageToString(locale.language())
+                + " (" + QLocale::countryToString(locale.country()) + ")";
+        }
+
+        list.push_back(Locale(locale_code, name));
     };
 
     add_locale(QLatin1String("en"));
@@ -89,6 +113,8 @@ void LocaleLoader::installTranslators(const QString& locale)
 {
     removeTranslators();
 
+    LOG(LS_INFO) << "Install translators for: " << locale;
+
     auto file_list = locale_list_.constFind(locale);
     if (file_list == locale_list_.constEnd())
         return;
@@ -107,6 +133,8 @@ void LocaleLoader::installTranslators(const QString& locale)
 
 void LocaleLoader::removeTranslators()
 {
+    LOG(LS_INFO) << "Cleanup translators";
+
     for (const auto& translator : translator_list_)
     {
         QCoreApplication::removeTranslator(translator);
