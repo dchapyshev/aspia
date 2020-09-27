@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
 
+    console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     console::Application application(argc, argv);
 
     QCommandLineOption address_option(

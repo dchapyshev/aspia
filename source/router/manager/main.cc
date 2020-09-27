@@ -24,14 +24,15 @@ int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(qt_translations);
 
+    qt_base::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    qt_base::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     qt_base::Application application(argc, argv);
 
     qt_base::Application::setOrganizationName(QLatin1String("Aspia"));
     qt_base::Application::setApplicationName(QLatin1String("Router Manager"));
     qt_base::Application::setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
     qt_base::Application::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
-    qt_base::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
-    qt_base::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     qt_base::Application::setWindowIcon(QIcon(":/img/main.ico"));
 
     router::RouterDialog dialog;
