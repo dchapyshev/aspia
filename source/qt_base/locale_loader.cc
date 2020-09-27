@@ -31,8 +31,6 @@ namespace {
 
 const QString kTranslationsDir = QLatin1String(":/tr/");
 
-
-
 } // namespace
 
 LocaleLoader::LocaleLoader()

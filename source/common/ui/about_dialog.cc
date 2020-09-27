@@ -53,7 +53,8 @@ const char* kTranslators[] =
     "Dmitry Chapyshev (Russian)",
     "Gregor Doroschenko (German)",
     "Lyhyrda Myhaylo (Ukrainian)",
-    "Mark Jansen (Dutch)"
+    "Mark Jansen (Dutch)",
+    "Wang Qiang (Chinese)"
 };
 
 const char* kThirdParty[] =
