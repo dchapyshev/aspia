@@ -82,5 +82,4 @@ target_link_libraries(aspia_router
     unofficial::sqlite3::sqlite3
     ${ROUTER_PLATFORM_LIBS})
 
-add_subdirectory(keygen)
 add_subdirectory(manager)
