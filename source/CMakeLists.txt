@@ -63,7 +63,7 @@ if (WIN32)
 endif()
 
 if (UNIX)
-    find_package(icu REQUIRED uc dt)
+    find_package(ICU REQUIRED uc dt)
 endif()
 
 if (APPLE)
