@@ -243,9 +243,12 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
         return nullptr;
     }
 
+    std::string file_path_utf8 = file_path.u8string();
+    LOG(LS_INFO) << "Opening database: " << file_path_utf8;
+
     sqlite3* db = nullptr;
 
-    int error_code = sqlite3_open(file_path.u8string().c_str(), &db);
+    int error_code = sqlite3_open(file_path_utf8.c_str(), &db);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_WARNING) << "sqlite3_open failed: " << sqlite3_errstr(error_code);
