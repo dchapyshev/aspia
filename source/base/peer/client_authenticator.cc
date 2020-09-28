@@ -215,8 +215,10 @@ void ClientAuthenticator::sendClientHello()
 
     uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
+#if defined(ARCH_CPU_X86_FAMILY)
     if (CpuidUtil::hasAesNi())
         encryption |= proto::ENCRYPTION_AES256_GCM;
+#endif
 
     client_hello.set_encryption(encryption);
     client_hello.set_identify(identify_);

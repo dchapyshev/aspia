@@ -16,8 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/compiler_specific.h"
 #include "base/cpuid_util.h"
+
+#if defined(ARCH_CPU_X86_FAMILY)
 
 #include "base/bitset.h"
 
@@ -26,6 +27,7 @@
 #else
 #include <cpuid.h>
 #endif // CC_MSVC
+
 #include <cstring>
 
 namespace base {
@@ -82,3 +84,5 @@ bool CpuidUtil::hasAesNi()
 }
 
 } // namespace base
+
+#endif // defined(ARCH_CPU_X86_FAMILY)

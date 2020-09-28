@@ -319,7 +319,13 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
         }
     }
 
-    if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && CpuidUtil::hasAesNi())
+    bool has_aes_ni = false;
+
+#if defined(ARCH_CPU_X86_FAMILY)
+    has_aes_ni = CpuidUtil::hasAesNi();
+#endif
+
+    if ((client_hello.encryption() & proto::ENCRYPTION_AES256_GCM) && has_aes_ni)
     {
         LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
