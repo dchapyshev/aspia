@@ -76,14 +76,6 @@
 #error Unknown architecture
 #endif
 
-#if defined(CC_MSVC)
-#define FORCEINLINE __forceinline
-#elif defined(CC_GCC) && __GNUC__ > 3
-#define FORCEINLINE inline __attribute__ ((__always_inline__))
-#else
-#define FORCEINLINE inline
-#endif
-
 #if defined(OS_WIN)
 #define WCHAR_T_IS_UTF16
 #elif defined(OS_POSIX) && defined(CC_GCC) && defined(__WCHAR_MAX__) && \
