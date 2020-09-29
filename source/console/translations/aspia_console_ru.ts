@@ -104,7 +104,7 @@
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.ui" line="95"/>
+        <location filename="../address_book_tab.ui" line="114"/>
         <source>Computer Name</source>
         <translation>Имя компьютера</translation>
     </message>
@@ -117,22 +117,27 @@
         <translation type="vanished">Адрес или ID</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="100"/>
+        <location filename="../address_book_tab.ui" line="78"/>
+        <source>Routers</source>
+        <translation type="unfinished">Маршрутизаторы</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.ui" line="119"/>
         <source>Address / ID</source>
         <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="105"/>
+        <location filename="../address_book_tab.ui" line="124"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="110"/>
+        <location filename="../address_book_tab.ui" line="129"/>
         <source>Created</source>
         <translation>Создан</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="115"/>
+        <location filename="../address_book_tab.ui" line="134"/>
         <source>Modified</source>
         <translation>Изменен</translation>
     </message>
@@ -986,89 +991,93 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="231"/>
+        <location filename="../address_book_tab.cc" line="215"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>Не удалось открыть файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="238"/>
+        <location filename="../address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>Не удалось прочитать файл адресной книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="247"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги &quot;%1&quot; поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="291"/>
+        <location filename="../address_book_tab.cc" line="275"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="297"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="284"/>
+        <location filename="../address_book_tab.cc" line="268"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="524"/>
+        <source>Routers</source>
+        <translation type="obsolete">Маршрутизаторы</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="507"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="528"/>
-        <location filename="../address_book_tab.cc" line="550"/>
+        <location filename="../address_book_tab.cc" line="511"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="546"/>
+        <location filename="../address_book_tab.cc" line="529"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="803"/>
+        <location filename="../address_book_tab.cc" line="846"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="805"/>
+        <location filename="../address_book_tab.cc" line="848"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="815"/>
+        <location filename="../address_book_tab.cc" line="858"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="828"/>
+        <location filename="../address_book_tab.cc" line="871"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="913"/>
         <source>Root Group</source>
         <translation>Корневая группа</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="867"/>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="924"/>
+        <location filename="../address_book_tab.cc" line="938"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="869"/>
+        <location filename="../address_book_tab.cc" line="926"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="883"/>
+        <location filename="../address_book_tab.cc" line="940"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>

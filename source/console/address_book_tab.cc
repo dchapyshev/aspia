@@ -28,8 +28,9 @@
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
-#include "console/settings.h"
 #include "console/open_address_book_dialog.h"
+#include "console/router_item.h"
+#include "console/settings.h"
 
 #include <QFileDialog>
 #include <QMenu>
@@ -109,24 +110,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     ui.tree_group->setComputerMimeType(ui.tree_computer->mimeType());
 
     Settings settings;
-
-    QByteArray splitter_state = settings.splitterState();
-    if (splitter_state.isEmpty())
-    {
-        QList<int> sizes;
-        sizes.push_back(200);
-        sizes.push_back(width() - 200);
-        ui.splitter->setSizes(sizes);
-    }
-    else
-    {
-        ui.splitter->restoreState(splitter_state);
-    }
-
-    QHeaderView* header = ui.tree_computer->header();
-    QByteArray columns_state = settings.columnsState();
-    if (!columns_state.isEmpty())
-        header->restoreState(columns_state);
+    restoreState(settings.addressBookState());
 
     ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);
 
@@ -134,6 +118,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     ui.tree_group->setCurrentItem(group_item);
 
     updateComputerList(group_item);
+    updateRouterList();
 
     group_item->setExpanded(group_item->IsExpanded());
 
@@ -197,8 +182,7 @@ AddressBookTab::~AddressBookTab()
     base::memZero(&key_);
 
     Settings settings;
-    settings.setSplitterState(ui.splitter->saveState());
-    settings.setColumnsState(ui.tree_computer->header()->saveState());
+    settings.setAddressBookState(saveState());
 }
 
 // static
@@ -452,8 +436,7 @@ void AddressBookTab::copyComputer()
 
 void AddressBookTab::modifyAddressBook()
 {
-    ComputerGroupItem* root_item =
-        dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(0));
+    ComputerGroupItem* root_item = rootComputerGroup();
     if (!root_item)
     {
         LOG(LS_WARNING) << "Invalid root item";
@@ -750,8 +733,7 @@ void AddressBookTab::retranslateUi()
 {
     ui.retranslateUi(this);
 
-    ComputerGroupItem* root_item =
-        dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(0));
+    ComputerGroupItem* root_item = rootComputerGroup();
     if (root_item)
         root_item->updateItem();
 
@@ -760,12 +742,73 @@ void AddressBookTab::retranslateUi()
         onGroupItemClicked(current, 0);
 }
 
+QByteArray AddressBookTab::saveState()
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+
+        stream << ui.tree_computer->header()->saveState();
+        stream << ui.vsplitter->saveState();
+        stream << ui.hsplitter->saveState();
+    }
+
+    return buffer;
+}
+
+void AddressBookTab::restoreState(const QByteArray& state)
+{
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_12);
+
+    QByteArray columns_state;
+    QByteArray vsplitter_state;
+    QByteArray hsplitter_state;
+
+    stream >> columns_state;
+    stream >> vsplitter_state;
+    stream >> hsplitter_state;
+
+    if (!columns_state.isEmpty())
+    {
+        ui.tree_computer->header()->restoreState(columns_state);
+    }
+
+    if (!vsplitter_state.isEmpty())
+    {
+        ui.vsplitter->restoreState(vsplitter_state);
+    }
+    else
+    {
+        QList<int> sizes;
+        sizes.push_back(200);
+        sizes.push_back(width() - 200);
+        ui.vsplitter->setSizes(sizes);
+    }
+
+    if (!hsplitter_state.isEmpty())
+    {
+        ui.hsplitter->restoreState(hsplitter_state);
+    }
+}
+
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)
         std::unique_ptr<QTreeWidgetItem> item_deleter(ui.tree_computer->takeTopLevelItem(i));
 
     ui.tree_computer->addTopLevelItems(computer_group->ComputerList());
+}
+
+void AddressBookTab::updateRouterList()
+{
+    ui.tree_routers->clear();
+
+    auto routers = routersList();
+    for (auto it = routers.begin(); it != routers.end(); ++it)
+        ui.tree_routers->addTopLevelItem(new RouterItem(it.key(), it.value()));
 }
 
 bool AddressBookTab::saveToFile(const QString& file_path)
@@ -847,6 +890,20 @@ QMap<QString, QString> AddressBookTab::routersList() const
     }
 
     return routers;
+}
+
+ComputerGroupItem* AddressBookTab::rootComputerGroup()
+{
+    ComputerGroupItem* root_item = nullptr;
+
+    for (int i = 0; i < ui.tree_group->topLevelItemCount(); ++i)
+    {
+        root_item = dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(i));
+        if (root_item)
+            break;
+    }
+
+    return root_item;
 }
 
 // static

@@ -104,27 +104,32 @@
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.ui" line="95"/>
+        <location filename="../address_book_tab.ui" line="78"/>
+        <source>Routers</source>
+        <translation type="unfinished">路由器</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.ui" line="114"/>
         <source>Computer Name</source>
         <translation>计算机名</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="100"/>
+        <location filename="../address_book_tab.ui" line="119"/>
         <source>Address / ID</source>
         <translation>地址 / ID</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="105"/>
+        <location filename="../address_book_tab.ui" line="124"/>
         <source>Comment</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="110"/>
+        <location filename="../address_book_tab.ui" line="129"/>
         <source>Created</source>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="115"/>
+        <location filename="../address_book_tab.ui" line="134"/>
         <source>Modified</source>
         <translation>修改时间</translation>
     </message>
@@ -791,89 +796,93 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="231"/>
+        <location filename="../address_book_tab.cc" line="215"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>无法打开通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="238"/>
+        <location filename="../address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>无法读取通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="247"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>通讯录文件 &quot;%1&quot; 已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="291"/>
+        <location filename="../address_book_tab.cc" line="275"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>无法使用指定的密码解密通讯录。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="297"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>通讯录文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="284"/>
+        <location filename="../address_book_tab.cc" line="268"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>通讯录文件使用不受支持的加密类型加密。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="524"/>
+        <source>Routers</source>
+        <translation type="obsolete">路由器</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="507"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="528"/>
-        <location filename="../address_book_tab.cc" line="550"/>
+        <location filename="../address_book_tab.cc" line="511"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="546"/>
+        <location filename="../address_book_tab.cc" line="529"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="803"/>
+        <location filename="../address_book_tab.cc" line="846"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="805"/>
+        <location filename="../address_book_tab.cc" line="848"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="815"/>
+        <location filename="../address_book_tab.cc" line="858"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="828"/>
+        <location filename="../address_book_tab.cc" line="871"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="913"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="867"/>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="924"/>
+        <location filename="../address_book_tab.cc" line="938"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="869"/>
+        <location filename="../address_book_tab.cc" line="926"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="883"/>
+        <location filename="../address_book_tab.cc" line="940"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>

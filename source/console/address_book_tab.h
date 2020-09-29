@@ -96,9 +96,13 @@ private:
                    std::string&& key,
                    QWidget* parent);
 
+    QByteArray saveState();
+    void restoreState(const QByteArray& state);
     void updateComputerList(ComputerGroupItem* computer_group);
+    void updateRouterList();
     bool saveToFile(const QString& file_path);
     QMap<QString, QString> routersList() const;
+    ComputerGroupItem* rootComputerGroup();
 
     static QString parentName(ComputerGroupItem* item);
     static void showOpenError(QWidget* parent, const QString& message);

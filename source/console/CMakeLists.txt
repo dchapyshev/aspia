@@ -72,6 +72,8 @@ list(APPEND SOURCE_CONSOLE
     router_dialog.cc
     router_dialog.h
     router_dialog.ui
+    router_item.cc
+    router_item.h
     settings.cc
     settings.h
     statusbar.cc

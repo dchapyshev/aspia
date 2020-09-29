@@ -44,11 +44,8 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
-    QByteArray splitterState() const;
-    void setSplitterState(const QByteArray& state);
-
-    QByteArray columnsState() const;
-    void setColumnsState(const QByteArray& state);
+    QByteArray addressBookState() const;
+    void setAddressBookState(const QByteArray& state);
 
     bool isRecentOpenEnabled() const;
     void setRecentOpenEnabled(bool enable);

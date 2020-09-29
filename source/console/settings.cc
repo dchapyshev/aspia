@@ -74,24 +74,14 @@ void Settings::setWindowState(const QByteArray& state)
     settings_.setValue("WindowState", state);
 }
 
-QByteArray Settings::splitterState() const
+QByteArray Settings::addressBookState() const
 {
-    return settings_.value("SplitterState").toByteArray();
+    return settings_.value("AddressBookState").toByteArray();
 }
 
-void Settings::setSplitterState(const QByteArray& state)
+void Settings::setAddressBookState(const QByteArray& state)
 {
-    settings_.setValue("SplitterState", state);
-}
-
-QByteArray Settings::columnsState() const
-{
-    return settings_.value("ColumnsState").toByteArray();
-}
-
-void Settings::setColumnsState(const QByteArray& state)
-{
-    settings_.setValue("ColumnsState", state);
+    settings_.setValue("AddressBookState", state);
 }
 
 bool Settings::isRecentOpenEnabled() const
