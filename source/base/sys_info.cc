@@ -19,6 +19,7 @@
 #include "base/sys_info.h"
 
 #include "base/cpuid_util.h"
+#include "base/logging.h"
 #include "base/strings/string_util.h"
 
 #include <algorithm>
@@ -29,6 +30,7 @@ namespace base {
 // static
 std::string SysInfo::processorName()
 {
+#if defined(ARCH_CPU_X86_FAMILY)
     CpuidUtil cpuidUtil;
     cpuidUtil.get(0x80000000);
 
@@ -72,11 +74,16 @@ std::string SysInfo::processorName()
         result.erase(sub - 1, result.end());
 
     return collapseWhitespaceASCII(result, true);
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 // static
 std::string SysInfo::processorVendor()
 {
+#if defined(ARCH_CPU_X86_FAMILY)
     CpuidUtil cpuidUtil;
     cpuidUtil.get(0x00000000);
 
@@ -127,6 +134,10 @@ std::string SysInfo::processorVendor()
         return "Xen HVM";
     else
         return vendor;
+#else
+    NOTIMPLEMENTED();
+    return std::string();
+#endif
 }
 
 } // namespace base
