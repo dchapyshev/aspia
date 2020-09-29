@@ -166,11 +166,16 @@ void showHelp()
         << '\t' << "--help" << '\t' << "Show help" << std::endl;
 }
 
-void entryPoint(int argc, const char* const* argv)
+#endif // defined(OS_WIN)
+
+} // namespace
+
+#if defined(OS_WIN)
+int wmain()
 {
     initLogging();
 
-    base::CommandLine::init(argc, argv);
+    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
     if (command_line->hasSwitch(u"install"))
@@ -203,16 +208,6 @@ void entryPoint(int argc, const char* const* argv)
     }
 
     shutdownLogging();
-}
-
-#endif // defined(OS_WIN)
-
-} // namespace
-
-#if defined(OS_WIN)
-int wmain()
-{
-    entryPoint(0, nullptr); // On Windows ignores arguments.
     return 0;
 }
 #else
