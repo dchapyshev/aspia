@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/router_proxy.h"
+#include "client/router_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "router/manager/router.h"
+#include "client/router.h"
 
-namespace router {
+namespace client {
 
 class RouterProxy::Impl : public std::enable_shared_from_this<Impl>
 {
@@ -226,4 +226,4 @@ void RouterProxy::deleteUser(int64_t entry_id)
     impl_->deleteUser(entry_id);
 }
 
-} // namespace router
+} // namespace client

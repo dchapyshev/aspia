@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H
-#define ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H
+#ifndef CLIENT__ROUTER_WINDOW_PROXY_H
+#define CLIENT__ROUTER_WINDOW_PROXY_H
 
-#include "router/manager/router_window.h"
+#include "client/router_window.h"
 
 namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace router {
+namespace client {
 
 class RouterWindowProxy : public std::enable_shared_from_this<RouterWindowProxy>
 {
@@ -52,6 +52,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RouterWindowProxy);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__ROUTER_WINDOW_PROXY_H
+#endif // CLIENT__ROUTER_WINDOW_PROXY_H

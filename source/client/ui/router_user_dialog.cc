@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/user_dialog.h"
+#include "client/ui/router_user_dialog.h"
 
 #include "base/peer/user.h"
 #include "base/strings/string_util.h"
@@ -24,11 +24,11 @@
 #include <QAbstractButton>
 #include <QMessageBox>
 
-namespace router {
+namespace client {
 
-UserDialog::UserDialog(const base::User& user,
-                       const std::vector<std::u16string>& users,
-                       QWidget* parent)
+RouterUserDialog::RouterUserDialog(const base::User& user,
+                                   const std::vector<std::u16string>& users,
+                                   QWidget* parent)
     : QDialog(parent),
       user_(user),
       users_(users)
@@ -77,21 +77,21 @@ UserDialog::UserDialog(const base::User& user,
     add_session(proto::ROUTER_SESSION_CLIENT);
     add_session(proto::ROUTER_SESSION_ADMIN);
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
+    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui.edit_username, &QLineEdit::textEdited, [this]()
     {
         setAccountChanged(true);
     });
 }
 
-UserDialog::~UserDialog() = default;
+RouterUserDialog::~RouterUserDialog() = default;
 
-const base::User& UserDialog::user() const
+const base::User& RouterUserDialog::user() const
 {
     return user_;
 }
 
-bool UserDialog::eventFilter(QObject* object, QEvent* event)
+bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
         (object == ui.edit_password || object == ui.edit_password_retry))
@@ -107,7 +107,7 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
-void UserDialog::onButtonBoxClicked(QAbstractButton* button)
+void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
@@ -240,7 +240,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void UserDialog::setAccountChanged(bool changed)
+void RouterUserDialog::setAccountChanged(bool changed)
 {
     account_changed_ = changed;
 
@@ -280,7 +280,7 @@ void UserDialog::setAccountChanged(bool changed)
 }
 
 // static
-QString UserDialog::sessionTypeToString(proto::RouterSession session_type)
+QString RouterUserDialog::sessionTypeToString(proto::RouterSession session_type)
 {
     const char* str = nullptr;
 
@@ -304,4 +304,4 @@ QString UserDialog::sessionTypeToString(proto::RouterSession session_type)
     return tr(str);
 }
 
-} // namespace router
+} // namespace client

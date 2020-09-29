@@ -101,6 +101,7 @@ private:
     bool hasUnpinnedTabs() const;
     void connectToComputer(const proto::address_book::Computer& computer,
                            const std::optional<client::RouterConfig>& router_config);
+    void connectToRouter(const QString& guid);
 
     Ui::ConsoleMainWindow ui;
     Mru mru_;

@@ -73,6 +73,7 @@ signals:
     void computerGroupContextMenu(const QPoint& point, bool is_root);
     void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
     void computerDoubleClicked(proto::address_book::Computer* computer);
+    void routerDoubleClicked(const QString& guid);
 
 protected:
     // ConsoleTab implementation.
@@ -88,6 +89,7 @@ private slots:
     void onComputerItemClicked(QTreeWidgetItem* item, int column);
     void onComputerContextMenu(const QPoint& point);
     void onComputerItemDoubleClicked(QTreeWidgetItem* item, int column);
+    void onRouterItemDoubleClicked(QTreeWidgetItem* item, int column);
 
 private:
     AddressBookTab(const QString& file_path,

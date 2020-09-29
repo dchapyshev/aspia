@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/router.h"
+#include "client/router.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "client/router_window_proxy.h"
 #include "proto/router_common.pb.h"
-#include "router/manager/router_window_proxy.h"
 
-namespace router {
+namespace client {
 
 Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
                std::shared_ptr<base::TaskRunner> io_task_runner)
@@ -223,4 +223,4 @@ void Router::onMessageWritten(size_t /* pending */)
     // Not used.
 }
 
-} // namespace router
+} // namespace client

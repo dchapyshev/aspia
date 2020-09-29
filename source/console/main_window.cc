@@ -18,13 +18,13 @@
 
 #include "console/main_window.h"
 
-#include "base/logging.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/ui/client_dialog.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "client/ui/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"
@@ -32,6 +32,7 @@
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
 #include "common/ui/update_dialog.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -1046,6 +1047,8 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &MainWindow::onComputerContextMenu);
     connect(new_tab, &AddressBookTab::computerDoubleClicked,
             this, &MainWindow::onComputerDoubleClicked);
+    connect(new_tab, &AddressBookTab::routerDoubleClicked,
+            this, &MainWindow::connectToRouter);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
         QIcon(":/img/address-book-pinned.png") :
@@ -1168,6 +1171,27 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     client_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!client_window->connectToHost(config))
         client_window->close();
+}
+
+void MainWindow::connectToRouter(const QString& guid)
+{
+    AddressBookTab* tab = currentAddressBookTab();
+    if (!tab)
+    {
+        LOG(LS_ERROR) << "No active tab";
+        return;
+    }
+
+    std::optional<client::RouterConfig> router_config = tab->routerConfig(guid.toStdString());
+    if (!router_config.has_value())
+    {
+        LOG(LS_ERROR) << "No config for router with GUID: " << guid;
+        return;
+    }
+
+    client::RouterManagerWindow* client_window = new client::RouterManagerWindow();
+    client_window->setAttribute(Qt::WA_DeleteOnClose);
+    client_window->connectToRouter(router_config.value());
 }
 
 } // namespace console

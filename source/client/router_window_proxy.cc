@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/router_window_proxy.h"
+#include "client/router_window_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "client/router_window.h"
 #include "proto/router_admin.pb.h"
-#include "router/manager/router_window.h"
 
-namespace router {
+namespace client {
 
 RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                      RouterWindow* router_window)
@@ -148,4 +148,4 @@ void RouterWindowProxy::onUserResult(std::shared_ptr<proto::UserResult> user_res
         router_window_->onUserResult(user_result);
 }
 
-} // namespace router
+} // namespace client

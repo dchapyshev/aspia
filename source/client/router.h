@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__ROUTER_H
-#define ROUTER__MANAGER__ROUTER_H
+#ifndef CLIENT__ROUTER_H
+#define CLIENT__ROUTER_H
 
 #include "base/macros_magic.h"
 #include "base/peer/client_authenticator.h"
@@ -28,7 +28,7 @@ namespace base {
 class TaskRunner;
 } // namespace base
 
-namespace router {
+namespace client {
 
 class RouterWindowProxy;
 
@@ -68,6 +68,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Router);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__ROUTER_H
+#endif // CLIENT__ROUTER_H

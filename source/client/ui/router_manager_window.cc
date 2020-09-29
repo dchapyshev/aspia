@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/manager/main_window.h"
+#include "client/ui/router_manager_window.h"
 
 #include "base/logging.h"
 #include "base/peer/user.h"
 #include "qt_base/application.h"
-#include "router/manager/user_dialog.h"
-#include "router/manager/router.h"
-#include "router/manager/router_proxy.h"
-#include "router/manager/router_window_proxy.h"
-#include "router/manager/status_dialog.h"
+#include "client/router.h"
+#include "client/router_proxy.h"
+#include "client/router_window_proxy.h"
+#include "client/ui/router_user_dialog.h"
+#include "client/ui/router_status_dialog.h"
 
 #include <QDateTime>
 #include <QMessageBox>
 #include <QTimer>
 
-namespace router {
+namespace client {
 
 namespace {
 
@@ -102,42 +102,57 @@ private:
 
 } // namespace
 
-MainWindow::MainWindow(QWidget* parent)
+RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     : QMainWindow(parent),
-      status_dialog_(new StatusDialog(this)),
-      window_proxy_(std::make_shared<RouterWindowProxy>(qt_base::Application::uiTaskRunner(), this))
+      status_dialog_(new RouterStatusDialog(this)),
+      window_proxy_(std::make_shared<RouterWindowProxy>(
+          qt_base::Application::uiTaskRunner(), this))
 {
     ui.setupUi(this);
 
-    connect(ui.button_refresh_hosts, &QPushButton::released, this, &MainWindow::refreshHostList);
-    connect(ui.button_disconnect_host, &QPushButton::released, this, &MainWindow::disconnectHost);
-    connect(ui.button_disconnect_all_hosts, &QPushButton::released, this, &MainWindow::disconnectAllHosts);
-    connect(ui.button_refresh_relay, &QPushButton::released, this, &MainWindow::refreshRelayList);
-    connect(ui.button_refresh_users, &QPushButton::released, this, &MainWindow::refreshUserList);
-    connect(ui.button_add_user, &QPushButton::released, this, &MainWindow::addUser);
-    connect(ui.button_modify_user, &QPushButton::released, this, &MainWindow::modifyUser);
-    connect(ui.button_delete_user, &QPushButton::released, this, &MainWindow::deleteUser);
-    connect(ui.tree_users, &QTreeWidget::currentItemChanged, this, &MainWindow::onCurrentUserChanged);
+    connect(ui.button_refresh_hosts, &QPushButton::released,
+            this, &RouterManagerWindow::refreshHostList);
+
+    connect(ui.button_disconnect_host, &QPushButton::released,
+            this, &RouterManagerWindow::disconnectHost);
+
+    connect(ui.button_disconnect_all_hosts, &QPushButton::released,
+            this, &RouterManagerWindow::disconnectAllHosts);
+
+    connect(ui.button_refresh_relay, &QPushButton::released,
+            this, &RouterManagerWindow::refreshRelayList);
+
+    connect(ui.button_refresh_users, &QPushButton::released,
+            this, &RouterManagerWindow::refreshUserList);
+
+    connect(ui.button_add_user, &QPushButton::released,
+            this, &RouterManagerWindow::addUser);
+
+    connect(ui.button_modify_user, &QPushButton::released,
+            this, &RouterManagerWindow::modifyUser);
+
+    connect(ui.button_delete_user, &QPushButton::released,
+            this, &RouterManagerWindow::deleteUser);
+
+    connect(ui.tree_users, &QTreeWidget::currentItemChanged,
+            this, &RouterManagerWindow::onCurrentUserChanged);
 }
 
-MainWindow::~MainWindow()
+RouterManagerWindow::~RouterManagerWindow()
 {
     window_proxy_->dettach();
 }
 
-void MainWindow::connectToRouter(const QString& address,
-                                 uint16_t port,
-                                 const QString& user_name,
-                                 const QString& password)
+void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 {
-    peer_address_ = address;
-    peer_port_ = port;
+    peer_address_ = QString::fromStdU16String(router_config.address);
+    peer_port_ = router_config.port;
 
-    status_dialog_->setStatus(tr("Connecting to %1:%2...").arg(address).arg(port));
+    status_dialog_->setStatus(tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
     status_dialog_->show();
     status_dialog_->activateWindow();
 
-    connect(status_dialog_, &StatusDialog::canceled, [this]()
+    connect(status_dialog_, &RouterStatusDialog::canceled, [this]()
     {
         router_proxy_.reset();
         close();
@@ -146,16 +161,16 @@ void MainWindow::connectToRouter(const QString& address,
     std::unique_ptr<Router> router = std::make_unique<Router>(
         window_proxy_, qt_base::Application::ioTaskRunner());
 
-    router->setUserName(user_name.toStdU16String());
-    router->setPassword(password.toStdU16String());
+    router->setUserName(router_config.username);
+    router->setPassword(router_config.password);
 
     router_proxy_ = std::make_unique<RouterProxy>(
         qt_base::Application::ioTaskRunner(), std::move(router));
 
-    router_proxy_->connectToRouter(address.toStdU16String(), port);
+    router_proxy_->connectToRouter(router_config.address, router_config.port);
 }
 
-void MainWindow::onConnected(const base::Version& peer_version)
+void RouterManagerWindow::onConnected(const base::Version& peer_version)
 {
     status_dialog_->hide();
 
@@ -174,7 +189,7 @@ void MainWindow::onConnected(const base::Version& peer_version)
     }
 }
 
-void MainWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterManagerWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     const char* message;
 
@@ -228,7 +243,7 @@ void MainWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     status_dialog_->show();
 }
 
-void MainWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
@@ -263,7 +278,7 @@ void MainWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
     status_dialog_->show();
 }
 
-void MainWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
+void RouterManagerWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
 {
     ui.tree_hosts->clear();
 
@@ -279,7 +294,7 @@ void MainWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
     afterRequest();
 }
 
-void MainWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
+void RouterManagerWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
 {
     if (host_result->error_code() != proto::HostResult::SUCCESS)
     {
@@ -315,7 +330,7 @@ void MainWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
     afterRequest();
 }
 
-void MainWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
+void RouterManagerWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
     ui.tree_relay->clear();
 
@@ -330,7 +345,7 @@ void MainWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
     afterRequest();
 }
 
-void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
+void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 {
     ui.tree_users->clear();
 
@@ -340,7 +355,7 @@ void MainWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
     afterRequest();
 }
 
-void MainWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
+void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
     if (user_result->error_code() != proto::UserResult::SUCCESS)
     {
@@ -372,15 +387,13 @@ void MainWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
     afterRequest();
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void RouterManagerWindow::closeEvent(QCloseEvent* event)
 {
     if (router_proxy_)
         router_proxy_->disconnectFromRouter();
-
-    QApplication::quit();
 }
 
-void MainWindow::refreshHostList()
+void RouterManagerWindow::refreshHostList()
 {
     if (router_proxy_)
     {
@@ -389,7 +402,7 @@ void MainWindow::refreshHostList()
     }
 }
 
-void MainWindow::disconnectHost()
+void RouterManagerWindow::disconnectHost()
 {
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
     if (!tree_item)
@@ -411,7 +424,7 @@ void MainWindow::disconnectHost()
     }
 }
 
-void MainWindow::disconnectAllHosts()
+void RouterManagerWindow::disconnectAllHosts()
 {
     if (!router_proxy_)
         return;
@@ -434,7 +447,7 @@ void MainWindow::disconnectAllHosts()
     }
 }
 
-void MainWindow::refreshRelayList()
+void RouterManagerWindow::refreshRelayList()
 {
     if (router_proxy_)
     {
@@ -443,7 +456,7 @@ void MainWindow::refreshRelayList()
     }
 }
 
-void MainWindow::refreshUserList()
+void RouterManagerWindow::refreshUserList()
 {
     if (router_proxy_)
     {
@@ -452,7 +465,7 @@ void MainWindow::refreshUserList()
     }
 }
 
-void MainWindow::addUser()
+void RouterManagerWindow::addUser()
 {
     std::vector<std::u16string> users;
 
@@ -462,7 +475,7 @@ void MainWindow::addUser()
             ui.tree_users->topLevelItem(i))->user.name);
     }
 
-    UserDialog dialog(base::User(), users, this);
+    RouterUserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
@@ -473,7 +486,7 @@ void MainWindow::addUser()
     }
 }
 
-void MainWindow::modifyUser()
+void RouterManagerWindow::modifyUser()
 {
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!tree_item)
@@ -488,7 +501,7 @@ void MainWindow::modifyUser()
             users.emplace_back(current_item->user.name);
     }
 
-    UserDialog dialog(tree_item->user, users, this);
+    RouterUserDialog dialog(tree_item->user, users, this);
     if (dialog.exec() == QDialog::Accepted)
     {
         if (router_proxy_)
@@ -499,7 +512,7 @@ void MainWindow::modifyUser()
     }
 }
 
-void MainWindow::deleteUser()
+void RouterManagerWindow::deleteUser()
 {
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!tree_item)
@@ -520,20 +533,20 @@ void MainWindow::deleteUser()
     }
 }
 
-void MainWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+void RouterManagerWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
     ui.button_modify_user->setEnabled(true);
     ui.button_delete_user->setEnabled(true);
 }
 
-void MainWindow::beforeRequest()
+void RouterManagerWindow::beforeRequest()
 {
     ui.tab->setEnabled(false);
 }
 
-void MainWindow::afterRequest()
+void RouterManagerWindow::afterRequest()
 {
     ui.tab->setEnabled(true);
 }
 
-} // namespace router
+} // namespace client

@@ -64,6 +64,13 @@ list(APPEND SOURCE_CLIENT
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
+    router.cc
+    router.h
+    router_proxy.cc
+    router_proxy.h
+    router_window.h
+    router_window_proxy.cc
+    router_window_proxy.h
     router_config.cc
     router_config.h
     router_controller.cc
@@ -132,6 +139,15 @@ list(APPEND SOURCE_CLIENT_UI
     ui/qt_file_manager_window.cc
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
+    ui/router_manager_window.cc
+    ui/router_manager_window.h
+    ui/router_manager_window.ui
+    ui/router_status_dialog.cc
+    ui/router_status_dialog.h
+    ui/router_status_dialog.ui
+    ui/router_user_dialog.cc
+    ui/router_user_dialog.h
+    ui/router_user_dialog.ui
     ui/select_screen_action.h
     ui/statistics_dialog.cc
     ui/statistics_dialog.h

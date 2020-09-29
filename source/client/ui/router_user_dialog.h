@@ -16,25 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__USER_DIALOG_H
-#define ROUTER__MANAGER__USER_DIALOG_H
+#ifndef CLIENT__UI__ROUTER_USER_DIALOG_H
+#define CLIENT__UI__ROUTER_USER_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "base/peer/user.h"
 #include "proto/router_common.pb.h"
-#include "ui_user_dialog.h"
+#include "ui_router_user_dialog.h"
 
-namespace router {
+namespace client {
 
-class UserDialog : public QDialog
+class RouterUserDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    UserDialog(const base::User& user,
-               const std::vector<std::u16string>& users,
-               QWidget* parent);
-    ~UserDialog();
+    RouterUserDialog(const base::User& user,
+                     const std::vector<std::u16string>& users,
+                     QWidget* parent);
+    ~RouterUserDialog();
 
     const base::User& user() const;
 
@@ -47,15 +47,15 @@ private:
     void setAccountChanged(bool changed);
     static QString sessionTypeToString(proto::RouterSession session_type);
 
-    Ui::UserDialog ui;
+    Ui::RouterUserDialog ui;
 
     base::User user_;
     std::vector<std::u16string> users_;
     bool account_changed_ = true;
 
-    DISALLOW_COPY_AND_ASSIGN(UserDialog);
+    DISALLOW_COPY_AND_ASSIGN(RouterUserDialog);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__USER_DIALOG_H
+#endif // CLIENT__ROUTER_USER_DIALOG_H

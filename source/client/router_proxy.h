@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__ROUTER_PROXY_H
-#define ROUTER__MANAGER__ROUTER_PROXY_H
+#ifndef CLIENT__ROUTER_PROXY_H
+#define CLIENT__ROUTER_PROXY_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -31,7 +31,7 @@ namespace proto {
 class User;
 } // namespace proto
 
-namespace router {
+namespace client {
 
 class Router;
 
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RouterProxy);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__ROUTER_PROXY_H
+#endif // CLIENT__ROUTER_PROXY_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__ROUTER_WINDOW_H
-#define ROUTER__MANAGER__ROUTER_WINDOW_H
+#ifndef CLIENT__ROUTER_WINDOW_H
+#define CLIENT__ROUTER_WINDOW_H
 
 #include "base/peer/client_authenticator.h"
 
@@ -29,7 +29,7 @@ class UserList;
 class UserResult;
 } // namespace proto
 
-namespace router {
+namespace client {
 
 class RouterWindow
 {
@@ -46,6 +46,6 @@ public:
     virtual void onUserResult(std::shared_ptr<proto::UserResult> user_result) = 0;
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__ROUTER_WINDOW_H
+#endif // CLIENT__ROUTER_WINDOW_H

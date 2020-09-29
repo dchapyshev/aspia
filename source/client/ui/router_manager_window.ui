@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>RouterManagerWindow</class>
+ <widget class="QMainWindow" name="RouterManagerWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Router Manager</string>
+   <string>Router Management</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -219,7 +219,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
+             <iconset>
               <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
             </property>
            </widget>
@@ -233,7 +233,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
+             <iconset>
               <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
             </property>
            </widget>
@@ -247,7 +247,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
+             <iconset>
               <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
             </property>
            </widget>
@@ -258,7 +258,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resources/router_manager.qrc">
+             <iconset resource="../resources/client.qrc">
               <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
             </property>
            </widget>
@@ -299,7 +299,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="resources/router_manager.qrc"/>
+  <include location="../resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

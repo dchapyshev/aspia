@@ -413,6 +413,136 @@
     </message>
 </context>
 <context>
+    <name>RouterManagerWindow</name>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="14"/>
+        <source>Router Management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="25"/>
+        <source>Hosts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="33"/>
+        <location filename="../ui/router_manager_window.ui" line="133"/>
+        <source>Connections count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="58"/>
+        <location filename="../ui/router_manager_window.ui" line="158"/>
+        <source>Connect Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="63"/>
+        <source>IP Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="68"/>
+        <location filename="../ui/router_manager_window.ui" line="168"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="73"/>
+        <location filename="../ui/router_manager_window.ui" line="173"/>
+        <source>Computer Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="78"/>
+        <location filename="../ui/router_manager_window.ui" line="178"/>
+        <source>Operating System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="101"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="108"/>
+        <source>Disconnect All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="115"/>
+        <location filename="../ui/router_manager_window.ui" line="201"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="125"/>
+        <source>Relay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="153"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="163"/>
+        <source>Pool Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="211"/>
+        <source>Users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="288"/>
+        <source>User Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RouterStatusDialog</name>
+    <message>
+        <location filename="../ui/router_status_dialog.ui" line="14"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RouterUserDialog</name>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="14"/>
+        <source>User Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="27"/>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="34"/>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="41"/>
+        <source>Password (retry):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="73"/>
+        <source>Disable User Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.ui" line="80"/>
+        <source>Allowed Session Types:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../ui/statistics_dialog.ui" line="14"/>
@@ -1130,6 +1260,233 @@
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::RouterManagerWindow</name>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="151"/>
+        <source>Connecting to %1:%2...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="177"/>
+        <source>Connected to: %1:%2 (version %3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="199"/>
+        <source>Cryptography error (message encryption or decryption failed).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="203"/>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="207"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="211"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="215"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="219"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="223"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="227"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="237"/>
+        <location filename="../ui/router_manager_window.cc" line="273"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="242"/>
+        <location filename="../ui/router_manager_window.cc" line="277"/>
+        <source>Error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="253"/>
+        <source>Authentication successfully completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="257"/>
+        <source>Network authentication error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="261"/>
+        <source>Violation of the data exchange protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="265"/>
+        <source>An error occured while authenticating: wrong user name or password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="269"/>
+        <source>Specified session type is not allowed for the user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="306"/>
+        <source>Invalid request.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="310"/>
+        <location filename="../ui/router_manager_window.cc" line="367"/>
+        <source>Unknown internal error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="314"/>
+        <source>Invalid host ID was passed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="318"/>
+        <source>The specified host is not connected to the router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="322"/>
+        <location filename="../ui/router_manager_window.cc" line="379"/>
+        <source>Unknown error type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="326"/>
+        <location filename="../ui/router_manager_window.cc" line="383"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="371"/>
+        <source>Invalid data was passed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="375"/>
+        <source>A user with the specified name already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="412"/>
+        <location filename="../ui/router_manager_window.cc" line="433"/>
+        <location filename="../ui/router_manager_window.cc" line="522"/>
+        <source>Confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="413"/>
+        <source>Are you sure you want to disconnect host with ID &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="434"/>
+        <source>Are you sure you want to disconnect all hosts?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="523"/>
+        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::RouterUserDialog</name>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="127"/>
+        <location filename="../ui/router_user_dialog.cc" line="142"/>
+        <location filename="../ui/router_user_dialog.cc" line="155"/>
+        <location filename="../ui/router_user_dialog.cc" line="169"/>
+        <location filename="../ui/router_user_dialog.cc" line="192"/>
+        <location filename="../ui/router_user_dialog.cc" line="217"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="128"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="143"/>
+        <source>The username you entered already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="156"/>
+        <source>The passwords you entered do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/router_user_dialog.cc" line="170"/>
+        <source>Password can not be empty and should not exceed %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="182"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/router_user_dialog.cc" line="185"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="189"/>
+        <source>Do you want to enter a different password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="218"/>
+        <source>Unknown internal error when creating or modifying a user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="266"/>
+        <source>Double-click to change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="290"/>
+        <source>Administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="294"/>
+        <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

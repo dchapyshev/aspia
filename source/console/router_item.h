@@ -28,13 +28,13 @@ namespace console {
 class RouterItem : public QTreeWidgetItem
 {
 public:
-    RouterItem(const QString& name, const QString& uuid);
+    RouterItem(const QString& name, const QString& guid);
     ~RouterItem();
 
-    QString uuid() const;
+    QString guid() const;
 
 private:
-    QString uuid_;
+    QString guid_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterItem);
 };

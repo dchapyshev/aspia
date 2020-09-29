@@ -16,35 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__MAIN_WINDOW_H
-#define ROUTER__MANAGER__MAIN_WINDOW_H
+#ifndef CLIENT__UI__ROUTER_MANAGER_WINDOW_H
+#define CLIENT__UI__ROUTER_MANAGER_WINDOW_H
 
-#include "router/manager/router_window.h"
-#include "ui_main_window.h"
+#include "client/router_config.h"
+#include "client/router_window.h"
+#include "ui_router_manager_window.h"
 
 #include <QMainWindow>
 #include <QPointer>
 
-namespace router {
+namespace client {
 
 class RouterProxy;
 class RouterWindowProxy;
-class StatusDialog;
+class RouterStatusDialog;
 
-class MainWindow
+class RouterManagerWindow
     : public QMainWindow,
       public RouterWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    explicit RouterManagerWindow(QWidget* parent = nullptr);
+    ~RouterManagerWindow();
 
-    void connectToRouter(const QString& address,
-                         uint16_t port,
-                         const QString& user_name,
-                         const QString& password);
+    void connectToRouter(const RouterConfig& router_config);
 
     // RouterWindow implementation.
     void onConnected(const base::Version& peer_version) override;
@@ -74,19 +72,19 @@ private:
     void beforeRequest();
     void afterRequest();
 
-    Ui::MainWindow ui;
+    Ui::RouterManagerWindow ui;
 
     QString peer_address_;
     uint16_t peer_port_ = 0;
 
-    StatusDialog* status_dialog_;
+    RouterStatusDialog* status_dialog_;
 
     std::shared_ptr<RouterWindowProxy> window_proxy_;
     std::unique_ptr<RouterProxy> router_proxy_;
 
-    DISALLOW_COPY_AND_ASSIGN(MainWindow);
+    DISALLOW_COPY_AND_ASSIGN(RouterManagerWindow);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__MAIN_WINDOW_H
+#endif // CLIENT__UI__ROUTER_MANAGER_WINDOW_H

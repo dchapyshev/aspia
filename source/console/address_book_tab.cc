@@ -172,6 +172,9 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     connect(ui.tree_computer, &ComputerTree::itemDoubleClicked,
             this, &AddressBookTab::onComputerItemDoubleClicked);
+
+    connect(ui.tree_routers, &QTreeWidget::itemDoubleClicked,
+            this, &AddressBookTab::onRouterItemDoubleClicked);
 }
 
 AddressBookTab::~AddressBookTab()
@@ -631,6 +634,15 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
         return;
 
     emit computerDoubleClicked(current_item->computer());
+}
+
+void AddressBookTab::onRouterItemDoubleClicked(QTreeWidgetItem* item, int column)
+{
+    RouterItem* current_item = dynamic_cast<RouterItem*>(item);
+    if (!current_item)
+        return;
+
+    emit routerDoubleClicked(current_item->guid());
 }
 
 void AddressBookTab::showEvent(QShowEvent* event)

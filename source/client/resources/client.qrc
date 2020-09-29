@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/img">
+    <file>user.png</file>
+    <file>user-disabled.png</file>
     <file>broom.png</file>
     <file>navigation-270-button.png</file>
     <file>cross-button.png</file>

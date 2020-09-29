@@ -16,21 +16,21 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__STATUS_DIALOG_H
-#define ROUTER__MANAGER__STATUS_DIALOG_H
+#ifndef CLIENT__UI__ROUTER_STATUS_DIALOG_H
+#define CLIENT__UI__ROUTER_STATUS_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "ui_status_dialog.h"
+#include "ui_router_status_dialog.h"
 
-namespace router {
+namespace client {
 
-class StatusDialog : public QDialog
+class RouterStatusDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    StatusDialog(QWidget* parent);
-    ~StatusDialog();
+    RouterStatusDialog(QWidget* parent);
+    ~RouterStatusDialog();
 
     void setStatus(const QString& message);
 
@@ -38,11 +38,11 @@ signals:
     void canceled();
 
 private:
-    Ui::StatusDialog ui;
+    Ui::RouterStatusDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
+    DISALLOW_COPY_AND_ASSIGN(RouterStatusDialog);
 };
 
-} // namespace router
+} // namespace client
 
-#endif // ROUTER__MANAGER__STATUS_DIALOG_H
+#endif // CLIENT__UI__ROUTER_STATUS_DIALOG_H

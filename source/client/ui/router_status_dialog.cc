@@ -16,34 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__MANAGER__SETTINGS_H
-#define ROUTER__MANAGER__SETTINGS_H
+#include "client/ui/router_status_dialog.h"
 
-#include "base/macros_magic.h"
-#include "router/manager/mru_cache.h"
+#include <QAbstractButton>
 
-#include <QSettings>
+namespace client {
 
-namespace router {
-
-class Settings
+RouterStatusDialog::RouterStatusDialog(QWidget* parent)
+    : QDialog(parent)
 {
-public:
-    Settings();
-    ~Settings();
+    ui.setupUi(this);
 
-    QString locale() const;
-    void setLocale(const QString& locale);
+    connect(ui.buttonbox, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
+    {
+        QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
+        if (standard_button != QDialogButtonBox::Cancel)
+            return;
 
-    void readMru(MruCache* mru) const;
-    void writeMru(const MruCache& mru);
+        emit canceled();
+        close();
+    });
+}
 
-private:
-    mutable QSettings settings_;
+RouterStatusDialog::~RouterStatusDialog() = default;
 
-    DISALLOW_COPY_AND_ASSIGN(Settings);
-};
+void RouterStatusDialog::setStatus(const QString& message)
+{
+    ui.label->setText(message);
+}
 
-} // namespace router
-
-#endif // ROUTER__MANAGER__SETTINGS_H
+} // namespace client

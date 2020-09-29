@@ -20,8 +20,8 @@
 
 namespace console {
 
-RouterItem::RouterItem(const QString& name, const QString& uuid)
-    : uuid_(uuid)
+RouterItem::RouterItem(const QString& name, const QString& guid)
+    : guid_(guid)
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/server.png"));
@@ -29,9 +29,9 @@ RouterItem::RouterItem(const QString& name, const QString& uuid)
 
 RouterItem::~RouterItem() = default;
 
-QString RouterItem::uuid() const
+QString RouterItem::guid() const
 {
-    return uuid_;
+    return guid_;
 }
 
 } // namespace console
