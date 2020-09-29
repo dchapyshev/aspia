@@ -830,59 +830,59 @@
         <translation type="obsolete">路由器</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="510"/>
+        <location filename="../address_book_tab.cc" line="511"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="514"/>
-        <location filename="../address_book_tab.cc" line="536"/>
+        <location filename="../address_book_tab.cc" line="515"/>
+        <location filename="../address_book_tab.cc" line="537"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="532"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="858"/>
+        <location filename="../address_book_tab.cc" line="869"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="860"/>
+        <location filename="../address_book_tab.cc" line="871"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="870"/>
+        <location filename="../address_book_tab.cc" line="881"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="883"/>
+        <location filename="../address_book_tab.cc" line="894"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="936"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="936"/>
-        <location filename="../address_book_tab.cc" line="950"/>
+        <location filename="../address_book_tab.cc" line="947"/>
+        <location filename="../address_book_tab.cc" line="961"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="938"/>
+        <location filename="../address_book_tab.cc" line="949"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="952"/>
+        <location filename="../address_book_tab.cc" line="963"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>

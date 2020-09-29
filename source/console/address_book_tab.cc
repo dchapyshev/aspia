@@ -451,6 +451,7 @@ void AddressBookTab::modifyAddressBook()
         return;
 
     root_item->updateItem();
+    updateRouterList();
     setChanged(true);
 }
 
@@ -819,8 +820,18 @@ void AddressBookTab::updateRouterList()
     ui.tree_routers->clear();
 
     auto routers = routersList();
-    for (auto it = routers.begin(); it != routers.end(); ++it)
-        ui.tree_routers->addTopLevelItem(new RouterItem(it.key(), it.value()));
+
+    if (routers.isEmpty())
+    {
+        ui.tree_routers->hide();
+    }
+    else
+    {
+        ui.tree_routers->show();
+
+        for (auto it = routers.begin(); it != routers.end(); ++it)
+            ui.tree_routers->addTopLevelItem(new RouterItem(it.key(), it.value()));
+    }
 }
 
 bool AddressBookTab::saveToFile(const QString& file_path)
