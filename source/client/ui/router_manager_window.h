@@ -21,10 +21,15 @@
 
 #include "client/router_config.h"
 #include "client/router_window.h"
-#include "ui_router_manager_window.h"
 
 #include <QMainWindow>
 #include <QPointer>
+
+namespace Ui {
+class RouterManagerWindow;
+} // namespace Ui
+
+class QTreeWidgetItem;
 
 namespace client {
 
@@ -72,7 +77,7 @@ private:
     void beforeRequest();
     void afterRequest();
 
-    Ui::RouterManagerWindow ui;
+    std::unique_ptr<Ui::RouterManagerWindow> ui;
 
     QString peer_address_;
     uint16_t peer_port_ = 0;

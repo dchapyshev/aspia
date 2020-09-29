@@ -1797,154 +1797,154 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="151"/>
+        <location filename="../ui/router_manager_window.cc" line="159"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="177"/>
+        <location filename="../ui/router_manager_window.cc" line="185"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="199"/>
+        <location filename="../ui/router_manager_window.cc" line="207"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="203"/>
+        <location filename="../ui/router_manager_window.cc" line="211"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="207"/>
+        <location filename="../ui/router_manager_window.cc" line="215"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="211"/>
+        <location filename="../ui/router_manager_window.cc" line="219"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="215"/>
+        <location filename="../ui/router_manager_window.cc" line="223"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="219"/>
+        <location filename="../ui/router_manager_window.cc" line="227"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="223"/>
+        <location filename="../ui/router_manager_window.cc" line="231"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="227"/>
+        <location filename="../ui/router_manager_window.cc" line="235"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="237"/>
-        <location filename="../ui/router_manager_window.cc" line="273"/>
+        <location filename="../ui/router_manager_window.cc" line="245"/>
+        <location filename="../ui/router_manager_window.cc" line="281"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="242"/>
-        <location filename="../ui/router_manager_window.cc" line="277"/>
+        <location filename="../ui/router_manager_window.cc" line="250"/>
+        <location filename="../ui/router_manager_window.cc" line="285"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="253"/>
+        <location filename="../ui/router_manager_window.cc" line="261"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="257"/>
+        <location filename="../ui/router_manager_window.cc" line="265"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="261"/>
+        <location filename="../ui/router_manager_window.cc" line="269"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="265"/>
+        <location filename="../ui/router_manager_window.cc" line="273"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="269"/>
+        <location filename="../ui/router_manager_window.cc" line="277"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="306"/>
+        <location filename="../ui/router_manager_window.cc" line="315"/>
         <source>Invalid request.</source>
         <translation>Неверный запрос.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="310"/>
-        <location filename="../ui/router_manager_window.cc" line="367"/>
+        <location filename="../ui/router_manager_window.cc" line="319"/>
+        <location filename="../ui/router_manager_window.cc" line="378"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="314"/>
+        <location filename="../ui/router_manager_window.cc" line="323"/>
         <source>Invalid host ID was passed.</source>
         <translation>Указан неверный ID хоста.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="318"/>
+        <location filename="../ui/router_manager_window.cc" line="327"/>
         <source>The specified host is not connected to the router.</source>
         <translation>Указанный хост не подключен к маршрутизатору.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="322"/>
-        <location filename="../ui/router_manager_window.cc" line="379"/>
+        <location filename="../ui/router_manager_window.cc" line="331"/>
+        <location filename="../ui/router_manager_window.cc" line="390"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="326"/>
-        <location filename="../ui/router_manager_window.cc" line="383"/>
+        <location filename="../ui/router_manager_window.cc" line="335"/>
+        <location filename="../ui/router_manager_window.cc" line="394"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="371"/>
+        <location filename="../ui/router_manager_window.cc" line="382"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="375"/>
+        <location filename="../ui/router_manager_window.cc" line="386"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="412"/>
-        <location filename="../ui/router_manager_window.cc" line="433"/>
-        <location filename="../ui/router_manager_window.cc" line="522"/>
+        <location filename="../ui/router_manager_window.cc" line="423"/>
+        <location filename="../ui/router_manager_window.cc" line="444"/>
+        <location filename="../ui/router_manager_window.cc" line="533"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="413"/>
+        <location filename="../ui/router_manager_window.cc" line="424"/>
         <source>Are you sure you want to disconnect host with ID &quot;%1&quot;?</source>
         <translation>Вы действительно хотите отключить хост с ID &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="434"/>
+        <location filename="../ui/router_manager_window.cc" line="445"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Вы действительно хотите отключить все хосты?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="523"/>
+        <location filename="../ui/router_manager_window.cc" line="534"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>

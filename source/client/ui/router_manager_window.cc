@@ -26,6 +26,7 @@
 #include "client/router_window_proxy.h"
 #include "client/ui/router_user_dialog.h"
 #include "client/ui/router_status_dialog.h"
+#include "ui_router_manager_window.h"
 
 #include <QDateTime>
 #include <QMessageBox>
@@ -41,8 +42,11 @@ public:
     explicit HostTreeItem(const proto::Host& host)
         : host_id(host.host_id())
     {
+        QString time = QLocale::system().toString(
+            QDateTime::fromTime_t(host.timepoint()), QLocale::ShortFormat);
+
         setText(0, QString::number(host.host_id()));
-        setText(1, QDateTime::fromTime_t(host.timepoint()).toString(Qt::DefaultLocaleShortDate));
+        setText(1, time);
         setText(2, QString::fromStdString(host.ip_address()));
         setText(3, QString("%1.%2.%3")
                 .arg(host.version().major())
@@ -65,8 +69,11 @@ class RelayTreeItem : public QTreeWidgetItem
 public:
     explicit RelayTreeItem(const proto::Relay& relay)
     {
+        QString time = QLocale::system().toString(
+            QDateTime::fromTime_t(relay.timepoint()), QLocale::ShortFormat);
+
         setText(0, QString::fromStdString(relay.address()));
-        setText(1, QDateTime::fromTime_t(relay.timepoint()).toString(Qt::DefaultLocaleShortDate));
+        setText(1, time);
         setText(2, QString::number(relay.pool_size()));
         setText(3, QString("%1.%2.%3")
                 .arg(relay.version().major())
@@ -104,37 +111,38 @@ private:
 
 RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     : QMainWindow(parent),
+      ui(std::make_unique<Ui::RouterManagerWindow>()),
       status_dialog_(new RouterStatusDialog(this)),
       window_proxy_(std::make_shared<RouterWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_refresh_hosts, &QPushButton::released,
+    connect(ui->button_refresh_hosts, &QPushButton::released,
             this, &RouterManagerWindow::refreshHostList);
 
-    connect(ui.button_disconnect_host, &QPushButton::released,
+    connect(ui->button_disconnect_host, &QPushButton::released,
             this, &RouterManagerWindow::disconnectHost);
 
-    connect(ui.button_disconnect_all_hosts, &QPushButton::released,
+    connect(ui->button_disconnect_all_hosts, &QPushButton::released,
             this, &RouterManagerWindow::disconnectAllHosts);
 
-    connect(ui.button_refresh_relay, &QPushButton::released,
+    connect(ui->button_refresh_relay, &QPushButton::released,
             this, &RouterManagerWindow::refreshRelayList);
 
-    connect(ui.button_refresh_users, &QPushButton::released,
+    connect(ui->button_refresh_users, &QPushButton::released,
             this, &RouterManagerWindow::refreshUserList);
 
-    connect(ui.button_add_user, &QPushButton::released,
+    connect(ui->button_add_user, &QPushButton::released,
             this, &RouterManagerWindow::addUser);
 
-    connect(ui.button_modify_user, &QPushButton::released,
+    connect(ui->button_modify_user, &QPushButton::released,
             this, &RouterManagerWindow::modifyUser);
 
-    connect(ui.button_delete_user, &QPushButton::released,
+    connect(ui->button_delete_user, &QPushButton::released,
             this, &RouterManagerWindow::deleteUser);
 
-    connect(ui.tree_users, &QTreeWidget::currentItemChanged,
+    connect(ui->tree_users, &QTreeWidget::currentItemChanged,
             this, &RouterManagerWindow::onCurrentUserChanged);
 }
 
@@ -174,10 +182,10 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
 {
     status_dialog_->hide();
 
-    ui.statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
-                              .arg(peer_address_)
-                              .arg(peer_port_)
-                              .arg(QString::fromStdString(peer_version.toString())));
+    ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
+                               .arg(peer_address_)
+                               .arg(peer_port_)
+                               .arg(QString::fromStdString(peer_version.toString())));
     show();
     activateWindow();
 
@@ -280,16 +288,17 @@ void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode er
 
 void RouterManagerWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
 {
-    ui.tree_hosts->clear();
+    QTreeWidget* tree_hosts = ui->tree_hosts;
+    tree_hosts->clear();
 
     int host_size = host_list->host_size();
 
     for (int i = 0; i < host_size; ++i)
-        ui.tree_hosts->addTopLevelItem(new HostTreeItem(host_list->host(i)));
-    ui.label_hosts_conn_count->setText(QString::number(host_size));
+        tree_hosts->addTopLevelItem(new HostTreeItem(host_list->host(i)));
+    ui->label_hosts_conn_count->setText(QString::number(host_size));
 
-    for (int i = 0; i < ui.tree_hosts->columnCount(); ++i)
-        ui.tree_hosts->resizeColumnToContents(i);
+    for (int i = 0; i < tree_hosts->columnCount(); ++i)
+        tree_hosts->resizeColumnToContents(i);
 
     afterRequest();
 }
@@ -332,25 +341,27 @@ void RouterManagerWindow::onHostResult(std::shared_ptr<proto::HostResult> host_r
 
 void RouterManagerWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
 {
-    ui.tree_relay->clear();
+    QTreeWidget* tree_relay = ui->tree_relay;
+    tree_relay->clear();
 
     int relay_size = relay_list->relay_size();
     for (int i = 0; i < relay_size; ++i)
-        ui.tree_relay->addTopLevelItem(new RelayTreeItem(relay_list->relay(i)));
-    ui.label_relay_conn_count->setText(QString::number(relay_size));
+        tree_relay->addTopLevelItem(new RelayTreeItem(relay_list->relay(i)));
+    ui->label_relay_conn_count->setText(QString::number(relay_size));
 
-    for (int i = 0; i < ui.tree_relay->columnCount(); ++i)
-        ui.tree_relay->resizeColumnToContents(i);
+    for (int i = 0; i < tree_relay->columnCount(); ++i)
+        tree_relay->resizeColumnToContents(i);
 
     afterRequest();
 }
 
 void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 {
-    ui.tree_users->clear();
+    QTreeWidget* tree_users = ui->tree_users;
+    tree_users->clear();
 
     for (int i = 0; i < user_list->user_size(); ++i)
-        ui.tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
+        tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
 
     afterRequest();
 }
@@ -387,7 +398,7 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_r
     afterRequest();
 }
 
-void RouterManagerWindow::closeEvent(QCloseEvent* event)
+void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (router_proxy_)
         router_proxy_->disconnectFromRouter();
@@ -404,7 +415,7 @@ void RouterManagerWindow::refreshHostList()
 
 void RouterManagerWindow::disconnectHost()
 {
-    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
         return;
 
@@ -439,9 +450,10 @@ void RouterManagerWindow::disconnectAllHosts()
 
     beforeRequest();
 
-    for (int i = 0; i < ui.tree_hosts->topLevelItemCount(); ++i)
+    QTreeWidget* tree_hosts = ui->tree_hosts;
+    for (int i = 0; i < tree_hosts->topLevelItemCount(); ++i)
     {
-        HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i));
+        HostTreeItem* tree_item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(i));
         if (tree_item)
             router_proxy_->disconnectHost(tree_item->host_id);
     }
@@ -467,13 +479,11 @@ void RouterManagerWindow::refreshUserList()
 
 void RouterManagerWindow::addUser()
 {
+    QTreeWidget* tree_users = ui->tree_users;
     std::vector<std::u16string> users;
 
-    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
-    {
-        users.emplace_back(static_cast<UserTreeItem*>(
-            ui.tree_users->topLevelItem(i))->user.name);
-    }
+    for (int i = 0; i < tree_users->topLevelItemCount(); ++i)
+        users.emplace_back(static_cast<UserTreeItem*>(tree_users->topLevelItem(i))->user.name);
 
     RouterUserDialog dialog(base::User(), users, this);
     if (dialog.exec() == QDialog::Accepted)
@@ -488,15 +498,16 @@ void RouterManagerWindow::addUser()
 
 void RouterManagerWindow::modifyUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    QTreeWidget* tree_users = ui->tree_users;
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(tree_users->currentItem());
     if (!tree_item)
         return;
 
     std::vector<std::u16string> users;
 
-    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    for (int i = 0; i < tree_users->topLevelItemCount(); ++i)
     {
-        UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+        UserTreeItem* current_item = static_cast<UserTreeItem*>(tree_users->topLevelItem(i));
         if (current_item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
             users.emplace_back(current_item->user.name);
     }
@@ -514,7 +525,7 @@ void RouterManagerWindow::modifyUser()
 
 void RouterManagerWindow::deleteUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
     if (!tree_item)
         return;
 
@@ -533,20 +544,21 @@ void RouterManagerWindow::deleteUser()
     }
 }
 
-void RouterManagerWindow::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+void RouterManagerWindow::onCurrentUserChanged(
+    QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
-    ui.button_modify_user->setEnabled(true);
-    ui.button_delete_user->setEnabled(true);
+    ui->button_modify_user->setEnabled(true);
+    ui->button_delete_user->setEnabled(true);
 }
 
 void RouterManagerWindow::beforeRequest()
 {
-    ui.tab->setEnabled(false);
+    ui->tab->setEnabled(false);
 }
 
 void RouterManagerWindow::afterRequest()
 {
-    ui.tab->setEnabled(true);
+    ui->tab->setEnabled(true);
 }
 
 } // namespace client
