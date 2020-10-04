@@ -279,6 +279,10 @@ void MainWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
+
+    if (status_dialog_)
+        status_dialog_->retranslateUi();
+
     updateStatusBar();
 
     if (agent_proxy_)

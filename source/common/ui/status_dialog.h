@@ -39,6 +39,7 @@ public:
 
     void addMessage(const QString& message);
     void addMessageAndActivate(const QString& message);
+    void retranslateUi();
 
 private:
     std::unique_ptr<Ui::StatusDialog> ui;

@@ -55,4 +55,9 @@ void StatusDialog::addMessageAndActivate(const QString& message)
     addMessage(message);
 }
 
+void StatusDialog::retranslateUi()
+{
+    ui->retranslateUi(this);
+}
+
 } // namespace common
