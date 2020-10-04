@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
+    <width>258</width>
     <height>194</height>
    </rect>
   </property>
@@ -90,7 +90,6 @@
            <string notr="true">QLabel {
 font: bold 11px;
 color:#505050;
-padding-left: 6px;
 }</string>
           </property>
           <property name="text">
@@ -155,7 +154,6 @@ padding-left: 20px;
            <string notr="true">QLabel {
 font: bold 11px;
 color:#505050;
-padding-left: 6px;
 }</string>
           </property>
           <property name="text">
@@ -317,7 +315,7 @@ text-decoration: underline;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>292</width>
+     <width>258</width>
      <height>21</height>
     </rect>
    </property>

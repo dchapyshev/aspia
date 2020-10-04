@@ -129,7 +129,7 @@
         <translation>Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="97"/>
+        <location filename="../main_window.ui" line="96"/>
         <source>Your ID</source>
         <translation>你的 ID</translation>
     </message>
@@ -146,47 +146,47 @@
         <translation type="obsolete">无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="162"/>
+        <location filename="../main_window.ui" line="160"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="289"/>
+        <location filename="../main_window.ui" line="287"/>
         <source>Router is disabled</source>
         <translation type="unfinished">路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="335"/>
+        <location filename="../main_window.ui" line="333"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="343"/>
+        <location filename="../main_window.ui" line="341"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="356"/>
+        <location filename="../main_window.ui" line="354"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="365"/>
+        <location filename="../main_window.ui" line="363"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="377"/>
+        <location filename="../main_window.ui" line="375"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="386"/>
+        <location filename="../main_window.ui" line="384"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="391"/>
+        <location filename="../main_window.ui" line="389"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
@@ -423,7 +423,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="108"/>
-        <location filename="../main_window.cc" line="309"/>
+        <location filename="../main_window.cc" line="301"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
@@ -433,12 +433,13 @@
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="252"/>
+        <location filename="../main_window.cc" line="403"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="388"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
@@ -451,42 +452,42 @@
         <translation type="vanished">已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="253"/>
+        <location filename="../main_window.cc" line="246"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="240"/>
+        <location filename="../main_window.cc" line="393"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="247"/>
+        <location filename="../main_window.cc" line="242"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
+        <location filename="../main_window.cc" line="398"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="241"/>
+        <location filename="../main_window.cc" line="238"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="314"/>
+        <location filename="../main_window.cc" line="306"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="346"/>
+        <location filename="../main_window.cc" line="338"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="347"/>
+        <location filename="../main_window.cc" line="339"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>

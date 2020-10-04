@@ -71,6 +71,7 @@ private slots:
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void updateStatusBar();
 
     Ui::MainWindow ui;
 
@@ -79,7 +80,9 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
+
     common::StatusDialog* status_dialog_ = nullptr;
+    proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;
 
     std::unique_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;

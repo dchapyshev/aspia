@@ -194,6 +194,8 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 {
+    last_state_ = state.state();
+
     QString router;
 
     if (state.state() != proto::internal::RouterState::DISABLED)
@@ -225,33 +227,23 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     }
 
     QString status;
-    QString message;
-    QString icon;
 
     switch (state.state())
     {
         case proto::internal::RouterState::DISABLED:
-            message = tr("Router is disabled");
-            status = message;
-            icon = ":/img/cross-script.png";
+            status = tr("Router is disabled");
             break;
 
         case proto::internal::RouterState::CONNECTING:
-            message = tr("Connecting to a router...");
             status = tr("Connecting to a router %1...").arg(router);
-            icon = ":/img/arrow-circle-double.png";
             break;
 
         case proto::internal::RouterState::CONNECTED:
-            message = tr("Connected to a router");
             status = tr("Connected to a router %1").arg(router);
-            icon = ":/img/tick.png";
             break;
 
         case proto::internal::RouterState::FAILED:
-            message = tr("Connection error");
             status = tr("Failed to connect to router %1").arg(router);
-            icon = ":/img/cross-script.png";
             break;
 
         default:
@@ -259,8 +251,7 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
             return;
     }
 
-    ui.button_status->setText(message);
-    ui.button_status->setIcon(QIcon(icon));
+    updateStatusBar();
 
     if (!status_dialog_)
     {
@@ -288,6 +279,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
+    updateStatusBar();
 
     if (agent_proxy_)
         agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
@@ -296,9 +288,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 void MainWindow::onSettings()
 {
     QApplication::setQuitOnLastWindowClosed(false);
-
     ConfigDialog(this).exec();
-
     QApplication::setQuitOnLastWindowClosed(true);
 }
 
@@ -383,6 +373,42 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 
         ui.menu_language->addAction(action_language);
     }
+}
+
+void MainWindow::updateStatusBar()
+{
+    QString message;
+    QString icon;
+
+    switch (last_state_)
+    {
+        case proto::internal::RouterState::DISABLED:
+            message = tr("Router is disabled");
+            icon = ":/img/cross-script.png";
+            break;
+
+        case proto::internal::RouterState::CONNECTING:
+            message = tr("Connecting to a router...");
+            icon = ":/img/arrow-circle-double.png";
+            break;
+
+        case proto::internal::RouterState::CONNECTED:
+            message = tr("Connected to a router");
+            icon = ":/img/tick.png";
+            break;
+
+        case proto::internal::RouterState::FAILED:
+            message = tr("Connection error");
+            icon = ":/img/cross-script.png";
+            break;
+
+        default:
+            NOTREACHED();
+            return;
+    }
+
+    ui.button_status->setText(message);
+    ui.button_status->setIcon(QIcon(icon));
 }
 
 } // namespace host
