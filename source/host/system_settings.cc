@@ -163,17 +163,6 @@ void SystemSettings::setRouterPublicKey(const base::ByteArray& key)
     settings_.set<base::ByteArray>("RouterPublicKey", key);
 }
 
-base::ByteArray SystemSettings::hostKey() const
-{
-    return settings_.get<base::ByteArray>("HostKey");
-}
-
-void SystemSettings::setHostKey(const base::ByteArray& key)
-{
-    settings_.set<base::ByteArray>("HostKey", key);
-    settings_.flush();
-}
-
 std::unique_ptr<base::UserList> SystemSettings::userList() const
 {
     std::unique_ptr<base::UserList> users = base::UserList::createEmpty();

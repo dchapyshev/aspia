@@ -84,6 +84,9 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.ui
     ui/language_action.cc
     ui/language_action.h
+    ui/status_dialog.cc
+    ui/status_dialog.h
+    ui/status_dialog.ui
     ui/update_checker.cc
     ui/update_checker.h
     ui/update_checker_impl.cc

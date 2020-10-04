@@ -55,7 +55,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onUserSessionStarted() = 0;
+        virtual void onUserSessionHostIdRequest(const std::string& session_name) = 0;
         virtual void onUserSessionDettached() = 0;
         virtual void onUserSessionFinished() = 0;
     };
@@ -65,12 +65,14 @@ public:
                 std::unique_ptr<base::IpcChannel> channel);
     ~UserSession();
 
-    void start(base::HostId host_id, Delegate* delegate);
+    void start(Delegate* delegate);
     void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
+    base::HostId hostId() const { return host_id_; }
+    std::string sessionName() const;
     base::User user() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
@@ -113,7 +115,6 @@ private:
     base::SessionId session_id_;
     proto::internal::RouterState router_state_;
     base::HostId host_id_ = base::kInvalidHostId;
-    std::string username_;
     std::string password_;
 
     using ClientSessionPtr = std::unique_ptr<ClientSession>;

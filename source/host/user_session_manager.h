@@ -41,13 +41,15 @@ public:
     public:
         virtual ~Delegate() = default;
 
+        virtual void onHostIdRequest(const std::string& session_name) = 0;
+        virtual void onResetHostId(base::HostId host_id) = 0;
         virtual void onUserListChanged() = 0;
     };
 
     bool start(Delegate* delegate);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void setRouterState(const proto::internal::RouterState& router_state);
-    void setHostId(base::HostId host_id);
+    void setHostId(const std::string& session_name, base::HostId host_id);
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
 
@@ -57,7 +59,7 @@ protected:
     void onErrorOccurred() override;
 
     // UserSession::Delegate implementation.
-    void onUserSessionStarted() override;
+    void onUserSessionHostIdRequest(const std::string& session_name) override;
     void onUserSessionDettached() override;
     void onUserSessionFinished() override;
 
@@ -71,7 +73,6 @@ private:
     Delegate* delegate_ = nullptr;
 
     proto::internal::RouterState router_state_;
-    base::HostId host_id_ = base::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(UserSessionManager);
 };

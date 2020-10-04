@@ -152,9 +152,6 @@ list(APPEND SOURCE_CLIENT_UI
     ui/statistics_dialog.cc
     ui/statistics_dialog.h
     ui/statistics_dialog.ui
-    ui/status_dialog.cc
-    ui/status_dialog.h
-    ui/status_dialog.ui
     ui/system_info_window.cc
     ui/system_info_window.h
     ui/system_info_window.ui

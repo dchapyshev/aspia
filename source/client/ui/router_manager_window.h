@@ -73,6 +73,7 @@ private:
     void modifyUser();
     void deleteUser();
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 
     void beforeRequest();
     void afterRequest();

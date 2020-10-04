@@ -16,14 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__STATUS_DIALOG_H
-#define CLIENT__UI__STATUS_DIALOG_H
+#ifndef COMMON__UI__STATUS_DIALOG_H
+#define COMMON__UI__STATUS_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "client/status_window.h"
-#include "ui_status_dialog.h"
 
-namespace client {
+#include <QDialog>
+
+namespace Ui {
+class StatusDialog;
+} // namespace Ui
+
+namespace common {
 
 class StatusDialog : public QDialog
 {
@@ -34,13 +38,14 @@ public:
     ~StatusDialog() = default;
 
     void addMessage(const QString& message);
+    void addMessageAndActivate(const QString& message);
 
 private:
-    Ui::StatusDialog ui;
+    std::unique_ptr<Ui::StatusDialog> ui;
 
     DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };
 
-} // namespace client
+} // namespace common
 
-#endif // CLIENT__UI__STATUS_DIALOG_H
+#endif // COMMON__UI__STATUS_DIALOG_H

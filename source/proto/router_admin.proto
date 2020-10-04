@@ -26,12 +26,12 @@ package proto;
 
 message Host
 {
-    fixed64 timepoint    = 1;
-    fixed64 host_id      = 2;
-    string ip_address    = 3;
-    Version version      = 4;
-    string os_name       = 5;
-    string computer_name = 6;
+    fixed64 timepoint        = 1;
+    repeated fixed64 host_id = 2;
+    string ip_address        = 3;
+    Version version          = 4;
+    string os_name           = 5;
+    string computer_name     = 6;
 }
 
 message HostListRequest
@@ -60,7 +60,7 @@ enum HostRequestType
 message HostRequest
 {
     HostRequestType type = 1;
-    Host host            = 2;
+    fixed64 host_id      = 2;
 }
 
 message HostResult

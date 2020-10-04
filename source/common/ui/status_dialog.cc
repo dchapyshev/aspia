@@ -16,21 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/status_dialog.h"
+#include "common/ui/status_dialog.h"
 
+#include "ui_status_dialog.h"
+
+#include <QAbstractButton>
 #include <QTime>
 
-namespace client {
+namespace common {
 
 StatusDialog::StatusDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::StatusDialog>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_cancel, &QPushButton::released, this, &StatusDialog::close);
+    connect(ui->buttonbox, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
+    {
+        if (ui->buttonbox->standardButton(button) == QDialogButtonBox::Close)
+            close();
+    });
 }
 
 void StatusDialog::addMessage(const QString& message)
+{
+    ui->edit_status->appendPlainText(
+        QTime::currentTime().toString() + QLatin1Char(' ') + message);
+}
+
+void StatusDialog::addMessageAndActivate(const QString& message)
 {
     if (isHidden())
     {
@@ -38,8 +52,7 @@ void StatusDialog::addMessage(const QString& message)
         activateWindow();
     }
 
-    ui.edit_status->appendPlainText(
-        QString("%1 %2").arg(QTime::currentTime().toString()).arg(message));
+    addMessage(message);
 }
 
-} // namespace client
+} // namespace common

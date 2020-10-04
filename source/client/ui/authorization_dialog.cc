@@ -43,6 +43,12 @@ QString AuthorizationDialog::userName() const
 void AuthorizationDialog::setUserName(const QString& username)
 {
     ui.edit_username->setText(username);
+
+    if (username.startsWith('#'))
+    {
+        ui.label_username->setVisible(false);
+        ui.edit_username->setVisible(false);
+    }
 }
 
 QString AuthorizationDialog::password() const

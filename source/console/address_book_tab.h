@@ -53,6 +53,7 @@ public:
     bool saveAs();
 
     std::optional<client::RouterConfig> routerConfig(std::string_view guid) const;
+    std::vector<client::RouterConfig> routerConfigList() const;
 
     void retranslateUi();
 

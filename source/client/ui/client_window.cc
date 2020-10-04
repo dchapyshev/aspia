@@ -23,7 +23,7 @@
 #include "client/client_proxy.h"
 #include "client/status_window_proxy.h"
 #include "client/ui/authorization_dialog.h"
-#include "client/ui/status_dialog.h"
+#include "common/ui/status_dialog.h"
 #include "qt_base/application.h"
 
 namespace client {
@@ -96,13 +96,13 @@ void ClientWindow::closeEvent(QCloseEvent* event)
 void ClientWindow::onStarted(const std::u16string& address_or_id)
 {
     // Create a dialog to display the connection status.
-    status_dialog_ = new StatusDialog(this);
+    status_dialog_ = new common::StatusDialog(this);
 
     // After closing the status dialog, close the session window.
-    connect(status_dialog_, &StatusDialog::finished, this, &ClientWindow::close);
+    connect(status_dialog_, &common::StatusDialog::finished, this, &ClientWindow::close);
 
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
-    status_dialog_->addMessage(tr("Attempt to connect to %1.").arg(address_or_id));
+    status_dialog_->addMessageAndActivate(tr("Attempt to connect to %1.").arg(address_or_id));
 }
 
 void ClientWindow::onStopped()
@@ -112,7 +112,7 @@ void ClientWindow::onStopped()
 
 void ClientWindow::onConnected()
 {
-    status_dialog_->addMessage(tr("Connection established."));
+    status_dialog_->addMessageAndActivate(tr("Connection established."));
     status_dialog_->hide();
 }
 
@@ -202,7 +202,7 @@ void ClientWindow::onErrorOccurred(const QString& message)
             widget->hide();
     }
 
-    status_dialog_->addMessage(message);
+    status_dialog_->addMessageAndActivate(message);
 }
 
 // static

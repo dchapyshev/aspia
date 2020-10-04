@@ -52,13 +52,15 @@ protected:
 
     // RouterController::Delegate implementation.
     void onRouterStateChanged(const proto::internal::RouterState& router_state) override;
-    void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) override;
+    void onHostIdAssigned(const std::string& session_name, base::HostId host_id) override;
     void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) override;
 
     // base::AuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
 
     // UserSessionManager::Delegate implementation.
+    void onHostIdRequest(const std::string& session_name) override;
+    void onResetHostId(base::HostId host_id) override;
     void onUserListChanged() override;
 
 private:

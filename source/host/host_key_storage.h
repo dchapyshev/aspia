@@ -16,46 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef HOST__HOST_KEY_STORAGE_H
+#define HOST__HOST_KEY_STORAGE_H
 
-option optimize_for = LITE_RUNTIME;
+#include "base/macros_magic.h"
+#include "base/settings/json_settings.h"
 
-import "router_common.proto";
+namespace host {
 
-package proto;
-
-message HostIdRequest
+class HostKeyStorage
 {
-    enum Type
-    {
-        UNKNOWN     = 0;
-        NEW_ID      = 1;
-        EXISTING_ID = 2;
-    }
+public:
+    HostKeyStorage();
+    ~HostKeyStorage();
 
-    Type type = 1;
-    bytes key = 2;
-}
+    base::ByteArray key(std::string_view session_name) const;
+    void setKey(std::string_view session_name, const base::ByteArray& key);
 
-message ResetHostId
-{
-    fixed64 host_id = 1;
-}
+private:
+    base::JsonSettings impl_;
 
-message HostIdResponse
-{
-    fixed64 host_id = 1;
-    bytes key       = 2;
-}
+    DISALLOW_COPY_AND_ASSIGN(HostKeyStorage);
+};
 
-message RouterToHost
-{
-    HostIdResponse host_id_response  = 1;
-    ConnectionOffer connection_offer = 2;
-}
+} // namespace host
 
-message HostToRouter
-{
-    HostIdRequest host_id_request = 1;
-    ResetHostId reset_host_id     = 2;
-}
+#endif // HOST__HOST_KEY_STORAGE_H

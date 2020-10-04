@@ -71,7 +71,7 @@ void Router::disconnectHost(base::HostId host_id)
 
     proto::HostRequest* request = message.mutable_host_request();
     request->set_type(proto::HOST_REQUEST_DISCONNECT);
-    request->mutable_host()->set_host_id(host_id);
+    request->set_host_id(host_id);
 
     channel_->send(base::serialize(message));
 }

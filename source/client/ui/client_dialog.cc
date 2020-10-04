@@ -34,9 +34,10 @@
 
 namespace client {
 
-ClientDialog::ClientDialog(QWidget* parent)
+ClientDialog::ClientDialog(const RouterList& routers, QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::ClientDialog>())
+      ui(std::make_unique<Ui::ClientDialog>()),
+      routers_(routers)
 {
     config_.port = DEFAULT_HOST_TCP_PORT;
     config_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
@@ -44,6 +45,27 @@ ClientDialog::ClientDialog(QWidget* parent)
 
     ui->setupUi(this);
     setFixedHeight(sizeHint().height());
+
+    QComboBox* combo_router = ui->combo_router;
+    combo_router->addItem(tr("Without Router"), -1);
+
+    for (size_t i = 0; i < routers.size(); ++i)
+        combo_router->addItem(QString::fromStdU16String(routers[i].name), static_cast<int>(i));
+
+    if (routers.empty())
+        combo_router->setCurrentIndex(0);
+
+    connect(combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index)
+    {
+        if (ui->combo_router->itemData(index).toInt() == -1)
+        {
+            ui->label_address->setText(tr("Address:"));
+        }
+        else
+        {
+            ui->label_address->setText("ID:");
+        }
+    });
 
     QComboBox* combo_address = ui->combo_address;
 
@@ -160,76 +182,110 @@ void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QComboBox* combo_address = ui->combo_address;
-    QString current_address = combo_address->currentText();
+    std::optional<client::RouterConfig> router_config;
 
-    base::Address address = base::Address::fromString(
-        current_address.toStdU16String(), DEFAULT_HOST_TCP_PORT);
-    if (!address.isValid())
+    int current_router = ui->combo_router->currentIndex();
+    if (current_router != -1)
     {
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("An invalid computer address was entered."),
-                             QMessageBox::Ok);
-        combo_address->setFocus();
-    }
-    else
-    {
-        int current_index = combo_address->findText(current_address);
-        if (current_index != -1)
-            combo_address->removeItem(current_index);
+        size_t current_router_index =
+            static_cast<size_t>(ui->combo_router->itemData(current_router).toInt());
 
-        combo_address->insertItem(0, current_address);
-        combo_address->setCurrentIndex(0);
-
-        QStringList address_list;
-        for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
-            address_list.append(combo_address->itemText(i));
-
-        ClientSettings settings;
-        settings.setAddressList(address_list);
-
-        proto::SessionType session_type = static_cast<proto::SessionType>(
-            ui->combo_session_type->currentData().toInt());
-
-        config_.address_or_id = address.host();
-        config_.port = address.port();
-        config_.session_type = session_type;
-
-        ClientWindow* client_window = nullptr;
-
-        switch (config_.session_type)
+        if (current_router_index < routers_.size())
         {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
-            {
-                client_window = new QtDesktopWindow(
-                    config_.session_type, desktop_config_, parentWidget());
-            }
-            break;
-
-            case proto::SESSION_TYPE_FILE_TRANSFER:
-                client_window = new client::QtFileManagerWindow(parentWidget());
-                break;
-
-            default:
-                NOTREACHED();
-                break;
-        }
-
-        if (!client_window)
-            return;
-
-        client_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!client_window->connectToHost(config_))
-        {
-            client_window->close();
+            router_config.emplace(routers_[current_router_index]);
         }
         else
         {
-            accept();
-            close();
+            LOG(LS_ERROR) << "Invalid router index: " << current_router_index;
         }
+    }
+
+    QComboBox* combo_address = ui->combo_address;
+    QString current_address = combo_address->currentText();
+
+    if (!router_config.has_value())
+    {
+        LOG(LS_INFO) << "Direct connection selected";
+
+        base::Address address = base::Address::fromString(
+            current_address.toStdU16String(), DEFAULT_HOST_TCP_PORT);
+
+        if (!address.isValid())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("An invalid computer address was entered."),
+                                 QMessageBox::Ok);
+            combo_address->setFocus();
+            return;
+        }
+
+        config_.address_or_id = address.host();
+        config_.port = address.port();
+    }
+    else
+    {
+        LOG(LS_INFO) << "Relay connection selected";
+
+        config_.address_or_id = current_address.toStdU16String();
+        config_.username = u"#" + config_.address_or_id;
+    }
+
+    int current_index = combo_address->findText(current_address);
+    if (current_index != -1)
+        combo_address->removeItem(current_index);
+
+    combo_address->insertItem(0, current_address);
+    combo_address->setCurrentIndex(0);
+
+    QStringList address_list;
+    for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
+        address_list.append(combo_address->itemText(i));
+
+    ClientSettings settings;
+    settings.setAddressList(address_list);
+
+    proto::SessionType session_type = static_cast<proto::SessionType>(
+        ui->combo_session_type->currentData().toInt());
+
+    if (router_config.has_value())
+        config_.router_config = std::move(router_config.value());
+
+    config_.session_type = session_type;
+
+    ClientWindow* client_window = nullptr;
+
+    switch (config_.session_type)
+    {
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            client_window = new QtDesktopWindow(
+                config_.session_type, desktop_config_, parentWidget());
+        }
+        break;
+
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+            client_window = new client::QtFileManagerWindow(parentWidget());
+            break;
+
+        default:
+            NOTREACHED();
+            break;
+    }
+
+    if (!client_window)
+        return;
+
+    client_window->setAttribute(Qt::WA_DeleteOnClose);
+    if (!client_window->connectToHost(config_))
+    {
+        client_window->close();
+    }
+    else
+    {
+        accept();
+        close();
     }
 }
 

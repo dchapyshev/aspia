@@ -203,7 +203,10 @@ std::unique_ptr<proto::HostList> Server::hostList() const
         proto::Host* host = result->add_host();
 
         host->set_timepoint(session_host->startTime());
-        host->set_host_id(session_host->hostId());
+
+        for (const auto& host_id : session_host->hostIdList())
+            host->add_host_id(host_id);
+
         host->set_ip_address(session_host->address());
         host->mutable_version()->CopyFrom(session_host->version().toProto());
         host->set_os_name(session_host->osName());
@@ -223,7 +226,7 @@ bool Server::disconnectHost(base::HostId host_id)
         if (entry->sessionType() != proto::ROUTER_SESSION_HOST)
             continue;
 
-        if (static_cast<SessionHost*>(entry)->hostId() == host_id)
+        if (static_cast<SessionHost*>(entry)->hasHostId(host_id))
         {
             sessions_.erase(it);
             return true;
@@ -235,21 +238,24 @@ bool Server::disconnectHost(base::HostId host_id)
 
 void Server::onHostSessionWithId(SessionHost* session)
 {
-    base::HostId host_id = session->hostId();
-
     for (auto it = sessions_.begin(); it != sessions_.end();)
     {
-        Session* entry = it->get();
-
-        if (entry != session &&
-            entry->sessionType() == proto::ROUTER_SESSION_HOST &&
-            static_cast<SessionHost*>(entry)->hostId() == host_id)
+        if (it->get()->sessionType() == proto::ROUTER_SESSION_HOST)
         {
-            LOG(LS_INFO) << "Detected previous connection with ID " << host_id
-                         << ". It will be completed";
+            SessionHost* other_session = reinterpret_cast<SessionHost*>(it->get());
+            if (other_session != session)
+            {
+                for (const auto& host_id : session->hostIdList())
+                {
+                    if (other_session->hasHostId(host_id))
+                    {
+                        LOG(LS_INFO) << "Detected previous connection with ID " << host_id;
 
-            it = sessions_.erase(it);
-            continue;
+                        it = sessions_.erase(it);
+                        continue;
+                    }
+                }
+            }
         }
 
         ++it;
@@ -263,7 +269,7 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
         Session* entry = it->get();
 
         if (entry->sessionType() == proto::ROUTER_SESSION_HOST &&
-            static_cast<SessionHost*>(entry)->hostId() == host_id)
+            static_cast<SessionHost*>(entry)->hasHostId(host_id))
         {
             return static_cast<SessionHost*>(entry);
         }

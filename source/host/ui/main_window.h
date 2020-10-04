@@ -26,6 +26,10 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 
+namespace common {
+class StatusDialog;
+} // namespace common
+
 namespace host {
 
 class NotifierWindow;
@@ -74,8 +78,8 @@ private:
 
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
-    QLabel* status_label_ = nullptr;
     QPointer<NotifierWindow> notifier_;
+    common::StatusDialog* status_dialog_ = nullptr;
 
     std::unique_ptr<UserSessionAgentProxy> agent_proxy_;
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;

@@ -56,9 +56,7 @@ public:
                 return;
         }
 
-        setText(0, QString("%1 (%2)")
-                .arg(QString::fromStdString(client.username))
-                .arg(QString::fromStdString(client.computer_name)));
+        setText(0, QString::fromStdString(client.computer_name));
     }
 
     uint32_t id() const { return id_; }

@@ -158,7 +158,7 @@ void SessionAdmin::doHostRequest(const proto::HostRequest& request)
 
     if (request.type() == proto::HOST_REQUEST_DISCONNECT)
     {
-        base::HostId host_id = request.host().host_id();
+        base::HostId host_id = request.host_id();
 
         if (host_id == base::kInvalidHostId)
         {

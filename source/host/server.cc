@@ -126,17 +126,10 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
     user_session_manager_->setRouterState(router_state);
 }
 
-void Server::onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key)
+void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
 {
-    LOG(LS_INFO) << "New host ID assigned: " << host_id;
-
-    if (!host_key.empty())
-    {
-        LOG(LS_INFO) << "Host key changed";
-        settings_.setHostKey(host_key);
-    }
-
-    user_session_manager_->setHostId(host_id);
+    LOG(LS_INFO) << "New host ID assigned: " << host_id << " (" << session_name << ")";
+    user_session_manager_->setHostId(session_name, host_id);
 }
 
 void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
@@ -161,6 +154,22 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
         user_session_manager_->addNewSession(std::move(session));
 }
 
+void Server::onHostIdRequest(const std::string& session_name)
+{
+    if (!router_controller_)
+        return;
+
+    router_controller_->hostIdRequest(session_name);
+}
+
+void Server::onResetHostId(base::HostId host_id)
+{
+    if (!router_controller_)
+        return;
+
+    router_controller_->resetHostId(host_id);
+}
+
 void Server::onUserListChanged()
 {
     reloadUserList();
@@ -169,8 +178,11 @@ void Server::onUserListChanged()
 void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
 {
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
+    static const std::chrono::minutes kKeepAliveTime{ 1 };
+    static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
     channel->setReadBufferSize(kReadBufferSize);
+    channel->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel->setNoDelay(true);
 
     if (authenticator_manager_)
@@ -278,7 +290,6 @@ void Server::connectToRouter()
     router_info.address = settings_.routerAddress();
     router_info.port = settings_.routerPort();
     router_info.public_key = settings_.routerPublicKey();
-    router_info.host_key = settings_.hostKey();
 
     // Connect to the router.
     router_controller_ = std::make_unique<RouterController>(task_runner_);

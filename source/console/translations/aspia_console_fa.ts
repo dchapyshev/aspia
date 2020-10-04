@@ -802,59 +802,59 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="511"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="515"/>
         <location filename="../address_book_tab.cc" line="537"/>
+        <location filename="../address_book_tab.cc" line="559"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="533"/>
+        <location filename="../address_book_tab.cc" line="555"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="869"/>
+        <location filename="../address_book_tab.cc" line="891"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="871"/>
+        <location filename="../address_book_tab.cc" line="893"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="903"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="894"/>
+        <location filename="../address_book_tab.cc" line="916"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="936"/>
+        <location filename="../address_book_tab.cc" line="958"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="947"/>
-        <location filename="../address_book_tab.cc" line="961"/>
+        <location filename="../address_book_tab.cc" line="969"/>
+        <location filename="../address_book_tab.cc" line="983"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="949"/>
+        <location filename="../address_book_tab.cc" line="971"/>
         <source>Could not open address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="963"/>
+        <location filename="../address_book_tab.cc" line="985"/>
         <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
@@ -971,7 +971,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1124"/>
+        <location filename="../main_window.cc" line="1130"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1001,56 +1001,56 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="820"/>
-        <location filename="../main_window.cc" line="897"/>
+        <location filename="../main_window.cc" line="515"/>
+        <location filename="../main_window.cc" line="826"/>
+        <location filename="../main_window.cc" line="903"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="510"/>
-        <location filename="../main_window.cc" line="898"/>
+        <location filename="../main_window.cc" line="516"/>
+        <location filename="../main_window.cc" line="904"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="713"/>
+        <location filename="../main_window.cc" line="719"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="726"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="721"/>
-        <location filename="../main_window.cc" line="726"/>
+        <location filename="../main_window.cc" line="727"/>
+        <location filename="../main_window.cc" line="732"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="821"/>
+        <location filename="../main_window.cc" line="827"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="860"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="875"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1005"/>
+        <location filename="../main_window.cc" line="1011"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1125"/>
+        <location filename="../main_window.cc" line="1131"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation type="unfinished"></translation>
     </message>

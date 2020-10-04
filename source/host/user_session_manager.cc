@@ -233,32 +233,59 @@ void UserSessionManager::setRouterState(const proto::internal::RouterState& rout
         session->setRouterState(router_state);
 }
 
-void UserSessionManager::setHostId(base::HostId host_id)
+void UserSessionManager::setHostId(const std::string& session_name, base::HostId host_id)
 {
-    host_id_ = host_id;
-
     // Send an event of each session.
     for (const auto& session : sessions_)
-        session->setHostId(host_id);
+    {
+        if (session->sessionName() == session_name)
+        {
+            session->setHostId(host_id);
+            delegate_->onUserListChanged();
+            return;
+        }
+    }
 }
 
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
 
-    base::SessionId session_id;
+    base::SessionId session_id = base::kInvalidSessionId;
 
     std::string username = client_session->userName();
     if (base::startsWith(username, "#"))
     {
         username.erase(username.begin());
 
-        if (!base::stringToULong(username, &session_id))
+        base::HostId host_id = base::kInvalidHostId;
+        if (!base::stringToULong64(username, &host_id))
+        {
+            LOG(LS_ERROR) << "Failed to convert host id: " << username;
             return;
+        }
+
+        for (const auto& session : sessions_)
+        {
+            if (session->hostId() == host_id)
+            {
+                session_id = session->sessionId();
+                break;
+            }
+        }
+
+        LOG(LS_INFO) << "Connection by host id";
     }
     else
     {
+        LOG(LS_INFO) << "Connecting with a permanent username";
         session_id = base::activeConsoleSessionId();
+    }
+
+    if (session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_ERROR) << "Failed to get session id";
+        return;
     }
 
     for (const auto& session : sessions_)
@@ -331,9 +358,9 @@ void UserSessionManager::onErrorOccurred()
     // Ignore.
 }
 
-void UserSessionManager::onUserSessionStarted()
+void UserSessionManager::onUserSessionHostIdRequest(const std::string& session_name)
 {
-    delegate_->onUserListChanged();
+    delegate_->onHostIdRequest(session_name);
 }
 
 void UserSessionManager::onUserSessionDettached()
@@ -347,6 +374,9 @@ void UserSessionManager::onUserSessionFinished()
     {
         if (it->get()->state() == UserSession::State::FINISHED)
         {
+            // User session ended, host ID is no longer valid.
+            delegate_->onResetHostId(it->get()->hostId());
+
             task_runner_->deleteSoon(std::move(*it));
             it = sessions_.erase(it);
         }
@@ -400,12 +430,10 @@ void UserSessionManager::addUserSession(
 
     std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
         task_runner_, session_id, std::move(channel));
-
     user_session->setRouterState(router_state_);
-    user_session->setHostId(host_id_);
 
     sessions_.emplace_back(std::move(user_session));
-    sessions_.back()->start(host_id_, this);
+    sessions_.back()->start(this);
 }
 
 } // namespace host

@@ -41,18 +41,15 @@ message CredentialsRequest
 
 message Credentials
 {
-    repeated string host_ip = 1;
-    fixed64 host_id         = 2;
-    string username         = 3;
-    string password         = 4;
+    fixed64 host_id = 1;
+    string password = 2;
 }
 
 message ConnectEvent
 {
     uint32 id                = 1;
     string computer_name     = 2;
-    string username          = 3;
-    SessionType session_type = 4;
+    SessionType session_type = 3;
 }
 
 message DisconnectEvent

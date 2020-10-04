@@ -23,10 +23,10 @@
 #include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
-#include "base/net/adapter_enumerator.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/win/session_info.h"
 #include "host/client_session_desktop.h"
 #include "host/desktop_session_proxy.h"
 
@@ -52,11 +52,9 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession() = default;
 
-void UserSession::start(base::HostId host_id, Delegate* delegate)
+void UserSession::start(Delegate* delegate)
 {
     delegate_ = delegate;
-    host_id_ = host_id;
-
     DCHECK(delegate_);
 
     LOG(LS_INFO) << "User session started "
@@ -76,7 +74,9 @@ void UserSession::start(base::HostId host_id, Delegate* delegate)
     }
 
     state_ = State::STARTED;
-    delegate_->onUserSessionStarted();
+
+    // Session started, request for host ID.
+    delegate_->onUserSessionHostIdRequest(sessionName());
 }
 
 void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
@@ -109,13 +109,32 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     }
 
     state_ = State::STARTED;
-    delegate_->onUserSessionStarted();
+}
+
+std::string UserSession::sessionName() const
+{
+    if (type_ == Type::CONSOLE)
+        return std::string();
+
+    DCHECK_EQ(type_, Type::RDP);
+
+    base::win::SessionInfo session_info(sessionId());
+    if (!session_info.isValid())
+    {
+        LOG(LS_ERROR) << "Failed to get session information";
+        return std::string();
+    }
+
+    return session_info.userName();
 }
 
 base::User UserSession::user() const
 {
-    base::User user = base::User::create(
-        base::utf16FromAscii(username_), base::utf16FromAscii(password_));
+    if (host_id_ == base::kInvalidHostId)
+        return base::User();
+
+    std::u16string username = u'#' + base::numberToString16(host_id_);
+    base::User user = base::User::create(username, base::utf16FromAscii(password_));
 
     user.sessions = proto::SESSION_TYPE_ALL;
     user.flags = base::User::ENABLED;
@@ -190,6 +209,18 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
         }
         break;
 
+        case base::win::SessionStatus::REMOTE_DISCONNECT:
+        {
+            if (type_ == Type::RDP && state_ == State::DETTACHED)
+            {
+                LOG(LS_INFO) << "RDP session finished";
+
+                state_ = State::FINISHED;
+                delegate_->onUserSessionFinished();
+            }
+        }
+        break;
+
         default:
         {
             // Ignore other events.
@@ -201,7 +232,18 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 void UserSession::setRouterState(const proto::internal::RouterState& router_state)
 {
     router_state_ = router_state;
+
     sendRouterState();
+
+    if (router_state.state() == proto::internal::RouterState::CONNECTED)
+    {
+        if (delegate_)
+            delegate_->onUserSessionHostIdRequest(sessionName());
+    }
+    else
+    {
+        host_id_ = base::kInvalidHostId;
+    }
 }
 
 void UserSession::setHostId(base::HostId host_id)
@@ -375,7 +417,6 @@ void UserSession::onSessionDettached(const base::Location& location)
     LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
 
     task_runner_->deleteSoon(std::move(channel_));
-    username_.clear();
     password_.clear();
 
     // Stop one-time desktop clients.
@@ -394,6 +435,9 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     if (type_ == Type::RDP)
     {
+        LOG(LS_INFO) << "RDP session finished";
+
+        state_ = State::FINISHED;
         delegate_->onUserSessionFinished();
     }
     else
@@ -417,7 +461,6 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
     event->set_computer_name(client_session.computerName());
-    event->set_username(client_session.userName());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
@@ -446,37 +489,21 @@ void UserSession::updateCredentials()
     generator.setCharacters(kPasswordCharacters);
     generator.setLength(kPasswordLength);
 
-    username_ = "#" + base::numberToString(sessionId());
     password_ = generator.result();
 }
 
 void UserSession::sendCredentials()
 {
-    if (!channel_)
+    if (!channel_ || host_id_ == base::kInvalidHostId)
         return;
 
-    LOG(LS_INFO) << "Sending credentials to UI";
-    LOG(LS_INFO) << "Host ID: " << host_id_;
-    LOG(LS_INFO) << "User Name: " << username_;
+    LOG(LS_INFO) << "Sending credentials to UI for host " << host_id_;
 
     outgoing_message_.Clear();
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
     credentials->set_host_id(host_id_);
-    credentials->set_username(username_);
     credentials->set_password(password_);
-
-    for (base::AdapterEnumerator adapters; !adapters.isAtEnd(); adapters.advance())
-    {
-        for (base::AdapterEnumerator::IpAddressEnumerator addresses(adapters);
-             !addresses.isAtEnd(); addresses.advance())
-        {
-            std::string ip = addresses.address();
-
-            if (ip != "127.0.0.1")
-                credentials->add_host_ip(std::move(ip));
-        }
-    }
 
     channel_->send(base::serialize(outgoing_message_));
 }

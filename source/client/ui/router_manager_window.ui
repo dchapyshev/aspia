@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>653</width>
-    <height>377</height>
+    <width>687</width>
+    <height>520</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Router Management</string>
@@ -17,6 +23,12 @@
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
      <widget class="QTabWidget" name="tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -44,40 +56,45 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="tree_hosts">
-          <property name="indentation">
-           <number>0</number>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <column>
-           <property name="text">
-            <string notr="true">ID</string>
+          <widget class="QTreeWidget" name="tree_hosts">
+           <property name="indentation">
+            <number>0</number>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Connect Time</string>
+           <column>
+            <property name="text">
+             <string>Computer Name</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>IP Address</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Connect Time</string>
+            </property>
+           </column>
+          </widget>
+          <widget class="QTreeWidget" name="tree_host_info">
+           <property name="enabled">
+            <bool>false</bool>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>IP Address</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Version</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Computer Name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Operating System</string>
-           </property>
-          </column>
+           <column>
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Value</string>
+            </property>
+           </column>
+          </widget>
          </widget>
         </item>
         <item>

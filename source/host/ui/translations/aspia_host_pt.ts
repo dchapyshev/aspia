@@ -107,14 +107,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your IP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -144,6 +136,10 @@
     </message>
     <message>
         <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -342,15 +338,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
+        <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connected to router %1</source>
+        <source>Connected to a router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to connect to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

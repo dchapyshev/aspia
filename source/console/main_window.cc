@@ -419,7 +419,13 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
-    client::ClientDialog().exec();
+    std::vector<client::RouterConfig> routers;
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        routers = tab->routerConfigList();
+
+    client::ClientDialog(routers).exec();
 }
 
 void MainWindow::onDesktopManageConnect()

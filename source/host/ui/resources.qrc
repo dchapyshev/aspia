@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/img">
+    <file alias="tick.png">resources/tick.png</file>
     <file alias="arrow-circle-double.png">resources/arrow-circle-double.png</file>
     <file alias="key.png">resources/key.png</file>
     <file alias="computer.png">resources/computer.png</file>

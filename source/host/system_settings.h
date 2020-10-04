@@ -55,9 +55,6 @@ public:
     base::ByteArray routerPublicKey() const;
     void setRouterPublicKey(const base::ByteArray& key);
 
-    base::ByteArray hostKey() const;
-    void setHostKey(const base::ByteArray& key);
-
     std::unique_ptr<base::UserList> userList() const;
     void setUserList(const base::UserList& user_list);
 

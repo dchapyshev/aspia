@@ -40,25 +40,19 @@ class HostTreeItem : public QTreeWidgetItem
 {
 public:
     explicit HostTreeItem(const proto::Host& host)
-        : host_id(host.host_id())
+        : host(host)
     {
         QString time = QLocale::system().toString(
             QDateTime::fromTime_t(host.timepoint()), QLocale::ShortFormat);
 
-        setText(0, QString::number(host.host_id()));
-        setText(1, time);
-        setText(2, QString::fromStdString(host.ip_address()));
-        setText(3, QString("%1.%2.%3")
-                .arg(host.version().major())
-                .arg(host.version().minor())
-                .arg(host.version().patch()));
-        setText(4, QString::fromStdString(host.computer_name()));
-        setText(5, QString::fromStdString(host.os_name()));
+        setText(0, QString::fromStdString(host.computer_name()));
+        setText(1, QString::fromStdString(host.ip_address()));
+        setText(2, time);
     }
 
     ~HostTreeItem() = default;
 
-    base::HostId host_id;
+    proto::Host host;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
@@ -144,6 +138,9 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     connect(ui->tree_users, &QTreeWidget::currentItemChanged,
             this, &RouterManagerWindow::onCurrentUserChanged);
+
+    connect(ui->tree_hosts, &QTreeWidget::currentItemChanged,
+            this, &RouterManagerWindow::onCurrentHostChanged);
 }
 
 RouterManagerWindow::~RouterManagerWindow()
@@ -415,6 +412,7 @@ void RouterManagerWindow::refreshHostList()
 
 void RouterManagerWindow::disconnectHost()
 {
+#if 0
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
         return;
@@ -433,10 +431,12 @@ void RouterManagerWindow::disconnectHost()
         beforeRequest();
         router_proxy_->disconnectHost(tree_item->host_id);
     }
+#endif
 }
 
 void RouterManagerWindow::disconnectAllHosts()
 {
+#if 0
     if (!router_proxy_)
         return;
 
@@ -457,6 +457,7 @@ void RouterManagerWindow::disconnectAllHosts()
         if (tree_item)
             router_proxy_->disconnectHost(tree_item->host_id);
     }
+#endif
 }
 
 void RouterManagerWindow::refreshRelayList()
@@ -549,6 +550,62 @@ void RouterManagerWindow::onCurrentUserChanged(
 {
     ui->button_modify_user->setEnabled(true);
     ui->button_delete_user->setEnabled(true);
+}
+
+void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+{
+    ui->tree_host_info->clear();
+
+    HostTreeItem* host_item = reinterpret_cast<HostTreeItem*>(current);
+    if (!host_item)
+    {
+        ui->tree_host_info->setEnabled(false);
+    }
+    else
+    {
+        ui->tree_host_info->setEnabled(true);
+
+        const proto::Host& host = host_item->host;
+
+        auto add_item = [this](const QString& name, const QString& value)
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem();
+            item->setText(0, name);
+            item->setText(1, value);
+
+            ui->tree_host_info->addTopLevelItem(item);
+        };
+
+        QString time = QLocale::system().toString(
+            QDateTime::fromTime_t(host.timepoint()), QLocale::ShortFormat);
+
+        add_item(tr("Computer Name"), QString::fromStdString(host.computer_name()));
+        add_item(tr("IP Address"), QString::fromStdString(host.ip_address()));
+        add_item(tr("Connect Time"), time);
+        add_item(tr("Version"), QString("%1.%2.%3").arg(host.version().major())
+                                                   .arg(host.version().minor())
+                                                   .arg(host.version().patch()));
+        add_item(tr("Operating System"), QString::fromStdString(host.os_name()));
+
+        QTreeWidgetItem* title_item = new QTreeWidgetItem();
+        title_item->setText(0, tr("Host IDs"));
+
+        ui->tree_host_info->addTopLevelItem(title_item);
+
+        for (int i = 0; i < host.host_id_size(); ++i)
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem();
+            item->setText(0, tr("ID #%1").arg(i + 1));
+            item->setText(1, QString::number(host.host_id(i)));
+
+            title_item->addChild(item);
+        }
+
+        title_item->setExpanded(true);
+
+        for (int i = 0; i < ui->tree_host_info->columnCount(); ++i)
+            ui->tree_host_info->resizeColumnToContents(i);
+    }
 }
 
 void RouterManagerWindow::beforeRequest()

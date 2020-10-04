@@ -23,6 +23,7 @@
 #include "base/strings/unicode.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
+#include "common/ui/status_dialog.h"
 #include "host/user_session_agent.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
@@ -46,13 +47,8 @@ MainWindow::MainWindow(QWidget* parent)
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
-    QString text = tr("Not available");
-    ui.edit_id->setText(text);
-    ui.edit_ip->setText(text);
-
-    status_label_ = new QLabel(ui.statusbar);
-    status_label_->setText(tr("Router is disabled"));
-    ui.statusbar->addWidget(status_label_);
+    ui.edit_id->setText("-");
+    ui.edit_password->setText("-");
 
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
@@ -87,12 +83,6 @@ MainWindow::MainWindow(QWidget* parent)
     {
         if (agent_proxy_)
             agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
-    });
-
-    connect(ui.button_refresh_ip_list, &QPushButton::released, [this]()
-    {
-        if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     });
 }
 
@@ -142,12 +132,6 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
         LOG(LS_INFO) << "The connection to the service was successfully established.";
-
-        ui.button_new_password->setEnabled(true);
-        ui.button_refresh_ip_list->setEnabled(true);
-
-        if (agent_proxy_)
-            agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
@@ -191,15 +175,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
-    std::string ip;
-
-    for (int i = 0; i < credentials.host_ip_size(); ++i)
-    {
-        if (!ip.empty())
-            ip += ", ";
-
-        ip += credentials.host_ip(i);
-    }
+    ui.button_new_password->setEnabled(true);
 
     bool has_id = credentials.host_id() != base::kInvalidHostId;
 
@@ -207,20 +183,6 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     ui.label_id->setEnabled(has_id);
     ui.edit_id->setEnabled(has_id);
     ui.edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
-
-    bool has_ip = !ip.empty();
-
-    ui.label_icon_ip->setEnabled(has_ip);
-    ui.label_ip->setEnabled(has_ip);
-    ui.edit_ip->setEnabled(has_ip);
-    ui.edit_ip->setText(has_ip ? QString::fromStdString(ip) : tr("Not available"));
-
-    bool has_username = !credentials.username().empty();
-
-    ui.label_icon_user->setEnabled(has_username);
-    ui.label_user->setEnabled(has_username);
-    ui.edit_user->setEnabled(has_username);
-    ui.edit_user->setText(QString::fromStdString(credentials.username()));
 
     bool has_password = !credentials.password().empty();
 
@@ -243,24 +205,53 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
         router = QString::fromStdU16String(address.toString());
     }
 
+    if (state.state() == proto::internal::RouterState::DISABLED)
+        ui.button_status->setEnabled(false);
+    else
+        ui.button_status->setEnabled(true);
+
+    if (state.state() != proto::internal::RouterState::CONNECTED)
+    {
+        ui.label_icon_id->setEnabled(false);
+        ui.label_icon_password->setEnabled(false);
+        ui.button_new_password->setEnabled(false);
+
+        ui.edit_id->setText("-");
+        ui.edit_password->setText("-");
+    }
+    else
+    {
+        ui.button_status->setEnabled(true);
+    }
+
+    QString status;
     QString message;
+    QString icon;
 
     switch (state.state())
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
+            status = message;
+            icon = ":/img/cross-script.png";
             break;
 
         case proto::internal::RouterState::CONNECTING:
-            message = tr("Connecting to router %1...").arg(router);
+            message = tr("Connecting to a router...");
+            status = tr("Connecting to a router %1...").arg(router);
+            icon = ":/img/arrow-circle-double.png";
             break;
 
         case proto::internal::RouterState::CONNECTED:
-            message = tr("Connected to router %1").arg(router);
+            message = tr("Connected to a router");
+            status = tr("Connected to a router %1").arg(router);
+            icon = ":/img/tick.png";
             break;
 
         case proto::internal::RouterState::FAILED:
-            message = tr("Failed to connect to router %1").arg(router);
+            message = tr("Connection error");
+            status = tr("Failed to connect to router %1").arg(router);
+            icon = ":/img/cross-script.png";
             break;
 
         default:
@@ -268,7 +259,18 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
             return;
     }
 
-    status_label_->setText(message);
+    ui.button_status->setText(message);
+    ui.button_status->setIcon(QIcon(icon));
+
+    if (!status_dialog_)
+    {
+        status_dialog_ = new common::StatusDialog(this);
+
+        connect(ui.button_status, &QPushButton::clicked,
+                status_dialog_, &common::StatusDialog::show);
+    }
+
+    status_dialog_->addMessage(status);
 }
 
 void MainWindow::realClose()

@@ -28,11 +28,14 @@ namespace base {
 class TaskRunner;
 } // namespace base
 
+namespace common {
+class StatusDialog;
+} // namespace common
+
 namespace client {
 
 class Client;
 class ClientProxy;
-class StatusDialog;
 class StatusWindowProxy;
 
 class ClientWindow
@@ -76,7 +79,7 @@ private:
 
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
     std::unique_ptr<ClientProxy> client_proxy_;
-    StatusDialog* status_dialog_ = nullptr;
+    common::StatusDialog* status_dialog_ = nullptr;
 };
 
 } // namespace client

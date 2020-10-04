@@ -33,7 +33,10 @@ public:
     SessionHost();
     ~SessionHost();
 
-    base::HostId hostId() const { return host_id_; }
+    using HostIdList = std::vector<base::HostId>;
+
+    const HostIdList& hostIdList() const { return host_id_list_; }
+    bool hasHostId(base::HostId host_id) const;
 
     void sendConnectionOffer(const proto::ConnectionOffer& offer);
 
@@ -47,8 +50,9 @@ protected:
 
 private:
     void readHostIdRequest(const proto::HostIdRequest& host_id_request);
+    void readResetHostId(const proto::ResetHostId& reset_host_id);
 
-    base::HostId host_id_ = base::kInvalidHostId;
+    HostIdList host_id_list_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionHost);
 };

@@ -42,7 +42,6 @@ public:
         explicit Client(const proto::internal::ConnectEvent& event)
             : id(event.id()),
               computer_name(event.computer_name()),
-              username(event.username()),
               session_type(event.session_type())
         {
             // Nothing
@@ -50,7 +49,6 @@ public:
 
         uint32_t id;
         std::string computer_name;
-        std::string username;
         proto::SessionType session_type;
     };
 

@@ -22,6 +22,7 @@
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
 #include "base/strings/unicode.h"
+#include "host/host_key_storage.h"
 #include "proto/router_host.pb.h"
 
 namespace host {
@@ -59,6 +60,44 @@ void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
     connectToRouter();
 }
 
+void RouterController::hostIdRequest(const std::string& session_name)
+{
+    LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
+
+    HostKeyStorage host_key_storage;
+    base::ByteArray host_key = host_key_storage.key(session_name);
+
+    pending_id_requests_.emplace(session_name);
+
+    proto::HostToRouter message;
+    proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
+
+    if (host_key.empty())
+    {
+        LOG(LS_INFO) << "Host key is empty. Request for a new ID";
+        host_id_request->set_type(proto::HostIdRequest::NEW_ID);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Host key is present. Request for an existing ID";
+        host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
+        host_id_request->set_key(base::toStdString(host_key));
+    }
+
+    // Send host ID request.
+    LOG(LS_INFO) << "Send ID request to router";
+    channel_->send(base::serialize(message));
+}
+
+void RouterController::resetHostId(base::HostId host_id)
+{
+    proto::HostToRouter message;
+    message.mutable_reset_host_id()->set_host_id(host_id);
+
+    LOG(LS_INFO) << "Send reset host ID request";
+    channel_->send(base::serialize(message));
+}
+
 void RouterController::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
@@ -85,28 +124,11 @@ void RouterController::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            LOG(LS_INFO) << "Router connected. Receiving host ID...";
-
+            LOG(LS_INFO) << "Router connected";
             routerStateChanged(proto::internal::RouterState::CONNECTED);
-
-            proto::HostToRouter message;
-            proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
-
-            if (router_info_.host_key.empty())
-            {
-                host_id_request->set_type(proto::HostIdRequest::NEW_ID);
-            }
-            else
-            {
-                host_id_request->set_type(proto::HostIdRequest::EXISTING_ID);
-                host_id_request->set_key(base::toStdString(router_info_.host_key));
-            }
 
             // Now the session will receive incoming messages.
             channel_->resume();
-
-            // Send peer ID request.
-            channel_->send(base::serialize(message));
         }
         else
         {
@@ -125,12 +147,7 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
-    host_id_ = base::kInvalidHostId;
     routerStateChanged(proto::internal::RouterState::FAILED);
-
-    if (delegate_)
-        delegate_->onHostIdAssigned(base::kInvalidHostId, base::ByteArray());
-
     delayedConnectToRouter();
 }
 
@@ -145,9 +162,9 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
     if (message.has_host_id_response())
     {
-        if (host_id_ != base::kInvalidHostId)
+        if (pending_id_requests_.empty())
         {
-            LOG(LS_ERROR) << "Host ID already assigned";
+            LOG(LS_ERROR) << "ID received, but no request was sent";
             return;
         }
 
@@ -158,34 +175,32 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
+        base::ByteArray host_key = base::fromStdString(host_id_response.key());
+        if (!host_key.empty())
+        {
+            LOG(LS_INFO) << "New host key received";
+
+            HostKeyStorage host_key_storage;
+            host_key_storage.setKey(pending_id_requests_.front(), host_key);
+        }
+
         LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id();
 
-        base::ByteArray peer_key = base::fromStdString(host_id_response.key());
-        if (!peer_key.empty())
-            router_info_.host_key = base::fromStdString(host_id_response.key());
-        host_id_ = host_id_response.host_id();
+        delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
+        pending_id_requests_.pop();
+    }
+    else if (message.has_connection_offer())
+    {
+        LOG(LS_INFO) << "New connection offer";
 
-        delegate_->onHostIdAssigned(host_id_, router_info_.host_key);
+        const proto::ConnectionOffer& connection_offer = message.connection_offer();
+
+        if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS)
+            peer_manager_->addConnectionOffer(connection_offer.relay());
     }
     else
     {
-        if (host_id_ == base::kInvalidHostId)
-        {
-            LOG(LS_ERROR) << "Request could not be processed (host ID not received yet)";
-            return;
-        }
-
-        if (message.has_connection_offer())
-        {
-            const proto::ConnectionOffer& connection_offer = message.connection_offer();
-
-            if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS)
-                peer_manager_->addConnectionOffer(connection_offer.relay());
-        }
-        else
-        {
-            LOG(LS_WARNING) << "Unhandled message from router";
-        }
+        LOG(LS_WARNING) << "Unhandled message from router";
     }
 }
 

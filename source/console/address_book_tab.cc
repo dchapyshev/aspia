@@ -345,6 +345,7 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig(std::string_vie
         {
             client::RouterConfig router_config;
 
+            router_config.name     = base::utf16FromUtf8(router.name());
             router_config.address  = base::utf16FromUtf8(router.address());
             router_config.port     = router.port();
             router_config.username = base::utf16FromUtf8(router.username());
@@ -355,6 +356,27 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig(std::string_vie
     }
 
     return std::nullopt;
+}
+
+std::vector<client::RouterConfig> AddressBookTab::routerConfigList() const
+{
+    std::vector<client::RouterConfig> routers;
+
+    for (int i = 0; i < data_.router_size(); ++i)
+    {
+        const proto::address_book::Router& router = data_.router(i);
+        client::RouterConfig router_config;
+
+        router_config.name     = base::utf16FromUtf8(router.name());
+        router_config.address  = base::utf16FromUtf8(router.address());
+        router_config.port     = router.port();
+        router_config.username = base::utf16FromUtf8(router.username());
+        router_config.password = base::utf16FromUtf8(router.password());
+
+        routers.emplace_back(std::move(router_config));
+    }
+
+    return routers;
 }
 
 void AddressBookTab::addComputerGroup()

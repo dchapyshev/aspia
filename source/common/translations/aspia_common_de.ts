@@ -66,6 +66,14 @@
     </message>
 </context>
 <context>
+    <name>StatusDialog</name>
+    <message>
+        <location filename="../ui/status_dialog.ui" line="14"/>
+        <source>Connection Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UpdateDialog</name>
     <message>
         <location filename="../ui/update_dialog.ui" line="14"/>

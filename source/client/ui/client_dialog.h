@@ -38,7 +38,9 @@ class ClientDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClientDialog(QWidget* parent = nullptr);
+    using RouterList = std::vector<client::RouterConfig>;
+
+    explicit ClientDialog(const RouterList& routers = RouterList(), QWidget* parent = nullptr);
     ~ClientDialog();
 
 private slots:
@@ -49,6 +51,7 @@ private slots:
 private:
     std::unique_ptr<Ui::ClientDialog> ui;
 
+    RouterList routers_;
     Config config_;
     proto::DesktopConfig desktop_config_;
 

@@ -44,7 +44,6 @@ public:
         std::u16string address;
         uint16_t port = 0;
         base::ByteArray public_key;
-        base::ByteArray host_key;
     };
 
     class Delegate
@@ -53,17 +52,18 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onRouterStateChanged(const proto::internal::RouterState& router_state) = 0;
-        virtual void onHostIdAssigned(base::HostId host_id, const base::ByteArray& host_key) = 0;
+        virtual void onHostIdAssigned(const std::string& username, base::HostId host_id) = 0;
         virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
 
+    void hostIdRequest(const std::string& session_name);
+    void resetHostId(base::HostId host_id);
+
     const std::u16string& address() const { return router_info_.address; }
     uint16_t port() const { return router_info_.port; }
     const base::ByteArray& publicKey() const { return router_info_.public_key; }
-    const base::ByteArray& hostKey() const { return router_info_.host_key; }
-    base::HostId hostId() const { return host_id_; }
 
 protected:
     // base::NetworkChannel::Listener implementation.
@@ -87,8 +87,9 @@ private:
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<base::RelayPeerManager> peer_manager_;
     base::WaitableTimer reconnect_timer_;
-    base::HostId host_id_ = base::kInvalidHostId;
     RouterInfo router_info_;
+
+    std::queue<std::string> pending_id_requests_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

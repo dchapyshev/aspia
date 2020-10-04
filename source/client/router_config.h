@@ -35,6 +35,7 @@ struct RouterConfig
     RouterConfig(RouterConfig&& other) noexcept = default;
     RouterConfig& operator=(RouterConfig&& other) noexcept = default;
 
+    std::u16string name;
     std::u16string address;
     uint16_t port;
     std::u16string username;

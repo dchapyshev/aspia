@@ -29,13 +29,18 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
 {
     DCHECK(window_proxy_);
 
-    SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY);
+    if (!SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY))
+    {
+        PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
+    }
 }
 
 UserSessionAgent::~UserSessionAgent() = default;
 
 void UserSessionAgent::start()
 {
+    LOG(LS_INFO) << "Starting user session agent";
+
     ipc_channel_ = std::make_unique<base::IpcChannel>();
     ipc_channel_->setListener(this);
 
@@ -67,11 +72,15 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
     if (incoming_message_.has_connect_event())
     {
+        LOG(LS_INFO) << "Connect event received";
+
         clients_.emplace_back(incoming_message_.connect_event());
         window_proxy_->onClientListChanged(clients_);
     }
     else if (incoming_message_.has_disconnect_event())
     {
+        LOG(LS_INFO) << "Disconnect event received";
+
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
             if (it->id == incoming_message_.disconnect_event().id())
@@ -85,10 +94,14 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_credentials())
     {
+        LOG(LS_INFO) << "Credentials received";
+
         window_proxy_->onCredentialsChanged(incoming_message_.credentials());
     }
     else if (incoming_message_.has_router_state())
     {
+        LOG(LS_INFO) << "Router state received";
+
         window_proxy_->onRouterStateChanged(incoming_message_.router_state());
     }
     else
@@ -99,6 +112,8 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
 void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
+    LOG(LS_INFO) << "Update credentials request: " << request_type;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_credentials_request()->set_type(request_type);
     ipc_channel_->send(base::serialize(outgoing_message_));
@@ -106,6 +121,8 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
 
 void UserSessionAgent::killClient(uint32_t id)
 {
+    LOG(LS_INFO) << "Kill client request: " << id;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_kill_session()->set_id(id);
     ipc_channel_->send(base::serialize(outgoing_message_));

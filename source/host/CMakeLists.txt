@@ -41,6 +41,8 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_proxy.cc
     desktop_session_proxy.h
     host_export.h
+    host_key_storage.cc
+    host_key_storage.h
     host_main.cc
     host_main.h
     input_injector.h

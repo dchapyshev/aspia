@@ -210,7 +210,7 @@ border-left-style: solid;
 border-right-style: solid;
 border-bottom-style: solid;
 border-top-style: none;
-background: white;
+background-color:#FAFAFA;
 padding: 30px;
 }</string>
      </property>
@@ -248,7 +248,7 @@ margin: 2px;
 }
 QTreeWidget::item {
 border: 1px solid white;
-color: #000;
+color: #505050;
 }
 QTreeWidget::item:hover {
 border: 1px solid #AAAAAA;
@@ -308,15 +308,18 @@ background: #EBEBEB;
          <widget class="QPushButton" name="button_disconnect_all">
           <property name="styleSheet">
            <string notr="true">QPushButton {
-border: 1px solid #AAAAAA;
-background: white;
-color: black;
+border: 1px solid #FAFAFA;
+border-radius: 2px;
+background:#FAFAFA;
+color: #505050;
 padding: 3px;
 }
 QPushButton:hover {
+border: 1px solid #AAAAAA;
 background: #EBEBEB;
 }
 QPushButton:pressed {
+border: 1px solid #AAAAAA;
 background: #D7D7D7;
 }
 QPushButton:disabled {
