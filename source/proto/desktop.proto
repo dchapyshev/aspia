@@ -133,6 +133,49 @@ message VideoPacket
     bytes data = 4;
 }
 
+enum AudioEncoding
+{
+    AUDIO_ENCODING_UNKNOWN = 0;
+    AUDIO_ENCODING_RAW     = 1;
+    AUDIO_ENCODING_OPUS    = 2;
+}
+
+message AudioPacket
+{
+    enum SamplingRate
+    {
+        SAMPLING_RATE_INVALID = 0;
+        SAMPLING_RATE_44100   = 44100;
+        SAMPLING_RATE_48000   = 48000;
+    }
+
+    enum BytesPerSample
+    {
+        BYTES_PER_SAMPLE_INVALID = 0;
+        BYTES_PER_SAMPLE_2       = 2;
+    }
+
+    enum Channels
+    {
+        CHANNELS_INVALID  = 0;
+        CHANNELS_MONO     = 1;
+        CHANNELS_STEREO   = 2;
+        CHANNELS_SURROUND = 3;
+        CHANNELS_4_0      = 4;
+        CHANNELS_4_1      = 5;
+        CHANNELS_5_1      = 6;
+        CHANNELS_6_1      = 7;
+        CHANNELS_7_1      = 8;
+    }
+
+    int32 timestamp                 = 1;
+    repeated bytes data             = 2;
+    AudioEncoding encoding          = 3;
+    SamplingRate sampling_rate      = 4;
+    BytesPerSample bytes_per_sample = 5;
+    Channels channels               = 6;
+}
+
 message DesktopExtension
 {
     string name = 1;
@@ -170,7 +213,7 @@ message DesktopConfig
 message HostToClient
 {
     VideoPacket video_packet            = 1;
-    // Field 2 reserved for AudioPacket.
+    AudioPacket audio_packet            = 2;
     CursorShape cursor_shape            = 3;
     ClipboardEvent clipboard_event      = 4;
     DesktopExtension extension          = 5;

@@ -39,7 +39,7 @@ PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
                                asio::ip::tcp::socket&& socket,
                                Delegate* delegate)
     : delegate_(delegate),
-      timer_(std::move(task_runner)),
+      timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)),
       socket_(std::move(socket))
 {
     // Nothing

@@ -36,7 +36,7 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
-      reconnect_timer_(task_runner)
+      reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner)
 {
     // TODO
 }

@@ -32,7 +32,9 @@ class TaskRunner;
 class WaitableTimer
 {
 public:
-    explicit WaitableTimer(std::shared_ptr<TaskRunner> task_runner);
+    enum class Type { SINGLE_SHOT, REPEATED };
+
+    WaitableTimer(Type type, std::shared_ptr<TaskRunner> task_runner);
     ~WaitableTimer();
 
     using TimeoutCallback = std::function<void()>;
@@ -50,6 +52,8 @@ public:
 private:
     class Impl;
     std::shared_ptr<Impl> impl_;
+
+    Type type_;
     std::shared_ptr<TaskRunner> task_runner_;
 
     DISALLOW_COPY_AND_ASSIGN(WaitableTimer);

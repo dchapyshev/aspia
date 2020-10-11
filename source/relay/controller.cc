@@ -63,7 +63,7 @@ private:
 
 Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
-      reconnect_timer_(task_runner),
+      reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       shared_pool_(std::make_unique<SharedPool>(this))
 {
     Settings settings;

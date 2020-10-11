@@ -26,24 +26,33 @@ namespace base {
 class WaitableTimer::Impl : public std::enable_shared_from_this<Impl>
 {
 public:
-    explicit Impl(TimeoutCallback signal_callback);
+    explicit Impl(Type type,
+                  TimeoutCallback signal_callback,
+                  std::shared_ptr<TaskRunner> task_runner);
     ~Impl();
 
-    void start(const std::chrono::milliseconds& time_delta, std::shared_ptr<TaskRunner>& task_runner);
+    void start(const std::chrono::milliseconds& time_delta);
     void dettach();
 
 private:
     void onSignal();
 
+    Type type_;
     TimeoutCallback signal_callback_;
+    std::shared_ptr<TaskRunner> task_runner_;
+    std::chrono::milliseconds time_delta_;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-WaitableTimer::Impl::Impl(TimeoutCallback signal_callback)
-    : signal_callback_(std::move(signal_callback))
+WaitableTimer::Impl::Impl(Type type,
+                          TimeoutCallback signal_callback,
+                          std::shared_ptr<TaskRunner> task_runner)
+    : type_(type),
+      signal_callback_(std::move(signal_callback)),
+      task_runner_(std::move(task_runner))
 {
-    DCHECK(signal_callback_);
+    DCHECK(signal_callback_ && task_runner_);
 }
 
 WaitableTimer::Impl::~Impl()
@@ -51,10 +60,9 @@ WaitableTimer::Impl::~Impl()
     dettach();
 }
 
-void WaitableTimer::Impl::start(
-    const std::chrono::milliseconds& time_delta, std::shared_ptr<TaskRunner>& task_runner)
+void WaitableTimer::Impl::start(const std::chrono::milliseconds& time_delta)
 {
-    task_runner->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
+    task_runner_->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
 }
 
 void WaitableTimer::Impl::dettach()
@@ -64,12 +72,18 @@ void WaitableTimer::Impl::dettach()
 
 void WaitableTimer::Impl::onSignal()
 {
-    if (signal_callback_)
-        signal_callback_();
+    if (!signal_callback_)
+        return;
+
+    signal_callback_();
+
+    if (type_ == Type::REPEATED)
+        start(time_delta_);
 }
 
-WaitableTimer::WaitableTimer(std::shared_ptr<TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+WaitableTimer::WaitableTimer(Type type, std::shared_ptr<TaskRunner> task_runner)
+    : type_(type),
+      task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
 }
@@ -82,8 +96,8 @@ WaitableTimer::~WaitableTimer()
 void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
-    impl_ = std::make_shared<Impl>(std::move(signal_callback));
-    impl_->start(time_delta, task_runner_);
+    impl_ = std::make_shared<Impl>(type_, std::move(signal_callback), task_runner_);
+    impl_->start(time_delta);
 }
 
 void WaitableTimer::stop()

@@ -102,6 +102,26 @@ list(APPEND SOURCE_BASE_TESTS
     tests_main.cc
     version_unittest.cc)
 
+list(APPEND SOURCE_BASE_AUDIO
+    audio/audio_capturer.cc
+    audio/audio_capturer.h
+    audio/audio_silence_detector.cc
+    audio/audio_silence_detector.h
+    audio/audio_volume_filter.cc
+    audio/audio_volume_filter.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_capturer_win.cc
+        audio/audio_capturer_win.h
+        audio/audio_volume_filter_win.cc
+        audio/audio_volume_filter_win.h)
+
+    list(APPEND SOURCE_BASE_AUDIO_WIN
+        audio/win/default_audio_device_change_detector.cc
+        audio/win/default_audio_device_change_detector.h)
+endif()
+
 list(APPEND SOURCE_BASE_CODEC
     codec/cursor_decoder.cc
     codec/cursor_decoder.h
@@ -501,6 +521,7 @@ if (WIN32)
         win/resource_util.h
         win/scoped_clipboard.cc
         win/scoped_clipboard.h
+        win/scoped_co_mem.h
         win/scoped_com_initializer.cc
         win/scoped_com_initializer.h
         win/scoped_gdi_object.h
@@ -544,6 +565,7 @@ if (LINUX)
 endif()
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
+source_group(audio FILES ${SOURCE_BASE_AUDIO})
 source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
@@ -558,6 +580,7 @@ source_group(strings FILES ${SOURCE_BASE_STRINGS} ${SOURCE_BASE_STRINGS_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING})
 
 if (WIN32)
+    source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
     source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
@@ -572,6 +595,8 @@ endif()
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
+    ${SOURCE_BASE_AUDIO}
+    ${SOURCE_BASE_AUDIO_WIN}
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}

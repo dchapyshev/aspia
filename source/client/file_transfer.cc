@@ -93,7 +93,7 @@ FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
       transfer_window_proxy_(std::move(transfer_window_proxy)),
       task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
-      cancel_timer_(io_task_runner),
+      cancel_timer_(base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner),
       type_(type)
 {
     // Nothing

@@ -32,7 +32,7 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 } // namespace
 
 Authenticator::Authenticator(std::shared_ptr<TaskRunner> task_runner)
-    : timer_(std::move(task_runner))
+    : timer_(WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
 {
     // Nothing
 }

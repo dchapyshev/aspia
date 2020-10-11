@@ -37,7 +37,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          std::unique_ptr<base::IpcChannel> channel)
     : task_runner_(task_runner),
       channel_(std::move(channel)),
-      attach_timer_(task_runner),
+      attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id)
 {
     DCHECK(task_runner_);
