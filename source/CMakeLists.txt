@@ -36,6 +36,7 @@ find_package(asio REQUIRED)
 find_package(GTest REQUIRED)
 find_package(libyuv REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(Opus REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(RapidJSON REQUIRED)
 find_package(unofficial-libvpx REQUIRED)
@@ -119,6 +120,7 @@ set(THIRD_PARTY_LIBS
     libzstd
     OpenSSL::Crypto
     OpenSSL::SSL
+    Opus::opus
     modp_b64
     unofficial::libvpx::libvpx
     x11region
