@@ -34,7 +34,7 @@ public:
     virtual ~AudioVolumeFilter();
 
     // Adjusts audio samples in |data|. If the samples are silent before applying the volume level
-    // or the GetAudioLevel() returns 0, this function returns false. If |frames| is 0, this
+    // or the audioLevel() returns 0, this function returns false. If |frames| is 0, this
     // function also returns false.
     bool apply(int16_t* data, size_t frames);
 

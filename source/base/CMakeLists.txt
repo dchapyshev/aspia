@@ -123,12 +123,24 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_BASE_CODEC
+    codec/audio_bus.cc
+    codec/audio_bus.h
+    codec/audio_decoder.cc
+    codec/audio_decoder.h
+    codec/audio_decoder_opus.cc
+    codec/audio_decoder_opus.h
+    codec/audio_encoder.h
+    codec/audio_encoder_opus.cc
+    codec/audio_encoder_opus.h
+    codec/audio_sample_types.h
     codec/cursor_decoder.cc
     codec/cursor_decoder.h
     codec/cursor_encoder.cc
     codec/cursor_encoder.h
     codec/encoder_bitrate_filter.cc
     codec/encoder_bitrate_filter.h
+    codec/multi_channel_resampler.cc
+    codec/multi_channel_resampler.h
     codec/running_samples.cc
     codec/running_samples.h
     codec/scale_reducer.cc
@@ -137,6 +149,10 @@ list(APPEND SOURCE_BASE_CODEC
     codec/scoped_vpx_codec.h
     codec/scoped_zstd_stream.cc
     codec/scoped_zstd_stream.h
+    codec/sinc_resampler.cc
+    codec/sinc_resampler.h
+    codec/vector_math.cc
+    codec/vector_math.h
     codec/video_decoder.cc
     codec/video_decoder.h
     codec/video_decoder_vpx.cc
