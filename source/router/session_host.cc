@@ -78,12 +78,6 @@ void SessionHost::onMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        if (host_id_list_.empty())
-        {
-            LOG(LS_ERROR) << "Request could not be processed (host ID not assigned yet)";
-            return;
-        }
-
         LOG(LS_WARNING) << "Unhandled message from host";
     }
 }
