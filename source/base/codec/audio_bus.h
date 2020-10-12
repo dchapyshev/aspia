@@ -103,11 +103,6 @@ public:
         const typename SourceSampleTypeTraits::ValueType* source_buffer,
         int num_frames_to_write);
 
-    // DEPRECATED (https://crbug.com/580391)
-    // Please use the version templated with SourceSampleTypeTraits instead.
-    // TODO(chfremer): Remove (https://crbug.com/619623)
-    void FromInterleaved(const void* source, int frames, int bytes_per_sample);
-
     // Similar to FromInterleaved...(), but overwrites the frames starting at a
     // given offset |write_offset_in_frames| and does not zero out frames that are
     // not overwritten.
@@ -116,12 +111,6 @@ public:
         const typename SourceSampleTypeTraits::ValueType* source_buffer,
         int write_offset_in_frames,
         int num_frames_to_write);
-
-    // DEPRECATED (https://crbug.com/580391)
-    // Please use the version templated with SourceSampleTypeTraits instead.
-    // TODO(chfremer): Remove (https://crbug.com/619623)
-    void FromInterleavedPartial(const void* source, int start_frame, int frames,
-                                int bytes_per_sample);
 
     // Reads the sample values stored in this AudioBus instance and places them
     // into the given |dest_buffer| in interleaved format using the sample format
@@ -133,11 +122,6 @@ public:
         int num_frames_to_read,
         typename TargetSampleTypeTraits::ValueType* dest_buffer) const;
 
-    // DEPRECATED (https://crbug.com/580391)
-    // Please use the version templated with TargetSampleTypeTraits instead.
-    // TODO(chfremer): Remove (https://crbug.com/619623)
-    void ToInterleaved(int frames, int bytes_per_sample, void* dest) const;
-
     // Similar to ToInterleaved(), but reads the frames starting at a given
     // offset |read_offset_in_frames|.
     template <class TargetSampleTypeTraits>
@@ -145,14 +129,6 @@ public:
         int read_offset_in_frames,
         int num_frames_to_read,
         typename TargetSampleTypeTraits::ValueType* dest_buffer) const;
-
-    // DEPRECATED (https://crbug.com/580391)
-    // Please use the version templated with TargetSampleTypeTraits instead.
-    // TODO(chfremer): Remove (https://crbug.com/619623)
-    void ToInterleavedPartial(int start_frame,
-                              int frames,
-                              int bytes_per_sample,
-                              void* dest) const;
 
     // Helper method for copying channel data from one AudioBus to another.  Both
     // AudioBus object must have the same frames() and channels().
