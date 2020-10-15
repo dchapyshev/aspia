@@ -28,8 +28,8 @@ namespace base {
 
 namespace {
 
-// Output 160 kb/s bitrate.
-const int kOutputBitrateBps = 160 * 1024;
+// Output 64 kb/s bitrate.
+const int kOutputBitrateBps = 64 * 1024;
 
 // Opus doesn't support 44100 sampling rate so we always resample to 48kHz.
 const proto::AudioPacket::SamplingRate kOpusSamplingRate =
@@ -40,8 +40,7 @@ const proto::AudioPacket::SamplingRate kOpusSamplingRate =
 const std::chrono::milliseconds kFrameSizeMs { 20 };
 
 // Number of samples per frame when using default sampling rate.
-const int kFrameSamples =
-    kOpusSamplingRate * kFrameSizeMs / std::chrono::milliseconds(1000);
+const int kFrameSamples = kOpusSamplingRate * kFrameSizeMs / std::chrono::milliseconds(1000);
 
 const proto::AudioPacket::BytesPerSample kBytesPerSample =
     proto::AudioPacket::BYTES_PER_SAMPLE_2;
@@ -90,7 +89,7 @@ void AudioEncoderOpus::initEncoder()
     {
         resample_buffer_.reset(new char[kFrameSamples * kBytesPerSample * channels_]);
         // TODO(sergeyu): Figure out the right buffer size to use per packet instead
-        // of using media::SincResampler::kDefaultRequestSize.
+        // of using SincResampler::kDefaultRequestSize.
         resampler_.reset(new MultiChannelResampler(
             channels_,
             static_cast<double>(sampling_rate_) / kOpusSamplingRate,
@@ -117,14 +116,14 @@ void AudioEncoderOpus::destroyEncoder()
     resampler_.reset();
 }
 
-bool AudioEncoderOpus::resetForPacket(proto::AudioPacket* packet)
+bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
 {
-    if (packet->channels() != channels_ || packet->sampling_rate() != sampling_rate_)
+    if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
         destroyEncoder();
 
-        channels_ = packet->channels();
-        sampling_rate_ = packet->sampling_rate();
+        channels_ = packet.channels();
+        sampling_rate_ = packet.sampling_rate();
 
         if (channels_ <= 0 || channels_ > 2 || !IsSupportedSampleRate(sampling_rate_))
         {
@@ -160,27 +159,26 @@ int AudioEncoderOpus::bitrate()
     return kOutputBitrateBps;
 }
 
-std::unique_ptr<proto::AudioPacket> AudioEncoderOpus::encode(
-    std::unique_ptr<proto::AudioPacket> packet)
+bool AudioEncoderOpus::encode(
+    const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet)
 {
-    DCHECK_EQ(proto::AUDIO_ENCODING_RAW, packet->encoding());
-    DCHECK_EQ(1, packet->data_size());
-    DCHECK_EQ(kBytesPerSample, packet->bytes_per_sample());
+    DCHECK_EQ(proto::AUDIO_ENCODING_RAW, input_packet.encoding());
+    DCHECK_EQ(1, input_packet.data_size());
+    DCHECK_EQ(kBytesPerSample, input_packet.bytes_per_sample());
 
-    if (!resetForPacket(packet.get()))
+    if (!resetForPacket(input_packet))
     {
         LOG(LS_ERROR) << "Encoder initialization failed";
-        return nullptr;
+        return false;
     }
 
-    int samples_in_packet = packet->data(0).size() / kBytesPerSample / channels_;
-    const int16_t* next_sample = reinterpret_cast<const int16_t*>(packet->data(0).data());
+    int samples_in_packet = input_packet.data(0).size() / kBytesPerSample / channels_;
+    const int16_t* next_sample = reinterpret_cast<const int16_t*>(input_packet.data(0).data());
 
     // Create a new packet of encoded data.
-    std::unique_ptr<proto::AudioPacket> encoded_packet(new proto::AudioPacket());
-    encoded_packet->set_encoding(proto::AUDIO_ENCODING_OPUS);
-    encoded_packet->set_sampling_rate(kOpusSamplingRate);
-    encoded_packet->set_channels(channels_);
+    output_packet->set_encoding(proto::AUDIO_ENCODING_OPUS);
+    output_packet->set_sampling_rate(kOpusSamplingRate);
+    output_packet->set_channels(channels_);
 
     int prefetch_samples = resampler_.get() ? SincResampler::kDefaultRequestSize : 0;
     int samples_wanted = frame_size_ + prefetch_samples;
@@ -223,7 +221,7 @@ std::unique_ptr<proto::AudioPacket> AudioEncoderOpus::encode(
         }
 
         // Initialize output buffer.
-        std::string* data = encoded_packet->add_data();
+        std::string* data = output_packet->add_data();
         data->resize(kFrameSamples * kBytesPerSample * channels_);
 
         // Encode.
@@ -232,7 +230,7 @@ std::unique_ptr<proto::AudioPacket> AudioEncoderOpus::encode(
         if (result < 0)
         {
             LOG(LS_ERROR) << "opus_encode() failed with error code: " << result;
-            return nullptr;
+            return false;
         }
 
         DCHECK_LE(result, static_cast<int>(data->length()));
@@ -265,10 +263,10 @@ std::unique_ptr<proto::AudioPacket> AudioEncoderOpus::encode(
     }
 
     // Return nullptr if there's nothing in the packet.
-    if (encoded_packet->data_size() == 0)
-        return nullptr;
+    if (output_packet->data_size() == 0)
+        return false;
 
-    return encoded_packet;
+    return true;
 }
 
 } // namespace base

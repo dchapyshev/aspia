@@ -26,6 +26,7 @@
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
+class AudioCapturerWrapper;
 class CaptureScheduler;
 class TaskRunner;
 class Thread;
@@ -84,6 +85,7 @@ private:
     std::unique_ptr<base::SharedMemoryFactory> shared_memory_factory_;
     std::unique_ptr<base::CaptureScheduler> capture_scheduler_;
     std::unique_ptr<base::ScreenCapturerWrapper> screen_capturer_;
+    std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
 
     bool lock_at_disconnect_ = false;
 

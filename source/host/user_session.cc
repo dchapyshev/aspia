@@ -321,7 +321,13 @@ void UserSession::onDesktopSessionStopped()
 void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     for (const auto& client : desktop_clients_)
-        static_cast<ClientSessionDesktop*>(client.get())->encode(frame, cursor);
+        static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
+}
+
+void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
 }
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)

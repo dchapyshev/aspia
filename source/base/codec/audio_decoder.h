@@ -32,14 +32,13 @@ namespace base {
 class AudioDecoder
 {
 public:
-    static std::unique_ptr<AudioDecoder> createAudioDecoder(proto::AudioEncoding encoding);
+    static std::unique_ptr<AudioDecoder> create(proto::AudioEncoding encoding);
 
     virtual ~AudioDecoder() = default;
 
     // Returns the decoded packet. If the packet is invalid, then a NULL
     // std::unique_ptr is returned.
-    virtual std::unique_ptr<proto::AudioPacket> decode(
-        std::unique_ptr<proto::AudioPacket> packet) = 0;
+    virtual std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet) = 0;
 };
 
 } // namespace base

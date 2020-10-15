@@ -25,6 +25,7 @@
 #include "host/desktop_session.h"
 
 namespace base {
+class AudioEncoder;
 class CursorEncoder;
 class Frame;
 class MouseCursor;
@@ -45,7 +46,8 @@ public:
 
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
-    void encode(const base::Frame* frame, const base::MouseCursor* cursor);
+    void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
+    void encodeAudio(const proto::AudioPacket& audio_packet);
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
@@ -67,6 +69,7 @@ private:
     std::unique_ptr<base::ScaleReducer> scale_reducer_;
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
+    std::unique_ptr<base::AudioEncoder> audio_encoder_;
     DesktopSession::Config desktop_session_config_;
     base::Size preferred_size_;
 

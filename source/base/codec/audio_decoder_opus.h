@@ -33,13 +33,12 @@ public:
     ~AudioDecoderOpus() override;
 
     // AudioDecoder interface.
-    std::unique_ptr<proto::AudioPacket> decode(
-        std::unique_ptr<proto::AudioPacket> packet) override;
+    std::unique_ptr<proto::AudioPacket> decode(const proto::AudioPacket& packet) override;
 
 private:
     void initDecoder();
     void destroyDecoder();
-    bool resetForPacket(proto::AudioPacket* packet);
+    bool resetForPacket(const proto::AudioPacket& packet);
 
     int sampling_rate_ = 0;
     int channels_ = 0;

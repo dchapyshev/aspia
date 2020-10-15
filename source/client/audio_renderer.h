@@ -16,20 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/audio_decoder.h"
+#ifndef CLIENT__AUDIO_RENDERER_H
+#define CLIENT__AUDIO_RENDERER_H
 
-#include "base/logging.h"
-#include "base/codec/audio_decoder_opus.h"
+#include <memory>
 
-namespace base {
+namespace proto {
+class AudioPacket;
+} // namespace proto
 
-std::unique_ptr<AudioDecoder> AudioDecoder::create(proto::AudioEncoding encoding)
+namespace client {
+
+class AudioRenderer
 {
-    if (encoding == proto::AUDIO_ENCODING_OPUS)
-        return std::unique_ptr<AudioDecoder>(new AudioDecoderOpus());
+public:
+    virtual ~AudioRenderer() = default;
 
-    NOTIMPLEMENTED();
-    return nullptr;
-}
+    virtual void addAudioPacket(std::unique_ptr<proto::AudioPacket> packet) = 0;
+};
 
-} // namespace base
+} // namespace client
+
+#endif // CLIENT__AUDIO_RENDERER_H

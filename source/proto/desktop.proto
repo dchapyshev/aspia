@@ -136,8 +136,9 @@ message VideoPacket
 enum AudioEncoding
 {
     AUDIO_ENCODING_UNKNOWN = 0;
-    AUDIO_ENCODING_RAW     = 1;
-    AUDIO_ENCODING_OPUS    = 2;
+    AUDIO_ENCODING_DEFAULT = 1;
+    AUDIO_ENCODING_RAW     = 2;
+    AUDIO_ENCODING_OPUS    = 3;
 }
 
 message AudioPacket
@@ -186,6 +187,7 @@ message DesktopConfigRequest
 {
     string extensions      = 1;
     uint32 video_encodings = 2;
+    uint32 audio_encodings = 3;
 }
 
 enum DesktopFlags
@@ -208,6 +210,7 @@ message DesktopConfig
     uint32 update_interval       = 4; // Deprecated. Must be equal to 30.
     // Field 5: deprecated.
     uint32 scale_factor          = 6; // Deprecated. Must be equal to 100.
+    AudioEncoding audio_encoding = 7;
 }
 
 message HostToClient

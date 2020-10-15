@@ -34,7 +34,8 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(proto::VIDEO_ENCODING_VP8);
+    config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
 }
@@ -47,7 +48,8 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
         proto::DISABLE_DESKTOP_EFFECTS | proto::DISABLE_DESKTOP_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    config->set_video_encoding(proto::VIDEO_ENCODING_VP8);
+    config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
 }

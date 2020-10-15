@@ -105,6 +105,8 @@ list(APPEND SOURCE_BASE_TESTS
 list(APPEND SOURCE_BASE_AUDIO
     audio/audio_capturer.cc
     audio/audio_capturer.h
+    audio/audio_capturer_wrapper.cc
+    audio/audio_capturer_wrapper.h
     audio/audio_silence_detector.cc
     audio/audio_silence_detector.h
     audio/audio_volume_filter.cc

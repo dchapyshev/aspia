@@ -185,6 +185,10 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     {
         onScreenCaptured(incoming_message_.screen_captured());
     }
+    else if (incoming_message_.has_audio_packet())
+    {
+        onAudioCaptured(incoming_message_.audio_packet());
+    }
     else if (incoming_message_.has_screen_list())
     {
         last_screen_list_.reset(incoming_message_.release_screen_list());
@@ -271,6 +275,11 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     outgoing_message_.Clear();
     outgoing_message_.mutable_next_screen_capture()->set_update_interval(40);
     channel_->send(base::serialize(outgoing_message_));
+}
+
+void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
+{
+    delegate_->onAudioCaptured(audio_packet);
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)

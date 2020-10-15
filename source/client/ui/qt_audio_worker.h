@@ -16,29 +16,46 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FRAME_FACTORY_H
-#define CLIENT__FRAME_FACTORY_H
+#ifndef CLIENT__UI__QT_AUDIO_WORKER_H
+#define CLIENT__UI__QT_AUDIO_WORKER_H
 
-#include <memory>
+#include <mutex>
+#include <queue>
 
-namespace base {
-class Frame;
-class Size;
-} // namespace base
+#include <QObject>
+
+class QAudioOutput;
+class QIODevice;
+
+namespace proto {
+class AudioPacket;
+} // namespace proto
 
 namespace client {
 
-class AudioRenderer;
-
-class FrameFactory
+class QtAudioWorker : public QObject
 {
-public:
-    virtual ~FrameFactory() = default;
+    Q_OBJECT
 
-    virtual std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) = 0;
-    virtual std::unique_ptr<AudioRenderer> audioRenderer() = 0;
+public:
+    QtAudioWorker();
+    ~QtAudioWorker();
+
+protected:
+    void customEvent(QEvent* event) override;
+
+private:
+    friend class QtAudioRenderer;
+    bool init();
+    void processEvents();
+
+    std::queue<std::unique_ptr<proto::AudioPacket>> incoming_queue_;
+    std::mutex incoming_queue_lock_;
+
+    QAudioOutput* audio_output_ = nullptr;
+    QIODevice* audio_device_ = nullptr;
 };
 
 } // namespace client
 
-#endif // CLIENT__FRAME_FACTORY_H
+#endif // CLIENT__UI__QT_AUDIO_WORKER_H

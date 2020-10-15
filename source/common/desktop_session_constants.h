@@ -33,6 +33,7 @@ extern const char kSupportedExtensionsForManage[];
 extern const char kSupportedExtensionsForView[];
 
 extern const uint32_t kSupportedVideoEncodings;
+extern const uint32_t kSupportedAudioEncodings;
 
 } // namespace common
 

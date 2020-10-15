@@ -17,6 +17,7 @@
 //
 
 #include "common/desktop_session_constants.h"
+
 #include "proto/desktop.pb.h"
 
 namespace common {
@@ -34,5 +35,6 @@ const char kSupportedExtensionsForView[] =
     "select_screen;preferred_size;system_info";
 
 const uint32_t kSupportedVideoEncodings = proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9;
+const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
 
 } // namespace common

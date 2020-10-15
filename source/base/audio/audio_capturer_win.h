@@ -19,18 +19,18 @@
 #ifndef BASE__AUDIO__AUDIO_CAPTURER_WIN_H
 #define BASE__AUDIO__AUDIO_CAPTURER_WIN_H
 
-#include <audioclient.h>
-#include <mmdeviceapi.h>
-#include <wrl/client.h>
-
-#include <memory>
-
 #include "base/macros_magic.h"
 #include "base/waitable_timer.h"
 #include "base/threading/thread_checker.h"
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"
 #include "base/audio/audio_volume_filter_win.h"
+
+#include <asio/high_resolution_timer.hpp>
+
+#include <audioclient.h>
+#include <mmdeviceapi.h>
+#include <wrl/client.h>
 
 namespace base {
 
@@ -42,7 +42,7 @@ class DefaultAudioDeviceChangeDetector;
 class AudioCapturerWin : public AudioCapturer
 {
 public:
-    explicit AudioCapturerWin(std::shared_ptr<base::TaskRunner> task_runner);
+    AudioCapturerWin();
     ~AudioCapturerWin() override;
 
     // AudioCapturer interface.
@@ -67,10 +67,12 @@ private:
     // Receives all packets from the audio capture endpoint buffer and pushes them to the network.
     void doCapture();
 
+    void onCaptureTimeout(const std::error_code& error_code);
+
     PacketCapturedCallback callback_;
 
     proto::AudioPacket::SamplingRate sampling_rate_;
-    base::WaitableTimer capture_timer_;
+    asio::high_resolution_timer capture_timer_;
     std::chrono::milliseconds audio_device_period_;
     AudioVolumeFilterWin volume_filter_;
 

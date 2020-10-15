@@ -56,6 +56,9 @@ public:
         size_t min_video_packet = 0;
         size_t max_video_packet = 0;
         size_t avg_video_packet = 0;
+        size_t min_audio_packet = 0;
+        size_t max_audio_packet = 0;
+        size_t avg_audio_packet = 0;
         int fps = 0;
         int send_mouse = 0;
         int drop_mouse = 0;

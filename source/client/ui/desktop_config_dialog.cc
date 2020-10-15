@@ -47,6 +47,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     combo_codec->setCurrentIndex(current_codec);
 
+    if (config_.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
+        ui.checkbox_audio->setChecked(true);
+
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config_.flags() & proto::LOCK_AT_DISCONNECT)
@@ -63,8 +66,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     }
     else
     {
-        ui.checkbox_lock_at_disconnect->hide();
-        ui.checkbox_block_remote_input->hide();
+        ui.groupbox_other->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
     }
@@ -92,6 +94,11 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             static_cast<proto::VideoEncoding>(ui.combo_codec->currentData().toInt());
 
         config_.set_video_encoding(video_encoding);
+
+        if (ui.checkbox_audio->isChecked())
+            config_.set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+        else
+            config_.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
 
         uint32_t flags = 0;
 

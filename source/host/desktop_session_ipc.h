@@ -53,6 +53,7 @@ private:
     using SharedBuffers = std::map<int, std::unique_ptr<SharedBuffer>>;
 
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
+    void onAudioCaptured(const proto::AudioPacket& audio_packet);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
     std::unique_ptr<SharedBuffer> sharedBuffer(int shared_buffer_id);

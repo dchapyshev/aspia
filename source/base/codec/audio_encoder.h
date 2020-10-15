@@ -32,8 +32,8 @@ class AudioEncoder
 public:
     virtual ~AudioEncoder() = default;
 
-    virtual std::unique_ptr<proto::AudioPacket> encode(
-        std::unique_ptr<proto::AudioPacket> packet) = 0;
+    virtual bool encode(const proto::AudioPacket& input_packet,
+                        proto::AudioPacket* output_packet) = 0;
 
     // Returns average bitrate for the stream in bits per second.
     virtual int bitrate() = 0;

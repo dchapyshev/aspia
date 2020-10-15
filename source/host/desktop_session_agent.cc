@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
@@ -276,6 +277,9 @@ void DesktopSessionAgent::setEnabled(bool enable)
         screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
+        audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>(channel_->channelProxy());
+        audio_capturer_->start();
+
         LOG(LS_INFO) << "Session successfully started";
 
         task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
@@ -289,6 +293,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         screen_capturer_.reset();
         shared_memory_factory_.reset();
         clipboard_monitor_.reset();
+        audio_capturer_.reset();
 
         if (lock_at_disconnect_)
         {

@@ -114,5 +114,6 @@ message DesktopToService
     ScreenList screen_list         = 1;
     SharedBuffer shared_buffer     = 2;
     ScreenCaptured screen_captured = 3;
-    ClipboardEvent clipboard_event = 4;
+    AudioPacket audio_packet       = 4;
+    ClipboardEvent clipboard_event = 5;
 }

@@ -54,7 +54,7 @@
         <translation>会话配置</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="38"/>
         <source>Codec</source>
         <translation>编码</translation>
     </message>
@@ -83,44 +83,63 @@
         <translation type="vanished">高级</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="44"/>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Lock at disconnect</source>
-        <translation>断开时锁定</translation>
+        <translation type="vanished">断开时锁定</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="57"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="141"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="69"/>
         <source>Enable cursor shape</source>
         <translation>启用光标形状</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <source>Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
+        <source>Enable audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="76"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="78"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="98"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="85"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="105"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="112"/>
         <source>Disable font smoothing</source>
         <translation>禁用字体平滑</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="134"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -599,6 +618,21 @@
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="86"/>
+        <source>MIN Audio Packet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="91"/>
+        <source>MAX Audio Packet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="96"/>
+        <source>AVG Audio Packet</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1284,34 +1318,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="220"/>
-        <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="221"/>
+        <location filename="../ui/qt_desktop_window.cc" line="229"/>
+        <location filename="../ui/qt_desktop_window.cc" line="556"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="221"/>
+        <location filename="../ui/qt_desktop_window.cc" line="222"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="229"/>
+        <location filename="../ui/qt_desktop_window.cc" line="230"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="533"/>
+        <location filename="../ui/qt_desktop_window.cc" line="534"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="535"/>
+        <location filename="../ui/qt_desktop_window.cc" line="536"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="556"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>

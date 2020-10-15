@@ -39,6 +39,9 @@ void ComputerDialogDesktop::restoreSettings(
 
     combo_codec->setCurrentIndex(current_codec);
 
+    if (config.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
+        ui.checkbox_audio->setChecked(true);
+
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config.flags() & proto::LOCK_AT_DISCONNECT)
@@ -55,8 +58,7 @@ void ComputerDialogDesktop::restoreSettings(
     }
     else
     {
-        ui.checkbox_lock_at_disconnect->hide();
-        ui.checkbox_block_remote_input->hide();
+        ui.groupbox_other->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
     }
@@ -79,6 +81,11 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
     config->set_video_encoding(video_encoding);
 
     uint32_t flags = 0;
+
+    if (ui.checkbox_audio->isChecked())
+        config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+    else
+        config->set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
         flags |= proto::ENABLE_CURSOR_SHAPE;

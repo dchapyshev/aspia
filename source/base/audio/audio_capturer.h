@@ -26,8 +26,6 @@
 
 namespace base {
 
-class TaskRunner;
-
 class AudioCapturer
 {
 public:
@@ -38,7 +36,7 @@ public:
     // Returns true if audio capturing is supported on this platform. If this returns true, then
     // create() must not return nullptr.
     static bool isSupported();
-    static std::unique_ptr<AudioCapturer> create(std::shared_ptr<TaskRunner> task_runner);
+    static std::unique_ptr<AudioCapturer> create();
 
     static bool isValidSampleRate(int sample_rate);
 

@@ -173,6 +173,11 @@ void DesktopSessionManager::onScreenCaptured(
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
+void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_packet)
+{
+    delegate_->onAudioCaptured(audio_packet);
+}
+
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 {
     delegate_->onScreenListChanged(list);

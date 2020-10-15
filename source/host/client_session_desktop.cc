@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/codec/audio_encoder_opus.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
@@ -131,16 +132,18 @@ void ClientSessionDesktop::onStarted()
     // Add supported extensions and video encodings.
     request->set_extensions(extensions);
     request->set_video_encodings(common::kSupportedVideoEncodings);
+    request->set_audio_encodings(common::kSupportedAudioEncodings);
 
     LOG(LS_INFO) << "Sending config request";
     LOG(LS_INFO) << "Supported extensions: " << request->extensions();
     LOG(LS_INFO) << "Supported video encodings: " << request->video_encodings();
+    LOG(LS_INFO) << "Supported audio encodings: " << request->audio_encodings();
 
     // Send the request.
     sendMessage(base::serialize(outgoing_message_));
 }
 
-void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCursor* cursor)
+void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     outgoing_message_.Clear();
 
@@ -196,6 +199,19 @@ void ClientSessionDesktop::encode(const base::Frame* frame, const base::MouseCur
 
     if (outgoing_message_.has_video_packet() || outgoing_message_.has_cursor_shape())
         sendMessage(base::serialize(outgoing_message_));
+}
+
+void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
+{
+    if (!audio_encoder_)
+        return;
+
+    outgoing_message_.Clear();
+
+    if (!audio_encoder_->encode(audio_packet, outgoing_message_.mutable_audio_packet()))
+        return;
+
+    sendMessage(base::serialize(outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
@@ -356,10 +372,24 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         return;
     }
 
+    switch (config.audio_encoding())
+    {
+        case proto::AUDIO_ENCODING_OPUS:
+            audio_encoder_ = std::make_unique<base::AudioEncoderOpus>();
+            break;
+
+        default:
+        {
+            LOG(LS_WARNING) << "Unsupported audio encoding: " << config.audio_encoding();
+            audio_encoder_.reset();
+        }
+        break;
+    }
+
     cursor_encoder_.reset();
     if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
-    
+
     scale_reducer_ = std::make_unique<base::ScaleReducer>();
 
     desktop_session_config_.disable_font_smoothing =

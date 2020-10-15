@@ -20,9 +20,11 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/codec/audio_decoder_opus.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/desktop/mouse_cursor.h"
+#include "client/audio_renderer.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
@@ -41,7 +43,7 @@ int calculateFps(int last_fps, const std::chrono::milliseconds& duration, int64_
         ((1.0 - kAlpha) * static_cast<double>(last_fps)));
 }
 
-size_t calculateAvgVideoSize(size_t last_avg_size, size_t bytes)
+size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 {
     static const double kAlpha = 0.1;
     return static_cast<size_t>(
@@ -99,6 +101,10 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 
         if (incoming_message_.has_cursor_shape())
             readCursorShape(incoming_message_.cursor_shape());
+    }
+    else if (incoming_message_.has_audio_packet())
+    {
+        readAudioPacket(incoming_message_.audio_packet());
     }
     else if (incoming_message_.has_clipboard_event())
     {
@@ -278,6 +284,9 @@ void ClientDesktop::onMetricsRequest()
     metrics.min_video_packet = min_video_packet_;
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
+    metrics.min_audio_packet = min_audio_packet_;
+    metrics.max_audio_packet = max_audio_packet_;
+    metrics.avg_audio_packet = avg_audio_packet_;
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
@@ -379,11 +388,42 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
     size_t packet_size = packet.ByteSizeLong();
 
-    avg_video_packet_ = calculateAvgVideoSize(avg_video_packet_, packet_size);
+    avg_video_packet_ = calculateAvgSize(avg_video_packet_, packet_size);
     min_video_packet_ = std::min(min_video_packet_, packet_size);
     max_video_packet_ = std::max(max_video_packet_, packet_size);
 
     desktop_window_proxy_->drawFrame();
+}
+
+void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
+{
+    if (packet.encoding() != audio_encoding_)
+    {
+        audio_decoder_ = base::AudioDecoder::create(packet.encoding());
+        audio_encoding_ = packet.encoding();
+
+        LOG(LS_INFO) << "Audio encoding changed to: " << audio_encoding_;
+    }
+
+    if (!audio_decoder_)
+        return;
+
+    if (!audio_renderer_)
+    {
+        audio_renderer_ = desktop_window_proxy_->audioRenderer();
+        if (!audio_renderer_)
+            return;
+    }
+
+    size_t packet_size = packet.ByteSizeLong();
+
+    avg_audio_packet_ = calculateAvgSize(avg_audio_packet_, packet_size);
+    min_audio_packet_ = std::min(min_audio_packet_, packet_size);
+    max_audio_packet_ = std::max(max_audio_packet_, packet_size);
+
+    std::unique_ptr<proto::AudioPacket> decoded_packet = audio_decoder_->decode(packet);
+    if (decoded_packet)
+        audio_renderer_->addAudioPacket(std::move(decoded_packet));
 }
 
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)

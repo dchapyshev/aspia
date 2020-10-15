@@ -149,7 +149,7 @@
 <context>
     <name>ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="32"/>
+        <location filename="../computer_dialog_desktop.ui" line="38"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
@@ -174,12 +174,7 @@
         <translation type="vanished">Якісніше</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="50"/>
-        <source>Lock at disconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,34 +199,54 @@
         <translation type="vanished">Додаткові</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="44"/>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_desktop.ui" line="57"/>
+        <location filename="../computer_dialog_desktop.ui" line="141"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="64"/>
+        <location filename="../computer_dialog_desktop.ui" line="69"/>
         <source>Enable cursor shape</source>
         <translation>Включити форму курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="71"/>
+        <location filename="../computer_dialog_desktop.ui" line="56"/>
+        <source>Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="62"/>
+        <source>Enable audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="76"/>
         <source>Enable clipboard</source>
         <translation>Включити буфер обміну</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="78"/>
+        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="98"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="85"/>
+        <location filename="../computer_dialog_desktop.ui" line="105"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="128"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

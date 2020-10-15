@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>289</height>
+    <height>356</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -79,6 +79,21 @@
      <item>
       <property name="text">
        <string notr="true">AVG Video Packet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MIN Audio Packet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MAX Audio Packet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>AVG Audio Packet</string>
       </property>
      </item>
      <item>

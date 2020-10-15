@@ -16,20 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/audio_decoder.h"
+#ifndef CLIENT__UI__QT_AUDIO_RENDERER_H
+#define CLIENT__UI__QT_AUDIO_RENDERER_H
 
-#include "base/logging.h"
-#include "base/codec/audio_decoder_opus.h"
+#include "client/audio_renderer.h"
 
-namespace base {
+#include <queue>
 
-std::unique_ptr<AudioDecoder> AudioDecoder::create(proto::AudioEncoding encoding)
+#include <QThread>
+
+namespace client {
+
+class QtAudioWorker;
+
+class QtAudioRenderer
+    : public QObject,
+      public AudioRenderer
 {
-    if (encoding == proto::AUDIO_ENCODING_OPUS)
-        return std::unique_ptr<AudioDecoder>(new AudioDecoderOpus());
+    Q_OBJECT
 
-    NOTIMPLEMENTED();
-    return nullptr;
-}
+public:
+    QtAudioRenderer();
+    ~QtAudioRenderer();
 
-} // namespace base
+    // AudioRenderer implementation.
+    void addAudioPacket(std::unique_ptr<proto::AudioPacket> packet) override;
+
+private:
+    QThread* thread_;
+    QtAudioWorker* worker_;
+};
+
+} // namespace client
+
+#endif // CLIENT__UI__QT_AUDIO_RENDERER_H

@@ -67,14 +67,14 @@ void AudioDecoderOpus::destroyDecoder()
     }
 }
 
-bool AudioDecoderOpus::resetForPacket(proto::AudioPacket* packet)
+bool AudioDecoderOpus::resetForPacket(const proto::AudioPacket& packet)
 {
-    if (packet->channels() != channels_ || packet->sampling_rate() != sampling_rate_)
+    if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
         destroyDecoder();
 
-        channels_ = packet->channels();
-        sampling_rate_ = packet->sampling_rate();
+        channels_ = packet.channels();
+        sampling_rate_ = packet.sampling_rate();
 
         if (channels_ <= 0 || channels_ > 2 || sampling_rate_ != kSamplingRate)
         {
@@ -91,46 +91,45 @@ bool AudioDecoderOpus::resetForPacket(proto::AudioPacket* packet)
     return decoder_ != nullptr;
 }
 
-std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(
-    std::unique_ptr<proto::AudioPacket> packet)
+std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioPacket& packet)
+{
+    if (packet.encoding() != proto::AUDIO_ENCODING_OPUS)
     {
-        if (packet->encoding() != proto::AUDIO_ENCODING_OPUS)
-        {
-            LOG(LS_WARNING) << "Received an audio packet with encoding "
-                            << packet->encoding() << " when an OPUS packet was expected.";
-            return nullptr;
-        }
+        LOG(LS_WARNING) << "Received an audio packet with encoding "
+                        << packet.encoding() << " when an OPUS packet was expected.";
+        return nullptr;
+    }
 
-        if (packet->data_size() > kMaxFramesPerPacket)
-        {
-            LOG(LS_WARNING) << "Received an packet with too many frames.";
-            return nullptr;
-        }
+    if (packet.data_size() > kMaxFramesPerPacket)
+    {
+        LOG(LS_WARNING) << "Received an packet with too many frames.";
+        return nullptr;
+    }
 
-        if (!resetForPacket(packet.get()))
-            return nullptr;
+    if (!resetForPacket(packet))
+        return nullptr;
 
     // Create a new packet of decoded data.
     std::unique_ptr<proto::AudioPacket> decoded_packet(new proto::AudioPacket());
     decoded_packet->set_encoding(proto::AUDIO_ENCODING_RAW);
     decoded_packet->set_sampling_rate(kSamplingRate);
     decoded_packet->set_bytes_per_sample(proto::AudioPacket::BYTES_PER_SAMPLE_2);
-    decoded_packet->set_channels(packet->channels());
+    decoded_packet->set_channels(packet.channels());
 
     int max_frame_samples = kMaxFrameSizeMs * kSamplingRate / std::chrono::milliseconds(1000);
     int max_frame_bytes = max_frame_samples * channels_ * decoded_packet->bytes_per_sample();
 
     std::string* decoded_data = decoded_packet->add_data();
-    decoded_data->resize(packet->data_size() * max_frame_bytes);
+    decoded_data->resize(packet.data_size() * max_frame_bytes);
     int buffer_pos = 0;
 
-    for (int i = 0; i < packet->data_size(); ++i)
+    for (int i = 0; i < packet.data_size(); ++i)
     {
         int16_t* pcm_buffer = reinterpret_cast<int16_t*>(std::data(*decoded_data) + buffer_pos);
         CHECK_LE(buffer_pos + max_frame_bytes, static_cast<int>(decoded_data->size()));
-        std::string* frame = packet->mutable_data(i);
-        unsigned char* frame_data = reinterpret_cast<unsigned char*>(std::data(*frame));
-        int result = opus_decode(decoder_, frame_data, frame->size(),
+        const std::string& frame = packet.data(i);
+        const unsigned char* frame_data = reinterpret_cast<const unsigned char*>(frame.data());
+        int result = opus_decode(decoder_, frame_data, frame.size(),
                                  pcm_buffer, max_frame_samples, 0);
         if (result < 0)
         {
@@ -139,7 +138,7 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(
             return nullptr;
         }
 
-        buffer_pos += result * packet->channels() * decoded_packet->bytes_per_sample();
+        buffer_pos += result * packet.channels() * decoded_packet->bytes_per_sample();
     }
 
     if (!buffer_pos)

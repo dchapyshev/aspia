@@ -89,6 +89,7 @@ protected:
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
     void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) override;
+    void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 

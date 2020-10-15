@@ -26,6 +26,7 @@
 #include "common/clipboard_monitor.h"
 
 namespace base {
+class AudioDecoder;
 class CursorDecoder;
 class Frame;
 class VideoDecoder;
@@ -33,6 +34,7 @@ class VideoDecoder;
 
 namespace client {
 
+class AudioRenderer;
 class DesktopControlProxy;
 class DesktopWindow;
 class DesktopWindowProxy;
@@ -73,6 +75,7 @@ protected:
 private:
     void readConfigRequest(const proto::DesktopConfigRequest& config_request);
     void readVideoPacket(const proto::VideoPacket& packet);
+    void readAudioPacket(const proto::AudioPacket& packet);
     void readCursorShape(const proto::CursorShape& cursor_shape);
     void readClipboardEvent(const proto::ClipboardEvent& event);
     void readExtension(const proto::DesktopExtension& extension);
@@ -82,14 +85,18 @@ private:
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<base::Frame> desktop_frame_;
+    std::unique_ptr<AudioRenderer> audio_renderer_;
     proto::DesktopConfig desktop_config_;
 
     proto::HostToClient incoming_message_;
     proto::ClientToHost outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
+    proto::AudioEncoding audio_encoding_ = proto::AUDIO_ENCODING_UNKNOWN;
+
     std::unique_ptr<base::VideoDecoder> video_decoder_;
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;
+    std::unique_ptr<base::AudioDecoder> audio_decoder_;
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
 
     InputEventFilter input_event_filter_;
@@ -103,6 +110,9 @@ private:
     size_t min_video_packet_ = std::numeric_limits<size_t>::max();
     size_t max_video_packet_ = 0;
     size_t avg_video_packet_ = 0;
+    size_t min_audio_packet_ = std::numeric_limits<size_t>::max();
+    size_t max_audio_packet_ = 0;
+    size_t avg_audio_packet_ = 0;
     int fps_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);

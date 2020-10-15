@@ -74,7 +74,7 @@
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="38"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
@@ -99,12 +99,11 @@
         <translation type="vanished">Сильнее</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Lock at disconnect</source>
-        <translation>Блокировать при отключении</translation>
+        <translation type="vanished">Блокировать при отключении</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="112"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
@@ -129,34 +128,58 @@
         <translation type="vanished">Дополнительно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="44"/>
         <source>Options</source>
-        <translation>Опции</translation>
+        <translation type="vanished">Опции</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="57"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="141"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="69"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="71"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <source>Features</source>
+        <translation>Возможности</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
+        <source>Enable audio</source>
+        <translation>Включить звук</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="76"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="78"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <source>Appearance</source>
+        <translation>Внешний вид</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="98"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="85"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="105"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <source>Other</source>
+        <translation>Разное</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="134"/>
+        <source>Lock computer at disconnect</source>
+        <translation>Блокировать компьютер при отключении</translation>
     </message>
 </context>
 <context>
@@ -746,6 +769,21 @@
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="86"/>
+        <source>MIN Audio Packet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="91"/>
+        <source>MAX Audio Packet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/statistics_dialog.ui" line="96"/>
+        <source>AVG Audio Packet</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1756,19 +1794,19 @@
         <translation type="obsolete">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="220"/>
-        <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="221"/>
+        <location filename="../ui/qt_desktop_window.cc" line="229"/>
+        <location filename="../ui/qt_desktop_window.cc" line="556"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="221"/>
+        <location filename="../ui/qt_desktop_window.cc" line="222"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="229"/>
+        <location filename="../ui/qt_desktop_window.cc" line="230"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
@@ -1777,17 +1815,17 @@
         <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="533"/>
+        <location filename="../ui/qt_desktop_window.cc" line="534"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="535"/>
+        <location filename="../ui/qt_desktop_window.cc" line="536"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="556"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

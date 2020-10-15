@@ -37,13 +37,13 @@ public:
     ~AudioEncoderOpus() override;
 
     // AudioEncoder interface.
-    std::unique_ptr<proto::AudioPacket> encode(std::unique_ptr<proto::AudioPacket> packet) override;
+    bool encode(const proto::AudioPacket& input_packet, proto::AudioPacket* output_packet) override;
     int bitrate() override;
 
 private:
     void initEncoder();
     void destroyEncoder();
-    bool resetForPacket(proto::AudioPacket* packet);
+    bool resetForPacket(const proto::AudioPacket& packet);
     void fetchBytesToResample(int resampler_frame_delay, AudioBus* audio_bus);
 
     int sampling_rate_;

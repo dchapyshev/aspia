@@ -31,6 +31,7 @@ endif()
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
+find_package(Qt5Multimedia REQUIRED)
 find_package(Qt5LinguistTools)
 find_package(asio REQUIRED)
 find_package(GTest REQUIRED)
@@ -96,6 +97,7 @@ set(QT_COMMON_LIBS
     Qt5::Gui
     Qt5::GuiPrivate
     Qt5::QICOPlugin
+    Qt5::Multimedia
     Qt5::Network
     Qt5::NetworkPrivate
     Qt5::PrintSupport
@@ -110,6 +112,8 @@ if (WIN32)
         Qt5::WinMain
         Qt5::WinExtras
         Qt5::WinExtrasPrivate
+        Qt5::QWasapiPlugin
+        Qt5::DSServicePlugin
         Qt5::QWindowsIntegrationPlugin
         Qt5::QWindowsVistaStylePlugin
         Qt5::QWindowsPrinterSupportPlugin)

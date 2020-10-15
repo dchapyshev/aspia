@@ -25,6 +25,7 @@ namespace client {
 namespace {
 
 const proto::VideoEncoding kDefaultVideoEncoding = proto::VIDEO_ENCODING_VP8;
+const proto::AudioEncoding kDefaultAudioEncoding = proto::AUDIO_ENCODING_OPUS;
 
 } // namespace
 
@@ -55,6 +56,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
+    config->set_audio_encoding(kDefaultAudioEncoding);
 
     fixupDesktopConfig(config);
 }
@@ -69,6 +71,7 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
+    config->set_audio_encoding(kDefaultAudioEncoding);
 
     fixupDesktopConfig(config);
 }
@@ -83,6 +86,9 @@ void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
 
     if (config->video_encoding() == proto::VIDEO_ENCODING_DEFAULT)
         config->set_video_encoding(kDefaultVideoEncoding);
+
+    if (config->audio_encoding() == proto::AUDIO_ENCODING_DEFAULT)
+        config->set_audio_encoding(kDefaultAudioEncoding);
 }
 
 } // namespace client

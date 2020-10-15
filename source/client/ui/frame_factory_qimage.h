@@ -31,6 +31,7 @@ public:
     ~FrameFactoryQImage();
 
     std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) override;
+    std::unique_ptr<AudioRenderer> audioRenderer() override;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);

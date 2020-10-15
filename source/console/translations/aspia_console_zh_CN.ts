@@ -145,7 +145,7 @@
 <context>
     <name>ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="32"/>
+        <location filename="../computer_dialog_desktop.ui" line="38"/>
         <source>Codec</source>
         <translation>编码</translation>
     </message>
@@ -174,44 +174,63 @@
         <translation type="vanished">高级</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="44"/>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_desktop.ui" line="50"/>
         <source>Lock at disconnect</source>
-        <translation>锁定断开连接</translation>
+        <translation type="vanished">锁定断开连接</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="57"/>
+        <location filename="../computer_dialog_desktop.ui" line="141"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="64"/>
+        <location filename="../computer_dialog_desktop.ui" line="69"/>
         <source>Enable cursor shape</source>
         <translation>启用光标形状</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="71"/>
+        <location filename="../computer_dialog_desktop.ui" line="56"/>
+        <source>Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="62"/>
+        <source>Enable audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="76"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="78"/>
+        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="98"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="85"/>
+        <location filename="../computer_dialog_desktop.ui" line="105"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
         <translation>禁用字体平滑</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="128"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -20,6 +20,9 @@
 
 #include "base/logging.h"
 #include "base/audio/win/default_audio_device_change_detector.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "base/strings/unicode.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -57,9 +60,9 @@ const int kMaxExpectedTimerLag = 30;
 
 namespace base {
 
-AudioCapturerWin::AudioCapturerWin(std::shared_ptr<base::TaskRunner> task_runner)
+AudioCapturerWin::AudioCapturerWin()
     : sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
-      capture_timer_(base::WaitableTimer::Type::REPEATED, std::move(task_runner)),
+      capture_timer_(MessageLoop::current()->pumpAsio()->ioContext()),
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {
@@ -80,9 +83,11 @@ bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
         return false;
 
     // Initialize the capture timer and start capturing. Note, this timer won't be reset or
-    // restarted in ResetAndInitialize() function. Which means we expect the audio_device_period_
+    // restarted in resetAndInitialize() function. Which means we expect the audio_device_period_
     // is a system wide configuration, it would not be changed with the default audio device.
-    capture_timer_.start(audio_device_period_, std::bind(&AudioCapturerWin::doCapture, this));
+    capture_timer_.expires_after(audio_device_period_);
+    capture_timer_.async_wait(
+        std::bind(&AudioCapturerWin::onCaptureTimeout, this, std::placeholders::_1));
     return true;
 }
 
@@ -99,7 +104,9 @@ bool AudioCapturerWin::resetAndInitialize()
 
 void AudioCapturerWin::deinitialize()
 {
+    LOG(LS_INFO) << "Deinitialize audio capturer";
     DCHECK(thread_checker_.calledOnValidThread());
+
     wave_format_ex_.reset(nullptr);
     default_device_detector_.reset();
     audio_capture_client_.Reset();
@@ -111,6 +118,7 @@ void AudioCapturerWin::deinitialize()
 
 bool AudioCapturerWin::initialize()
 {
+    LOG(LS_INFO) << "Audio capturer initializing";
     DCHECK(!audio_capture_client_.Get());
     DCHECK(!audio_client_.Get());
     DCHECK(!mm_device_.Get());
@@ -189,6 +197,10 @@ bool AudioCapturerWin::initialize()
         return false;
     }
 
+    LOG(LS_INFO) << "Audio device period: " << audio_device_period_.count();
+    LOG(LS_INFO) << "Audio device sample rate: " << wave_format_ex_->nSamplesPerSec;
+    LOG(LS_INFO) << "Audio device channels: " << wave_format_ex_->nChannels;
+
     sampling_rate_ = static_cast<proto::AudioPacket::SamplingRate>(
         wave_format_ex_->nSamplesPerSec);
 
@@ -248,6 +260,7 @@ bool AudioCapturerWin::initialize()
     volume_filter_.activateBy(mm_device_.Get());
     volume_filter_.initialize(sampling_rate_, wave_format_ex_->nChannels);
 
+    LOG(LS_INFO) << "Audio capturer initialized";
     return true;
 }
 
@@ -266,7 +279,7 @@ void AudioCapturerWin::doCapture()
     {
         if (!resetAndInitialize())
         {
-            // Initialization failed, we should wait for next DoCapture call.
+            // Initialization failed, we should wait for next doCapture call.
             return;
         }
     }
@@ -325,14 +338,29 @@ void AudioCapturerWin::doCapture()
     }
 }
 
+void AudioCapturerWin::onCaptureTimeout(const std::error_code& error_code)
+{
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Timer error: " << utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    doCapture();
+
+    capture_timer_.expires_after(audio_device_period_);
+    capture_timer_.async_wait(
+        std::bind(&AudioCapturerWin::onCaptureTimeout, this, std::placeholders::_1));
+}
+
 bool AudioCapturer::isSupported()
 {
     return true;
 }
 
-std::unique_ptr<AudioCapturer> AudioCapturer::create(std::shared_ptr<TaskRunner> task_runner)
+std::unique_ptr<AudioCapturer> AudioCapturer::create()
 {
-    return std::unique_ptr<AudioCapturer>(new AudioCapturerWin(std::move(task_runner)));
+    return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
 }
 
 } // namespace base
