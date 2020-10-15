@@ -27,7 +27,7 @@
 namespace common {
 
 ClipboardMac::ClipboardMac()
-    : timer_(base::MessageLoop::current()->taskRunner())
+    : timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner())
 {
     // Nothing
 }

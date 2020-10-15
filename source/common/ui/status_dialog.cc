@@ -38,6 +38,8 @@ StatusDialog::StatusDialog(QWidget* parent)
     });
 }
 
+StatusDialog::~StatusDialog() = default;
+
 void StatusDialog::addMessage(const QString& message)
 {
     ui->edit_status->appendPlainText(

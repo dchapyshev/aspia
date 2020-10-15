@@ -20,6 +20,7 @@
 
 #include "base/audio/audio_capturer.h"
 #include "base/ipc/ipc_channel_proxy.h"
+#include "build/build_config.h"
 
 namespace base {
 
@@ -42,7 +43,11 @@ void AudioCapturerWrapper::start()
 
 void AudioCapturerWrapper::onBeforeThreadRunning()
 {
+#if defined(OS_WIN)
     thread_->setPriority(Thread::Priority::HIGHEST);
+#else
+#warning Not implemented
+#endif
 
     capturer_ = AudioCapturer::create();
     capturer_->start([this](std::unique_ptr<proto::AudioPacket> packet)

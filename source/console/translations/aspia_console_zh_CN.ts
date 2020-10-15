@@ -313,67 +313,67 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="46"/>
+        <location filename="../main.cc" line="50"/>
         <source>Remote computer address.</source>
         <translation>远程计算机地址。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="47"/>
+        <location filename="../main.cc" line="51"/>
         <source>address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="51"/>
+        <location filename="../main.cc" line="55"/>
         <source>Remote computer port.</source>
         <translation>远程计算机端口。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="52"/>
+        <location filename="../main.cc" line="56"/>
         <source>port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="57"/>
+        <location filename="../main.cc" line="61"/>
         <source>Name of user.</source>
         <translation>用户名称。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="58"/>
+        <location filename="../main.cc" line="62"/>
         <source>username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="66"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>会话类型，可能的值：桌面管理、桌面视图、文件传输。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="72"/>
         <source>Open the client to connect to the computer.</source>
         <translation>打开客户端以连接到计算机。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="71"/>
+        <location filename="../main.cc" line="75"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="78"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="75"/>
+        <location filename="../main.cc" line="79"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="114"/>
+        <location filename="../main.cc" line="118"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="115"/>
+        <location filename="../main.cc" line="119"/>
         <source>Incorrect session type entered.</source>
         <translation>输入的会话类型不正确。</translation>
     </message>
