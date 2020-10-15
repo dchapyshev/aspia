@@ -21,6 +21,8 @@
 #include "base/logging.h"
 #include "base/codec/vector_math.h"
 
+#include <cstring>
+
 namespace base {
 
 static bool IsAligned(void* ptr)

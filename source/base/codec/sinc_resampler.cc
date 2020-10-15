@@ -91,6 +91,8 @@
 
 #include "base/logging.h"
 
+#include <cmath>
+#include <cstring>
 #include <limits>
 
 #if defined(ARCH_CPU_X86_FAMILY)
