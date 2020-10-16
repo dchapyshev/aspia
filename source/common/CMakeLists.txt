@@ -129,10 +129,10 @@ if(Qt5LinguistTools_FOUND)
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE COMMON_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/common/*.cc
-        ${PROJECT_SOURCE_DIR}/common/*.cpp
-        ${PROJECT_SOURCE_DIR}/common/*.h
-        ${PROJECT_SOURCE_DIR}/common/*.ui)
+        ${PROJECT_SOURCE_DIR}/source/common/*.cc
+        ${PROJECT_SOURCE_DIR}/source/common/*.cpp
+        ${PROJECT_SOURCE_DIR}/source/common/*.h
+        ${PROJECT_SOURCE_DIR}/source/common/*.ui)
 
     create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES})
     add_custom_target(aspia_common_ts_update DEPENDS ${TS_COMMON_UPDATE})

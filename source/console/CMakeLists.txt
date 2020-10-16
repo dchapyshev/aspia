@@ -156,10 +156,10 @@ if(Qt5LinguistTools_FOUND)
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE CONSOLE_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/console/*.cc
-        ${PROJECT_SOURCE_DIR}/console/*.cpp
-        ${PROJECT_SOURCE_DIR}/console/*.h
-        ${PROJECT_SOURCE_DIR}/console/*.ui)
+        ${PROJECT_SOURCE_DIR}/source/console/*.cc
+        ${PROJECT_SOURCE_DIR}/source/console/*.cpp
+        ${PROJECT_SOURCE_DIR}/source/console/*.h
+        ${PROJECT_SOURCE_DIR}/source/console/*.ui)
 
     create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES})
     add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})

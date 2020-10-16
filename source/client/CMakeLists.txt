@@ -191,10 +191,10 @@ if(Qt5LinguistTools_FOUND)
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE CLIENT_TR_SOURCES
-        ${PROJECT_SOURCE_DIR}/client/*.cc
-        ${PROJECT_SOURCE_DIR}/client/*.cpp
-        ${PROJECT_SOURCE_DIR}/client/*.h
-        ${PROJECT_SOURCE_DIR}/client/*.ui)
+        ${PROJECT_SOURCE_DIR}/source/client/*.cc
+        ${PROJECT_SOURCE_DIR}/source/client/*.cpp
+        ${PROJECT_SOURCE_DIR}/source/client/*.h
+        ${PROJECT_SOURCE_DIR}/source/client/*.ui)
 
     create_translation(TS_CLIENT_UPDATE ${CLIENT_TR_SOURCES} ${CLIENT_TS_FILES})
     add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_UPDATE})

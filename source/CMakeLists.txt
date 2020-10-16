@@ -16,39 +16,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.17.0)
-
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-project(aspia)
-
-# Detecting Linux.
-if (UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
-find_package(Qt5Multimedia REQUIRED)
-find_package(Qt5LinguistTools)
-find_package(asio REQUIRED)
-find_package(GTest REQUIRED)
-find_package(libyuv REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(Opus REQUIRED)
-find_package(Protobuf REQUIRED)
-find_package(RapidJSON REQUIRED)
-find_package(unofficial-libvpx REQUIRED)
-find_package(unofficial-sqlite3 REQUIRED)
-find_package(zstd REQUIRED)
-
-find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 if (WIN32)
-    find_package(Qt5WinExtras REQUIRED)
-
     # Target version.
     add_definitions(-DNTDDI_VERSION=0x06010000
                     -D_WIN32_WINNT=0x0601
@@ -64,17 +38,6 @@ if (WIN32)
                     -DNOMINMAX)
 endif()
 
-if (UNIX)
-    find_package(ICU REQUIRED uc dt)
-endif()
-
-if (APPLE)
-    find_library(FOUNDATION_LIB Foundation)
-endif()
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
-
 # For Asio.
 add_definitions(-DASIO_STANDALONE
                 -DASIO_NO_DEPRECATED
@@ -87,8 +50,6 @@ add_definitions(-DRAPIDJSON_SSE2)
 add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_BYTEARRAY
                 -DQT_USE_QSTRINGBUILDER)
-
-include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 
 set(QT_COMMON_LIBS
     Qt5::Core
@@ -130,6 +91,8 @@ set(THIRD_PARTY_LIBS
     x11region
     yuv)
 
+include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
+
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 17)
 
@@ -150,12 +113,6 @@ if (MSVC)
     # Static runtime library.
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
-enable_testing()
 
 add_subdirectory(base)
 add_subdirectory(client)

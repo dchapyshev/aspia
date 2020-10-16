@@ -140,7 +140,7 @@ function(CREATE_TRANSLATION _qm_files)
                 set(_lst_file_srcs "${_lst_file_src}\n${_lst_file_srcs}")
             endforeach()
 
-            set(_inc_DIRS ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
+            set(_inc_DIRS ${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
             foreach(_pro_include ${_inc_DIRS})
                 get_filename_component(_abs_include "${_pro_include}" ABSOLUTE)
                 set(_lst_file_srcs "-I${_pro_include}\n${_lst_file_srcs}")
