@@ -19,6 +19,7 @@
 #ifndef CLIENT__UI__QT_AUDIO_WORKER_H
 #define CLIENT__UI__QT_AUDIO_WORKER_H
 
+#include <memory>
 #include <mutex>
 #include <queue>
 

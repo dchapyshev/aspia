@@ -50,7 +50,23 @@ bool QtAudioWorker::init()
     audio_format.setSampleSize(16);
     audio_format.setSampleType(QAudioFormat::SignedInt);
 
-    audio_output_ = new QAudioOutput(QAudioDeviceInfo::defaultOutputDevice(), audio_format, this);
+    QAudioDeviceInfo device_info = QAudioDeviceInfo::defaultOutputDevice();
+
+    if (!device_info.isFormatSupported(audio_format))
+    {
+        LOG(LS_INFO) << "Audio format NOT supported";
+
+        QAudioFormat preferred_format = device_info.preferredFormat();
+        LOG(LS_INFO) << "Preferred format";
+        LOG(LS_INFO) << "Codec: " << preferred_format.codec().toStdString();
+        LOG(LS_INFO) << "Sample rate: " << preferred_format.sampleRate();
+        LOG(LS_INFO) << "Sample size: " << preferred_format.sampleSize();
+        LOG(LS_INFO) << "Sample type: " << preferred_format.sampleType();
+        LOG(LS_INFO) << "Channels: " << preferred_format.channelCount();
+        return false;
+    }
+
+    audio_output_ = new QAudioOutput(device_info, audio_format, this);
     if (audio_output_->error() != QAudio::NoError)
     {
         LOG(LS_WARNING) << "Failed to open audio device";

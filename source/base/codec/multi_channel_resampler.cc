@@ -18,11 +18,12 @@
 
 #include "base/codec/multi_channel_resampler.h"
 
-#include <algorithm>
-#include <memory>
-
 #include "base/logging.h"
 #include "base/codec/audio_bus.h"
+
+#include <algorithm>
+#include <cstring>
+#include <memory>
 
 namespace base {
 
