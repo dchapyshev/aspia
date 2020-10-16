@@ -329,42 +329,42 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="50"/>
+        <location filename="../main.cc" line="46"/>
         <source>Remote computer address.</source>
         <translation>Адреса віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="51"/>
+        <location filename="../main.cc" line="47"/>
         <source>address</source>
         <translation>адреса</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="55"/>
+        <location filename="../main.cc" line="51"/>
         <source>Remote computer port.</source>
         <translation>Порт віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="52"/>
         <source>port</source>
         <translation>порт</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="61"/>
+        <location filename="../main.cc" line="57"/>
         <source>Name of user.</source>
         <translation>Ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="62"/>
+        <location filename="../main.cc" line="58"/>
         <source>username</source>
         <translation>ім&apos;я користувача</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="66"/>
+        <location filename="../main.cc" line="62"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессії. Можливі значення: керування робочим столом, перегляд робочого стола, передача файлів.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="72"/>
+        <location filename="../main.cc" line="68"/>
         <source>Open the client to connect to the computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -373,27 +373,27 @@
         <translation type="vanished">Запустити програму із спрощеним інтерфейсом користувача.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="75"/>
+        <location filename="../main.cc" line="71"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="78"/>
+        <location filename="../main.cc" line="74"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="79"/>
+        <location filename="../main.cc" line="75"/>
         <source>The file to open.</source>
         <translation>Файл для відкриття.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="118"/>
+        <location filename="../main.cc" line="114"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="119"/>
+        <location filename="../main.cc" line="115"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>
