@@ -110,8 +110,8 @@ endif()
 
 if (APPLE)
     set(CONSOLE_PLATFORM_LIBS ICU::uc ICU::dt)
-    set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/console/resources/main.icns)
-    set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/console/Info.plist)
+    set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/source/console/resources/main.icns)
+    set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/source/console/Info.plist)
 
     set_source_files_properties(${aspia_console_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
