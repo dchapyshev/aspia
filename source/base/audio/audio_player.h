@@ -16,47 +16,45 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__QT_AUDIO_WORKER_H
-#define CLIENT__UI__QT_AUDIO_WORKER_H
+#ifndef BASE__AUDIO__AUDIO_PLAYER_H
+#define BASE__AUDIO__AUDIO_PLAYER_H
+
+#include "base/macros_magic.h"
 
 #include <memory>
 #include <mutex>
 #include <queue>
 
-#include <QObject>
-
-class QAudioOutput;
-class QIODevice;
-
 namespace proto {
 class AudioPacket;
 } // namespace proto
 
-namespace client {
+namespace base {
 
-class QtAudioWorker : public QObject
+class AudioOutput;
+
+class AudioPlayer
 {
-    Q_OBJECT
-
 public:
-    QtAudioWorker();
-    ~QtAudioWorker();
+    AudioPlayer();
+    ~AudioPlayer();
 
-protected:
-    void customEvent(QEvent* event) override;
+    void addPacket(std::unique_ptr<proto::AudioPacket> packet);
 
 private:
-    friend class QtAudioRenderer;
-    bool init();
-    void processEvents();
+    size_t onMoreDataRequired(void* data, size_t size);
+
+    std::unique_ptr<AudioOutput> output_;
 
     std::queue<std::unique_ptr<proto::AudioPacket>> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    QAudioOutput* audio_output_ = nullptr;
-    QIODevice* audio_device_ = nullptr;
+    std::queue<std::unique_ptr<proto::AudioPacket>> work_queue_;
+    size_t source_pos_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(AudioPlayer);
 };
 
-} // namespace client
+} // namespace base
 
-#endif // CLIENT__UI__QT_AUDIO_WORKER_H
+#endif // BASE__AUDIO__AUDIO_PLAYER_H

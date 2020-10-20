@@ -29,7 +29,7 @@ void SimpleThread::threadMain()
 
     running_event_.notify_one();
 
-    run();
+    run_callback_();
 
     {
         std::unique_lock lock(running_lock_);
@@ -71,12 +71,13 @@ bool SimpleThread::isRunning() const
     return running_;
 }
 
-void SimpleThread::start()
+void SimpleThread::start(const RunCallback& run_callback)
 {
     if (state_ != State::STOPPED)
         return;
 
     state_ = State::STARTING;
+    run_callback_ = run_callback;
 
     thread_ = std::thread(&SimpleThread::threadMain, this);
 

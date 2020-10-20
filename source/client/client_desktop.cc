@@ -20,11 +20,11 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/audio/audio_player.h"
 #include "base/codec/audio_decoder_opus.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
 #include "base/desktop/mouse_cursor.h"
-#include "client/audio_renderer.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/desktop_window_proxy.h"
@@ -408,12 +408,8 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
     if (!audio_decoder_)
         return;
 
-    if (!audio_renderer_)
-    {
-        audio_renderer_ = desktop_window_proxy_->audioRenderer();
-        if (!audio_renderer_)
-            return;
-    }
+    if (!audio_player_)
+        audio_player_ = std::make_unique<base::AudioPlayer>();
 
     size_t packet_size = packet.ByteSizeLong();
 
@@ -423,7 +419,7 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 
     std::unique_ptr<proto::AudioPacket> decoded_packet = audio_decoder_->decode(packet);
     if (decoded_packet)
-        audio_renderer_->addAudioPacket(std::move(decoded_packet));
+        audio_player_->addPacket(std::move(decoded_packet));
 }
 
 void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)

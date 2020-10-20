@@ -30,7 +30,6 @@ class TaskRunner;
 
 namespace client {
 
-class AudioRenderer;
 class DesktopControlProxy;
 
 class DesktopWindowProxy : public std::enable_shared_from_this<DesktopWindowProxy>
@@ -53,7 +52,6 @@ public:
     void setMetrics(const DesktopWindow::Metrics& metrics);
 
     std::shared_ptr<base::Frame> allocateFrame(const base::Size& size);
-    std::unique_ptr<AudioRenderer> audioRenderer();
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
     void drawFrame();
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);

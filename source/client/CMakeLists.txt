@@ -19,7 +19,6 @@
 include(translations)
 
 list(APPEND SOURCE_CLIENT
-    audio_renderer.h
     client.cc
     client.h
     client_config.cc
@@ -135,10 +134,6 @@ list(APPEND SOURCE_CLIENT_UI
     ui/frame_factory_qimage.h
     ui/frame_qimage.cc
     ui/frame_qimage.h
-    ui/qt_audio_renderer.cc
-    ui/qt_audio_renderer.h
-    ui/qt_audio_worker.cc
-    ui/qt_audio_worker.h
     ui/qt_desktop_window.cc
     ui/qt_desktop_window.h
     ui/qt_file_manager_window.cc

@@ -107,6 +107,10 @@ list(APPEND SOURCE_BASE_AUDIO
     audio/audio_capturer.h
     audio/audio_capturer_wrapper.cc
     audio/audio_capturer_wrapper.h
+    audio/audio_output.cc
+    audio/audio_output.h
+    audio/audio_player.cc
+    audio/audio_player.h
     audio/audio_silence_detector.cc
     audio/audio_silence_detector.h
     audio/audio_volume_filter.cc
@@ -116,12 +120,18 @@ if (WIN32)
     list(APPEND SOURCE_BASE_AUDIO
         audio/audio_capturer_win.cc
         audio/audio_capturer_win.h
+        audio/audio_output_win.cc
+        audio/audio_output_win.h
         audio/audio_volume_filter_win.cc
         audio/audio_volume_filter_win.h)
 
     list(APPEND SOURCE_BASE_AUDIO_WIN
+        audio/win/audio_util_win.cc
+        audio/win/audio_util_win.h
         audio/win/default_audio_device_change_detector.cc
-        audio/win/default_audio_device_change_detector.h)
+        audio/win/default_audio_device_change_detector.h
+        audio/win/scoped_mmcss_registration.cc
+        audio/win/scoped_mmcss_registration.h)
 endif()
 
 list(APPEND SOURCE_BASE_CODEC

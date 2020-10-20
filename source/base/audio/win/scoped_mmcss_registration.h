@@ -16,25 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__AUDIO_RENDERER_H
-#define CLIENT__AUDIO_RENDERER_H
+#ifndef BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H
+#define BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H
 
-#include <memory>
+#include "base/macros_magic.h"
 
-namespace proto {
-class AudioPacket;
-} // namespace proto
+#include <Windows.h>
 
-namespace client {
+namespace base {
 
-class AudioRenderer
+class ScopedMMCSSRegistration
 {
 public:
-    virtual ~AudioRenderer() = default;
+    explicit ScopedMMCSSRegistration(const wchar_t* task_name);
+    ~ScopedMMCSSRegistration();
 
-    virtual void addAudioPacket(std::unique_ptr<proto::AudioPacket> packet) = 0;
+    bool isSucceeded() const;
+
+private:
+    HANDLE mmcss_handle_ = nullptr;
+    DISALLOW_COPY_AND_ASSIGN(ScopedMMCSSRegistration);
 };
 
-} // namespace client
+} // namespace base
 
-#endif // CLIENT__AUDIO_RENDERER_H
+#endif // BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H

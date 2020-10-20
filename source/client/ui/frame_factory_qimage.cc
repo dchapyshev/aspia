@@ -18,7 +18,6 @@
 
 #include "client/ui/frame_factory_qimage.h"
 
-#include "client/ui/qt_audio_renderer.h"
 #include "client/ui/frame_qimage.h"
 
 namespace client {
@@ -30,11 +29,6 @@ FrameFactoryQImage::~FrameFactoryQImage() = default;
 std::shared_ptr<base::Frame> FrameFactoryQImage::allocateFrame(const base::Size& size)
 {
     return std::shared_ptr<base::Frame>(FrameQImage::create(size).release());
-}
-
-std::unique_ptr<AudioRenderer> FrameFactoryQImage::audioRenderer()
-{
-    return std::make_unique<QtAudioRenderer>();
 }
 
 } // namespace client

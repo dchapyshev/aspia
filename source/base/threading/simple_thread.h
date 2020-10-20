@@ -23,6 +23,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <functional>
 #include <mutex>
 #include <thread>
 
@@ -34,8 +35,10 @@ public:
     SimpleThread() = default;
     virtual ~SimpleThread() = default;
 
+    using RunCallback = std::function<void()>;
+
     // Starts the thread and waits for its real start
-    void start();
+    void start(const RunCallback& run_callback);
 
     // Signals the thread to exit in the near future.
     void stopSoon();
@@ -57,13 +60,11 @@ public:
     // Returns if the Run method is running.
     bool isRunning() const;
 
-protected:
-    virtual void run() = 0;
-
 private:
     void threadMain();
 
     std::thread thread_;
+    RunCallback run_callback_;
 
     enum class State { STARTING, STARTED, STOPPING, STOPPED };
 

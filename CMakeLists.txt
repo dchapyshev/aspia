@@ -28,7 +28,6 @@ if (UNIX AND NOT APPLE)
 endif()
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
-find_package(Qt5Multimedia REQUIRED)
 find_package(Qt5LinguistTools)
 find_package(asio REQUIRED)
 find_package(GTest REQUIRED)

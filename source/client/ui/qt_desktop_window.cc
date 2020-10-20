@@ -29,7 +29,6 @@
 #include "client/ui/desktop_panel.h"
 #include "client/ui/frame_factory_qimage.h"
 #include "client/ui/frame_qimage.h"
-#include "client/ui/qt_audio_renderer.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/system_info_window.h"
 #include "client/ui/statistics_dialog.h"

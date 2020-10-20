@@ -90,6 +90,7 @@ source_group(resources FILES ${SOURCE_CONSOLE_RESOURCES})
 
 if (WIN32)
     set(CONSOLE_PLATFORM_LIBS
+        avrt
         crypt32
         dwmapi
         imm32

@@ -28,15 +28,12 @@ class Size;
 
 namespace client {
 
-class AudioRenderer;
-
 class FrameFactory
 {
 public:
     virtual ~FrameFactory() = default;
 
     virtual std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) = 0;
-    virtual std::unique_ptr<AudioRenderer> audioRenderer() = 0;
 };
 
 } // namespace client

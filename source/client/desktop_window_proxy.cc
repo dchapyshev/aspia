@@ -22,7 +22,6 @@
 #include "base/task_runner.h"
 #include "base/version.h"
 #include "base/desktop/geometry.h"
-#include "client/audio_renderer.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
 #include "client/frame_factory.h"
@@ -121,11 +120,6 @@ void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
 std::shared_ptr<base::Frame> DesktopWindowProxy::allocateFrame(const base::Size& size)
 {
     return frame_factory_->allocateFrame(size);
-}
-
-std::unique_ptr<AudioRenderer> DesktopWindowProxy::audioRenderer()
-{
-    return frame_factory_->audioRenderer();
 }
 
 void DesktopWindowProxy::showWindow(

@@ -27,6 +27,7 @@
 
 namespace base {
 class AudioDecoder;
+class AudioPlayer;
 class CursorDecoder;
 class Frame;
 class VideoDecoder;
@@ -85,7 +86,6 @@ private:
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy_;
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<base::Frame> desktop_frame_;
-    std::unique_ptr<AudioRenderer> audio_renderer_;
     proto::DesktopConfig desktop_config_;
 
     proto::HostToClient incoming_message_;
@@ -97,6 +97,7 @@ private:
     std::unique_ptr<base::VideoDecoder> video_decoder_;
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;
     std::unique_ptr<base::AudioDecoder> audio_decoder_;
+    std::unique_ptr<base::AudioPlayer> audio_player_;
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
 
     InputEventFilter input_event_filter_;

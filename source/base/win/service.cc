@@ -56,7 +56,7 @@ const wchar_t kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
-class ServiceThread : public SimpleThread
+class ServiceThread
 {
 public:
     ServiceThread(Service* service);
@@ -64,6 +64,7 @@ public:
 
     using EventCallback = std::function<void()>;
 
+    void start();
     void setStatus(DWORD status);
     void doEvent(EventCallback callback, bool quit = false);
 
@@ -89,13 +90,14 @@ public:
 
 protected:
     // SimpleThread implementation.
-    void run() override;
+    void run();
 
 private:
     static void WINAPI serviceMain(DWORD argc, LPWSTR* argv);
     static DWORD WINAPI serviceControlHandler(
         DWORD control_code, DWORD event_type, LPVOID event_data, LPVOID context);
 
+    SimpleThread thread_;
     Service* service_;
     std::shared_ptr<TaskRunner> task_runner_;
 
@@ -126,10 +128,16 @@ ServiceThread::ServiceThread(Service* service)
 ServiceThread::~ServiceThread()
 {
     setStatus(SERVICE_STOPPED);
-    stop();
+
+    thread_.stop();
 
     DCHECK(self);
     self = nullptr;
+}
+
+void ServiceThread::start()
+{
+    thread_.start(std::bind(&ServiceThread::run, this));
 }
 
 void ServiceThread::setStatus(DWORD status)

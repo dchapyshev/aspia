@@ -1794,19 +1794,19 @@
         <translation type="obsolete">Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="221"/>
-        <location filename="../ui/qt_desktop_window.cc" line="229"/>
-        <location filename="../ui/qt_desktop_window.cc" line="556"/>
+        <location filename="../ui/qt_desktop_window.cc" line="220"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
+        <location filename="../ui/qt_desktop_window.cc" line="555"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="222"/>
+        <location filename="../ui/qt_desktop_window.cc" line="221"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="230"/>
+        <location filename="../ui/qt_desktop_window.cc" line="229"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
@@ -1815,17 +1815,17 @@
         <translation type="obsolete">Выбор поддерживаемой видео-кодировки отменен пользователем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="534"/>
+        <location filename="../ui/qt_desktop_window.cc" line="533"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="536"/>
+        <location filename="../ui/qt_desktop_window.cc" line="535"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="556"/>
+        <location filename="../ui/qt_desktop_window.cc" line="555"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
