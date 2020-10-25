@@ -134,6 +134,12 @@ if (WIN32)
         audio/win/scoped_mmcss_registration.h)
 endif()
 
+if (APPLE)
+    list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_output_mac.cc
+        audio/audio_output_mac.h)
+endif()
+
 list(APPEND SOURCE_BASE_CODEC
     codec/audio_bus.cc
     codec/audio_bus.h
@@ -618,12 +624,13 @@ if (LINUX)
 endif()
 
 if (APPLE)
-   source_group(mac FILES ${SOURCE_BASE_MAC})
+    source_group(mac FILES ${SOURCE_BASE_MAC})
 endif()
 
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_AUDIO}
+    ${SOURCE_BASE_AUDIO_MAC}
     ${SOURCE_BASE_AUDIO_WIN}
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}

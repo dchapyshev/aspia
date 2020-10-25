@@ -109,7 +109,7 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    set(CONSOLE_PLATFORM_LIBS ICU::uc ICU::dt)
+    set(CONSOLE_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio ICU::uc ICU::dt)
     set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/source/console/resources/main.icns)
     set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/source/console/Info.plist)
 

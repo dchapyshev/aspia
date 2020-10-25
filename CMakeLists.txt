@@ -52,6 +52,8 @@ endif()
 
 if (APPLE)
     find_library(FOUNDATION_LIB Foundation)
+    find_library(COREAUDIO_LIB CoreAudio)
+    find_library(AUDIOTOOLBOX_LIB AudioToolbox)
 endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})

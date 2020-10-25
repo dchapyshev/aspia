@@ -16,9 +16,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(modp_b64)
-add_subdirectory(x11region)
+list(APPEND SOURCE_PORTAUDIO pa_memorybarrier.h pa_ringbuffer.c pa_ringbuffer.h)
 
-if (APPLE)
-    add_subdirectory(portaudio)
-endif()
+source_group("" FILES ${SOURCE_PORTAUDIO})
+
+add_library(portaudio STATIC ${SOURCE_PORTAUDIO})
+set_target_properties(portaudio PROPERTIES LANGUAGE C LINKER_LANGUAGE C)
+set_target_properties(portaudio PROPERTIES COMPILE_DEFINITIONS "OSATOMIC_USE_INLINED")
+set_target_properties(portaudio PROPERTIES FOLDER third_party)
