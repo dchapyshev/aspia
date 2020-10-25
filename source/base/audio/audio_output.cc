@@ -25,6 +25,8 @@
 #include "base/audio/audio_output_win.h"
 #elif defined(OS_MAC)
 #include "base/audio/audio_output_mac.h"
+#elif defined(OS_LINUX)
+#include "base/audio/audio_output_pulse.h"
 #endif
 
 namespace base {
@@ -42,6 +44,8 @@ std::unique_ptr<AudioOutput> AudioOutput::create(const NeedMoreDataCB& need_more
     return std::make_unique<AudioOutputWin>(need_more_data_cb);
 #elif defined(OS_MAC)
     return std::make_unique<AudioOutputMac>(need_more_data_cb);
+#elif defined(OS_LINUX)
+    return std::make_unique<AudioOutputPulse>(need_more_data_cb);
 #else
     NOTIMPLEMENTED();
     return nullptr;

@@ -134,6 +134,12 @@ if (WIN32)
         audio/win/scoped_mmcss_registration.h)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_output_pulse.cc
+        audio/audio_output_pulse.h)
+endif()
+
 if (APPLE)
     list(APPEND SOURCE_BASE_AUDIO
         audio/audio_output_mac.cc
