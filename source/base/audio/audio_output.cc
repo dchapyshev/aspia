@@ -29,6 +29,8 @@
 #include "base/audio/audio_output_pulse.h"
 #endif
 
+#include <cstring>
+
 namespace base {
 
 AudioOutput::AudioOutput(const NeedMoreDataCB& need_more_data_cb)

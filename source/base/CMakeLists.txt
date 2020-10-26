@@ -138,6 +138,12 @@ if (LINUX)
     list(APPEND SOURCE_BASE_AUDIO
         audio/audio_output_pulse.cc
         audio/audio_output_pulse.h)
+
+    list(APPEND SOURCE_BASE_AUDIO_LINUX
+        audio/linux/late_binding_symbol_table.cc
+        audio/linux/late_binding_symbol_table.h
+        audio/linux/pulseaudio_symbol_table.cc
+        audio/linux/pulseaudio_symbol_table.h)
 endif()
 
 if (APPLE)
@@ -626,6 +632,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
+    source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
@@ -636,7 +643,7 @@ endif()
 add_library(aspia_base STATIC
     ${SOURCE_BASE}
     ${SOURCE_BASE_AUDIO}
-    ${SOURCE_BASE_AUDIO_MAC}
+    ${SOURCE_BASE_AUDIO_LINUX}
     ${SOURCE_BASE_AUDIO_WIN}
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
