@@ -55,7 +55,8 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
-      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this))
+      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
+      audio_player_(base::AudioPlayer::create())
 {
     // Nothing
 }
@@ -397,6 +398,9 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
 void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 {
+    if (!audio_player_)
+        return;
+
     if (packet.encoding() != audio_encoding_)
     {
         audio_decoder_ = base::AudioDecoder::create(packet.encoding());
@@ -407,9 +411,6 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 
     if (!audio_decoder_)
         return;
-
-    if (!audio_player_)
-        audio_player_ = std::make_unique<base::AudioPlayer>();
 
     size_t packet_size = packet.ByteSizeLong();
 

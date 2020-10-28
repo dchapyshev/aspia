@@ -36,12 +36,14 @@ class AudioOutput;
 class AudioPlayer
 {
 public:
-    AudioPlayer();
     ~AudioPlayer();
 
+    static std::unique_ptr<AudioPlayer> create();
     void addPacket(std::unique_ptr<proto::AudioPacket> packet);
 
 private:
+    AudioPlayer();
+    bool init();
     size_t onMoreDataRequired(void* data, size_t size);
 
     std::unique_ptr<AudioOutput> output_;

@@ -19,10 +19,17 @@
 #ifndef BASE__AUDIO__AUDIO_OUTPUT_PULSE_H
 #define BASE__AUDIO__AUDIO_OUTPUT_PULSE_H
 
-#include "base/macros_magic.h"
+#include "base/waitable_event.h"
 #include "base/audio/audio_output.h"
+#include "base/audio/linux/pulseaudio_symbol_table.h"
+
+#include <mutex>
+
+#include <pulse/pulseaudio.h>
 
 namespace base {
+
+class SimpleThread;
 
 class AudioOutputPulse : public AudioOutput
 {
@@ -35,6 +42,57 @@ public:
     bool stop() override;
 
 private:
+    static void paContextStateCallback(pa_context* c, void* self);
+    static void paServerInfoCallback(pa_context* c, const pa_server_info* i, void* self);
+    static void paStreamStateCallback(pa_stream* p, void* self);
+    static void paStreamWriteCallback(pa_stream* unused, size_t buffer_space, void* self);
+    static void paStreamUnderflowCallback(pa_stream* unused, void* self);
+
+    void paContextStateCallbackHandler(pa_context* c);
+    void paServerInfoCallbackHandler(const pa_server_info* i);
+    void paStreamStateCallbackHandler(pa_stream* p);
+    void paStreamWriteCallbackHandler(size_t buffer_space);
+    void paStreamUnderflowCallbackHandler();
+
+    void enableWriteCallback();
+    void disableWriteCallback();
+
+    bool initDevice();
+    bool initPlayout();
+    void terminate();
+    bool initPulseAudio();
+    void terminatePulseAudio();
+    void threadRun();
+
+    std::mutex mutex_;
+    WaitableEvent time_event_play_;
+    WaitableEvent play_start_event_;
+
+    std::unique_ptr<SimpleThread> worker_thread_;
+
+    bool device_initialized_ = false;
+    bool playing_ = false;
+    bool playout_initialized_ = false;
+    bool start_play_ = false;
+    bool quit_ = false;
+
+    int32_t write_errors_ = 0;
+
+    std::unique_ptr<int8_t[]> play_buffer_;
+    size_t playback_buffer_size_ = 0;
+    size_t playback_buffer_unused_ = 0;
+    size_t temp_buffer_space_ = 0;
+    int32_t configured_latency_ = 0;
+
+    bool pa_state_changed_ = false;
+    pa_threaded_mainloop* pa_main_loop_ = nullptr;
+    pa_mainloop_api* pa_main_loop_api_ = nullptr;
+    pa_context* pa_context_ = nullptr;
+
+    pa_stream* play_stream_ = nullptr;
+    uint32_t play_stream_flags_ = 0;
+    pa_buffer_attr play_buffer_attr_;
+
     DISALLOW_COPY_AND_ASSIGN(AudioOutputPulse);
 };
 

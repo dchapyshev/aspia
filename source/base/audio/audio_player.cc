@@ -18,20 +18,25 @@
 
 #include "base/audio/audio_player.h"
 
+#include "base/logging.h"
 #include "base/audio/audio_output.h"
 #include "proto/desktop.pb.h"
 
 namespace base {
 
-AudioPlayer::AudioPlayer()
-{
-    output_ = AudioOutput::create(std::bind(
-        &AudioPlayer::onMoreDataRequired, this, std::placeholders::_1, std::placeholders::_2));
-    if (output_)
-        output_->start();
-}
+AudioPlayer::AudioPlayer() = default;
 
 AudioPlayer::~AudioPlayer() = default;
+
+// static
+std::unique_ptr<AudioPlayer> AudioPlayer::create()
+{
+    std::unique_ptr<AudioPlayer> player(new AudioPlayer());
+    if (!player->init())
+        return nullptr;
+
+    return player;
+}
 
 void AudioPlayer::addPacket(std::unique_ptr<proto::AudioPacket> packet)
 {
@@ -83,6 +88,25 @@ size_t AudioPlayer::onMoreDataRequired(void* data, size_t size)
     }
 
     return target_pos;
+}
+
+bool AudioPlayer::init()
+{
+    output_ = AudioOutput::create(std::bind(
+        &AudioPlayer::onMoreDataRequired, this, std::placeholders::_1, std::placeholders::_2));
+    if (!output_)
+    {
+        LOG(LS_ERROR) << "AudioOutput::create failed";
+        return false;
+    }
+
+    if (!output_->start())
+    {
+        LOG(LS_ERROR) << "AudioOutput::start failed";
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace base
