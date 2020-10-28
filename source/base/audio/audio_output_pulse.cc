@@ -579,6 +579,12 @@ void AudioOutputPulse::threadRun()
 {
     LOG(LS_INFO) << "Audio thread started";
 
+    static const struct sched_param kRealTimePrio = {8};
+    if (pthread_setschedparam(pthread_self(), SCHED_RR, &kRealTimePrio) != 0)
+    {
+        LOG(LS_WARNING) << "pthread_setschedparam failed";
+    }
+
     while (true)
     {
         if (!time_event_play_.wait(std::chrono::milliseconds(1000)))
