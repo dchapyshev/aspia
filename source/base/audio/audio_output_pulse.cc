@@ -35,26 +35,6 @@ namespace base {
 
 namespace {
 
-// First PulseAudio protocol version that supports PA_STREAM_ADJUST_LATENCY.
-const uint32_t kPaAdjustLatencyProtocolVersion = 13;
-
-// For playback, there is a round-trip delay to fill the server-side playback buffer, so setting too
-// low of a latency is a buffer underflow risk. We will automatically increase the latency if a
-// buffer underflow does occur, but we also enforce a sane minimum at start-up time. Anything lower
-// would be virtually guaranteed to underflow at least once, so there's no point in allowing lower
-// latencies.
-const uint32_t kPaPlaybackLatencyMinMSecs = 20;
-
-// Every time a playback stream underflows, we will reconfigure it with target latency that is
-// greater by this amount.
-const uint32_t kPaPlaybackLatencyIncrementMSecs = 20;
-
-// We also need to configure a suitable request size. Too small and we'd burn CPU from the overhead
-// of transfering small amounts of data at once. Too large and the amount of data remaining in the
-// buffer right before refilling it would be a buffer underflow risk. We set it to half of the
-// buffer size.
-const uint32_t kPaPlaybackRequestFactor = 2;
-
 class ScopedPaLock
 {
 public:
@@ -77,7 +57,11 @@ private:
 } // namespace
 
 AudioOutputPulse::AudioOutputPulse(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb)
+    : AudioOutput(need_more_data_cb),
+      time_event_play_(WaitableEvent::ResetPolicy::AUTOMATIC,
+                       WaitableEvent::InitialState::NOT_SIGNALED),
+      play_start_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
+                        WaitableEvent::InitialState::NOT_SIGNALED)
 {
     memset(&play_buffer_attr_, 0, sizeof(play_buffer_attr_));
 
@@ -105,7 +89,7 @@ bool AudioOutputPulse::start()
         start_play_ = true;
     }
 
-    // Both |_startPlay| and |_playing| needs protction since they are also accessed on the playout
+    // Both |start_play_| and |playing_| needs protction since they are also accessed on the playout
     // thread.
 
     // The audio thread will signal when playout has started.
@@ -155,7 +139,6 @@ bool AudioOutputPulse::stop()
         ScopedPaLock pa_lock(pa_main_loop_);
 
         disableWriteCallback();
-        LATE(pa_stream_set_underflow_callback)(play_stream_, nullptr, nullptr);
 
         // Unset this here so that we don't get a TERMINATED callback.
         LATE(pa_stream_set_state_callback)(play_stream_, nullptr, nullptr);
@@ -205,12 +188,6 @@ void AudioOutputPulse::paStreamStateCallback(pa_stream* p, void* self)
 void AudioOutputPulse::paStreamWriteCallback(pa_stream*, size_t buffer_space, void* self)
 {
     static_cast<AudioOutputPulse*>(self)->paStreamWriteCallbackHandler(buffer_space);
-}
-
-// static
-void AudioOutputPulse::paStreamUnderflowCallback(pa_stream*, void* self)
-{
-    static_cast<AudioOutputPulse*>(self)->paStreamUnderflowCallbackHandler();
 }
 
 void AudioOutputPulse::paContextStateCallbackHandler(pa_context* c)
@@ -263,40 +240,6 @@ void AudioOutputPulse::paStreamWriteCallbackHandler(size_t buffer_space)
     // re-enable it below.
     disableWriteCallback();
     time_event_play_.signal();
-}
-
-void AudioOutputPulse::paStreamUnderflowCallbackHandler()
-{
-    const pa_sample_spec* spec = LATE(pa_stream_get_sample_spec)(play_stream_);
-    if (!spec)
-    {
-        LOG(LS_ERROR) << "pa_stream_get_sample_spec failed";
-        return;
-    }
-
-    size_t bytes_per_sec = LATE(pa_bytes_per_second)(spec);
-    uint32_t new_latency =
-        configured_latency_ + bytes_per_sec * kPaPlaybackLatencyIncrementMSecs / 1000;
-
-    // Set the play buffer attributes.
-    play_buffer_attr_.maxlength = new_latency;
-    play_buffer_attr_.tlength = new_latency;
-    play_buffer_attr_.minreq = new_latency / kPaPlaybackRequestFactor;
-    play_buffer_attr_.prebuf = play_buffer_attr_.tlength - play_buffer_attr_.minreq;
-
-    pa_operation* op = LATE(pa_stream_set_buffer_attr)(
-        play_stream_, &play_buffer_attr_, nullptr, nullptr);
-    if (!op)
-    {
-        LOG(LS_ERROR) << "pa_stream_set_buffer_attr failed";
-        return;
-    }
-
-    // Don't need to wait for this to complete.
-    LATE(pa_operation_unref)(op);
-
-    // Save the new latency in case we underflow again.
-    configured_latency_ = new_latency;
 }
 
 void AudioOutputPulse::enableWriteCallback()
@@ -373,41 +316,10 @@ bool AudioOutputPulse::initPlayout()
     play_stream_flags_ = static_cast<pa_stream_flags_t>(
          PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_INTERPOLATE_TIMING);
 
-    // If configuring a specific latency then we want to specify PA_STREAM_ADJUST_LATENCY to make
-    // the server adjust parameters automatically to reach that target latency. However, that flag
-    // doesn't exist in Ubuntu 8.04 and many people still use that, so we have to check the protocol
-    // version of libpulse.
-    if (LATE(pa_context_get_protocol_version)(pa_context_) >= kPaAdjustLatencyProtocolVersion)
-    {
-        play_stream_flags_ |= PA_STREAM_ADJUST_LATENCY;
-    }
-
-    const pa_sample_spec* spec = LATE(pa_stream_get_sample_spec)(play_stream_);
-    if (!spec)
-    {
-        LOG(LS_ERROR) << "pa_stream_get_sample_spec failed";
-        return false;
-    }
-
-    size_t bytes_per_sec = LATE(pa_bytes_per_second)(spec);
-    uint32_t latency = bytes_per_sec * kPaPlaybackLatencyMinMSecs / 1000;
-
-    // Set the play buffer attributes.
-    play_buffer_attr_.maxlength = latency;  // Number bytes stored in the buffer.
-    play_buffer_attr_.tlength = latency;    // Target fill level of play buffer.
-    // Minimum free num bytes before server request more data.
-    play_buffer_attr_.minreq = latency / kPaPlaybackRequestFactor;
-    // prebuffer tlength before starting playout
-    play_buffer_attr_.prebuf = play_buffer_attr_.tlength - play_buffer_attr_.minreq;
-    configured_latency_ = latency;
-
     // Num samples in bytes * num channels.
     playback_buffer_size_ = kSampleRate / 100 * 2 * kChannels;
     playback_buffer_unused_ = playback_buffer_size_;
     play_buffer_ = std::make_unique<int8_t[]>(playback_buffer_size_);
-
-    // Enable underflow callback.
-    LATE(pa_stream_set_underflow_callback)(play_stream_, paStreamUnderflowCallback, this);
 
     // Set the state callback function for the stream.
     LATE(pa_stream_set_state_callback)(play_stream_, paStreamStateCallback, this);

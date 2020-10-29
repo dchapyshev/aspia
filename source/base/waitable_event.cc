@@ -37,11 +37,8 @@ void WaitableEvent::reset()
 
 void WaitableEvent::signal()
 {
-    {
-        std::scoped_lock lock(signal_lock_);
-        signal_ = true;
-    }
-
+    std::scoped_lock lock(signal_lock_);
+    signal_ = true;
     signal_condition_.notify_all();
 }
 

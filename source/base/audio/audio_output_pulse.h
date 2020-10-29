@@ -46,13 +46,11 @@ private:
     static void paServerInfoCallback(pa_context* c, const pa_server_info* i, void* self);
     static void paStreamStateCallback(pa_stream* p, void* self);
     static void paStreamWriteCallback(pa_stream* unused, size_t buffer_space, void* self);
-    static void paStreamUnderflowCallback(pa_stream* unused, void* self);
 
     void paContextStateCallbackHandler(pa_context* c);
     void paServerInfoCallbackHandler(const pa_server_info* i);
     void paStreamStateCallbackHandler(pa_stream* p);
     void paStreamWriteCallbackHandler(size_t buffer_space);
-    void paStreamUnderflowCallbackHandler();
 
     void enableWriteCallback();
     void disableWriteCallback();
@@ -82,7 +80,6 @@ private:
     size_t playback_buffer_size_ = 0;
     size_t playback_buffer_unused_ = 0;
     size_t temp_buffer_space_ = 0;
-    int32_t configured_latency_ = 0;
 
     bool pa_state_changed_ = false;
     pa_threaded_mainloop* pa_main_loop_ = nullptr;
