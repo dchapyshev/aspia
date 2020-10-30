@@ -79,6 +79,7 @@ endif()
 
 set(THIRD_PARTY_LIBS
     ${Protobuf_LITE_LIBRARIES}
+    optimized ${WEBM_RELEASE_LIB} debug ${WEBM_DEBUG_LIB}
     libzstd
     OpenSSL::Crypto
     OpenSSL::SSL
