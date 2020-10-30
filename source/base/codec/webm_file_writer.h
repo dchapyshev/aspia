@@ -52,17 +52,15 @@ private:
     int file_counter_ = 0;
     FILE* file_ = nullptr;
 
-    std::unique_ptr<WebmFileMuxer> muxer_;
-    ByteArray chunk_buffer_;
-
-    proto::VideoEncoding last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
-
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using NanoSeconds = std::chrono::nanoseconds;
 
+    std::unique_ptr<WebmFileMuxer> muxer_;
     std::optional<TimePoint> video_start_time_;
     std::optional<TimePoint> audio_start_time_;
+
+    proto::VideoEncoding last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
 
     DISALLOW_COPY_AND_ASSIGN(WebmFileWriter);
 };

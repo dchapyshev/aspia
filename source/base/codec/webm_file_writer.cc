@@ -191,6 +191,8 @@ bool WebmFileWriter::init()
 void WebmFileWriter::close()
 {
     last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
+    video_start_time_.reset();
+    audio_start_time_.reset();
 
     if (muxer_)
     {
