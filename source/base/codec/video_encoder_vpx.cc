@@ -97,7 +97,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     config->rc_dropframe_thresh = 0;
 
     // We do not want variations in bandwidth.
-    config->rc_end_usage = VPX_CBR;
+    config->rc_end_usage = VPX_VBR;
     config->rc_undershoot_pct = 100;
     config->rc_overshoot_pct = 15;
 }
