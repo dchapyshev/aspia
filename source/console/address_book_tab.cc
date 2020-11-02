@@ -195,6 +195,8 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
     proto::address_book::Data data;
     std::string key;
 
+    file.set_encryption_type(proto::address_book::ENCRYPTION_TYPE_NONE);
+
     AddressBookDialog dialog(parent, QString(), &file, &data, &key);
     if (dialog.exec() != QDialog::Accepted)
         return nullptr;
