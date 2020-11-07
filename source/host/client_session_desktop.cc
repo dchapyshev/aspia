@@ -155,16 +155,11 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         if (current_size.width() > source_size.width() ||
             current_size.height() > source_size.height())
         {
-            LOG(LS_INFO) << "Preferred size is larger than the original. "
-                            "Original frame size will be used";
             current_size = source_size;
         }
 
         if (current_size.isEmpty())
-        {
-            LOG(LS_INFO) << "Preferred size has not been set. Original frame size will be used";
             current_size = source_size;
-        }
 
         const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
         if (!scaled_frame)
@@ -403,7 +398,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     desktop_session_config_.lock_at_disconnect =
         (config.flags() & proto::LOCK_AT_DISCONNECT);
 
-    LOG(LS_INFO) << "NEW CLIENT CONFIGURATION";
+    LOG(LS_INFO) << "Client configuration changed";
     LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
     LOG(LS_INFO) << "Enable cursor shape: " << (cursor_encoder_ != nullptr);
     LOG(LS_INFO) << "Disable font smoothing: " << desktop_session_config_.disable_font_smoothing;

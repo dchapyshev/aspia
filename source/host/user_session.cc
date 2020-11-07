@@ -332,6 +332,16 @@ void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
+    LOG(LS_INFO) << "Screen list changed";
+    LOG(LS_INFO) << "Primary screen: " << list.primary_screen();
+    LOG(LS_INFO) << "Current screen: " << list.current_screen();
+
+    for (int i = 0; i < list.screen_size(); ++i)
+    {
+        const proto::Screen& screen = list.screen(i);
+        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id() << ", title=" << screen.title();
+    }
+
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
 }

@@ -56,12 +56,27 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
+    LOG(LS_INFO) << "Try to select screen: " << screen_id;
+
     if (screen_capturer_->selectScreen(screen_id))
     {
+        LOG(LS_INFO) << "Screen " << screen_id << " selected";
+
         ScreenCapturer::ScreenList screens;
 
         if (screen_capturer_->screenList(&screens))
+        {
+            LOG(LS_INFO) << "Received an updated list of screens";
             delegate_->onScreenListChanged(screens, screen_id);
+        }
+        else
+        {
+            LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
+        }
+    }
+    else
+    {
+        LOG(LS_ERROR) << "ScreenCapturer::selectScreen failed";
     }
 }
 
@@ -70,13 +85,18 @@ void ScreenCapturerWrapper::captureFrame()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     if (!screen_capturer_)
+    {
+        LOG(LS_ERROR) << "Screen capturer NOT initialized";
         return;
+    }
 
     switchToInputDesktop();
 
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
+        LOG(LS_INFO) << "Screen count changed: " << count;
+
         screen_count_ = count;
         selectScreen(defaultScreen());
     }
@@ -131,10 +151,14 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
         for (const auto& screen : screens)
         {
             if (screen.is_primary)
+            {
+                LOG(LS_INFO) << "Primary screen found: " << screen.id;
                 return screen.id;
+            }
         }
     }
 
+    LOG(LS_INFO) << "Primary screen NOT found";
     return ScreenCapturer::kFullDesktopScreenId;
 }
 

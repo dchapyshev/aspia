@@ -477,6 +477,16 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
             return;
         }
 
+        LOG(LS_INFO) << "Screen list received";
+        LOG(LS_INFO) << "Primary screen: " << screen_list.primary_screen();
+        LOG(LS_INFO) << "Current screen: " << screen_list.current_screen();
+
+        for (int i = 0; i < screen_list.screen_size(); ++i)
+        {
+            const proto::Screen& screen = screen_list.screen(i);
+            LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id() << ", title=" << screen.title();
+        }
+
         desktop_window_proxy_->setScreenList(screen_list);
     }
     else if (extension.name() == common::kSystemInfoExtension)

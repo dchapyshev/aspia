@@ -31,6 +31,31 @@
 
 namespace host {
 
+namespace {
+
+const char* controlActionToString(proto::internal::Control::Action action)
+{
+    switch (action)
+    {
+        case proto::internal::Control::ENABLE:
+            return "Control::ENABLE";
+
+        case proto::internal::Control::DISABLE:
+            return "Control::DISABLE";
+
+        case proto::internal::Control::LOCK:
+            return "Control::LOCK";
+
+        case proto::internal::Control::LOGOFF:
+            return "Control::LOGOFF";
+
+        default:
+            return "Unknown control action";
+    }
+}
+
+} // namespace
+
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -43,6 +68,8 @@ DesktopSessionAgent::~DesktopSessionAgent() = default;
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
+    LOG(LS_INFO) << "Starting with channel id: " << channel_id.data();
+
     channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
@@ -90,15 +117,28 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
     else if (incoming_message_.has_select_source())
     {
+        LOG(LS_INFO) << "Select source received";
+
         if (screen_capturer_)
         {
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
                 incoming_message_.select_source().screen().id()));
         }
+        else
+        {
+            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+        }
     }
     else if (incoming_message_.has_configure())
     {
         const proto::internal::Configure& config = incoming_message_.configure();
+
+        LOG(LS_INFO) << "Configure received";
+        LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
+        LOG(LS_INFO) << "Disable effects: " << config.disable_effects();
+        LOG(LS_INFO) << "Disable font smoothing: " << config.disable_font_smoothing();
+        LOG(LS_INFO) << "Block input: " << config.block_input();
+        LOG(LS_INFO) << "Lock at disconnect: " << config.lock_at_disconnect();
 
         if (screen_capturer_)
         {
@@ -106,14 +146,27 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
             screen_capturer_->enableEffects(!config.disable_effects());
             screen_capturer_->enableFontSmoothing(!config.disable_font_smoothing());
         }
+        else
+        {
+            LOG(LS_ERROR) << "Screen capturer NOT initialized";
+        }
 
         if (input_injector_)
+        {
             input_injector_->setBlockInput(config.block_input());
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Input injector NOT initialized";
+        }
 
         lock_at_disconnect_ = config.lock_at_disconnect();
     }
     else if (incoming_message_.has_control())
     {
+        LOG(LS_INFO) << "Control received: "
+                     << controlActionToString(incoming_message_.control().action());
+
         switch (incoming_message_.control().action())
         {
             case proto::internal::Control::ENABLE:
@@ -146,6 +199,8 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
+    LOG(LS_INFO) << "Shared memory created: " << id;
+
     outgoing_message_.Clear();
 
     proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
@@ -157,6 +212,8 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
 
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
+    LOG(LS_INFO) << "Shared memory destroyed: " << id;
+
     outgoing_message_.Clear();
 
     proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
@@ -184,6 +241,7 @@ void DesktopSessionAgent::onScreenListChanged(
             screen_list->set_primary_screen(list_item.id);
     }
 
+    LOG(LS_INFO) << "Sending screen list to service";
     channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -250,15 +308,15 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void DesktopSessionAgent::setEnabled(bool enable)
 {
+    LOG(LS_INFO) << "Enable session: " << enable;
+
     if (enable)
     {
         if (input_injector_)
         {
-            LOG(LS_INFO) << "Session already started";
+            LOG(LS_INFO) << "Session already enabled";
             return;
         }
-
-        LOG(LS_INFO) << "Session start...";
 
         input_injector_ = std::make_unique<InputInjectorWin>();
 
@@ -280,14 +338,12 @@ void DesktopSessionAgent::setEnabled(bool enable)
         audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>(channel_->channelProxy());
         audio_capturer_->start();
 
-        LOG(LS_INFO) << "Session successfully started";
+        LOG(LS_INFO) << "Session successfully enabled";
 
         task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
     }
     else
     {
-        LOG(LS_INFO) << "Session stop...";
-
         input_injector_.reset();
         capture_scheduler_.reset();
         screen_capturer_.reset();
@@ -297,11 +353,13 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         if (lock_at_disconnect_)
         {
+            LOG(LS_INFO) << "Enabled locking of user session when disconnected";
+
             base::PowerController::lock();
             lock_at_disconnect_ = false;
         }
 
-        LOG(LS_INFO) << "Session successfully stopped";
+        LOG(LS_INFO) << "Session successfully disabled";
     }
 }
 

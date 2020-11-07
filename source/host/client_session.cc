@@ -43,7 +43,10 @@ std::unique_ptr<ClientSession> ClientSession::create(
     proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
 {
     if (!channel)
+    {
+        LOG(LS_ERROR) << "Invalid network channel";
         return nullptr;
+    }
 
     switch (session_type)
     {
@@ -57,12 +60,14 @@ std::unique_ptr<ClientSession> ClientSession::create(
                 new ClientSessionFileTransfer(std::move(channel)));
 
         default:
+            LOG(LS_ERROR) << "Unknown session type: " << session_type;
             return nullptr;
     }
 }
 
 void ClientSession::start(Delegate* delegate)
 {
+    LOG(LS_INFO) << "Starting client session";
     state_ = State::STARTED;
 
     delegate_ = delegate;
