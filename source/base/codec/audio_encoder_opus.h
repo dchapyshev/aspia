@@ -46,24 +46,24 @@ private:
     bool resetForPacket(const proto::AudioPacket& packet);
     void fetchBytesToResample(int resampler_frame_delay, AudioBus* audio_bus);
 
-    int sampling_rate_;
-    proto::AudioPacket::Channels channels_;
-    OpusEncoder* encoder_;
+    int sampling_rate_ = 0;
+    proto::AudioPacket::Channels channels_ = proto::AudioPacket::CHANNELS_STEREO;
+    OpusEncoder* encoder_ = nullptr;
 
-    int frame_size_;
+    int frame_size_ = 0;
     std::unique_ptr<MultiChannelResampler> resampler_;
     std::unique_ptr<char[]> resample_buffer_;
     std::unique_ptr<AudioBus> resampler_bus_;
 
     // Used to pass packet to the FetchBytesToResampler() callback.
-    const char* resampling_data_;
-    int resampling_data_size_;
-    int resampling_data_pos_;
+    const char* resampling_data_ = nullptr;
+    int resampling_data_size_ = 0;
+    int resampling_data_pos_ = 0;
 
     // Left-over unencoded samples from the previous AudioPacket.
     std::unique_ptr<int16_t[]> leftover_buffer_;
-    int leftover_buffer_size_;
-    int leftover_samples_;
+    int leftover_buffer_size_ = 0;
+    int leftover_samples_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(AudioEncoderOpus);
 };

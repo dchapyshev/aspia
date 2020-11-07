@@ -52,17 +52,7 @@ bool IsSupportedSampleRate(int rate)
 
 } // namespace
 
-AudioEncoderOpus::AudioEncoderOpus()
-    : sampling_rate_(0),
-      channels_(proto::AudioPacket::CHANNELS_STEREO),
-      encoder_(nullptr),
-      frame_size_(0),
-      resampling_data_(nullptr),
-      resampling_data_size_(0),
-      resampling_data_pos_(0)
-{
-    // Nothing
-}
+AudioEncoderOpus::AudioEncoderOpus() = default;
 
 AudioEncoderOpus::~AudioEncoderOpus()
 {
