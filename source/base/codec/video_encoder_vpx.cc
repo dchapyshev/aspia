@@ -329,7 +329,6 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     config_.g_profile = kVp9I420ProfileNumber;
     config_.rc_min_quantizer = 20;
     config_.rc_max_quantizer = 30;
-    config_.rc_end_usage = VPX_CBR;
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
     // conservative default.
