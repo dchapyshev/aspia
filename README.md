@@ -19,6 +19,7 @@ Plans
 -----
 The next stable release will include
 - NAT traversal
+- Audio support
 - Console for MacOS X and Linux
 
 System requirements
