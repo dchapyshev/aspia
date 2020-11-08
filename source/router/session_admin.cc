@@ -50,17 +50,13 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_host_list_request())
+    if (message.has_session_list_request())
     {
-        doHostListRequest();
+        doSessionListRequest(message.session_list_request());
     }
-    else if (message.has_host_request())
+    else if (message.has_session_request())
     {
-        doHostRequest(message.host_request());
-    }
-    else if (message.has_relay_list_request())
-    {
-        doRelayListRequest();
+        doSessionRequest(message.session_request());
     }
     else if (message.has_user_list_request())
     {
@@ -128,61 +124,42 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
     sendMessage(message);
 }
 
-void SessionAdmin::doRelayListRequest()
+void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
 {
     proto::RouterToAdmin message;
 
-    message.set_allocated_relay_list(server().relayList().release());
-    if (!message.has_relay_list())
-        message.mutable_relay_list()->set_error_code(proto::RelayList::UNKNOWN_ERROR);
+    message.set_allocated_session_list(server().sessionList().release());
+    if (!message.has_session_list())
+        message.mutable_session_list()->set_error_code(proto::SessionList::UNKNOWN_ERROR);
 
     sendMessage(message);
 }
 
-void SessionAdmin::doHostListRequest()
+void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
 {
     proto::RouterToAdmin message;
+    proto::SessionResult* session_result = message.mutable_session_result();
+    session_result->set_type(request.type());
 
-    message.set_allocated_host_list(server().hostList().release());
-    if (!message.has_host_list())
-        message.mutable_host_list()->set_error_code(proto::HostList::UNKNOWN_ERROR);
-
-    sendMessage(message);
-}
-
-void SessionAdmin::doHostRequest(const proto::HostRequest& request)
-{
-    proto::RouterToAdmin message;
-    proto::HostResult* host_result = message.mutable_host_result();
-    host_result->set_type(request.type());
-
-    if (request.type() == proto::HOST_REQUEST_DISCONNECT)
+    if (request.type() == proto::SESSION_REQUEST_DISCONNECT)
     {
-        base::HostId host_id = request.host_id();
+        Session::SessionId session_id = request.session_id();
 
-        if (host_id == base::kInvalidHostId)
+        if (!server().stopSession(session_id))
         {
-            LOG(LS_INFO) << "Invalid host ID";
-            host_result->set_error_code(proto::HostResult::INVALID_HOST_ID);
+            LOG(LS_WARNING) << "Session not found: " << session_id;
+            session_result->set_error_code(proto::SessionResult::INVALID_SESSION_ID);
         }
         else
         {
-            if (!server().disconnectHost(host_id))
-            {
-                LOG(LS_WARNING) << "Host not found: " << host_id;
-                host_result->set_error_code(proto::HostResult::HOST_MISSED);
-            }
-            else
-            {
-                LOG(LS_INFO) << "Host '" << host_id << "' disconnected by " << userName();
-                host_result->set_error_code(proto::HostResult::SUCCESS);
-            }
+            LOG(LS_INFO) << "Session '" << session_id << "' disconnected by " << userName();
+            session_result->set_error_code(proto::SessionResult::SUCCESS);
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown host request: " << request.type();
-        host_result->set_error_code(proto::HostResult::INVALID_REQUEST);
+        LOG(LS_WARNING) << "Unknown session request: " << request.type();
+        session_result->set_error_code(proto::SessionResult::INVALID_REQUEST);
     }
 
     sendMessage(message);

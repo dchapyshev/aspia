@@ -166,67 +166,57 @@ bool Server::start()
     return true;
 }
 
-std::unique_ptr<proto::RelayList> Server::relayList() const
+std::unique_ptr<proto::SessionList> Server::sessionList() const
 {
-    std::unique_ptr<proto::RelayList> result = std::make_unique<proto::RelayList>();
+    std::unique_ptr<proto::SessionList> result = std::make_unique<proto::SessionList>();
 
     for (const auto& session : sessions_)
     {
-        if (session->sessionType() != proto::ROUTER_SESSION_RELAY)
-            continue;
+        proto::Session* item = result->add_session();
 
-        SessionRelay* session_relay = static_cast<SessionRelay*>(session.get());
-        proto::Relay* relay = result->add_relay();
+        item->set_session_id(session->sessionId());
+        item->set_session_type(session->sessionType());
+        item->set_timepoint(session->startTime());
+        item->set_ip_address(session->address());
+        item->mutable_version()->CopyFrom(session->version().toProto());
+        item->set_os_name(session->osName());
+        item->set_computer_name(session->computerName());
 
-        relay->set_timepoint(session_relay->startTime());
-        relay->set_address(session_relay->address());
-        relay->set_pool_size(relay_key_pool_->countForRelay(session_relay->sessionId()));
-        relay->mutable_version()->CopyFrom(session_relay->version().toProto());
-        relay->set_os_name(session_relay->osName());
-        relay->set_computer_name(session_relay->computerName());
+        switch (session->sessionType())
+        {
+            case proto::ROUTER_SESSION_HOST:
+            {
+                proto::HostSessionData session_data;
+
+                for (const auto& host_id : static_cast<SessionHost*>(session.get())->hostIdList())
+                    session_data.add_host_id(host_id);
+
+                item->set_session_data(session_data.SerializeAsString());
+            }
+            break;
+
+            case proto::ROUTER_SESSION_RELAY:
+            {
+                proto::RelaySessionData session_data;
+                session_data.set_pool_size(relay_key_pool_->countForRelay(session->sessionId()));
+                item->set_session_data(session_data.SerializeAsString());
+            }
+            break;
+
+            default:
+                break;
+        }
     }
 
-    result->set_error_code(proto::RelayList::SUCCESS);
+    result->set_error_code(proto::SessionList::SUCCESS);
     return result;
 }
 
-std::unique_ptr<proto::HostList> Server::hostList() const
-{
-    std::unique_ptr<proto::HostList> result = std::make_unique<proto::HostList>();
-
-    for (const auto& session : sessions_)
-    {
-        if (session->sessionType() != proto::ROUTER_SESSION_HOST)
-            continue;
-
-        SessionHost* session_host = static_cast<SessionHost*>(session.get());
-        proto::Host* host = result->add_host();
-
-        host->set_timepoint(session_host->startTime());
-
-        for (const auto& host_id : session_host->hostIdList())
-            host->add_host_id(host_id);
-
-        host->set_ip_address(session_host->address());
-        host->mutable_version()->CopyFrom(session_host->version().toProto());
-        host->set_os_name(session_host->osName());
-        host->set_computer_name(session_host->computerName());
-    }
-
-    result->set_error_code(proto::HostList::SUCCESS);
-    return result;
-}
-
-bool Server::disconnectHost(base::HostId host_id)
+bool Server::stopSession(Session::SessionId session_id)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
     {
-        Session* entry = it->get();
-
-        if (entry->sessionType() != proto::ROUTER_SESSION_HOST)
-            continue;
-
-        if (static_cast<SessionHost*>(entry)->hasHostId(host_id))
+        if (it->get()->sessionId() == session_id)
         {
             sessions_.erase(it);
             return true;

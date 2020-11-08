@@ -20,8 +20,11 @@
 #define CLIENT__ROUTER_PROXY_H
 
 #include "base/macros_magic.h"
-#include "base/memory/byte_array.h"
-#include "base/peer/host_id.h"
+#include "proto/router_common.pb.h"
+
+#include <cstdint>
+#include <memory>
+#include <string>
 
 namespace base {
 class TaskRunner;
@@ -43,9 +46,8 @@ public:
 
     void connectToRouter(const std::u16string& address, uint16_t port);
     void disconnectFromRouter();
-    void refreshHostList();
-    void disconnectHost(base::HostId host_id);
-    void refreshRelayList();
+    void refreshSessionList();
+    void stopSession(int64_t session_id);
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);

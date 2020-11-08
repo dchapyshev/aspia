@@ -44,9 +44,9 @@ public:
 
     void connectToRouter(std::u16string_view address, uint16_t port);
 
-    void refreshHostList();
-    void disconnectHost(base::HostId host_id);
-    void refreshRelayList();
+    void refreshSessionList();
+    void stopSession(int64_t session_id);
+
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);

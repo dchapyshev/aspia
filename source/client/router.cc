@@ -54,34 +54,25 @@ void Router::connectToRouter(std::u16string_view address, uint16_t port)
     channel_->connect(address, port);
 }
 
-void Router::refreshHostList()
+void Router::refreshSessionList()
 {
-    LOG(LS_INFO) << "Sending host list request";
+    LOG(LS_INFO) << "Sending session list request";
 
     proto::AdminToRouter message;
-    message.mutable_host_list_request()->set_dummy(1);
+    message.mutable_session_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
-void Router::disconnectHost(base::HostId host_id)
+void Router::stopSession(int64_t session_id)
 {
-    LOG(LS_INFO) << "Sending disconnect host request (host_id: " << host_id << ")";
+    LOG(LS_INFO) << "Sending disconnect request (session_id: " << session_id << ")";
 
     proto::AdminToRouter message;
 
-    proto::HostRequest* request = message.mutable_host_request();
-    request->set_type(proto::HOST_REQUEST_DISCONNECT);
-    request->set_host_id(host_id);
+    proto::SessionRequest* request = message.mutable_session_request();
+    request->set_type(proto::SESSION_REQUEST_DISCONNECT);
+    request->set_session_id(session_id);
 
-    channel_->send(base::serialize(message));
-}
-
-void Router::refreshRelayList()
-{
-    LOG(LS_INFO) << "Sending relay list request";
-
-    proto::AdminToRouter message;
-    message.mutable_relay_list_request()->set_dummy(1);
     channel_->send(base::serialize(message));
 }
 
@@ -177,26 +168,20 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (message.has_host_list())
+    if (message.has_session_list())
     {
-        LOG(LS_INFO) << "Host list received";
+        LOG(LS_INFO) << "Session list received";
 
-        window_proxy_->onHostList(
-            std::shared_ptr<proto::HostList>(message.release_host_list()));
+        window_proxy_->onSessionList(
+            std::shared_ptr<proto::SessionList>(message.release_session_list()));
     }
-    else if (message.has_host_result())
+    else if (message.has_session_result())
     {
-        LOG(LS_INFO) << "Host result received with code: " << message.host_result().error_code();
+        LOG(LS_INFO) << "Session result received with code: "
+                     << message.session_result().error_code();
 
-        window_proxy_->onHostResult(
-            std::shared_ptr<proto::HostResult>(message.release_host_result()));
-    }
-    else if (message.has_relay_list())
-    {
-        LOG(LS_INFO) << "Relay list received";
-
-        window_proxy_->onRelayList(
-            std::shared_ptr<proto::RelayList>(message.release_relay_list()));
+        window_proxy_->onSessionResult(
+            std::shared_ptr<proto::SessionResult>(message.release_session_result()));
     }
     else if (message.has_user_list())
     {

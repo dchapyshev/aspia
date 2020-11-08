@@ -39,20 +39,20 @@ namespace {
 class HostTreeItem : public QTreeWidgetItem
 {
 public:
-    explicit HostTreeItem(const proto::Host& host)
-        : host(host)
+    explicit HostTreeItem(const proto::Session& session)
+        : session(session)
     {
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(host.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
 
-        setText(0, QString::fromStdString(host.computer_name()));
-        setText(1, QString::fromStdString(host.ip_address()));
+        setText(0, QString::fromStdString(session.computer_name()));
+        setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
     }
 
     ~HostTreeItem() = default;
 
-    proto::Host host;
+    proto::Session session;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(HostTreeItem);
@@ -61,20 +61,26 @@ private:
 class RelayTreeItem : public QTreeWidgetItem
 {
 public:
-    explicit RelayTreeItem(const proto::Relay& relay)
+    explicit RelayTreeItem(const proto::Session& session)
     {
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(relay.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
 
-        setText(0, QString::fromStdString(relay.address()));
+        setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
-        setText(2, QString::number(relay.pool_size()));
+
+        proto::RelaySessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
+        {
+            setText(2, QString::number(session_data.pool_size()));
+        }
+        
         setText(3, QString("%1.%2.%3")
-                .arg(relay.version().major())
-                .arg(relay.version().minor())
-                .arg(relay.version().patch()));
-        setText(4, QString::fromStdString(relay.computer_name()));
-        setText(5, QString::fromStdString(relay.os_name()));
+                .arg(session.version().major())
+                .arg(session.version().minor())
+                .arg(session.version().patch()));
+        setText(4, QString::fromStdString(session.computer_name()));
+        setText(5, QString::fromStdString(session.os_name()));
     }
 
 private:
@@ -113,7 +119,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     ui->setupUi(this);
 
     connect(ui->button_refresh_hosts, &QPushButton::released,
-            this, &RouterManagerWindow::refreshHostList);
+            this, &RouterManagerWindow::refreshSessionList);
 
     connect(ui->button_disconnect_host, &QPushButton::released,
             this, &RouterManagerWindow::disconnectHost);
@@ -122,7 +128,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
             this, &RouterManagerWindow::disconnectAllHosts);
 
     connect(ui->button_refresh_relay, &QPushButton::released,
-            this, &RouterManagerWindow::refreshRelayList);
+            this, &RouterManagerWindow::refreshSessionList);
 
     connect(ui->button_refresh_users, &QPushButton::released,
             this, &RouterManagerWindow::refreshUserList);
@@ -188,8 +194,7 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
 
     if (router_proxy_)
     {
-        router_proxy_->refreshHostList();
-        router_proxy_->refreshRelayList();
+        router_proxy_->refreshSessionList();
         router_proxy_->refreshUserList();
     }
 }
@@ -283,45 +288,72 @@ void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode er
     status_dialog_->show();
 }
 
-void RouterManagerWindow::onHostList(std::shared_ptr<proto::HostList> host_list)
+void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> session_list)
 {
     QTreeWidget* tree_hosts = ui->tree_hosts;
+    QTreeWidget* tree_relay = ui->tree_relay;
+
     tree_hosts->clear();
+    tree_relay->clear();
 
-    int host_size = host_list->host_size();
+    int host_count = 0;
+    int relay_count = 0;
 
-    for (int i = 0; i < host_size; ++i)
-        tree_hosts->addTopLevelItem(new HostTreeItem(host_list->host(i)));
-    ui->label_hosts_conn_count->setText(QString::number(host_size));
+    for (int i = 0; i < session_list->session_size(); ++i)
+    {
+        const proto::Session& session = session_list->session(i);
+
+        switch (session.session_type())
+        {
+            case proto::ROUTER_SESSION_HOST:
+            {
+                tree_hosts->addTopLevelItem(new HostTreeItem(session_list->session(i)));
+                ++host_count;
+            }
+            break;
+
+            case proto::ROUTER_SESSION_RELAY:
+            {
+                tree_relay->addTopLevelItem(new RelayTreeItem(session_list->session(i)));
+                ++relay_count;
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+
+    ui->label_hosts_conn_count->setText(QString::number(host_count));
+    ui->label_relay_conn_count->setText(QString::number(relay_count));
 
     for (int i = 0; i < tree_hosts->columnCount(); ++i)
         tree_hosts->resizeColumnToContents(i);
 
+    for (int i = 0; i < tree_relay->columnCount(); ++i)
+        tree_relay->resizeColumnToContents(i);
+
     afterRequest();
 }
 
-void RouterManagerWindow::onHostResult(std::shared_ptr<proto::HostResult> host_result)
+void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::SessionResult> session_result)
 {
-    if (host_result->error_code() != proto::HostResult::SUCCESS)
+    if (session_result->error_code() != proto::SessionResult::SUCCESS)
     {
         const char* message;
 
-        switch (host_result->error_code())
+        switch (session_result->error_code())
         {
-            case proto::HostResult::INVALID_REQUEST:
+            case proto::SessionResult::INVALID_REQUEST:
                 message = QT_TR_NOOP("Invalid request.");
                 break;
 
-            case proto::HostResult::INTERNAL_ERROR:
+            case proto::SessionResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
 
-            case proto::HostResult::INVALID_HOST_ID:
-                message = QT_TR_NOOP("Invalid host ID was passed.");
-                break;
-
-            case proto::HostResult::HOST_MISSED:
-                message = QT_TR_NOOP("The specified host is not connected to the router.");
+            case proto::SessionResult::INVALID_SESSION_ID:
+                message = QT_TR_NOOP("Invalid session ID was passed.");
                 break;
 
             default:
@@ -332,23 +364,7 @@ void RouterManagerWindow::onHostResult(std::shared_ptr<proto::HostResult> host_r
         QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
     }
 
-    refreshHostList();
-    afterRequest();
-}
-
-void RouterManagerWindow::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
-{
-    QTreeWidget* tree_relay = ui->tree_relay;
-    tree_relay->clear();
-
-    int relay_size = relay_list->relay_size();
-    for (int i = 0; i < relay_size; ++i)
-        tree_relay->addTopLevelItem(new RelayTreeItem(relay_list->relay(i)));
-    ui->label_relay_conn_count->setText(QString::number(relay_size));
-
-    for (int i = 0; i < tree_relay->columnCount(); ++i)
-        tree_relay->resizeColumnToContents(i);
-
+    refreshSessionList();
     afterRequest();
 }
 
@@ -401,26 +417,25 @@ void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
         router_proxy_->disconnectFromRouter();
 }
 
-void RouterManagerWindow::refreshHostList()
+void RouterManagerWindow::refreshSessionList()
 {
     if (router_proxy_)
     {
         beforeRequest();
-        router_proxy_->refreshHostList();
+        router_proxy_->refreshSessionList();
     }
 }
 
 void RouterManagerWindow::disconnectHost()
 {
-#if 0
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
         return;
 
     if (QMessageBox::question(this,
                               tr("Confirmation"),
-                              tr("Are you sure you want to disconnect host with ID \"%1\"?")
-                              .arg(tree_item->host_id),
+                              tr("Are you sure you want to disconnect session \"%1\"?")
+                              .arg(QString::fromStdString(tree_item->session.computer_name())),
                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
     {
         return;
@@ -429,14 +444,12 @@ void RouterManagerWindow::disconnectHost()
     if (router_proxy_)
     {
         beforeRequest();
-        router_proxy_->disconnectHost(tree_item->host_id);
+        router_proxy_->stopSession(tree_item->session.session_id());
     }
-#endif
 }
 
 void RouterManagerWindow::disconnectAllHosts()
 {
-#if 0
     if (!router_proxy_)
         return;
 
@@ -455,17 +468,7 @@ void RouterManagerWindow::disconnectAllHosts()
     {
         HostTreeItem* tree_item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(i));
         if (tree_item)
-            router_proxy_->disconnectHost(tree_item->host_id);
-    }
-#endif
-}
-
-void RouterManagerWindow::refreshRelayList()
-{
-    if (router_proxy_)
-    {
-        beforeRequest();
-        router_proxy_->refreshRelayList();
+            router_proxy_->stopSession(tree_item->session.session_id());
     }
 }
 
@@ -565,7 +568,7 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current, QTreeWi
     {
         ui->tree_host_info->setEnabled(true);
 
-        const proto::Host& host = host_item->host;
+        const proto::Session& session = host_item->session;
 
         auto add_item = [this](const QString& name, const QString& value)
         {
@@ -577,31 +580,35 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current, QTreeWi
         };
 
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(host.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
 
-        add_item(tr("Computer Name"), QString::fromStdString(host.computer_name()));
-        add_item(tr("IP Address"), QString::fromStdString(host.ip_address()));
+        add_item(tr("Computer Name"), QString::fromStdString(session.computer_name()));
+        add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));
         add_item(tr("Connect Time"), time);
-        add_item(tr("Version"), QString("%1.%2.%3").arg(host.version().major())
-                                                   .arg(host.version().minor())
-                                                   .arg(host.version().patch()));
-        add_item(tr("Operating System"), QString::fromStdString(host.os_name()));
+        add_item(tr("Version"), QString("%1.%2.%3").arg(session.version().major())
+                                                   .arg(session.version().minor())
+                                                   .arg(session.version().patch()));
+        add_item(tr("Operating System"), QString::fromStdString(session.os_name()));
 
-        QTreeWidgetItem* title_item = new QTreeWidgetItem();
-        title_item->setText(0, tr("Host IDs"));
-
-        ui->tree_host_info->addTopLevelItem(title_item);
-
-        for (int i = 0; i < host.host_id_size(); ++i)
+        proto::HostSessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
         {
-            QTreeWidgetItem* item = new QTreeWidgetItem();
-            item->setText(0, tr("ID #%1").arg(i + 1));
-            item->setText(1, QString::number(host.host_id(i)));
+            QTreeWidgetItem* title_item = new QTreeWidgetItem();
+            title_item->setText(0, tr("Host IDs"));
 
-            title_item->addChild(item);
+            ui->tree_host_info->addTopLevelItem(title_item);
+
+            for (int i = 0; i < session_data.host_id_size(); ++i)
+            {
+                QTreeWidgetItem* item = new QTreeWidgetItem();
+                item->setText(0, tr("ID #%1").arg(i + 1));
+                item->setText(1, QString::number(session_data.host_id(i)));
+
+                title_item->addChild(item);
+            }
+
+            title_item->setExpanded(true);
         }
-
-        title_item->setExpanded(true);
 
         for (int i = 0; i < ui->tree_host_info->columnCount(); ++i)
             ui->tree_host_info->resizeColumnToContents(i);

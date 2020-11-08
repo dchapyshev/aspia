@@ -83,43 +83,30 @@ void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode erro
         router_window_->onAccessDenied(error_code);
 }
 
-void RouterWindowProxy::onHostList(std::shared_ptr<proto::HostList> host_list)
+void RouterWindowProxy::onSessionList(std::shared_ptr<proto::SessionList> session_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onHostList, shared_from_this(), host_list));
+            std::bind(&RouterWindowProxy::onSessionList, shared_from_this(), session_list));
         return;
     }
 
     if (router_window_)
-        router_window_->onHostList(host_list);
+        router_window_->onSessionList(session_list);
 }
 
-void RouterWindowProxy::onHostResult(std::shared_ptr<proto::HostResult> host_result)
+void RouterWindowProxy::onSessionResult(std::shared_ptr<proto::SessionResult> session_result)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onHostResult, shared_from_this(), host_result));
+            std::bind(&RouterWindowProxy::onSessionResult, shared_from_this(), session_result));
         return;
     }
 
     if (router_window_)
-        router_window_->onHostResult(host_result);
-}
-
-void RouterWindowProxy::onRelayList(std::shared_ptr<proto::RelayList> relay_list)
-{
-    if (!ui_task_runner_->belongsToCurrentThread())
-    {
-        ui_task_runner_->postTask(
-            std::bind(&RouterWindowProxy::onRelayList, shared_from_this(), relay_list));
-        return;
-    }
-
-    if (router_window_)
-        router_window_->onRelayList(relay_list);
+        router_window_->onSessionResult(session_result);
 }
 
 void RouterWindowProxy::onUserList(std::shared_ptr<proto::UserList> user_list)

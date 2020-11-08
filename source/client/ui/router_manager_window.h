@@ -53,9 +53,8 @@ public:
     void onConnected(const base::Version& peer_version) override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
-    void onHostList(std::shared_ptr<proto::HostList> peer_list) override;
-    void onHostResult(std::shared_ptr<proto::HostResult> peer_result) override;
-    void onRelayList(std::shared_ptr<proto::RelayList> relay_list) override;
+    void onSessionList(std::shared_ptr<proto::SessionList> session_list) override;
+    void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) override;
     void onUserList(std::shared_ptr<proto::UserList> user_list) override;
     void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
 
@@ -64,10 +63,9 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void refreshHostList();
+    void refreshSessionList();
     void disconnectHost();
     void disconnectAllHosts();
-    void refreshRelayList();
     void refreshUserList();
     void addUser();
     void modifyUser();

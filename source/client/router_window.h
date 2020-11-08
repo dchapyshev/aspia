@@ -22,9 +22,8 @@
 #include "base/peer/client_authenticator.h"
 
 namespace proto {
-class HostList;
-class HostResult;
-class RelayList;
+class SessionList;
+class SessionResult;
 class UserList;
 class UserResult;
 } // namespace proto
@@ -39,9 +38,8 @@ public:
     virtual void onConnected(const base::Version& peer_version) = 0;
     virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
-    virtual void onHostList(std::shared_ptr<proto::HostList> host_list) = 0;
-    virtual void onHostResult(std::shared_ptr<proto::HostResult> host_result) = 0;
-    virtual void onRelayList(std::shared_ptr<proto::RelayList> relay_list) = 0;
+    virtual void onSessionList(std::shared_ptr<proto::SessionList> session_list) = 0;
+    virtual void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) = 0;
     virtual void onUserList(std::shared_ptr<proto::UserList> user_list) = 0;
     virtual void onUserResult(std::shared_ptr<proto::UserResult> user_result) = 0;
 };

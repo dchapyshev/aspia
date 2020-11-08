@@ -32,9 +32,8 @@ public:
 
     void connectToRouter(const std::u16string& address, uint16_t port);
     void disconnectFromRouter();
-    void refreshHostList();
-    void disconnectHost(base::HostId host_id);
-    void refreshRelayList();
+    void refreshSessionList();
+    void stopSession(int64_t session_id);
     void refreshUserList();
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
@@ -85,40 +84,28 @@ void RouterProxy::Impl::disconnectFromRouter()
     router_.reset();
 }
 
-void RouterProxy::Impl::refreshHostList()
+void RouterProxy::Impl::refreshSessionList()
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::refreshHostList, shared_from_this()));
+        io_task_runner_->postTask(std::bind(&Impl::refreshSessionList, shared_from_this()));
         return;
     }
 
     if (router_)
-        router_->refreshHostList();
+        router_->refreshSessionList();
 }
 
-void RouterProxy::Impl::disconnectHost(base::HostId host_id)
+void RouterProxy::Impl::stopSession(int64_t session_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
-        io_task_runner_->postTask(std::bind(&Impl::disconnectHost, shared_from_this(), host_id));
+        io_task_runner_->postTask(std::bind(&Impl::stopSession, shared_from_this(), session_id));
         return;
     }
 
     if (router_)
-        router_->disconnectHost(host_id);
-}
-
-void RouterProxy::Impl::refreshRelayList()
-{
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(std::bind(&Impl::refreshRelayList, shared_from_this()));
-        return;
-    }
-
-    if (router_)
-        router_->refreshRelayList();
+        router_->stopSession(session_id);
 }
 
 void RouterProxy::Impl::refreshUserList()
@@ -191,19 +178,14 @@ void RouterProxy::disconnectFromRouter()
     impl_->disconnectFromRouter();
 }
 
-void RouterProxy::refreshHostList()
+void RouterProxy::refreshSessionList()
 {
-    impl_->refreshHostList();
+    impl_->refreshSessionList();
 }
 
-void RouterProxy::disconnectHost(base::HostId host_id)
+void RouterProxy::stopSession(int64_t session_id)
 {
-    impl_->disconnectHost(host_id);
-}
-
-void RouterProxy::refreshRelayList()
-{
-    impl_->refreshRelayList();
+    impl_->stopSession(session_id);
 }
 
 void RouterProxy::refreshUserList()

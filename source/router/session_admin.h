@@ -43,9 +43,8 @@ protected:
 private:
     void doUserListRequest();
     void doUserRequest(const proto::UserRequest& request);
-    void doRelayListRequest();
-    void doHostListRequest();
-    void doHostRequest(const proto::HostRequest& request);
+    void doSessionListRequest(const proto::SessionListRequest& request);
+    void doSessionRequest(const proto::SessionRequest& request);
 
     proto::UserResult::ErrorCode addUser(const proto::User& user);
     proto::UserResult::ErrorCode modifyUser(const proto::User& user);

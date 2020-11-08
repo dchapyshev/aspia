@@ -21,25 +21,54 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
+import "router_common.proto";
 
 package proto;
 
-message Host
+message Session
 {
-    fixed64 timepoint        = 1;
-    repeated fixed64 host_id = 2;
-    string ip_address        = 3;
-    Version version          = 4;
-    string os_name           = 5;
-    string computer_name     = 6;
+    int64 session_id           = 1;
+    RouterSession session_type = 2;
+    bytes session_data         = 3;
+    fixed64 timepoint          = 4;
+    string ip_address          = 5;
+    Version version            = 6;
+    string os_name             = 7;
+    string computer_name       = 8;
 }
 
-message HostListRequest
+enum SessionRequestType
 {
-    uint32 dummy = 1;
+    SESSION_REQUEST_UNKNOWN    = 0;
+    SESSION_REQUEST_DISCONNECT = 1;
 }
 
-message HostList
+message SessionRequest
+{
+    SessionRequestType type = 1;
+    int64 session_id        = 2;
+}
+
+message SessionResult
+{
+    enum ErrorCode
+    {
+        SUCCESS            = 0;
+        INVALID_REQUEST    = 1;
+        INTERNAL_ERROR     = 2;
+        INVALID_SESSION_ID = 3;
+    }
+
+    SessionRequestType type    = 1;
+    ErrorCode error_code       = 2;
+}
+
+message SessionListRequest
+{
+    int64 dummy = 1;
+}
+
+message SessionList
 {
     enum ErrorCode
     {
@@ -47,35 +76,18 @@ message HostList
         UNKNOWN_ERROR = 1;
     }
 
-    ErrorCode error_code = 1;
-    repeated Host host   = 2;
+    ErrorCode error_code     = 1;
+    repeated Session session = 2;
 }
 
-enum HostRequestType
+message HostSessionData
 {
-    HOST_REQUEST_UNKNOWN    = 0;
-    HOST_REQUEST_DISCONNECT = 1;
+    repeated fixed64 host_id = 1;
 }
 
-message HostRequest
+message RelaySessionData
 {
-    HostRequestType type = 1;
-    fixed64 host_id      = 2;
-}
-
-message HostResult
-{
-    enum ErrorCode
-    {
-        SUCCESS         = 0;
-        INVALID_REQUEST = 1;
-        INTERNAL_ERROR  = 2;
-        INVALID_HOST_ID = 3;
-        HOST_MISSED     = 4;
-    }
-
-    HostRequestType type = 1;
-    ErrorCode error_code = 2;
+    uint64 pool_size = 1;
 }
 
 message User
@@ -134,47 +146,18 @@ message UserResult
     ErrorCode error_code = 2;
 }
 
-message Relay
-{
-    fixed64 timepoint    = 1;
-    string address       = 2;
-    uint64 pool_size     = 3;
-    Version version      = 4;
-    string os_name       = 5;
-    string computer_name = 6;
-}
-
-message RelayListRequest
-{
-    uint32 dummy = 1;
-}
-
-message RelayList
-{
-    enum ErrorCode
-    {
-        SUCCESS       = 0;
-        UNKNOWN_ERROR = 1;
-    }
-
-    ErrorCode error_code = 1;
-    repeated Relay relay = 2;
-}
-
 message RouterToAdmin
 {
-    HostList host_list     = 1;
-    HostResult host_result = 2;
-    UserList user_list     = 3;
-    UserResult user_result = 4;
-    RelayList relay_list   = 5;
+    SessionList session_list     = 1;
+    SessionResult session_result = 2;
+    UserList user_list           = 3;
+    UserResult user_result       = 4;
 }
 
 message AdminToRouter
 {
-    HostListRequest host_list_request   = 1;
-    HostRequest host_request            = 2;
-    UserListRequest user_list_request   = 3;
-    UserRequest user_request            = 4;
-    RelayListRequest relay_list_request = 5;
+    SessionListRequest session_list_request = 1;
+    SessionRequest session_request          = 2;
+    UserListRequest user_list_request       = 3;
+    UserRequest user_request                = 4;
 }

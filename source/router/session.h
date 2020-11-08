@@ -36,7 +36,7 @@ public:
     explicit Session(proto::RouterSession session_type);
     virtual ~Session();
 
-    using SessionId = uint64_t;
+    using SessionId = int64_t;
 
     class Delegate
     {
