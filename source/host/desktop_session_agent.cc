@@ -38,16 +38,16 @@ const char* controlActionToString(proto::internal::Control::Action action)
     switch (action)
     {
         case proto::internal::Control::ENABLE:
-            return "Control::ENABLE";
+            return "ENABLE";
 
         case proto::internal::Control::DISABLE:
-            return "Control::DISABLE";
+            return "DISABLE";
 
         case proto::internal::Control::LOCK:
-            return "Control::LOCK";
+            return "LOCK";
 
         case proto::internal::Control::LOGOFF:
-            return "Control::LOGOFF";
+            return "LOGOFF";
 
         default:
             return "Unknown control action";

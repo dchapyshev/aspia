@@ -284,6 +284,8 @@ void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
+    LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id;
+
     std::unique_ptr<base::SharedMemory> shared_memory =
         base::SharedMemory::open(base::SharedMemory::Mode::READ_ONLY, shared_buffer_id);
 
@@ -298,6 +300,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
+    LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id;
     shared_buffers_.erase(shared_buffer_id);
 }
 
