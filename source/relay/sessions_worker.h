@@ -31,7 +31,9 @@ class SessionsWorker
       public SessionManager::Delegate
 {
 public:
-    SessionsWorker(uint16_t peer_port, std::unique_ptr<SharedPool> shared_pool);
+    SessionsWorker(uint16_t peer_port,
+                   const std::chrono::minutes& peer_idle_timeout,
+                   std::unique_ptr<SharedPool> shared_pool);
     ~SessionsWorker();
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
@@ -46,7 +48,9 @@ protected:
     void onSessionFinished() override;
 
 private:
-    uint16_t peer_port_;
+    const uint16_t peer_port_;
+    const std::chrono::minutes peer_idle_timeout_;
+
     std::unique_ptr<SharedPool> shared_pool_;
 
     std::unique_ptr<base::Thread> thread_;

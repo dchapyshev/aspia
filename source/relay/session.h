@@ -35,6 +35,9 @@ public:
     explicit Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets);
     ~Session();
 
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
     class Delegate
     {
     public:
@@ -46,6 +49,7 @@ public:
     void start(Delegate* delegate);
     void stop();
 
+    std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration() const;
     int64_t bytesTransferred() const;
 
@@ -53,7 +57,8 @@ private:
     static void doReadSome(Session* session, int source);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_time_;
+    TimePoint start_time_;
+    mutable TimePoint start_idle_time_;
     int64_t bytes_transferred_ = 0;
 
     static const int kNumberOfSides = 2;

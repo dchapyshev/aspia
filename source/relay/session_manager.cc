@@ -30,6 +30,8 @@ namespace relay {
 
 namespace {
 
+const std::chrono::minutes kIdleTimerInterval { 1 };
+
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
 {
@@ -93,10 +95,14 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 
 } // namespace
 
-SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner, uint16_t port)
+SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
+                               uint16_t port,
+                               const std::chrono::minutes& idle_timeout)
     : task_runner_(std::move(task_runner)),
       acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
-                asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+                asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+      idle_timeout_(idle_timeout),
+      idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
     DCHECK(task_runner_);
 
@@ -108,6 +114,7 @@ SessionManager::~SessionManager()
     std::error_code ignored_code;
     acceptor_.cancel(ignored_code);
     acceptor_.close(ignored_code);
+    idle_timer_.cancel();
 }
 
 void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate)
@@ -118,6 +125,9 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     delegate_ = delegate;
 
     DCHECK(delegate_ && shared_pool_);
+
+    idle_timer_.expires_after(kIdleTimerInterval);
+    idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
 
     SessionManager::doAccept(this);
 }
@@ -188,10 +198,10 @@ void SessionManager::onSessionFinished(Session* session)
 }
 
 // static
-void SessionManager::doAccept(SessionManager* session_manager)
+void SessionManager::doAccept(SessionManager* self)
 {
-    session_manager->acceptor_.async_accept(
-        [session_manager](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    self->acceptor_.async_accept(
+        [self](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
         if (!error_code)
         {
@@ -199,9 +209,9 @@ void SessionManager::doAccept(SessionManager* session_manager)
                 socket.remote_endpoint().address().to_string());
 
             // A new peer is connected. Create and start the pending session.
-            session_manager->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
-                session_manager->task_runner_, std::move(socket), session_manager));
-            session_manager->pending_sessions_.back()->start();
+            self->pending_sessions_.emplace_back(std::make_unique<PendingSession>(
+                self->task_runner_, std::move(socket), self));
+            self->pending_sessions_.back()->start();
         }
         else
         {
@@ -213,8 +223,49 @@ void SessionManager::doAccept(SessionManager* session_manager)
         }
 
         // Waiting for the next connection.
-        SessionManager::doAccept(session_manager);
+        SessionManager::doAccept(self);
     });
+}
+
+// static
+void SessionManager::doIdleTimeout(SessionManager* self, const std::error_code& error_code)
+{
+    if (error_code == asio::error::operation_aborted)
+        return;
+
+    self->doIdleTimeoutImpl(error_code);
+}
+
+void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
+{
+    if (!error_code)
+    {
+        auto current_time = Session::Clock::now();
+        auto it = active_sessions_.begin();
+        int count = 0;
+
+        while (it != active_sessions_.end())
+        {
+            if ((*it)->idleTime(current_time) >= idle_timeout_)
+            {
+                it = active_sessions_.erase(it);
+                ++count;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        LOG(LS_INFO) << "Sessions ended by timeout: " << count;
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Error in idle timer: " << base::utf16FromLocal8Bit(error_code.message());
+    }
+
+    idle_timer_.expires_after(kIdleTimerInterval);
+    idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
 }
 
 void SessionManager::removePendingSession(PendingSession* session)

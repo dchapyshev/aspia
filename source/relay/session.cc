@@ -42,7 +42,7 @@ void Session::start(Delegate* delegate)
 {
     LOG(LS_INFO) << "Starting peers session";
 
-    start_time_ = std::chrono::high_resolution_clock::now();
+    start_time_ = Clock::now();
     delegate_ = delegate;
 
     for (int i = 0; i < kNumberOfSides; ++i)
@@ -67,12 +67,20 @@ void Session::stop()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
 
+std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
+{
+    if (start_idle_time_ == TimePoint())
+    {
+        start_idle_time_ = current_time;
+        return std::chrono::seconds(0);
+    }
+
+    return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_idle_time_);
+}
+
 std::chrono::seconds Session::duration() const
 {
-    std::chrono::time_point<std::chrono::high_resolution_clock> current_time =
-        std::chrono::high_resolution_clock::now();
-
-    return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
+    return std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
 }
 
 int64_t Session::bytesTransferred() const
@@ -95,6 +103,7 @@ void Session::doReadSome(Session* session, int source)
         else
         {
             session->bytes_transferred_ += bytes_transferred;
+            session->start_idle_time_ = TimePoint();
 
             asio::async_write(
                 session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],

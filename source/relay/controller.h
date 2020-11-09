@@ -69,6 +69,7 @@ private:
     // Peers settings.
     std::u16string peer_address_;
     uint16_t peer_port_ = 0;
+    std::chrono::minutes peer_idle_timeout_;
     uint32_t max_peer_count_ = 0;
 
     std::shared_ptr<base::TaskRunner> task_runner_;

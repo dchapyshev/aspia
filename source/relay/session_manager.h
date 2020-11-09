@@ -24,6 +24,8 @@
 #include "relay/session.h"
 #include "relay/shared_pool.h"
 
+#include <asio/high_resolution_timer.hpp>
+
 namespace base {
 class TaskRunner;
 } // namespace base
@@ -43,7 +45,9 @@ public:
         virtual void onSessionFinished() = 0;
     };
 
-    SessionManager(std::shared_ptr<base::TaskRunner> task_runner, uint16_t port);
+    SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
+                   uint16_t port,
+                   const std::chrono::minutes& idle_timeout);
     ~SessionManager();
 
     void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
@@ -58,7 +62,10 @@ protected:
     void onSessionFinished(Session* session) override;
 
 private:
-    static void doAccept(SessionManager* session_manager);
+    static void doAccept(SessionManager* self);
+    static void doIdleTimeout(SessionManager* self, const std::error_code& error_code);
+    void doIdleTimeoutImpl(const std::error_code& error_code);
+
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
 
@@ -67,6 +74,9 @@ private:
     asio::ip::tcp::acceptor acceptor_;
     std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
     std::vector<std::unique_ptr<Session>> active_sessions_;
+
+    const std::chrono::minutes idle_timeout_;
+    asio::high_resolution_timer idle_timer_;
 
     std::unique_ptr<SharedPool> shared_pool_;
     Delegate* delegate_ = nullptr;

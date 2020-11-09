@@ -22,8 +22,11 @@
 
 namespace relay {
 
-SessionsWorker::SessionsWorker(uint16_t peer_port, std::unique_ptr<SharedPool> shared_pool)
+SessionsWorker::SessionsWorker(uint16_t peer_port,
+                               const std::chrono::minutes& peer_idle_timeout,
+                               std::unique_ptr<SharedPool> shared_pool)
     : peer_port_(peer_port),
+      peer_idle_timeout_(peer_idle_timeout),
       shared_pool_(std::move(shared_pool)),
       thread_(std::make_unique<base::Thread>())
 {
@@ -52,7 +55,8 @@ void SessionsWorker::onBeforeThreadRunning()
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
-    session_manager_ = std::make_unique<SessionManager>(self_task_runner_, peer_port_);
+    session_manager_ = std::make_unique<SessionManager>(
+        self_task_runner_, peer_port_, peer_idle_timeout_);
     session_manager_->start(std::move(shared_pool_), this);
 }
 

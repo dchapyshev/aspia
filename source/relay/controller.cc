@@ -80,10 +80,12 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     // Peers settings.
     peer_address_ = settings.peerAddress();
     peer_port_ = settings.peerPort();
+    peer_idle_timeout_ = settings.peerIdleTimeout();
     max_peer_count_ = settings.maxPeerCount();
 
     LOG(LS_INFO) << "Peer address: " << peer_address_;
     LOG(LS_INFO) << "Peer port: " << peer_port_;
+    LOG(LS_INFO) << "Peer idle timeout: " << peer_idle_timeout_.count();
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
@@ -123,7 +125,14 @@ bool Controller::start()
         return false;
     }
 
-    sessions_worker_ = std::make_unique<SessionsWorker>(peer_port_, shared_pool_->share());
+    if (peer_idle_timeout_ < std::chrono::minutes(1) || peer_idle_timeout_ > std::chrono::minutes(60))
+    {
+        LOG(LS_WARNING) << "Invalid peer idle specified";
+        return false;
+    }
+
+    sessions_worker_ = std::make_unique<SessionsWorker>(
+        peer_port_, peer_idle_timeout_, shared_pool_->share());
     sessions_worker_->start(task_runner_, this);
 
     connectToRouter();
@@ -134,10 +143,7 @@ void Controller::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    static const std::chrono::seconds kKeepAliveTime{ 30 };
-    static const std::chrono::seconds kKeepAliveInterval{ 3 };
-
-    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
+    channel_->setOwnKeepAlive(true);
     channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);
