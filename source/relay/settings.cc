@@ -81,6 +81,16 @@ uint16_t Settings::peerPort() const
     return impl_.get<uint16_t>("PeerPort", DEFAULT_RELAY_PEER_TCP_PORT);
 }
 
+void Settings::setPeerIdleTimeout(const std::chrono::minutes& timeout)
+{
+    impl_.set<int>("PeerIdleTimeout", timeout.count());
+}
+
+std::chrono::minutes Settings::peerIdleTimeout() const
+{
+    return std::chrono::minutes(impl_.get<int>("PeerIdleTimeout", 5));
+}
+
 void Settings::setMaxPeerCount(uint32_t count)
 {
     impl_.set<uint32_t>("MaxPeerCount", count);

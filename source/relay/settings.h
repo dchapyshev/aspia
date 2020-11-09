@@ -21,6 +21,8 @@
 
 #include "base/settings/json_settings.h"
 
+#include <chrono>
+
 namespace relay {
 
 class Settings
@@ -43,6 +45,9 @@ public:
 
     void setPeerPort(uint16_t port);
     uint16_t peerPort() const;
+
+    void setPeerIdleTimeout(const std::chrono::minutes& timeout);
+    std::chrono::minutes peerIdleTimeout() const;
 
     void setMaxPeerCount(uint32_t count);
     uint32_t maxPeerCount() const;

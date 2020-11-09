@@ -4,6 +4,7 @@
 	"RouterPublicKey": "",
 	"PeerAddress": "",
 	"PeerPort": "8070",
+	"PeerIdleTimeout": "5",
 	"MaxPeerCount": "100",
 	"LogPath": "",
 	"MinLogLevel": "1",
