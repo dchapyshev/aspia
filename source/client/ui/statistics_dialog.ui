@@ -83,17 +83,17 @@
      </item>
      <item>
       <property name="text">
-       <string>MIN Audio Packet</string>
+       <string notr="true">MIN Audio Packet</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>MAX Audio Packet</string>
+       <string notr="true">MAX Audio Packet</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>AVG Audio Packet</string>
+       <string notr="true">AVG Audio Packet</string>
       </property>
      </item>
      <item>

@@ -212,6 +212,10 @@ QString ClientWindow::netErrorToString(base::NetworkChannel::ErrorCode error_cod
 
     switch (error_code)
     {
+        case base::NetworkChannel::ErrorCode::INVALID_PROTOCOL:
+            message = QT_TR_NOOP("Violation of the communication protocol.");
+            break;
+
         case base::NetworkChannel::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;

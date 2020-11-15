@@ -342,6 +342,10 @@ std::string NetworkChannel::errorToString(ErrorCode error_code)
             str = "SUCCESS";
             break;
 
+        case ErrorCode::INVALID_PROTOCOL:
+            str = "INVALID_PROTOCOL";
+            break;
+
         case ErrorCode::ACCESS_DENIED:
             str = "ACCESS_DENIED";
             break;
@@ -402,9 +406,7 @@ void NetworkChannel::onErrorOccurred(const Location& location, const std::error_
 
     ErrorCode error = ErrorCode::UNKNOWN;
 
-    if (error_code == asio::error::access_denied)
-        error = ErrorCode::ACCESS_DENIED;
-    else if (error_code == asio::error::host_not_found)
+    if (error_code == asio::error::host_not_found)
         error = ErrorCode::SPECIFIED_HOST_NOT_FOUND;
     else if (error_code == asio::error::connection_refused)
         error = ErrorCode::CONNECTION_REFUSED;
@@ -419,15 +421,21 @@ void NetworkChannel::onErrorOccurred(const Location& location, const std::error_
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(LS_WARNING) << "Network error: " << utf16FromLocal8Bit(error_code.message())
-                    << " (code: " << error_code.value()
-                    << ", location: " << location.toString() << ")";
+    LOG(LS_WARNING) << "Asio error: " << utf16FromLocal8Bit(error_code.message())
+                    << " (" << error_code.value() << ")";
+    onErrorOccurred(location, error);
+}
+
+void NetworkChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
+{
+    LOG(LS_WARNING) << "Connection finished with error " << errorToString(error_code)
+                    << " from: " << location.toString();
 
     disconnect();
 
     if (listener_)
     {
-        listener_->onDisconnected(error);
+        listener_->onDisconnected(error_code);
         listener_ = nullptr;
     }
 }
@@ -444,7 +452,7 @@ void NetworkChannel::onMessageReceived()
 
     if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
     {
-        onErrorOccurred(FROM_HERE, asio::error::access_denied);
+        onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
         return;
     }
 
@@ -468,7 +476,7 @@ void NetworkChannel::doWrite()
     const ByteArray& source_buffer = write_queue_.front().data();
     if (source_buffer.empty())
     {
-        onErrorOccurred(FROM_HERE, asio::error::message_size);
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
@@ -479,7 +487,7 @@ void NetworkChannel::doWrite()
 
         if (target_data_size > kMaxMessageSize)
         {
-            onErrorOccurred(FROM_HERE, asio::error::message_size);
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
@@ -495,7 +503,7 @@ void NetworkChannel::doWrite()
                                  source_buffer.size(),
                                  write_buffer_.data() + variable_size.size()))
         {
-            onErrorOccurred(FROM_HERE, asio::error::access_denied);
+            onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
             return;
         }
     }
@@ -575,7 +583,7 @@ void NetworkChannel::onReadSize(const std::error_code& error_code, size_t bytes_
 
         if (message_size > kMaxMessageSize)
         {
-            onErrorOccurred(FROM_HERE, asio::error::message_size);
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
@@ -672,7 +680,7 @@ void NetworkChannel::onReadServiceHeader(const std::error_code& error_code, size
     ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
     if (header->length > kMaxMessageSize)
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
@@ -681,7 +689,7 @@ void NetworkChannel::onReadServiceHeader(const std::error_code& error_code, size
         // Keep alive packet must always contain data.
         if (!header->length)
         {
-            onErrorOccurred(FROM_HERE, std::error_code());
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
@@ -689,7 +697,7 @@ void NetworkChannel::onReadServiceHeader(const std::error_code& error_code, size
     }
     else
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 }
@@ -746,13 +754,13 @@ void NetworkChannel::onReadServiceData(const std::error_code& error_code, size_t
         {
             if (read_buffer_.size() < (sizeof(ServiceHeader) + header->length))
             {
-                onErrorOccurred(FROM_HERE, std::error_code());
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
 
             if (header->length != keep_alive_counter_.size())
             {
-                onErrorOccurred(FROM_HERE, std::error_code());
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
 
@@ -761,7 +769,7 @@ void NetworkChannel::onReadServiceData(const std::error_code& error_code, size_t
                        keep_alive_counter_.data(),
                        keep_alive_counter_.size()) != 0)
             {
-                onErrorOccurred(FROM_HERE, std::error_code());
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
 
@@ -788,7 +796,7 @@ void NetworkChannel::onReadServiceData(const std::error_code& error_code, size_t
     }
     else
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
@@ -838,7 +846,7 @@ void NetworkChannel::onKeepAliveTimeout(const std::error_code& error_code)
     }
 
     // No response came within the specified period of time. We forcibly terminate the connection.
-    onErrorOccurred(FROM_HERE, error_code);
+    onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
 }
 
 void NetworkChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)

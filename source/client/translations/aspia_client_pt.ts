@@ -587,21 +587,6 @@
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="86"/>
-        <source>MIN Audio Packet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="91"/>
-        <source>MAX Audio Packet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/statistics_dialog.ui" line="96"/>
-        <source>AVG Audio Packet</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SystemInfoWindow</name>
@@ -840,97 +825,102 @@
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="216"/>
-        <source>Cryptography error (message encryption or decryption failed).</source>
+        <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="220"/>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="224"/>
-        <source>Connection was refused by the peer (or timed out).</source>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="228"/>
-        <source>Remote host closed the connection.</source>
+        <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="232"/>
-        <source>Host address was not found.</source>
+        <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="236"/>
-        <source>Socket operation timed out.</source>
+        <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="240"/>
-        <source>Address specified is already in use and was set to be exclusive.</source>
+        <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="244"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="248"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="254"/>
-        <location filename="../ui/client_window.cc" line="290"/>
+        <location filename="../ui/client_window.cc" line="258"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="270"/>
+        <location filename="../ui/client_window.cc" line="274"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="274"/>
+        <location filename="../ui/client_window.cc" line="278"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="278"/>
+        <location filename="../ui/client_window.cc" line="282"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="282"/>
+        <location filename="../ui/client_window.cc" line="286"/>
         <source>Wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="286"/>
+        <location filename="../ui/client_window.cc" line="290"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="305"/>
+        <location filename="../ui/client_window.cc" line="309"/>
         <source>No host with the specified ID was found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="309"/>
+        <location filename="../ui/client_window.cc" line="313"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="313"/>
+        <location filename="../ui/client_window.cc" line="317"/>
         <source>Failed to connect to the relay server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="317"/>
+        <location filename="../ui/client_window.cc" line="321"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="321"/>
+        <location filename="../ui/client_window.cc" line="325"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1317,173 +1307,178 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="209"/>
-        <source>Cryptography error (message encryption or decryption failed).</source>
+        <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="213"/>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="217"/>
-        <source>Connection was refused by the peer (or timed out).</source>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="221"/>
-        <source>Remote host closed the connection.</source>
+        <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="225"/>
-        <source>Host address was not found.</source>
+        <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="229"/>
-        <source>Socket operation timed out.</source>
+        <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="233"/>
-        <source>Address specified is already in use and was set to be exclusive.</source>
+        <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="237"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="241"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="247"/>
-        <location filename="../ui/router_manager_window.cc" line="283"/>
+        <location filename="../ui/router_manager_window.cc" line="251"/>
+        <location filename="../ui/router_manager_window.cc" line="287"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="252"/>
-        <location filename="../ui/router_manager_window.cc" line="287"/>
+        <location filename="../ui/router_manager_window.cc" line="256"/>
+        <location filename="../ui/router_manager_window.cc" line="291"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="263"/>
+        <location filename="../ui/router_manager_window.cc" line="267"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="267"/>
+        <location filename="../ui/router_manager_window.cc" line="271"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="271"/>
+        <location filename="../ui/router_manager_window.cc" line="275"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="275"/>
+        <location filename="../ui/router_manager_window.cc" line="279"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="279"/>
+        <location filename="../ui/router_manager_window.cc" line="283"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="348"/>
+        <location filename="../ui/router_manager_window.cc" line="352"/>
         <source>Invalid request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="352"/>
-        <location filename="../ui/router_manager_window.cc" line="391"/>
+        <location filename="../ui/router_manager_window.cc" line="356"/>
+        <location filename="../ui/router_manager_window.cc" line="395"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="356"/>
+        <location filename="../ui/router_manager_window.cc" line="360"/>
         <source>Invalid session ID was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="437"/>
+        <location filename="../ui/router_manager_window.cc" line="441"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager_window.cc" line="360"/>
-        <location filename="../ui/router_manager_window.cc" line="403"/>
-        <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="364"/>
         <location filename="../ui/router_manager_window.cc" line="407"/>
+        <source>Unknown error type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="368"/>
+        <location filename="../ui/router_manager_window.cc" line="411"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="395"/>
+        <location filename="../ui/router_manager_window.cc" line="399"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="399"/>
+        <location filename="../ui/router_manager_window.cc" line="403"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="436"/>
-        <location filename="../ui/router_manager_window.cc" line="457"/>
-        <location filename="../ui/router_manager_window.cc" line="537"/>
+        <location filename="../ui/router_manager_window.cc" line="440"/>
+        <location filename="../ui/router_manager_window.cc" line="461"/>
+        <location filename="../ui/router_manager_window.cc" line="541"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="458"/>
+        <location filename="../ui/router_manager_window.cc" line="462"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="538"/>
+        <location filename="../ui/router_manager_window.cc" line="542"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="585"/>
+        <location filename="../ui/router_manager_window.cc" line="589"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="586"/>
+        <location filename="../ui/router_manager_window.cc" line="590"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="587"/>
+        <location filename="../ui/router_manager_window.cc" line="591"/>
         <source>Connect Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="588"/>
+        <location filename="../ui/router_manager_window.cc" line="592"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="591"/>
+        <location filename="../ui/router_manager_window.cc" line="595"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="601"/>
         <source>Host IDs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="604"/>
+        <location filename="../ui/router_manager_window.cc" line="608"/>
         <source>ID #%1</source>
         <translation type="unfinished"></translation>
     </message>

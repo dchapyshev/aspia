@@ -56,6 +56,9 @@ public:
         // No error.
         SUCCESS,
 
+        // Violation of the communication protocol.
+        INVALID_PROTOCOL,
+
         // Cryptography error (message encryption or decryption failed).
         ACCESS_DENIED,
 
@@ -203,6 +206,7 @@ private:
     };
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onErrorOccurred(const Location& location, ErrorCode error_code);
     void onMessageWritten();
     void onMessageReceived();
 
