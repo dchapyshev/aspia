@@ -54,10 +54,7 @@ void RouterController::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    static const std::chrono::seconds kKeepAliveTime{ 30 };
-    static const std::chrono::seconds kKeepAliveInterval{ 3 };
-
-    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
+    channel_->setOwnKeepAlive(true);
     channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);

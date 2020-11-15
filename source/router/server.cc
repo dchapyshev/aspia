@@ -283,7 +283,7 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
 
-    channel->setKeepAlive(true, std::chrono::seconds(30), std::chrono::seconds(5));
+    channel->setOwnKeepAlive(true);
     channel->setNoDelay(true);
 
     if (authenticator_manager_)

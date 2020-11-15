@@ -21,8 +21,10 @@
 
 #include "base/memory/byte_array.h"
 #include "base/net/variable_size.h"
+#include "base/net/write_task.h"
 
 #include <asio/ip/tcp.hpp>
+#include <asio/high_resolution_timer.hpp>
 
 #include <queue>
 
@@ -40,6 +42,11 @@ public:
     // Constructor available for client.
     NetworkChannel();
     ~NetworkChannel();
+
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
 
     enum class ErrorCode
     {
@@ -132,9 +139,12 @@ public:
     // packet is sent.
     // |interval| specifies the interval, in milliseconds, between when successive keep-alive
     // packets are sent if no acknowledgement is received.
-    bool setKeepAlive(bool enable,
-                      const std::chrono::milliseconds& time = std::chrono::milliseconds(),
-                      const std::chrono::milliseconds& interval = std::chrono::milliseconds());
+    bool setTcpKeepAlive(bool enable,
+                         const Milliseconds& time = Milliseconds(45000),
+                         const Milliseconds& interval = Milliseconds(5000));
+    bool setOwnKeepAlive(bool enable,
+                         const Seconds& interval = Seconds(45),
+                         const Seconds& timeout = Seconds(15));
 
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
@@ -162,21 +172,74 @@ protected:
 private:
     friend class NetworkChannelProxy;
 
+    enum class ReadState
+    {
+        IDLE,                // No reads are in progress right now.
+        READ_SIZE,           // Reading the message size.
+        READ_SERVICE_HEADER, // Reading the contents of the service header.
+        READ_SERVICE_DATA,   // Reading the contents of the service data.
+        READ_USER_DATA,      // Reading the contents of the user data.
+        PENDING              // There is a message about which we did not notify.
+    };
+
+    enum ServiceMessageType
+    {
+        KEEP_ALIVE = 1
+    };
+
+    enum KeepAliveFlags
+    {
+        KEEP_ALIVE_PONG = 0,
+        KEEP_ALIVE_PING = 1
+    };
+
+    struct ServiceHeader
+    {
+        uint8_t type;      // Type of service packet (see ServiceDataType).
+        uint8_t flags;     // Flags bitmask (depends on the type).
+        uint8_t reserved1; // Reserved.
+        uint8_t reserved2; // Reserved.
+        uint32_t length;   // Additional data size.
+    };
+
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageWritten();
     void onMessageReceived();
+
+    void addWriteTask(WriteTask::Type type, ByteArray&& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
 
     void doReadSize();
     void onReadSize(const std::error_code& error_code, size_t bytes_transferred);
-    void onReadContent(const std::error_code& error_code, size_t bytes_transferred);
+
+    void doReadUserData(size_t length);
+    void onReadUserData(const std::error_code& error_code, size_t bytes_transferred);
+
+    void doReadServiceHeader();
+    void onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred);
+
+    void doReadServiceData(size_t length);
+    void onReadServiceData(const std::error_code& error_code, size_t bytes_transferred);
+
+    void onKeepAliveInterval(const std::error_code& error_code);
+    void onKeepAliveTimeout(const std::error_code& error_code);
+    void sendKeepAlive(uint8_t flags, const void* data, size_t size);
+
+    void addTxBytes(size_t bytes_count);
+    void addRxBytes(size_t bytes_count);
 
     std::shared_ptr<NetworkChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
+
+    std::unique_ptr<asio::high_resolution_timer> keep_alive_timer_;
+    Seconds keep_alive_interval_;
+    Seconds keep_alive_timeout_;
+    ByteArray keep_alive_counter_;
+    TimePoint keep_alive_timestamp_;
 
     Listener* listener_ = nullptr;
     bool connected_ = false;
@@ -185,25 +248,14 @@ private:
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    std::queue<ByteArray> write_queue_;
+    std::queue<WriteTask> write_queue_;
     VariableSizeWriter variable_size_writer_;
     ByteArray write_buffer_;
-
-    enum class ReadState
-    {
-        IDLE,         // No reads are in progress right now.
-        READ_SIZE,    // Reading the message size.
-        READ_CONTENT, // Reading the contents of the message.
-        PENDING       // There is a message about which we did not notify.
-    };
 
     ReadState state_ = ReadState::IDLE;
     VariableSizeReader variable_size_reader_;
     ByteArray read_buffer_;
     ByteArray decrypt_buffer_;
-
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
 
     int64_t total_tx_ = 0;
     int64_t total_rx_ = 0;

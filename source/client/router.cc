@@ -128,6 +128,9 @@ void Router::deleteUser(int64_t entry_id)
 
 void Router::onConnected()
 {
+    channel_->setOwnKeepAlive(true);
+    channel_->setNoDelay(true);
+
     authenticator_->start(std::move(channel_),
                           [this](base::ClientAuthenticator::ErrorCode error_code)
     {

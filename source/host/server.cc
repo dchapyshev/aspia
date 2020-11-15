@@ -178,11 +178,8 @@ void Server::onUserListChanged()
 void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
 {
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
-    static const std::chrono::minutes kKeepAliveTime{ 1 };
-    static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
     channel->setReadBufferSize(kReadBufferSize);
-    channel->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel->setNoDelay(true);
 
     if (authenticator_manager_)

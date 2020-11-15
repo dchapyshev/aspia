@@ -37,7 +37,7 @@ void NetworkChannelProxy::send(ByteArray&& buffer)
 
     bool schedule_write = incoming_queue_.empty();
 
-    incoming_queue_.emplace(std::move(buffer));
+    incoming_queue_.emplace(WriteTask::Type::USER_DATA, std::move(buffer));
 
     if (!schedule_write)
         return;
@@ -61,7 +61,7 @@ void NetworkChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool NetworkChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
+bool NetworkChannelProxy::reloadWriteQueue(std::queue<WriteTask>* work_queue)
 {
     if (!work_queue->empty())
         return false;

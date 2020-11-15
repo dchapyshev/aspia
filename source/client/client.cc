@@ -230,11 +230,8 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 void Client::startAuthentication()
 {
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
-    static const std::chrono::minutes kKeepAliveTime{ 1 };
-    static const std::chrono::seconds kKeepAliveInterval{ 3 };
 
     channel_->setReadBufferSize(kReadBufferSize);
-    channel_->setKeepAlive(true, kKeepAliveTime, kKeepAliveInterval);
     channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
@@ -253,6 +250,17 @@ void Client::startAuthentication()
             // notifications.
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
+
+            if (authenticator_->peerVersion() >= base::Version(2, 0, 0))
+            {
+                // Versions 2.0.0+ support their own implementation keep alive.
+                channel_->setOwnKeepAlive(true);
+            }
+            else
+            {
+                // Otherwise use TCP keep alive.
+                channel_->setTcpKeepAlive(true);
+            }
 
             status_window_proxy_->onConnected();
 

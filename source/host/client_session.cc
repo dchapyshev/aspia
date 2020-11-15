@@ -74,8 +74,19 @@ void ClientSession::start(Delegate* delegate)
     DCHECK(delegate_);
 
     channel_->setListener(this);
-    channel_->resume();
 
+    if (version_ >= base::Version(2, 0, 0))
+    {
+        // Versions 2.0.0+ support their own implementation keep alive.
+        channel_->setOwnKeepAlive(true);
+    }
+    else
+    {
+        // Otherwise use TCP keep alive.
+        channel_->setTcpKeepAlive(true);
+    }
+
+    channel_->resume();
     onStarted();
 }
 

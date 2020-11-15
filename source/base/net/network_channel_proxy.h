@@ -40,13 +40,13 @@ private:
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
-    bool reloadWriteQueue(std::queue<ByteArray>* work_queue);
+    bool reloadWriteQueue(std::queue<WriteTask>* work_queue);
 
     std::shared_ptr<TaskRunner> task_runner_;
 
     NetworkChannel* channel_;
 
-    std::queue<ByteArray> incoming_queue_;
+    std::queue<WriteTask> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannelProxy);

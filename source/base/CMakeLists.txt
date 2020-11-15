@@ -463,7 +463,8 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_keep_alive.cc
     net/tcp_keep_alive.h
     net/variable_size.cc
-    net/variable_size.h)
+    net/variable_size.h
+    net/write_task.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET
