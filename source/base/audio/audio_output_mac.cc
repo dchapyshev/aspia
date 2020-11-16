@@ -30,7 +30,8 @@
 namespace base {
 
 AudioOutputMac::AudioOutputMac(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb)
+    : AudioOutput(need_more_data_cb),
+      stop_event_(WaitableEvent::ResetPolicy::AUTOMATIC, WaitableEvent::InitialState::NOT_SIGNALED)
 {
     memset(convert_data_, 0, sizeof(convert_data_));
     memset(&stream_format_, 0, sizeof(AudioStreamBasicDescription));
