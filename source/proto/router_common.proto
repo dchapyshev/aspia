@@ -68,18 +68,3 @@ message RelayCredentials
     RelayKey key = 3;
     bytes secret = 4;
 }
-
-message ConnectionOffer
-{
-    enum ErrorCode
-    {
-        SUCCESS        = 0;
-        UNKNOWN_ERROR  = 1;
-        PEER_NOT_FOUND = 2;
-        ACCESS_DENIED  = 3;
-        KEY_POOL_EMPTY = 4;
-    }
-
-    ErrorCode error_code   = 1;
-    RelayCredentials relay = 2;
-}

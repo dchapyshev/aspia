@@ -27,9 +27,8 @@ list(APPEND SOURCE_PROTO
     host_internal.proto
     relay_peer.proto
     router_admin.proto
-    router_client.proto
     router_common.proto
-    router_host.proto
+    router_peer.proto
     router_relay.proto
     system_info.proto)
 

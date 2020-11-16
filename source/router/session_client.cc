@@ -42,7 +42,7 @@ void SessionClient::onSessionReady()
 
 void SessionClient::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::ClientToRouter message;
+    proto::PeerToRouter message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from client";
@@ -68,7 +68,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 {
     LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
 
-    proto::RouterToClient message;
+    proto::RouterToPeer message;
     proto::ConnectionOffer* offer = message.mutable_connection_offer();
 
     SessionHost* host = server().hostSessionById(request.host_id());
@@ -117,6 +117,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
                     offer_credentials->set_secret(base::Random::string(16));
 
                     LOG(LS_INFO) << "Sending connection offer to host";
+                    offer->set_peer_role(proto::ConnectionOffer::HOST);
                     host->sendConnectionOffer(*offer);
                 }
             }
@@ -124,6 +125,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     }
 
     LOG(LS_INFO) << "Sending connection offer to client";
+    offer->set_peer_role(proto::ConnectionOffer::CLIENT);
     sendMessage(message);
 }
 

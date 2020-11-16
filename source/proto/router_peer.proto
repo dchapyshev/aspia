@@ -24,18 +24,66 @@ import "router_common.proto";
 
 package proto;
 
+message HostIdRequest
+{
+    enum Type
+    {
+        UNKNOWN     = 0;
+        NEW_ID      = 1;
+        EXISTING_ID = 2;
+    }
+
+    Type type = 1;
+    bytes key = 2;
+}
+
+message ResetHostId
+{
+    fixed64 host_id = 1;
+}
+
+message HostIdResponse
+{
+    fixed64 host_id = 1;
+    bytes key       = 2;
+}
+
 message ConnectionRequest
 {
     fixed64 host_id = 1;
 }
 
-message RouterToClient
+message ConnectionOffer
 {
-    ConnectionOffer connection_offer = 1;
+    enum PeerRole
+    {
+        HOST   = 0;
+        CLIENT = 1;
+    }
+
+    enum ErrorCode
+    {
+        SUCCESS        = 0;
+        UNKNOWN_ERROR  = 1;
+        PEER_NOT_FOUND = 2;
+        ACCESS_DENIED  = 3;
+        KEY_POOL_EMPTY = 4;
+    }
+
+    PeerRole peer_role     = 1;
+    ErrorCode error_code   = 2;
+    RelayCredentials relay = 3;
 }
 
-message ClientToRouter
+message RouterToPeer
+{
+    HostIdResponse host_id_response  = 1;
+    ConnectionOffer connection_offer = 2;
+}
+
+message PeerToRouter
 {
     ConnectionRequest connection_request = 1;
+    HostIdRequest host_id_request        = 2;
+    ResetHostId reset_host_id            = 3;
 }
-

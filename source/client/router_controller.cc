@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router_client.pb.h"
+#include "proto/router_peer.pb.h"
 
 namespace client {
 
@@ -80,7 +80,7 @@ void RouterController::onConnected()
             channel_->resume();
 
             // Send connection request.
-            proto::ClientToRouter message;
+            proto::PeerToRouter message;
             message.mutable_connection_request()->set_host_id(host_id_);
             channel_->send(base::serialize(message));
         }
@@ -121,7 +121,7 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
 
 void RouterController::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToClient message;
+    proto::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
@@ -138,7 +138,8 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
         const proto::ConnectionOffer& connection_offer = message.connection_offer();
 
-        if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS)
+        if (connection_offer.error_code() != proto::ConnectionOffer::SUCCESS ||
+            connection_offer.peer_role() != proto::ConnectionOffer::CLIENT)
         {
             if (delegate_)
             {

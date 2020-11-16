@@ -49,7 +49,7 @@ bool SessionHost::hasHostId(base::HostId host_id) const
 
 void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
 {
-    proto::RouterToHost message;
+    proto::RouterToPeer message;
     message.mutable_connection_offer()->CopyFrom(offer);
     sendMessage(message);
 }
@@ -61,7 +61,7 @@ void SessionHost::onSessionReady()
 
 void SessionHost::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::HostToRouter message;
+    proto::PeerToRouter message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Could not read message from host";
@@ -96,7 +96,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         return;
     }
 
-    proto::RouterToHost message;
+    proto::RouterToPeer message;
     proto::HostIdResponse* host_id_response = message.mutable_host_id_response();
     base::ByteArray key_hash;
 

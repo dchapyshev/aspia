@@ -20,7 +20,7 @@
 #define ROUTER__SESSION_HOST_H
 
 #include "base/peer/host_id.h"
-#include "proto/router_host.pb.h"
+#include "proto/router_peer.pb.h"
 #include "router/session.h"
 
 namespace router {

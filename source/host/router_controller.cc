@@ -23,7 +23,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/strings/unicode.h"
 #include "host/host_key_storage.h"
-#include "proto/router_host.pb.h"
+#include "proto/router_peer.pb.h"
 
 namespace host {
 
@@ -69,7 +69,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
     pending_id_requests_.emplace(session_name);
 
-    proto::HostToRouter message;
+    proto::PeerToRouter message;
     proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
 
     if (host_key.empty())
@@ -91,7 +91,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
 void RouterController::resetHostId(base::HostId host_id)
 {
-    proto::HostToRouter message;
+    proto::PeerToRouter message;
     message.mutable_reset_host_id()->set_host_id(host_id);
 
     LOG(LS_INFO) << "Send reset host ID request";
@@ -150,7 +150,7 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
 
 void RouterController::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToHost message;
+    proto::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
@@ -192,8 +192,11 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
         const proto::ConnectionOffer& connection_offer = message.connection_offer();
 
-        if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS)
+        if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS &&
+            connection_offer.peer_role() == proto::ConnectionOffer::HOST)
+        {
             peer_manager_->addConnectionOffer(connection_offer.relay());
+        }
     }
     else
     {
