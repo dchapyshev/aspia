@@ -18,8 +18,6 @@
 
 #include "base/desktop/diff_block_32bpp_sse2.h"
 
-#include "build/build_config.h"
-
 #if defined(CC_MSVC)
 #include <intrin.h>
 #else
@@ -28,6 +26,8 @@
 #endif
 
 namespace base {
+
+#if defined(ARCH_CPU_X86_FAMILY)
 
 uint8_t diffFullBlock_32bpp_32x32_SSE2(
     const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
@@ -116,5 +116,7 @@ uint8_t diffFullBlock_32bpp_16x16_SSE2(
 
     return 0U;
 }
+
+#endif // defined(ARCH_CPU_X86_FAMILY)
 
 } // namespace base

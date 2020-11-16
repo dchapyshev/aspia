@@ -19,15 +19,21 @@
 #ifndef BASE__DESKTOP__DIFF_BLOCK_32BPP_SSE2_H
 #define BASE__DESKTOP__DIFF_BLOCK_32BPP_SSE2_H
 
+#include "build/build_config.h"
+
 #include <cstdint>
 
 namespace base {
+
+#if defined(ARCH_CPU_X86_FAMILY)
 
 uint8_t diffFullBlock_32bpp_32x32_SSE2(
     const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
 
 uint8_t diffFullBlock_32bpp_16x16_SSE2(
     const uint8_t* image1, const uint8_t* image2, int bytes_per_row);
+
+#endif // defined(ARCH_CPU_X86_FAMILY)
 
 } // namespace base
 

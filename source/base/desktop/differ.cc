@@ -86,28 +86,28 @@ Differ::Differ(const Size& size)
 // static
 Differ::DiffFullBlockFunc Differ::diffFunction()
 {
-    DiffFullBlockFunc func = nullptr;
-
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
+#if defined(ARCH_CPU_X86_FAMILY)
         LOG(LS_INFO) << "SSE2 differ loaded";
 
         if constexpr (kBlockSize == 16)
-            func = diffFullBlock_32bpp_16x16_SSE2;
+            return diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
-            func = diffFullBlock_32bpp_32x32_SSE2;
+            return diffFullBlock_32bpp_32x32_SSE2;
+#endif // defined(ARCH_CPU_X86_FAMILY)
     }
     else
     {
         LOG(LS_INFO) << "C differ loaded";
 
         if constexpr (kBlockSize == 16)
-            func = diffFullBlock_32bpp_16x16_C;
+            return diffFullBlock_32bpp_16x16_C;
         else if constexpr (kBlockSize == 32)
-            func = diffFullBlock_32bpp_32x32_C;
+            return diffFullBlock_32bpp_32x32_C;
     }
 
-    return func;
+    return nullptr;
 }
 
 // Identify all of the blocks that contain changed pixels.
