@@ -537,6 +537,13 @@ void RouterManagerWindow::deleteUser()
     if (!tree_item)
         return;
 
+    int64_t entry_id = tree_item->user.entry_id;
+    if (entry_id == 1)
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("You cannot delete a built-in user."));
+        return;
+    }
+
     if (QMessageBox::question(this,
                               tr("Confirmation"),
                               tr("Are you sure you want to delete user \"%1\"?")
@@ -547,7 +554,7 @@ void RouterManagerWindow::deleteUser()
         if (router_proxy_)
         {
             beforeRequest();
-            router_proxy_->deleteUser(tree_item->user.entry_id);
+            router_proxy_->deleteUser(entry_id);
         }
     }
 }

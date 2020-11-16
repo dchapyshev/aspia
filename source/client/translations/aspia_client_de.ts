@@ -1712,6 +1712,7 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="368"/>
         <location filename="../ui/router_manager_window.cc" line="411"/>
+        <location filename="../ui/router_manager_window.cc" line="543"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -1728,7 +1729,7 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="440"/>
         <location filename="../ui/router_manager_window.cc" line="461"/>
-        <location filename="../ui/router_manager_window.cc" line="541"/>
+        <location filename="../ui/router_manager_window.cc" line="548"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
@@ -1738,42 +1739,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="542"/>
+        <location filename="../ui/router_manager_window.cc" line="543"/>
+        <source>You cannot delete a built-in user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="549"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="589"/>
+        <location filename="../ui/router_manager_window.cc" line="596"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="590"/>
+        <location filename="../ui/router_manager_window.cc" line="597"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="591"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>Connect Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="592"/>
+        <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="595"/>
+        <location filename="../ui/router_manager_window.cc" line="602"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="601"/>
+        <location filename="../ui/router_manager_window.cc" line="608"/>
         <source>Host IDs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="608"/>
+        <location filename="../ui/router_manager_window.cc" line="615"/>
         <source>ID #%1</source>
         <translation type="unfinished"></translation>
     </message>
