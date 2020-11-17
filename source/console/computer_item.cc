@@ -55,11 +55,15 @@ void ComputerItem::updateItem()
     setText(COLUMN_INDEX_ADDRESS, address_title);
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
 
-    setText(COLUMN_INDEX_CREATED, QDateTime::fromSecsSinceEpoch(
-        computer_->create_time()).toString(Qt::DefaultLocaleShortDate));
+    QLocale system_locale = QLocale::system();
 
-    setText(COLUMN_INDEX_MODIFIED, QDateTime::fromSecsSinceEpoch(
-        computer_->modify_time()).toString(Qt::DefaultLocaleShortDate));
+    QString create_time = system_locale.toString(
+        QDateTime::fromSecsSinceEpoch(computer_->create_time()), QLocale::ShortFormat);
+    setText(COLUMN_INDEX_CREATED, create_time);
+
+    QString modify_time = system_locale.toString(
+        QDateTime::fromSecsSinceEpoch(computer_->modify_time()), QLocale::ShortFormat);
+    setText(COLUMN_INDEX_MODIFIED, modify_time);
 }
 
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()

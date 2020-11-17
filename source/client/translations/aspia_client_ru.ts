@@ -1452,52 +1452,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="98"/>
+        <location filename="../ui/file_list_model.cc" line="99"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="360"/>
+        <location filename="../ui/file_list_model.cc" line="361"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="363"/>
+        <location filename="../ui/file_list_model.cc" line="364"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="366"/>
+        <location filename="../ui/file_list_model.cc" line="367"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="369"/>
+        <location filename="../ui/file_list_model.cc" line="370"/>
         <source>Modified</source>
         <translation>Изменен</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="526"/>
+        <location filename="../ui/file_list_model.cc" line="527"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="531"/>
+        <location filename="../ui/file_list_model.cc" line="532"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="536"/>
+        <location filename="../ui/file_list_model.cc" line="537"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="541"/>
+        <location filename="../ui/file_list_model.cc" line="542"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="546"/>
+        <location filename="../ui/file_list_model.cc" line="547"/>
         <source>B</source>
         <translation>Б</translation>
     </message>

@@ -21,6 +21,7 @@
 #include "common/file_platform_util.h"
 
 #include <QDateTime>
+#include <QLocale>
 
 namespace client {
 
@@ -555,7 +556,7 @@ QString FileListModel::sizeToString(int64_t size)
 // static
 QString FileListModel::timeToString(time_t time)
 {
-    return QDateTime::fromSecsSinceEpoch(time).toString(Qt::DefaultLocaleShortDate);
+    return QLocale::system().toString(QDateTime::fromSecsSinceEpoch(time), QLocale::ShortFormat);
 }
 
 } // namespace client
