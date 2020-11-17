@@ -101,9 +101,9 @@ AddressBookTab::AddressBookTab(const QString& file_path,
                                QWidget* parent)
     : QWidget(parent),
       file_path_(file_path),
+      key_(std::move(key)),
       file_(std::move(file)),
-      data_(std::move(data)),
-      key_(std::move(key))
+      data_(std::move(data))
 {
     ui.setupUi(this);
 
@@ -661,7 +661,7 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
     emit computerDoubleClicked(current_item->computer());
 }
 
-void AddressBookTab::onRouterItemDoubleClicked(QTreeWidgetItem* item, int column)
+void AddressBookTab::onRouterItemDoubleClicked(QTreeWidgetItem* item, int /* column */)
 {
     RouterItem* current_item = dynamic_cast<RouterItem*>(item);
     if (!current_item)
@@ -913,7 +913,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     base::memZero(buffer.data(), buffer.size());
 
-    if (bytes_written != buffer.size())
+    if (bytes_written != static_cast<int64_t>(buffer.size()))
     {
         showSaveError(this, tr("Unable to write address book file."));
         return false;
