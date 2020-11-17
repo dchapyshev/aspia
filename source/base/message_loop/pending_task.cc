@@ -23,8 +23,8 @@ namespace base {
 PendingTask::PendingTask(
     Callback&& callback, TimePoint delayed_run_time, bool nestable, int sequence_num)
     : callback(std::move(callback)),
-      delayed_run_time(delayed_run_time),
       sequence_num(sequence_num),
+      delayed_run_time(delayed_run_time),
       nestable(nestable)
 {
     // Nothing

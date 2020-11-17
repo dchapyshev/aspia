@@ -84,7 +84,7 @@ Config ClientWindow::config() const
     return client_proxy_->config();
 }
 
-void ClientWindow::closeEvent(QCloseEvent* event)
+void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (client_proxy_)
     {

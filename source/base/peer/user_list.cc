@@ -25,8 +25,8 @@ namespace base {
 UserList::UserList() = default;
 
 UserList::UserList(const std::vector<User>& list, const ByteArray& seed_key)
-    : list_(list),
-      seed_key_(seed_key)
+    : seed_key_(seed_key),
+      list_(list)
 {
     // Nothing
 }

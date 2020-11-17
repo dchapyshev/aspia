@@ -129,7 +129,7 @@ bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
     return encoder_ != nullptr;
 }
 
-void AudioEncoderOpus::fetchBytesToResample(int resampler_frame_delay, AudioBus* audio_bus)
+void AudioEncoderOpus::fetchBytesToResample(int /* resampler_frame_delay */, AudioBus* audio_bus)
 {
     DCHECK(resampling_data_);
 

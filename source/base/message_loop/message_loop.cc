@@ -105,7 +105,9 @@ void MessageLoop::run(Dispatcher* dispatcher)
         pumpWin()->runWithDispatcher(this, dispatcher);
         return;
     }
-#endif // defined(OS_WIN)
+#else
+    (void)dispatcher;
+#endif
 
     pump_->run(this);
 }

@@ -333,7 +333,7 @@ void Application::onNewConnection()
         if (socket->state() == QLocalSocket::UnconnectedState)
             return;
 
-        if (socket->bytesAvailable() >= sizeof(uint32_t))
+        if (socket->bytesAvailable() >= static_cast<int>(sizeof(uint32_t)))
             break;
 
         socket->waitForReadyRead();
