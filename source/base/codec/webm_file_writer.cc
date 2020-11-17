@@ -23,6 +23,7 @@
 #include "base/codec/webm_file_muxer.h"
 #include "build/build_config.h"
 
+#include <iomanip>
 #include <sstream>
 
 namespace base {
