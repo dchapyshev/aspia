@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/system_time.h"
 #include "base/codec/webm_file_muxer.h"
+#include "build/build_config.h"
 
 #include <sstream>
 
@@ -170,7 +171,12 @@ bool WebmFileWriter::init()
 
     LOG(LS_INFO) << "New video file: " << file_path;
 
+#if defined(OS_WIN)
     if (fopen_s(&file_, file_path.string().c_str(), "wb") != 0)
+#else
+    file_ = fopen(file_path.string().c_str(), "wb");
+    if (!file_)
+#endif
     {
         LOG(LS_ERROR) << "Could not open file for writing";
         return false;
