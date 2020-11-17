@@ -122,6 +122,7 @@ add_executable(aspia_console MACOSX_BUNDLE
     ${SOURCE_CONSOLE_RESOURCES})
 
 if (APPLE)
+    set_target_properties(aspia_console PROPERTIES OUTPUT_NAME "Aspia Console")
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_console_PLIST})
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_console_ICON})
 endif()
@@ -167,3 +168,23 @@ if(Qt5LinguistTools_FOUND)
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
+
+install(TARGETS aspia_console
+    BUNDLE DESTINATION . COMPONENT aspia_console
+    RUNTIME DESTINATION bin COMPONENT aspia_console)
+
+if (APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+endif()
+
+set(CPACK_COMPONENTS_ALL aspia_console)
+set(CPACK_PACKAGE_NAME "aspia-console")
+set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Aspia Console")
+set(CPACK_PACKAGE_VERSION "2.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "2")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+
+include(CPack)

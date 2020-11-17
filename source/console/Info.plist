@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>aspia_console</string>
+	<string>Aspia Console</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Aspia Console</string>
 	<key>CFBundleIconFile</key>
