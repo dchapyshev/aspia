@@ -673,20 +673,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(BASE_TESTS_PLATFORM_LIBS
-        stdc++fs
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(BASE_TESTS_PLATFORM_LIBS stdc++fs ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
-    set(BASE_TESTS_PLATFORM_LIBS
-        optimized ${ICUUC_RELEASE}
-        optimized ${ICUDATA_RELEASE}
-        debug ${ICUUC_DEBUG}
-        debug ${ICUDATA_DEBUG})
+    set(BASE_TESTS_PLATFORM_LIBS ${FOUNDATION_LIB} ICU::uc ICU::dt)
 endif()
 
 add_executable(aspia_base_tests
