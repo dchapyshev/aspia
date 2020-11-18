@@ -228,6 +228,7 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/message_encryptor_openssl.h
     crypto/openssl_util.cc
     crypto/openssl_util.h
+    crypto/os_crypt.h
     crypto/password_generator.cc
     crypto/password_generator.h
     crypto/password_hash.cc
@@ -242,6 +243,18 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/srp_constants.h
     crypto/srp_math.cc
     crypto/srp_math.h)
+
+if (WIN32)
+    list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_win.cc)
+endif()
+
+if (APPLE)
+    list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_mac.mm)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_BASE_CRYPTO crypto/os_crypt_linux.cc)
+endif()
 
 list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/big_num_unittest.cc
