@@ -16,35 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_CONFIG_H
-#define CLIENT__ROUTER_CONFIG_H
+#ifndef CLIENT__ROUTER_CONFIG_STORAGE_H
+#define CLIENT__ROUTER_CONFIG_STORAGE_H
 
-#include <cstdint>
-#include <string>
-#include <vector>
+#include "base/macros_magic.h"
+#include "base/settings/json_settings.h"
+#include "client/router_config.h"
 
 namespace client {
 
-struct RouterConfig
+class RouterConfigStorage
 {
-    RouterConfig();
-    ~RouterConfig();
+public:
+    ~RouterConfigStorage();
 
-    RouterConfig(const RouterConfig& other) = default;
-    RouterConfig& operator=(const RouterConfig& other) = default;
+    static std::unique_ptr<RouterConfigStorage> open();
 
-    RouterConfig(RouterConfig&& other) noexcept = default;
-    RouterConfig& operator=(RouterConfig&& other) noexcept = default;
+    RouterConfigList routerConfigList();
+    void setRouterConfigList(const RouterConfigList& configs);
 
-    std::u16string name;
-    std::u16string address;
-    uint16_t port;
-    std::u16string username;
-    std::u16string password;
+private:
+    RouterConfigStorage();
+
+    base::JsonSettings storage_;
+
+    DISALLOW_COPY_AND_ASSIGN(RouterConfigStorage);
 };
-
-using RouterConfigList = std::vector<RouterConfig>;
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_CONFIG_H
+#endif // CLIENT__ROUTER_CONFIG_STORAGE_H
