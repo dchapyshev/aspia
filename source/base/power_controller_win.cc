@@ -30,7 +30,7 @@ namespace base {
 namespace {
 
 // Delay for shutdown and reboot.
-const DWORD kActionDelayInSeconds = 30;
+const DWORD kActionDelayInSeconds = 0;
 
 bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 {
