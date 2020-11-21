@@ -48,7 +48,7 @@ public:
         virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
     };
 
-    explicit ScreenCapturerWrapper(Delegate* delegate);
+    ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate);
     ~ScreenCapturerWrapper();
 
     void selectScreen(ScreenCapturer::ScreenId screen_id);
@@ -63,6 +63,7 @@ private:
     void selectCapturer();
     void switchToInputDesktop();
 
+    ScreenCapturer::Type preferred_type_;
     Delegate* delegate_;
 
 #if defined(OS_WIN)

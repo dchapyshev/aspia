@@ -117,6 +117,7 @@ message VideoPacketFormat
     Rect video_rect = 1;
     // Field 2: deprecated.
     Size screen_size = 3;
+    uint32 capturer_type = 4;
 }
 
 message VideoPacket

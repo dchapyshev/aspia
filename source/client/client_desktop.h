@@ -107,6 +107,7 @@ private:
 
     TimePoint start_time_;
     TimePoint begin_time_;
+    uint32_t video_capturer_type_ = 0;
     int64_t video_frame_count_ = 0;
     size_t min_video_packet_ = std::numeric_limits<size_t>::max();
     size_t max_video_packet_ = 0;

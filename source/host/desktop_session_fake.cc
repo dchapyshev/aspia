@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/desktop/frame_simple.h"
+#include "base/desktop/screen_capturer.h"
 
 namespace host {
 
@@ -65,6 +66,8 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
     }
 
     memset(frame_->frameData(), 0, frame_->stride() * frame_->size().height());
+
+    frame_->setCapturerType(static_cast<uint32_t>(base::ScreenCapturer::Type::FAKE));
     frame_->setDpi(base::Point(96, 96));
 }
 

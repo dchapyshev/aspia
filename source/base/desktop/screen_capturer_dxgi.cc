@@ -91,7 +91,8 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 } // namespace
 
 ScreenCapturerDxgi::ScreenCapturerDxgi()
-    : controller_(std::make_shared<DxgiDuplicatorController>())
+    : ScreenCapturer(Type::WIN_DXGI),
+      controller_(std::make_shared<DxgiDuplicatorController>())
 {
     // Nothing
 }

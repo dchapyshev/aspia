@@ -35,7 +35,22 @@ class ScreenCapturer
 public:
     virtual ~ScreenCapturer() = default;
 
-    enum class Error { SUCCEEDED, PERMANENT, TEMPORARY };
+    enum class Type
+    {
+        DEFAULT   = 0,
+        FAKE      = 1,
+        WIN_GDI   = 2,
+        WIN_DXGI  = 3,
+        LINUX_X11 = 4,
+        MACOSX    = 5
+    };
+
+    enum class Error
+    {
+        SUCCEEDED = 0,
+        PERMANENT = 1,
+        TEMPORARY = 2
+    };
 
     using ScreenId = intptr_t;
 
@@ -59,8 +74,13 @@ public:
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;
 
+    static const char* typeToString(Type type);
+    Type type() const;
+
 protected:
     friend class ScreenCapturerWrapper;
+
+    explicit ScreenCapturer(Type type);
     virtual void reset() = 0;
 
     template <typename FrameType>
@@ -91,6 +111,7 @@ protected:
 
 private:
     SharedMemoryFactory* shared_memory_factory_ = nullptr;
+    const Type type_;
 };
 
 template <typename FrameType>

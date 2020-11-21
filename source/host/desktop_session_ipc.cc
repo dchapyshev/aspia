@@ -238,6 +238,8 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
             last_frame_ = base::SharedMemoryFrame::attach(
                 base::Size(serialized_frame.width(), serialized_frame.height()),
                 std::move(shared_buffer));
+
+            last_frame_->setCapturerType(serialized_frame.capturer_type());
             last_frame_->setDpi(base::Point(
                 serialized_frame.dpi_x(), serialized_frame.dpi_y()));
 
@@ -301,7 +303,11 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id;
+
     shared_buffers_.erase(shared_buffer_id);
+
+    if (shared_buffers_.empty())
+        last_frame_.reset();
 }
 
 std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer(

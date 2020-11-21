@@ -259,6 +259,7 @@ void DesktopSessionAgent::onScreenCaptured(
 
         proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
 
+        serialized_frame->set_capturer_type(frame->capturerType());
         serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
@@ -332,7 +333,8 @@ void DesktopSessionAgent::setEnabled(bool enable)
         capture_scheduler_ = std::make_unique<base::CaptureScheduler>(
             std::chrono::milliseconds(40));
 
-        screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(this);
+        screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(
+            base::ScreenCapturer::Type::DEFAULT, this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
         audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>(channel_->channelProxy());

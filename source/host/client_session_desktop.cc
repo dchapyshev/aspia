@@ -25,6 +25,7 @@
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
 #include "base/desktop/frame.h"
+#include "base/desktop/screen_capturer.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
@@ -175,14 +176,23 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
         if (packet->has_format())
         {
-            proto::Size* screen_size = packet->mutable_format()->mutable_screen_size();
+            proto::VideoPacketFormat* format = packet->mutable_format();
+
+            // In video packets that contain the format, we pass the screen capture type.
+            format->set_capturer_type(frame->capturerType());
+
+            // Real screen size.
+            proto::Size* screen_size = format->mutable_screen_size();
             screen_size->set_width(frame->size().width());
             screen_size->set_height(frame->size().height());
 
             LOG(LS_INFO) << "Video packet has format";
-            LOG(LS_INFO) << "Screen size: " << screen_size->width() << "x" << screen_size->height();
-            LOG(LS_INFO) << "Video size: " << packet->format().video_rect().width() << "x"
-                         << packet->format().video_rect().height();
+            LOG(LS_INFO) << "Capturer type: " << base::ScreenCapturer::typeToString(
+                static_cast<base::ScreenCapturer::Type>(frame->capturerType()));
+            LOG(LS_INFO) << "Screen size: " << screen_size->width() << "x"
+                         << screen_size->height();
+            LOG(LS_INFO) << "Video size: " << format->video_rect().width() << "x"
+                         << format->video_rect().height();
         }
     }
 

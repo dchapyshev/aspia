@@ -55,6 +55,9 @@ public:
     void setDpi(const Point& dpi) { dpi_ = dpi; }
     const Point& dpi() const { return dpi_; }
 
+    void setCapturerType(uint32_t capturer_type) { capturer_type_ = capturer_type; }
+    uint32_t capturerType() const { return capturer_type_; }
+
     // Copies various information from |other|. Anything initialized in constructor are not copied.
     // This function is usually used when sharing a source Frame with several clients: the original
     // Frame should be kept unchanged. For example and SharedFrame::share().
@@ -80,6 +83,7 @@ private:
     Region updated_region_;
     Point top_left_;
     Point dpi_;
+    uint32_t capturer_type_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Frame);
 };

@@ -31,13 +31,19 @@
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/win/windows_version.h"
 #elif defined(OS_LINUX)
+// TODO
+#elif defined(OS_MAC)
+// TODO
 #else
+#error Platform support not implemented
 #endif
 
 namespace base {
 
-ScreenCapturerWrapper::ScreenCapturerWrapper(Delegate* delegate)
-    : delegate_(delegate),
+ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type,
+                                             Delegate* delegate)
+    : preferred_type_(preferred_type),
+      delegate_(delegate),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(std::make_unique<DesktopEnvironment>())
 {
@@ -169,14 +175,19 @@ void ScreenCapturerWrapper::selectCapturer()
 #if defined(OS_WIN)
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
-    if (win::windowsVersion() >= win::VERSION_WIN8)
+    if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
+        preferred_type_ == ScreenCapturer::Type::DEFAULT)
     {
-        // Desktop Duplication API is available in Windows 8+.
-        std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi = std::make_unique<ScreenCapturerDxgi>();
-        if (capturer_dxgi->isSupported())
+        if (win::windowsVersion() >= win::VERSION_WIN8)
         {
-            LOG(LS_INFO) << "Using DXGI capturer";
-            screen_capturer_ = std::move(capturer_dxgi);
+            // Desktop Duplication API is available in Windows 8+.
+            std::unique_ptr<ScreenCapturerDxgi> capturer_dxgi =
+                std::make_unique<ScreenCapturerDxgi>();
+            if (capturer_dxgi->isSupported())
+            {
+                LOG(LS_INFO) << "Using DXGI capturer";
+                screen_capturer_ = std::move(capturer_dxgi);
+            }
         }
     }
 
@@ -185,6 +196,7 @@ void ScreenCapturerWrapper::selectCapturer()
         LOG(LS_INFO) << "Using GDI capturer";
         screen_capturer_ = std::make_unique<ScreenCapturerGdi>();
     }
+
 #elif defined(OS_LINUX)
     NOTIMPLEMENTED();
 #elif defined(OS_MAC)

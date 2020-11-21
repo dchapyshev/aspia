@@ -72,6 +72,8 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
             return false;
         }
 
+        frame->setCapturerType(static_cast<uint32_t>(ScreenCapturer::Type::WIN_DXGI));
+
         const Size& frame_size = frame->size();
 
         // DirectX capturer won't paint each pixel in the frame due to its one

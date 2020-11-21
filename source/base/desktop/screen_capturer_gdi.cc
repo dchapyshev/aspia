@@ -29,7 +29,11 @@
 
 namespace base {
 
-ScreenCapturerGdi::ScreenCapturerGdi() = default;
+ScreenCapturerGdi::ScreenCapturerGdi()
+    : ScreenCapturer(Type::WIN_GDI)
+{
+    // Nothing
+}
 
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
@@ -108,6 +112,7 @@ const Frame* ScreenCapturerGdi::captureImage()
             return nullptr;
         }
 
+        frame->setCapturerType(static_cast<uint32_t>(type()));
         queue_.replaceCurrentFrame(std::move(frame));
     }
 

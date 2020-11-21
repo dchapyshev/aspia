@@ -22,6 +22,12 @@
 
 namespace base {
 
+ScreenCapturer::ScreenCapturer(Type type)
+    : type_(type)
+{
+    // Nothing
+}
+
 void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
@@ -30,6 +36,35 @@ void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_f
 SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
     return shared_memory_factory_;
+}
+
+const char* ScreenCapturer::typeToString(Type type)
+{
+    switch (type)
+    {
+        case Type::FAKE:
+            return "FAKE";
+
+        case Type::WIN_GDI:
+            return "WIN_GDI";
+
+        case Type::WIN_DXGI:
+            return "WIN_DXGI";
+
+        case Type::LINUX_X11:
+            return "LINUX_X11";
+
+        case Type::MACOSX:
+            return "MACOSX";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
+ScreenCapturer::Type ScreenCapturer::type() const
+{
+    return type_;
 }
 
 } // namespace base

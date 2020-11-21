@@ -288,6 +288,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.min_audio_packet = min_audio_packet_;
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
+    metrics.video_capturer_type = video_capturer_type_;
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
@@ -365,6 +366,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
                 return;
             }
         }
+
+        video_capturer_type_ = format.capturer_type();
 
         LOG(LS_INFO) << "New video size: " << video_size.width() << "x" << video_size.height();
         LOG(LS_INFO) << "New screen size: " << screen_size.width() << "x" << screen_size.height();
