@@ -106,17 +106,27 @@
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="408"/>
+        <location filename="../config_dialog.ui" line="394"/>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="402"/>
+        <source>Preffered video capturer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="442"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="417"/>
+        <location filename="../config_dialog.ui" line="451"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="426"/>
+        <location filename="../config_dialog.ui" line="460"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -275,19 +285,19 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="216"/>
-        <location filename="../config_dialog.cc" line="291"/>
-        <location filename="../config_dialog.cc" line="344"/>
+        <location filename="../config_dialog.cc" line="252"/>
+        <location filename="../config_dialog.cc" line="327"/>
+        <location filename="../config_dialog.cc" line="380"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="217"/>
+        <location filename="../config_dialog.cc" line="253"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您确定要删除用户 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="277"/>
+        <location filename="../config_dialog.cc" line="313"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
@@ -296,120 +306,125 @@
         <translation type="vanished">XML-文件 (*.xml)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="277"/>
-        <location filename="../config_dialog.cc" line="307"/>
+        <location filename="../config_dialog.cc" line="140"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="313"/>
+        <location filename="../config_dialog.cc" line="343"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="286"/>
-        <location filename="../config_dialog.cc" line="339"/>
+        <location filename="../config_dialog.cc" line="322"/>
+        <location filename="../config_dialog.cc" line="375"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>服务配置已更改。 为了使更改生效，您必须重新启动服务。 立即重新启动服务？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="307"/>
+        <location filename="../config_dialog.cc" line="343"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="326"/>
+        <location filename="../config_dialog.cc" line="362"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>该配置无法写入。 确保您具有足够的写权限。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="329"/>
-        <location filename="../config_dialog.cc" line="361"/>
-        <location filename="../config_dialog.cc" line="374"/>
-        <location filename="../config_dialog.cc" line="553"/>
-        <location filename="../config_dialog.cc" line="572"/>
-        <location filename="../config_dialog.cc" line="587"/>
-        <location filename="../config_dialog.cc" line="597"/>
-        <location filename="../config_dialog.cc" line="613"/>
-        <location filename="../config_dialog.cc" line="623"/>
+        <location filename="../config_dialog.cc" line="365"/>
+        <location filename="../config_dialog.cc" line="397"/>
+        <location filename="../config_dialog.cc" line="410"/>
+        <location filename="../config_dialog.cc" line="590"/>
+        <location filename="../config_dialog.cc" line="609"/>
+        <location filename="../config_dialog.cc" line="624"/>
+        <location filename="../config_dialog.cc" line="634"/>
+        <location filename="../config_dialog.cc" line="650"/>
+        <location filename="../config_dialog.cc" line="660"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="362"/>
+        <location filename="../config_dialog.cc" line="398"/>
         <source>Incorrect router address entered.</source>
         <translation>输入了错误的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="375"/>
+        <location filename="../config_dialog.cc" line="411"/>
         <source>Incorrect router public key entered.</source>
         <translation>输入了错误的路由器公钥。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="487"/>
+        <location filename="../config_dialog.cc" line="524"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="496"/>
+        <location filename="../config_dialog.cc" line="533"/>
         <source>Started</source>
         <translation>已开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="497"/>
+        <location filename="../config_dialog.cc" line="534"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="502"/>
+        <location filename="../config_dialog.cc" line="539"/>
         <source>Not started</source>
         <translation>没有开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="503"/>
-        <location filename="../config_dialog.cc" line="510"/>
-        <location filename="../config_dialog.cc" line="523"/>
+        <location filename="../config_dialog.cc" line="540"/>
+        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="560"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="509"/>
+        <location filename="../config_dialog.cc" line="546"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="520"/>
+        <location filename="../config_dialog.cc" line="557"/>
         <source>Not installed</source>
         <translation>未安装</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="522"/>
+        <location filename="../config_dialog.cc" line="559"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="527"/>
+        <location filename="../config_dialog.cc" line="564"/>
         <source>Current state: %1</source>
         <translation>当前状态 %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="554"/>
+        <location filename="../config_dialog.cc" line="591"/>
         <source>The service could not be installed.</source>
         <translation>无法安装该服务。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="573"/>
+        <location filename="../config_dialog.cc" line="610"/>
         <source>The service could not be removed.</source>
         <translation>该服务无法删除。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="588"/>
-        <location filename="../config_dialog.cc" line="614"/>
+        <location filename="../config_dialog.cc" line="625"/>
+        <location filename="../config_dialog.cc" line="651"/>
         <source>Could not access the service.</source>
         <translation>无法访问该服务。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="598"/>
+        <location filename="../config_dialog.cc" line="635"/>
         <source>The service could not be started.</source>
         <translation>该服务无法启动。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="624"/>
+        <location filename="../config_dialog.cc" line="661"/>
         <source>The service could not be stopped.</source>
         <translation>该服务无法停止。</translation>
     </message>

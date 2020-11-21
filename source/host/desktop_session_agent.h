@@ -87,6 +87,7 @@ private:
     std::unique_ptr<base::ScreenCapturerWrapper> screen_capturer_;
     std::unique_ptr<base::AudioCapturerWrapper> audio_capturer_;
 
+    base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);

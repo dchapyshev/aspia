@@ -95,6 +95,14 @@
         <source>Public Key:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Preffered video capturer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -304,6 +312,10 @@
     </message>
     <message>
         <source>JSON-files (*.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

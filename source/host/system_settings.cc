@@ -223,4 +223,14 @@ void SystemSettings::setUpdateServer(const std::u16string& server)
     settings_.set("UpdateServer", server);
 }
 
+uint32_t SystemSettings::preferredVideoCapturer() const
+{
+    return settings_.get<uint32_t>("PreferredVideoCapturer", 0);
+}
+
+void SystemSettings::setPreferredVideoCapturer(uint32_t type)
+{
+    settings_.set("PreferredVideoCapturer", type);
+}
+
 } // namespace host

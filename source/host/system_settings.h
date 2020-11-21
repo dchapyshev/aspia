@@ -61,6 +61,9 @@ public:
     std::u16string updateServer() const;
     void setUpdateServer(const std::u16string& server);
 
+    uint32_t preferredVideoCapturer() const;
+    void setPreferredVideoCapturer(uint32_t type);
+
 private:
     base::JsonSettings settings_;
 

@@ -28,6 +28,7 @@
 #include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
 #include "host/input_injector_win.h"
+#include "host/system_settings.h"
 
 namespace host {
 
@@ -62,6 +63,10 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     // At the end of the user's session, the program ends later than the others.
     SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
+    SystemSettings settings;
+    preferred_video_capturer_ =
+        static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
 }
 
 DesktopSessionAgent::~DesktopSessionAgent() = default;
@@ -334,7 +339,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
             std::chrono::milliseconds(40));
 
         screen_capturer_ = std::make_unique<base::ScreenCapturerWrapper>(
-            base::ScreenCapturer::Type::DEFAULT, this);
+            preferred_video_capturer_, this);
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory_.get());
 
         audio_capturer_ = std::make_unique<base::AudioCapturerWrapper>(channel_->channelProxy());
