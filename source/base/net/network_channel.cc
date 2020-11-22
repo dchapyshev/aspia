@@ -52,7 +52,10 @@ void resizeBuffer(ByteArray* buffer, size_t new_size)
 {
     // If the reserved buffer size is less, then increase it.
     if (buffer->capacity() < new_size)
+    {
+        buffer->clear();
         buffer->reserve(new_size);
+    }
 
     // Change the size of the buffer.
     buffer->resize(new_size);
@@ -708,7 +711,7 @@ void NetworkChannel::doReadServiceData(size_t length)
     DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
     DCHECK_GT(length, 0);
 
-    resizeBuffer(&read_buffer_, read_buffer_.size() + length);
+    read_buffer_.resize(read_buffer_.size() + length);
 
     // Now we read the data after the header.
     state_ = ReadState::READ_SERVICE_DATA;

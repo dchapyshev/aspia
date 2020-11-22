@@ -389,7 +389,10 @@ void IpcChannel::doReadMessage()
         }
 
         if (read_buffer_.capacity() < read_size_)
+        {
+            read_buffer_.clear();
             read_buffer_.reserve(read_size_);
+        }
 
         read_buffer_.resize(read_size_);
 
