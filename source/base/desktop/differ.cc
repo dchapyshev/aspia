@@ -67,7 +67,12 @@ Differ::Differ(const Size& size)
       full_blocks_x_(size.width() / kBlockSize),
       full_blocks_y_(size.height() / kBlockSize)
 {
-    const int diff_info_size = diff_width_ * diff_height_;
+    DLOG(LS_INFO) << "Screen size: " << size;
+    DLOG(LS_INFO) << "Bytes per row: " << bytes_per_row_;
+    DLOG(LS_INFO) << "Diff size: " << diff_width_ << "x" << diff_height_;
+    DLOG(LS_INFO) << "Full blocks: " << full_blocks_x_ << "x" << full_blocks_y_;
+
+    const size_t diff_info_size = diff_width_ * diff_height_;
 
     diff_info_ = std::make_unique<uint8_t[]>(diff_info_size);
     memset(diff_info_.get(), 0, diff_info_size);
@@ -76,8 +81,13 @@ Differ::Differ(const Size& size)
     partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
     partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
+    DLOG(LS_INFO) << "Partial column: " << partial_column_width_;
+    DLOG(LS_INFO) << "Partial row: " << partial_row_height_;
+
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
+
+    DLOG(LS_INFO) << "Block stride: " << block_stride_y_;
 
     diff_full_block_func_ = diffFunction();
     CHECK(diff_full_block_func_);
@@ -147,7 +157,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             *is_different = diffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
-                                             kBytesPerBlock,
+                                             partial_column_width_ * kBytesPerPixel,
                                              kBlockSize);
         }
 

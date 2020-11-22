@@ -66,7 +66,7 @@ AudioCapturerWin::AudioCapturerWin()
       volume_filter_(kSilenceThreshold),
       last_capture_error_(S_OK)
 {
-    thread_checker_.detachFromThread();
+    // Nothing
 }
 
 AudioCapturerWin::~AudioCapturerWin()
