@@ -342,7 +342,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
         return false;
     }
 
-    if (metadata_.capacity() < frame_info.TotalMetadataBufferSize)
+    if (metadata_.size() < frame_info.TotalMetadataBufferSize)
     {
         metadata_.clear(); // Avoid data copy
         metadata_.resize(frame_info.TotalMetadataBufferSize);
@@ -352,7 +352,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
     DXGI_OUTDUPL_MOVE_RECT* move_rects = reinterpret_cast<DXGI_OUTDUPL_MOVE_RECT*>(metadata_.data());
 
     _com_error error = duplication_->GetFrameMoveRects(
-        static_cast<UINT>(metadata_.capacity()), move_rects, &buff_size);
+        static_cast<UINT>(metadata_.size()), move_rects, &buff_size);
     if (error.Error() != S_OK)
     {
         LOG(LS_ERROR) << "Failed to get move rectangles, error "
@@ -365,7 +365,7 @@ bool DxgiOutputDuplicator::doDetectUpdatedRegion(const DXGI_OUTDUPL_FRAME_INFO& 
     RECT* dirty_rects = reinterpret_cast<RECT*>(metadata_.data() + buff_size);
 
     error = duplication_->GetFrameDirtyRects(
-        static_cast<UINT>(metadata_.capacity()) - buff_size, dirty_rects, &buff_size);
+        static_cast<UINT>(metadata_.size()) - buff_size, dirty_rects, &buff_size);
     if (error.Error() != S_OK)
     {
         LOG(LS_ERROR) << "Failed to get dirty rectangles, error "
