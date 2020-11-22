@@ -335,9 +335,10 @@ if (APPLE)
         desktop/screen_capturer_mac.h)
 endif()
 
-list(APPEND SOURCE_DESKTOP_TESTS
+list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/diff_block_32bpp_c_unittest.cc
     desktop/diff_block_32bpp_sse2_unittest.cc
+    desktop/frame_unittest.cc
     desktop/geometry_unittest.cc
     desktop/region_unittest.cc)
 
