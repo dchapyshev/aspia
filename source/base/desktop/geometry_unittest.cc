@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/geometry.h"
+#include "base/desktop/geometry.h"
 
 #include <gtest/gtest.h>
 
-namespace desktop {
+namespace base {
 
 TEST(desktop_rect_test, union_between_two_non_empty_rects)
 {
@@ -116,4 +116,4 @@ TEST(desktop_rect_test, scale)
     ASSERT_EQ(rect.height(), 110);
 }
 
-} // namespace desktop
+} // namespace base

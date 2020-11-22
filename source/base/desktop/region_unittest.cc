@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "desktop/region.h"
+#include "base/desktop/region.h"
 
 #include <gtest/gtest.h>
 
 #include <algorithm>
 
-namespace desktop {
+namespace base {
 
 namespace {
 
@@ -1007,4 +1007,4 @@ TEST(desktop_region_test, performance)
     }
 }
 
-} // namespace desktop
+} // namespace base

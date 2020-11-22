@@ -21,7 +21,7 @@
 
 #include <gtest/gtest.h>
 
-namespace desktop {
+namespace base {
 
 namespace {
 
@@ -193,4 +193,4 @@ TEST(diff_block_c, block_difference_test_first)
     }
 }
 
-} // namespace desktop
+} // namespace base

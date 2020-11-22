@@ -17,12 +17,12 @@
 //
 
 #include "base/memory/aligned_memory.h"
-#include "desktop/diff_block_32bpp_sse2.h"
+#include "base/desktop/diff_block_32bpp_sse2.h"
 
 #include <gtest/gtest.h>
 #include <libyuv/cpu_id.h>
 
-namespace desktop {
+namespace base {
 
 namespace {
 
@@ -206,4 +206,4 @@ TEST(diff_block_sse2, block_difference_test_first)
     }
 }
 
-} // namespace desktop
+} // namespace base
