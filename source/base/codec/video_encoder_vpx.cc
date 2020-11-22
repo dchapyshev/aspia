@@ -32,25 +32,6 @@ namespace {
 
 const std::chrono::milliseconds kTargetFrameInterval{ 80 };
 
-// Target quantizer at which stop the encoding top-off.
-const int kTargetQuantizerForVp8TopOff = 30;
-
-// Estimated size (in bytes per megapixel) of encoded frame at target quantizer value
-// (see kTargetQuantizerForVp8TopOff). Compression ratio varies depending on the image, so this
-// is just a rough estimate. It's used to predict when encoded "big" frame may be too large to
-// be delivered to the client quickly.
-static const int64_t kEstimatedBytesPerMegapixel = 100000;
-static const int64_t kPixelsPerMegapixel = 1000000;
-
-// Threshold in number of updated pixels used to detect "big" frames. These frames update
-// significant portion of the screen compared to the preceding frames. For these frames min
-// quantizer may need to be adjusted in order to ensure that they get delivered to the client
-// as soon as possible, in exchange for lower-quality image.
-static const int64_t kBigFrameThresholdPixels = 300000;
-
-// Number of samples used to estimate processing time for the next frame.
-const int kStatsWindow = 5;
-
 // Defines the dimension of a macro block. This is used to compute the active map for the encoder.
 const int kMacroBlockSize = 16;
 
@@ -59,13 +40,6 @@ const int kVp9I420ProfileNumber = 0;
 
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
-
-const int kDefaultTargetBitrateKbps = 1000;
-
-// Minimum target bitrate per megapixel. The value is chosen experimentally such that when screen
-// is not changing the codec converges to the target quantizer above in less than 10 frames.
-// This value is for VP8 only; reconsider the value for VP9.
-const int kVp8MinimumTargetBitrateKbpsPerMegapixel = 2500;
 
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 {
@@ -181,9 +155,7 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 }
 
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
-    : VideoEncoder(encoding),
-      bitrate_filter_(kVp8MinimumTargetBitrateKbpsPerMegapixel),
-      updated_region_area_(kStatsWindow)
+    : VideoEncoder(encoding)
 {
     memset(&config_, 0, sizeof(config_));
     memset(&active_map_, 0, sizeof(active_map_));
@@ -198,8 +170,6 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     if (packet->has_format())
     {
         const Size& frame_size = frame->size();
-
-        bitrate_filter_.setFrameSize(frame_size.width(), frame_size.height());
 
         createImage(frame_size, &image_, &image_buffer_);
         createActiveMap(frame_size);
@@ -219,9 +189,7 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
-    int64_t updated_area = prepareImageAndActiveMap(is_key_frame, frame, packet);
-
-    updateConfig(updated_area);
+    prepareImageAndActiveMap(is_key_frame, frame, packet);
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
@@ -236,8 +204,6 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
                            0, // flags
                            VPX_DL_REALTIME);
     DCHECK_EQ(ret, VPX_CODEC_OK);
-
-    top_off_is_active_ = config_.rc_min_quantizer > kTargetQuantizerForVp8TopOff;
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;
@@ -254,11 +220,6 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
             break;
         }
     }
-}
-
-void VideoEncoderVPX::setBandwidthEstimateKbps(int bandwidth_kbps)
-{
-    bitrate_filter_.setBandwidthEstimateKbps(bandwidth_kbps);
 }
 
 void VideoEncoderVPX::createActiveMap(const Size& size)
@@ -295,7 +256,7 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
     // conservative default.
-    config_.rc_target_bitrate = kDefaultTargetBitrateKbps;
+    config_.rc_target_bitrate = 1000;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
@@ -332,7 +293,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
     // conservative default.
-    config_.rc_target_bitrate = kDefaultTargetBitrateKbps;
+    config_.rc_target_bitrate = 1000;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     DCHECK_EQ(VPX_CODEC_OK, ret);
@@ -355,7 +316,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     DCHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-int64_t VideoEncoderVPX::prepareImageAndActiveMap(
+void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
 {
     Rect image_rect = Rect::makeWH(image_->w, image_->h);
@@ -391,16 +352,13 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
         updated_region = Region(image_rect);
     }
 
-    if (!top_off_is_active_)
-        clearActiveMap();
+    clearActiveMap();
 
     const int y_stride = image_->stride[0];
     const int uv_stride = image_->stride[1];
     uint8_t* y_data = image_->planes[0];
     uint8_t* u_data = image_->planes[1];
     uint8_t* v_data = image_->planes[2];
-
-    int64_t updated_area = 0;
 
     for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
     {
@@ -419,55 +377,14 @@ int64_t VideoEncoderVPX::prepareImageAndActiveMap(
                            width,
                            height);
 
-        updated_area += width * height;
         addRectToActiveMap(rect);
-    }
 
-    if (top_off_is_active_)
-        regionFromActiveMap(&updated_region);
-
-    for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
-    {
         proto::Rect* dirty_rect = packet->add_dirty_rect();
-        Rect rect = it.rect();
-
         dirty_rect->set_x(rect.x());
         dirty_rect->set_y(rect.y());
         dirty_rect->set_width(rect.width());
         dirty_rect->set_height(rect.height());
     }
-
-    return updated_area;
-}
-
-void VideoEncoderVPX::regionFromActiveMap(Region* updated_region)
-{
-    const uint8_t* map = active_map_.active_map;
-
-    for (int y = 0; y < static_cast<int>(active_map_.rows); ++y)
-    {
-        for (int x0 = 0; x0 < static_cast<int>(active_map_.cols);)
-        {
-            int x1 = x0;
-
-            for (; x1 < static_cast<int>(active_map_.cols); ++x1)
-            {
-                if (map[y * active_map_.cols + x1] == 0)
-                    break;
-            }
-
-            if (x1 > x0)
-            {
-                updated_region->addRect(Rect::makeLTRB(
-                    kMacroBlockSize * x0, kMacroBlockSize * y, kMacroBlockSize * x1,
-                    kMacroBlockSize * (y + 1)));
-            }
-
-            x0 = x1 + 1;
-        }
-    }
-
-    updated_region->intersectWith(Rect::makeWH(image_->w, image_->h));
 }
 
 void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
@@ -491,55 +408,6 @@ void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
 void VideoEncoderVPX::clearActiveMap()
 {
     memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
-}
-
-void VideoEncoderVPX::updateConfig(int64_t updated_area)
-{
-    bool changed = false;
-
-    uint32_t target_bitrate = static_cast<uint32_t>(bitrate_filter_.targetBitrateKbps());
-    if (config_.rc_target_bitrate != target_bitrate)
-    {
-        config_.rc_target_bitrate = target_bitrate;
-        changed = true;
-    }
-
-    uint32_t min_quantizer = 20;
-    uint32_t max_quantizer = 30;
-
-    if (updated_area - updated_region_area_.max() > kBigFrameThresholdPixels)
-    {
-        int64_t expected_frame_size =
-            updated_area * kEstimatedBytesPerMegapixel / kPixelsPerMegapixel;
-        std::chrono::milliseconds expected_send_delay(expected_frame_size / target_bitrate);
-
-        if (expected_send_delay > kTargetFrameInterval)
-        {
-            max_quantizer = 50;
-            min_quantizer = 50;
-        }
-    }
-
-    updated_region_area_.record(updated_area);
-
-    if (config_.rc_min_quantizer != min_quantizer)
-    {
-        config_.rc_min_quantizer = min_quantizer;
-        changed = true;
-    }
-
-    if (config_.rc_max_quantizer != max_quantizer)
-    {
-        config_.rc_max_quantizer = max_quantizer;
-        changed = true;
-    }
-
-    if (!changed)
-        return;
-
-    // Update encoder context.
-    if (vpx_codec_enc_config_set(codec_.get(), &config_))
-        NOTREACHED() << "Unable to set encoder config";
 }
 
 } // namespace base

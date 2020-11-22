@@ -167,12 +167,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/cursor_decoder.h
     codec/cursor_encoder.cc
     codec/cursor_encoder.h
-    codec/encoder_bitrate_filter.cc
-    codec/encoder_bitrate_filter.h
     codec/multi_channel_resampler.cc
     codec/multi_channel_resampler.h
-    codec/running_samples.cc
-    codec/running_samples.h
     codec/scale_reducer.cc
     codec/scale_reducer.h
     codec/scoped_vpx_codec.cc
@@ -194,13 +190,7 @@ list(APPEND SOURCE_BASE_CODEC
     codec/webm_file_muxer.cc
     codec/webm_file_muxer.h
     codec/webm_file_writer.cc
-    codec/webm_file_writer.h
-    codec/weighted_samples.cc
-    codec/weighted_samples.h)
-
-list(APPEND SOURCE_BASE_CODEC_TESTS
-    codec/running_samples_unittest.cc
-    codec/weighted_samples_unittest.cc)
+    codec/webm_file_writer.h)
 
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc
@@ -631,7 +621,7 @@ endif()
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
 source_group(audio FILES ${SOURCE_BASE_AUDIO})
-source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
+source_group(codec FILES ${SOURCE_BASE_CODEC})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
@@ -696,7 +686,6 @@ endif()
 
 add_executable(aspia_base_tests
     ${SOURCE_BASE_TESTS}
-    ${SOURCE_BASE_CODEC_TESTS}
     ${SOURCE_BASE_CRYPTO_TESTS}
     ${SOURCE_BASE_DESKTOP_TESTS}
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
