@@ -140,8 +140,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
-            // Mark this block as being modified so that it gets
-            // incorporated into a dirty rect.
+            // Mark this block as being modified so that it gets incorporated into a dirty rect.
             *is_different = diff_full_block_func_(prev_block, curr_block, bytes_per_row_);
 
             prev_block += kBytesPerBlock;
@@ -150,8 +149,8 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             ++is_different;
         }
 
-        // If there is a partial column at the end, handle it.
-        // This condition should rarely, if ever, occur.
+        // If there is a partial column at the end, handle it. This condition should rarely, if
+        // ever, occur.
         if (partial_column_width_ != 0)
         {
             *is_different = diffPartialBlock(prev_block,
@@ -168,9 +167,8 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
         is_diff_row_start += diff_stride;
     }
 
-    // If the screen height is not a multiple of the block size, then this
-    // handles the last partial row. This situation is far more common than
-    // the 'partial column' case.
+    // If the screen height is not a multiple of the block size, then this handles the last partial
+    // row. This situation is far more common than the 'partial column' case.
     if (partial_row_height_ != 0)
     {
         const uint8_t* prev_block = prev_block_row_start;
@@ -203,11 +201,8 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
     }
 }
 
-//
-// After the dirty blocks have been identified, this routine merges adjacent
-// blocks into a region.
+// After the dirty blocks have been identified, this routine merges adjacent blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
-//
 void Differ::mergeBlocks(Region* dirty_region)
 {
     uint8_t* is_diff_row_start = diff_info_.get();
@@ -219,8 +214,8 @@ void Differ::mergeBlocks(Region* dirty_region)
 
         for (int x = 0; x < diff_width_; ++x)
         {
-            // We've found a modified block. Look at blocks to the right and
-            // below to group this block with as many others as we can.
+            // We've found a modified block. Look at blocks to the right and below to group this
+            // block with as many others as we can.
             if (*is_different != 0)
             {
                 // Width and height of the rectangle in blocks.
@@ -229,10 +224,8 @@ void Differ::mergeBlocks(Region* dirty_region)
 
                 *is_different = 0;
 
-                // Group with blocks to the right.
-                // We can keep looking until we find an unchanged block because
-                // we have a boundary block which is never marked as having
-                // diffs.
+                // Group with blocks to the right. We can keep looking until we find an unchanged
+                // block because we have a boundary block which is never marked as having diffs.
                 uint8_t* right = is_different + 1;
 
                 while (*right != 0)
@@ -241,9 +234,8 @@ void Differ::mergeBlocks(Region* dirty_region)
                     ++width;
                 }
 
-                // Group with blocks below.
-                // The entire width of blocks that we matched above much match
-                // for each row that we add.
+                // Group with blocks below. The entire width of blocks that we matched above much
+                // match for each row that we add.
                 uint8_t* bottom = is_different;
                 bool found_new_row;
 
@@ -263,8 +255,8 @@ void Differ::mergeBlocks(Region* dirty_region)
                     {
                         ++height;
 
-                        // We need to go back and erase the diff markers so
-                        // that we don't try to add these blocks a second time.
+                        // We need to go back and erase the diff markers so that we don't try to
+                        // add these blocks a second time.
                         right = bottom;
 
                         for (int x2 = 0; x2 < width; ++x2)
@@ -301,10 +293,8 @@ void Differ::calcDirtyRegion(const uint8_t* prev_image,
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);
 
-    //
-    // Now that we've identified the blocks that have changed, merge adjacent
-    // blocks to minimize the number of rects that we return.
-    //
+    // Now that we've identified the blocks that have changed, merge adjacent blocks to minimize
+    // the number of rects that we return.
     mergeBlocks(dirty_region);
 }
 
