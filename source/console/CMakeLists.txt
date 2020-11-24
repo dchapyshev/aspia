@@ -131,7 +131,7 @@ endif()
 
 target_link_libraries(aspia_console
     aspia_base
-    aspia_client
+    aspia_client_core
     aspia_common
     aspia_proto
     aspia_qt_base

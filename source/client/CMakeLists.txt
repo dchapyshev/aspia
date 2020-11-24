@@ -18,7 +18,7 @@
 
 include(translations)
 
-list(APPEND SOURCE_CLIENT
+list(APPEND SOURCE_CLIENT_CORE
     client.cc
     client.h
     client_config.cc
@@ -27,6 +27,8 @@ list(APPEND SOURCE_CLIENT
     client_desktop.h
     client_file_transfer.cc
     client_file_transfer.h
+    client_main.cc
+    client_main.h
     client_proxy.cc
     client_proxy.h
     config_factory.cc
@@ -81,10 +83,10 @@ list(APPEND SOURCE_CLIENT
     status_window_proxy.cc
     status_window_proxy.h)
 
-list(APPEND SOURCE_CLIENT_RESOURCES
+list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
 
-list(APPEND SOURCE_CLIENT_UI
+list(APPEND SOURCE_CLIENT_CORE_UI
     ui/address_bar.cc
     ui/address_bar.h
     ui/address_bar_model.cc
@@ -168,41 +170,109 @@ list(APPEND SOURCE_CLIENT_UI
     ui/tree_to_html.cc
     ui/tree_to_html.h)
 
-source_group("" FILES ${SOURCE_CLIENT})
-source_group(resources FILES ${SOURCE_CLIENT_RESOURCES})
-source_group(ui FILES ${SOURCE_CLIENT_UI})
+source_group("" FILES ${SOURCE_CLIENT_CORE})
+source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
+source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 
-add_library(aspia_client STATIC
-    ${SOURCE_CLIENT}
-    ${SOURCE_CLIENT_RESOURCES}
-    ${SOURCE_CLIENT_UI})
-target_link_libraries(aspia_client
+add_library(aspia_client_core STATIC
+    ${SOURCE_CLIENT_CORE}
+    ${SOURCE_CLIENT_CORE_RESOURCES}
+    ${SOURCE_CLIENT_CORE_UI})
+target_link_libraries(aspia_client_core
     aspia_base
     aspia_common
     aspia_proto
+    aspia_qt_base
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
-set_target_properties(aspia_client PROPERTIES COMPILE_DEFINITIONS "CLIENT_IMPLEMENTATION")
-set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_client PROPERTY AUTOUIC ON)
-set_property(TARGET aspia_client PROPERTY AUTORCC ON)
+set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
+qt5_import_plugins(aspia_client_core
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
-    file(GLOB CLIENT_TS_FILES translations/*.ts)
+    file(GLOB CLIENT_CORE_TS_FILES translations/*.ts)
 
-    add_translations(aspia_client QRC_FILE "translations/client_translations.qrc" TS_FILES ${CLIENT_TS_FILES})
+    add_translations(aspia_client_core QRC_FILE "translations/client_translations.qrc" TS_FILES ${CLIENT_CORE_TS_FILES})
 
     # Get the list of files containing messages.
-    file(GLOB_RECURSE CLIENT_TR_SOURCES
+    file(GLOB_RECURSE CLIENT_CORE_TR_SOURCES
         ${PROJECT_SOURCE_DIR}/source/client/*.cc
         ${PROJECT_SOURCE_DIR}/source/client/*.cpp
         ${PROJECT_SOURCE_DIR}/source/client/*.h
         ${PROJECT_SOURCE_DIR}/source/client/*.ui)
 
-    create_translation(TS_CLIENT_UPDATE ${CLIENT_TR_SOURCES} ${CLIENT_TS_FILES})
-    add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_UPDATE})
+    create_translation(TS_CLIENT_CORE_UPDATE ${CLIENT_CORE_TR_SOURCES} ${CLIENT_CORE_TS_FILES})
+    add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_CORE_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
+
+if (WIN32)
+    set(CLIENT_PLATFORM_LIBS
+        avrt
+        crypt32
+        dwmapi
+        imm32
+        iphlpapi
+        netapi32
+        shlwapi
+        userenv
+        uxtheme
+        version
+        winmm
+        wtsapi32
+        Qt5::WinMain)
+endif()
+
+if (LINUX)
+    set(CLIENT_PLATFORM_LIBS stdc++fs Xfixes ICU::uc ICU::dt)
+endif()
+
+if (APPLE)
+    set(CLIENT_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio ICU::uc ICU::dt)
+    set(aspia_client_ICON ${PROJECT_SOURCE_DIR}/source/client/resources/main.icns)
+    set(aspia_client_PLIST ${PROJECT_SOURCE_DIR}/source/client/Info.plist)
+
+    set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+endif()
+
+add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
+target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
+
+if (WIN32)
+    set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(aspia_client PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+if (APPLE)
+    set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "Aspia Client")
+    set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
+    set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_client_ICON})
+endif()
+
+install(TARGETS aspia_client
+    BUNDLE DESTINATION . COMPONENT aspia_client
+    RUNTIME DESTINATION bin COMPONENT aspia_client)
+
+if (APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+endif()
+
+set(CPACK_COMPONENTS_ALL aspia_client)
+set(CPACK_PACKAGE_NAME "aspia-client")
+set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Aspia Client")
+set(CPACK_PACKAGE_VERSION "2.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "2")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+
+include(CPack)

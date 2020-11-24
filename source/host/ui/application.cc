@@ -71,9 +71,9 @@ bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* me
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName(QLatin1String("Aspia"));
-    setApplicationName(QLatin1String("Host"));
-    setApplicationVersion(QLatin1String(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Host");
+    setApplicationVersion(ASPIA_VERSION_STRING);
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(

@@ -20,6 +20,49 @@
     </message>
 </context>
 <context>
+    <name>Client</name>
+    <message>
+        <location filename="../client_main.cc" line="51"/>
+        <source>Remote computer address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="52"/>
+        <source>address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="56"/>
+        <source>Remote computer port.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="57"/>
+        <source>port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="62"/>
+        <source>Name of user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="63"/>
+        <source>username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="67"/>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="72"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ClientDialog</name>
     <message>
         <source>Connection</source>
@@ -64,6 +107,19 @@
     <message>
         <source>Connect</source>
         <translation type="vanished">Verbinden</translation>
+    </message>
+</context>
+<context>
+    <name>Console</name>
+    <message>
+        <location filename="../client_main.cc" line="108"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="109"/>
+        <source>Incorrect session type entered.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
