@@ -77,21 +77,6 @@
         <translation type="vanished">Порт сервера:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="20"/>
-        <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="35"/>
-        <source>Router:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="65"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>User Name:</source>
         <translation type="obsolete">Ім&apos;я користувача:</translation>
     </message>
@@ -100,13 +85,35 @@
         <translation type="obsolete">Пароль:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="99"/>
         <source>Session Type:</source>
-        <translation>Тип сесії:</translation>
+        <translation type="vanished">Тип сесії:</translation>
     </message>
     <message>
         <source>Connect</source>
         <translation type="vanished">Підключити</translation>
+    </message>
+</context>
+<context>
+    <name>ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.ui" line="20"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="35"/>
+        <source>Router:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="65"/>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="99"/>
+        <source>Session Type:</source>
+        <translation type="unfinished">Тип сесії:</translation>
     </message>
 </context>
 <context>
@@ -1237,34 +1244,12 @@
         <translation type="vanished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="298"/>
-        <source>Without Router</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="56"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation type="obsolete">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="100"/>
-        <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="217"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="218"/>
-        <source>An invalid computer address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Попередження</translation>
     </message>
 </context>
 <context>
@@ -1351,6 +1336,36 @@
     <message>
         <source>Session started.</source>
         <translation type="vanished">Сесію розпочато.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="56"/>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="99"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Підтвердження</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="100"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="217"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="218"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="298"/>
+        <source>Without Router</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

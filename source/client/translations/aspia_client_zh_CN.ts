@@ -65,28 +65,43 @@
 <context>
     <name>ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.ui" line="20"/>
         <source>Aspia Client</source>
-        <translation>Aspia 客户端</translation>
+        <translation type="vanished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="35"/>
-        <source>Router:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.ui" line="65"/>
         <source>Address:</source>
-        <translation>地址：</translation>
+        <translation type="vanished">地址：</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="99"/>
         <source>Session Type:</source>
-        <translation>会话类型：</translation>
+        <translation type="vanished">会话类型：</translation>
     </message>
     <message>
         <source>Connect</source>
         <translation type="vanished">连接</translation>
+    </message>
+</context>
+<context>
+    <name>ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.ui" line="20"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished">Aspia 客户端</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="35"/>
+        <source>Router:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="65"/>
+        <source>Address:</source>
+        <translation type="unfinished">地址：</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="99"/>
+        <source>Session Type:</source>
+        <translation type="unfinished">会话类型：</translation>
     </message>
 </context>
 <context>
@@ -926,34 +941,24 @@
 <context>
     <name>client::ClientDialog</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="298"/>
-        <source>Without Router</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="56"/>
         <source>Address:</source>
-        <translation type="unfinished">地址：</translation>
+        <translation type="obsolete">地址：</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="99"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="100"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>输入的地址列表将被清除，继续吗？</translation>
+        <translation type="vanished">输入的地址列表将被清除，继续吗？</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="217"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="218"/>
         <source>An invalid computer address was entered.</source>
-        <translation>输入了无效的计算机地址。</translation>
+        <translation type="vanished">输入了无效的计算机地址。</translation>
     </message>
 </context>
 <context>
@@ -1061,6 +1066,36 @@
     <message>
         <source>File Transfer</source>
         <translation type="vanished">文件传输</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="56"/>
+        <source>Address:</source>
+        <translation type="unfinished">地址：</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="99"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">确认</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="100"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished">输入的地址列表将被清除，继续吗？</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="217"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="218"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished">输入了无效的计算机地址。</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="298"/>
+        <source>Without Router</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -63,24 +63,24 @@
     </message>
 </context>
 <context>
-    <name>ClientDialog</name>
+    <name>ClientWindow</name>
     <message>
-        <location filename="../ui/client_dialog.ui" line="20"/>
+        <location filename="../ui/client_window.ui" line="20"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="35"/>
+        <location filename="../ui/client_window.ui" line="35"/>
         <source>Router:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="65"/>
+        <location filename="../ui/client_window.ui" line="65"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="99"/>
+        <location filename="../ui/client_window.ui" line="99"/>
         <source>Session Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -881,35 +881,35 @@
     </message>
 </context>
 <context>
-    <name>client::ClientDialog</name>
+    <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_dialog.cc" line="298"/>
-        <source>Without Router</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/client_dialog.cc" line="56"/>
+        <location filename="../ui/client_window.cc" line="56"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="99"/>
+        <location filename="../ui/client_window.cc" line="99"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="100"/>
+        <location filename="../ui/client_window.cc" line="100"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="217"/>
+        <location filename="../ui/client_window.cc" line="217"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="218"/>
+        <location filename="../ui/client_window.cc" line="218"/>
         <source>An invalid computer address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="298"/>
+        <source>Without Router</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

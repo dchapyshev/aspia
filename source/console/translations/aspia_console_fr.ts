@@ -911,7 +911,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1124"/>
+        <location filename="../main_window.cc" line="1127"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -941,56 +941,56 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="820"/>
-        <location filename="../main_window.cc" line="897"/>
+        <location filename="../main_window.cc" line="512"/>
+        <location filename="../main_window.cc" line="823"/>
+        <location filename="../main_window.cc" line="900"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="510"/>
-        <location filename="../main_window.cc" line="898"/>
+        <location filename="../main_window.cc" line="513"/>
+        <location filename="../main_window.cc" line="901"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="713"/>
+        <location filename="../main_window.cc" line="716"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="723"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="721"/>
-        <location filename="../main_window.cc" line="726"/>
+        <location filename="../main_window.cc" line="724"/>
+        <location filename="../main_window.cc" line="729"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="821"/>
+        <location filename="../main_window.cc" line="824"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="857"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="872"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1005"/>
+        <location filename="../main_window.cc" line="1008"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1125"/>
+        <location filename="../main_window.cc" line="1128"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation type="unfinished"></translation>
     </message>

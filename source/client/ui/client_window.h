@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_DIALOG_H
-#define CLIENT__UI__CLIENT_DIALOG_H
+#ifndef CLIENT__UI__CLIENT_WINDOW_H
+#define CLIENT__UI__CLIENT_WINDOW_H
 
 #include "base/macros_magic.h"
 #include "client/client_config.h"
@@ -28,18 +28,18 @@
 class QAbstractButton;
 
 namespace Ui {
-class ClientDialog;
+class ClientWindow;
 } // namespace Ui
 
 namespace client {
 
-class ClientDialog : public QDialog
+class ClientWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog();
+    explicit ClientWindow(QWidget* parent = nullptr);
+    ~ClientWindow();
 
 private slots:
     void sessionTypeChanged(int item_index);
@@ -49,15 +49,15 @@ private slots:
 private:
     void reloadRouters();
 
-    std::unique_ptr<Ui::ClientDialog> ui;
+    std::unique_ptr<Ui::ClientWindow> ui;
 
     RouterConfigList routers_;
     Config config_;
     proto::DesktopConfig desktop_config_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientDialog);
+    DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_DIALOG_H
+#endif // CLIENT__UI__CLIENT_WINDOW_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/client_dialog.h"
+#include "client/ui/client_window.h"
 
 #include "base/logging.h"
 #include "base/net/address.h"
@@ -30,15 +30,15 @@
 #include "client/ui/router_list_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
-#include "ui_client_dialog.h"
+#include "ui_client_window.h"
 
 #include <QMessageBox>
 
 namespace client {
 
-ClientDialog::ClientDialog(QWidget* parent)
+ClientWindow::ClientWindow(QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::ClientDialog>())
+      ui(std::make_unique<Ui::ClientWindow>())
 {
     config_.port = DEFAULT_HOST_TCP_PORT;
     config_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
@@ -110,19 +110,19 @@ ClientDialog::ClientDialog(QWidget* parent)
     });
 
     connect(ui->combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ClientDialog::sessionTypeChanged);
+            this, &ClientWindow::sessionTypeChanged);
 
     connect(ui->button_session_config, &QPushButton::released,
-            this, &ClientDialog::sessionConfigButtonPressed);
+            this, &ClientWindow::sessionConfigButtonPressed);
 
-    connect(ui->button_box, &QDialogButtonBox::clicked, this, &ClientDialog::onButtonBoxClicked);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &ClientWindow::onButtonBoxClicked);
 
     combo_address->setFocus();
 }
 
-ClientDialog::~ClientDialog() = default;
+ClientWindow::~ClientWindow() = default;
 
-void ClientDialog::sessionTypeChanged(int item_index)
+void ClientWindow::sessionTypeChanged(int item_index)
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui->combo_session_type->itemData(item_index).toInt());
@@ -149,7 +149,7 @@ void ClientDialog::sessionTypeChanged(int item_index)
     }
 }
 
-void ClientDialog::sessionConfigButtonPressed()
+void ClientWindow::sessionConfigButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui->combo_session_type->currentData().toInt());
@@ -174,7 +174,7 @@ void ClientDialog::sessionConfigButtonPressed()
     }
 }
 
-void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
+void ClientWindow::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->standardButton(button) == QDialogButtonBox::Cancel)
     {
@@ -290,7 +290,7 @@ void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 }
 
-void ClientDialog::reloadRouters()
+void ClientWindow::reloadRouters()
 {
     QComboBox* combo_router = ui->combo_router;
     combo_router->clear();

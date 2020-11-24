@@ -69,19 +69,16 @@
         <translation type="vanished">Подключение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="20"/>
         <source>Aspia Client</source>
-        <translation>Клиент Aspia</translation>
+        <translation type="vanished">Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="35"/>
         <source>Router:</source>
-        <translation>Маршутизатор:</translation>
+        <translation type="vanished">Маршутизатор:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="65"/>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="vanished">Адрес:</translation>
     </message>
     <message>
         <source>User Name:</source>
@@ -104,9 +101,31 @@
         <translation type="vanished">Порт сервера:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="99"/>
         <source>Session Type:</source>
-        <translation>Тип сессии:</translation>
+        <translation type="vanished">Тип сессии:</translation>
+    </message>
+</context>
+<context>
+    <name>ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.ui" line="20"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished">Клиент Aspia</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="35"/>
+        <source>Router:</source>
+        <translation type="unfinished">Маршутизатор:</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="65"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="99"/>
+        <source>Session Type:</source>
+        <translation type="unfinished">Тип сессии:</translation>
     </message>
 </context>
 <context>
@@ -1257,34 +1276,28 @@
         <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="298"/>
         <source>Without Router</source>
-        <translation>Без маршрутизатора</translation>
+        <translation type="vanished">Без маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="56"/>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="99"/>
         <source>Confirmation</source>
-        <translation>Подтверждение</translation>
+        <translation type="vanished">Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="100"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>Список введенных адресов будет очищен. Продолжить?</translation>
+        <translation type="vanished">Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="217"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="218"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Введен некорректный адрес компьютера.</translation>
+        <translation type="vanished">Введен некорректный адрес компьютера.</translation>
     </message>
 </context>
 <context>
@@ -1423,6 +1436,36 @@
     <message>
         <source>Session started.</source>
         <translation type="vanished">Сессия запущена.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="56"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="99"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="100"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished">Список введенных адресов будет очищен. Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="217"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="218"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished">Введен некорректный адрес компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="298"/>
+        <source>Without Router</source>
+        <translation type="unfinished">Без маршрутизатора</translation>
     </message>
 </context>
 <context>

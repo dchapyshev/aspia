@@ -94,9 +94,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/authorization_dialog.cc
     ui/authorization_dialog.h
     ui/authorization_dialog.ui
-    ui/client_dialog.cc
-    ui/client_dialog.h
-    ui/client_dialog.ui
+    ui/client_window.cc
+    ui/client_window.h
+    ui/client_window.ui
     ui/client_settings.cc
     ui/client_settings.h
     ui/desktop_config_dialog.cc

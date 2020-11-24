@@ -21,7 +21,7 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "client/ui/client_dialog.h"
+#include "client/ui/client_window.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/router_manager_window.h"
@@ -419,7 +419,10 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
-    client::ClientDialog().exec();
+    client::ClientWindow* client_window = new client::ClientWindow(this);
+    client_window->setAttribute(Qt::WA_DeleteOnClose);
+    client_window->show();
+    client_window->activateWindow();
 }
 
 void MainWindow::onDesktopManageConnect()

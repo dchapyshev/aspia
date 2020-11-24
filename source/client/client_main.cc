@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"
-#include "client/ui/client_dialog.h"
+#include "client/ui/client_window.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "qt_base/application.h"
@@ -78,7 +78,7 @@ int clientMain(int argc, char* argv[])
     parser.addOption(session_type_option);
     parser.process(application);
 
-    QScopedPointer<client::ClientDialog> client_dialog;
+    QScopedPointer<client::ClientWindow> client_window;
 
     if (parser.isSet(address_option))
     {
@@ -147,9 +147,9 @@ int clientMain(int argc, char* argv[])
     }
     else
     {
-        client_dialog.reset(new client::ClientDialog());
-        client_dialog->show();
-        client_dialog->activateWindow();
+        client_window.reset(new client::ClientWindow());
+        client_window->show();
+        client_window->activateWindow();
     }
 
     return application.exec();
