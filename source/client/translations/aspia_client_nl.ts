@@ -36,7 +36,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="47"/>
+        <location filename="../ui/client_dialog.ui" line="65"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
         <translation type="vanished">Server Poort:</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.ui" line="81"/>
+        <location filename="../ui/client_dialog.ui" line="99"/>
         <source>Session Type:</source>
         <translation>Sessie Type:</translation>
     </message>
@@ -582,6 +582,62 @@
     <message>
         <source>Remote Computer</source>
         <translation type="obsolete">Computer op afstand</translation>
+    </message>
+</context>
+<context>
+    <name>RouterDialog</name>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="14"/>
+        <source>Router Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="22"/>
+        <source>Name:</source>
+        <translation type="unfinished">Naam:</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="36"/>
+        <source>Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="50"/>
+        <source>User Name:</source>
+        <translation type="unfinished">Gebruikers Naam:</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="64"/>
+        <source>Password:</source>
+        <translation type="unfinished">Wachtwoord:</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.ui" line="101"/>
+        <source>Comment:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RouterListDialog</name>
+    <message>
+        <location filename="../ui/router_list_dialog.ui" line="14"/>
+        <source>Routers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_list_dialog.ui" line="80"/>
+        <source>Name</source>
+        <translation type="unfinished">Naam</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_list_dialog.ui" line="85"/>
+        <source>Address</source>
+        <translation type="unfinished">Adres</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_list_dialog.ui" line="90"/>
+        <source>Port</source>
+        <translation type="unfinished">Poort</translation>
     </message>
 </context>
 <context>
@@ -1121,32 +1177,32 @@
         <translation type="vanished">Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="50"/>
+        <location filename="../ui/client_dialog.cc" line="298"/>
         <source>Without Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="62"/>
+        <location filename="../ui/client_dialog.cc" line="56"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="98"/>
+        <location filename="../ui/client_dialog.cc" line="99"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="99"/>
+        <location filename="../ui/client_dialog.cc" line="100"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="216"/>
+        <location filename="../ui/client_dialog.cc" line="217"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_dialog.cc" line="217"/>
+        <location filename="../ui/client_dialog.cc" line="218"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1816,6 +1872,63 @@
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::RouterDialog</name>
+    <message numerus="yes">
+        <location filename="../ui/router_dialog.cc" line="98"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.cc" line="106"/>
+        <source>Name can not be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.cc" line="116"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.cc" line="125"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/router_dialog.cc" line="134"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.cc" line="145"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_dialog.cc" line="172"/>
+        <source>Warning</source>
+        <translation type="unfinished">Waarschuwing</translation>
+    </message>
+</context>
+<context>
+    <name>client::RouterListDialog</name>
+    <message>
+        <location filename="../ui/router_list_dialog.cc" line="106"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bevestiging</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_list_dialog.cc" line="107"/>
+        <source>Are you sure you want to remove router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

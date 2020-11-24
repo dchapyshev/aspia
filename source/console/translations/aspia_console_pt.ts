@@ -636,39 +636,6 @@
     </message>
 </context>
 <context>
-    <name>RouterDialog</name>
-    <message>
-        <location filename="../router_dialog.ui" line="14"/>
-        <source>Router Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="22"/>
-        <source>Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="36"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="50"/>
-        <source>User Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="64"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="101"/>
-        <source>Comment:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UpdateSettingsDialog</name>
     <message>
         <location filename="../update_settings_dialog.ui" line="14"/>
@@ -694,27 +661,27 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="105"/>
+        <location filename="../address_book_dialog.cc" line="116"/>
         <source>Without Encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="107"/>
+        <location filename="../address_book_dialog.cc" line="118"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="136"/>
+        <location filename="../address_book_dialog.cc" line="147"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="119"/>
+        <location filename="../address_book_dialog.cc" line="130"/>
         <source>Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="214"/>
+        <location filename="../address_book_dialog.cc" line="225"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -722,12 +689,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="220"/>
+        <location filename="../address_book_dialog.cc" line="231"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="227"/>
+        <location filename="../address_book_dialog.cc" line="238"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -735,12 +702,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="255"/>
+        <location filename="../address_book_dialog.cc" line="266"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="261"/>
+        <location filename="../address_book_dialog.cc" line="272"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -748,12 +715,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="269"/>
+        <location filename="../address_book_dialog.cc" line="280"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="272"/>
+        <location filename="../address_book_dialog.cc" line="283"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -761,29 +728,29 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="276"/>
+        <location filename="../address_book_dialog.cc" line="287"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="279"/>
-        <location filename="../address_book_dialog.cc" line="478"/>
+        <location filename="../address_book_dialog.cc" line="290"/>
+        <location filename="../address_book_dialog.cc" line="496"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="379"/>
-        <location filename="../address_book_dialog.cc" line="434"/>
+        <location filename="../address_book_dialog.cc" line="391"/>
+        <location filename="../address_book_dialog.cc" line="449"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="380"/>
+        <location filename="../address_book_dialog.cc" line="392"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="435"/>
+        <location filename="../address_book_dialog.cc" line="450"/>
         <source>Are you sure you want to remove router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1096,45 +1063,6 @@
     <message>
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>console::RouterDialog</name>
-    <message numerus="yes">
-        <location filename="../router_dialog.cc" line="97"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="105"/>
-        <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="115"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../router_dialog.cc" line="125"/>
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="136"/>
-        <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="163"/>
-        <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

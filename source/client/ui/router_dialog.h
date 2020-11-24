@@ -16,27 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__ROUTER_DIALOG_H
-#define CONSOLE__ROUTER_DIALOG_H
+#ifndef CLIENT__UI__ROUTER_DIALOG_H
+#define CLIENT__UI__ROUTER_DIALOG_H
 
-#include "proto/address_book.pb.h"
-#include "ui_router_dialog.h"
+#include "client/router_config.h"
 
 #include <optional>
 
 #include <QDialog>
 
-namespace console {
+class QAbstractButton;
+
+namespace Ui {
+class RouterDialog;
+} // namespace Ui
+
+namespace client {
 
 class RouterDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    RouterDialog(const std::optional<proto::address_book::Router>& router, QWidget* parent);
+    RouterDialog(const std::optional<RouterConfig>& router, QWidget* parent);
     ~RouterDialog();
 
-    const std::optional<proto::address_book::Router>& router() const { return router_; }
+    const std::optional<RouterConfig>& router() const { return router_; }
 
 private slots:
     void showPasswordButtonToggled(bool checked);
@@ -45,10 +50,10 @@ private slots:
 private:
     void showError(const QString& message);
 
-    Ui::RouterDialog ui;
-    std::optional<proto::address_book::Router> router_;
+    std::unique_ptr<Ui::RouterDialog> ui;
+    std::optional<RouterConfig> router_;
 };
 
-} // namespace console
+} // namespace client
 
-#endif // CONSOLE__ROUTER_DIALOG_H
+#endif // CLIENT__UI__ROUTER_DIALOG_H

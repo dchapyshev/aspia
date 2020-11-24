@@ -22,10 +22,12 @@
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
+#include "client/router_config_storage.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "client/ui/router_list_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
 #include "ui_client_dialog.h"
@@ -34,10 +36,9 @@
 
 namespace client {
 
-ClientDialog::ClientDialog(const RouterList& routers, QWidget* parent)
+ClientDialog::ClientDialog(QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::ClientDialog>()),
-      routers_(routers)
+      ui(std::make_unique<Ui::ClientDialog>())
 {
     config_.port = DEFAULT_HOST_TCP_PORT;
     config_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
@@ -46,16 +47,9 @@ ClientDialog::ClientDialog(const RouterList& routers, QWidget* parent)
     ui->setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    QComboBox* combo_router = ui->combo_router;
-    combo_router->addItem(tr("Without Router"), -1);
+    reloadRouters();
 
-    for (size_t i = 0; i < routers.size(); ++i)
-        combo_router->addItem(QString::fromStdU16String(routers[i].name), static_cast<int>(i));
-
-    if (routers.empty())
-        combo_router->setCurrentIndex(0);
-
-    connect(combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index)
+    connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index)
     {
         if (ui->combo_router->itemData(index).toInt() == -1)
         {
@@ -65,6 +59,13 @@ ClientDialog::ClientDialog(const RouterList& routers, QWidget* parent)
         {
             ui->label_address->setText("ID:");
         }
+    });
+
+    connect(ui->button_routers, &QPushButton::released, [this]()
+    {
+        RouterListDialog dialog(this);
+        if (dialog.exec() == QDialog::Accepted)
+            reloadRouters();
     });
 
     QComboBox* combo_address = ui->combo_address;
@@ -287,6 +288,24 @@ void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
         accept();
         close();
     }
+}
+
+void ClientDialog::reloadRouters()
+{
+    QComboBox* combo_router = ui->combo_router;
+    combo_router->clear();
+
+    combo_router->addItem(tr("Without Router"), -1);
+
+    std::unique_ptr<RouterConfigStorage> storage = RouterConfigStorage::open();
+    if (storage)
+        routers_ = storage->routerConfigList();
+
+    for (size_t i = 0; i < routers_.size(); ++i)
+        combo_router->addItem(QString::fromStdU16String(routers_[i].name), static_cast<int>(i));
+
+    if (routers_.empty())
+        combo_router->setCurrentIndex(0);
 }
 
 } // namespace client

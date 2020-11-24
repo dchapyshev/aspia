@@ -19,12 +19,14 @@
 #include "client/router_config_storage.h"
 
 #include "base/logging.h"
-#include "base/crypto/os_crypt.h"
 
 namespace client {
 
 RouterConfigStorage::RouterConfigStorage()
-    : storage_(base::JsonSettings::Scope::USER, "aspia", "router_storage")
+    : storage_(base::JsonSettings::Scope::USER,
+               "aspia",
+               "routers",
+               base::JsonSettings::Encrypted::YES)
 {
     // Nothing
 }
@@ -44,6 +46,13 @@ RouterConfigList RouterConfigStorage::routerConfigList()
     for (const auto& item : storage_.getArray("routers"))
     {
         RouterConfig config;
+
+        config.guid = item.get<std::string>("guid");
+        if (config.guid.empty())
+        {
+            LOG(LS_ERROR) << "Invalid 'guid' field";
+            return RouterConfigList();
+        }
 
         config.name = item.get<std::u16string>("name");
         if (config.name.empty())
@@ -73,18 +82,14 @@ RouterConfigList RouterConfigStorage::routerConfigList()
             return RouterConfigList();
         }
 
-        std::string cipher_password = item.get<std::string>("password");
-        if (cipher_password.empty())
+        config.password = item.get<std::u16string>("password");
+        if (config.password.empty())
         {
             LOG(LS_ERROR) << "Invalid 'password' field";
             return RouterConfigList();
         }
 
-        if (!base::OSCrypt::decryptString16(cipher_password, &config.password))
-        {
-            LOG(LS_ERROR) << "Invalid 'password' field";
-            return RouterConfigList();
-        }
+        config.comment = item.get<std::u16string>("comment");
 
         list.emplace_back(std::move(config));
     }
@@ -99,6 +104,12 @@ void RouterConfigStorage::setRouterConfigList(const RouterConfigList& configs)
     for (const auto& config : configs)
     {
         base::Settings item;
+
+        if (config.guid.empty())
+        {
+            LOG(LS_ERROR) << "Invalid 'guid' field";
+            return;
+        }
 
         if (config.name.empty())
         {
@@ -130,18 +141,13 @@ void RouterConfigStorage::setRouterConfigList(const RouterConfigList& configs)
             return;
         }
 
-        std::string cipher_password;
-        if (!base::OSCrypt::encryptString16(config.password, &cipher_password))
-        {
-            LOG(LS_ERROR) << "Invalid 'password' filed";
-            return;
-        }
-
+        item.set("guid", config.guid);
         item.set("name", config.name);
         item.set("address", config.address);
         item.set("port", config.port);
         item.set("username", config.username);
-        item.set("password", cipher_password);
+        item.set("password", config.password);
+        item.set("comment", config.comment);
 
         array.emplace_back(std::move(item));
     }

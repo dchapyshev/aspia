@@ -16,28 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__WEIGHTED_SAMPLES_H
-#define BASE__CODEC__WEIGHTED_SAMPLES_H
+#include "client/ui/router_tree_item.h"
 
-namespace base {
+namespace client {
 
-// Aggregates the samples and gives each of them a weight based on its age. This class can help to
-// smooth the input data.
-class WeightedSamples final
+RouterTreeItem::RouterTreeItem(const RouterConfig& router)
 {
-public:
-    explicit WeightedSamples(double weight_factor);
-    ~WeightedSamples();
+    setRouter(router);
+}
 
-    void record(double value);
-    double weightedAverage() const;
+RouterTreeItem::~RouterTreeItem() = default;
 
-private:
-    const double weight_factor_;
-    double weighted_sum_ = 0;
-    double weight_ = 0;
-};
+void RouterTreeItem::setRouter(const RouterConfig& router)
+{
+    router_ = router;
 
-} // namespace base
+    setText(0, QString::fromStdU16String(router.name));
+    setText(1, QString::fromStdU16String(router.address));
+    setText(2, QString::number(router.port));
+}
 
-#endif // BASE__CODEC__WEIGHTED_SAMPLES_H
+const RouterConfig& RouterTreeItem::router() const
+{
+    return router_;
+}
+
+} // namespace client

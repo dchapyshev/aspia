@@ -16,48 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_DIALOG_H
-#define CLIENT__UI__CLIENT_DIALOG_H
+#ifndef CLIENT__UI__ROUTER_LIST_DIALOG_H
+#define CLIENT__UI__ROUTER_LIST_DIALOG_H
 
-#include "base/macros_magic.h"
-#include "client/client_config.h"
-#include "proto/desktop.pb.h"
+#include "ui_router_list_dialog.h"
 
 #include <QDialog>
 
 class QAbstractButton;
 
-namespace Ui {
-class ClientDialog;
-} // namespace Ui
-
 namespace client {
 
-class ClientDialog : public QDialog
+class RouterListDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog();
+    explicit RouterListDialog(QWidget* parent = nullptr);
+    ~RouterListDialog();
 
 private slots:
-    void sessionTypeChanged(int item_index);
-    void sessionConfigButtonPressed();
-    void onButtonBoxClicked(QAbstractButton* button);
+    void reloadRouters();
+    void currentRouterChanged();
+    void addRouter();
+    void modifyRouter();
+    void deleteRouter();
+    void buttonBoxClicked(QAbstractButton* button);
 
 private:
-    void reloadRouters();
-
-    std::unique_ptr<Ui::ClientDialog> ui;
-
-    RouterConfigList routers_;
-    Config config_;
-    proto::DesktopConfig desktop_config_;
-
-    DISALLOW_COPY_AND_ASSIGN(ClientDialog);
+    Ui::RouterListDialog ui;
 };
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_DIALOG_H
+#endif // CLIENT__UI__ROUTER_LIST_DIALOG_H

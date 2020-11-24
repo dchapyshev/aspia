@@ -141,12 +141,20 @@ list(APPEND SOURCE_CLIENT_UI
     ui/qt_file_manager_window.cc
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
+    ui/router_dialog.cc
+    ui/router_dialog.h
+    ui/router_dialog.ui
+    ui/router_list_dialog.cc
+    ui/router_list_dialog.h
+    ui/router_list_dialog.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui
     ui/router_status_dialog.cc
     ui/router_status_dialog.h
     ui/router_status_dialog.ui
+    ui/router_tree_item.cc
+    ui/router_tree_item.h
     ui/router_user_dialog.cc
     ui/router_user_dialog.h
     ui/router_user_dialog.ui

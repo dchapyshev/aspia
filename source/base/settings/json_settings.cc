@@ -19,7 +19,9 @@
 #include "base/settings/json_settings.h"
 
 #include "base/logging.h"
+#include "base/crypto/os_crypt.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_util.h"
 #include "base/files/scoped_temp_file.h"
 #include "base/strings/string_split.h"
 
@@ -27,8 +29,6 @@
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
-
-#include <fstream>
 
 namespace base {
 
@@ -92,7 +92,8 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
 } // namespace
 
-JsonSettings::JsonSettings(std::string_view file_name)
+JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
+    : encrypted_(encrypted)
 {
     path_ = filePath(file_name);
     if (path_.empty())
@@ -103,19 +104,21 @@ JsonSettings::JsonSettings(std::string_view file_name)
 
 JsonSettings::JsonSettings(Scope scope,
                            std::string_view application_name,
-                           std::string_view file_name)
+                           std::string_view file_name,
+                           Encrypted encrypted)
+    : encrypted_(encrypted)
 {
     path_ = filePath(scope, application_name, file_name);
     if (path_.empty())
         return;
 
-    readFile(path_, map());
+    readFile(path_, map(), encrypted_);
 }
 
 JsonSettings::~JsonSettings()
 {
     if (isChanged())
-        writeFile(path_, constMap());
+        writeFile(path_, constMap(), encrypted_);
 }
 
 bool JsonSettings::isWritable() const
@@ -203,7 +206,7 @@ std::filesystem::path JsonSettings::filePath(Scope scope,
 }
 
 // static
-bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
+bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypted encrypted)
 {
     map.clear();
 
@@ -228,11 +231,28 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
         return true;
     }
 
-    std::ifstream stream(file);
-    rapidjson::IStreamWrapper wrapper(stream);
+    std::string buffer;
+    if (!base::readFile(file, &buffer))
+    {
+        LOG(LS_ERROR) << "Failed to read config file";
+        return false;
+    }
 
+    if (encrypted == Encrypted::YES)
+    {
+        std::string decrypted;
+        if (!OSCrypt::decryptString(buffer, &decrypted))
+        {
+            LOG(LS_ERROR) << "Failed to decrypt config file";
+            return false;
+        }
+
+        buffer.swap(decrypted);
+    }
+
+    rapidjson::StringStream stream(buffer.data());
     rapidjson::Document doc;
-    doc.ParseStream(wrapper);
+    doc.ParseStream(stream);
 
     if (doc.HasParseError())
     {
@@ -246,7 +266,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map)
 }
 
 // static
-bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map)
+bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, Encrypted encrypted)
 {
     std::error_code error_code;
     if (!std::filesystem::create_directories(file.parent_path(), error_code))
@@ -255,10 +275,8 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map)
             return false;
     }
 
-    std::ofstream stream(file);
-    rapidjson::OStreamWrapper wrapper(stream);
-
-    rapidjson::PrettyWriter<rapidjson::OStreamWrapper> json(wrapper);
+    rapidjson::StringBuffer buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> json(buffer);
 
     // Start JSON document.
     json.StartObject();
@@ -301,7 +319,42 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map)
     // End JSON document.
     json.EndObject();
 
-    return json.IsComplete() && !stream.fail();
+    if (!json.IsComplete())
+    {
+        LOG(LS_ERROR) << "Incomplete json document";
+        return false;
+    }
+
+    std::string_view source_buffer(buffer.GetString(), buffer.GetSize());
+
+    if (encrypted == Encrypted::YES)
+    {
+        std::string cipher_buffer;
+
+        if (!OSCrypt::encryptString(source_buffer, &cipher_buffer))
+        {
+            LOG(LS_ERROR) << "Failed to encrypt config file";
+            return false;
+        }
+
+        if (!base::writeFile(file, cipher_buffer))
+        {
+            LOG(LS_ERROR) << "Failed to write config file";
+            return false;
+        }
+    }
+    else
+    {
+        DCHECK_EQ(encrypted, Encrypted::NO);
+
+        if (!base::writeFile(file, source_buffer))
+        {
+            LOG(LS_ERROR) << "Failed to write config file";
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace base

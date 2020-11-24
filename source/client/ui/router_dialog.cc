@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "console/router_dialog.h"
+#include "client/ui/router_dialog.h"
 
 #include "base/guid.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "base/strings/unicode.h"
+#include "ui_router_dialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
 
-namespace console {
+namespace client {
 
 namespace {
 
@@ -37,30 +37,31 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 RouterDialog::RouterDialog(
-    const std::optional<proto::address_book::Router>& router, QWidget* parent)
+    const std::optional<RouterConfig>& router, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::RouterDialog>()),
       router_(router)
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     if (router_.has_value())
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(base::utf16FromUtf8(router_->address()));
-        address.setPort(router_->port());
+        address.setHost(router_->address);
+        address.setPort(router_->port);
 
-        ui.edit_name->setText(QString::fromStdString(router_->name()));
-        ui.edit_address->setText(QString::fromStdU16String(address.toString()));
-        ui.edit_username->setText(QString::fromStdString(router_->username()));
-        ui.edit_password->setText(QString::fromStdString(router_->password()));
-        ui.edit_comment->setPlainText(QString::fromStdString(router_->comment()));
+        ui->edit_name->setText(QString::fromStdU16String(router_->name));
+        ui->edit_address->setText(QString::fromStdU16String(address.toString()));
+        ui->edit_username->setText(QString::fromStdU16String(router_->username));
+        ui->edit_password->setText(QString::fromStdU16String(router_->password));
+        ui->edit_comment->setPlainText(QString::fromStdU16String(router_->comment));
     }
 
-    connect(ui.button_show_password, &QPushButton::toggled,
+    connect(ui->button_show_password, &QPushButton::toggled,
             this, &RouterDialog::showPasswordButtonToggled);
-    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
+    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
 
-    ui.edit_name->setFocus();
+    ui->edit_name->setFocus();
 }
 
 RouterDialog::~RouterDialog() = default;
@@ -69,88 +70,96 @@ void RouterDialog::showPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 
-    ui.edit_password->setFocus();
+    ui->edit_password->setFocus();
 }
 
 void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
         reject();
     }
     else
     {
-        QString name = ui.edit_name->text();
+        QString name = ui->edit_name->text();
         if (name.length() > kMaxNameLength)
         {
             showError(tr("Too long name. The maximum length of the name is %n characters.",
                          "", kMaxNameLength));
-            ui.edit_name->setFocus();
-            ui.edit_name->selectAll();
+            ui->edit_name->setFocus();
+            ui->edit_name->selectAll();
             return;
         }
         else if (name.length() < kMinNameLength)
         {
             showError(tr("Name can not be empty."));
-            ui.edit_name->setFocus();
+            ui->edit_name->setFocus();
             return;
         }
 
-        std::u16string username = ui.edit_username->text().toStdU16String();
-        std::u16string password = ui.edit_password->text().toStdU16String();
+        std::u16string username = ui->edit_username->text().toStdU16String();
+        std::u16string password = ui->edit_password->text().toStdU16String();
 
-        if (!username.empty() && !base::User::isValidUserName(username))
+        if (!base::User::isValidUserName(username))
         {
             showError(tr("The user name can not be empty and can contain only"
                          " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-            ui.edit_name->setFocus();
-            ui.edit_name->selectAll();
+            ui->edit_username->setFocus();
+            ui->edit_username->selectAll();
             return;
         }
 
-        QString comment = ui.edit_comment->toPlainText();
+        if (!base::User::isValidPassword(password))
+        {
+            showError(tr("Password cannot be empty."));
+            ui->edit_password->setFocus();
+            ui->edit_password->selectAll();
+            return;
+        }
+
+        QString comment = ui->edit_comment->toPlainText();
         if (comment.length() > kMaxCommentLength)
         {
             showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                          "", kMaxCommentLength));
-            ui.edit_comment->setFocus();
-            ui.edit_comment->selectAll();
+            ui->edit_comment->setFocus();
+            ui->edit_comment->selectAll();
             return;
         }
 
         base::Address address = base::Address::fromString(
-            ui.edit_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+            ui->edit_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
         if (!address.isValid())
         {
             showError(tr("An invalid router address was entered."));
-            ui.edit_address->setFocus();
-            ui.edit_address->selectAll();
+            ui->edit_address->setFocus();
+            ui->edit_address->selectAll();
             return;
         }
 
         if (!router_.has_value())
         {
-            router_ = proto::address_book::Router();
-            router_->set_guid(base::Guid::create().toStdString());
+            router_.emplace(RouterConfig());
+            router_->guid = base::Guid::create().toStdString();
         }
 
-        router_->set_name(name.toStdString());
-        router_->set_address(base::utf8FromUtf16(address.host()));
-        router_->set_port(address.port());
-        router_->set_username(base::utf8FromUtf16(username));
-        router_->set_password(base::utf8FromUtf16(password));
-        router_->set_comment(comment.toStdString());
+        router_->name     = name.toStdU16String();
+        router_->address  = address.host();
+        router_->port     = address.port();
+        router_->username = std::move(username);
+        router_->password = std::move(password);
+        router_->comment  = comment.toStdU16String();
 
         accept();
     }
@@ -163,4 +172,4 @@ void RouterDialog::showError(const QString& message)
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
-} // namespace console
+} // namespace client

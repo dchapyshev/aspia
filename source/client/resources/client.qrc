@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/img">
+    <file>servers.png</file>
     <file>user.png</file>
     <file>user-disabled.png</file>
     <file>broom.png</file>
