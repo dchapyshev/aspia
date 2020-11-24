@@ -254,20 +254,20 @@ void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
 
     config_.session_type = session_type;
 
-    ClientWindow* client_window = nullptr;
+    SessionWindow* session_window = nullptr;
 
     switch (config_.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            client_window = new QtDesktopWindow(
+            session_window = new QtDesktopWindow(
                 config_.session_type, desktop_config_, parentWidget());
         }
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            client_window = new client::QtFileManagerWindow(parentWidget());
+            session_window = new client::QtFileManagerWindow(parentWidget());
             break;
 
         default:
@@ -275,13 +275,13 @@ void ClientDialog::onButtonBoxClicked(QAbstractButton* button)
             break;
     }
 
-    if (!client_window)
+    if (!session_window)
         return;
 
-    client_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!client_window->connectToHost(config_))
+    session_window->setAttribute(Qt::WA_DeleteOnClose);
+    if (!session_window->connectToHost(config_))
     {
-        client_window->close();
+        session_window->close();
     }
     else
     {

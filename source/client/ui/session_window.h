@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_WINDOW_H
-#define CLIENT__UI__CLIENT_WINDOW_H
+#ifndef CLIENT__UI__SESSION_WINDOW_H
+#define CLIENT__UI__SESSION_WINDOW_H
 
 #include "client/client_config.h"
 #include "client/status_window.h"
@@ -38,15 +38,15 @@ class Client;
 class ClientProxy;
 class StatusWindowProxy;
 
-class ClientWindow
+class SessionWindow
     : public QWidget,
       public StatusWindow
 {
     Q_OBJECT
 
 public:
-    explicit ClientWindow(QWidget* parent = nullptr);
-    virtual ~ClientWindow();
+    explicit SessionWindow(QWidget* parent = nullptr);
+    virtual ~SessionWindow();
 
     // Connects to a host.
     // If the username and/or password are not specified in the connection parameters, the
@@ -84,4 +84,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_WINDOW_H
+#endif // CLIENT__UI__SESSION_WINDOW_H

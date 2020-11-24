@@ -99,8 +99,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_dialog.ui
     ui/client_settings.cc
     ui/client_settings.h
-    ui/client_window.cc
-    ui/client_window.h
     ui/desktop_config_dialog.cc
     ui/desktop_config_dialog.h
     ui/desktop_config_dialog.ui
@@ -161,6 +159,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/router_user_dialog.h
     ui/router_user_dialog.ui
     ui/select_screen_action.h
+    ui/session_window.cc
+    ui/session_window.h
     ui/statistics_dialog.cc
     ui/statistics_dialog.h
     ui/statistics_dialog.ui

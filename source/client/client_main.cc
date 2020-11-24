@@ -111,26 +111,26 @@ int clientMain(int argc, char* argv[])
             return 1;
         }
 
-        client::ClientWindow* client_window = nullptr;
+        client::SessionWindow* session_window = nullptr;
 
         switch (config.session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
             {
-                client_window = new client::QtDesktopWindow(
+                session_window = new client::QtDesktopWindow(
                     config.session_type, client::ConfigFactory::defaultDesktopManageConfig());
             }
             break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
             {
-                client_window = new client::QtDesktopWindow(
+                session_window = new client::QtDesktopWindow(
                     config.session_type, client::ConfigFactory::defaultDesktopViewConfig());
             }
             break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                client_window = new client::QtFileManagerWindow();
+                session_window = new client::QtFileManagerWindow();
                 break;
 
             default:
@@ -138,11 +138,11 @@ int clientMain(int argc, char* argv[])
                 break;
         }
 
-        if (!client_window)
+        if (!session_window)
             return 0;
 
-        client_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!client_window->connectToHost(config))
+        session_window->setAttribute(Qt::WA_DeleteOnClose);
+        if (!session_window->connectToHost(config))
             return 0;
     }
     else

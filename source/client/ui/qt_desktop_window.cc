@@ -69,7 +69,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
-    : ClientWindow(parent),
+    : SessionWindow(parent),
       session_type_(session_type),
       desktop_config_(desktop_config),
       desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
@@ -164,12 +164,12 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         client::Config session_config = config();
         session_config.session_type = session_type;
 
-        client::ClientWindow* client_window = nullptr;
+        client::SessionWindow* session_window = nullptr;
 
         switch (session_config.session_type)
         {
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                client_window = new client::QtFileManagerWindow();
+                session_window = new client::QtFileManagerWindow();
                 break;
 
             default:
@@ -177,12 +177,12 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                 break;
         }
 
-        if (!client_window)
+        if (!session_window)
             return;
 
-        client_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!client_window->connectToHost(session_config))
-            client_window->close();
+        session_window->setAttribute(Qt::WA_DeleteOnClose);
+        if (!session_window->connectToHost(session_config))
+            session_window->close();
     });
 }
 

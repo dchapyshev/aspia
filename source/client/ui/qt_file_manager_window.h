@@ -22,7 +22,7 @@
 #include "client/file_manager_window.h"
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "client/ui/client_window.h"
+#include "client/ui/session_window.h"
 
 #include <QPointer>
 
@@ -38,7 +38,7 @@ class FileRemoveDialog;
 class FileTransferDialog;
 
 class QtFileManagerWindow
-    : public ClientWindow,
+    : public SessionWindow,
       public FileManagerWindow
 {
     Q_OBJECT
@@ -47,7 +47,7 @@ public:
     explicit QtFileManagerWindow(QWidget* parent = nullptr);
     ~QtFileManagerWindow();
 
-    // ClientWindow implementation.
+    // SessionWindow implementation.
     std::unique_ptr<Client> createClient() override;
 
     // FileManagerWindow implementation.

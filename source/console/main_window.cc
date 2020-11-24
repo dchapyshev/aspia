@@ -1138,26 +1138,26 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     config.password      = base::utf16FromUtf8(computer.password());
     config.session_type  = computer.session_type();
 
-    client::ClientWindow* client_window = nullptr;
+    client::SessionWindow* session_window = nullptr;
 
     switch (config.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            client_window = new client::QtDesktopWindow(
+            session_window = new client::QtDesktopWindow(
                 config.session_type, computer.session_config().desktop_manage());
         }
         break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            client_window = new client::QtDesktopWindow(
+            session_window = new client::QtDesktopWindow(
                 config.session_type, computer.session_config().desktop_view());
         }
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            client_window = new client::QtFileManagerWindow();
+            session_window = new client::QtFileManagerWindow();
             break;
 
         default:
@@ -1165,12 +1165,12 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
             break;
     }
 
-    if (!client_window)
+    if (!session_window)
         return;
 
-    client_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!client_window->connectToHost(config))
-        client_window->close();
+    session_window->setAttribute(Qt::WA_DeleteOnClose);
+    if (!session_window->connectToHost(config))
+        session_window->close();
 }
 
 void MainWindow::connectToRouter(const QString& guid)

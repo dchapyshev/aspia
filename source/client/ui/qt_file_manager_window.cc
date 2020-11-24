@@ -36,7 +36,7 @@
 namespace client {
 
 QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
-    : ClientWindow(parent),
+    : SessionWindow(parent),
       ui(std::make_unique<Ui::FileManagerWindow>()),
       file_manager_window_proxy_(
           std::make_shared<FileManagerWindowProxy>(qt_base::Application::uiTaskRunner(), this))
@@ -195,7 +195,7 @@ void QtFileManagerWindow::closeEvent(QCloseEvent* event)
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
 
-    ClientWindow::closeEvent(event);
+    SessionWindow::closeEvent(event);
 }
 
 void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::TaskList& items)

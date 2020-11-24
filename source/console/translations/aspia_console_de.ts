@@ -297,69 +297,23 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="46"/>
-        <source>Remote computer address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="47"/>
-        <source>address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="51"/>
-        <source>Remote computer port.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="52"/>
-        <source>port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="57"/>
-        <source>Name of user.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="58"/>
-        <source>username</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="62"/>
-        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="68"/>
-        <source>Open the client to connect to the computer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="71"/>
+        <location filename="../main.cc" line="38"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="74"/>
+        <location filename="../main.cc" line="41"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="75"/>
+        <location filename="../main.cc" line="42"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="114"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
-    </message>
-    <message>
-        <location filename="../main.cc" line="115"/>
-        <source>Incorrect session type entered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>

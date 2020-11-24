@@ -22,7 +22,7 @@
 #include "base/version.h"
 #include "client/client_desktop.h"
 #include "client/desktop_window.h"
-#include "client/ui/client_window.h"
+#include "client/ui/session_window.h"
 #include "client/ui/desktop_widget.h"
 
 #include <QPointer>
@@ -43,7 +43,7 @@ class SystemInfoWindow;
 class StatisticsDialog;
 
 class QtDesktopWindow :
-    public ClientWindow,
+    public SessionWindow,
     public DesktopWindow,
     public DesktopWidget::Delegate
 {
@@ -55,7 +55,7 @@ public:
                     QWidget* parent = nullptr);
     ~QtDesktopWindow();
 
-    // ClientWindow implementation.
+    // SessionWindow implementation.
     std::unique_ptr<Client> createClient() override;
 
     // DesktopWindow implementation.

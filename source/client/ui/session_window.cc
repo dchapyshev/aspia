@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/client_window.h"
+#include "client/ui/session_window.h"
 
 #include "base/logging.h"
 #include "client/client.h"
@@ -28,7 +28,7 @@
 
 namespace client {
 
-ClientWindow::ClientWindow(QWidget* parent)
+SessionWindow::SessionWindow(QWidget* parent)
     : QWidget(parent),
       status_window_proxy_(
           std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
@@ -36,12 +36,12 @@ ClientWindow::ClientWindow(QWidget* parent)
     // Nothing
 }
 
-ClientWindow::~ClientWindow()
+SessionWindow::~SessionWindow()
 {
     status_window_proxy_->dettach();
 }
 
-bool ClientWindow::connectToHost(Config config)
+bool SessionWindow::connectToHost(Config config)
 {
     if (client_proxy_)
     {
@@ -79,12 +79,12 @@ bool ClientWindow::connectToHost(Config config)
     return true;
 }
 
-Config ClientWindow::config() const
+Config SessionWindow::config() const
 {
     return client_proxy_->config();
 }
 
-void ClientWindow::closeEvent(QCloseEvent* /* event */)
+void SessionWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (client_proxy_)
     {
@@ -93,40 +93,40 @@ void ClientWindow::closeEvent(QCloseEvent* /* event */)
     }
 }
 
-void ClientWindow::onStarted(const std::u16string& address_or_id)
+void SessionWindow::onStarted(const std::u16string& address_or_id)
 {
     // Create a dialog to display the connection status.
     status_dialog_ = new common::StatusDialog(this);
 
     // After closing the status dialog, close the session window.
-    connect(status_dialog_, &common::StatusDialog::finished, this, &ClientWindow::close);
+    connect(status_dialog_, &common::StatusDialog::finished, this, &SessionWindow::close);
 
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
     status_dialog_->addMessageAndActivate(tr("Attempt to connect to %1.").arg(address_or_id));
 }
 
-void ClientWindow::onStopped()
+void SessionWindow::onStopped()
 {
     status_dialog_->close();
 }
 
-void ClientWindow::onConnected()
+void SessionWindow::onConnected()
 {
     status_dialog_->addMessageAndActivate(tr("Connection established."));
     status_dialog_->hide();
 }
 
-void ClientWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void SessionWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     onErrorOccurred(netErrorToString(error_code));
 }
 
-void ClientWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
+void SessionWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     onErrorOccurred(authErrorToString(error_code));
 }
 
-void ClientWindow::onRouterError(const RouterController::Error& error)
+void SessionWindow::onRouterError(const RouterController::Error& error)
 {
     switch (error.type)
     {
@@ -156,7 +156,7 @@ void ClientWindow::onRouterError(const RouterController::Error& error)
     }
 }
 
-void ClientWindow::setClientTitle(const Config& config)
+void SessionWindow::setClientTitle(const Config& config)
 {
     QString session_name;
 
@@ -191,7 +191,7 @@ void ClientWindow::setClientTitle(const Config& config)
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
 }
 
-void ClientWindow::onErrorOccurred(const QString& message)
+void SessionWindow::onErrorOccurred(const QString& message)
 {
     hide();
 
@@ -206,7 +206,7 @@ void ClientWindow::onErrorOccurred(const QString& message)
 }
 
 // static
-QString ClientWindow::netErrorToString(base::NetworkChannel::ErrorCode error_code)
+QString SessionWindow::netErrorToString(base::NetworkChannel::ErrorCode error_code)
 {
     const char* message;
 
@@ -264,7 +264,7 @@ QString ClientWindow::netErrorToString(base::NetworkChannel::ErrorCode error_cod
 }
 
 // static
-QString ClientWindow::authErrorToString(base::ClientAuthenticator::ErrorCode error_code)
+QString SessionWindow::authErrorToString(base::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
 
@@ -299,7 +299,7 @@ QString ClientWindow::authErrorToString(base::ClientAuthenticator::ErrorCode err
 }
 
 // static
-QString ClientWindow::routerErrorToString(RouterController::ErrorCode error_code)
+QString SessionWindow::routerErrorToString(RouterController::ErrorCode error_code)
 {
     const char* message;
 
