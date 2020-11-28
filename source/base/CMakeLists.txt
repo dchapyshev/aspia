@@ -191,10 +191,6 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_encoder.h
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
-    codec/webm_file_muxer.cc
-    codec/webm_file_muxer.h
-    codec/webm_file_writer.cc
-    codec/webm_file_writer.h
     codec/weighted_samples.cc
     codec/weighted_samples.h)
 
@@ -666,7 +662,12 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_THREADING}
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
-target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS})
+
+if (LINUX)
+    set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt)
+endif()
+
+target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS})
 
 if (WIN32)
     set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)

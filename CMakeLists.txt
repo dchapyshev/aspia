@@ -22,26 +22,34 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(aspia)
 
-# Detecting Linux.
 if (UNIX AND NOT APPLE)
+    message(STATUS "Linux detected")
     set(LINUX TRUE)
 endif()
 
+if (APPLE)
+    message(STATUS "MacOSX detected")
+endif()
+
+if (WIN32)
+    message(STATUS "Windows detected")
+endif()
+
+message(STATUS "Traget processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "Host processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
-find_package(asio REQUIRED)
-find_package(GTest REQUIRED)
-find_package(libyuv REQUIRED)
+find_package(asio CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
+find_package(libyuv CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
-find_package(Opus REQUIRED)
-find_package(Protobuf REQUIRED)
-find_package(RapidJSON REQUIRED)
-find_package(unofficial-libvpx REQUIRED)
-find_package(unofficial-sqlite3 REQUIRED)
-find_package(zstd REQUIRED)
-
-find_library(WEBM_RELEASE_LIB NAMES libwebm webm)
-find_library(WEBM_DEBUG_LIB NAMES libwebmd webmd)
+find_package(Opus CONFIG REQUIRED)
+find_package(Protobuf CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
+find_package(unofficial-libvpx CONFIG REQUIRED)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+find_package(zstd CONFIG REQUIRED)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -51,6 +59,11 @@ endif()
 
 if (UNIX)
     find_package(ICU REQUIRED uc dt)
+endif()
+
+if (LINUX)
+    find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)
+    message(STATUS "XFixes library: ${XFIXES_LIB}")
 endif()
 
 if (APPLE)
