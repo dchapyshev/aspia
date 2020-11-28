@@ -18,12 +18,14 @@
 
 #include "base/desktop/diff_block_32bpp_sse2.h"
 
+#if defined(ARCH_CPU_X86_FAMILY)
 #if defined(CC_MSVC)
 #include <intrin.h>
 #else
 #include <mmintrin.h>
 #include <emmintrin.h>
-#endif
+#endif // defined(CC_*)
+#endif // defined(ARCH_CPU_X86_FAMILY)
 
 namespace base {
 
