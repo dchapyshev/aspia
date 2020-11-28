@@ -65,6 +65,10 @@ void debugBreak()
 #define Compiller support not implemented
 #endif // CC_*
 
+#elif defined(ARCH_CPU_ARM64)
+    asm("brk 0");
+#elif defined(ARCH_CPU_ARMEL)
+    asm("break 2");
 #else // ARCH_CPU_*
 #error CPU family support not implemented
 #endif // ARCH_CPU_*

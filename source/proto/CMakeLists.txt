@@ -32,10 +32,8 @@ list(APPEND SOURCE_PROTO
     router_relay.proto
     system_info.proto)
 
-protobuf_generate_cpp(PROTO_CC_FILES PROTO_H_FILES ${SOURCE_PROTO})
-set_source_files_properties(${PROTO_CC_FILES} ${PROTO_H_FILES} PROPERTIES SKIP_AUTOGEN ON)
-
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
-add_library(aspia_proto STATIC ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
+add_library(aspia_proto STATIC ${SOURCE_PROTO})
+protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${SOURCE_PROTO})
 target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS})

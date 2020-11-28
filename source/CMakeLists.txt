@@ -43,8 +43,10 @@ add_definitions(-DASIO_STANDALONE
                 -DASIO_NO_DEPRECATED
                 -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING)
 
-# For RapidJSON.
-add_definitions(-DRAPIDJSON_SSE2)
+if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "AMD64" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86")
+    # For RapidJSON.
+    add_definitions(-DRAPIDJSON_SSE2)
+endif()
 
 # For Qt.
 add_definitions(-DQT_NO_CAST_TO_ASCII
@@ -78,9 +80,8 @@ if (WIN32)
 endif()
 
 set(THIRD_PARTY_LIBS
-    ${Protobuf_LITE_LIBRARIES}
-    optimized ${WEBM_RELEASE_LIB} debug ${WEBM_DEBUG_LIB}
-    libzstd
+    protobuf::libprotobuf-lite
+    zstd::libzstd_static
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
