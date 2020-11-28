@@ -16,29 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_tree_item.h"
+#ifndef CLIENT__UI__CLIENT_SETTINGS_DIALOG_H
+#define CLIENT__UI__CLIENT_SETTINGS_DIALOG_H
+
+#include "ui_client_settings_dialog.h"
+
+#include <QDialog>
+
+class QAbstractButton;
 
 namespace client {
 
-RouterTreeItem::RouterTreeItem(const RouterConfig& router)
+class ClientSettingsDialog : public QDialog
 {
-    setRouter(router);
-}
+    Q_OBJECT
 
-RouterTreeItem::~RouterTreeItem() = default;
+public:
+    explicit ClientSettingsDialog(QWidget* parent = nullptr);
+    ~ClientSettingsDialog();
 
-void RouterTreeItem::setRouter(const RouterConfig& router)
-{
-    router_ = router;
+private slots:
+    void onButtonBoxClicked(QAbstractButton* button);
 
-    setText(0, QString::fromStdU16String(router.name));
-    setText(1, QString::fromStdU16String(router.address));
-    setText(2, QString::number(router.port));
-}
+private:
+    void showError(const QString& message);
 
-const RouterConfig& RouterTreeItem::router() const
-{
-    return router_;
-}
+    Ui::ClientSettingsDialog ui;
+};
 
 } // namespace client
+
+#endif // CLIENT__UI__CLIENT_SETTINGS_DIALOG_H

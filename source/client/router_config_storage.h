@@ -28,16 +28,16 @@ namespace client {
 class RouterConfigStorage
 {
 public:
+    RouterConfigStorage();
     ~RouterConfigStorage();
 
-    static std::unique_ptr<RouterConfigStorage> open();
+    bool isEnabled() const;
+    void setEnabled(bool enable);
 
-    RouterConfigList routerConfigList();
-    void setRouterConfigList(const RouterConfigList& configs);
+    RouterConfig routerConfig() const;
+    void setRouterConfig(const RouterConfig& config);
 
 private:
-    RouterConfigStorage();
-
     base::JsonSettings storage_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterConfigStorage);

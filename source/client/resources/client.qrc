@@ -1,9 +1,15 @@
 <RCC>
   <qresource prefix="/img">
+    <file>arrow-down.png</file>
+    <file>gear-pencil.png</file>
+    <file>gear.png</file>
+    <file>lifebuoy.png</file>
+    <file>about.png</file>
+    <file>exit.png</file>
+    <file>tick.png</file>
     <file>servers.png</file>
     <file>user.png</file>
     <file>user-disabled.png</file>
-    <file>broom.png</file>
     <file>navigation-270-button.png</file>
     <file>cross-button.png</file>
     <file>drive.png</file>

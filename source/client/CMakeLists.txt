@@ -91,6 +91,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/address_bar.h
     ui/address_bar_model.cc
     ui/address_bar_model.h
+    ui/application.cc
+    ui/application.h
     ui/authorization_dialog.cc
     ui/authorization_dialog.h
     ui/authorization_dialog.ui
@@ -99,6 +101,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_window.ui
     ui/client_settings.cc
     ui/client_settings.h
+    ui/client_settings_dialog.cc
+    ui/client_settings_dialog.h
+    ui/client_settings_dialog.ui
     ui/desktop_config_dialog.cc
     ui/desktop_config_dialog.h
     ui/desktop_config_dialog.ui
@@ -141,20 +146,12 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/qt_file_manager_window.cc
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
-    ui/router_dialog.cc
-    ui/router_dialog.h
-    ui/router_dialog.ui
-    ui/router_list_dialog.cc
-    ui/router_list_dialog.h
-    ui/router_list_dialog.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui
     ui/router_status_dialog.cc
     ui/router_status_dialog.h
     ui/router_status_dialog.ui
-    ui/router_tree_item.cc
-    ui/router_tree_item.h
     ui/router_user_dialog.cc
     ui/router_user_dialog.h
     ui/router_user_dialog.ui
@@ -189,11 +186,6 @@ target_link_libraries(aspia_client_core
 set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
-qt5_import_plugins(aspia_client_core
-    INCLUDE ""
-    EXCLUDE ""
-    INCLUDE_BY_TYPE ""
-    EXCLUDE_BY_TYPE imageformats)
 
 if(Qt5LinguistTools_FOUND)
     # Get the list of translation files.
@@ -245,6 +237,11 @@ endif()
 
 add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
 target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
+qt5_import_plugins(aspia_client
+    INCLUDE ""
+    EXCLUDE ""
+    INCLUDE_BY_TYPE ""
+    EXCLUDE_BY_TYPE imageformats)
 
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)

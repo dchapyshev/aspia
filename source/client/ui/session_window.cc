@@ -56,6 +56,7 @@ bool SessionWindow::connectToHost(Config config)
     {
         AuthorizationDialog auth_dialog(this);
 
+        auth_dialog.setOneTimePasswordEnabled(config.router_config.has_value());
         auth_dialog.setUserName(QString::fromStdU16String(config.username));
         auth_dialog.setPassword(QString::fromStdU16String(config.password));
 
@@ -65,6 +66,11 @@ bool SessionWindow::connectToHost(Config config)
         config.username = auth_dialog.userName().toStdU16String();
         config.password = auth_dialog.password().toStdU16String();
     }
+
+    // When connecting with a one-time password, the username must be in the following format:
+    // #host_id.
+    if (config.username.empty())
+        config.username = u"#" + config.address_or_id;
 
     // Create a client instance.
     std::unique_ptr<Client> client = createClient();

@@ -23,10 +23,7 @@
 namespace host {
 
 UserSettings::UserSettings()
-    : settings_(QSettings::IniFormat,
-                QSettings::UserScope,
-                QLatin1String("aspia"),
-                QLatin1String("host"))
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host")
 {
     // Nothing
 }
@@ -50,12 +47,12 @@ void UserSettings::sync()
 
 QString UserSettings::locale() const
 {
-    return settings_.value(QLatin1String("Locale"), QLocale::system().bcp47Name()).toString();
+    return settings_.value("Locale", QLocale::system().bcp47Name()).toString();
 }
 
 void UserSettings::setLocale(const QString& locale)
 {
-    settings_.setValue(QLatin1String("Locale"), locale);
+    settings_.setValue("Locale", locale);
 }
 
 } // namespace host

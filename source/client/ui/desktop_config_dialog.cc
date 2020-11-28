@@ -82,6 +82,8 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
+
+    setFixedHeight(sizeHint().height());
 }
 
 DesktopConfigDialog::~DesktopConfigDialog() = default;

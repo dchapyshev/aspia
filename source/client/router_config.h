@@ -36,13 +36,12 @@ struct RouterConfig
     RouterConfig(RouterConfig&& other) noexcept = default;
     RouterConfig& operator=(RouterConfig&& other) noexcept = default;
 
-    std::string guid;
-    std::u16string name;
+    bool isValid() const;
+
     std::u16string address;
     uint16_t port;
     std::u16string username;
     std::u16string password;
-    std::u16string comment;
 };
 
 using RouterConfigList = std::vector<RouterConfig>;

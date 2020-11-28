@@ -34,6 +34,8 @@ public:
     explicit AuthorizationDialog(QWidget* parent = nullptr);
     ~AuthorizationDialog();
 
+    void setOneTimePasswordEnabled(bool enable);
+
     QString userName() const;
     void setUserName(const QString& username);
 
@@ -49,6 +51,8 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
+    void fitSize();
+
     Ui::AuthorizationDialog ui;
 
     DISALLOW_COPY_AND_ASSIGN(AuthorizationDialog);

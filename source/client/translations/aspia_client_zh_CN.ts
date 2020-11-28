@@ -10,56 +10,64 @@
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="29"/>
-        <source>User Name:</source>
-        <translation>用户名：</translation>
+        <source>User Name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="43"/>
+        <location filename="../ui/authorization_dialog.ui" line="49"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/authorization_dialog.ui" line="99"/>
+        <source>One-time password connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Name:</source>
+        <translation type="vanished">用户名：</translation>
+    </message>
+    <message>
         <source>Password:</source>
-        <translation>密码：</translation>
+        <translation type="vanished">密码：</translation>
     </message>
 </context>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="51"/>
+        <location filename="../client_main.cc" line="47"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="52"/>
-        <source>address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="56"/>
+        <location filename="../client_main.cc" line="50"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="57"/>
-        <source>port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="54"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="63"/>
-        <source>username</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="67"/>
+        <location filename="../client_main.cc" line="57"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="72"/>
+        <location filename="../client_main.cc" line="62"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="98"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="99"/>
+        <source>Incorrect session type entered.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -82,39 +90,112 @@
     </message>
 </context>
 <context>
-    <name>ClientWindow</name>
+    <name>ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_window.ui" line="20"/>
-        <source>Aspia Client</source>
-        <translation type="unfinished">Aspia 客户端</translation>
-    </message>
-    <message>
-        <location filename="../ui/client_window.ui" line="35"/>
-        <source>Router:</source>
+        <location filename="../ui/client_settings_dialog.ui" line="14"/>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="65"/>
+        <location filename="../ui/client_settings_dialog.ui" line="24"/>
+        <source>Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.ui" line="30"/>
+        <source>Use a router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.ui" line="39"/>
         <source>Address:</source>
         <translation type="unfinished">地址：</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="99"/>
+        <location filename="../ui/client_settings_dialog.ui" line="53"/>
+        <source>User Name:</source>
+        <translation type="unfinished">用户名：</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.ui" line="67"/>
+        <source>Password:</source>
+        <translation type="unfinished">密码：</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="obsolete">名称：</translation>
+    </message>
+</context>
+<context>
+    <name>ClientWindow</name>
+    <message>
+        <location filename="../ui/client_window.ui" line="14"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished">Aspia 客户端</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="obsolete">地址</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="49"/>
+        <source>ID / Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="121"/>
+        <source>Session Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="257"/>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="284"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="289"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="305"/>
+        <source>Online Help...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="314"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="323"/>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="332"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address:</source>
+        <translation type="obsolete">地址：</translation>
+    </message>
+    <message>
         <source>Session Type:</source>
-        <translation type="unfinished">会话类型：</translation>
+        <translation type="obsolete">会话类型：</translation>
     </message>
 </context>
 <context>
     <name>Console</name>
     <message>
-        <location filename="../client_main.cc" line="108"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
-    </message>
-    <message>
-        <location filename="../client_main.cc" line="109"/>
-        <source>Incorrect session type entered.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -538,57 +619,31 @@
 <context>
     <name>RouterDialog</name>
     <message>
-        <location filename="../ui/router_dialog.ui" line="14"/>
-        <source>Router Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.ui" line="22"/>
         <source>Name:</source>
-        <translation type="unfinished">名称：</translation>
+        <translation type="obsolete">名称：</translation>
     </message>
     <message>
-        <location filename="../ui/router_dialog.ui" line="36"/>
         <source>Address:</source>
-        <translation type="unfinished">地址：</translation>
+        <translation type="obsolete">地址：</translation>
     </message>
     <message>
-        <location filename="../ui/router_dialog.ui" line="50"/>
         <source>User Name:</source>
-        <translation type="unfinished">用户名：</translation>
+        <translation type="obsolete">用户名：</translation>
     </message>
     <message>
-        <location filename="../ui/router_dialog.ui" line="64"/>
         <source>Password:</source>
-        <translation type="unfinished">密码：</translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.ui" line="101"/>
-        <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">密码：</translation>
     </message>
 </context>
 <context>
     <name>RouterListDialog</name>
     <message>
-        <location filename="../ui/router_list_dialog.ui" line="14"/>
-        <source>Routers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_list_dialog.ui" line="80"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_list_dialog.ui" line="85"/>
         <source>Address</source>
-        <translation type="unfinished">地址</translation>
+        <translation type="obsolete">地址</translation>
     </message>
     <message>
-        <location filename="../ui/router_list_dialog.ui" line="90"/>
         <source>Port</source>
-        <translation type="unfinished">端口</translation>
+        <translation type="obsolete">端口</translation>
     </message>
 </context>
 <context>
@@ -939,6 +994,25 @@
     </message>
 </context>
 <context>
+    <name>client::AuthorizationDialog</name>
+    <message>
+        <location filename="../ui/authorization_dialog.cc" line="113"/>
+        <location filename="../ui/authorization_dialog.cc" line="123"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../ui/authorization_dialog.cc" line="114"/>
+        <source>Username cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/authorization_dialog.cc" line="124"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::ClientDialog</name>
     <message>
         <source>Address:</source>
@@ -959,6 +1033,29 @@
     <message>
         <source>An invalid computer address was entered.</source>
         <translation type="vanished">输入了无效的计算机地址。</translation>
+    </message>
+</context>
+<context>
+    <name>client::ClientSettingsDialog</name>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="91"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="102"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="111"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="135"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
     </message>
 </context>
 <context>
@@ -1068,33 +1165,31 @@
         <translation type="vanished">文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="56"/>
         <source>Address:</source>
-        <translation type="unfinished">地址：</translation>
+        <translation type="obsolete">地址：</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
+        <translation type="obsolete">确认</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="100"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="unfinished">输入的地址列表将被清除，继续吗？</translation>
+        <translation type="obsolete">输入的地址列表将被清除，继续吗？</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="217"/>
+        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="218"/>
+        <location filename="../ui/client_window.cc" line="200"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished">输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="298"/>
-        <source>Without Router</source>
+        <location filename="../ui/client_window.cc" line="217"/>
+        <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1480,57 +1575,16 @@
 </context>
 <context>
     <name>client::RouterDialog</name>
-    <message numerus="yes">
-        <location filename="../ui/router_dialog.cc" line="98"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../ui/router_dialog.cc" line="106"/>
-        <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.cc" line="116"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.cc" line="125"/>
-        <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../ui/router_dialog.cc" line="134"/>
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.cc" line="145"/>
-        <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_dialog.cc" line="172"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
     <name>client::RouterListDialog</name>
     <message>
-        <location filename="../ui/router_list_dialog.cc" line="106"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
-    </message>
-    <message>
-        <location filename="../ui/router_list_dialog.cc" line="107"/>
-        <source>Are you sure you want to remove router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">确认</translation>
     </message>
 </context>
 <context>
@@ -1812,138 +1866,138 @@
 <context>
     <name>client::SessionWindow</name>
     <message>
-        <location filename="../ui/session_window.cc" line="105"/>
+        <location filename="../ui/session_window.cc" line="111"/>
         <source>Attempt to connect to %1.</source>
         <translation type="unfinished">尝试连接到 %1.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="115"/>
+        <location filename="../ui/session_window.cc" line="121"/>
         <source>Connection established.</source>
         <translation type="unfinished">已建立连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="135"/>
+        <location filename="../ui/session_window.cc" line="141"/>
         <source>Network error when connecting to the router: %1</source>
         <translation type="unfinished">连接到路由器时出现网络错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="142"/>
+        <location filename="../ui/session_window.cc" line="148"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation type="unfinished">连接到路由器时发生身份验证错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="166"/>
+        <location filename="../ui/session_window.cc" line="172"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">桌面管理</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="170"/>
+        <location filename="../ui/session_window.cc" line="176"/>
         <source>Desktop View</source>
         <translation type="unfinished">桌面查看</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="174"/>
+        <location filename="../ui/session_window.cc" line="180"/>
         <source>File Transfer</source>
         <translation type="unfinished">文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="216"/>
+        <location filename="../ui/session_window.cc" line="222"/>
         <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="220"/>
+        <location filename="../ui/session_window.cc" line="226"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished">加密错误（消息加密或解密失败）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="224"/>
+        <location filename="../ui/session_window.cc" line="230"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished">网络发生错误（例如，网络电缆被意外地拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="228"/>
+        <location filename="../ui/session_window.cc" line="234"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished">连接被对方拒绝（或超时）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="232"/>
+        <location filename="../ui/session_window.cc" line="238"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished">远程主机已关闭连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="236"/>
+        <location filename="../ui/session_window.cc" line="242"/>
         <source>Host address was not found.</source>
         <translation type="unfinished">找不到主机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="240"/>
+        <location filename="../ui/session_window.cc" line="246"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished">套接字操作超时。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="244"/>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished">指定的地址已在使用中，并被设置为独占地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="248"/>
+        <location filename="../ui/session_window.cc" line="254"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished">指定的地址的主机不可用。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="258"/>
-        <location filename="../ui/session_window.cc" line="294"/>
+        <location filename="../ui/session_window.cc" line="264"/>
+        <location filename="../ui/session_window.cc" line="300"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished">出现未知错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="274"/>
+        <location filename="../ui/session_window.cc" line="280"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished">身份验证成功。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="278"/>
+        <location filename="../ui/session_window.cc" line="284"/>
         <source>Network authentication error.</source>
         <translation type="unfinished">网络身份验证错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="282"/>
+        <location filename="../ui/session_window.cc" line="288"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished">违反数据交换协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="286"/>
+        <location filename="../ui/session_window.cc" line="292"/>
         <source>Wrong user name or password.</source>
         <translation type="unfinished">错误的用户名或密码。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="290"/>
+        <location filename="../ui/session_window.cc" line="296"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished">用户不允许指定的会话类型。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="309"/>
+        <location filename="../ui/session_window.cc" line="315"/>
         <source>No host with the specified ID was found.</source>
         <translation type="unfinished">找不到具有指定ID的主机。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="313"/>
+        <location filename="../ui/session_window.cc" line="319"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished">没有可用的中继或密钥池为空。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="317"/>
+        <location filename="../ui/session_window.cc" line="323"/>
         <source>Failed to connect to the relay server.</source>
         <translation type="unfinished">无法连接到中继服务器。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="321"/>
+        <location filename="../ui/session_window.cc" line="327"/>
         <source>Access is denied.</source>
         <translation type="unfinished">访问被拒绝。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="325"/>
+        <location filename="../ui/session_window.cc" line="331"/>
         <source>Unknown error.</source>
         <translation type="unfinished">未知错误。</translation>
     </message>

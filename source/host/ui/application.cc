@@ -92,7 +92,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QLatin1String(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }

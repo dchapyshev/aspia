@@ -25,7 +25,7 @@ namespace client {
 RouterConfigStorage::RouterConfigStorage()
     : storage_(base::JsonSettings::Scope::USER,
                "aspia",
-               "routers",
+               "router_config",
                base::JsonSettings::Encrypted::YES)
 {
     // Nothing
@@ -33,127 +33,40 @@ RouterConfigStorage::RouterConfigStorage()
 
 RouterConfigStorage::~RouterConfigStorage() = default;
 
-// static
-std::unique_ptr<RouterConfigStorage> RouterConfigStorage::open()
+bool RouterConfigStorage::isEnabled() const
 {
-    return std::unique_ptr<RouterConfigStorage>(new RouterConfigStorage());
+    return storage_.get<bool>("enabled", false);
 }
 
-RouterConfigList RouterConfigStorage::routerConfigList()
+void RouterConfigStorage::setEnabled(bool enable)
 {
-    RouterConfigList list;
-
-    for (const auto& item : storage_.getArray("routers"))
-    {
-        RouterConfig config;
-
-        config.guid = item.get<std::string>("guid");
-        if (config.guid.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'guid' field";
-            return RouterConfigList();
-        }
-
-        config.name = item.get<std::u16string>("name");
-        if (config.name.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'name' field";
-            return RouterConfigList();
-        }
-
-        config.address = item.get<std::u16string>("address");
-        if (config.address.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'address' filed";
-            return RouterConfigList();
-        }
-
-        config.port = item.get<uint16_t>("port");
-        if (!config.port)
-        {
-            LOG(LS_ERROR) << "Invalid 'port' field";
-            return RouterConfigList();
-        }
-
-        config.username = item.get<std::u16string>("username");
-        if (config.username.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'username' field";
-            return RouterConfigList();
-        }
-
-        config.password = item.get<std::u16string>("password");
-        if (config.password.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'password' field";
-            return RouterConfigList();
-        }
-
-        config.comment = item.get<std::u16string>("comment");
-
-        list.emplace_back(std::move(config));
-    }
-
-    return list;
+    storage_.set("enabled", enable);
 }
 
-void RouterConfigStorage::setRouterConfigList(const RouterConfigList& configs)
+RouterConfig RouterConfigStorage::routerConfig() const
 {
-    base::Settings::Array array;
+    RouterConfig config;
 
-    for (const auto& config : configs)
+    config.address = storage_.get<std::u16string>("address");
+    config.port = storage_.get<uint16_t>("port");
+    config.username = storage_.get<std::u16string>("username");
+    config.password = storage_.get<std::u16string>("password");
+
+    return config;
+}
+
+void RouterConfigStorage::setRouterConfig(const RouterConfig& config)
+{
+    if (!config.isValid())
     {
-        base::Settings item;
-
-        if (config.guid.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'guid' field";
-            return;
-        }
-
-        if (config.name.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'name' field";
-            return;
-        }
-
-        if (config.address.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'address' field";
-            return;
-        }
-
-        if (!config.port)
-        {
-            LOG(LS_ERROR) << "Invalid 'port' field";
-            return;
-        }
-
-        if (config.username.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'username' field";
-            return;
-        }
-
-        if (config.password.empty())
-        {
-            LOG(LS_ERROR) << "Invalid 'password' field";
-            return;
-        }
-
-        item.set("guid", config.guid);
-        item.set("name", config.name);
-        item.set("address", config.address);
-        item.set("port", config.port);
-        item.set("username", config.username);
-        item.set("password", config.password);
-        item.set("comment", config.comment);
-
-        array.emplace_back(std::move(item));
+        LOG(LS_ERROR) << "Invalid router config";
+        return;
     }
 
-    storage_.remove("routers");
-    storage_.setArray("routers", array);
+    storage_.set("address", config.address);
+    storage_.set("port", config.port);
+    storage_.set("username", config.username);
+    storage_.set("password", config.password);
 }
 
 } // namespace client

@@ -16,37 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__ROUTER_LIST_DIALOG_H
-#define CLIENT__UI__ROUTER_LIST_DIALOG_H
+#ifndef CLIENT__UI__APPLICATION_H
+#define CLIENT__UI__APPLICATION_H
 
-#include "ui_router_list_dialog.h"
-
-#include <QDialog>
-
-class QAbstractButton;
+#include "client/ui/client_settings.h"
+#include "qt_base/application.h"
 
 namespace client {
 
-class RouterListDialog : public QDialog
+class Application : public qt_base::Application
 {
     Q_OBJECT
 
 public:
-    explicit RouterListDialog(QWidget* parent = nullptr);
-    ~RouterListDialog();
+    Application(int& argc, char* argv[]);
+    virtual ~Application() = default;
 
-private slots:
-    void reloadRouters();
-    void currentRouterChanged();
-    void addRouter();
-    void modifyRouter();
-    void deleteRouter();
-    void buttonBoxClicked(QAbstractButton* button);
+    static Application* instance();
+
+    ClientSettings& settings() { return settings_; }
 
 private:
-    Ui::RouterListDialog ui;
+    ClientSettings settings_;
+
+    DISALLOW_COPY_AND_ASSIGN(Application);
 };
 
-} // namespace client
+} // namespace host
 
-#endif // CLIENT__UI__ROUTER_LIST_DIALOG_H
+#endif // HOST__UI__APPLICATION_H

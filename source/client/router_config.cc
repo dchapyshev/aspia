@@ -34,4 +34,9 @@ RouterConfig::~RouterConfig()
     base::memZero(&password);
 }
 
+bool RouterConfig::isValid() const
+{
+    return !address.empty() && port && !username.empty() && !password.empty();
+}
+
 } // namespace client

@@ -16,28 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__ROUTER_TREE_ITEM_H
-#define CLIENT__UI__ROUTER_TREE_ITEM_H
+#include "client/ui/application.h"
 
-#include "client/router_config.h"
+#include "build/version.h"
+#include "qt_base/qt_logging.h"
 
-#include <QTreeWidgetItem>
+#include <QIcon>
 
 namespace client {
 
-class RouterTreeItem : public QTreeWidgetItem
+Application::Application(int& argc, char* argv[])
+    : qt_base::Application(argc, argv)
 {
-public:
-    explicit RouterTreeItem(const RouterConfig& router);
-    ~RouterTreeItem();
+    setOrganizationName("Aspia");
+    setApplicationName("Client");
+    setApplicationVersion(ASPIA_VERSION_STRING);
+    setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+    setWindowIcon(QIcon(":/img/main.ico"));
 
-    void setRouter(const RouterConfig& router);
-    const RouterConfig& router() const;
+    if (!hasLocale(settings_.locale()))
+        settings_.setLocale(DEFAULT_LOCALE);
 
-private:
-    RouterConfig router_;
-};
+    setLocale(settings_.locale());
+}
+
+// static
+Application* Application::instance()
+{
+    return static_cast<Application*>(QApplication::instance());
+}
 
 } // namespace client
-
-#endif // CLIENT__UI__ROUTER_TREE_ITEM_H

@@ -27,6 +27,8 @@ if (UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
 
+message(STATUS "Processor: ${CMAKE_SYSTEM_PROCESSOR}")
+
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
 find_package(asio REQUIRED)

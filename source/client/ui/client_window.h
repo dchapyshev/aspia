@@ -22,18 +22,13 @@
 #include "base/macros_magic.h"
 #include "client/client_config.h"
 #include "proto/desktop.pb.h"
+#include "ui_client_window.h"
 
-#include <QDialog>
-
-class QAbstractButton;
-
-namespace Ui {
-class ClientWindow;
-} // namespace Ui
+#include <QMainWindow>
 
 namespace client {
 
-class ClientWindow : public QDialog
+class ClientWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -41,19 +36,24 @@ public:
     explicit ClientWindow(QWidget* parent = nullptr);
     ~ClientWindow();
 
+protected:
+    // QMainWindow implementation.
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
+    void onLanguageChanged(QAction* action);
+    void onSettings();
+    void onHelp();
+    void onAbout();
     void sessionTypeChanged(int item_index);
     void sessionConfigButtonPressed();
-    void onButtonBoxClicked(QAbstractButton* button);
+    void connectToHost();
 
 private:
-    void reloadRouters();
+    void createLanguageMenu(const QString& current_locale);
+    void reloadSessionTypes();
 
-    std::unique_ptr<Ui::ClientWindow> ui;
-
-    RouterConfigList routers_;
-    Config config_;
-    proto::DesktopConfig desktop_config_;
+    Ui::ClientWindow ui;
 
     DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };

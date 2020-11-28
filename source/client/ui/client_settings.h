@@ -20,6 +20,8 @@
 #define CLIENT__UI__CLIENT_SETTINGS_H
 
 #include "base/macros_magic.h"
+#include "proto/common.pb.h"
+#include "proto/desktop.pb.h"
 
 #include <QSettings>
 
@@ -31,8 +33,20 @@ public:
     ClientSettings();
     ~ClientSettings() = default;
 
+    QString locale() const;
+    void setLocale(const QString& locale);
+
     QStringList addressList() const;
     void setAddressList(const QStringList& list);
+
+    proto::SessionType sessionType() const;
+    void setSessionType(proto::SessionType session_type);
+
+    proto::DesktopConfig desktopManageConfig() const;
+    void setDesktopManageConfig(const proto::DesktopConfig& config);
+
+    proto::DesktopConfig desktopViewConfig() const;
+    void setDesktopViewConfig(const proto::DesktopConfig& config);
 
 private:
     QSettings settings_;

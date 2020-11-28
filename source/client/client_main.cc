@@ -21,10 +21,11 @@
 #include "base/logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "client/ui/application.h"
+#include "client/ui/client_settings.h"
 #include "client/ui/client_window.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
-#include "qt_base/application.h"
 
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -37,33 +38,22 @@ int clientMain(int argc, char* argv[])
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
 
-    qt_base::Application::setOrganizationName("Aspia");
-    qt_base::Application::setApplicationName("Host");
-    qt_base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
-    qt_base::Application::setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
-    qt_base::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
-    qt_base::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    qt_base::Application application(argc, argv);
+    client::Application application(argc, argv);
 
-    QCommandLineOption address_option(
-        "address",
-        QApplication::translate("Client", "Remote computer address."),
-        QApplication::translate("Client", "address"));
+    QCommandLineOption address_option("address",
+        QApplication::translate("Client", "Remote computer address."), "address");
 
-    QCommandLineOption port_option(
-        "port",
-        QApplication::translate("Client", "Remote computer port."),
-        QApplication::translate("Client", "port"),
+    QCommandLineOption port_option("port",
+        QApplication::translate("Client", "Remote computer port."), "port",
         QString::number(DEFAULT_HOST_TCP_PORT));
 
-    QCommandLineOption username_option(
-        "username",
-        QApplication::translate("Client", "Name of user."),
-        QApplication::translate("Client", "username"));
+    QCommandLineOption username_option("username",
+        QApplication::translate("Client", "Name of user."), "username");
 
-    QCommandLineOption session_type_option(
-        "session-type",
+    QCommandLineOption session_type_option("session-type",
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
                                 "desktop-view, file-transfer."),
         "desktop-manage");
@@ -89,15 +79,15 @@ int clientMain(int argc, char* argv[])
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == QLatin1String("desktop-manage"))
+        if (session_type == "desktop-manage")
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
         }
-        else if (session_type == QLatin1String("desktop-view"))
+        else if (session_type == "desktop-view")
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
         }
-        else if (session_type == QLatin1String("file-transfer"))
+        else if (session_type == "file-transfer")
         {
             config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
         }
@@ -105,8 +95,8 @@ int clientMain(int argc, char* argv[])
         {
             QMessageBox::warning(
                 nullptr,
-                QApplication::translate("Console", "Warning"),
-                QApplication::translate("Console", "Incorrect session type entered."),
+                QApplication::translate("Client", "Warning"),
+                QApplication::translate("Client", "Incorrect session type entered."),
                 QMessageBox::Ok);
             return 1;
         }

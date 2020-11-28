@@ -22,8 +22,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/strings/unicode.h"
-#include "client/ui/router_dialog.h"
-#include "client/ui/router_tree_item.h"
+#include "console/router_dialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -62,37 +61,28 @@ bool isSafePassword(const QString& password)
     return has_upper && has_lower && has_digit;
 }
 
-std::unique_ptr<proto::address_book::Router> serializeRouter(
-    const client::RouterConfig& router_config)
+class RouterTreeItem : public QTreeWidgetItem
 {
-    std::unique_ptr<proto::address_book::Router> router =
-        std::make_unique<proto::address_book::Router>();
+public:
+    explicit RouterTreeItem(const proto::address_book::Router& router)
+    {
+        setRouter(router);
+    }
 
-    router->set_guid(router_config.guid);
-    router->set_name(base::utf8FromUtf16(router_config.name));
-    router->set_address(base::utf8FromUtf16(router_config.address));
-    router->set_port(router_config.port);
-    router->set_username(base::utf8FromUtf16(router_config.username));
-    router->set_password(base::utf8FromUtf16(router_config.password));
-    router->set_comment(base::utf8FromUtf16(router_config.comment));
+    void setRouter(const proto::address_book::Router& router)
+    {
+        router_ = router;
 
-    return router;
-}
+        setText(0, QString::fromStdString(router.name()));
+        setText(1, QString::fromStdString(router.address()));
+        setText(2, QString::number(router.port()));
+    }
 
-client::RouterConfig parseRouter(const proto::address_book::Router& router)
-{
-    client::RouterConfig router_config;
+    const proto::address_book::Router& router() const { return router_; }
 
-    router_config.guid = router.guid();
-    router_config.name = base::utf16FromUtf8(router.name());
-    router_config.address = base::utf16FromUtf8(router.address());
-    router_config.port = static_cast<uint16_t>(router.port());
-    router_config.username = base::utf16FromUtf8(router.username());
-    router_config.password = base::utf16FromUtf8(router.password());
-    router_config.comment = base::utf16FromUtf8(router.comment());
-
-    return router_config;
-}
+private:
+    proto::address_book::Router router_;
+};
 
 } // namespace
 
@@ -332,10 +322,9 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
     for (int i = 0; i < ui.tree_routers->topLevelItemCount(); ++i)
     {
-        client::RouterTreeItem* tree_item =
-            static_cast<client::RouterTreeItem*>(ui.tree_routers->topLevelItem(i));
+        RouterTreeItem* tree_item = static_cast<RouterTreeItem*>(ui.tree_routers->topLevelItem(i));
         if (tree_item)
-            data_->mutable_router()->AddAllocated(serializeRouter(tree_item->router()).release());
+            data_->add_router()->CopyFrom(tree_item->router());
     }
 
     file_->set_encryption_type(encryption_type);
@@ -405,8 +394,7 @@ void AddressBookDialog::hashingSaltChanged(int /* value */)
 
 void AddressBookDialog::currentRouterChanged()
 {
-    client::RouterTreeItem* router_item =
-        static_cast<client::RouterTreeItem*>(ui.tree_routers->currentItem());
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
     if (!router_item)
     {
         ui.button_modify_router->setEnabled(false);
@@ -423,13 +411,12 @@ void AddressBookDialog::addRouter()
 {
     client::RouterDialog dialog(std::nullopt, this);
     if (dialog.exec() == QDialog::Accepted)
-        ui.tree_routers->addTopLevelItem(new client::RouterTreeItem(dialog.router().value()));
+        ui.tree_routers->addTopLevelItem(new RouterTreeItem(dialog.router().value()));
 }
 
 void AddressBookDialog::modifyRouter()
 {
-    client::RouterTreeItem* router_item =
-        static_cast<client::RouterTreeItem*>(ui.tree_routers->currentItem());
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
     if (!router_item)
         return;
 
@@ -440,8 +427,7 @@ void AddressBookDialog::modifyRouter()
 
 void AddressBookDialog::deleteRouter()
 {
-    client::RouterTreeItem* router_item =
-        static_cast<client::RouterTreeItem*>(ui.tree_routers->currentItem());
+    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
     if (!router_item)
         return;
 
@@ -463,10 +449,7 @@ void AddressBookDialog::reloadRouters()
     ui.tree_routers->clear();
 
     for (int i = 0; i < data_->router_size(); ++i)
-    {
-        ui.tree_routers->addTopLevelItem(
-            new client::RouterTreeItem(parseRouter(data_->router(i))));
-    }
+        ui.tree_routers->addTopLevelItem(new RouterTreeItem(data_->router(i)));
 }
 
 void AddressBookDialog::setPasswordChanged()

@@ -18,22 +18,41 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include <QMessageBox>
+#include <QTimer>
+
 namespace client {
 
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-    setFixedHeight(sizeHint().height());
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::onShowPasswordButtonToggled);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
+    connect(ui.buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
+
+    connect(ui.checkbox_one_time_password, &QCheckBox::toggled, [this](bool checked)
+    {
+        ui.label_username->setVisible(!checked);
+        ui.edit_username->setVisible(!checked);
+        ui.edit_username->clear();
+
+        fitSize();
+    });
+
+    fitSize();
 }
 
 AuthorizationDialog::~AuthorizationDialog() = default;
+
+void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
+{
+    ui.checkbox_one_time_password->setVisible(enable);
+    fitSize();
+}
 
 QString AuthorizationDialog::userName() const
 {
@@ -43,12 +62,6 @@ QString AuthorizationDialog::userName() const
 void AuthorizationDialog::setUserName(const QString& username)
 {
     ui.edit_username->setText(username);
-
-    if (username.startsWith('#'))
-    {
-        ui.label_username->setVisible(false);
-        ui.edit_username->setVisible(false);
-    }
 }
 
 QString AuthorizationDialog::password() const
@@ -63,7 +76,7 @@ void AuthorizationDialog::setPassword(const QString& password)
 
 void AuthorizationDialog::showEvent(QShowEvent* event)
 {
-    if (ui.edit_username->text().isEmpty())
+    if (ui.edit_username->text().isEmpty() && !ui.checkbox_one_time_password->isChecked())
         ui.edit_username->setFocus();
     else
         ui.edit_password->setFocus();
@@ -90,12 +103,45 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
+    if (ui.buttonbox->standardButton(button) == QDialogButtonBox::Ok)
+    {
+        if (!ui.checkbox_one_time_password->isChecked())
+        {
+            if (ui.edit_username->text().isEmpty())
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("Username cannot be empty."),
+                                     QMessageBox::Ok);
+                return;
+            }
+        }
+
+        if (ui.edit_password->text().isEmpty())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Password cannot be empty."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
         accept();
+    }
     else
+    {
         reject();
+    }
 
     close();
+}
+
+void AuthorizationDialog::fitSize()
+{
+    QTimer::singleShot(0, [this]()
+    {
+        setFixedHeight(sizeHint().height());
+    });
 }
 
 } // namespace client
