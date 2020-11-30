@@ -29,18 +29,18 @@ base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
     switch (type)
     {
         case QtCriticalMsg:
-            return base::LS_ERROR;
+            return base::LOG_LS_ERROR;
 
         case QtFatalMsg:
-            return base::LS_FATAL;
+            return base::LOG_LS_FATAL;
 
         case QtInfoMsg:
-            return base::LS_INFO;
+            return base::LOG_LS_INFO;
 
         case QtDebugMsg:
         case QtWarningMsg:
         default:
-            return base::LS_WARNING;
+            return base::LOG_LS_WARNING;
     }
 }
 

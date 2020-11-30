@@ -48,7 +48,7 @@ namespace base {
 
 namespace {
 
-LoggingSeverity g_min_log_level = LS_INFO;
+LoggingSeverity g_min_log_level = LOG_LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 std::filesystem::path g_log_file_path;
@@ -62,9 +62,9 @@ const char* severityName(LoggingSeverity severity)
         "INFO", "WARNING", "ERROR", "FATAL"
     };
 
-    static_assert(LS_NUMBER == std::size(kLogSeverityNames));
+    static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
-    if (severity >= 0 && severity < LS_NUMBER)
+    if (severity >= 0 && severity < LOG_LS_NUMBER)
         return kLogSeverityNames[severity];
 
     return "UNKNOWN";
@@ -168,7 +168,7 @@ std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
     : destination(LOG_DEFAULT),
-      min_log_level(LS_INFO),
+      min_log_level(LOG_LS_INFO),
       max_log_age(7)
 {
     // Nothing
@@ -231,7 +231,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity)
     // Return true here unless we know ~LogMessage won't do anything. Note that
     // ~LogMessage writes to stderr if severity_ >= kAlwaysPrintErrorLevel, even
     // when g_logging_destination is LOG_NONE.
-    return g_logging_destination != LOG_NONE || severity >= LS_ERROR;
+    return g_logging_destination != LOG_NONE || severity >= LOG_LS_ERROR;
 }
 
 void makeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
@@ -283,14 +283,14 @@ LogMessage::LogMessage(std::string_view file, int line, LoggingSeverity severity
 }
 
 LogMessage::LogMessage(std::string_view file, int line, const char* condition)
-    : severity_(LS_FATAL)
+    : severity_(LOG_LS_FATAL)
 {
     init(file, line);
     stream_ << "Check failed: " << condition << ". ";
 }
 
 LogMessage::LogMessage(std::string_view file, int line, std::string* result)
-    : severity_(LS_FATAL)
+    : severity_(LOG_LS_FATAL)
 {
     std::unique_ptr<std::string> result_deleter(result);
     init(file, line);
@@ -321,7 +321,7 @@ LogMessage::~LogMessage()
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
-    else if (severity_ >= LS_ERROR)
+    else if (severity_ >= LOG_LS_ERROR)
     {
         // When we're only outputting to a log file, above a certain log level, we
         // should still output to stderr so that we can better detect and diagnose
@@ -338,7 +338,7 @@ LogMessage::~LogMessage()
         g_log_file.flush();
     }
 
-    if (severity_ == LS_FATAL)
+    if (severity_ == LOG_LS_FATAL)
     {
         // Crash the process.
         debugBreak();
@@ -383,7 +383,7 @@ ErrorLogMessage::~ErrorLogMessage()
 
 void logErrorNotReached(const char* file, int line)
 {
-    LogMessage(file, line, LS_ERROR).stream() << "NOTREACHED() hit.";
+    LogMessage(file, line, LOG_LS_ERROR).stream() << "NOTREACHED() hit.";
 }
 
 } // namespace base

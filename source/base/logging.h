@@ -103,13 +103,13 @@ enum LoggingDestination
 
 using LoggingSeverity = int;
 
-const LoggingSeverity LS_INFO = 0;
-const LoggingSeverity LS_WARNING = 1;
-const LoggingSeverity LS_ERROR = 2;
-const LoggingSeverity LS_FATAL = 3;
-const LoggingSeverity LS_NUMBER = 4;
-const LoggingSeverity LS_DFATAL = LS_FATAL;
-const LoggingSeverity LS_DCHECK = LS_FATAL;
+const LoggingSeverity LOG_LS_INFO = 0;
+const LoggingSeverity LOG_LS_WARNING = 1;
+const LoggingSeverity LOG_LS_ERROR = 2;
+const LoggingSeverity LOG_LS_FATAL = 3;
+const LoggingSeverity LOG_LS_NUMBER = 4;
+const LoggingSeverity LOG_LS_DFATAL = LOG_LS_FATAL;
+const LoggingSeverity LOG_LS_DCHECK = LOG_LS_FATAL;
 
 struct LoggingSettings
 {
@@ -117,7 +117,7 @@ struct LoggingSettings
     //
     //  destination: LOG_DEFAULT
     //  max_log_age: 7 days
-    //  min_log_level: LS_INFO
+    //  min_log_level: LOG_LS_INFO
     LoggingSettings();
 
     LoggingDestination destination;
@@ -143,17 +143,17 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
 #define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_INFO, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_INFO, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_WARNING, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_WARNING, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_ERROR, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_ERROR, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_FATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_FATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DFATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DFATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_DFATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DCHECK(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LS_DCHECK, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_DCHECK, ##__VA_ARGS__)
 
 #define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
 #define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
@@ -164,13 +164,8 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 
 // As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also, LOG_IS_ON(LS_DFATAL)
 // always holds in debug mode. In particular, CHECK()s will always fire if they fail.
-#if defined(CC_MSVC)
 #define LOG_IS_ON(severity) \
-    (::base::shouldCreateLogMessage(::base::##severity))
-#else
-#define LOG_IS_ON(severity) \
-    (::base::shouldCreateLogMessage(::base::severity))
-#endif // CC_MSVC
+    (::base::shouldCreateLogMessage(::base::LOG_##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.
@@ -247,7 +242,7 @@ private:
     LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                                        \
-    LAZY_STREAM(PLOG_STREAM(FATAL), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(PLOG_STREAM(LS_FATAL), !(condition)) << "Check failed: " #condition ". "
 
 // Helper macro for binary operators.
 // Don't use this macro directly in your code, use CHECK_EQ et al below.
@@ -321,7 +316,7 @@ std::string* makeCheckOpString(const t1& v1, const t2& v2, const char* names)
     return msg;
 }
 
-// Commonly used instantiations of MakeCheckOpString<>. Explicitly instantiated in logging.cc.
+// Commonly used instantiations of makeCheckOpString<>. Explicitly instantiated in logging.cc.
 std::string* makeCheckOpString(const int& v1, const int& v2, const char* names);
 std::string* makeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names);
 std::string* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names);
@@ -403,9 +398,9 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #if DCHECK_IS_ON()
 
 #define DCHECK(condition) \
-  LAZY_STREAM(LOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(LOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 #define DPCHECK(condition) \
-  LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
+    LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 
 #else // DCHECK_IS_ON()
 
@@ -428,7 +423,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
         DCHECK_IS_ON() ?                                                                         \
         ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);          \
     else                                                                                         \
-        ::base::LogMessage(__FILE__, __LINE__, ::base::LS_DCHECK,                                \
+        ::base::LogMessage(__FILE__, __LINE__, ::base::LOG_LS_DCHECK,                            \
                            true_if_passed.message()).stream()
 
 #else // DCHECK_IS_ON()
