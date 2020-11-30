@@ -35,7 +35,7 @@ if (WIN32)
     message(STATUS "Windows detected")
 endif()
 
-message(STATUS "Traget processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "Target processor: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "Host processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
