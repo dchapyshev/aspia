@@ -709,7 +709,7 @@ void NetworkChannel::doReadServiceData(size_t length)
 {
     DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
     DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
-    DCHECK_GT(length, 0);
+    DCHECK_GT(length, 0u);
 
     read_buffer_.resize(read_buffer_.size() + length);
 
