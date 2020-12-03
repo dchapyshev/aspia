@@ -16,45 +16,45 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__ROUTER_DIALOG_H
-#define CONSOLE__ROUTER_DIALOG_H
+#ifndef CONSOLE__FAST_CONNECT_DIALOG_H
+#define CONSOLE__FAST_CONNECT_DIALOG_H
 
-#include "proto/address_book.pb.h"
-#include "ui_router_dialog.h"
-
-#include <optional>
+#include "base/macros_magic.h"
+#include "client/client_config.h"
+#include "proto/desktop.pb.h"
+#include "ui_fast_connect_dialog.h"
 
 #include <QDialog>
 
 class QAbstractButton;
 
-namespace Ui {
-class RouterDialog;
-} // namespace Ui
-
 namespace console {
 
-class RouterDialog : public QDialog
+class FastConnectDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    RouterDialog(const std::optional<proto::address_book::Router>& router, QWidget* parent);
-    ~RouterDialog();
-
-    const std::optional<proto::address_book::Router>& router() const { return router_; }
+    explicit FastConnectDialog(QWidget* parent = nullptr);
+    ~FastConnectDialog();
 
 private slots:
-    void showPasswordButtonToggled(bool checked);
+    void sessionTypeChanged(int item_index);
+    void sessionConfigButtonPressed();
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void showError(const QString& message);
+    void reloadRouters();
 
-    Ui::RouterDialog ui;
-    std::optional<proto::address_book::Router> router_;
+    Ui::FastConnectDialog ui;
+
+    client::RouterConfigList routers_;
+    client::Config config_;
+    proto::DesktopConfig desktop_config_;
+
+    DISALLOW_COPY_AND_ASSIGN(FastConnectDialog);
 };
 
 } // namespace console
 
-#endif // CONSOLE__ROUTER_DIALOG_H
+#endif // CONSOLE__FAST_CONNECT_DIALOG_H

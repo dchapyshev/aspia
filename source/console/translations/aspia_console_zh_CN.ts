@@ -626,6 +626,29 @@
     </message>
 </context>
 <context>
+    <name>FastConnectDialog</name>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="20"/>
+        <source>Fast Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="35"/>
+        <source>Router:</source>
+        <translation type="unfinished">路由：</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="45"/>
+        <source>Address:</source>
+        <translation type="unfinished">地址：</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="83"/>
+        <source>Session Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OpenAddressBookDialog</name>
     <message>
         <location filename="../open_address_book_dialog.ui" line="23"/>
@@ -656,28 +679,50 @@
 <context>
     <name>RouterDialog</name>
     <message>
+        <location filename="../router_dialog.ui" line="14"/>
         <source>Router Properties</source>
-        <translation type="vanished">路由器属性</translation>
+        <translation>路由器属性</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="22"/>
         <source>Name:</source>
-        <translation type="vanished">名字：</translation>
+        <translation>名字：</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="36"/>
         <source>Address:</source>
-        <translation type="vanished">地址：</translation>
+        <translation>地址：</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="50"/>
         <source>User Name:</source>
-        <translation type="vanished">用户名：</translation>
+        <translation>用户名：</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="64"/>
         <source>Password:</source>
-        <translation type="vanished">密码：</translation>
+        <translation>密码：</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="101"/>
         <source>Comment:</source>
-        <translation type="vanished">描述：</translation>
+        <translation>描述：</translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">名称不能为空。</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="obsolete">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+    </message>
+    <message>
+        <source>An invalid router address was entered.</source>
+        <translation type="obsolete">输入了无效的路由器地址。</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -706,92 +751,92 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="116"/>
+        <location filename="../address_book_dialog.cc" line="106"/>
         <source>Without Encryption</source>
         <translation>没有加密</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="118"/>
+        <location filename="../address_book_dialog.cc" line="108"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="147"/>
+        <location filename="../address_book_dialog.cc" line="137"/>
         <source>Double-click to change</source>
         <translation>双击可更改</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="130"/>
+        <location filename="../address_book_dialog.cc" line="120"/>
         <source>Address Book</source>
         <translation>通讯录</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="225"/>
+        <location filename="../address_book_dialog.cc" line="215"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名称太长。名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="231"/>
+        <location filename="../address_book_dialog.cc" line="221"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="228"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长。描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="266"/>
+        <location filename="../address_book_dialog.cc" line="256"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="272"/>
+        <location filename="../address_book_dialog.cc" line="262"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="280"/>
+        <location filename="../address_book_dialog.cc" line="270"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="283"/>
+        <location filename="../address_book_dialog.cc" line="273"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="287"/>
+        <location filename="../address_book_dialog.cc" line="277"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="290"/>
-        <location filename="../address_book_dialog.cc" line="496"/>
+        <location filename="../address_book_dialog.cc" line="280"/>
+        <location filename="../address_book_dialog.cc" line="479"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="391"/>
-        <location filename="../address_book_dialog.cc" line="449"/>
+        <location filename="../address_book_dialog.cc" line="380"/>
+        <location filename="../address_book_dialog.cc" line="435"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="392"/>
+        <location filename="../address_book_dialog.cc" line="381"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>在更改哈希salt的大小时，需要重新输入密码，继续吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="450"/>
+        <location filename="../address_book_dialog.cc" line="436"/>
         <source>Are you sure you want to remove router &quot;%1&quot;?</source>
         <translation>确定要删除路由器吗 &quot;%1&quot;?</translation>
     </message>
@@ -833,59 +878,59 @@
         <translation type="obsolete">路由器</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="535"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="539"/>
-        <location filename="../address_book_tab.cc" line="561"/>
+        <location filename="../address_book_tab.cc" line="537"/>
+        <location filename="../address_book_tab.cc" line="559"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="557"/>
+        <location filename="../address_book_tab.cc" line="555"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="893"/>
+        <location filename="../address_book_tab.cc" line="891"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="895"/>
+        <location filename="../address_book_tab.cc" line="893"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="905"/>
+        <location filename="../address_book_tab.cc" line="903"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="918"/>
+        <location filename="../address_book_tab.cc" line="916"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="960"/>
+        <location filename="../address_book_tab.cc" line="958"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="971"/>
-        <location filename="../address_book_tab.cc" line="985"/>
+        <location filename="../address_book_tab.cc" line="969"/>
+        <location filename="../address_book_tab.cc" line="983"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="973"/>
+        <location filename="../address_book_tab.cc" line="971"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="987"/>
+        <location filename="../address_book_tab.cc" line="985"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -1026,10 +1071,43 @@
     </message>
 </context>
 <context>
+    <name>console::FastConnectDialog</name>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="50"/>
+        <source>Address:</source>
+        <translation type="unfinished">地址：</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="86"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">确认</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="87"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="204"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="205"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished">输入了无效的计算机地址。</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="284"/>
+        <source>Without Router</source>
+        <translation type="unfinished">没有路由器</translation>
+    </message>
+</context>
+<context>
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1127"/>
+        <location filename="../main_window.cc" line="1124"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1059,56 +1137,56 @@
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="512"/>
-        <location filename="../main_window.cc" line="823"/>
-        <location filename="../main_window.cc" line="900"/>
+        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="820"/>
+        <location filename="../main_window.cc" line="897"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="513"/>
-        <location filename="../main_window.cc" line="901"/>
+        <location filename="../main_window.cc" line="510"/>
+        <location filename="../main_window.cc" line="898"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="716"/>
+        <location filename="../main_window.cc" line="713"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
+        <location filename="../main_window.cc" line="720"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="724"/>
-        <location filename="../main_window.cc" line="729"/>
+        <location filename="../main_window.cc" line="721"/>
+        <location filename="../main_window.cc" line="726"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="824"/>
+        <location filename="../main_window.cc" line="821"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished">最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="857"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="872"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1008"/>
+        <location filename="../main_window.cc" line="1005"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1128"/>
+        <location filename="../main_window.cc" line="1125"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation>计算机属性指示路由器的使用，但是在列表中找不到指定的路由器。 检查是否正确指定了路由器。</translation>
     </message>
@@ -1137,32 +1215,43 @@
 <context>
     <name>console::RouterDialog</name>
     <message numerus="yes">
+        <location filename="../router_dialog.cc" line="97"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>名字太长， 名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="105"/>
         <source>Name can not be empty.</source>
-        <translation type="vanished">名称不能为空。</translation>
+        <translation>名称不能为空。</translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="115"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+        <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="124"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
+        <location filename="../router_dialog.cc" line="133"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="144"/>
         <source>An invalid router address was entered.</source>
-        <translation type="vanished">输入了无效的路由器地址。</translation>
+        <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="171"/>
         <source>Warning</source>
-        <translation type="vanished">警告</translation>
+        <translation>警告</translation>
     </message>
 </context>
 <context>

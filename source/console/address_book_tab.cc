@@ -347,7 +347,6 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig(std::string_vie
         {
             client::RouterConfig router_config;
 
-            router_config.name     = base::utf16FromUtf8(router.name());
             router_config.address  = base::utf16FromUtf8(router.address());
             router_config.port     = router.port();
             router_config.username = base::utf16FromUtf8(router.username());
@@ -369,7 +368,6 @@ std::vector<client::RouterConfig> AddressBookTab::routerConfigList() const
         const proto::address_book::Router& router = data_.router(i);
         client::RouterConfig router_config;
 
-        router_config.name     = base::utf16FromUtf8(router.name());
         router_config.address  = base::utf16FromUtf8(router.address());
         router_config.port     = router.port();
         router_config.username = base::utf16FromUtf8(router.username());

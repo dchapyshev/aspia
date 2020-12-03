@@ -59,6 +59,9 @@ list(APPEND SOURCE_CONSOLE
     computer_tree.h
     console.rc
     main.cc
+    fast_connect_dialog.cc
+    fast_connect_dialog.h
+    fast_connect_dialog.ui
     main_window.cc
     main_window.h
     main_window.ui

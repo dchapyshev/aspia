@@ -22,11 +22,14 @@
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
 #include "proto/desktop.pb.h"
-#include "ui_desktop_config_dialog.h"
 
 #include <QDialog>
 
 class QAbstractButton;
+
+namespace Ui {
+class DesktopConfigDialog;
+} // namespace Ui
 
 namespace client {
 
@@ -50,7 +53,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::DesktopConfigDialog ui;
+    std::unique_ptr<Ui::DesktopConfigDialog> ui;
     proto::DesktopConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);

@@ -409,7 +409,7 @@ void AddressBookDialog::currentRouterChanged()
 
 void AddressBookDialog::addRouter()
 {
-    client::RouterDialog dialog(std::nullopt, this);
+    RouterDialog dialog(std::nullopt, this);
     if (dialog.exec() == QDialog::Accepted)
         ui.tree_routers->addTopLevelItem(new RouterTreeItem(dialog.router().value()));
 }
@@ -420,7 +420,7 @@ void AddressBookDialog::modifyRouter()
     if (!router_item)
         return;
 
-    client::RouterDialog dialog(router_item->router(), this);
+    RouterDialog dialog(router_item->router(), this);
     if (dialog.exec() == QDialog::Accepted)
         router_item->setRouter(dialog.router().value());
 }

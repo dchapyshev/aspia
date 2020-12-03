@@ -817,6 +817,29 @@
     </message>
 </context>
 <context>
+    <name>FastConnectDialog</name>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="20"/>
+        <source>Fast Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="35"/>
+        <source>Router:</source>
+        <translation type="unfinished">Маршрутизатор:</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="45"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="83"/>
+        <source>Session Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OpenAddressBookDialog</name>
     <message>
         <location filename="../open_address_book_dialog.ui" line="23"/>
@@ -847,28 +870,66 @@
 <context>
     <name>RouterDialog</name>
     <message>
+        <location filename="../router_dialog.ui" line="14"/>
         <source>Router Properties</source>
-        <translation type="vanished">Свойства маршрутизатора</translation>
+        <translation>Свойства маршрутизатора</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="22"/>
         <source>Name:</source>
-        <translation type="vanished">Имя:</translation>
+        <translation>Имя:</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="36"/>
         <source>Address:</source>
-        <translation type="vanished">Адрес:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="50"/>
         <source>User Name:</source>
-        <translation type="vanished">Имя пользователя:</translation>
+        <translation>Имя пользователя:</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="64"/>
         <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
+        <location filename="../router_dialog.ui" line="101"/>
         <source>Comment:</source>
-        <translation type="vanished">Комментарий:</translation>
+        <translation>Комментарий:</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">Имя не может быть пустым.</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="obsolete">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>An invalid router address was entered.</source>
+        <translation type="obsolete">Введен некорректный адрес маршрутизатора.</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
     </message>
 </context>
 <context>
@@ -897,27 +958,27 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="116"/>
+        <location filename="../address_book_dialog.cc" line="106"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="118"/>
+        <location filename="../address_book_dialog.cc" line="108"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="147"/>
+        <location filename="../address_book_dialog.cc" line="137"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="130"/>
+        <location filename="../address_book_dialog.cc" line="120"/>
         <source>Address Book</source>
         <translation>Адресная книга</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="225"/>
+        <location filename="../address_book_dialog.cc" line="215"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -926,12 +987,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="231"/>
+        <location filename="../address_book_dialog.cc" line="221"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="228"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -940,12 +1001,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="266"/>
+        <location filename="../address_book_dialog.cc" line="256"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="272"/>
+        <location filename="../address_book_dialog.cc" line="262"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -954,12 +1015,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="280"/>
+        <location filename="../address_book_dialog.cc" line="270"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="283"/>
+        <location filename="../address_book_dialog.cc" line="273"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -968,29 +1029,29 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="287"/>
+        <location filename="../address_book_dialog.cc" line="277"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="290"/>
-        <location filename="../address_book_dialog.cc" line="496"/>
+        <location filename="../address_book_dialog.cc" line="280"/>
+        <location filename="../address_book_dialog.cc" line="479"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="391"/>
-        <location filename="../address_book_dialog.cc" line="449"/>
+        <location filename="../address_book_dialog.cc" line="380"/>
+        <location filename="../address_book_dialog.cc" line="435"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="392"/>
+        <location filename="../address_book_dialog.cc" line="381"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>При изменении размера соли для хеширования вам придется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="450"/>
+        <location filename="../address_book_dialog.cc" line="436"/>
         <source>Are you sure you want to remove router &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить маршрутизатор &quot;%1&quot;?</translation>
     </message>
@@ -1032,59 +1093,59 @@
         <translation type="obsolete">Маршрутизаторы</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="535"/>
+        <location filename="../address_book_tab.cc" line="533"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="539"/>
-        <location filename="../address_book_tab.cc" line="561"/>
+        <location filename="../address_book_tab.cc" line="537"/>
+        <location filename="../address_book_tab.cc" line="559"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="557"/>
+        <location filename="../address_book_tab.cc" line="555"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="893"/>
+        <location filename="../address_book_tab.cc" line="891"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="895"/>
+        <location filename="../address_book_tab.cc" line="893"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="905"/>
+        <location filename="../address_book_tab.cc" line="903"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="918"/>
+        <location filename="../address_book_tab.cc" line="916"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="960"/>
+        <location filename="../address_book_tab.cc" line="958"/>
         <source>Root Group</source>
         <translation>Корневая группа</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="971"/>
-        <location filename="../address_book_tab.cc" line="985"/>
+        <location filename="../address_book_tab.cc" line="969"/>
+        <location filename="../address_book_tab.cc" line="983"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="973"/>
+        <location filename="../address_book_tab.cc" line="971"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="987"/>
+        <location filename="../address_book_tab.cc" line="985"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1319,10 +1380,43 @@
     </message>
 </context>
 <context>
+    <name>console::FastConnectDialog</name>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="50"/>
+        <source>Address:</source>
+        <translation type="unfinished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="86"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="87"/>
+        <source>The list of entered addresses will be cleared. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="204"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="205"/>
+        <source>An invalid computer address was entered.</source>
+        <translation type="unfinished">Введен некорректный адрес компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="284"/>
+        <source>Without Router</source>
+        <translation type="unfinished">Без маршрутизатора</translation>
+    </message>
+</context>
+<context>
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1127"/>
+        <location filename="../main_window.cc" line="1124"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1342,51 +1436,51 @@
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="512"/>
-        <location filename="../main_window.cc" line="823"/>
-        <location filename="../main_window.cc" line="900"/>
+        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="820"/>
+        <location filename="../main_window.cc" line="897"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="513"/>
-        <location filename="../main_window.cc" line="901"/>
+        <location filename="../main_window.cc" line="510"/>
+        <location filename="../main_window.cc" line="898"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="716"/>
+        <location filename="../main_window.cc" line="713"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="723"/>
+        <location filename="../main_window.cc" line="720"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="724"/>
-        <location filename="../main_window.cc" line="729"/>
+        <location filename="../main_window.cc" line="721"/>
+        <location filename="../main_window.cc" line="726"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="824"/>
+        <location filename="../main_window.cc" line="821"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="857"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="872"/>
+        <location filename="../main_window.cc" line="869"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1128"/>
+        <location filename="../main_window.cc" line="1125"/>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
         <translation>В свойствах компьютера указано использование маршрутизатора, но указанный маршрутизатор не найден в списке. Проверьте, правильно ли указан маршрутизатор.</translation>
     </message>
@@ -1395,7 +1489,7 @@
         <translation type="vanished">&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1008"/>
+        <location filename="../main_window.cc" line="1005"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
@@ -1434,40 +1528,51 @@
 <context>
     <name>console::RouterDialog</name>
     <message numerus="yes">
+        <location filename="../router_dialog.cc" line="97"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="105"/>
         <source>Name can not be empty.</source>
-        <translation type="vanished">Имя не может быть пустым.</translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="115"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
+        <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../router_dialog.cc" line="124"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
+        <location filename="../router_dialog.cc" line="133"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="144"/>
         <source>An invalid router address was entered.</source>
-        <translation type="vanished">Введен некорректный адрес маршрутизатора.</translation>
+        <translation>Введен некорректный адрес маршрутизатора.</translation>
     </message>
     <message>
         <source>An invalid computer address was entered.</source>
         <translation type="obsolete">Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
+        <location filename="../router_dialog.cc" line="171"/>
         <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
 </context>
 <context>
