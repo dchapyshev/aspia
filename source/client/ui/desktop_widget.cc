@@ -102,9 +102,8 @@ bool isModifierKey(int key)
 
 } // namespace
 
-DesktopWidget::DesktopWidget(Delegate* delegate, QWidget* parent)
-    : QWidget(parent),
-      delegate_(delegate)
+DesktopWidget::DesktopWidget(QWidget* parent)
+    : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
@@ -183,11 +182,11 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         if (mask & kWheelMask)
         {
             for (int i = 0; i < wheel_steps; ++i)
-                delegate_->onMouseEvent(event);
+                emit sig_mouseEvent(event);
         }
         else
         {
-            delegate_->onMouseEvent(event);
+            emit sig_mouseEvent(event);
         }
     }
 }
@@ -246,57 +245,57 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     if (key_sequence & Qt::AltModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftAlt);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::ControlModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftCtrl);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::ShiftModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftShift);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::MetaModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftMeta);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     event.set_usb_keycode(key);
-    delegate_->onKeyEvent(event);
+    emit sig_keyEvent(event);
 
     event.set_flags(flags);
 
     event.set_usb_keycode(key);
-    delegate_->onKeyEvent(event);
+    emit sig_keyEvent(event);
 
     if (key_sequence & Qt::MetaModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftMeta);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::ShiftModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftShift);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::ControlModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftCtrl);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 
     if (key_sequence & Qt::AltModifier)
     {
         event.set_usb_keycode(kUsbCodeLeftAlt);
-        delegate_->onKeyEvent(event);
+        emit sig_keyEvent(event);
     }
 }
 
@@ -322,8 +321,6 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter_.drawImage(rect(), frame->constImage());
         painter_.end();
     }
-
-    delegate_->onDrawDesktop();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
@@ -369,7 +366,7 @@ void DesktopWidget::leaveEvent(QEvent* event)
         mouse_event.set_x(prev_pos_.x());
         mouse_event.set_y(prev_pos_.y());
 
-        delegate_->onMouseEvent(mouse_event);
+        emit sig_mouseEvent(mouse_event);
         prev_mask_ = 0;
     }
 
@@ -407,7 +404,7 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
         while (it != pressed_keys_.end())
         {
             key_event.set_usb_keycode(*it);
-            delegate_->onKeyEvent(key_event);
+            emit sig_keyEvent(key_event);
             it = pressed_keys_.erase(it);
         }
     }
@@ -426,7 +423,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     event.set_usb_keycode(usb_keycode);
     event.set_flags(flags);
 
-    delegate_->onKeyEvent(event);
+    emit sig_keyEvent(event);
 }
 
 #if defined(OS_WIN)

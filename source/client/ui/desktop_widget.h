@@ -41,17 +41,7 @@ class DesktopWidget : public QWidget
     Q_OBJECT
 
 public:
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
-
-        virtual void onMouseEvent(const proto::MouseEvent& event) = 0;
-        virtual void onKeyEvent(const proto::KeyEvent& event) = 0;
-        virtual void onDrawDesktop() = 0;
-    };
-
-    DesktopWidget(Delegate* delegate, QWidget* parent);
+    explicit DesktopWidget(QWidget* parent);
     ~DesktopWidget() = default;
 
     base::Frame* desktopFrame();
@@ -69,6 +59,10 @@ public slots:
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.
     void enableKeyCombinations(bool enable);
+
+signals:
+    void sig_mouseEvent(const proto::MouseEvent& event);
+    void sig_keyEvent(const proto::KeyEvent& event);
 
 protected:
     // QWidget implementation.
@@ -92,8 +86,6 @@ private:
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
     base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
-
-    Delegate* delegate_;
 
     std::shared_ptr<base::Frame> frame_;
     bool enable_key_sequenses_ = true;

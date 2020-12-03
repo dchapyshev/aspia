@@ -44,8 +44,7 @@ class StatisticsDialog;
 
 class QtDesktopWindow :
     public SessionWindow,
-    public DesktopWindow,
-    public DesktopWidget::Delegate
+    public DesktopWindow
 {
     Q_OBJECT
 
@@ -71,11 +70,6 @@ public:
     void drawFrame() override;
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
 
-    // DesktopWidget::Delegate implementation.
-    void onMouseEvent(const proto::MouseEvent& event) override;
-    void onKeyEvent(const proto::KeyEvent& event) override;
-    void onDrawDesktop() override;
-
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) override;
@@ -83,6 +77,8 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
+    void onMouseEvent(const proto::MouseEvent& event);
+    void onKeyEvent(const proto::KeyEvent& event);
     void changeSettings();
     void onConfigChanged(const proto::DesktopConfig& config);
     void autosizeWindow();

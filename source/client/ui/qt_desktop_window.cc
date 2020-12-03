@@ -77,23 +77,22 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 {
     setMinimumSize(400, 300);
 
-    desktop_ = new DesktopWidget(this, this);
+    desktop_ = new DesktopWidget(this);
 
     scroll_area_ = new QScrollArea(this);
     scroll_area_->setAlignment(Qt::AlignCenter);
     scroll_area_->setFrameShape(QFrame::NoFrame);
-    scroll_area_->setAutoFillBackground(true);
     scroll_area_->setWidget(desktop_);
 
     QPalette palette(scroll_area_->palette());
     palette.setBrush(QPalette::Window, QBrush(QColor(25, 25, 25)));
-    scroll_area_->setPalette(palette);
+    scroll_area_->viewport()->setPalette(palette);
 
     layout_ = new QHBoxLayout(this);
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(session_type_, this);
+    panel_ = new DesktopPanel(session_type_, scroll_area_);
     panel_->installEventFilter(this);
 
     resize_timer_ = new QTimer(this);
@@ -184,6 +183,9 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         if (!session_window->connectToHost(session_config))
             session_window->close();
     });
+
+    connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
+    connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::onKeyEvent);
 }
 
 QtDesktopWindow::~QtDesktopWindow()
@@ -345,6 +347,60 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
         QPixmap::fromImage(image), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
+void QtDesktopWindow::resizeEvent(QResizeEvent* event)
+{
+    panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+    scaleDesktop();
+    QWidget::resizeEvent(event);
+}
+
+void QtDesktopWindow::leaveEvent(QEvent* event)
+{
+    if (scroll_timer_->isActive())
+        scroll_timer_->stop();
+
+    QWidget::leaveEvent(event);
+}
+
+bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == desktop_)
+    {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_Tab)
+            {
+                desktop_->doKeyEvent(key_event);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    else if (object == scroll_area_->viewport())
+    {
+        if (event->type() == QEvent::Wheel)
+        {
+            QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
+            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
+
+            desktop_->doMouseEvent(wheel_event->type(),
+                                   wheel_event->buttons(),
+                                   pos,
+                                   wheel_event->angleDelta());
+            return true;
+        }
+    }
+    else if (object == panel_)
+    {
+        if (event->type() == QEvent::Resize)
+            panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+    }
+
+    return QWidget::eventFilter(object, event);
+}
+
 void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
@@ -422,65 +478,6 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
 {
     desktop_control_proxy_->onKeyEvent(event);
-}
-
-void QtDesktopWindow::onDrawDesktop()
-{
-    panel_->update();
-}
-
-void QtDesktopWindow::resizeEvent(QResizeEvent* event)
-{
-    panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
-    scaleDesktop();
-    QWidget::resizeEvent(event);
-}
-
-void QtDesktopWindow::leaveEvent(QEvent* event)
-{
-    if (scroll_timer_->isActive())
-        scroll_timer_->stop();
-
-    QWidget::leaveEvent(event);
-}
-
-bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
-{
-    if (object == desktop_)
-    {
-        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
-        {
-            QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-            if (key_event->key() == Qt::Key_Tab)
-            {
-                desktop_->doKeyEvent(key_event);
-                return true;
-            }
-        }
-
-        return false;
-    }
-    else if (object == scroll_area_->viewport())
-    {
-        if (event->type() == QEvent::Wheel)
-        {
-            QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
-            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
-
-            desktop_->doMouseEvent(wheel_event->type(),
-                                   wheel_event->buttons(),
-                                   pos,
-                                   wheel_event->angleDelta());
-            return true;
-        }
-    }
-    else if (object == panel_)
-    {
-        if (event->type() == QEvent::Resize)
-            panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
-    }
-
-    return QWidget::eventFilter(object, event);
 }
 
 void QtDesktopWindow::changeSettings()

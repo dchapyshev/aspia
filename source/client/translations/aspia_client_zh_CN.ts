@@ -1518,34 +1518,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="220"/>
-        <location filename="../ui/qt_desktop_window.cc" line="228"/>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="222"/>
+        <location filename="../ui/qt_desktop_window.cc" line="230"/>
+        <location filename="../ui/qt_desktop_window.cc" line="552"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="221"/>
+        <location filename="../ui/qt_desktop_window.cc" line="223"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="229"/>
+        <location filename="../ui/qt_desktop_window.cc" line="231"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="533"/>
+        <location filename="../ui/qt_desktop_window.cc" line="530"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="535"/>
+        <location filename="../ui/qt_desktop_window.cc" line="532"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="555"/>
+        <location filename="../ui/qt_desktop_window.cc" line="552"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
