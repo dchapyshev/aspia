@@ -86,6 +86,9 @@ int hostMain(int argc, char* argv[])
             return 1;
     }
 
+    host::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     host::Application application(argc, argv);
 
     if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
