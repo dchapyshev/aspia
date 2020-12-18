@@ -776,11 +776,14 @@ void NetworkChannel::onReadServiceData(const std::error_code& error_code, size_t
                 return;
             }
 
-            Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
-                Clock::now() - keep_alive_timestamp_);
+            if (DCHECK_IS_ON())
+            {
+                Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
+                    Clock::now() - keep_alive_timestamp_);
 
-            LOG(LS_INFO) << "Ping result: " << ping_time.count() << " ms ("
-                         << keep_alive_counter_.size() << " bytes)";
+                DLOG(LS_INFO) << "Ping result: " << ping_time.count() << " ms ("
+                              << keep_alive_counter_.size() << " bytes)";
+            }
 
             // The user can disable keep alive. Restart the timer only if keep alive is enabled.
             if (keep_alive_timer_)
