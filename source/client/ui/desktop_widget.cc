@@ -318,7 +318,13 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     if (frame)
     {
         painter_.begin(this);
+
+
+#if !defined(OS_MAC)
+        // SmoothPixmapTransform causes too much CPU load in MacOSX.
         painter_.setRenderHint(QPainter::SmoothPixmapTransform);
+#endif
+
         painter_.drawImage(rect(), frame->constImage());
         painter_.end();
     }
