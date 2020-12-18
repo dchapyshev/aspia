@@ -18,11 +18,13 @@
 
 #include "console/address_book_dialog.h"
 
+#include "base/guid.h"
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
+#include "base/net/address.h"
+#include "base/peer/user.h"
 #include "base/strings/unicode.h"
-#include "console/router_dialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -60,29 +62,6 @@ bool isSafePassword(const QString& password)
 
     return has_upper && has_lower && has_digit;
 }
-
-class RouterTreeItem : public QTreeWidgetItem
-{
-public:
-    explicit RouterTreeItem(const proto::address_book::Router& router)
-    {
-        setRouter(router);
-    }
-
-    void setRouter(const proto::address_book::Router& router)
-    {
-        router_ = router;
-
-        setText(0, QString::fromStdString(router.name()));
-        setText(1, QString::fromStdString(router.address()));
-        setText(2, QString::number(router.port()));
-    }
-
-    const proto::address_book::Router& router() const { return router_; }
-
-private:
-    proto::address_book::Router router_;
-};
 
 } // namespace
 
@@ -169,15 +148,60 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         ui.tab_widget->setTabEnabled(2, false);
     }
 
-    reloadRouters();
+    const proto::address_book::Router& router = data_->router();
+
+    base::Address address(DEFAULT_ROUTER_TCP_PORT);
+    address.setHost(base::utf16FromUtf8(router.address()));
+    address.setPort(router.port());
+
+    bool enable_router = data_->enable_router();
+    ui.checkbox_use_router->setChecked(enable_router);
+
+    ui.label_router_address->setEnabled(enable_router);
+    ui.edit_router_address->setEnabled(enable_router);
+    ui.label_router_username->setEnabled(enable_router);
+    ui.edit_router_username->setEnabled(enable_router);
+    ui.label_router_password->setEnabled(enable_router);
+    ui.edit_router_password->setEnabled(enable_router);
+    ui.button_show_password->setEnabled(enable_router);
+
+    ui.edit_router_address->setText(QString::fromStdU16String(address.toString()));
+    ui.edit_router_username->setText(QString::fromStdString(router.username()));
+    ui.edit_router_password->setText(QString::fromStdString(router.password()));
 
     connect(ui.spinbox_password_salt, QOverload<int>::of(&QSpinBox::valueChanged), this,
             &AddressBookDialog::hashingSaltChanged);
 
-    connect(ui.tree_routers, &QTreeWidget::currentItemChanged, this, &AddressBookDialog::currentRouterChanged);
-    connect(ui.button_add_router, &QPushButton::released, this, &AddressBookDialog::addRouter);
-    connect(ui.button_modify_router, &QPushButton::released, this, &AddressBookDialog::modifyRouter);
-    connect(ui.button_delete_router, &QPushButton::released, this, &AddressBookDialog::deleteRouter);
+    connect(ui.button_show_password, &QPushButton::toggled, [this](bool checked)
+    {
+        if (checked)
+        {
+            ui.edit_router_password->setEchoMode(QLineEdit::Normal);
+            ui.edit_router_password->setInputMethodHints(Qt::ImhNone);
+        }
+        else
+        {
+            ui.edit_router_password->setEchoMode(QLineEdit::Password);
+            ui.edit_router_password->setInputMethodHints(
+                Qt::ImhHiddenText | Qt::ImhSensitiveData |
+                Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
+        }
+
+        ui.edit_router_password->setFocus();
+    });
+
+    connect(ui.checkbox_use_router, &QCheckBox::toggled, [this](bool checked)
+    {
+        ui.label_router_address->setEnabled(checked);
+        ui.edit_router_address->setEnabled(checked);
+
+        ui.label_router_username->setEnabled(checked);
+        ui.edit_router_username->setEnabled(checked);
+
+        ui.label_router_password->setEnabled(checked);
+        ui.edit_router_password->setEnabled(checked);
+        ui.button_show_password->setEnabled(checked);
+    });
 
     ui.edit_name->setFocus();
 }
@@ -315,19 +339,52 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
             return;
     }
 
-    data_->mutable_root_group()->set_name(name.toStdString());
-    data_->mutable_root_group()->set_comment(comment.toStdString());
-
-    data_->mutable_router()->Clear();
-
-    for (int i = 0; i < ui.tree_routers->topLevelItemCount(); ++i)
+    if (ui.checkbox_use_router->isChecked())
     {
-        RouterTreeItem* tree_item = static_cast<RouterTreeItem*>(ui.tree_routers->topLevelItem(i));
-        if (tree_item)
-            data_->add_router()->CopyFrom(tree_item->router());
+        base::Address address = base::Address::fromString(
+            ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+        if (!address.isValid())
+        {
+            showError(tr("An invalid router address was entered."));
+            ui.edit_router_address->setFocus();
+            ui.edit_router_address->selectAll();
+            return;
+        }
+
+        std::u16string username = ui.edit_router_username->text().toStdU16String();
+        std::u16string password = ui.edit_router_password->text().toStdU16String();
+
+        if (!base::User::isValidUserName(username))
+        {
+            showError(tr("The user name can not be empty and can contain only"
+                         " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
+            ui.edit_router_username->setFocus();
+            ui.edit_router_username->selectAll();
+            return;
+        }
+
+        if (!base::User::isValidPassword(password))
+        {
+            showError(tr("Router password cannot be empty."));
+            ui.edit_router_password->setFocus();
+            ui.edit_router_password->selectAll();
+            return;
+        }
+
+        proto::address_book::Router* router = data_->mutable_router();
+        router->set_address(base::utf8FromUtf16(address.host()));
+        router->set_port(address.port());
+        router->set_username(base::utf8FromUtf16(username));
+        router->set_password(base::utf8FromUtf16(password));
     }
 
     file_->set_encryption_type(encryption_type);
+    data_->mutable_root_group()->set_name(name.toStdString());
+    data_->mutable_root_group()->set_comment(comment.toStdString());
+    data_->set_enable_router(ui.checkbox_use_router->isChecked());
+
+    if (data_->guid().empty())
+        data_->set_guid(base::Guid::create().toStdString());
 
     accept();
     close();
@@ -390,66 +447,6 @@ void AddressBookDialog::hashingSaltChanged(int /* value */)
         ui.spinbox_password_salt->setValue(file_->hashing_salt().size());
         value_reverting_ = false;
     }
-}
-
-void AddressBookDialog::currentRouterChanged()
-{
-    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
-    if (!router_item)
-    {
-        ui.button_modify_router->setEnabled(false);
-        ui.button_delete_router->setEnabled(false);
-    }
-    else
-    {
-        ui.button_modify_router->setEnabled(true);
-        ui.button_delete_router->setEnabled(true);
-    }
-}
-
-void AddressBookDialog::addRouter()
-{
-    RouterDialog dialog(std::nullopt, this);
-    if (dialog.exec() == QDialog::Accepted)
-        ui.tree_routers->addTopLevelItem(new RouterTreeItem(dialog.router().value()));
-}
-
-void AddressBookDialog::modifyRouter()
-{
-    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
-    if (!router_item)
-        return;
-
-    RouterDialog dialog(router_item->router(), this);
-    if (dialog.exec() == QDialog::Accepted)
-        router_item->setRouter(dialog.router().value());
-}
-
-void AddressBookDialog::deleteRouter()
-{
-    RouterTreeItem* router_item = static_cast<RouterTreeItem*>(ui.tree_routers->currentItem());
-    if (!router_item)
-        return;
-
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to remove router \"%1\"?")
-                                  .arg(router_item->text(0)),
-                              QMessageBox::Yes,
-                              QMessageBox::No) != QMessageBox::Yes)
-    {
-        return;
-    }
-
-    delete router_item;
-}
-
-void AddressBookDialog::reloadRouters()
-{
-    ui.tree_routers->clear();
-
-    for (int i = 0; i < data_->router_size(); ++i)
-        ui.tree_routers->addTopLevelItem(new RouterTreeItem(data_->router(i)));
 }
 
 void AddressBookDialog::setPasswordChanged()

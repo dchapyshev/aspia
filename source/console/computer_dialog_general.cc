@@ -32,6 +32,22 @@ constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
 
+bool isHostId(const QString& str)
+{
+    bool host_id_entered = true;
+
+    for (int i = 0; i < str.length(); ++i)
+    {
+        if (!str[i].isDigit())
+        {
+            host_id_entered = false;
+            break;
+        }
+    }
+
+    return host_id_entered;
+}
+
 } // namespace
 
 ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
@@ -53,41 +69,15 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
         has_name_ = !text.isEmpty();
     });
 
-    connect(ui.combobox_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
-         [this](int index)
-    {
-        QString text;
-
-        if (index == 0)
-            text = tr("Address:");
-        else
-            text = "ID:";
-
-        ui.label_address->setText(text);
-    });
-
     ui.edit_address->setFocus();
 }
 
-void ComputerDialogGeneral::restoreSettings(const QMap<QString, QString>& routers,
-                                            const QString& parent_name,
+void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
                                             const proto::address_book::Computer& computer)
 {
-    ui.combobox_router->addItem(tr("Without Router"));
-
-    for (auto it = routers.begin(); it != routers.end(); ++it)
-        ui.combobox_router->addItem(it.key(), it.value());
-
-    if (!computer.router_guid().empty())
+    if (isHostId(QString::fromStdString(computer.address())))
     {
         ui.edit_address->setText(QString::fromStdString(computer.address()));
-
-        int item_index = ui.combobox_router->findData(
-            QString::fromStdString(computer.router_guid()));
-        if (item_index != -1)
-            ui.combobox_router->setCurrentIndex(item_index);
-
-        ui.label_address->setText("ID:");
     }
     else
     {
@@ -96,9 +86,6 @@ void ComputerDialogGeneral::restoreSettings(const QMap<QString, QString>& router
         address.setPort(computer.port());
 
         ui.edit_address->setText(QString::fromStdU16String(address.toString()));
-        ui.combobox_router->setCurrentIndex(0);
-
-        ui.label_address->setText(tr("Address:"));
     }
 
     ui.edit_parent_name->setText(parent_name);
@@ -152,25 +139,9 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         return false;
     }
 
-    int current_router = ui.combobox_router->currentIndex();
-    if (current_router != 0)
+    if (isHostId(ui.edit_address->text()))
     {
-        QString id = ui.edit_address->text();
-        for (const auto& ch : id)
-        {
-            if (!ch.isDigit())
-            {
-                showError(tr("The ID can only contain numbers."));
-                ui.edit_address->setFocus();
-                ui.edit_address->selectAll();
-                return false;
-            }
-        }
-
-        computer->set_address(id.toStdString());
-        computer->set_router_guid(
-            ui.combobox_router->itemData(current_router).toString().toStdString());
-        computer->clear_port();
+        computer->set_address(ui.edit_address->text().toStdString());
     }
     else
     {
@@ -186,7 +157,6 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
 
         computer->set_address(base::utf8FromUtf16(address.host()));
         computer->set_port(address.port());
-        computer->clear_router_guid();
     }
 
     computer->set_name(name.toStdString());

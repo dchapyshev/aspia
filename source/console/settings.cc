@@ -216,4 +216,14 @@ void Settings::setComputerGroupDialogGeometry(const QByteArray& geometry)
     settings_.setValue("ComputerGroupDialogGeometry", geometry);
 }
 
+QByteArray Settings::fastConnectConfig(const QString& guid)
+{
+    return settings_.value("FastConnect/" + guid).toByteArray();
+}
+
+void Settings::setFastConnectConfig(const QString& guid, const QByteArray& config)
+{
+    settings_.setValue("FastConnect/" + guid, config);
+}
+
 } // namespace console

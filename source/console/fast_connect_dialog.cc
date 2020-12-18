@@ -29,36 +29,25 @@
 #include "client/ui/qt_file_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/session_type.h"
+#include "console/application.h"
 
 #include <QMessageBox>
 
 namespace console {
 
-FastConnectDialog::FastConnectDialog(QWidget* parent)
-    : QDialog(parent)
+FastConnectDialog::FastConnectDialog(QWidget* parent,
+                                     const QString& address_book_guid,
+                                     const std::optional<client::RouterConfig>& router_config)
+    : QDialog(parent),
+      address_book_guid_(address_book_guid),
+      router_config_(router_config)
 {
-    config_.port = DEFAULT_HOST_TCP_PORT;
-    config_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
-    desktop_config_ = client::ConfigFactory::defaultDesktopManageConfig();
-
     ui.setupUi(this);
-
-    connect(ui.combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index)
-    {
-        if (ui.combo_router->itemData(index).toInt() == -1)
-        {
-            ui.label_address->setText(tr("Address:"));
-        }
-        else
-        {
-            ui.label_address->setText("ID:");
-        }
-    });
+    readState();
 
     QComboBox* combo_address = ui.combo_address;
 
-    //ClientSettings settings;
-    //combo_address->addItems(settings.addressList());
+    combo_address->addItems(state_.history);
     combo_address->setCurrentIndex(0);
 
     auto add_session = [this](const QString& icon, proto::SessionType session_type)
@@ -72,7 +61,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent)
     add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
     add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
 
-    int current_session_type = ui.combo_session_type->findData(QVariant(config_.session_type));
+    int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
     {
         ui.combo_session_type->setCurrentIndex(current_session_type);
@@ -90,9 +79,8 @@ FastConnectDialog::FastConnectDialog(QWidget* parent)
         if (ret == QMessageBox::Yes)
         {
             ui.combo_address->clear();
-
-            //ClientSettings settings;
-            //settings.setAddressList(QStringList());
+            state_.history.clear();
+            writeState();
         }
     });
 
@@ -107,28 +95,22 @@ FastConnectDialog::FastConnectDialog(QWidget* parent)
     combo_address->setFocus();
 }
 
-FastConnectDialog::~FastConnectDialog() = default;
+FastConnectDialog::~FastConnectDialog()
+{
+    writeState();
+}
 
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
-    proto::SessionType session_type = static_cast<proto::SessionType>(
+    state_.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
-    switch (session_type)
+    switch (state_.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        {
-            ui.button_session_config->setEnabled(true);
-            desktop_config_ = client::ConfigFactory::defaultDesktopManageConfig();
-        }
-        break;
-
         case proto::SESSION_TYPE_DESKTOP_VIEW:
-        {
             ui.button_session_config->setEnabled(true);
-            desktop_config_ = client::ConfigFactory::defaultDesktopViewConfig();
-        }
-        break;
+            break;
 
         default:
             ui.button_session_config->setEnabled(false);
@@ -144,15 +126,26 @@ void FastConnectDialog::sessionConfigButtonPressed()
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
             client::DesktopConfigDialog dialog(session_type,
-                                               desktop_config_,
+                                               state_.desktop_manage_config,
                                                common::kSupportedVideoEncodings,
                                                this);
 
             if (dialog.exec() == client::DesktopConfigDialog::Accepted)
-                desktop_config_ = dialog.config();
+                state_.desktop_manage_config = dialog.config();
+        }
+        break;
+
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            client::DesktopConfigDialog dialog(session_type,
+                                               state_.desktop_view_config,
+                                               common::kSupportedVideoEncodings,
+                                               this);
+
+            if (dialog.exec() == client::DesktopConfigDialog::Accepted)
+                state_.desktop_view_config = dialog.config();
         }
         break;
 
@@ -170,28 +163,33 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    std::optional<client::RouterConfig> router_config;
+    QComboBox* combo_address = ui.combo_address;
+    QString current_address = combo_address->currentText();
+    bool host_id_entered = true;
 
-    int current_router = ui.combo_router->currentIndex();
-    if (current_router != -1)
+    for (int i = 0; i < current_address.length(); ++i)
     {
-        size_t current_router_index =
-            static_cast<size_t>(ui.combo_router->itemData(current_router).toInt());
-
-        if (current_router_index < routers_.size())
+        if (!current_address[i].isDigit())
         {
-            router_config.emplace(routers_[current_router_index]);
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Invalid router index: " << current_router_index;
+            host_id_entered = false;
+            break;
         }
     }
 
-    QComboBox* combo_address = ui.combo_address;
-    QString current_address = combo_address->currentText();
+    if (host_id_entered && !router_config_.has_value())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Connection by ID is specified but the router is not configured. "
+                                "Check the parameters of the router in the properties of the "
+                                "address book."),
+                             QMessageBox::Ok);
+        return;
+    }
 
-    if (!router_config.has_value())
+    client::Config client_config;
+
+    if (!host_id_entered)
     {
         LOG(LS_INFO) << "Direct connection selected";
 
@@ -208,15 +206,18 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        config_.address_or_id = address.host();
-        config_.port = address.port();
+        client_config.address_or_id = address.host();
+        client_config.port = address.port();
     }
     else
     {
         LOG(LS_INFO) << "Relay connection selected";
-
-        config_.address_or_id = current_address.toStdU16String();
+        client_config.address_or_id = current_address.toStdU16String();
     }
+
+    client_config.session_type = static_cast<proto::SessionType>(
+        ui.combo_session_type->currentData().toInt());
+    client_config.router_config = router_config_;
 
     int current_index = combo_address->findText(current_address);
     if (current_index != -1)
@@ -225,35 +226,30 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     combo_address->insertItem(0, current_address);
     combo_address->setCurrentIndex(0);
 
-    QStringList address_list;
+    state_.history.clear();
     for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
-        address_list.append(combo_address->itemText(i));
-
-    //ClientSettings settings;
-    //settings.setAddressList(address_list);
-
-    proto::SessionType session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->currentData().toInt());
-
-    if (router_config.has_value())
-        config_.router_config = std::move(router_config.value());
-
-    config_.session_type = session_type;
+        state_.history.append(combo_address->itemText(i));
 
     client::SessionWindow* session_window = nullptr;
 
-    switch (config_.session_type)
+    switch (client_config.session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        {
+            session_window = new client::QtDesktopWindow(
+                state_.session_type, state_.desktop_manage_config);
+        }
+        break;
+
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
             session_window = new client::QtDesktopWindow(
-                config_.session_type, desktop_config_, parentWidget());
+                state_.session_type, state_.desktop_view_config);
         }
         break;
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
-            session_window = new client::QtFileManagerWindow(parentWidget());
+            session_window = new client::QtFileManagerWindow();
             break;
 
         default:
@@ -265,7 +261,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(config_))
+    if (!session_window->connectToHost(client_config))
     {
         session_window->close();
     }
@@ -276,18 +272,61 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 }
 
-void FastConnectDialog::reloadRouters()
+void FastConnectDialog::readState()
 {
-    QComboBox* combo_router = ui.combo_router;
-    combo_router->clear();
+    QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
+    stream.setVersion(QDataStream::Qt_5_12);
 
-    combo_router->addItem(tr("Without Router"), -1);
+    int session_type;
+    QByteArray desktop_manage_config;
+    QByteArray desktop_view_config;
 
-    //for (size_t i = 0; i < routers_.size(); ++i)
-    //    combo_router->addItem(QString::fromStdU16String(routers_[i].name), static_cast<int>(i));
+    stream >> state_.history >> session_type >> desktop_manage_config >> desktop_view_config;
 
-    if (routers_.empty())
-        combo_router->setCurrentIndex(0);
+    if (session_type != 0)
+        state_.session_type = static_cast<proto::SessionType>(session_type);
+    else
+        state_.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+
+    if (!desktop_manage_config.isEmpty())
+    {
+        state_.desktop_manage_config.ParseFromArray(
+            desktop_manage_config.data(), desktop_manage_config.size());
+    }
+    else
+    {
+        state_.desktop_manage_config = client::ConfigFactory::defaultDesktopManageConfig();
+    }
+
+    if (!desktop_view_config.isEmpty())
+    {
+        state_.desktop_view_config.ParseFromArray(
+            desktop_view_config.data(), desktop_view_config.size());
+    }
+    else
+    {
+        state_.desktop_view_config = client::ConfigFactory::defaultDesktopViewConfig();
+    }
+}
+
+void FastConnectDialog::writeState()
+{
+    QByteArray buffer;
+
+    {
+        int session_type = static_cast<int>(state_.session_type);
+        QByteArray desktop_manage_config =
+            QByteArray::fromStdString(state_.desktop_manage_config.SerializeAsString());
+        QByteArray desktop_view_config =
+            QByteArray::fromStdString(state_.desktop_view_config.SerializeAsString());
+
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+
+        stream << state_.history << session_type << desktop_manage_config << desktop_view_config;
+    }
+
+    Application::instance()->settings().setFastConnectConfig(address_book_guid_, buffer);
 }
 
 } // namespace console

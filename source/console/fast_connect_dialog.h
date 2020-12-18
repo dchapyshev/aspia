@@ -35,7 +35,9 @@ class FastConnectDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FastConnectDialog(QWidget* parent = nullptr);
+    FastConnectDialog(QWidget* parent,
+                      const QString& address_book_guid,
+                      const std::optional<client::RouterConfig>& router_config);
     ~FastConnectDialog();
 
 private slots:
@@ -44,13 +46,21 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void reloadRouters();
+    void readState();
+    void writeState();
+
+    struct State
+    {
+        QStringList history;
+        proto::SessionType session_type;
+        proto::DesktopConfig desktop_manage_config;
+        proto::DesktopConfig desktop_view_config;
+    };
 
     Ui::FastConnectDialog ui;
-
-    client::RouterConfigList routers_;
-    client::Config config_;
-    proto::DesktopConfig desktop_config_;
+    QString address_book_guid_;
+    std::optional<client::RouterConfig> router_config_;
+    State state_;
 
     DISALLOW_COPY_AND_ASSIGN(FastConnectDialog);
 };

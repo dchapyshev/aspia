@@ -45,13 +45,8 @@ private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void encryptionTypedChanged(int item_index);
     void hashingSaltChanged(int value);
-    void currentRouterChanged();
-    void addRouter();
-    void modifyRouter();
-    void deleteRouter();
 
 private:
-    void reloadRouters();
     void setPasswordChanged();
     void showError(const QString& message);
 

@@ -40,7 +40,6 @@ public:
 
     ComputerDialog(QWidget* parent,
                    Mode mode,
-                   const QMap<QString, QString>& routers,
                    const QString& parent_name,
                    const std::optional<proto::address_book::Computer>& computer = std::nullopt);
     ~ComputerDialog();

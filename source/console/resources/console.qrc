@@ -1,15 +1,10 @@
 <RCC>
     <qresource prefix="/img">
         <file>server.png</file>
-        <file>servers.png</file>
         <file>minus.png</file>
         <file>pencil.png</file>
         <file>plus.png</file>
-        <file>ui-tab-close.png</file>
         <file>computer-copy.png</file>
-        <file>ui-tab-multi-close.png</file>
-        <file>lock-unlock.png</file>
-        <file>lock.png</file>
         <file>disks.png</file>
         <file>address-book-pinned.png</file>
         <file>keyboard.png</file>

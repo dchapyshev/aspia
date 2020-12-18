@@ -37,18 +37,25 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
 
 void ComputerItem::updateItem()
 {
-    QString address_title;
-    if (computer_->router_guid().empty())
+    QString address_title = QString::fromStdString(computer_->address());
+    bool host_id_entered = true;
+
+    for (int i = 0; i < address_title.length(); ++i)
+    {
+        if (!address_title[i].isDigit())
+        {
+            host_id_entered = false;
+            break;
+        }
+    }
+
+    if (!host_id_entered)
     {
         base::Address address(DEFAULT_HOST_TCP_PORT);
         address.setHost(base::utf16FromUtf8(computer_->address()));
         address.setPort(computer_->port());
 
         address_title = QString::fromStdU16String(address.toString());
-    }
-    else
-    {
-        address_title = QString::fromStdString(computer_->address());
     }
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
