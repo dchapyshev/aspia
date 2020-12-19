@@ -9,27 +9,27 @@
         <translation>Про програму</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="64"/>
+        <location filename="../ui/about_dialog.ui" line="61"/>
         <source>General</source>
         <translation>Основні</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="91"/>
+        <location filename="../ui/about_dialog.ui" line="88"/>
         <source>License</source>
         <translation>Ліцензія</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="108"/>
+        <location filename="../ui/about_dialog.ui" line="105"/>
         <source>Service Information</source>
         <translation>Сервісна інформація</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="123"/>
+        <location filename="../ui/about_dialog.ui" line="120"/>
         <source>Donate!</source>
         <translation>Допомогти розробникам!</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="147"/>
+        <location filename="../ui/about_dialog.ui" line="144"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -81,37 +81,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="47"/>
+        <location filename="../ui/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="62"/>
+        <location filename="../ui/update_dialog.ui" line="59"/>
         <source>Current version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="69"/>
+        <location filename="../ui/update_dialog.ui" line="66"/>
         <source>Available version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="78"/>
+        <location filename="../ui/update_dialog.ui" line="75"/>
         <source>URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="139"/>
+        <location filename="../ui/update_dialog.ui" line="136"/>
         <source>Update description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="184"/>
+        <location filename="../ui/update_dialog.ui" line="181"/>
         <source>Update now!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.ui" line="191"/>
+        <location filename="../ui/update_dialog.ui" line="188"/>
         <source>Close</source>
         <translation type="unfinished">Закрити</translation>
     </message>

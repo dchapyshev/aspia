@@ -9,17 +9,17 @@
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="29"/>
+        <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="49"/>
+        <location filename="../ui/authorization_dialog.ui" line="46"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="99"/>
+        <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -214,7 +214,7 @@
         <translation>Sessie Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="38"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation>Codec</translation>
     </message>
@@ -239,7 +239,7 @@
         <translation type="vanished">Beste</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="112"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="106"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -264,52 +264,52 @@
         <translation type="vanished">Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="141"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="135"/>
         <source>Block remote input</source>
         <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="69"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="63"/>
         <source>Enable cursor shape</source>
         <translation>Muis vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
         <source>Enable audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="76"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="70"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="98"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable desktop effects</source>
         <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="105"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="99"/>
         <source>Disable desktop wallpaper</source>
         <translation>Geen bureaublad achtergrond</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="134"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -597,7 +597,7 @@
         <translation>Objecten Verwijderen</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="23"/>
+        <location filename="../ui/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
         <translation>Lijst genereren van objecten om te verwijderen...</translation>
     </message>
@@ -610,32 +610,32 @@
         <translation>Bestands overdracht</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="29"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>Huidige taak: Bestandslijst maken...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="36"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
         <translation>Van: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="43"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
         <translation>Naar: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="53"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
         <translation>Voortgang</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="61"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
         <translation>Totaal:</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="68"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
         <translation>Item:</translation>
     </message>

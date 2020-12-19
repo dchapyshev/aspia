@@ -9,58 +9,58 @@
         <translation>Свойства адресной книги</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="33"/>
+        <location filename="../address_book_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="43"/>
+        <location filename="../address_book_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="50"/>
+        <location filename="../address_book_dialog.ui" line="44"/>
         <source>File:</source>
         <translation>Файл:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="57"/>
+        <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
         <translation>Шифрование:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="64"/>
-        <location filename="../address_book_dialog.ui" line="181"/>
+        <location filename="../address_book_dialog.ui" line="58"/>
+        <location filename="../address_book_dialog.ui" line="175"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="71"/>
+        <location filename="../address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="125"/>
+        <location filename="../address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="138"/>
+        <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="144"/>
+        <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
         <translation>Использовать маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="153"/>
+        <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="167"/>
+        <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
@@ -81,39 +81,39 @@
         <translation type="vanished">Порт</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="232"/>
+        <location filename="../address_book_dialog.ui" line="226"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="238"/>
+        <location filename="../address_book_dialog.ui" line="232"/>
         <source>Password hashing</source>
         <translation>Хеширование пароля</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="244"/>
+        <location filename="../address_book_dialog.ui" line="238"/>
         <source>Size of salt for password hashing:</source>
         <translation>Размер соли для хеширования пароля:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="251"/>
-        <location filename="../address_book_dialog.ui" line="298"/>
-        <location filename="../address_book_dialog.ui" line="314"/>
+        <location filename="../address_book_dialog.ui" line="245"/>
+        <location filename="../address_book_dialog.ui" line="292"/>
+        <location filename="../address_book_dialog.ui" line="308"/>
         <source> bytes</source>
         <translation> байт</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="280"/>
+        <location filename="../address_book_dialog.ui" line="274"/>
         <source>Size of salt before the data:</source>
         <translation>Размер соли до данных:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="287"/>
+        <location filename="../address_book_dialog.ui" line="281"/>
         <source>Size of salt after the data:</source>
         <translation>Размер соли после данных:</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="270"/>
+        <location filename="../address_book_dialog.ui" line="264"/>
         <source>Salt of data</source>
         <translation>Соль данных</translation>
     </message>
@@ -334,17 +334,17 @@
         <translation>Свойства группы компьютеров</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="33"/>
+        <location filename="../computer_group_dialog.ui" line="27"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="40"/>
+        <location filename="../computer_group_dialog.ui" line="34"/>
         <source>Parent Group:</source>
         <translation>Родительская группа:</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="74"/>
+        <location filename="../computer_group_dialog.ui" line="68"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
     </message>
@@ -883,22 +883,22 @@
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="59"/>
+        <location filename="../open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation>Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="72"/>
+        <location filename="../open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
         <translation>Файл:</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="79"/>
+        <location filename="../open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
         <translation>Тип шифрования:</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="86"/>
+        <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>

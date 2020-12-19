@@ -16,12 +16,6 @@
   <property name="windowTitle">
    <string>Address Book Properties</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QTabWidget" name="tab_widget">

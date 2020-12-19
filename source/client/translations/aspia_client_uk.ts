@@ -9,17 +9,17 @@
         <translation>Авторизація</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="29"/>
+        <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="49"/>
+        <location filename="../ui/authorization_dialog.ui" line="46"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.ui" line="99"/>
+        <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -214,7 +214,7 @@
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="38"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
@@ -239,7 +239,7 @@
         <translation type="vanished">Якісно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="112"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="106"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -264,52 +264,52 @@
         <translation type="vanished">Додатково</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="141"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="135"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="69"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="63"/>
         <source>Enable cursor shape</source>
         <translation>Показати курсор</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="62"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
         <source>Enable audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="76"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="70"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="98"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="105"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="99"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="134"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -597,7 +597,7 @@
         <translation>Видалення об&apos;єктів</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="23"/>
+        <location filename="../ui/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
         <translation>Створення списку об&apos;єктів для видалення...</translation>
     </message>
@@ -610,32 +610,32 @@
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="29"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>Поточне завдання: створення списку файлів для копіювання...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="36"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
         <translation>З: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="43"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
         <translation>До: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="53"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
         <translation>Виконано</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="61"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
         <translation>Всього:</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="68"/>
+        <location filename="../ui/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
         <translation>Поточний об&apos;єкт:</translation>
     </message>

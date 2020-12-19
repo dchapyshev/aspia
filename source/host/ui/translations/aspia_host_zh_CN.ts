@@ -5,128 +5,128 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../config_dialog.ui" line="14"/>
-        <location filename="../config_dialog.ui" line="109"/>
+        <location filename="../config_dialog.ui" line="106"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="27"/>
+        <location filename="../config_dialog.ui" line="24"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="33"/>
+        <location filename="../config_dialog.ui" line="30"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="80"/>
+        <location filename="../config_dialog.ui" line="77"/>
         <source>Incoming Connections</source>
         <translation>传入连接</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="86"/>
+        <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="128"/>
+        <location filename="../config_dialog.ui" line="125"/>
         <source>Import...</source>
         <translation>导入...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="135"/>
+        <location filename="../config_dialog.ui" line="132"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="159"/>
+        <location filename="../config_dialog.ui" line="156"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="165"/>
+        <location filename="../config_dialog.ui" line="162"/>
         <source>Enable the use of a router</source>
         <translation>启用路由器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="177"/>
+        <location filename="../config_dialog.ui" line="174"/>
         <source>Address:</source>
         <translation>地址：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="196"/>
+        <location filename="../config_dialog.ui" line="193"/>
         <source>Public Key:</source>
         <translation>公钥：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="211"/>
-        <location filename="../config_dialog.ui" line="304"/>
+        <location filename="../config_dialog.ui" line="208"/>
+        <location filename="../config_dialog.ui" line="301"/>
         <source>Users</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="225"/>
+        <location filename="../config_dialog.ui" line="222"/>
         <source>Add new user</source>
         <translation>添加新用户</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="245"/>
+        <location filename="../config_dialog.ui" line="242"/>
         <source>Edit user</source>
         <translation>编辑用户</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="265"/>
+        <location filename="../config_dialog.ui" line="262"/>
         <source>Delete user</source>
         <translation>删除用户</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="313"/>
+        <location filename="../config_dialog.ui" line="310"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="319"/>
+        <location filename="../config_dialog.ui" line="316"/>
         <source>Update Server</source>
         <translation>更新服务器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="325"/>
+        <location filename="../config_dialog.ui" line="322"/>
         <source>Use custom update server</source>
         <translation>使用自定义更新服务器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="334"/>
+        <location filename="../config_dialog.ui" line="331"/>
         <source>Server:</source>
         <translation>服务器：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="384"/>
+        <location filename="../config_dialog.ui" line="381"/>
         <source>Check for updates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="394"/>
+        <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="402"/>
+        <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="442"/>
+        <location filename="../config_dialog.ui" line="439"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="451"/>
+        <location filename="../config_dialog.ui" line="448"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="460"/>
+        <location filename="../config_dialog.ui" line="457"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -257,27 +257,27 @@
         <translation>用户属性</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="27"/>
+        <location filename="../user_dialog.ui" line="24"/>
         <source>User Name:</source>
         <translation>用户名：</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="34"/>
+        <location filename="../user_dialog.ui" line="31"/>
         <source>Password:</source>
         <translation>密码：</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="41"/>
+        <location filename="../user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
         <translation>密码（重复）：</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="73"/>
+        <location filename="../user_dialog.ui" line="70"/>
         <source>Disable User Account</source>
         <translation>禁用用户帐号</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="80"/>
+        <location filename="../user_dialog.ui" line="77"/>
         <source>Allowed Session Types:</source>
         <translation>允许的会话类型：</translation>
     </message>

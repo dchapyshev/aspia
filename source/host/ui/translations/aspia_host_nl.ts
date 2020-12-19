@@ -5,128 +5,128 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../config_dialog.ui" line="14"/>
-        <location filename="../config_dialog.ui" line="109"/>
+        <location filename="../config_dialog.ui" line="106"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="27"/>
+        <location filename="../config_dialog.ui" line="24"/>
         <source>General</source>
         <translation type="unfinished">Basis</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="33"/>
+        <location filename="../config_dialog.ui" line="30"/>
         <source>Service</source>
         <translation type="unfinished">Service</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="80"/>
+        <location filename="../config_dialog.ui" line="77"/>
         <source>Incoming Connections</source>
         <translation type="unfinished">Binnenkomende Verbindingen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="86"/>
+        <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation type="unfinished">Poort:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="128"/>
+        <location filename="../config_dialog.ui" line="125"/>
         <source>Import...</source>
         <translation type="unfinished">Importeren...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="135"/>
+        <location filename="../config_dialog.ui" line="132"/>
         <source>Export...</source>
         <translation type="unfinished">Exporteren...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="159"/>
+        <location filename="../config_dialog.ui" line="156"/>
         <source>Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="165"/>
+        <location filename="../config_dialog.ui" line="162"/>
         <source>Enable the use of a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="177"/>
+        <location filename="../config_dialog.ui" line="174"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="196"/>
+        <location filename="../config_dialog.ui" line="193"/>
         <source>Public Key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="211"/>
-        <location filename="../config_dialog.ui" line="304"/>
+        <location filename="../config_dialog.ui" line="208"/>
+        <location filename="../config_dialog.ui" line="301"/>
         <source>Users</source>
         <translation type="unfinished">Gebruikers</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="225"/>
+        <location filename="../config_dialog.ui" line="222"/>
         <source>Add new user</source>
         <translation type="unfinished">Nieuwe gebruiker toevoegen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="245"/>
+        <location filename="../config_dialog.ui" line="242"/>
         <source>Edit user</source>
         <translation type="unfinished">Gebruiker bewerken</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="265"/>
+        <location filename="../config_dialog.ui" line="262"/>
         <source>Delete user</source>
         <translation type="unfinished">Gebruiker verwijderen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="313"/>
+        <location filename="../config_dialog.ui" line="310"/>
         <source>Update</source>
         <translation type="unfinished">Updaten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="319"/>
+        <location filename="../config_dialog.ui" line="316"/>
         <source>Update Server</source>
         <translation type="unfinished">Update Server</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="325"/>
+        <location filename="../config_dialog.ui" line="322"/>
         <source>Use custom update server</source>
         <translation type="unfinished">Aangepaste update server gebruiken</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="334"/>
+        <location filename="../config_dialog.ui" line="331"/>
         <source>Server:</source>
         <translation type="unfinished">Server:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="384"/>
+        <location filename="../config_dialog.ui" line="381"/>
         <source>Check for updates</source>
         <translation type="unfinished">Controleer op updates</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="394"/>
+        <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="402"/>
+        <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="442"/>
+        <location filename="../config_dialog.ui" line="439"/>
         <source>Add</source>
         <translation type="unfinished">Toevoegen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="451"/>
+        <location filename="../config_dialog.ui" line="448"/>
         <source>Modify</source>
         <translation type="unfinished">Aanpassen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="460"/>
+        <location filename="../config_dialog.ui" line="457"/>
         <source>Delete</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
@@ -442,27 +442,27 @@
         <translation>Gebruiker Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="27"/>
+        <location filename="../user_dialog.ui" line="24"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="34"/>
+        <location filename="../user_dialog.ui" line="31"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="41"/>
+        <location filename="../user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
         <translation>Wachtwoord (nogmaals):</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="73"/>
+        <location filename="../user_dialog.ui" line="70"/>
         <source>Disable User Account</source>
         <translation>Gebruikers account uitschakelen</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="80"/>
+        <location filename="../user_dialog.ui" line="77"/>
         <source>Allowed Session Types:</source>
         <translation>Toegestane sessie types:</translation>
     </message>

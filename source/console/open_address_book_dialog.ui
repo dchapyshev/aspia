@@ -22,12 +22,6 @@
   <property name="windowTitle">
    <string>Open Address Book</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QGroupBox" name="groupBox">
@@ -129,7 +123,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="resources/console.qrc">
+               <iconset resource="../client/resources/client.qrc">
                 <normaloff>:/img/eye.png</normaloff>:/img/eye.png</iconset>
               </property>
               <property name="checkable">
@@ -157,6 +151,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
+  <include location="../client/resources/client.qrc"/>
   <include location="resources/console.qrc"/>
  </resources>
  <connections/>

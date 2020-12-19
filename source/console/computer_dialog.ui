@@ -16,12 +16,6 @@
   <property name="windowTitle">
    <string>Computer Properties</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QSplitter" name="splitter">
@@ -70,8 +64,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="resources/console.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

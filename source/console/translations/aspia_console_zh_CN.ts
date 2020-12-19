@@ -9,58 +9,58 @@
         <translation>通讯录属性</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="33"/>
+        <location filename="../address_book_dialog.ui" line="27"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="43"/>
+        <location filename="../address_book_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>名字：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="50"/>
+        <location filename="../address_book_dialog.ui" line="44"/>
         <source>File:</source>
         <translation>文件：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="57"/>
+        <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
         <translation>加密：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="64"/>
-        <location filename="../address_book_dialog.ui" line="181"/>
+        <location filename="../address_book_dialog.ui" line="58"/>
+        <location filename="../address_book_dialog.ui" line="175"/>
         <source>Password:</source>
         <translation>密码：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="71"/>
+        <location filename="../address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
         <translation>密码（重复）：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="125"/>
+        <location filename="../address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
         <translation>描述：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="138"/>
+        <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="144"/>
+        <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="153"/>
+        <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
         <translation type="unfinished">地址：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="167"/>
+        <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
         <translation type="unfinished">用户名：</translation>
     </message>
@@ -81,39 +81,39 @@
         <translation type="vanished">端口</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="232"/>
+        <location filename="../address_book_dialog.ui" line="226"/>
         <source>Advanced</source>
         <translation>高级</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="238"/>
+        <location filename="../address_book_dialog.ui" line="232"/>
         <source>Password hashing</source>
         <translation>密码哈希</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="244"/>
+        <location filename="../address_book_dialog.ui" line="238"/>
         <source>Size of salt for password hashing:</source>
         <translation>密码哈希的salt大小：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="251"/>
-        <location filename="../address_book_dialog.ui" line="298"/>
-        <location filename="../address_book_dialog.ui" line="314"/>
+        <location filename="../address_book_dialog.ui" line="245"/>
+        <location filename="../address_book_dialog.ui" line="292"/>
+        <location filename="../address_book_dialog.ui" line="308"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="270"/>
+        <location filename="../address_book_dialog.ui" line="264"/>
         <source>Salt of data</source>
         <translation>Salt数据</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="280"/>
+        <location filename="../address_book_dialog.ui" line="274"/>
         <source>Size of salt before the data:</source>
         <translation>数据之前salt的大小：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="287"/>
+        <location filename="../address_book_dialog.ui" line="281"/>
         <source>Size of salt after the data:</source>
         <translation>数据之后salt的大小：</translation>
     </message>
@@ -306,17 +306,17 @@
         <translation>计算机组属性</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="33"/>
+        <location filename="../computer_group_dialog.ui" line="27"/>
         <source>Name:</source>
         <translation>名字：</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="40"/>
+        <location filename="../computer_group_dialog.ui" line="34"/>
         <source>Parent Group:</source>
         <translation>父级：</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="74"/>
+        <location filename="../computer_group_dialog.ui" line="68"/>
         <source>Comment:</source>
         <translation>描述：</translation>
     </message>
@@ -692,22 +692,22 @@
         <translation>打开通讯录</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="59"/>
+        <location filename="../open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation>通讯录已加密。要打开，必须输入密码。</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="72"/>
+        <location filename="../open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
         <translation>文件：</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="79"/>
+        <location filename="../open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
         <translation>加密类型：</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="86"/>
+        <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
         <translation>密码：</translation>
     </message>
