@@ -58,7 +58,9 @@ const char* controlActionToString(proto::internal::Control::Action action)
 } // namespace
 
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+    : task_runner_(std::move(task_runner)),
+      incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
+      outgoing_message_(std::make_unique<proto::internal::DesktopToService>())
 {
     // At the end of the user's session, the program ends later than the others.
     SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
@@ -92,51 +94,51 @@ void DesktopSessionAgent::onDisconnected()
 
 void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
-    incoming_message_.Clear();
+    incoming_message_->Clear();
 
-    if (!base::parse(buffer, &incoming_message_))
+    if (!base::parse(buffer, incoming_message_.get()))
     {
         LOG(LS_ERROR) << "Invalid message from service";
         return;
     }
 
-    if (incoming_message_.has_next_screen_capture())
+    if (incoming_message_->has_next_screen_capture())
     {
         captureEnd(std::chrono::milliseconds(
-            incoming_message_.next_screen_capture().update_interval()));
+            incoming_message_->next_screen_capture().update_interval()));
     }
-    else if (incoming_message_.has_mouse_event())
+    else if (incoming_message_->has_mouse_event())
     {
         if (input_injector_)
-            input_injector_->injectMouseEvent(incoming_message_.mouse_event());
+            input_injector_->injectMouseEvent(incoming_message_->mouse_event());
     }
-    else if (incoming_message_.has_key_event())
+    else if (incoming_message_->has_key_event())
     {
         if (input_injector_)
-            input_injector_->injectKeyEvent(incoming_message_.key_event());
+            input_injector_->injectKeyEvent(incoming_message_->key_event());
     }
-    else if (incoming_message_.has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
         if (clipboard_monitor_)
-            clipboard_monitor_->injectClipboardEvent(incoming_message_.clipboard_event());
+            clipboard_monitor_->injectClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incoming_message_.has_select_source())
+    else if (incoming_message_->has_select_source())
     {
         LOG(LS_INFO) << "Select source received";
 
         if (screen_capturer_)
         {
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
-                incoming_message_.select_source().screen().id()));
+                incoming_message_->select_source().screen().id()));
         }
         else
         {
             LOG(LS_ERROR) << "Screen capturer NOT initialized";
         }
     }
-    else if (incoming_message_.has_configure())
+    else if (incoming_message_->has_configure())
     {
-        const proto::internal::Configure& config = incoming_message_.configure();
+        const proto::internal::Configure& config = incoming_message_->configure();
 
         LOG(LS_INFO) << "Configure received";
         LOG(LS_INFO) << "Disable wallpaper: " << config.disable_wallpaper();
@@ -167,12 +169,12 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         lock_at_disconnect_ = config.lock_at_disconnect();
     }
-    else if (incoming_message_.has_control())
+    else if (incoming_message_->has_control())
     {
         LOG(LS_INFO) << "Control received: "
-                     << controlActionToString(incoming_message_.control().action());
+                     << controlActionToString(incoming_message_->control().action());
 
-        switch (incoming_message_.control().action())
+        switch (incoming_message_->control().action())
         {
             case proto::internal::Control::ENABLE:
                 setEnabled(true);
@@ -206,34 +208,34 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
     LOG(LS_INFO) << "Shared memory created: " << id;
 
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
+    proto::internal::SharedBuffer* shared_buffer = outgoing_message_->mutable_shared_buffer();
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << id;
 
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
-    proto::internal::SharedBuffer* shared_buffer = outgoing_message_.mutable_shared_buffer();
+    proto::internal::SharedBuffer* shared_buffer = outgoing_message_->mutable_shared_buffer();
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
-    proto::ScreenList* screen_list = outgoing_message_.mutable_screen_list();
+    proto::ScreenList* screen_list = outgoing_message_->mutable_screen_list();
     screen_list->set_current_screen(current);
 
     for (const auto& list_item : list)
@@ -247,15 +249,15 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
-    channel_->send(base::serialize(outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 void DesktopSessionAgent::onScreenCaptured(
     const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
-    proto::internal::ScreenCaptured* screen_captured = outgoing_message_.mutable_screen_captured();
+    proto::internal::ScreenCaptured* screen_captured = outgoing_message_->mutable_screen_captured();
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
@@ -297,7 +299,7 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (screen_captured->has_frame() || screen_captured->has_mouse_cursor())
     {
-        channel_->send(base::serialize(outgoing_message_));
+        channel_->send(base::serialize(*outgoing_message_));
     }
     else
     {
@@ -307,9 +309,9 @@ void DesktopSessionAgent::onScreenCaptured(
 
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(outgoing_message_));
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 void DesktopSessionAgent::setEnabled(bool enable)

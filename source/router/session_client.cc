@@ -42,16 +42,16 @@ void SessionClient::onSessionReady()
 
 void SessionClient::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::PeerToRouter message;
-    if (!base::parse(buffer, &message))
+    std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
+    if (!base::parse(buffer, message.get()))
     {
         LOG(LS_ERROR) << "Could not read message from client";
         return;
     }
 
-    if (message.has_connection_request())
+    if (message->has_connection_request())
     {
-        readConnectionRequest(message.connection_request());
+        readConnectionRequest(message->connection_request());
     }
     else
     {
@@ -68,8 +68,8 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 {
     LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
 
-    proto::RouterToPeer message;
-    proto::ConnectionOffer* offer = message.mutable_connection_offer();
+    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
+    proto::ConnectionOffer* offer = message->mutable_connection_offer();
 
     SessionHost* host = server().hostSessionById(request.host_id());
     if (!host)
@@ -126,7 +126,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 
     LOG(LS_INFO) << "Sending connection offer to client";
     offer->set_peer_role(proto::ConnectionOffer::CLIENT);
-    sendMessage(message);
+    sendMessage(*message);
 }
 
 } // namespace router

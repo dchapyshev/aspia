@@ -76,8 +76,8 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
 
     std::unique_ptr<base::IpcChannel> channel_;
-    proto::internal::ServiceToDesktop incoming_message_;
-    proto::internal::DesktopToService outgoing_message_;
+    std::unique_ptr<proto::internal::ServiceToDesktop> incoming_message_;
+    std::unique_ptr<proto::internal::DesktopToService> outgoing_message_;
 
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;

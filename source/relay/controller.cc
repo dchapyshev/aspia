@@ -195,17 +195,17 @@ void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 
 void Controller::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToRelay message;
-    if (!base::parse(buffer, &message))
+    std::unique_ptr<proto::RouterToRelay> message = std::make_unique<proto::RouterToRelay>();
+    if (!base::parse(buffer, message.get()))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (message.has_key_used())
+    if (message->has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(shared_pool_->share(), message.key_used().key_id());
+            std::make_shared<KeyDeleter>(shared_pool_->share(), message->key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
@@ -257,8 +257,8 @@ void Controller::delayedConnectToRouter()
 
 void Controller::sendKeyPool(uint32_t key_count)
 {
-    proto::RelayToRouter message;
-    proto::RelayKeyPool* relay_key_pool = message.mutable_key_pool();
+    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
+    proto::RelayKeyPool* relay_key_pool = message->mutable_key_pool();
 
     relay_key_pool->set_peer_host(base::utf8FromUtf16(peer_address_));
     relay_key_pool->set_peer_port(peer_port_);
@@ -283,7 +283,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     }
 
     // Send a message to the router.
-    channel_->send(base::serialize(message));
+    channel_->send(base::serialize(*message));
 }
 
 } // namespace relay

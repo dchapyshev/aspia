@@ -88,8 +88,8 @@ private:
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
 
-    proto::HostToClient incoming_message_;
-    proto::ClientToHost outgoing_message_;
+    std::unique_ptr<proto::HostToClient> incoming_message_;
+    std::unique_ptr<proto::ClientToHost> outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     proto::AudioEncoding audio_encoding_ = proto::AUDIO_ENCODING_UNKNOWN;
