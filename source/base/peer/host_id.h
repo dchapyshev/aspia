@@ -19,13 +19,27 @@
 #ifndef BASE__PEER__HOST_ID_H
 #define BASE__PEER__HOST_ID_H
 
+#include <string>
+
 namespace base {
 
 using HostId = unsigned long long;
 
-static_assert(sizeof(HostId) == 8);
-
 extern const HostId kInvalidHostId;
+
+// Checks if a string is a host ID.
+bool isHostId(std::u16string_view str);
+bool isHostId(std::string_view str);
+
+// Converts a string to a host ID.
+// If the string is empty or the conversion failed, then |kInvalidHostId| is returned.
+HostId stringToHostId(std::u16string_view str);
+HostId stringToHostId(std::string_view str);
+
+// Converts a host ID to a string.
+// If the host ID is |kInvalidHostId|, an empty string is returned.
+std::u16string hostIdToString16(HostId host_id);
+std::string hostIdToString(HostId host_id);
 
 } // namespace base
 
