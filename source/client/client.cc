@@ -66,7 +66,7 @@ void Client::start(const Config& config)
     config_ = config;
     state_ = State::STARTED;
 
-    if (config_.router_config.has_value())
+    if (base::isHostId(config_.address_or_id))
     {
         LOG(LS_INFO) << "Starting RELAY connection";
 
@@ -75,14 +75,7 @@ void Client::start(const Config& config)
 
         router_controller_ =
             std::make_unique<RouterController>(config_.router_config.value(), io_task_runner_);
-
-        base::HostId host_id = base::kInvalidHostId;
-        if (!base::stringToULong64(config_.address_or_id, &host_id))
-        {
-            LOG(LS_ERROR) << "Invalid host id: " << config_.address_or_id;
-        }
-
-        router_controller_->connectTo(host_id, this);
+        router_controller_->connectTo(base::stringToHostId(config_.address_or_id), this);
     }
     else
     {
