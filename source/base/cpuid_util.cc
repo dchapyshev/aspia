@@ -28,13 +28,16 @@
 #include <cpuid.h>
 #endif // CC_MSVC
 
-#include <cstring>
-
 namespace base {
+
+CpuidUtil::CpuidUtil(int leaf, int subleaf)
+{
+    get(leaf, subleaf);
+}
 
 CpuidUtil::CpuidUtil(const CpuidUtil& other)
 {
-    memcpy(cpu_info_, other.cpu_info_, sizeof(cpu_info_));
+    *this = other;
 }
 
 CpuidUtil& CpuidUtil::operator=(const CpuidUtil& other)
@@ -42,35 +45,28 @@ CpuidUtil& CpuidUtil::operator=(const CpuidUtil& other)
     if (&other == this)
         return *this;
 
-    memcpy(cpu_info_, other.cpu_info_, sizeof(cpu_info_));
+    eax_ = other.eax_;
+    ebx_ = other.ebx_;
+    ecx_ = other.ecx_;
+    edx_ = other.edx_;
     return *this;
 }
 
+void CpuidUtil::get(int leaf, int subleaf)
+{
 #if defined(CC_MSVC)
-
-void CpuidUtil::get(int leaf)
-{
-    __cpuid(cpu_info_, leaf);
-}
-
-void CpuidUtil::get(int leaf, int subleaf)
-{
-    __cpuidex(cpu_info_, leaf, subleaf);
-}
-
+    int cpu_info[4];
+    __cpuidex(cpu_info, leaf, subleaf);
 #else
+    unsigned int cpu_info[4];
+    __get_cpuid_count(leaf, subleaf, &cpu_info[0], &cpu_info[1], &cpu_info[2], &cpu_info[3]);
+#endif
 
-void CpuidUtil::get(int leaf)
-{
-    __get_cpuid(leaf, &cpu_info_[0], &cpu_info_[1], &cpu_info_[2], &cpu_info_[3]);
+    eax_ = cpu_info[0];
+    ebx_ = cpu_info[1];
+    ecx_ = cpu_info[2];
+    edx_ = cpu_info[3];
 }
-
-void CpuidUtil::get(int leaf, int subleaf)
-{
-    __get_cpuid_count(leaf, subleaf, &cpu_info_[0], &cpu_info_[1], &cpu_info_[2], &cpu_info_[3]);
-}
-
-#endif // CC_MSVC
 
 // static
 bool CpuidUtil::hasAesNi()
