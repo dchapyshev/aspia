@@ -59,18 +59,18 @@ const char* kTranslators[] =
 
 const char* kThirdParty[] =
 {
-    "asio &copy; 2003-2018 Christopher M. Kohlhoff, Boost Software License 1.0",
-#if !defined(OS_WIN)
-    "icu &copy; 2016 and later Unicode, Inc. and others, ICU License",
-#endif
-    "libvpx &copy; 2010, The WebM Project authors, BSD 3-Clause License",
-    "libyuv &copy; 2011 The LibYuv Project Authors, BSD 3-Clause License",
-    "openssl &copy; 1998-2018 The OpenSSL Project, OpenSSL License",
-    "protobuf &copy; 2014 Google Inc., BSD 3-Clause License",
-    "qt &copy; 2015 The Qt Company Ltd., GNU General Public License 3.0",
-    "rapidjson &copy; 2015 THL A29 Limited, a Tencent company, and Milo Yip, MIT License",
-    "zstd &copy; 2016 Yann Collet, Facebook, Inc., BSD License",
-    "Fugue Icons &copy; 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
+    "asio &copy; 2003-2018 Christopher M. Kohlhoff; Boost Software License 1.0",
+    "icu &copy; 2016 and later Unicode, Inc. and others; ICU License",
+    "libvpx &copy; 2010, The WebM Project authors; BSD 3-Clause License",
+    "libyuv &copy; 2011 The LibYuv Project Authors; BSD 3-Clause License",
+    "openssl &copy; 1998-2018 The OpenSSL Project; OpenSSL License",
+    "opus &copy; 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry,"
+        " CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo; BSD License",
+    "protobuf &copy; 2014 Google Inc.; BSD 3-Clause License",
+    "qt &copy; 2015 The Qt Company Ltd.; GNU General Public License 3.0",
+    "rapidjson &copy; 2015 THL A29 Limited, a Tencent company, and Milo Yip; MIT License",
+    "zstd &copy; 2016 Yann Collet, Facebook, Inc.; BSD License",
+    "Fugue Icons &copy; 2013 Yusuke Kamiyamane; Creative Commons Attribution 3.0 License"
 };
 
 QString createList(const QString& title, const char* array[], size_t array_size)
