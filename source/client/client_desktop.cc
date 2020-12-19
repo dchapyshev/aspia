@@ -267,19 +267,19 @@ void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
 
-    if (begin_time_ != TimePoint())
+    if (fps_time_ != TimePoint())
     {
         std::chrono::milliseconds fps_duration =
-            std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
-        fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
+            std::chrono::duration_cast<std::chrono::milliseconds>(current_time - fps_time_);
+        fps_ = calculateFps(fps_, fps_duration, fps_frame_count_);
     }
     else
     {
         fps_ = 0;
     }
 
-    begin_time_ = current_time;
-    video_frame_count_ = 0;
+    fps_time_ = current_time;
+    fps_frame_count_ = 0;
 
     std::chrono::seconds session_duration =
         std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
@@ -298,6 +298,7 @@ void ClientDesktop::onMetricsRequest()
 
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
+    metrics.video_packet_count = video_packet_count_;
 
     if (min_audio_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_audio_packet = min_audio_packet_;
@@ -306,6 +307,8 @@ void ClientDesktop::onMetricsRequest()
 
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
+    metrics.audio_packet_count = audio_packet_count_;
+
     metrics.video_capturer_type = video_capturer_type_;
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
@@ -406,7 +409,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         return;
     }
 
-    ++video_frame_count_;
+    ++video_packet_count_;
+    ++fps_frame_count_;
 
     size_t packet_size = packet.ByteSizeLong();
 
@@ -438,6 +442,8 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
     avg_audio_packet_ = calculateAvgSize(avg_audio_packet_, packet_size);
     min_audio_packet_ = std::min(min_audio_packet_, packet_size);
     max_audio_packet_ = std::max(max_audio_packet_, packet_size);
+
+    ++audio_packet_count_;
 
     std::unique_ptr<proto::AudioPacket> decoded_packet = audio_decoder_->decode(packet);
     if (decoded_packet)

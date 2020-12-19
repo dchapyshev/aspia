@@ -53,9 +53,11 @@ public:
         int64_t total_tx = 0;
         int speed_rx = 0;
         int speed_tx = 0;
+        int64_t video_packet_count = 0;
         size_t min_video_packet = 0;
         size_t max_video_packet = 0;
         size_t avg_video_packet = 0;
+        int64_t audio_packet_count = 0;
         size_t min_audio_packet = 0;
         size_t max_audio_packet = 0;
         size_t avg_audio_packet = 0;
