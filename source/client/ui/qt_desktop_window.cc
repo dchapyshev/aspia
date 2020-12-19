@@ -87,7 +87,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     QPalette palette(scroll_area_->palette());
     palette.setBrush(QPalette::Window, QBrush(QColor(25, 25, 25)));
-    scroll_area_->setPalette(palette);
+    scroll_area_->viewport()->setPalette(palette);
 
     layout_ = new QHBoxLayout(this);
     layout_->setContentsMargins(0, 0, 0, 0);
