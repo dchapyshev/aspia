@@ -267,10 +267,16 @@ void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
 
-    std::chrono::milliseconds fps_duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
-
-    fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
+    if (begin_time_ != TimePoint())
+    {
+        std::chrono::milliseconds fps_duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+        fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
+    }
+    else
+    {
+        fps_ = 0;
+    }
 
     begin_time_ = current_time;
     video_frame_count_ = 0;
@@ -284,10 +290,20 @@ void ClientDesktop::onMetricsRequest()
     metrics.total_tx = totalTx();
     metrics.speed_rx = speedRx();
     metrics.speed_tx = speedTx();
-    metrics.min_video_packet = min_video_packet_;
+
+    if (min_video_packet_ != std::numeric_limits<size_t>::max())
+        metrics.min_video_packet = min_video_packet_;
+    else
+        metrics.min_video_packet = 0;
+
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
-    metrics.min_audio_packet = min_audio_packet_;
+
+    if (min_audio_packet_ != std::numeric_limits<size_t>::max())
+        metrics.min_audio_packet = min_audio_packet_;
+    else
+        metrics.min_audio_packet = 0;
+
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
     metrics.video_capturer_type = video_capturer_type_;
