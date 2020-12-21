@@ -37,11 +37,6 @@ namespace router {
 
 namespace {
 
-#if defined(OS_WIN)
-const wchar_t kFirewallRuleName[] = L"Aspia Router Service";
-const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
-#endif // defined(OS_WIN)
-
 const char* sessionTypeToString(proto::RouterSession session_type)
 {
     switch (session_type)
@@ -163,6 +158,7 @@ bool Server::start()
     server_ = std::make_unique<base::NetworkServer>();
     server_->start(port, this);
 
+    LOG(LS_INFO) << "Server started";
     return true;
 }
 
@@ -351,7 +347,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     sessions_.back()->start(this);
 }
 
-void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession session_type)
+void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
     {

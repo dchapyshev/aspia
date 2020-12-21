@@ -9,94 +9,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="33"/>
+        <location filename="../address_book_dialog.ui" line="27"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="43"/>
+        <location filename="../address_book_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="50"/>
+        <location filename="../address_book_dialog.ui" line="44"/>
         <source>File:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="57"/>
+        <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="64"/>
+        <location filename="../address_book_dialog.ui" line="58"/>
+        <location filename="../address_book_dialog.ui" line="175"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="71"/>
+        <location filename="../address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="125"/>
+        <location filename="../address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../address_book_dialog.ui" line="132"/>
+        <source>Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../address_book_dialog.ui" line="138"/>
-        <source>Routers</source>
+        <source>Use a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="204"/>
-        <source>Name</source>
+        <location filename="../address_book_dialog.ui" line="147"/>
+        <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="209"/>
-        <source>Address</source>
+        <location filename="../address_book_dialog.ui" line="161"/>
+        <source>User Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="214"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.ui" line="223"/>
+        <location filename="../address_book_dialog.ui" line="226"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="229"/>
+        <location filename="../address_book_dialog.ui" line="232"/>
         <source>Password hashing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="235"/>
+        <location filename="../address_book_dialog.ui" line="238"/>
         <source>Size of salt for password hashing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="242"/>
-        <location filename="../address_book_dialog.ui" line="289"/>
-        <location filename="../address_book_dialog.ui" line="305"/>
+        <location filename="../address_book_dialog.ui" line="245"/>
+        <location filename="../address_book_dialog.ui" line="292"/>
+        <location filename="../address_book_dialog.ui" line="308"/>
         <source> bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="261"/>
+        <location filename="../address_book_dialog.ui" line="264"/>
         <source>Salt of data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="271"/>
+        <location filename="../address_book_dialog.ui" line="274"/>
         <source>Size of salt before the data:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="278"/>
+        <location filename="../address_book_dialog.ui" line="281"/>
         <source>Size of salt after the data:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -104,32 +105,27 @@
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.ui" line="78"/>
-        <source>Routers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../address_book_tab.ui" line="114"/>
+        <location filename="../address_book_tab.ui" line="92"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="119"/>
+        <location filename="../address_book_tab.ui" line="97"/>
         <source>Address / ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="124"/>
+        <location filename="../address_book_tab.ui" line="102"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="129"/>
+        <location filename="../address_book_tab.ui" line="107"/>
         <source>Created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="134"/>
+        <location filename="../address_book_tab.ui" line="112"/>
         <source>Modified</source>
         <translation type="unfinished"></translation>
     </message>
@@ -219,26 +215,21 @@
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
-        <source>Router:</source>
+        <source>Address / ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="78"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_general.ui" line="92"/>
+        <location filename="../computer_dialog_general.ui" line="82"/>
         <source>User Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="106"/>
+        <location filename="../computer_dialog_general.ui" line="96"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.ui" line="151"/>
+        <location filename="../computer_dialog_general.ui" line="141"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -259,17 +250,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="33"/>
+        <location filename="../computer_group_dialog.ui" line="27"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="40"/>
+        <location filename="../computer_group_dialog.ui" line="34"/>
         <source>Parent Group:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="74"/>
+        <location filename="../computer_group_dialog.ui" line="68"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,241 +309,251 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="87"/>
+        <location filename="../main_window.ui" line="85"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="102"/>
+        <location filename="../main_window.ui" line="100"/>
         <source>&amp;Session Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="110"/>
+        <location filename="../main_window.ui" line="108"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="121"/>
+        <location filename="../main_window.ui" line="119"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="125"/>
+        <location filename="../main_window.ui" line="123"/>
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="148"/>
-        <location filename="../main_window.ui" line="443"/>
+        <location filename="../main_window.ui" line="139"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="154"/>
+        <location filename="../main_window.ui" line="450"/>
         <source>Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="191"/>
+        <location filename="../main_window.ui" line="198"/>
         <source>&amp;New address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="194"/>
+        <location filename="../main_window.ui" line="201"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="203"/>
+        <location filename="../main_window.ui" line="210"/>
         <source>&amp;Open address book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="206"/>
+        <location filename="../main_window.ui" line="213"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="218"/>
+        <location filename="../main_window.ui" line="225"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="221"/>
+        <location filename="../main_window.ui" line="228"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="229"/>
+        <location filename="../main_window.ui" line="236"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="232"/>
+        <location filename="../main_window.ui" line="239"/>
         <source>Ctrl+Alt+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="240"/>
+        <location filename="../main_window.ui" line="247"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="243"/>
+        <location filename="../main_window.ui" line="250"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="252"/>
+        <location filename="../main_window.ui" line="259"/>
         <source>&amp;Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="264"/>
+        <location filename="../main_window.ui" line="271"/>
         <source>Add Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="276"/>
+        <location filename="../main_window.ui" line="283"/>
         <source>Modify Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="288"/>
+        <location filename="../main_window.ui" line="295"/>
         <source>Delete Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="300"/>
+        <location filename="../main_window.ui" line="307"/>
         <source>Add Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="312"/>
+        <location filename="../main_window.ui" line="319"/>
         <source>Modify Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="324"/>
+        <location filename="../main_window.ui" line="331"/>
         <source>Delete Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="339"/>
+        <location filename="../main_window.ui" line="346"/>
         <source>Desktop &amp;Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="351"/>
+        <location filename="../main_window.ui" line="358"/>
         <source>Desktop &amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="363"/>
+        <location filename="../main_window.ui" line="370"/>
         <source>&amp;File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="372"/>
+        <location filename="../main_window.ui" line="379"/>
         <source>&amp;Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="375"/>
+        <location filename="../main_window.ui" line="382"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="384"/>
+        <location filename="../main_window.ui" line="391"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="396"/>
+        <location filename="../main_window.ui" line="403"/>
         <source>Address Book Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="405"/>
-        <location filename="../main_window.ui" line="408"/>
+        <location filename="../main_window.ui" line="412"/>
+        <location filename="../main_window.ui" line="415"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="417"/>
-        <location filename="../main_window.ui" line="420"/>
+        <location filename="../main_window.ui" line="424"/>
+        <location filename="../main_window.ui" line="427"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="429"/>
-        <location filename="../main_window.ui" line="432"/>
+        <location filename="../main_window.ui" line="436"/>
+        <location filename="../main_window.ui" line="439"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="454"/>
+        <location filename="../main_window.ui" line="461"/>
         <source>Status Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="463"/>
-        <source>Fast Connect...</source>
+        <location filename="../main_window.ui" line="473"/>
+        <source>Fast Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="471"/>
+        <location filename="../main_window.ui" line="570"/>
+        <source>Router Manage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="481"/>
         <source>Show tray icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="479"/>
+        <location filename="../main_window.ui" line="489"/>
         <source>Minimize to tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="484"/>
+        <location filename="../main_window.ui" line="494"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="496"/>
+        <location filename="../main_window.ui" line="506"/>
         <source>Save all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="499"/>
+        <location filename="../main_window.ui" line="509"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="507"/>
+        <location filename="../main_window.ui" line="517"/>
         <source>Close all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="510"/>
+        <location filename="../main_window.ui" line="520"/>
         <source>Ctrl+Shift+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="515"/>
+        <location filename="../main_window.ui" line="525"/>
         <source>Check for updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="520"/>
+        <location filename="../main_window.ui" line="530"/>
         <source>Update Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="525"/>
+        <location filename="../main_window.ui" line="535"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="536"/>
+        <location filename="../main_window.ui" line="546"/>
         <source>Remember latest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="548"/>
+        <location filename="../main_window.ui" line="558"/>
         <source>Copy Computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -565,18 +566,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.ui" line="35"/>
-        <source>Router:</source>
+        <location filename="../fast_connect_dialog.ui" line="32"/>
+        <source>Address / ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.ui" line="45"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../fast_connect_dialog.ui" line="83"/>
-        <source>Session Type:</source>
+        <location filename="../fast_connect_dialog.ui" line="70"/>
+        <source>Session Type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -588,56 +584,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="59"/>
+        <location filename="../open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="72"/>
+        <location filename="../open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="79"/>
+        <location filename="../open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.ui" line="86"/>
+        <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <location filename="../router_dialog.ui" line="14"/>
-        <source>Router Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="22"/>
-        <source>Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="36"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="50"/>
-        <source>User Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="64"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.ui" line="101"/>
-        <source>Comment:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -667,27 +630,27 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="106"/>
+        <location filename="../address_book_dialog.cc" line="85"/>
         <source>Without Encryption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="108"/>
+        <location filename="../address_book_dialog.cc" line="87"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="137"/>
+        <location filename="../address_book_dialog.cc" line="116"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="120"/>
+        <location filename="../address_book_dialog.cc" line="99"/>
         <source>Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="215"/>
+        <location filename="../address_book_dialog.cc" line="239"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -695,12 +658,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="221"/>
+        <location filename="../address_book_dialog.cc" line="245"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="228"/>
+        <location filename="../address_book_dialog.cc" line="252"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -708,12 +671,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="256"/>
+        <location filename="../address_book_dialog.cc" line="280"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="262"/>
+        <location filename="../address_book_dialog.cc" line="286"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -721,12 +684,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="270"/>
+        <location filename="../address_book_dialog.cc" line="294"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="273"/>
+        <location filename="../address_book_dialog.cc" line="297"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -734,119 +697,128 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="277"/>
+        <location filename="../address_book_dialog.cc" line="301"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="280"/>
-        <location filename="../address_book_dialog.cc" line="479"/>
+        <location filename="../address_book_dialog.cc" line="304"/>
+        <location filename="../address_book_dialog.cc" line="476"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="380"/>
-        <location filename="../address_book_dialog.cc" line="435"/>
+        <location filename="../address_book_dialog.cc" line="348"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="359"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="368"/>
+        <source>Router password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="437"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="381"/>
+        <location filename="../address_book_dialog.cc" line="438"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../address_book_dialog.cc" line="436"/>
-        <source>Are you sure you want to remove router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="220"/>
+        <location filename="../address_book_tab.cc" line="215"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="227"/>
+        <location filename="../address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="236"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="280"/>
+        <location filename="../address_book_tab.cc" line="275"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="286"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="273"/>
+        <location filename="../address_book_tab.cc" line="268"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="533"/>
+        <location filename="../address_book_tab.cc" line="506"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="537"/>
-        <location filename="../address_book_tab.cc" line="559"/>
+        <location filename="../address_book_tab.cc" line="510"/>
+        <location filename="../address_book_tab.cc" line="532"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="555"/>
+        <location filename="../address_book_tab.cc" line="528"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="891"/>
+        <location filename="../address_book_tab.cc" line="828"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="893"/>
+        <location filename="../address_book_tab.cc" line="830"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="903"/>
+        <location filename="../address_book_tab.cc" line="840"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="916"/>
+        <location filename="../address_book_tab.cc" line="853"/>
         <source>Unable to write address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="958"/>
+        <location filename="../address_book_tab.cc" line="881"/>
         <source>Root Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="969"/>
-        <location filename="../address_book_tab.cc" line="983"/>
+        <location filename="../address_book_tab.cc" line="892"/>
+        <location filename="../address_book_tab.cc" line="906"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="971"/>
+        <location filename="../address_book_tab.cc" line="894"/>
         <source>Could not open address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="985"/>
+        <location filename="../address_book_tab.cc" line="908"/>
         <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
@@ -854,46 +826,35 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="63"/>
+        <location filename="../computer_dialog.cc" line="62"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="74"/>
+        <location filename="../computer_dialog.cc" line="73"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="78"/>
+        <location filename="../computer_dialog.cc" line="77"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="85"/>
+        <location filename="../computer_dialog.cc" line="84"/>
         <source>Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="89"/>
+        <location filename="../computer_dialog.cc" line="88"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>console::ComputerDialogGeneral</name>
-    <message>
-        <location filename="../computer_dialog_general.cc" line="62"/>
-        <location filename="../computer_dialog_general.cc" line="101"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_general.cc" line="76"/>
-        <source>Without Router</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="120"/>
+        <location filename="../computer_dialog_general.cc" line="107"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -901,17 +862,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="128"/>
+        <location filename="../computer_dialog_general.cc" line="115"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="138"/>
+        <location filename="../computer_dialog_general.cc" line="125"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="148"/>
+        <location filename="../computer_dialog_general.cc" line="135"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -919,17 +880,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="163"/>
-        <source>The ID can only contain numbers.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../computer_dialog_general.cc" line="181"/>
+        <location filename="../computer_dialog_general.cc" line="152"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="218"/>
+        <location filename="../computer_dialog_general.cc" line="188"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -966,121 +922,117 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="50"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../fast_connect_dialog.cc" line="86"/>
+        <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="87"/>
+        <location filename="../fast_connect_dialog.cc" line="76"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="204"/>
+        <location filename="../fast_connect_dialog.cc" line="182"/>
+        <location filename="../fast_connect_dialog.cc" line="202"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="205"/>
-        <source>An invalid computer address was entered.</source>
+        <location filename="../fast_connect_dialog.cc" line="183"/>
+        <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="284"/>
-        <source>Without Router</source>
+        <location filename="../fast_connect_dialog.cc" line="203"/>
+        <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1124"/>
+        <location filename="../main_window.cc" line="165"/>
+        <location filename="../main_window.cc" line="1143"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="165"/>
+        <location filename="../main_window.cc" line="166"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="233"/>
+        <location filename="../main_window.cc" line="234"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="235"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="261"/>
+        <location filename="../main_window.cc" line="262"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="263"/>
+        <location filename="../main_window.cc" line="264"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="509"/>
-        <location filename="../main_window.cc" line="820"/>
-        <location filename="../main_window.cc" line="897"/>
+        <location filename="../main_window.cc" line="521"/>
+        <location filename="../main_window.cc" line="829"/>
+        <location filename="../main_window.cc" line="906"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="510"/>
-        <location filename="../main_window.cc" line="898"/>
+        <location filename="../main_window.cc" line="522"/>
+        <location filename="../main_window.cc" line="907"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="713"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="732"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="721"/>
-        <location filename="../main_window.cc" line="726"/>
+        <location filename="../main_window.cc" line="733"/>
+        <location filename="../main_window.cc" line="738"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="821"/>
+        <location filename="../main_window.cc" line="830"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="854"/>
+        <location filename="../main_window.cc" line="863"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="869"/>
+        <location filename="../main_window.cc" line="878"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1005"/>
+        <location filename="../main_window.cc" line="1014"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1125"/>
-        <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
+        <location filename="../main_window.cc" line="1144"/>
+        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1102,50 +1054,6 @@
     <message>
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>console::RouterDialog</name>
-    <message numerus="yes">
-        <location filename="../router_dialog.cc" line="97"/>
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="105"/>
-        <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="115"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="124"/>
-        <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../router_dialog.cc" line="133"/>
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="144"/>
-        <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../router_dialog.cc" line="171"/>
-        <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

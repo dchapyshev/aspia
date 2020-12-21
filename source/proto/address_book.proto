@@ -51,9 +51,8 @@ message Computer
     uint32 port                   = 7;
     string username               = 8;
     string password               = 9;
-    string router_guid            = 10;
 
-    // Fields 11-15 are reserved.
+    // Fields 10-15 are reserved.
 
     // Session configurations.
     SessionType session_type = 16;
@@ -78,13 +77,10 @@ message ComputerGroup
 
 message Router
 {
-    string guid     = 1;
-    string name     = 2;
-    string comment  = 3;
-    string address  = 4;
-    uint32 port     = 5;
-    string username = 6;
-    string password = 7;
+    string address  = 1;
+    uint32 port     = 2;
+    string username = 3;
+    string password = 4;
 }
 
 message Data
@@ -97,8 +93,14 @@ message Data
     // Random data after. If the address book is not encrypted, then the field is not used.
     bytes salt2 = 3;
 
+    // Enable or disable router.
+    bool enable_router = 4;
+
     // Connection parameters for the router.
-    repeated Router router = 4;
+    Router router = 5;
+
+    // Unique GUID for address book.
+    string guid = 6;
 }
 
 message File

@@ -34,34 +34,26 @@ class CpuidUtil
 {
 public:
     CpuidUtil() = default;
-    explicit CpuidUtil(int leaf) { get(leaf); }
-    CpuidUtil(int leaf, int subleaf) { get(leaf, subleaf); }
+    CpuidUtil(int leaf, int subleaf = 0);
     virtual ~CpuidUtil() = default;
 
     CpuidUtil(const CpuidUtil& other);
     CpuidUtil& operator=(const CpuidUtil& other);
 
-    void get(int leaf);
-    void get(int leaf, int subleaf);
+    void get(int leaf, int subleaf = 0);
 
-    uint32_t eax() const { return static_cast<uint32_t>(cpu_info_[kEAX]); }
-    uint32_t ebx() const { return static_cast<uint32_t>(cpu_info_[kEBX]); }
-    uint32_t ecx() const { return static_cast<uint32_t>(cpu_info_[kECX]); }
-    uint32_t edx() const { return static_cast<uint32_t>(cpu_info_[kEDX]); }
+    uint32_t eax() const { return eax_; }
+    uint32_t ebx() const { return ebx_; }
+    uint32_t ecx() const { return ecx_; }
+    uint32_t edx() const { return edx_; }
 
     static bool hasAesNi();
 
 private:
-    static constexpr int kEAX = 0;
-    static constexpr int kEBX = 1;
-    static constexpr int kECX = 2;
-    static constexpr int kEDX = 3;
-
-#if defined(CC_MSVC)
-    int cpu_info_[4] = { -1, -1, -1, -1 };
-#else
-    unsigned int cpu_info_[4] = { UINT_MAX, UINT_MAX, UINT_MAX, UINT_MAX };
-#endif // CC_MSVC
+    uint32_t eax_ = 0;
+    uint32_t ebx_ = 0;
+    uint32_t ecx_ = 0;
+    uint32_t edx_ = 0;
 };
 
 } // namespace base

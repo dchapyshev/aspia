@@ -73,8 +73,8 @@ private:
     DesktopSession::Config desktop_session_config_;
     base::Size preferred_size_;
 
-    proto::ClientToHost incoming_message_;
-    proto::HostToClient outgoing_message_;
+    std::unique_ptr<proto::ClientToHost> incoming_message_;
+    std::unique_ptr<proto::HostToClient> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };

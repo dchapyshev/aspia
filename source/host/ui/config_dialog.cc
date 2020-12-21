@@ -52,13 +52,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.button_service_install_remove, &QPushButton::released,
+    connect(ui.button_service_install_remove, &QPushButton::clicked,
             this, &ConfigDialog::onServiceInstallRemove);
-    connect(ui.button_service_start_stop, &QPushButton::released,
+    connect(ui.button_service_start_stop, &QPushButton::clicked,
             this, &ConfigDialog::onServiceStartStop);
 
-    connect(ui.button_import, &QPushButton::released, this, &ConfigDialog::onImport);
-    connect(ui.button_export, &QPushButton::released, this, &ConfigDialog::onExport);
+    connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 
     //---------------------------------------------------------------------------------------------
     // Router Tab
@@ -105,9 +105,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.action_add, &QAction::triggered, this, &ConfigDialog::onAddUser);
     connect(ui.action_modify, &QAction::triggered, this, &ConfigDialog::onModifyUser);
     connect(ui.action_delete, &QAction::triggered, this, &ConfigDialog::onDeleteUser);
-    connect(ui.button_add, &QPushButton::released, this, &ConfigDialog::onAddUser);
-    connect(ui.button_modify, &QPushButton::released, this, &ConfigDialog::onModifyUser);
-    connect(ui.button_delete, &QPushButton::released, this, &ConfigDialog::onDeleteUser);
+    connect(ui.button_add, &QPushButton::clicked, this, &ConfigDialog::onAddUser);
+    connect(ui.button_modify, &QPushButton::clicked, this, &ConfigDialog::onModifyUser);
+    connect(ui.button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
 
     //---------------------------------------------------------------------------------------------
     // Update Tab
@@ -126,7 +126,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.edit_update_server, &QLineEdit::textEdited,
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.button_check_updates, &QPushButton::released, [this]()
+    connect(ui.button_check_updates, &QPushButton::clicked, [this]()
     {
         common::UpdateDialog(
             QString::fromStdU16String(SystemSettings().updateServer()), "host", this).exec();

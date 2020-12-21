@@ -64,8 +64,8 @@ private:
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
 
-    proto::internal::ServiceToDesktop outgoing_message_;
-    proto::internal::DesktopToService incoming_message_;
+    std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
+    std::unique_ptr<proto::internal::DesktopToService> incoming_message_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);

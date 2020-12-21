@@ -67,55 +67,63 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
                 break;
 
             case 5:
-                item->setText(1, sizeToString(metrics.min_video_packet));
+                item->setText(1, QString::number(metrics.video_packet_count));
                 break;
 
             case 6:
-                item->setText(1, sizeToString(metrics.max_video_packet));
+                item->setText(1, sizeToString(metrics.min_video_packet));
                 break;
 
             case 7:
-                item->setText(1, sizeToString(metrics.avg_video_packet));
+                item->setText(1, sizeToString(metrics.max_video_packet));
                 break;
 
             case 8:
-                item->setText(1, sizeToString(metrics.min_audio_packet));
+                item->setText(1, sizeToString(metrics.avg_video_packet));
                 break;
 
             case 9:
-                item->setText(1, sizeToString(metrics.max_audio_packet));
+                item->setText(1, QString::number(metrics.audio_packet_count));
                 break;
 
             case 10:
-                item->setText(1, sizeToString(metrics.avg_audio_packet));
+                item->setText(1, sizeToString(metrics.min_audio_packet));
                 break;
 
             case 11:
+                item->setText(1, sizeToString(metrics.max_audio_packet));
+                break;
+
+            case 12:
+                item->setText(1, sizeToString(metrics.avg_audio_packet));
+                break;
+
+            case 13:
                 item->setText(1, base::ScreenCapturer::typeToString(
                     static_cast<base::ScreenCapturer::Type>(metrics.video_capturer_type)));
                 break;
 
-            case 12:
+            case 14:
                 item->setText(1, QString::number(metrics.fps));
                 break;
 
-            case 13:
+            case 15:
                 item->setText(1, QString::number(metrics.send_mouse));
                 break;
 
-            case 14:
+            case 16:
                 item->setText(1, QString::number(metrics.drop_mouse));
                 break;
 
-            case 15:
+            case 17:
                 item->setText(1, QString::number(metrics.send_key));
                 break;
 
-            case 16:
+            case 18:
                 item->setText(1, QString::number(metrics.read_clipboard));
                 break;
 
-            case 17:
+            case 19:
                 item->setText(1, QString::number(metrics.send_clipboard));
                 break;
         }

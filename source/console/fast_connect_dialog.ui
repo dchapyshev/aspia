@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>275</width>
-    <height>208</height>
+    <width>276</width>
+    <height>163</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,30 +19,17 @@
   <property name="windowTitle">
    <string>Fast Connect</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QLabel" name="label_router">
-        <property name="text">
-         <string>Router:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="combo_router"/>
-      </item>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label_address">
         <property name="text">
-         <string>Address:</string>
+         <string>Address / ID</string>
         </property>
        </widget>
       </item>
@@ -80,7 +67,7 @@
       <item>
        <widget class="QLabel" name="label_session_type">
         <property name="text">
-         <string>Session Type:</string>
+         <string>Session Type</string>
         </property>
        </widget>
       </item>

@@ -211,7 +211,7 @@ void ClientAuthenticator::sendClientHello()
         return;
     }
 
-    proto::ClientHello client_hello;
+    std::unique_ptr<proto::ClientHello> client_hello = std::make_unique<proto::ClientHello>();
 
     uint32_t encryption = proto::ENCRYPTION_CHACHA20_POLY1305;
 
@@ -220,8 +220,8 @@ void ClientAuthenticator::sendClientHello()
         encryption |= proto::ENCRYPTION_AES256_GCM;
 #endif
 
-    client_hello.set_encryption(encryption);
-    client_hello.set_identify(identify_);
+    client_hello->set_encryption(encryption);
+    client_hello->set_identify(identify_);
 
     if (!peer_public_key_.empty())
     {
@@ -260,28 +260,28 @@ void ClientAuthenticator::sendClientHello()
             return;
         }
 
-        client_hello.set_public_key(toStdString(public_key));
-        client_hello.set_iv(toStdString(encrypt_iv_));
+        client_hello->set_public_key(toStdString(public_key));
+        client_hello->set_iv(toStdString(encrypt_iv_));
     }
 
     LOG(LS_INFO) << "Sending: ClientHello";
-    sendMessage(client_hello);
+    sendMessage(*client_hello);
 }
 
 bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerHello";
 
-    proto::ServerHello server_hello;
-    if (!parse(buffer, &server_hello))
+    std::unique_ptr<proto::ServerHello> server_hello = std::make_unique<proto::ServerHello>();
+    if (!parse(buffer, server_hello.get()))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    LOG(LS_INFO) << "Encryption: " << server_hello.encryption();
+    LOG(LS_INFO) << "Encryption: " << server_hello->encryption();
 
-    encryption_ = server_hello.encryption();
+    encryption_ = server_hello->encryption();
     switch (encryption_)
     {
         case proto::ENCRYPTION_AES256_GCM:
@@ -293,7 +293,7 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
             return false;
     }
 
-    decrypt_iv_ = fromStdString(server_hello.iv());
+    decrypt_iv_ = fromStdString(server_hello->iv());
 
     if (session_key_.empty() != decrypt_iv_.empty())
     {
@@ -312,44 +312,45 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
 
 void ClientAuthenticator::sendIdentify()
 {
-    proto::SrpIdentify identify;
-    identify.set_username(utf8FromUtf16(username_));
+    std::unique_ptr<proto::SrpIdentify> identify = std::make_unique<proto::SrpIdentify>();
+    identify->set_username(utf8FromUtf16(username_));
 
     LOG(LS_INFO) << "Sending: Identify";
-    sendMessage(identify);
+    sendMessage(*identify);
 }
 
 bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerKeyExchange";
 
-    proto::SrpServerKeyExchange server_key_exchange;
-    if (!parse(buffer, &server_key_exchange))
+    std::unique_ptr<proto::SrpServerKeyExchange> server_key_exchange =
+        std::make_unique<proto::SrpServerKeyExchange>();
+    if (!parse(buffer, server_key_exchange.get()))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (server_key_exchange.salt().empty() || server_key_exchange.b().empty())
+    if (server_key_exchange->salt().empty() || server_key_exchange->b().empty())
     {
-        LOG(LS_ERROR) << "Salt size: " << server_key_exchange.salt().size();
-        LOG(LS_ERROR) << "B size: " << server_key_exchange.b().size();
+        LOG(LS_ERROR) << "Salt size: " << server_key_exchange->salt().size();
+        LOG(LS_ERROR) << "B size: " << server_key_exchange->b().size();
 
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (!verifyNg(server_key_exchange.number(), server_key_exchange.generator()))
+    if (!verifyNg(server_key_exchange->number(), server_key_exchange->generator()))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    N_ = BigNum::fromStdString(server_key_exchange.number());
-    g_ = BigNum::fromStdString(server_key_exchange.generator());
-    s_ = BigNum::fromStdString(server_key_exchange.salt());
-    B_ = BigNum::fromStdString(server_key_exchange.b());
-    decrypt_iv_ = fromStdString(server_key_exchange.iv());
+    N_ = BigNum::fromStdString(server_key_exchange->number());
+    g_ = BigNum::fromStdString(server_key_exchange->generator());
+    s_ = BigNum::fromStdString(server_key_exchange->salt());
+    B_ = BigNum::fromStdString(server_key_exchange->b());
+    decrypt_iv_ = fromStdString(server_key_exchange->iv());
 
     a_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
     A_ = SrpMath::calc_A(a_, N_, g_);
@@ -383,59 +384,61 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 
 void ClientAuthenticator::sendClientKeyExchange()
 {
-    proto::SrpClientKeyExchange client_key_exchange;
-    client_key_exchange.set_a(A_.toStdString());
-    client_key_exchange.set_iv(toStdString(encrypt_iv_));
+    std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
+        std::make_unique<proto::SrpClientKeyExchange>();
+    client_key_exchange->set_a(A_.toStdString());
+    client_key_exchange->set_iv(toStdString(encrypt_iv_));
 
     LOG(LS_INFO) << "Sending: ClientKeyExchange";
-    sendMessage(client_key_exchange);
+    sendMessage(*client_key_exchange);
 }
 
 bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionChallenge";
 
-    proto::SessionChallenge challenge;
-    if (!parse(buffer, &challenge))
+    std::unique_ptr<proto::SessionChallenge> challenge =
+        std::make_unique<proto::SessionChallenge>();
+    if (!parse(buffer, challenge.get()))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (!(challenge.session_types() & session_type_))
+    if (!(challenge->session_types() & session_type_))
     {
         finish(FROM_HERE, ErrorCode::SESSION_DENIED);
         return false;
     }
 
-    setPeerVersion(challenge.version());
-    setPeerOsName(challenge.os_name());
-    setPeerComputerName(challenge.computer_name());
+    setPeerVersion(challenge->version());
+    setPeerOsName(challenge->os_name());
+    setPeerComputerName(challenge->computer_name());
 
     LOG(LS_INFO) << "Server Version: " << peerVersion();
-    LOG(LS_INFO) << "Server Name: " << challenge.computer_name();
-    LOG(LS_INFO) << "Server OS: " << challenge.os_name();
-    LOG(LS_INFO) << "Server CPU Cores: " << challenge.cpu_cores();
+    LOG(LS_INFO) << "Server Name: " << challenge->computer_name();
+    LOG(LS_INFO) << "Server OS: " << challenge->os_name();
+    LOG(LS_INFO) << "Server CPU Cores: " << challenge->cpu_cores();
 
     return true;
 }
 
 void ClientAuthenticator::sendSessionResponse()
 {
-    proto::SessionResponse response;
-    response.set_session_type(session_type_);
+    std::unique_ptr<proto::SessionResponse> response = std::make_unique<proto::SessionResponse>();
+    response->set_session_type(session_type_);
 
-    proto::Version* version = response.mutable_version();
+    proto::Version* version = response->mutable_version();
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
 
-    response.set_os_name(SysInfo::operatingSystemName());
-    response.set_computer_name(SysInfo::computerName());
-    response.set_cpu_cores(SysInfo::processorThreads());
+    response->set_os_name(SysInfo::operatingSystemName());
+    response->set_computer_name(SysInfo::computerName());
+    response->set_cpu_cores(SysInfo::processorThreads());
 
     LOG(LS_INFO) << "Sending: SessionResponse";
-    sendMessage(response);
+    sendMessage(*response);
 }
 
 } // namespace base

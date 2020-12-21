@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_new_password, &QPushButton::released, [this]()
+    connect(ui.button_new_password, &QPushButton::clicked, [this]()
     {
         if (agent_proxy_)
             agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);

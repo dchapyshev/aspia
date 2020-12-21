@@ -74,8 +74,8 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
     add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
 
-    connect(ui.button_check_all, &QPushButton::released, this, &UserDialog::onCheckAllButtonPressed);
-    connect(ui.button_check_none, &QPushButton::released, this, &UserDialog::onCheckNoneButtonPressed);
+    connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
+    connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 
     connect(ui.edit_username, &QLineEdit::textEdited, [this]()

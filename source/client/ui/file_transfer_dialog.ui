@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>File Transfer</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QGroupBox" name="groupBox">

@@ -86,6 +86,9 @@ public:
     QByteArray computerGroupDialogGeometry() const;
     void setComputerGroupDialogGeometry(const QByteArray& geometry);
 
+    QByteArray fastConnectConfig(const QString& guid);
+    void setFastConnectConfig(const QString& guid, const QByteArray& config);
+
 private:
     QSettings settings_;
 

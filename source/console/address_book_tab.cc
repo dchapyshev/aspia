@@ -29,7 +29,6 @@
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
-#include "console/router_item.h"
 #include "console/settings.h"
 
 #include <QFileDialog>
@@ -118,7 +117,6 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     ui.tree_group->setCurrentItem(group_item);
 
     updateComputerList(group_item);
-    updateRouterList();
 
     group_item->setExpanded(group_item->IsExpanded());
 
@@ -172,9 +170,6 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     connect(ui.tree_computer, &ComputerTree::itemDoubleClicked,
             this, &AddressBookTab::onComputerItemDoubleClicked);
-
-    connect(ui.tree_routers, &QTreeWidget::itemDoubleClicked,
-            this, &AddressBookTab::onRouterItemDoubleClicked);
 }
 
 AddressBookTab::~AddressBookTab()
@@ -301,6 +296,11 @@ QString AddressBookTab::addressBookName() const
     return QString::fromStdString(data_.root_group().name());
 }
 
+QString AddressBookTab::addressBookGuid() const
+{
+    return QString::fromStdString(data_.guid());
+}
+
 ComputerItem* AddressBookTab::currentComputer() const
 {
     return dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
@@ -335,48 +335,25 @@ bool AddressBookTab::saveAs()
     return saveToFile(QString());
 }
 
-std::optional<client::RouterConfig> AddressBookTab::routerConfig(std::string_view guid) const
+bool AddressBookTab::isRouterEnabled() const
 {
-    if (guid.empty())
-        return std::nullopt;
-
-    for (int i = 0; i < data_.router_size(); ++i)
-    {
-        const proto::address_book::Router& router = data_.router(i);
-        if (router.guid() == guid)
-        {
-            client::RouterConfig router_config;
-
-            router_config.address  = base::utf16FromUtf8(router.address());
-            router_config.port     = router.port();
-            router_config.username = base::utf16FromUtf8(router.username());
-            router_config.password = base::utf16FromUtf8(router.password());
-
-            return router_config;
-        }
-    }
-
-    return std::nullopt;
+    return data_.enable_router();
 }
 
-std::vector<client::RouterConfig> AddressBookTab::routerConfigList() const
+std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
 {
-    std::vector<client::RouterConfig> routers;
+    if (!data_.enable_router())
+        return std::nullopt;
 
-    for (int i = 0; i < data_.router_size(); ++i)
-    {
-        const proto::address_book::Router& router = data_.router(i);
-        client::RouterConfig router_config;
+    const proto::address_book::Router& router = data_.router();
+    client::RouterConfig router_config;
 
-        router_config.address  = base::utf16FromUtf8(router.address());
-        router_config.port     = router.port();
-        router_config.username = base::utf16FromUtf8(router.username());
-        router_config.password = base::utf16FromUtf8(router.password());
+    router_config.address  = base::utf16FromUtf8(router.address());
+    router_config.port     = router.port();
+    router_config.username = base::utf16FromUtf8(router.username());
+    router_config.password = base::utf16FromUtf8(router.password());
 
-        routers.emplace_back(std::move(router_config));
-    }
-
-    return routers;
+    return router_config;
 }
 
 void AddressBookTab::addComputerGroup()
@@ -412,7 +389,6 @@ void AddressBookTab::addComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::CREATE,
-                          routersList(),
                           parentName(parent_item));
     if (dialog.exec() != QDialog::Accepted)
         return;
@@ -441,7 +417,6 @@ void AddressBookTab::copyComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::COPY,
-                          routersList(),
                           parentName(parent_group_item),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
@@ -473,7 +448,6 @@ void AddressBookTab::modifyAddressBook()
         return;
 
     root_item->updateItem();
-    updateRouterList();
     setChanged(true);
 }
 
@@ -507,7 +481,6 @@ void AddressBookTab::modifyComputer()
 
     ComputerDialog dialog(this,
                           ComputerDialog::Mode::MODIFY,
-                          routersList(),
                           parentName(current_item->parentComputerGroupItem()),
                           *current_item->computer());
     if (dialog.exec() != QDialog::Accepted)
@@ -659,15 +632,6 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
     emit computerDoubleClicked(current_item->computer());
 }
 
-void AddressBookTab::onRouterItemDoubleClicked(QTreeWidgetItem* item, int /* column */)
-{
-    RouterItem* current_item = dynamic_cast<RouterItem*>(item);
-    if (!current_item)
-        return;
-
-    emit routerDoubleClicked(current_item->guid());
-}
-
 void AddressBookTab::showEvent(QShowEvent* event)
 {
     ComputerGroupItem* current_group =
@@ -786,8 +750,7 @@ QByteArray AddressBookTab::saveState()
         stream.setVersion(QDataStream::Qt_5_12);
 
         stream << ui.tree_computer->header()->saveState();
-        stream << ui.vsplitter->saveState();
-        stream << ui.hsplitter->saveState();
+        stream << ui.splitter->saveState();
     }
 
     return buffer;
@@ -799,33 +762,26 @@ void AddressBookTab::restoreState(const QByteArray& state)
     stream.setVersion(QDataStream::Qt_5_12);
 
     QByteArray columns_state;
-    QByteArray vsplitter_state;
-    QByteArray hsplitter_state;
+    QByteArray splitter_state;
 
     stream >> columns_state;
-    stream >> vsplitter_state;
-    stream >> hsplitter_state;
+    stream >> splitter_state;
 
     if (!columns_state.isEmpty())
     {
         ui.tree_computer->header()->restoreState(columns_state);
     }
 
-    if (!vsplitter_state.isEmpty())
+    if (!splitter_state.isEmpty())
     {
-        ui.vsplitter->restoreState(vsplitter_state);
+        ui.splitter->restoreState(splitter_state);
     }
     else
     {
         QList<int> sizes;
         sizes.push_back(200);
         sizes.push_back(width() - 200);
-        ui.vsplitter->setSizes(sizes);
-    }
-
-    if (!hsplitter_state.isEmpty())
-    {
-        ui.hsplitter->restoreState(hsplitter_state);
+        ui.splitter->setSizes(sizes);
     }
 }
 
@@ -835,25 +791,6 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
         std::unique_ptr<QTreeWidgetItem> item_deleter(ui.tree_computer->takeTopLevelItem(i));
 
     ui.tree_computer->addTopLevelItems(computer_group->ComputerList());
-}
-
-void AddressBookTab::updateRouterList()
-{
-    ui.tree_routers->clear();
-
-    auto routers = routersList();
-
-    if (routers.isEmpty())
-    {
-        ui.tree_routers->hide();
-    }
-    else
-    {
-        ui.tree_routers->show();
-
-        for (auto it = routers.begin(); it != routers.end(); ++it)
-            ui.tree_routers->addTopLevelItem(new RouterItem(it.key(), it.value()));
-    }
 }
 
 bool AddressBookTab::saveToFile(const QString& file_path)
@@ -921,20 +858,6 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     setChanged(false);
     return true;
-}
-
-QMap<QString, QString> AddressBookTab::routersList() const
-{
-    QMap<QString, QString> routers;
-
-    for (int i = 0; i < data_.router_size(); ++i)
-    {
-        const proto::address_book::Router& router = data_.router(i);
-        routers.insert(QString::fromStdString(router.name()),
-                       QString::fromStdString(router.guid()));
-    }
-
-    return routers;
 }
 
 ComputerGroupItem* AddressBookTab::rootComputerGroup()

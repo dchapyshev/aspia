@@ -16,12 +16,6 @@
   <property name="windowTitle">
    <string>Address Book Properties</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QTabWidget" name="tab_widget">
@@ -133,88 +127,97 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab_router">
       <attribute name="title">
-       <string>Routers</string>
+       <string>Router</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QPushButton" name="button_add_router">
+        <widget class="QCheckBox" name="checkbox_use_router">
+         <property name="text">
+          <string>Use a router</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_router_address">
            <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources/console.qrc">
-             <normaloff>:/img/plus.png</normaloff>:/img/plus.png</iconset>
+            <string>Address:</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="button_modify_router">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources/console.qrc">
-             <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="edit_router_address">
+           <property name="maxLength">
+            <number>64</number>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="button_delete_router">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_router_username">
            <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources/console.qrc">
-             <normaloff>:/img/minus.png</normaloff>:/img/minus.png</iconset>
+            <string>User Name:</string>
            </property>
           </widget>
          </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="edit_router_username">
+           <property name="maxLength">
+            <number>64</number>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_router_password">
+           <property name="text">
+            <string>Password:</string>
            </property>
-          </spacer>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLineEdit" name="edit_router_password">
+             <property name="maxLength">
+              <number>64</number>
+             </property>
+             <property name="echoMode">
+              <enum>QLineEdit::Password</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="button_show_password">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../client/resources/client.qrc">
+               <normaloff>:/img/eye.png</normaloff>:/img/eye.png</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QTreeWidget" name="tree_routers">
-         <property name="indentation">
-          <number>0</number>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <column>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Address</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Port</string>
-          </property>
-         </column>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>127</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -350,7 +353,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources/console.qrc"/>
+  <include location="../client/resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

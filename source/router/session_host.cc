@@ -49,9 +49,9 @@ bool SessionHost::hasHostId(base::HostId host_id) const
 
 void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
 {
-    proto::RouterToPeer message;
-    message.mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(message);
+    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
+    message->mutable_connection_offer()->CopyFrom(offer);
+    sendMessage(*message);
 }
 
 void SessionHost::onSessionReady()
@@ -61,20 +61,20 @@ void SessionHost::onSessionReady()
 
 void SessionHost::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::PeerToRouter message;
-    if (!base::parse(buffer, &message))
+    std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
+    if (!base::parse(buffer, message.get()))
     {
         LOG(LS_ERROR) << "Could not read message from host";
         return;
     }
 
-    if (message.has_host_id_request())
+    if (message->has_host_id_request())
     {
-        readHostIdRequest(message.host_id_request());
+        readHostIdRequest(message->host_id_request());
     }
-    else if (message.has_reset_host_id())
+    else if (message->has_reset_host_id())
     {
-        readResetHostId(message.reset_host_id());
+        readResetHostId(message->reset_host_id());
     }
     else
     {
@@ -96,8 +96,8 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         return;
     }
 
-    proto::RouterToPeer message;
-    proto::HostIdResponse* host_id_response = message.mutable_host_id_response();
+    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
+    proto::HostIdResponse* host_id_response = message->mutable_host_id_response();
     base::ByteArray key_hash;
 
     if (host_id_request.type() == proto::HostIdRequest::NEW_ID)
@@ -141,7 +141,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
     server().onHostSessionWithId(this);
 
     host_id_response->set_host_id(host_id);
-    sendMessage(message);
+    sendMessage(*message);
 }
 
 void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)

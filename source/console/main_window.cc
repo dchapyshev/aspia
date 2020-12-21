@@ -110,6 +110,7 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
     connect(ui.action_fast_connect, &QAction::triggered, this, &MainWindow::onFastConnect);
+    connect(ui.action_router_manage, &QAction::triggered, this, &MainWindow::connectToRouter);
 
     connect(ui.action_desktop_manage_connect, &QAction::triggered,
             this, &MainWindow::onDesktopManageConnect);
@@ -419,7 +420,13 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
-    FastConnectDialog(this).exec();
+    std::optional<client::RouterConfig> router;
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        router = tab->routerConfig();
+
+    FastConnectDialog(this, tab->addressBookGuid(), router).exec();
 }
 
 void MainWindow::onDesktopManageConnect()
@@ -432,7 +439,7 @@ void MainWindow::onDesktopManageConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
+            connectToComputer(*computer, tab->routerConfig());
         }
     }
 }
@@ -447,7 +454,7 @@ void MainWindow::onDesktopViewConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
-            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
+            connectToComputer(*computer, tab->routerConfig());
         }
     }
 }
@@ -462,7 +469,7 @@ void MainWindow::onFileTransferConnect()
         {
             proto::address_book::Computer* computer = computer_item->computer();
             computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
-            connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
+            connectToComputer(*computer, tab->routerConfig());
         }
     }
 }
@@ -474,6 +481,8 @@ void MainWindow::onCurrentTabChanged(int index)
         ui.action_save->setEnabled(false);
         ui.action_add_computer_group->setEnabled(false);
         ui.action_add_computer->setEnabled(false);
+        ui.action_fast_connect->setEnabled(false);
+        ui.action_router_manage->setEnabled(false);
         return;
     }
 
@@ -483,6 +492,9 @@ void MainWindow::onCurrentTabChanged(int index)
 
     ui.action_save->setEnabled(tab->isChanged());
     ui.action_close->setEnabled(!mru_.isPinnedFile(tab->filePath()));
+
+    ui.action_fast_connect->setEnabled(true);
+    ui.action_router_manage->setEnabled(tab->isRouterEnabled());
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (computer_group)
@@ -562,6 +574,7 @@ void MainWindow::onAddressBookChanged(bool changed)
 
         // Update tab title.
         ui.tab_widget->setTabText(current_tab_index, tab->addressBookName());
+        ui.action_router_manage->setEnabled(tab->isRouterEnabled());
     }
 }
 
@@ -678,7 +691,7 @@ void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer
         return;
     }
 
-    connectToComputer(*computer, tab->routerConfig(computer->router_guid()));
+    connectToComputer(*computer, tab->routerConfig());
 }
 
 void MainWindow::onTabContextMenu(const QPoint& pos)
@@ -709,21 +722,20 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
 
         if (i != tab_index && !mru_.isPinnedFile(tab_at->filePath()))
         {
-            close_other_action = new QAction(
-                QIcon(":/img/ui-tab-multi-close.png"), tr("Close other tabs"), &menu);
+            close_other_action = new QAction(tr("Close other tabs"), &menu);
             break;
         }
     }
 
     if (!is_pinned)
     {
-        close_action = new QAction(QIcon(":/img/ui-tab-close.png"), tr("Close tab"), &menu);
-        pin_action = new QAction(QIcon(":/img/lock-unlock.png"), tr("Pin tab"), &menu);
+        close_action = new QAction(tr("Close tab"), &menu);
+        pin_action = new QAction(tr("Pin tab"), &menu);
     }
     else
     {
         close_action = nullptr;
-        pin_action = new QAction(QIcon(":/img/lock.png"), tr("Pin tab"), &menu);
+        pin_action = new QAction(tr("Pin tab"), &menu);
     }
 
     pin_action->setCheckable(true);
@@ -733,9 +745,6 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
         menu.addAction(close_action);
     if (close_other_action)
         menu.addAction(close_other_action);
-
-    if (close_action || close_other_action)
-        menu.addSeparator();
 
     menu.addAction(pin_action);
 
@@ -1047,8 +1056,6 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &MainWindow::onComputerContextMenu);
     connect(new_tab, &AddressBookTab::computerDoubleClicked,
             this, &MainWindow::onComputerDoubleClicked);
-    connect(new_tab, &AddressBookTab::routerDoubleClicked,
-            this, &MainWindow::connectToRouter);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
         QIcon(":/img/address-book-pinned.png") :
@@ -1118,13 +1125,25 @@ bool MainWindow::hasUnpinnedTabs() const
 void MainWindow::connectToComputer(const proto::address_book::Computer& computer,
                                    const std::optional<client::RouterConfig>& router_config)
 {
-    if (!computer.router_guid().empty() && !router_config.has_value())
+    QString address = QString::fromStdString(computer.address());
+    bool host_id_entered = true;
+
+    for (int i = 0; i < address.length(); ++i)
+    {
+        if (!address[i].isDigit())
+        {
+            host_id_entered = false;
+            break;
+        }
+    }
+
+    if (host_id_entered && !router_config.has_value())
     {
         QMessageBox::warning(this,
                              tr("Warning"),
-                             tr("The computer properties indicate the use of the router, but the "
-                                "specified router was not found in the list. Check if the router "
-                                "is specified correctly."),
+                             tr("Connection by ID is specified in the properties of the computer, "
+                                "but the router is not configured. Check the parameters of the "
+                                "router in the properties of the address book."),
                              QMessageBox::Ok);
         return;
     }
@@ -1173,7 +1192,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         session_window->close();
 }
 
-void MainWindow::connectToRouter(const QString& guid)
+void MainWindow::connectToRouter()
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
@@ -1182,10 +1201,10 @@ void MainWindow::connectToRouter(const QString& guid)
         return;
     }
 
-    std::optional<client::RouterConfig> router_config = tab->routerConfig(guid.toStdString());
+    std::optional<client::RouterConfig> router_config = tab->routerConfig();
     if (!router_config.has_value())
     {
-        LOG(LS_ERROR) << "No config for router with GUID: " << guid;
+        LOG(LS_ERROR) << "No config for router";
         return;
     }
 

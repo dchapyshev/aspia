@@ -18,8 +18,84 @@
 
 #include "base/peer/host_id.h"
 
+#include "base/strings/string_number_conversions.h"
+
+#include <cctype>
+
 namespace base {
 
+namespace {
+
+template <class T>
+bool isHostIdT(T str)
+{
+    bool result = true;
+
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        if (!std::isdigit(static_cast<uint8_t>(str[i])))
+        {
+            result = false;
+            break;
+        }
+    }
+
+    return result;
+}
+
+template <class T>
+HostId stringToHostIdT(T str)
+{
+    if (str.empty())
+        return kInvalidHostId;
+
+    HostId host_id;
+    if (!stringToULong64(str, &host_id))
+        return kInvalidHostId;
+
+    return host_id;
+}
+
+} // namespace
+
 const HostId kInvalidHostId = 0;
+
+static_assert(sizeof(HostId) == 8);
+
+bool isHostId(std::u16string_view str)
+{
+    return isHostIdT(str);
+}
+
+bool isHostId(std::string_view str)
+{
+    return isHostIdT(str);
+}
+
+HostId stringToHostId(std::u16string_view str)
+{
+    return stringToHostIdT(str);
+}
+
+HostId stringToHostId(std::string_view str)
+{
+    return stringToHostIdT(str);
+}
+
+std::u16string hostIdToString16(HostId host_id)
+{
+    if (host_id == kInvalidHostId)
+        return std::u16string();
+
+    return numberToString16(host_id);
+}
+
+std::string hostIdToString(HostId host_id)
+{
+    if (host_id == kInvalidHostId)
+        return std::string();
+
+    return numberToString(host_id);
+}
 
 } // namespace base

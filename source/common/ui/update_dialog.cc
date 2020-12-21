@@ -225,8 +225,8 @@ void UpdateDialog::initialize()
 {
     ui->setupUi(this);
 
-    connect(ui->button_update, &QPushButton::released, this, &UpdateDialog::onUpdateNow);
-    connect(ui->button_close, &QPushButton::released, this, &UpdateDialog::close);
+    connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
+    connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
 
     base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 

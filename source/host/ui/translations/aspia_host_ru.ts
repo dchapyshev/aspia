@@ -5,128 +5,128 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../config_dialog.ui" line="14"/>
-        <location filename="../config_dialog.ui" line="109"/>
+        <location filename="../config_dialog.ui" line="106"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="27"/>
+        <location filename="../config_dialog.ui" line="24"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="33"/>
+        <location filename="../config_dialog.ui" line="30"/>
         <source>Service</source>
         <translation>Служба</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="80"/>
+        <location filename="../config_dialog.ui" line="77"/>
         <source>Incoming Connections</source>
         <translation>Входящие подключения</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="86"/>
+        <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="128"/>
+        <location filename="../config_dialog.ui" line="125"/>
         <source>Import...</source>
         <translation>Импорт...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="135"/>
+        <location filename="../config_dialog.ui" line="132"/>
         <source>Export...</source>
         <translation>Экспорт...</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="159"/>
+        <location filename="../config_dialog.ui" line="156"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="165"/>
+        <location filename="../config_dialog.ui" line="162"/>
         <source>Enable the use of a router</source>
         <translation>Включить использование маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="177"/>
+        <location filename="../config_dialog.ui" line="174"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="196"/>
+        <location filename="../config_dialog.ui" line="193"/>
         <source>Public Key:</source>
         <translation>Публичный ключ:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="211"/>
-        <location filename="../config_dialog.ui" line="304"/>
+        <location filename="../config_dialog.ui" line="208"/>
+        <location filename="../config_dialog.ui" line="301"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="225"/>
+        <location filename="../config_dialog.ui" line="222"/>
         <source>Add new user</source>
         <translation>Добавить нового пользователя</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="245"/>
+        <location filename="../config_dialog.ui" line="242"/>
         <source>Edit user</source>
         <translation>Редактировать пользователя</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="265"/>
+        <location filename="../config_dialog.ui" line="262"/>
         <source>Delete user</source>
         <translation>Удалить пользователя</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="313"/>
+        <location filename="../config_dialog.ui" line="310"/>
         <source>Update</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="319"/>
+        <location filename="../config_dialog.ui" line="316"/>
         <source>Update Server</source>
         <translation>Сервер обновлений</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="325"/>
+        <location filename="../config_dialog.ui" line="322"/>
         <source>Use custom update server</source>
         <translation>Использовать свой сервер обновлений</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="334"/>
+        <location filename="../config_dialog.ui" line="331"/>
         <source>Server:</source>
         <translation>Сервер:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="384"/>
+        <location filename="../config_dialog.ui" line="381"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="394"/>
+        <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="402"/>
+        <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
         <translation>Предпочитаемый тип захвата видео:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="442"/>
+        <location filename="../config_dialog.ui" line="439"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="451"/>
+        <location filename="../config_dialog.ui" line="448"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="460"/>
+        <location filename="../config_dialog.ui" line="457"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -586,27 +586,27 @@
         <translation>Свойства пользователя</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="27"/>
+        <location filename="../user_dialog.ui" line="24"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="34"/>
+        <location filename="../user_dialog.ui" line="31"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="41"/>
+        <location filename="../user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="73"/>
+        <location filename="../user_dialog.ui" line="70"/>
         <source>Disable User Account</source>
         <translation>Отключить аккаунт пользователя</translation>
     </message>
     <message>
-        <location filename="../user_dialog.ui" line="80"/>
+        <location filename="../user_dialog.ui" line="77"/>
         <source>Allowed Session Types:</source>
         <translation>Разрешенные типы сессий:</translation>
     </message>

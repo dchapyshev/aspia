@@ -44,7 +44,6 @@ enum ItemType
 
 ComputerDialog::ComputerDialog(QWidget* parent,
                                Mode mode,
-                               const QMap<QString, QString>& routers,
                                const QString& parent_name,
                                const std::optional<proto::address_book::Computer>& computer)
     : QDialog(parent),
@@ -100,7 +99,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     ComputerDialogDesktop* desktop_view_tab =
         new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
 
-    general_tab->restoreSettings(routers, parent_name, computer_);
+    general_tab->restoreSettings(parent_name, computer_);
     desktop_manage_tab->restoreSettings(
         proto::SESSION_TYPE_DESKTOP_MANAGE, computer_.session_config().desktop_manage());
     desktop_view_tab->restoreSettings(

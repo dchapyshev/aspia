@@ -118,28 +118,28 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
-    connect(ui->button_refresh_hosts, &QPushButton::released,
+    connect(ui->button_refresh_hosts, &QPushButton::clicked,
             this, &RouterManagerWindow::refreshSessionList);
 
-    connect(ui->button_disconnect_host, &QPushButton::released,
+    connect(ui->button_disconnect_host, &QPushButton::clicked,
             this, &RouterManagerWindow::disconnectHost);
 
-    connect(ui->button_disconnect_all_hosts, &QPushButton::released,
+    connect(ui->button_disconnect_all_hosts, &QPushButton::clicked,
             this, &RouterManagerWindow::disconnectAllHosts);
 
-    connect(ui->button_refresh_relay, &QPushButton::released,
+    connect(ui->button_refresh_relay, &QPushButton::clicked,
             this, &RouterManagerWindow::refreshSessionList);
 
-    connect(ui->button_refresh_users, &QPushButton::released,
+    connect(ui->button_refresh_users, &QPushButton::clicked,
             this, &RouterManagerWindow::refreshUserList);
 
-    connect(ui->button_add_user, &QPushButton::released,
+    connect(ui->button_add_user, &QPushButton::clicked,
             this, &RouterManagerWindow::addUser);
 
-    connect(ui->button_modify_user, &QPushButton::released,
+    connect(ui->button_modify_user, &QPushButton::clicked,
             this, &RouterManagerWindow::modifyUser);
 
-    connect(ui->button_delete_user, &QPushButton::released,
+    connect(ui->button_delete_user, &QPushButton::clicked,
             this, &RouterManagerWindow::deleteUser);
 
     connect(ui->tree_users, &QTreeWidget::currentItemChanged,

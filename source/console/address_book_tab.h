@@ -41,6 +41,7 @@ public:
     static AddressBookTab* openFromFile(const QString& file_path, QWidget* parent);
 
     QString addressBookName() const;
+    QString addressBookGuid() const;
     const QString& filePath() const { return file_path_; }
     ComputerItem* currentComputer() const;
     proto::address_book::ComputerGroup* currentComputerGroup() const;
@@ -51,9 +52,9 @@ public:
 
     bool save();
     bool saveAs();
-
-    std::optional<client::RouterConfig> routerConfig(std::string_view guid) const;
-    std::vector<client::RouterConfig> routerConfigList() const;
+\
+    bool isRouterEnabled() const;
+    std::optional<client::RouterConfig> routerConfig() const;
 
     void retranslateUi();
 
@@ -74,7 +75,6 @@ signals:
     void computerGroupContextMenu(const QPoint& point, bool is_root);
     void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
     void computerDoubleClicked(proto::address_book::Computer* computer);
-    void routerDoubleClicked(const QString& guid);
 
 protected:
     // ConsoleTab implementation.
@@ -90,7 +90,6 @@ private slots:
     void onComputerItemClicked(QTreeWidgetItem* item, int column);
     void onComputerContextMenu(const QPoint& point);
     void onComputerItemDoubleClicked(QTreeWidgetItem* item, int column);
-    void onRouterItemDoubleClicked(QTreeWidgetItem* item, int column);
 
 private:
     AddressBookTab(const QString& file_path,
@@ -102,9 +101,7 @@ private:
     QByteArray saveState();
     void restoreState(const QByteArray& state);
     void updateComputerList(ComputerGroupItem* computer_group);
-    void updateRouterList();
     bool saveToFile(const QString& file_path);
-    QMap<QString, QString> routersList() const;
     ComputerGroupItem* rootComputerGroup();
 
     static QString parentName(ComputerGroupItem* item);

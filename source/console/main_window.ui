@@ -78,8 +78,6 @@
     <addaction name="action_close"/>
     <addaction name="action_close_all"/>
     <addaction name="separator"/>
-    <addaction name="action_fast_connect"/>
-    <addaction name="separator"/>
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menu_edit">
@@ -136,10 +134,18 @@
     <addaction name="action_show_tray_icon"/>
     <addaction name="action_minimize_to_tray"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="action_fast_connect"/>
+    <addaction name="action_router_manage"/>
+   </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menu_session_type"/>
+   <addaction name="menuTools"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="console::StatusBar" name="status_bar"/>
@@ -165,6 +171,7 @@
    <addaction name="action_save_all"/>
    <addaction name="separator"/>
    <addaction name="action_fast_connect"/>
+   <addaction name="action_router_manage"/>
    <addaction name="separator"/>
    <addaction name="action_address_book_properties"/>
    <addaction name="action_add_computer_group"/>
@@ -184,7 +191,7 @@
   </widget>
   <action name="action_new">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/document.png</normaloff>:/img/document.png</iconset>
    </property>
    <property name="text">
@@ -211,7 +218,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/disk.png</normaloff>:/img/disk.png</iconset>
    </property>
    <property name="text">
@@ -245,7 +252,7 @@
   </action>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
    </property>
    <property name="text">
@@ -257,7 +264,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/folder-plus.png</normaloff>:/img/folder-plus.png</iconset>
    </property>
    <property name="text">
@@ -332,7 +339,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -344,7 +351,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
@@ -356,7 +363,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -365,7 +372,7 @@
   </action>
   <action name="action_online_help">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
    </property>
    <property name="text">
@@ -377,7 +384,7 @@
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
    </property>
    <property name="text">
@@ -398,7 +405,7 @@
   </action>
   <action name="action_desktop_manage_connect">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/monitor-keyboard.png</normaloff>:/img/monitor-keyboard.png</iconset>
    </property>
    <property name="text">
@@ -410,7 +417,7 @@
   </action>
   <action name="action_desktop_view_connect">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/monitor.png</normaloff>:/img/monitor.png</iconset>
    </property>
    <property name="text">
@@ -422,7 +429,7 @@
   </action>
   <action name="action_file_transfer_connect">
    <property name="icon">
-    <iconset resource="resources/console.qrc">
+    <iconset resource="../client/resources/client.qrc">
      <normaloff>:/img/folder-stand.png</normaloff>:/img/folder-stand.png</iconset>
    </property>
    <property name="text">
@@ -455,12 +462,15 @@
    </property>
   </action>
   <action name="action_fast_connect">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources/console.qrc">
      <normaloff>:/img/plug-disconnect.png</normaloff>:/img/plug-disconnect.png</iconset>
    </property>
    <property name="text">
-    <string>Fast Connect...</string>
+    <string>Fast Connect</string>
    </property>
   </action>
   <action name="action_show_tray_icon">
@@ -548,6 +558,18 @@
     <string>Copy Computer</string>
    </property>
   </action>
+  <action name="action_router_manage">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/server.png</normaloff>:/img/server.png</iconset>
+   </property>
+   <property name="text">
+    <string>Router Manage</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -558,6 +580,8 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../client/resources/client.qrc"/>
+  <include location="../common/resources/common.qrc"/>
   <include location="resources/console.qrc"/>
  </resources>
  <connections/>

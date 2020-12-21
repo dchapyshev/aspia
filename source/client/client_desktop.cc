@@ -56,6 +56,8 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
+      incoming_message_(std::make_unique<proto::HostToClient>()),
+      outgoing_message_(std::make_unique<proto::ClientToHost>()),
       audio_player_(base::AudioPlayer::create())
 {
     // Nothing
@@ -87,37 +89,37 @@ void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
-    incoming_message_.Clear();
+    incoming_message_->Clear();
 
-    if (!incoming_message_.ParseFromArray(buffer.data(), buffer.size()))
+    if (!base::parse(buffer, incoming_message_.get()))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;
     }
 
-    if (incoming_message_.has_video_packet() || incoming_message_.has_cursor_shape())
+    if (incoming_message_->has_video_packet() || incoming_message_->has_cursor_shape())
     {
-        if (incoming_message_.has_video_packet())
-            readVideoPacket(incoming_message_.video_packet());
+        if (incoming_message_->has_video_packet())
+            readVideoPacket(incoming_message_->video_packet());
 
-        if (incoming_message_.has_cursor_shape())
-            readCursorShape(incoming_message_.cursor_shape());
+        if (incoming_message_->has_cursor_shape())
+            readCursorShape(incoming_message_->cursor_shape());
     }
-    else if (incoming_message_.has_audio_packet())
+    else if (incoming_message_->has_audio_packet())
     {
-        readAudioPacket(incoming_message_.audio_packet());
+        readAudioPacket(incoming_message_->audio_packet());
     }
-    else if (incoming_message_.has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
-        readClipboardEvent(incoming_message_.clipboard_event());
+        readClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incoming_message_.has_config_request())
+    else if (incoming_message_->has_config_request())
     {
-        readConfigRequest(incoming_message_.config_request());
+        readConfigRequest(incoming_message_->config_request());
     }
-    else if (incoming_message_.has_extension())
+    else if (incoming_message_->has_extension())
     {
-        readExtension(incoming_message_.extension());
+        readExtension(incoming_message_->extension());
     }
     else
     {
@@ -137,9 +139,9 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_clipboard_event()->CopyFrom(out_event.value());
-    sendMessage(outgoing_message_);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_clipboard_event()->CopyFrom(out_event.value());
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
@@ -164,42 +166,42 @@ void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::ENABLE_CLIPBOARD);
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_config()->CopyFrom(desktop_config_);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_config()->CopyFrom(desktop_config_);
 
     LOG(LS_INFO) << "Send new config to host";
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Current screen changed: " << screen.id();
 
-    outgoing_message_.Clear();
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    outgoing_message_->Clear();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
 
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::setPreferredSize(int width, int height)
 {
     LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
 
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
     proto::PreferredSize preferred_size;
     preferred_size.set_width(width);
     preferred_size.set_height(height);
 
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
 
     extension->set_name(common::kPreferredSizeExtension);
     extension->set_data(preferred_size.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
@@ -208,10 +210,10 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_key_event()->CopyFrom(out_event.value());
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_key_event()->CopyFrom(out_event.value());
 
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
@@ -220,10 +222,10 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_mouse_event()->CopyFrom(out_event.value());
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_mouse_event()->CopyFrom(out_event.value());
 
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
@@ -234,9 +236,9 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
         return;
     }
 
-    outgoing_message_.Clear();
+    outgoing_message_->Clear();
 
-    proto::DesktopExtension* extension = outgoing_message_.mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
 
     proto::PowerControl power_control;
     power_control.set_action(action);
@@ -244,34 +246,40 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
     extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
-    sendMessage(outgoing_message_);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onRemoteUpdate()
 {
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_extension()->set_name(common::kRemoteUpdateExtension);
-    sendMessage(outgoing_message_);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_extension()->set_name(common::kRemoteUpdateExtension);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onSystemInfoRequest()
 {
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_extension()->set_name(common::kSystemInfoExtension);
-    sendMessage(outgoing_message_);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_extension()->set_name(common::kSystemInfoExtension);
+    sendMessage(*outgoing_message_);
 }
 
 void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
 
-    std::chrono::milliseconds fps_duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(current_time - begin_time_);
+    if (fps_time_ != TimePoint())
+    {
+        std::chrono::milliseconds fps_duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(current_time - fps_time_);
+        fps_ = calculateFps(fps_, fps_duration, fps_frame_count_);
+    }
+    else
+    {
+        fps_ = 0;
+    }
 
-    fps_ = calculateFps(fps_, fps_duration, video_frame_count_);
-
-    begin_time_ = current_time;
-    video_frame_count_ = 0;
+    fps_time_ = current_time;
+    fps_frame_count_ = 0;
 
     std::chrono::seconds session_duration =
         std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
@@ -282,12 +290,25 @@ void ClientDesktop::onMetricsRequest()
     metrics.total_tx = totalTx();
     metrics.speed_rx = speedRx();
     metrics.speed_tx = speedTx();
-    metrics.min_video_packet = min_video_packet_;
+
+    if (min_video_packet_ != std::numeric_limits<size_t>::max())
+        metrics.min_video_packet = min_video_packet_;
+    else
+        metrics.min_video_packet = 0;
+
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
-    metrics.min_audio_packet = min_audio_packet_;
+    metrics.video_packet_count = video_packet_count_;
+
+    if (min_audio_packet_ != std::numeric_limits<size_t>::max())
+        metrics.min_audio_packet = min_audio_packet_;
+    else
+        metrics.min_audio_packet = 0;
+
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
+    metrics.audio_packet_count = audio_packet_count_;
+
     metrics.video_capturer_type = video_capturer_type_;
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
@@ -388,7 +409,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         return;
     }
 
-    ++video_frame_count_;
+    ++video_packet_count_;
+    ++fps_frame_count_;
 
     size_t packet_size = packet.ByteSizeLong();
 
@@ -420,6 +442,8 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
     avg_audio_packet_ = calculateAvgSize(avg_audio_packet_, packet_size);
     min_audio_packet_ = std::min(min_audio_packet_, packet_size);
     max_audio_packet_ = std::max(max_audio_packet_, packet_size);
+
+    ++audio_packet_count_;
 
     std::unique_ptr<proto::AudioPacket> decoded_packet = audio_decoder_->decode(packet);
     if (decoded_packet)

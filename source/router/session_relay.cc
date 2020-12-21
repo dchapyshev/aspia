@@ -36,9 +36,9 @@ SessionRelay::~SessionRelay()
 
 void SessionRelay::sendKeyUsed(uint32_t key_id)
 {
-    proto::RouterToRelay message;
-    message.mutable_key_used()->set_key_id(key_id);
-    sendMessage(message);
+    std::unique_ptr<proto::RouterToRelay> message = std::make_unique<proto::RouterToRelay>();
+    message->mutable_key_used()->set_key_id(key_id);
+    sendMessage(*message);
 }
 
 void SessionRelay::onSessionReady()
@@ -48,17 +48,17 @@ void SessionRelay::onSessionReady()
 
 void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RelayToRouter message;
+    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
 
-    if (!base::parse(buffer, &message))
+    if (!base::parse(buffer, message.get()))
     {
         LOG(LS_ERROR) << "Could not read message from relay server";
         return;
     }
 
-    if (message.has_key_pool())
+    if (message->has_key_pool())
     {
-        readKeyPool(message.key_pool());
+        readKeyPool(message->key_pool());
     }
     else
     {

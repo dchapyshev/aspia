@@ -13,12 +13,6 @@
   <property name="windowTitle">
    <string>Connection Status</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QPlainTextEdit" name="edit_status">
@@ -36,8 +30,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/common.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

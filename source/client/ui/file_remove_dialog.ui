@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Deleting Items</string>
   </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label_current_item">
