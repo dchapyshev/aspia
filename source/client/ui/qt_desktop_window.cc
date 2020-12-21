@@ -466,11 +466,9 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 
         proto::MouseEvent out_event;
 
-        int remote_scale_factor = desktop_config_.scale_factor();
-
         out_event.set_mask(event.mask());
-        out_event.set_x((static_cast<double>(pos.x() * 10000) / (scale * remote_scale_factor)));
-        out_event.set_y((static_cast<double>(pos.y() * 10000) / (scale * remote_scale_factor)));
+        out_event.set_x((static_cast<double>(pos.x() * 100) / scale));
+        out_event.set_y((static_cast<double>(pos.y() * 100) / scale));
 
         desktop_control_proxy_->onMouseEvent(out_event);
     }

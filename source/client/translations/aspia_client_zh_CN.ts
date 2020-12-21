@@ -1520,7 +1520,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="222"/>
         <location filename="../ui/qt_desktop_window.cc" line="230"/>
-        <location filename="../ui/qt_desktop_window.cc" line="559"/>
+        <location filename="../ui/qt_desktop_window.cc" line="558"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1535,17 +1535,17 @@
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="537"/>
+        <location filename="../ui/qt_desktop_window.cc" line="536"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="539"/>
+        <location filename="../ui/qt_desktop_window.cc" line="538"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="559"/>
+        <location filename="../ui/qt_desktop_window.cc" line="558"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
