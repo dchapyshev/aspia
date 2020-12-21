@@ -16,6 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+include(CheckIPOSupported)
+
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -111,6 +113,19 @@ if (MSVC)
 
     # Static runtime library.
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT error)
+
+if (IPO_SUPPORTED)
+    message(STATUS "IPO/LTO supported")
+
+    # Enable link-time code generatation.
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO TRUE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_MINSIZEREL TRUE)
+else()
+    message(STATUS "IPO/LTO not supported")
 endif()
 
 add_subdirectory(base)
