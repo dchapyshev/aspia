@@ -423,20 +423,23 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         scroll_delta_.setX(0);
         scroll_delta_.setY(0);
 
+        static const int kThresholdDistance = 80;
+        static const int kStep = 10;
+
         if (client_area.width() < desktop_->width())
         {
-            if (cursor.x() > client_area.width() - 150)
-                scroll_delta_.setX(10);
-            else if (cursor.x() < 150)
-                scroll_delta_.setX(-10);
+            if (cursor.x() > client_area.width() - kThresholdDistance)
+                scroll_delta_.setX(kStep);
+            else if (cursor.x() < kThresholdDistance)
+                scroll_delta_.setX(-kStep);
         }
 
         if (client_area.height() < desktop_->height())
         {
-            if (cursor.y() > client_area.height() - 150)
-                scroll_delta_.setY(10);
-            else if (cursor.y() < 150)
-                scroll_delta_.setY(-10);
+            if (cursor.y() > client_area.height() - kThresholdDistance)
+                scroll_delta_.setY(kStep);
+            else if (cursor.y() < kThresholdDistance)
+                scroll_delta_.setY(-kStep);
         }
 
         if (!scroll_delta_.isNull())
