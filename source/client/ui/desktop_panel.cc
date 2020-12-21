@@ -236,6 +236,16 @@ bool DesktopPanel::sendKeyCombinations() const
     return ui.action_send_key_combinations->isChecked();
 }
 
+bool DesktopPanel::isPanelHidden() const
+{
+    return ui.toolbar->isHidden();
+}
+
+bool DesktopPanel::isPanelPinned() const
+{
+    return ui.action_pin->isChecked();
+}
+
 void DesktopPanel::enterEvent(QEvent* /* event */)
 {
     leaved_ = false;

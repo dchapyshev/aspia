@@ -948,35 +948,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="310"/>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="320"/>
+        <location filename="../ui/desktop_panel.cc" line="331"/>
+        <location filename="../ui/desktop_panel.cc" line="342"/>
+        <location filename="../ui/desktop_panel.cc" line="353"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="311"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <location filename="../ui/desktop_panel.cc" line="354"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="366"/>
+        <location filename="../ui/desktop_panel.cc" line="376"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1235,7 +1235,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="222"/>
         <location filename="../ui/qt_desktop_window.cc" line="230"/>
-        <location filename="../ui/qt_desktop_window.cc" line="553"/>
+        <location filename="../ui/qt_desktop_window.cc" line="559"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1250,17 +1250,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="531"/>
+        <location filename="../ui/qt_desktop_window.cc" line="537"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="533"/>
+        <location filename="../ui/qt_desktop_window.cc" line="539"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="553"/>
+        <location filename="../ui/qt_desktop_window.cc" line="559"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

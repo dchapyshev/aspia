@@ -45,6 +45,8 @@ public:
     int scale() const { return scale_; }
     bool autoScrolling() const;
     bool sendKeyCombinations() const;
+    bool isPanelHidden() const;
+    bool isPanelPinned() const;
 
 signals:
     void keyCombination(int key_secuence);

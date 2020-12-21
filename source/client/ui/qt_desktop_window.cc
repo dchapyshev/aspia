@@ -474,6 +474,13 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 
         desktop_control_proxy_->onMouseEvent(out_event);
     }
+
+    // In MacOS event Leave does not always come to the widget when the mouse leaves its area.
+    if (!panel_->isPanelHidden() && !panel_->isPanelPinned())
+    {
+        if (!panel_->rect().contains(pos))
+            QApplication::postEvent(panel_, new QEvent(QEvent::Leave));
+    }
 }
 
 void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
