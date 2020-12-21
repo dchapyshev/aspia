@@ -24,13 +24,13 @@
 namespace base {
 
 // static
-bool OSCrypt::encryptString16(const std::u16string& plaintext, std::string* ciphertext)
+bool OSCrypt::encryptString16(std::u16string_view plaintext, std::string* ciphertext)
 {
     return encryptString(utf8FromUtf16(plaintext), ciphertext);
 }
 
 // static
-bool OSCrypt::decryptString16(const std::string& ciphertext, std::u16string* plaintext)
+bool OSCrypt::decryptString16(std::string_view ciphertext, std::u16string* plaintext)
 {
     std::string utf8;
 
@@ -42,7 +42,7 @@ bool OSCrypt::decryptString16(const std::string& ciphertext, std::u16string* pla
 }
 
 // static
-bool OSCrypt::encryptString(const std::string& plaintext, std::string* ciphertext)
+bool OSCrypt::encryptString(std::string_view plaintext, std::string* ciphertext)
 {
     NOTIMPLEMENTED();
     ciphertext->assign(plaintext);
@@ -50,7 +50,7 @@ bool OSCrypt::encryptString(const std::string& plaintext, std::string* ciphertex
 }
 
 // static
-bool OSCrypt::decryptString(const std::string& ciphertext, std::string* plaintext)
+bool OSCrypt::decryptString(std::string_view ciphertext, std::string* plaintext)
 {
     NOTIMPLEMENTED();
     plaintext->assign(ciphertext);

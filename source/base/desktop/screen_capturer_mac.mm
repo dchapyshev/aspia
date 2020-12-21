@@ -22,7 +22,11 @@
 
 namespace base {
 
-ScreenCapturerMac::ScreenCapturerMac() = default;
+ScreenCapturerMac::ScreenCapturerMac()
+    : ScreenCapturer(ScreenCapturer::Type::MACOSX)
+{
+    // Nothing
+}
 
 ScreenCapturerMac::~ScreenCapturerMac() = default;
 
