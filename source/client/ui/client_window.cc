@@ -65,17 +65,17 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientWindow::sessionTypeChanged);
 
-    connect(ui.button_session_config, &QPushButton::released,
+    connect(ui.button_session_config, &QPushButton::clicked,
             this, &ClientWindow::sessionConfigButtonPressed);
 
-    connect(ui.button_connect, &QPushButton::released, this, &ClientWindow::connectToHost);
+    connect(ui.button_connect, &QPushButton::clicked, this, &ClientWindow::connectToHost);
 
     combo_address->setFocus();
 }
 
 ClientWindow::~ClientWindow() = default;
 
-void ClientWindow::closeEvent(QCloseEvent* event)
+void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     QApplication::quit();
 }

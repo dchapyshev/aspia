@@ -176,12 +176,12 @@ AboutDialog::AboutDialog(QWidget* parent)
     if (file.open(QFile::ReadOnly))
         ui->edit_license->setPlainText(file.readAll());
 
-    connect(ui->push_button_donate, &QPushButton::released, []()
+    connect(ui->push_button_donate, &QPushButton::clicked, []()
     {
         QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
     });
 
-    connect(ui->push_button_close, &QPushButton::released, this, &AboutDialog::close);
+    connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);
 }
 
 AboutDialog::~AboutDialog() = default;

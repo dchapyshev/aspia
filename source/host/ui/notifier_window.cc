@@ -76,10 +76,10 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     ui.label_title->installEventFilter(this);
     ui.label_connections->installEventFilter(this);
 
-    connect(ui.button_show_hide, &QPushButton::released,
+    connect(ui.button_show_hide, &QPushButton::clicked,
             this, &NotifierWindow::onShowHidePressed);
 
-    connect(ui.button_disconnect_all, &QPushButton::released,
+    connect(ui.button_disconnect_all, &QPushButton::clicked,
             this, &NotifierWindow::disconnectAll);
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,

@@ -68,7 +68,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
         sessionTypeChanged(current_session_type);
     }
 
-    connect(ui.button_clear, &QPushButton::released, [this]()
+    connect(ui.button_clear, &QPushButton::clicked, [this]()
     {
         int ret = QMessageBox::question(
             this,
@@ -87,7 +87,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &FastConnectDialog::sessionTypeChanged);
 
-    connect(ui.button_session_config, &QPushButton::released,
+    connect(ui.button_session_config, &QPushButton::clicked,
             this, &FastConnectDialog::sessionConfigButtonPressed);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FastConnectDialog::onButtonBoxClicked);
