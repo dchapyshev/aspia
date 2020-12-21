@@ -1896,7 +1896,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="222"/>
         <location filename="../ui/qt_desktop_window.cc" line="230"/>
-        <location filename="../ui/qt_desktop_window.cc" line="552"/>
+        <location filename="../ui/qt_desktop_window.cc" line="553"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
@@ -1915,17 +1915,17 @@
         <translation type="obsolete">Вибір підтримуваного кодування відео відмінено користувачем.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="530"/>
+        <location filename="../ui/qt_desktop_window.cc" line="531"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="532"/>
+        <location filename="../ui/qt_desktop_window.cc" line="533"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="552"/>
+        <location filename="../ui/qt_desktop_window.cc" line="553"/>
         <source>Could not save image</source>
         <translation type="unfinished">Неможливо зберегти зображення</translation>
     </message>

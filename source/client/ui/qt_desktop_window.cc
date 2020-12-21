@@ -333,6 +333,7 @@ void QtDesktopWindow::setFrame(
 void QtDesktopWindow::drawFrame()
 {
     desktop_->update();
+    panel_->update();
 }
 
 void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
@@ -383,7 +384,7 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
         if (event->type() == QEvent::Wheel)
         {
             QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
-            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
+            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
 
             desktop_->doMouseEvent(wheel_event->type(),
                                    wheel_event->buttons(),
