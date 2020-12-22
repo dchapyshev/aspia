@@ -43,9 +43,9 @@ list(APPEND SOURCE_HOST_CORE
     host_export.h
     host_key_storage.cc
     host_key_storage.h
-    host_main.cc
-    host_main.h
     input_injector.h
+    integrity_check.cc
+    integrity_check.h
     router_controller.cc
     router_controller.h
     server.cc
@@ -92,6 +92,8 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/config_dialog.cc
     ui/config_dialog.h
     ui/config_dialog.ui
+    ui/host_main.cc
+    ui/host_main.h
     ui/main_window.cc
     ui/main_window.h
     ui/main_window.ui
@@ -186,7 +188,7 @@ else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
 
-add_executable(aspia_host host_entry_point.cc host.rc)
+add_executable(aspia_host ui/host_entry_point.cc ui/host.rc)
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_host_core Qt5::WinMain)

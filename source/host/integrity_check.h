@@ -16,28 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_main.h"
-
-#include "base/logging.h"
-#include "host/integrity_check.h"
-#include "host/win/service.h"
+#ifndef HOST__INTEGRITY_CHECK_H
+#define HOST__INTEGRITY_CHECK_H
 
 namespace host {
 
-void hostServiceMain()
-{
-    base::initLogging();
-
-    if (!integrityCheck())
-    {
-        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
-    }
-    else
-    {
-        Service().exec();
-    }
-
-    base::shutdownLogging();
-}
+// Performs integrity checks on host components.
+// Returns true if check succeeded. Returns false if the check fails.
+bool integrityCheck();
 
 } // namespace host
+
+#endif // HOST__INTEGRITY_CHECK_H

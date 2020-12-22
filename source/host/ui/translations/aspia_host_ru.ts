@@ -154,12 +154,20 @@
         <translation type="vanished">Запускает обновление приложения.</translation>
     </message>
     <message>
+        <location filename="../host_main.cc" line="99"/>
+        <location filename="../host_main.cc" line="112"/>
         <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
+        <location filename="../host_main.cc" line="100"/>
+        <source>Application integrity check failed. Components are missing or damaged.</source>
+        <translation>Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="113"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
+        <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
 </context>
 <context>

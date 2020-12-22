@@ -105,6 +105,21 @@
     </message>
 </context>
 <context>
+    <name>Host</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application integrity check failed. Components are missing or damaged.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export and import parameters can not be specified together.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Aspia Host</source>

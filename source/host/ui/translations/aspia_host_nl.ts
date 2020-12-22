@@ -150,12 +150,20 @@
         <translation type="vanished">Applicatie update uitvoeren.</translation>
     </message>
     <message>
+        <location filename="../host_main.cc" line="99"/>
+        <location filename="../host_main.cc" line="112"/>
         <source>Warning</source>
-        <translation type="vanished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
+        <location filename="../host_main.cc" line="100"/>
+        <source>Application integrity check failed. Components are missing or damaged.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="113"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
+        <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
 </context>
 <context>

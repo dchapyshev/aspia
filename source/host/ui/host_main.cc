@@ -16,10 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_main.h"
+#include "host/ui/host_main.h"
 
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "host/integrity_check.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/main_window.h"
@@ -90,6 +91,17 @@ int hostMain(int argc, char* argv[])
     host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     host::Application application(argc, argv);
+
+    if (!host::integrityCheck())
+    {
+        QMessageBox::warning(
+            nullptr,
+            QApplication::translate("Host", "Warning"),
+            QApplication::translate("Host", "Application integrity check failed. Components are "
+                                            "missing or damaged."),
+            QMessageBox::Ok);
+        return 1;
+    }
 
     if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
     {

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/host_main.h"
+#include "host/ui/host_main.h"
 
 int main(int argc, char *argv[])
 {

@@ -132,6 +132,25 @@
     </message>
 </context>
 <context>
+    <name>Host</name>
+    <message>
+        <location filename="../host_main.cc" line="99"/>
+        <location filename="../host_main.cc" line="112"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="100"/>
+        <source>Application integrity check failed. Components are missing or damaged.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="113"/>
+        <source>Export and import parameters can not be specified together.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../main_window.ui" line="26"/>
