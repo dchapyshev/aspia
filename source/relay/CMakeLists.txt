@@ -19,9 +19,6 @@
 list(APPEND SOURCE_RELAY
     controller.cc
     controller.h
-    database.h
-    database_sqlite.cc
-    database_sqlite.h
     main.cc
     pending_session.cc
     pending_session.h
