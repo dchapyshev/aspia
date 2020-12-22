@@ -1,7 +1,5 @@
 {
 	"Port": "8060",
 	"PrivateKey": "",
-	"LogPath": "",
-	"MinLogLevel": "1",
-	"MaxLogAge": "7"
+	"MinLogLevel": "1"
 }

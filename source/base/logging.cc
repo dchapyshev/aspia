@@ -110,7 +110,6 @@ bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::pat
         return true;
 
     std::filesystem::path file_dir = settings.log_dir;
-
     if (file_dir.empty())
         file_dir = defaultLogFileDir();
 
@@ -201,7 +200,11 @@ bool initLogging(const LoggingSettings& settings)
         return false;
 
     LOG(LS_INFO) << "Executable file: " << exec_file_path.c_str();
-    LOG(LS_INFO) << "Logging file: " << g_log_file_path;
+    if (g_logging_destination & LOG_TO_FILE)
+    {
+        // If log output is enabled, then we output information about the file.
+        LOG(LS_INFO) << "Logging file: " << g_log_file_path;
+    }
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
 #if defined(NDEBUG)

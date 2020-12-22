@@ -20,37 +20,12 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "base/message_loop/message_loop.h"
 #include "host/desktop_session_agent.h"
 
-namespace {
-
-void initLogging()
-{
-    std::filesystem::path path;
-    if (!base::BasePaths::commonAppData(&path))
-        return;
-
-    path.append("aspia/logs");
-
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = path;
-
-    base::initLogging(settings);
-}
-
-void shutdownLogging()
-{
-    base::shutdownLogging();
-}
-
-} // namespace
-
 void desktopAgentMain(int argc, const char* const* argv)
 {
-    initLogging();
+    base::initLogging();
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -71,5 +46,5 @@ void desktopAgentMain(int argc, const char* const* argv)
         LOG(LS_ERROR) << "Parameter channel_id is not specified";
     }
 
-    shutdownLogging();
+    base::shutdownLogging();
 }

@@ -97,8 +97,12 @@ enum LoggingDestination
 
     LOG_TO_ALL = LOG_TO_FILE | LOG_TO_SYSTEM_DEBUG_LOG,
 
+#if defined(OS_WIN)
     // On Windows, use a file next to the exe.
-    LOG_DEFAULT = LOG_TO_FILE,
+    LOG_DEFAULT = LOG_TO_FILE
+#elif defined(OS_POSIX)
+    LOG_DEFAULT = LOG_TO_SYSTEM_DEBUG_LOG
+#endif
 };
 
 using LoggingSeverity = int;

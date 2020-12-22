@@ -19,40 +19,15 @@
 #include "host/win/service_main.h"
 
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 #include "host/win/service.h"
 
 namespace host {
 
-namespace {
-
-void initLogging()
-{
-    std::filesystem::path path;
-
-    if (!base::BasePaths::commonAppData(&path))
-        return;
-    path.append("Aspia/Logs");
-
-    base::LoggingSettings settings;
-    settings.destination = base::LOG_TO_FILE;
-    settings.log_dir = path;
-
-    base::initLogging(settings);
-}
-
-void shutdownLogging()
-{
-    base::shutdownLogging();
-}
-
-} // namespace
-
 void hostServiceMain()
 {
-    initLogging();
+    base::initLogging();
     Service().exec();
-    shutdownLogging();
+    base::shutdownLogging();
 }
 
 } // namespace host

@@ -37,14 +37,8 @@ public:
     void setPrivateKey(const base::ByteArray& private_key);
     base::ByteArray privateKey() const;
 
-    void setLogPath(const std::filesystem::path& path);
-    std::filesystem::path logPath() const;
-
     void setMinLogLevel(int level);
     int minLogLevel() const;
-
-    void setMaxLogAge(int age);
-    int maxLogAge() const;
 
 private:
     base::JsonSettings impl_;

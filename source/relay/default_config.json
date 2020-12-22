@@ -6,7 +6,5 @@
 	"PeerPort": "8070",
 	"PeerIdleTimeout": "5",
 	"MaxPeerCount": "100",
-	"LogPath": "",
-	"MinLogLevel": "1",
-	"MaxLogAge": "7"
+	"MinLogLevel": "1"
 }

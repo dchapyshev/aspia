@@ -103,45 +103,12 @@ bool isSameApplication(const QLocalSocket* socket)
 }
 #endif // defined(OS_WIN)
 
-std::filesystem::path loggingDir()
-{
-    std::filesystem::path path;
-
-#if defined(OS_WIN)
-    if (base::win::isProcessElevated())
-    {
-        if (!base::BasePaths::commonAppData(&path))
-            return std::filesystem::path();
-    }
-    else
-    {
-        if (!base::BasePaths::userAppData(&path))
-            return std::filesystem::path();
-    }
-
-    path.append("Aspia/Logs");
-#else
-#warning Not implemented
-#endif
-
-    return path;
-}
-
 } // namespace
 
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
-    base::LoggingSettings settings;
-    settings.log_dir = loggingDir();
-
-#if defined(NDEBUG)
-    settings.destination = base::LOG_TO_FILE;
-#else
-    settings.destination = base::LOG_TO_ALL;
-#endif
-
-    base::initLogging(settings);
+    base::initLogging();
     qt_base::initQtLogging();
 
 #if defined(OS_WIN)

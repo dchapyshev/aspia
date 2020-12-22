@@ -40,10 +40,7 @@ void initLogging()
     relay::Settings settings;
 
     base::LoggingSettings logging_settings;
-    logging_settings.destination = base::LOG_TO_FILE;
-    logging_settings.log_dir = settings.logPath();
     logging_settings.min_log_level = settings.minLogLevel();
-    logging_settings.max_log_age = settings.maxLogAge();
 
     base::initLogging(logging_settings);
 }
