@@ -120,13 +120,11 @@ struct LoggingSettings
     // The defaults values are:
     //
     //  destination: LOG_DEFAULT
-    //  max_log_age: 7 days
     //  min_log_level: LOG_LS_INFO
     LoggingSettings();
 
     LoggingDestination destination;
     LoggingSeverity min_log_level;
-    int max_log_age;
 
     std::filesystem::path log_dir;
 };

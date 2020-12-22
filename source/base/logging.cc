@@ -70,23 +70,6 @@ const char* severityName(LoggingSeverity severity)
     return "UNKNOWN";
 }
 
-void removeOldFiles(const std::filesystem::path& path,
-                    const std::filesystem::file_time_type& current_time,
-                    int max_file_age)
-{
-    std::filesystem::file_time_type time = current_time - std::chrono::hours(24 * max_file_age);
-
-    std::error_code ignored_code;
-    for (const auto& item : std::filesystem::directory_iterator(path, ignored_code))
-    {
-        if (item.is_directory())
-            continue;
-
-        if (item.last_write_time() < time)
-            std::filesystem::remove(item.path(), ignored_code);
-    }
-}
-
 std::filesystem::path defaultLogFileDir()
 {
     std::error_code error_code;
@@ -149,11 +132,6 @@ bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::pat
     if (!g_log_file.is_open())
         return false;
 
-    std::filesystem::file_time_type file_time =
-        std::filesystem::last_write_time(file_path, error_code);
-    if (!error_code)
-        removeOldFiles(file_dir, file_time, settings.max_log_age);
-
     g_log_file_path = std::move(file_path);
     return true;
 }
@@ -167,8 +145,7 @@ std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
     : destination(LOG_DEFAULT),
-      min_log_level(LOG_LS_INFO),
-      max_log_age(7)
+      min_log_level(LOG_LS_INFO)
 {
     // Nothing
 }
