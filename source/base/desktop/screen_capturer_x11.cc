@@ -22,7 +22,11 @@
 
 namespace base {
 
-ScreenCapturerX11::ScreenCapturerX11() = default;
+ScreenCapturerX11::ScreenCapturerX11()
+    : ScreenCapturer(ScreenCapturer::Type::LINUX_X11)
+{
+    // Nothing
+}
 
 ScreenCapturerX11::~ScreenCapturerX11() = default;
 
