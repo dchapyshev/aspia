@@ -191,7 +191,7 @@ MainWindow::MainWindow(const QString& file_path)
         common::UpdateChecker* checker = new common::UpdateChecker(this);
 
         checker->setUpdateServer(settings.updateServer());
-        checker->setPackageName("console");
+        checker->setPackageName(QStringLiteral("console"));
 
         connect(checker, &common::UpdateChecker::finished, this, &MainWindow::onUpdateChecked);
         connect(checker, &common::UpdateChecker::finished, checker, &common::UpdateChecker::deleteLater);

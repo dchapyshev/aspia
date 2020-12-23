@@ -566,7 +566,8 @@ void RouterManagerWindow::onCurrentUserChanged(
     ui->button_delete_user->setEnabled(true);
 }
 
-void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
+                                               QTreeWidgetItem* /* previous */)
 {
     ui->tree_host_info->clear();
 

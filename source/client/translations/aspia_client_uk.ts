@@ -1630,7 +1630,7 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="427"/>
+        <location filename="../ui/file_panel.cc" line="429"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1672,27 +1672,27 @@
         <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_panel.cc" line="322"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="322"/>
+        <location filename="../ui/file_panel.cc" line="324"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="332"/>
+        <location filename="../ui/file_panel.cc" line="334"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="393"/>
+        <location filename="../ui/file_panel.cc" line="395"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="394"/>
+        <location filename="../ui/file_panel.cc" line="396"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
@@ -2128,37 +2128,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="596"/>
+        <location filename="../ui/router_manager_window.cc" line="597"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="598"/>
+        <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>Connect Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="599"/>
+        <location filename="../ui/router_manager_window.cc" line="600"/>
         <source>Version</source>
         <translation type="unfinished">Версія</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="602"/>
+        <location filename="../ui/router_manager_window.cc" line="603"/>
         <source>Operating System</source>
         <translation type="unfinished">Операційна система</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="608"/>
+        <location filename="../ui/router_manager_window.cc" line="609"/>
         <source>Host IDs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="615"/>
+        <location filename="../ui/router_manager_window.cc" line="616"/>
         <source>ID #%1</source>
         <translation type="unfinished"></translation>
     </message>

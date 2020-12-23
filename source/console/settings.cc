@@ -25,205 +25,228 @@
 
 namespace console {
 
+namespace {
+
+const QString kLocaleParam = QStringLiteral("Locale");
+const QString kLastDirectoryParam = QStringLiteral("LastDirectory");
+const QString kWindowGeometryParam = QStringLiteral("WindowGeometry");
+const QString kWindowStateParam = QStringLiteral("WindowState");
+const QString kAddressBookStateParam = QStringLiteral("AddressBookState");
+const QString kEnableRecentOpenParam = QStringLiteral("EnableRecentOpen");
+const QString kRecentOpenParam = QStringLiteral("RecentOpen");
+const QString kPinnedFilesParam = QStringLiteral("PinnedFiles");
+const QString kToolbarParam = QStringLiteral("Toolbar");
+const QString kStatusbarParam = QStringLiteral("Statusbar");
+const QString kMinimizeToTrayParam = QStringLiteral("MinimizeToTray");
+const QString kAlwaysShowTrayIconParam = QStringLiteral("AlwaysShowTrayIcon");
+const QString kSessionTypeParam = QStringLiteral("SessionType");
+const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
+const QString kUpdateServerParam = QStringLiteral("UpdateServer");
+const QString kComputerDialogGeometryParam = QStringLiteral("ComputerDialogGeometry");
+const QString kComputerDialogStateParam = QStringLiteral("ComputerDialogState");
+const QString kComputerGroupDialogGeometryParam = QStringLiteral("ComputerGroupDialogGeometry");
+
+} // namespace
+
 Settings::Settings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
-                "aspia",
-                "console")
+                QStringLiteral("aspia"),
+                QStringLiteral("console"))
 {
     // Nothing
 }
 
 QString Settings::locale() const
 {
-    return settings_.value("Locale", QLocale::system().bcp47Name()).toString();
+    return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
 void Settings::setLocale(const QString& locale)
 {
-    settings_.setValue("Locale", locale);
+    settings_.setValue(kLocaleParam, locale);
 }
 
 QString Settings::lastDirectory() const
 {
-    return settings_.value("LastDirectory", QDir::homePath()).toString();
+    return settings_.value(kLastDirectoryParam, QDir::homePath()).toString();
 }
 
 void Settings::setLastDirectory(const QString& directory_path)
 {
-    settings_.setValue("LastDirectory", directory_path);
+    settings_.setValue(kLastDirectoryParam, directory_path);
 }
 
 QByteArray Settings::windowGeometry() const
 {
-    return settings_.value("WindowGeometry").toByteArray();
+    return settings_.value(kWindowGeometryParam).toByteArray();
 }
 
 void Settings::setWindowGeometry(const QByteArray& geometry)
 {
-    settings_.setValue("WindowGeometry", geometry);
+    settings_.setValue(kWindowGeometryParam, geometry);
 }
 
 QByteArray Settings::windowState() const
 {
-    return settings_.value("WindowState").toByteArray();
+    return settings_.value(kWindowStateParam).toByteArray();
 }
 
 void Settings::setWindowState(const QByteArray& state)
 {
-    settings_.setValue("WindowState", state);
+    settings_.setValue(kWindowStateParam, state);
 }
 
 QByteArray Settings::addressBookState() const
 {
-    return settings_.value("AddressBookState").toByteArray();
+    return settings_.value(kAddressBookStateParam).toByteArray();
 }
 
 void Settings::setAddressBookState(const QByteArray& state)
 {
-    settings_.setValue("AddressBookState", state);
+    settings_.setValue(kAddressBookStateParam, state);
 }
 
 bool Settings::isRecentOpenEnabled() const
 {
-    return settings_.value("EnableRecentOpen", true).toBool();
+    return settings_.value(kEnableRecentOpenParam, true).toBool();
 }
 
 void Settings::setRecentOpenEnabled(bool enable)
 {
-    settings_.setValue("EnableRecentOpen", enable);
+    settings_.setValue(kEnableRecentOpenParam, enable);
 }
 
 QStringList Settings::recentOpen() const
 {
-    return settings_.value("RecentOpen").toStringList();
+    return settings_.value(kRecentOpenParam).toStringList();
 }
 
 void Settings::setRecentOpen(const QStringList& mru)
 {
-    settings_.setValue("RecentOpen", mru);
+    settings_.setValue(kRecentOpenParam, mru);
 }
 
 QStringList Settings::pinnedFiles() const
 {
-    return settings_.value("PinnedFiles").toStringList();
+    return settings_.value(kPinnedFilesParam).toStringList();
 }
 
 void Settings::setPinnedFiles(const QStringList& tabs)
 {
-    settings_.setValue("PinnedFiles", tabs);
+    settings_.setValue(kPinnedFilesParam, tabs);
 }
 
 bool Settings::isToolBarEnabled() const
 {
-    return settings_.value("Toolbar", true).toBool();
+    return settings_.value(kToolbarParam, true).toBool();
 }
 
 void Settings::setToolBarEnabled(bool enable)
 {
-    settings_.setValue("Toolbar", enable);
+    settings_.setValue(kToolbarParam, enable);
 }
 
 bool Settings::isStatusBarEnabled() const
 {
-    return settings_.value("Statusbar", true).toBool();
+    return settings_.value(kStatusbarParam, true).toBool();
 }
 
 void Settings::setStatusBarEnabled(bool enable)
 {
-    settings_.setValue("Statusbar", enable);
+    settings_.setValue(kStatusbarParam, enable);
 }
 
 bool Settings::minimizeToTray() const
 {
-    return settings_.value("MinimizeToTray", false).toBool();
+    return settings_.value(kMinimizeToTrayParam, false).toBool();
 }
 
 void Settings::setMinimizeToTray(bool enable)
 {
-    settings_.setValue("MinimizeToTray", enable);
+    settings_.setValue(kMinimizeToTrayParam, enable);
 }
 
 bool Settings::alwaysShowTrayIcon() const
 {
-    return settings_.value("AlwaysShowTrayIcon", false).toBool();
+    return settings_.value(kAlwaysShowTrayIconParam, false).toBool();
 }
 
 void Settings::setAlwaysShowTrayIcon(bool enable)
 {
-    settings_.setValue("AlwaysShowTrayIcon", enable);
+    settings_.setValue(kAlwaysShowTrayIconParam, enable);
 }
 
 proto::SessionType Settings::sessionType() const
 {
     return static_cast<proto::SessionType>(
-        settings_.value("SessionType", proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
+        settings_.value(kSessionTypeParam, proto::SESSION_TYPE_DESKTOP_MANAGE).toInt());
 }
 
 void Settings::setSessionType(proto::SessionType session_type)
 {
-    settings_.setValue("SessionType", session_type);
+    settings_.setValue(kSessionTypeParam, session_type);
 }
 
 bool Settings::checkUpdates() const
 {
-    return settings_.value("CheckUpdates", true).toBool();
+    return settings_.value(kCheckUpdatesParam, true).toBool();
 }
 
 void Settings::setCheckUpdates(bool check)
 {
-    settings_.setValue("CheckUpdates", check);
+    settings_.setValue(kCheckUpdatesParam, check);
 }
 
 QString Settings::updateServer() const
 {
     return settings_.value(
-        "UpdateServer", QString::fromStdU16String(DEFAULT_UPDATE_SERVER)).toString().toLower();
+        kUpdateServerParam, QString::fromStdU16String(DEFAULT_UPDATE_SERVER)).toString().toLower();
 }
 
 void Settings::setUpdateServer(const QString& server)
 {
-    settings_.setValue("UpdateServer", server.toLower());
+    settings_.setValue(kUpdateServerParam, server.toLower());
 }
 
 QByteArray Settings::computerDialogGeometry() const
 {
-    return settings_.value("ComputerDialogGeometry").toByteArray();
+    return settings_.value(kComputerDialogGeometryParam).toByteArray();
 }
 
 void Settings::setComputerDialogGeometry(const QByteArray& geometry)
 {
-    settings_.setValue("ComputerDialogGeometry", geometry);
+    settings_.setValue(kComputerDialogGeometryParam, geometry);
 }
 
 QByteArray Settings::computerDialogState() const
 {
-    return settings_.value("ComputerDialogState").toByteArray();
+    return settings_.value(kComputerDialogStateParam).toByteArray();
 }
 
 void Settings::setComputerDialogState(const QByteArray& state)
 {
-    settings_.setValue("ComputerDialogState", state);
+    settings_.setValue(kComputerDialogStateParam, state);
 }
 
 QByteArray Settings::computerGroupDialogGeometry() const
 {
-    return settings_.value("ComputerGroupDialogGeometry").toByteArray();
+    return settings_.value(kComputerGroupDialogGeometryParam).toByteArray();
 }
 
 void Settings::setComputerGroupDialogGeometry(const QByteArray& geometry)
 {
-    settings_.setValue("ComputerGroupDialogGeometry", geometry);
+    settings_.setValue(kComputerGroupDialogGeometryParam, geometry);
 }
 
 QByteArray Settings::fastConnectConfig(const QString& guid)
 {
-    return settings_.value("FastConnect/" + guid).toByteArray();
+    return settings_.value(QLatin1String("FastConnect/") + guid).toByteArray();
 }
 
 void Settings::setFastConnectConfig(const QString& guid, const QByteArray& config)
 {
-    settings_.setValue("FastConnect/" + guid, config);
+    settings_.setValue(QLatin1String("FastConnect/") + guid, config);
 }
 
 } // namespace console

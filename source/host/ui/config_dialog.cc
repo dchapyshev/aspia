@@ -141,16 +141,16 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 #if defined(OS_WIN)
     ui.combo_video_capturer->addItem(
-        "DXGI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
+        QStringLiteral("DXGI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
 
     ui.combo_video_capturer->addItem(
-        "GDI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
+        QStringLiteral("GDI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
 #elif defined(OS_LINUX)
     ui.combo_video_capturer->addItem(
-        "X11", static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
+        QStringLiteral("X11"), static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
 #elif defined(OS_MAC)
     ui.combo_video_capturer->addItem(
-        "MACOSX", static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
+        QStringLiteral("MACOSX"), static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
 #else
 #error Platform support not implemented
 #endif

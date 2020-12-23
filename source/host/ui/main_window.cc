@@ -47,15 +47,15 @@ MainWindow::MainWindow(QWidget* parent)
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
-    ui.edit_id->setText("-");
-    ui.edit_password->setText("-");
+    ui.edit_id->setText(QStringLiteral("-"));
+    ui.edit_password->setText(QStringLiteral("-"));
 
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
-    tray_icon_.setIcon(QIcon(":/img/main.png"));
+    tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.png")));
     tray_icon_.setToolTip(tr("Aspia Host"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
@@ -312,7 +312,7 @@ void MainWindow::onShowHide()
 
 void MainWindow::onHelp()
 {
-    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
 }
 
 void MainWindow::onAbout()
@@ -388,22 +388,22 @@ void MainWindow::updateStatusBar()
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
-            icon = ":/img/cross-script.png";
+            icon = QStringLiteral(":/img/cross-script.png");
             break;
 
         case proto::internal::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
-            icon = ":/img/arrow-circle-double.png";
+            icon = QStringLiteral(":/img/arrow-circle-double.png");
             break;
 
         case proto::internal::RouterState::CONNECTED:
             message = tr("Connected to a router");
-            icon = ":/img/tick.png";
+            icon = QStringLiteral(":/img/tick.png");
             break;
 
         case proto::internal::RouterState::FAILED:
             message = tr("Connection error");
-            icon = ":/img/cross-script.png";
+            icon = QStringLiteral(":/img/cross-script.png");
             break;
 
         default:

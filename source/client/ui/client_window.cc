@@ -99,7 +99,7 @@ void ClientWindow::onSettings()
 
 void ClientWindow::onHelp()
 {
-    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
 }
 
 void ClientWindow::onAbout()
@@ -305,9 +305,9 @@ void ClientWindow::reloadSessionTypes()
 
     combobox->clear();
 
-    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

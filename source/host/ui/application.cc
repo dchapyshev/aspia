@@ -71,9 +71,9 @@ bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* me
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName("Aspia");
-    setApplicationName("Host");
-    setApplicationVersion(ASPIA_VERSION_STRING);
+    setOrganizationName(QStringLiteral("Aspia"));
+    setApplicationName(QStringLiteral("Host"));
+    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
@@ -92,7 +92,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(DEFAULT_LOCALE);
+        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
 
     setLocale(settings_.locale());
 }

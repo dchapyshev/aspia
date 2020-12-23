@@ -172,13 +172,13 @@ AboutDialog::AboutDialog(QWidget* parent)
     add_version("rapidjson", RAPIDJSON_VERSION_STRING);
     add_version("zstd", ZSTD_versionString());
 
-    QFile file(":/txt/license.txt");
+    QFile file(QStringLiteral(":/txt/license.txt"));
     if (file.open(QFile::ReadOnly))
         ui->edit_license->setPlainText(file.readAll());
 
     connect(ui->push_button_donate, &QPushButton::clicked, []()
     {
-        QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
+        QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/donate")));
     });
 
     connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);

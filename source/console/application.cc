@@ -35,12 +35,12 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName("Aspia");
-    setApplicationName("Console");
-    setApplicationVersion(ASPIA_VERSION_STRING);
+    setOrganizationName(QStringLiteral("Aspia"));
+    setApplicationName(QStringLiteral("Console"));
+    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
     setQuitOnLastWindowClosed(false);
-    setWindowIcon(QIcon(":/img/main.ico"));
+    setWindowIcon(QIcon(QStringLiteral(":/img/main.ico")));
 
     connect(this, &Application::messageReceived, [this](const QByteArray& message)
     {

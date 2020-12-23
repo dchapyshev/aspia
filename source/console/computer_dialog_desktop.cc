@@ -30,8 +30,8 @@ void ComputerDialogDesktop::restoreSettings(
     proto::SessionType session_type, const proto::DesktopConfig& config)
 {
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem(QLatin1String("VP9"), proto::VIDEO_ENCODING_VP9);
-    combo_codec->addItem(QLatin1String("VP8"), proto::VIDEO_ENCODING_VP8);
+    combo_codec->addItem(QStringLiteral("VP9"), proto::VIDEO_ENCODING_VP9);
+    combo_codec->addItem(QStringLiteral("VP8"), proto::VIDEO_ENCODING_VP8);
 
     int current_codec = combo_codec->findData(config.video_encoding());
     if (current_codec == -1)
