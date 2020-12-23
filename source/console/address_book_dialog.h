@@ -44,7 +44,6 @@ protected:
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void encryptionTypedChanged(int item_index);
-    void hashingSaltChanged(int value);
 
 private:
     void setPasswordChanged();

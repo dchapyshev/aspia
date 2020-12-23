@@ -77,9 +77,6 @@ void cleanupData(proto::address_book::Data* data)
         return;
 
     cleanupComputerGroup(data->mutable_root_group());
-
-    base::memZero(data->mutable_salt1());
-    base::memZero(data->mutable_salt2());
 }
 
 void cleanupFile(proto::address_book::File* file)

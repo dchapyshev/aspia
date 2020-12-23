@@ -85,13 +85,9 @@ message Router
 
 message Data
 {
-    // Random data before. If the address book is not encrypted, then the field is not used.
-    bytes salt1 = 1;
-
+    // Field 1 - Deprecated.
     ComputerGroup root_group = 2;
-
-    // Random data after. If the address book is not encrypted, then the field is not used.
-    bytes salt2 = 3;
+    // Field 3 - Deprecated.
 
     // Enable or disable router.
     bool enable_router = 4;

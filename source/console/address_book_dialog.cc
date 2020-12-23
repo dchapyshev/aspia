@@ -39,6 +39,7 @@ constexpr int kMinPasswordLength = 1;
 constexpr int kMaxPasswordLength = 64;
 constexpr int kSafePasswordLength = 8;
 constexpr int kMaxCommentLength = 2048;
+constexpr int kHashingSaltSize = 256;
 
 bool isSafePassword(const QString& password)
 {
@@ -130,11 +131,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
             ui.edit_password->installEventFilter(this);
             ui.edit_password_repeat->installEventFilter(this);
 
-            ui.spinbox_password_salt->setValue(file_->hashing_salt().size());
-
-            ui.spinbox_salt_before->setValue(data_->salt1().size());
-            ui.spinbox_salt_after->setValue(data_->salt2().size());
-
             password_changed_ = false;
         }
     }
@@ -168,9 +164,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.edit_router_address->setText(QString::fromStdU16String(address.toString()));
     ui.edit_router_username->setText(QString::fromStdString(router.username()));
     ui.edit_router_password->setText(QString::fromStdString(router.password()));
-
-    connect(ui.spinbox_password_salt, QOverload<int>::of(&QSpinBox::valueChanged), this,
-            &AddressBookDialog::hashingSaltChanged);
 
     connect(ui.button_show_password, &QPushButton::toggled, [this](bool checked)
     {
@@ -263,8 +256,6 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
         case proto::address_book::ENCRYPTION_TYPE_NONE:
         {
             file_->mutable_hashing_salt()->clear();
-            data_->mutable_salt1()->clear();
-            data_->mutable_salt2()->clear();
         }
         break;
 
@@ -316,21 +307,12 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
                 // Generate salt, which is added after each iteration of the hashing.
                 // New salt is generated each time the password is changed.
-                file_->set_hashing_salt(base::Random::string(ui.spinbox_password_salt->value()));
+                file_->set_hashing_salt(base::Random::string(kHashingSaltSize));
 
                 // Now generate a key for encryption/decryption.
                 *key_ = base::PasswordHash::hash(
                     base::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
             }
-
-            size_t salt_before_size = static_cast<size_t>(ui.spinbox_salt_before->value());
-            size_t salt_after_size = static_cast<size_t>(ui.spinbox_salt_after->value());
-
-            if (salt_before_size != data_->salt1().size())
-                data_->set_salt1(base::Random::string(salt_before_size));
-
-            if (salt_after_size != data_->salt2().size())
-                data_->set_salt2(base::Random::string(salt_after_size));
         }
         break;
 
@@ -424,28 +406,6 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
         default:
             LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
             break;
-    }
-}
-
-void AddressBookDialog::hashingSaltChanged(int /* value */)
-{
-    if (password_changed_ || value_reverting_)
-        return;
-
-    if (QMessageBox::question(
-        this,
-        tr("Confirmation"),
-        tr("At change the size of hashing salt, you will need to re-enter the password. Continue?"),
-        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-    {
-        setPasswordChanged();
-    }
-    else
-    {
-        // Revert value.
-        value_reverting_ = true;
-        ui.spinbox_password_salt->setValue(file_->hashing_salt().size());
-        value_reverting_ = false;
     }
 }
 

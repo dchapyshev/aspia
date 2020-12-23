@@ -81,41 +81,32 @@
         <translation type="vanished">端口</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="226"/>
         <source>Advanced</source>
-        <translation>高级</translation>
+        <translation type="vanished">高级</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="232"/>
         <source>Password hashing</source>
-        <translation>密码哈希</translation>
+        <translation type="vanished">密码哈希</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="238"/>
         <source>Size of salt for password hashing:</source>
-        <translation>密码哈希的salt大小：</translation>
+        <translation type="vanished">密码哈希的salt大小：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="245"/>
-        <location filename="../address_book_dialog.ui" line="292"/>
-        <location filename="../address_book_dialog.ui" line="308"/>
         <source> bytes</source>
-        <translation> bytes</translation>
+        <translation type="vanished"> bytes</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="264"/>
         <source>Salt of data</source>
-        <translation>Salt数据</translation>
+        <translation type="vanished">Salt数据</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="274"/>
         <source>Size of salt before the data:</source>
-        <translation>数据之前salt的大小：</translation>
+        <translation type="vanished">数据之前salt的大小：</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.ui" line="281"/>
         <source>Size of salt after the data:</source>
-        <translation>数据之后salt的大小：</translation>
+        <translation type="vanished">数据之后salt的大小：</translation>
     </message>
 </context>
 <context>
@@ -781,103 +772,101 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="85"/>
+        <location filename="../address_book_dialog.cc" line="86"/>
         <source>Without Encryption</source>
         <translation>没有加密</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="87"/>
+        <location filename="../address_book_dialog.cc" line="88"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="116"/>
+        <location filename="../address_book_dialog.cc" line="117"/>
         <source>Double-click to change</source>
         <translation>双击可更改</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="99"/>
+        <location filename="../address_book_dialog.cc" line="100"/>
         <source>Address Book</source>
         <translation>通讯录</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="239"/>
+        <location filename="../address_book_dialog.cc" line="232"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名称太长。名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="245"/>
+        <location filename="../address_book_dialog.cc" line="238"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="252"/>
+        <location filename="../address_book_dialog.cc" line="245"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长。描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="280"/>
+        <location filename="../address_book_dialog.cc" line="271"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="286"/>
+        <location filename="../address_book_dialog.cc" line="277"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="294"/>
+        <location filename="../address_book_dialog.cc" line="285"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="297"/>
+        <location filename="../address_book_dialog.cc" line="288"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="301"/>
+        <location filename="../address_book_dialog.cc" line="292"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="304"/>
-        <location filename="../address_book_dialog.cc" line="476"/>
+        <location filename="../address_book_dialog.cc" line="295"/>
+        <location filename="../address_book_dialog.cc" line="436"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="348"/>
+        <location filename="../address_book_dialog.cc" line="330"/>
         <source>An invalid router address was entered.</source>
         <translation type="unfinished">输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="359"/>
+        <location filename="../address_book_dialog.cc" line="341"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="368"/>
+        <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="437"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="438"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation>在更改哈希salt的大小时，需要重新输入密码，继续吗？</translation>
+        <translation type="vanished">在更改哈希salt的大小时，需要重新输入密码，继续吗？</translation>
     </message>
     <message>
         <source>Are you sure you want to remove router &quot;%1&quot;?</source>
@@ -887,32 +876,32 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="215"/>
+        <location filename="../address_book_tab.cc" line="212"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>无法打开通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="222"/>
+        <location filename="../address_book_tab.cc" line="219"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>无法读取通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="231"/>
+        <location filename="../address_book_tab.cc" line="228"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>通讯录文件 &quot;%1&quot; 已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="275"/>
+        <location filename="../address_book_tab.cc" line="272"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>无法使用指定的密码解密通讯录。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="281"/>
+        <location filename="../address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>通讯录文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="268"/>
+        <location filename="../address_book_tab.cc" line="265"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>通讯录文件使用不受支持的加密类型加密。</translation>
     </message>
@@ -921,59 +910,59 @@
         <translation type="obsolete">路由器</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="506"/>
+        <location filename="../address_book_tab.cc" line="503"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="510"/>
-        <location filename="../address_book_tab.cc" line="532"/>
+        <location filename="../address_book_tab.cc" line="507"/>
+        <location filename="../address_book_tab.cc" line="529"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="528"/>
+        <location filename="../address_book_tab.cc" line="525"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="828"/>
+        <location filename="../address_book_tab.cc" line="825"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="830"/>
+        <location filename="../address_book_tab.cc" line="827"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="840"/>
+        <location filename="../address_book_tab.cc" line="837"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="853"/>
+        <location filename="../address_book_tab.cc" line="850"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="878"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="892"/>
-        <location filename="../address_book_tab.cc" line="906"/>
+        <location filename="../address_book_tab.cc" line="889"/>
+        <location filename="../address_book_tab.cc" line="903"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="894"/>
+        <location filename="../address_book_tab.cc" line="891"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="908"/>
+        <location filename="../address_book_tab.cc" line="905"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
