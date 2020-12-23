@@ -345,7 +345,7 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
                  QImage::Format::Format_ARGB32);
 
     desktop_->setCursor(QCursor(
-        QPixmap::fromImage(image), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
+        QPixmap::fromImage(std::move(image)), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
