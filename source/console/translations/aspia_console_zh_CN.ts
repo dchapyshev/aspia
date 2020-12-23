@@ -1149,87 +1149,87 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="165"/>
-        <location filename="../main_window.cc" line="1143"/>
+        <location filename="../main_window.cc" line="164"/>
+        <location filename="../main_window.cc" line="1150"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="166"/>
+        <location filename="../main_window.cc" line="165"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>找不到固定的通讯录文件&quot;%1&quot;。&lt;br/&gt;该文件将被取消固定。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="234"/>
+        <location filename="../main_window.cc" line="239"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="235"/>
+        <location filename="../main_window.cc" line="240"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>通讯录&quot;%1&quot;已打开。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="262"/>
+        <location filename="../main_window.cc" line="267"/>
         <source>Open Address Book</source>
         <translation>打开通讯录</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="264"/>
+        <location filename="../main_window.cc" line="269"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="521"/>
-        <location filename="../main_window.cc" line="829"/>
-        <location filename="../main_window.cc" line="906"/>
+        <location filename="../main_window.cc" line="528"/>
+        <location filename="../main_window.cc" line="836"/>
+        <location filename="../main_window.cc" line="913"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="522"/>
-        <location filename="../main_window.cc" line="907"/>
+        <location filename="../main_window.cc" line="529"/>
+        <location filename="../main_window.cc" line="914"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="725"/>
+        <location filename="../main_window.cc" line="732"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="732"/>
+        <location filename="../main_window.cc" line="739"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="733"/>
-        <location filename="../main_window.cc" line="738"/>
+        <location filename="../main_window.cc" line="740"/>
+        <location filename="../main_window.cc" line="745"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="830"/>
+        <location filename="../main_window.cc" line="837"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished">最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="863"/>
+        <location filename="../main_window.cc" line="870"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="878"/>
+        <location filename="../main_window.cc" line="885"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1014"/>
+        <location filename="../main_window.cc" line="1021"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1144"/>
+        <location filename="../main_window.cc" line="1151"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -106,7 +106,6 @@ MainWindow::MainWindow(const QString& file_path)
             this, &MainWindow::onDeleteComputerGroup);
 
     connect(ui.action_online_help, &QAction::triggered, this, &MainWindow::onOnlineHelp);
-    connect(ui.action_check_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
     connect(ui.action_fast_connect, &QAction::triggered, this, &MainWindow::onFastConnect);
@@ -180,6 +179,8 @@ MainWindow::MainWindow(const QString& file_path)
     if (ui.tab_widget->count() > 0)
         ui.tab_widget->setCurrentIndex(0);
 
+#if defined(OS_WIN)
+    connect(ui.action_check_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
     connect(ui.action_update_settings, &QAction::triggered, [this]()
     {
         UpdateSettingsDialog(this).exec();
@@ -197,6 +198,10 @@ MainWindow::MainWindow(const QString& file_path)
 
         checker->start();
     }
+#else
+    ui.action_check_updates->setVisible(false);
+    ui.action_update_settings->setVisible(false);
+#endif
 }
 
 MainWindow::~MainWindow() = default;
@@ -408,9 +413,11 @@ void MainWindow::onOnlineHelp()
 
 void MainWindow::onCheckUpdates()
 {
+#if defined(OS_WIN)
     common::UpdateDialog(Application::instance()->settings().updateServer(),
                          QLatin1String("console"),
                          this).exec();
+#endif
 }
 
 void MainWindow::onAbout()
