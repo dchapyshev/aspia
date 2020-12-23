@@ -121,6 +121,20 @@ else()
     message(STATUS "IPO/LTO not supported")
 endif()
 
+# Compiller flags.
+message(STATUS "CXX flags (release): ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "CXX flags (debug): ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "C flags (release): ${CMAKE_C_FLAGS_RELEASE}")
+message(STATUS "C flags (debug): ${CMAKE_C_FLAGS_DEBUG}")
+
+# Linker flags.
+message(STATUS "Linker flags (shared release): ${CMAKE_SHARED_LINKER_FLAGS_RELEASE}")
+message(STATUS "Linker flags (shared debug): ${CMAKE_SHARED_LINKER_FLAGS_DEBUG}")
+message(STATUS "Linker flags (static release): ${CMAKE_STATIC_LINKER_FLAGS_RELEASE}")
+message(STATUS "Linker flags (static debug): ${CMAKE_STATIC_LINKER_FLAGS_DEBUG}")
+message(STATUS "Linker flags (exe release): ${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+message(STATUS "Linker flags (exe debug): ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+
 add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)
