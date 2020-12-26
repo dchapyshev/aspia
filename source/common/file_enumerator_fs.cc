@@ -50,9 +50,16 @@ int64_t FileEnumerator::FileInfo::size() const
 
 time_t FileEnumerator::FileInfo::lastWriteTime() const
 {
+    auto current_system_time = std::chrono::system_clock::now();
+    auto current_file_time = std::filesystem::file_time_type::clock::now();
+
     std::error_code ignored_error;
     auto file_time = it_->last_write_time(ignored_error);
-    return decltype(file_time)::clock::to_time_t(file_time);
+
+    auto timepoint = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+        file_time - current_file_time + current_system_time);
+
+    return std::chrono::system_clock::to_time_t(timepoint);
 }
 
 // FileEnumerator --------------------------------------------------------------
