@@ -220,7 +220,7 @@ void AudioOutputPulse::paServerInfoCallbackHandler(const pa_server_info* i)
 {
     LOG(LS_INFO) << "PulseAudio version: " << i->server_version;
     LOG(LS_INFO) << "Native sample rate: " << i->sample_spec.rate;
-    LOG(LS_INFO) << "Native channels: " << i->sample_spec.channels;
+    LOG(LS_INFO) << "Native channels: " << static_cast<int>(i->sample_spec.channels);
     LOG(LS_INFO) << "Native format: " << i->sample_spec.format;
 
     LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
@@ -296,9 +296,9 @@ bool AudioOutputPulse::initPlayout()
 
     // Set the play sample specification.
     pa_sample_spec play_sample_spec;
-    play_sample_spec.channels = kChannels;
     play_sample_spec.format = PA_SAMPLE_S16LE;
     play_sample_spec.rate = kSampleRate;
+    play_sample_spec.channels = kChannels;
 
     // Create a new play stream.
     {
