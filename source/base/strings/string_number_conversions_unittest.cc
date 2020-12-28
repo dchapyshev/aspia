@@ -345,7 +345,7 @@ TEST(StringNumberConversionsTest, StringToUint64)
     {
         uint64_t output = 0;
 
-        bool ret = stringToULong64(i.input, &output);
+        bool ret = stringToUint64(i.input, &output);
         EXPECT_EQ(i.success, ret);
 
         if (ret)
@@ -360,7 +360,7 @@ TEST(StringNumberConversionsTest, StringToUint64)
     const char input[] = "6\06";
     std::string input_string(input, std::size(input) - 1);
     uint64_t output;
-    EXPECT_FALSE(stringToULong64(input_string, &output));
+    EXPECT_FALSE(stringToUint64(input_string, &output));
 }
 
 } // namespace base
