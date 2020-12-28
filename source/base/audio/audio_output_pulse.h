@@ -25,6 +25,7 @@
 
 #include <mutex>
 
+#include <asio/high_resolution_timer.hpp>
 #include <pulse/pulseaudio.h>
 
 namespace base {
@@ -42,44 +43,28 @@ public:
     bool stop() override;
 
 private:
-    static void paContextStateCallback(pa_context* c, void* self);
-    static void paServerInfoCallback(pa_context* c, const pa_server_info* i, void* self);
-    static void paStreamStateCallback(pa_stream* p, void* self);
-    static void paStreamWriteCallback(pa_stream* unused, size_t buffer_space, void* self);
+    static void paContextStateCallback(pa_context* context, void* self);
+    static void paServerInfoCallback(pa_context* context, const pa_server_info* info, void* self);
+    static void paStreamStateCallback(pa_stream* stream, void* self);
+    static void paStreamWriteCallback(pa_stream* stream, size_t buffer_space, void* self);
 
-    void paContextStateCallbackHandler(pa_context* c);
-    void paServerInfoCallbackHandler(const pa_server_info* i);
-    void paStreamStateCallbackHandler(pa_stream* p);
-    void paStreamWriteCallbackHandler(size_t buffer_space);
-
-    void enableWriteCallback();
-    void disableWriteCallback();
+    void paContextStateCallbackHandler(pa_context* context);
+    void paServerInfoCallbackHandler(const pa_server_info* info);
+    void paStreamStateCallbackHandler(pa_stream* stream);
+    void paStreamWriteCallbackHandler();
 
     bool initDevice();
     bool initPlayout();
     void terminate();
     bool initPulseAudio();
     void terminatePulseAudio();
-    void threadRun();
-
-    std::mutex mutex_;
-    WaitableEvent time_event_play_;
-    WaitableEvent play_start_event_;
-
-    std::unique_ptr<SimpleThread> worker_thread_;
+    void onTimerExpired(const std::error_code& error_code);
+    void writePlayoutData();
 
     bool device_initialized_ = false;
     bool playing_ = false;
     bool playout_initialized_ = false;
     bool start_play_ = false;
-    bool quit_ = false;
-
-    int32_t write_errors_ = 0;
-
-    std::unique_ptr<int8_t[]> play_buffer_;
-    size_t playback_buffer_size_ = 0;
-    size_t playback_buffer_unused_ = 0;
-    size_t temp_buffer_space_ = 0;
 
     bool pa_state_changed_ = false;
     pa_threaded_mainloop* pa_main_loop_ = nullptr;
@@ -87,8 +72,14 @@ private:
     pa_context* pa_context_ = nullptr;
 
     pa_stream* play_stream_ = nullptr;
-    uint32_t play_stream_flags_ = 0;
-    pa_buffer_attr play_buffer_attr_;
+    std::unique_ptr<asio::high_resolution_timer> timer_;
+
+    int period_time_ = 0;
+    int period_size_ = 0;
+    int buffer_size_ = 0;
+    int max_buffer_size_ = 0;
+
+    std::unique_ptr<char[]> play_buffer_;
 
     DISALLOW_COPY_AND_ASSIGN(AudioOutputPulse);
 };

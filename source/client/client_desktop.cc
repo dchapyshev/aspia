@@ -57,8 +57,7 @@ ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
       incoming_message_(std::make_unique<proto::HostToClient>()),
-      outgoing_message_(std::make_unique<proto::ClientToHost>()),
-      audio_player_(base::AudioPlayer::create())
+      outgoing_message_(std::make_unique<proto::ClientToHost>())
 {
     // Nothing
 }
@@ -85,6 +84,8 @@ void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 
     clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
     clipboard_monitor_->start(ioTaskRunner(), this);
+
+    audio_player_ = base::AudioPlayer::create();
 }
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)

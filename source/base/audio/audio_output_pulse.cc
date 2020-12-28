@@ -19,6 +19,8 @@
 #include "base/audio/audio_output_pulse.h"
 
 #include "base/logging.h"
+#include "base/message_loop/message_loop.h"
+#include "base/message_loop/message_pump_asio.h"
 #include "base/threading/simple_thread.h"
 
 base::PulseAudioSymbolTable* pulseSymbolTable()
@@ -57,14 +59,8 @@ private:
 } // namespace
 
 AudioOutputPulse::AudioOutputPulse(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb),
-      time_event_play_(WaitableEvent::ResetPolicy::AUTOMATIC,
-                       WaitableEvent::InitialState::NOT_SIGNALED),
-      play_start_event_(WaitableEvent::ResetPolicy::AUTOMATIC,
-                        WaitableEvent::InitialState::NOT_SIGNALED)
+    : AudioOutput(need_more_data_cb)
 {
-    memset(&play_buffer_attr_, 0, sizeof(play_buffer_attr_));
-
     if (initDevice())
         initPlayout();
 }
@@ -83,54 +79,43 @@ bool AudioOutputPulse::start()
     if (playing_)
         return true;
 
-    // Set state to ensure that playout starts from the audio thread.
+    MessageLoop* message_loop = MessageLoop::current();
+    if (!message_loop)
     {
-        std::scoped_lock lock(mutex_);
-        start_play_ = true;
-    }
-
-    // Both |start_play_| and |playing_| needs protction since they are also accessed on the playout
-    // thread.
-
-    // The audio thread will signal when playout has started.
-    time_event_play_.signal();
-    if (!play_start_event_.wait(std::chrono::milliseconds(10000)))
-    {
-        {
-            std::scoped_lock lock(mutex_);
-            start_play_ = false;
-        }
-        stop();
-        LOG(LS_ERROR) << "Failed to activate playout";
+        LOG(LS_ERROR) << "No message loop in current thread";
         return false;
     }
 
+    if (message_loop->type() != MessageLoop::Type::ASIO)
     {
-        std::scoped_lock lock(mutex_);
-        if (playing_)
-        {
-            // The playing state is set by the audio thread after playout has started.
-        }
-        else
-        {
-            LOG(LS_ERROR) << "Failed to activate playing";
-            return false;
-        }
+        LOG(LS_ERROR) << "Wrong message loop type: " << static_cast<int>(message_loop->type());
+        return false;
     }
 
+    timer_ = std::make_unique<asio::high_resolution_timer>(
+        message_loop->pumpAsio()->ioContext());
+    timer_->expires_after(std::chrono::milliseconds(period_time_));
+    timer_->async_wait(
+        std::bind(&AudioOutputPulse::onTimerExpired, this, std::placeholders::_1));
+
     LOG(LS_INFO) << "Audio playout started";
+    playing_ = true;
     return true;
 }
 
 bool AudioOutputPulse::stop()
 {
-    std::scoped_lock lock(mutex_);
-
     if (!playout_initialized_)
         return true;
 
     if (!play_stream_)
         return false;
+
+    if (timer_)
+    {
+        timer_->cancel();
+        timer_.reset();
+    }
 
     playout_initialized_ = false;
     playing_ = false;
@@ -138,10 +123,9 @@ bool AudioOutputPulse::stop()
     {
         ScopedPaLock pa_lock(pa_main_loop_);
 
-        disableWriteCallback();
-
         // Unset this here so that we don't get a TERMINATED callback.
         LATE(pa_stream_set_state_callback)(play_stream_, nullptr, nullptr);
+        LATE(pa_stream_set_write_callback)(play_stream_, nullptr, nullptr);
 
         if (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_UNCONNECTED)
         {
@@ -185,14 +169,15 @@ void AudioOutputPulse::paStreamStateCallback(pa_stream* p, void* self)
 }
 
 // static
-void AudioOutputPulse::paStreamWriteCallback(pa_stream*, size_t buffer_space, void* self)
+void AudioOutputPulse::paStreamWriteCallback(
+    pa_stream* /* stream */, size_t /* buffer_space */, void* self)
 {
-    static_cast<AudioOutputPulse*>(self)->paStreamWriteCallbackHandler(buffer_space);
+    static_cast<AudioOutputPulse*>(self)->paStreamWriteCallbackHandler();
 }
 
-void AudioOutputPulse::paContextStateCallbackHandler(pa_context* c)
+void AudioOutputPulse::paContextStateCallbackHandler(pa_context* context)
 {
-    pa_context_state_t state = LATE(pa_context_get_state)(c);
+    pa_context_state_t state = LATE(pa_context_get_state)(context);
     switch (state)
     {
         case PA_CONTEXT_UNCONNECTED:
@@ -226,43 +211,27 @@ void AudioOutputPulse::paServerInfoCallbackHandler(const pa_server_info* i)
     LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
 }
 
-void AudioOutputPulse::paStreamStateCallbackHandler(pa_stream*)
+void AudioOutputPulse::paStreamStateCallbackHandler(pa_stream* stream)
+{
+    pa_stream_state_t state = LATE(pa_stream_get_state)(stream);
+    switch (state)
+    {
+        case PA_STREAM_CREATING:
+        case PA_STREAM_READY:
+        case PA_STREAM_TERMINATED:
+            break;
+
+        case PA_STREAM_FAILED:
+        default:
+            LOG(LS_ERROR) << "Stream error: " << LATE(pa_context_errno)(pa_context_);
+            LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
+            break;
+    }
+}
+
+void AudioOutputPulse::paStreamWriteCallbackHandler()
 {
     LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
-}
-
-void AudioOutputPulse::paStreamWriteCallbackHandler(size_t buffer_space)
-{
-    temp_buffer_space_ = buffer_space;
-
-    // Since we write the data asynchronously on a different thread, we have to temporarily disable
-    // the write callback or else Pulse will call it continuously until we write the data. We
-    // re-enable it below.
-    disableWriteCallback();
-    time_event_play_.signal();
-}
-
-void AudioOutputPulse::enableWriteCallback()
-{
-    if (LATE(pa_stream_get_state)(play_stream_) == PA_STREAM_READY)
-    {
-        // May already have available space. Must check.
-        temp_buffer_space_ = LATE(pa_stream_writable_size)(play_stream_);
-        if (temp_buffer_space_ > 0)
-        {
-            // Yup, there is already space available, so if we register a write callback then it
-            // will not receive any event. So dispatch one ourself instead.
-            time_event_play_.signal();
-            return;
-        }
-    }
-
-    LATE(pa_stream_set_write_callback)(play_stream_, &paStreamWriteCallback, this);
-}
-
-void AudioOutputPulse::disableWriteCallback()
-{
-    LATE(pa_stream_set_write_callback)(play_stream_, nullptr, nullptr);
 }
 
 bool AudioOutputPulse::initDevice()
@@ -278,9 +247,6 @@ bool AudioOutputPulse::initDevice()
         return false;
     }
 
-    worker_thread_ = std::make_unique<SimpleThread>();
-    worker_thread_->start(std::bind(&AudioOutputPulse::threadRun, this));
-
     LOG(LS_INFO) << "Audio device initialized";
     device_initialized_ = true;
     return true;
@@ -295,16 +261,21 @@ bool AudioOutputPulse::initPlayout()
         return true;
 
     // Set the play sample specification.
-    pa_sample_spec play_sample_spec;
-    play_sample_spec.format = PA_SAMPLE_S16LE;
-    play_sample_spec.rate = kSampleRate;
-    play_sample_spec.channels = kChannels;
+    pa_sample_spec spec;
+    spec.format = PA_SAMPLE_S16LE;
+    spec.rate = kSampleRate;
+    spec.channels = kChannels;
+
+    ScopedPaLock pa_lock(pa_main_loop_);
+
+    pa_proplist* prop_list = LATE(pa_proplist_new)();
+    LATE(pa_proplist_sets)(prop_list, PA_PROP_MEDIA_ROLE, "game");
 
     // Create a new play stream.
-    {
-        std::scoped_lock lock(mutex_);
-        play_stream_ = LATE(pa_stream_new)(pa_context_, "playStream", &play_sample_spec, nullptr);
-    }
+    play_stream_ = LATE(pa_stream_new_with_proplist)
+        (pa_context_, "playStream", &spec, nullptr, prop_list);
+
+    LATE(pa_proplist_free)(prop_list);
 
     if (!play_stream_)
     {
@@ -312,23 +283,46 @@ bool AudioOutputPulse::initPlayout()
         return false;
     }
 
-    // Set stream flags.
-    play_stream_flags_ = static_cast<pa_stream_flags_t>(
-         PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_INTERPOLATE_TIMING);
-
-    // Num samples in bytes * num channels.
-    playback_buffer_size_ = kSampleRate / 100 * 2 * kChannels;
-    playback_buffer_unused_ = playback_buffer_size_;
-    play_buffer_ = std::make_unique<int8_t[]>(playback_buffer_size_);
-
-    // Set the state callback function for the stream.
     LATE(pa_stream_set_state_callback)(play_stream_, paStreamStateCallback, this);
+    LATE(pa_stream_set_write_callback)(play_stream_, paStreamWriteCallback, this);
+
+    const int kBufferTimeMs = 10;
+    const int kBufferSizeMs = 40;
+    const int kBytesPerSecond = kSampleRate * kChannels * kBytesPerSample;
+    const int kBufferSize = kBytesPerSecond * kBufferSizeMs / 1000LL;
+
+    pa_buffer_attr pa_buffer_attr;
+    pa_buffer_attr.fragsize = -1;
+    pa_buffer_attr.maxlength = -1;
+    pa_buffer_attr.minreq = -1;
+    pa_buffer_attr.prebuf = -1;
+    pa_buffer_attr.tlength = kBufferSize;
+
+    if (LATE(pa_stream_connect_playback)(play_stream_,
+                                         nullptr,
+                                         &pa_buffer_attr,
+                                         static_cast<pa_stream_flags_t>(0),
+                                         nullptr,
+                                         nullptr))
+    {
+        LOG(LS_ERROR) << "Failed to connect play stream: " << LATE(pa_context_errno)(pa_context_);
+        return false;
+    }
+
+    // Wait for state change.
+    while (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_READY)
+        LATE(pa_threaded_mainloop_wait)(pa_main_loop_);
+
+    const struct pa_buffer_attr* buffer = LATE(pa_stream_get_buffer_attr)(play_stream_);
+    period_time_ = kBufferTimeMs;
+    period_size_ = LATE(pa_usec_to_bytes)(period_time_ * 1000, &spec);
+    buffer_size_ = buffer->tlength;
+    max_buffer_size_ = buffer->maxlength;
+
+    play_buffer_ = std::make_unique<char[]>(max_buffer_size_);
 
     // Mark playout side as initialized.
-    {
-        std::scoped_lock lock(mutex_);
-        playout_initialized_ = true;
-    }
+    playout_initialized_ = true;
 
     LOG(LS_INFO) << "Audio playout initialized";
     return true;
@@ -338,18 +332,6 @@ void AudioOutputPulse::terminate()
 {
     if (!device_initialized_)
         return;
-
-    {
-        std::scoped_lock lock(mutex_);
-        quit_ = true;
-    }
-
-    if (worker_thread_)
-    {
-        time_event_play_.signal();
-        worker_thread_->stop();
-        worker_thread_.reset();
-    }
 
     // Terminate PulseAudio.
     terminatePulseAudio();
@@ -487,102 +469,61 @@ void AudioOutputPulse::terminatePulseAudio()
     LOG(LS_INFO) << "PulseAudio terminated";
 }
 
-void AudioOutputPulse::threadRun()
+void AudioOutputPulse::onTimerExpired(const std::error_code& error_code)
 {
-    LOG(LS_INFO) << "Audio thread started";
+    if (error_code == asio::error::operation_aborted)
+        return;
 
-    static const struct sched_param kRealTimePrio = {8};
-    if (pthread_setschedparam(pthread_self(), SCHED_RR, &kRealTimePrio) != 0)
-    {
-        LOG(LS_WARNING) << "pthread_setschedparam failed";
-    }
+    if (!error_code)
+        writePlayoutData();
 
+    timer_->expires_after(std::chrono::milliseconds(period_time_));
+    timer_->async_wait(
+        std::bind(&AudioOutputPulse::onTimerExpired, this, std::placeholders::_1));
+}
+
+void AudioOutputPulse::writePlayoutData()
+{
     while (true)
     {
-        if (!time_event_play_.wait(std::chrono::milliseconds(1000)))
-            continue;
+        int bytes_free;
+        {
+            ScopedPaLock pa_lock(pa_main_loop_);
+            bytes_free = LATE(pa_stream_writable_size)(play_stream_);
+        }
 
-        std::scoped_lock lock(mutex_);
-
-        if (quit_)
+        int chunk_count = bytes_free / period_size_;
+        if (!chunk_count)
             return;
 
-        if (start_play_)
-        {
-            start_play_ = false;
+        int request_size = period_size_;
+        if (request_size > max_buffer_size_)
+            request_size = max_buffer_size_;
 
+        int samples_count = request_size / kBytesPerSample;
+
+        onDataRequest(reinterpret_cast<int16_t*>(play_buffer_.get()), samples_count);
+
+        {
             ScopedPaLock pa_lock(pa_main_loop_);
 
-            // Connect the stream to a sink.
-            if (LATE(pa_stream_connect_playback)(play_stream_, nullptr, &play_buffer_attr_,
-                static_cast<pa_stream_flags_t>(play_stream_flags_), nullptr, nullptr) != PA_OK)
+            bytes_free = LATE(pa_stream_writable_size)(play_stream_);
+            request_size = std::min(request_size, bytes_free);
+
+            if (LATE(pa_stream_write)(play_stream_,
+                                      play_buffer_.get(),
+                                      request_size,
+                                      nullptr,
+                                      0,
+                                      PA_SEEK_RELATIVE) < 0)
             {
-                LOG(LS_ERROR) << "Failed to connect play stream: "
-                              << LATE(pa_context_errno)(pa_context_);
+                LOG(LS_WARNING) << "pa_stream_write failed: "
+                                << LATE(pa_context_errno)(pa_context_);
             }
-
-            // Wait for state change.
-            while (LATE(pa_stream_get_state)(play_stream_) != PA_STREAM_READY)
-                LATE(pa_threaded_mainloop_wait)(pa_main_loop_);
-
-            // We can now handle write callbacks.
-            enableWriteCallback();
-
-            playing_ = true;
-            play_start_event_.signal();
-            continue;
         }
 
-        if (!playing_)
-            continue;
-
-        if (playback_buffer_unused_ < playback_buffer_size_)
-        {
-            size_t write = std::min(
-                playback_buffer_size_ - playback_buffer_unused_, temp_buffer_space_);
-
-            ScopedPaLock pa_lock(pa_main_loop_);
-
-            if (LATE(pa_stream_write)(play_stream_, &play_buffer_[playback_buffer_unused_], write,
-                                      nullptr, 0, PA_SEEK_RELATIVE) != PA_OK)
-            {
-                if (write_errors_++ > 10)
-                {
-                    LOG(LS_ERROR) << "Playout error: " << LATE(pa_context_errno)(pa_context_);
-                    write_errors_ = 0;
-                }
-            }
-
-            playback_buffer_unused_ += write;
-            temp_buffer_space_ -= write;
-        }
-
-        // Might have been reduced to zero by the above.
-        if (temp_buffer_space_ > 0)
-        {
-            onDataRequest(reinterpret_cast<int16_t*>(play_buffer_.get()), playback_buffer_size_ / 2);
-
-            size_t write = std::min(playback_buffer_size_, temp_buffer_space_);
-
-            ScopedPaLock pa_lock(pa_main_loop_);
-
-            if (LATE(pa_stream_write)(play_stream_, play_buffer_.get(), write,
-                                      nullptr, 0, PA_SEEK_RELATIVE) != PA_OK)
-            {
-                if (write_errors_++ > 10)
-                {
-                    LOG(LS_ERROR) << "Playout error: " << LATE(pa_context_errno)(pa_context_);
-                    write_errors_ = 0;
-                }
-            }
-
-            playback_buffer_unused_ = write;
-        }
-
-        temp_buffer_space_ = 0;
-
-        ScopedPaLock pa_lock(pa_main_loop_);
-        enableWriteCallback();
+        if (chunk_count <= 1)
+            break;
     }
 }
 

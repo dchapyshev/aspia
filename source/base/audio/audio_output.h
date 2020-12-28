@@ -32,6 +32,7 @@ public:
 
     static const size_t kSampleRate = 48000;
     static const size_t kBitsPerSample = 16;
+    static const size_t kBytesPerSample = 2;
     static const size_t kChannels = 2;
 
     using NeedMoreDataCB = std::function<size_t(void* data, size_t size)>;
