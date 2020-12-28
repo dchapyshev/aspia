@@ -43,6 +43,7 @@ namespace base {
 
 namespace {
 
+#if defined(OS_LINUX)
 std::filesystem::path xdgUserDirectory(const char* dir_name, const char* fallback_dir)
 {
     std::filesystem::path path;
@@ -59,6 +60,7 @@ std::filesystem::path xdgUserDirectory(const char* dir_name, const char* fallbac
     }
     return path;
 }
+#endif
 
 } // namespace
 
