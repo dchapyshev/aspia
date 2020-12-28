@@ -26,6 +26,7 @@
 #endif // defined(OS_POSIX)
 
 #if defined(OS_LINUX)
+#include "third_party/xdg_user_dirs/xdg_user_dir_lookup.h"
 #include <linux/limits.h>
 #endif // defined(OS_LINUX)
 
@@ -39,6 +40,27 @@
 #endif // defined(OS_MAC)
 
 namespace base {
+
+namespace {
+
+std::filesystem::path xdgUserDirectory(const char* dir_name, const char* fallback_dir)
+{
+    std::filesystem::path path;
+    char* xdg_dir = xdg_user_dir_lookup(dir_name);
+    if (xdg_dir)
+    {
+        path = std::filesystem::path(xdg_dir);
+        free(xdg_dir);
+    }
+    else
+    {
+        BasePaths::userHome(&path);
+        path.append(fallback_dir);
+    }
+    return path;
+}
+
+} // namespace
 
 #if defined(OS_WIN)
 // static
@@ -134,10 +156,7 @@ bool BasePaths::userDesktop(std::filesystem::path* result)
     result->assign(buffer);
     return true;
 #elif defined(OS_LINUX)
-    if (!userHome(result))
-        return false;
-
-    result->append("Desktop");
+    *result = xdgUserDirectory("DESKTOP", "Desktop");
     return true;
 #else
     NOTIMPLEMENTED();

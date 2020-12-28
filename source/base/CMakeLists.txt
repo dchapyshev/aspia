@@ -668,7 +668,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_X11})
 
 if (LINUX)
-    set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt)
+    set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt xdg_user_dirs)
 endif()
 
 target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS})

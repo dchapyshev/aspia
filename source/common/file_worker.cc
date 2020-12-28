@@ -186,6 +186,8 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
     std::filesystem::path desktop_path;
     if (base::BasePaths::userDesktop(&desktop_path))
     {
+        LOG(LS_INFO) << "User desktop path: " << desktop_path.u8string();
+
         proto::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::DriveList::Item::TYPE_DESKTOP_FOLDER);
@@ -197,6 +199,8 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
     std::filesystem::path home_path;
     if (base::BasePaths::userHome(&home_path))
     {
+        LOG(LS_INFO) << "Home path: " << home_path.u8string();
+
         proto::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::DriveList::Item::TYPE_HOME_FOLDER);
