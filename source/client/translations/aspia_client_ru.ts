@@ -177,32 +177,32 @@
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="284"/>
+        <location filename="../ui/client_window.ui" line="290"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="295"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="305"/>
+        <location filename="../ui/client_window.ui" line="311"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="314"/>
+        <location filename="../ui/client_window.ui" line="320"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="323"/>
+        <location filename="../ui/client_window.ui" line="329"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="332"/>
+        <location filename="../ui/client_window.ui" line="338"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
@@ -1555,18 +1555,18 @@
         <translation type="vanished">Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
-        <location filename="../ui/client_window.cc" line="216"/>
+        <location filename="../ui/client_window.cc" line="202"/>
+        <location filename="../ui/client_window.cc" line="219"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="200"/>
+        <location filename="../ui/client_window.cc" line="203"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="217"/>
+        <location filename="../ui/client_window.cc" line="220"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>

@@ -56,6 +56,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     combo_address->addItems(settings.addressList());
     combo_address->setCurrentIndex(0);
 
+    connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
+
     connect(ui.menu_language, &QMenu::triggered, this, &ClientWindow::onLanguageChanged);
     connect(ui.action_settings, &QAction::triggered, this, &ClientWindow::onSettings);
     connect(ui.action_help, &QAction::triggered, this, &ClientWindow::onHelp);
