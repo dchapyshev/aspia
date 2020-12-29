@@ -108,12 +108,12 @@
     <message>
         <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>高级</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>首选视频捕获器：</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="439"/>
@@ -137,17 +137,17 @@
         <location filename="../host_main.cc" line="99"/>
         <location filename="../host_main.cc" line="112"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="100"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="unfinished"></translation>
+        <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="113"/>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished"></translation>
+        <translation>不能同时指定导出和导入参数。</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../main_window.ui" line="287"/>
         <source>Router is disabled</source>
-        <translation type="unfinished">路由器被禁用</translation>
+        <translation>路由器被禁用</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="333"/>
@@ -327,13 +327,13 @@
     <message>
         <location filename="../config_dialog.cc" line="140"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>默认</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="313"/>
         <location filename="../config_dialog.cc" line="343"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-文件 (*.json)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="322"/>
@@ -469,7 +469,7 @@
     <message>
         <location filename="../main_window.cc" line="405"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>连接错误</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="234"/>
@@ -493,22 +493,22 @@
     <message>
         <location filename="../main_window.cc" line="395"/>
         <source>Connecting to a router...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在连接到路由器...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="242"/>
         <source>Connected to a router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已连接到路由器 %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="400"/>
         <source>Connected to a router</source>
-        <translation type="unfinished"></translation>
+        <translation>已连接到路由器</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="238"/>
         <source>Connecting to a router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在连接到路由器 %1 ...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="308"/>
