@@ -217,7 +217,8 @@ bool BasePaths::commonAppData(std::filesystem::path* result)
     result->assign(buffer);
     return true;
 #elif defined(OS_LINUX)
-    return userAppData(result);
+    *result = "/etc";
+    return true;
 #else
     NOTIMPLEMENTED();
     return false;

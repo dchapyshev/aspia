@@ -96,17 +96,19 @@ bool Server::start()
         }
 
         std::filesystem::path public_key_path;
-        if (!base::BasePaths::currentExecDir(&public_key_path))
+        if (!base::BasePaths::commonAppData(&public_key_path))
         {
             LOG(LS_ERROR) << "Failed to get the path to the current directory";
             return false;
         }
 
-        public_key_path.append("aspia_router.pub");
+        public_key_path.append("aspia/router.pub");
 
         std::error_code error_code;
         if (std::filesystem::exists(public_key_path))
         {
+            LOG(LS_INFO) << "A public key file exists and will be deleted: " << public_key_path;
+
             if (!std::filesystem::remove(public_key_path, error_code))
             {
                 LOG(LS_ERROR) << "Failed to delete old public key: "
@@ -128,6 +130,10 @@ bool Server::start()
         {
             LOG(LS_ERROR) << "Failed to write public key to file: " << public_key_path;
             return false;
+        }
+        else
+        {
+            LOG(LS_INFO) << "New public key saved to file: " << public_key_path;
         }
 
         settings.setPrivateKey(private_key);

@@ -24,7 +24,7 @@
 namespace relay {
 
 Settings::Settings()
-    : impl_("aspia_relay")
+    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "relay")
 {
     // Nothing
 }

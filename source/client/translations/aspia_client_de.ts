@@ -1164,18 +1164,18 @@
         <translation type="obsolete">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="201"/>
+        <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="202"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="220"/>
+        <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>

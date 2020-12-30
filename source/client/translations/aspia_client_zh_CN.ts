@@ -1177,18 +1177,18 @@
         <translation type="obsolete">输入的地址列表将被清除，继续吗？</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="201"/>
+        <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="202"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="220"/>
+        <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>

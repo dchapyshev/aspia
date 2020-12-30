@@ -1555,18 +1555,18 @@
         <translation type="vanished">Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="201"/>
+        <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="203"/>
+        <location filename="../ui/client_window.cc" line="202"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="220"/>
+        <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>

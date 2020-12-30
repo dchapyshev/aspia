@@ -254,16 +254,13 @@ set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
 
 if (LINUX)
     # Config file.
-    install(FILES router/aspia_router.json DESTINATION etc/aspia COMPONENT router)
+    install(FILES router/router.json DESTINATION /etc/aspia COMPONENT router)
 
     # Database file.
-    install(FILES router/aspia_router.db3 DESTINATION var/lib/aspia COMPONENT router)
+    install(FILES router/router.db3 DESTINATION /var/lib/aspia COMPONENT router)
 
     # Service file.
     install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
-
-    # Start daemon.
-    install(CODE "execute_process(COMMAND systemctl enable aspia-router && service aspia-router start)")
 
     set(CPACK_DEBIAN_ROUTER_FILE_NAME
         "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
@@ -282,13 +279,10 @@ set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data 
 
 if (LINUX)
     # Config file.
-    install(FILES relay/aspia_relay.json DESTINATION etc/aspia COMPONENT relay)
+    install(FILES relay/relay.json DESTINATION /etc/aspia COMPONENT relay)
 
     # Service file.
     install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
-
-    # Start daemon.
-    install(CODE "execute_process(COMMAND systemctl enable aspia-relay && service aspia-relay start)")
 
     set(CPACK_DEBIAN_RELAY_FILE_NAME
         "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
@@ -301,7 +295,6 @@ if (LINUX)
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
     set(CPACK_DEBIAN_PACKAGE_SECTION "net")
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "any")
 
     set(CPACK_COMPONENTS_ALL console client router relay)
 endif()

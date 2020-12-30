@@ -264,15 +264,14 @@ std::filesystem::path DatabaseSqlite::filePath()
     std::filesystem::path file_path;
 
 #if defined(OS_WIN)
-    if (!base::BasePaths::currentExecDir(&file_path))
+    if (!base::BasePaths::commonAppData(&file_path))
         return std::filesystem::path();
 
-    file_path.append(u"aspia_router.db3");
-#else // defined(OS_*)
-    if (!base::BasePaths::userAppData(&file_path))
-        return std::filesystem::path();
-
-    file_path.append("aspia_router.db3");
+    file_path.append(u"router.db3");
+#elif (OS_LINUX)
+    file_path.append("/var/lib/aspia/router.db3");
+#else
+    NOTIMPLEMENTED();
 #endif // defined(OS_*)
 
     return file_path;

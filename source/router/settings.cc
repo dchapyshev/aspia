@@ -21,7 +21,7 @@
 namespace router {
 
 Settings::Settings()
-    : impl_("aspia_router")
+    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "router")
 {
     // Nothing
 }
