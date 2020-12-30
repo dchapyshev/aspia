@@ -47,22 +47,22 @@
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>路由器</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>使用路由器</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation type="unfinished">地址：</translation>
+        <translation>地址：</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation type="unfinished">用户名：</translation>
+        <translation>用户名：</translation>
     </message>
     <message>
         <source>Routers</source>
@@ -197,12 +197,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="56"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>特性</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="62"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>启用声音</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="76"/>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="92"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>视觉效果</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="98"/>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="128"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>其它</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>锁定计算机以断开连接</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>地址 / ID：</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="82"/>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../main_window.ui" line="139"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>工具</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="154"/>
@@ -577,12 +577,12 @@
     <message>
         <location filename="../main_window.ui" line="473"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>快速连接</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="570"/>
         <source>Router Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>路由器管理</translation>
     </message>
     <message>
         <source>Fast Connect...</source>
@@ -654,17 +654,17 @@
     <message>
         <location filename="../fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>快速连接</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation type="unfinished">地址 / ID</translation>
+        <translation>地址 / ID</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>会话类型</translation>
     </message>
     <message>
         <source>Router:</source>
@@ -848,17 +848,17 @@
     <message>
         <location filename="../address_book_dialog.cc" line="330"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished">输入了无效的路由器地址。</translation>
+        <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="341"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+        <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>路由器密码不能为空。</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -1107,28 +1107,28 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="76"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="182"/>
         <location filename="../fast_connect_dialog.cc" line="202"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="183"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>已指定按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="203"/>
         <source>An invalid computer address was entered.</source>
-        <translation type="unfinished">输入了无效的计算机地址。</translation>
+        <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
         <source>Without Router</source>
@@ -1200,7 +1200,7 @@
     <message>
         <location filename="../main_window.cc" line="837"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation type="unfinished">最近打开的通讯录列表将被清除，继续？</translation>
+        <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="870"/>
@@ -1220,7 +1220,7 @@
     <message>
         <location filename="../main_window.cc" line="1151"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
         <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
