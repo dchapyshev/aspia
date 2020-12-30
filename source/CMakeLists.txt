@@ -17,6 +17,7 @@
 #
 
 include(CheckIPOSupported)
+include(GNUInstallDirs)
 
 # Qt configuration.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -250,8 +251,23 @@ install(TARGETS aspia_router
 set(CPACK_COMPONENT_ROUTER_NAME "aspia-router")
 set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
 set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
-set(CPACK_DEBIAN_ROUTER_FILE_NAME
-    "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+if (LINUX)
+    # Config file.
+    install(FILES router/aspia_router.json DESTINATION etc/aspia COMPONENT router)
+
+    # Database file.
+    install(FILES router/aspia_router.db3 DESTINATION var/lib/aspia COMPONENT router)
+
+    # Service file.
+    install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
+
+    # Start daemon.
+    install(CODE "execute_process(COMMAND systemctl enable aspia-router && service aspia-router start)")
+
+    set(CPACK_DEBIAN_ROUTER_FILE_NAME
+        "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+endif()
 
 #--------------------------------------------------------------------------------------------------
 # Relay
@@ -263,14 +279,29 @@ install(TARGETS aspia_relay
 set(CPACK_COMPONENT_RELAY_NAME "aspia-relay")
 set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
 set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
-set(CPACK_DEBIAN_RELAY_FILE_NAME
-    "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+if (LINUX)
+    # Config file.
+    install(FILES relay/aspia_relay.json DESTINATION etc/aspia COMPONENT relay)
+
+    # Service file.
+    install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
+
+    # Start daemon.
+    install(CODE "execute_process(COMMAND systemctl enable aspia-relay && service aspia-relay start)")
+
+    set(CPACK_DEBIAN_RELAY_FILE_NAME
+        "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+endif()
 
 if (LINUX)
     set(CPACK_GENERATOR "DEB")
 
     set(CPACK_DEB_COMPONENT_INSTALL ON)
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+    set(CPACK_DEBIAN_PACKAGE_SECTION "net")
+    set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "any")
 
     set(CPACK_COMPONENTS_ALL console client router relay)
 endif()
