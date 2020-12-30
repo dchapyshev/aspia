@@ -122,8 +122,10 @@ else()
 endif()
 
 # Compiller flags.
+message(STATUS "CXX compiller version: ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "CXX flags (release): ${CMAKE_CXX_FLAGS_RELEASE}")
 message(STATUS "CXX flags (debug): ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "C compiller version: ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "C flags (release): ${CMAKE_C_FLAGS_RELEASE}")
 message(STATUS "C flags (debug): ${CMAKE_C_FLAGS_DEBUG}")
 
