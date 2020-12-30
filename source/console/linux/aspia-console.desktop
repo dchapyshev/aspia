@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Aspia Console
+Name[ru]=Консоль Aspia
+Exec=/usr/bin/aspia_console
+Icon=aspia_console.png
+Type=Application
+Categories=Utility;
+MimeType=application/aab;
+Terminal=false

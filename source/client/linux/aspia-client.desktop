@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Aspia Client
+Name[ru]=Клиент Aspia
+Exec=/usr/bin/aspia_client
+Icon=aspia_client.png
+Type=Application
+Categories=Utility;
+Terminal=false

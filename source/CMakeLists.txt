@@ -150,3 +150,129 @@ add_subdirectory(third_party)
 if (WIN32)
     add_subdirectory(host)
 endif()
+
+###################################################################################################
+# Installers
+###################################################################################################
+
+set(CPACK_PACKAGE_NAME "aspia")
+set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
+set(CPACK_PACKAGE_CONTACT "Dmitry Chapyshev <dmitry@aspia.ru>")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://aspia.org/")
+set(CPACK_PACKAGE_VERSION "2.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "2")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+
+#--------------------------------------------------------------------------------------------------
+# Console
+#--------------------------------------------------------------------------------------------------
+
+install(TARGETS aspia_console
+    BUNDLE DESTINATION . COMPONENT console
+    RUNTIME DESTINATION bin COMPONENT console)
+set(CPACK_COMPONENT_CONSOLE_NAME "aspia-console")
+set(CPACK_COMPONENT_CONSOLE_DISPLAY_NAME "Aspia Console")
+set(CPACK_COMPONENT_CONSOLE_DESCRIPTION "Console for managing hosts and routers.")
+
+if (LINUX)
+    # Desktop file.
+    install(FILES console/linux/aspia-console.desktop
+        DESTINATION share/applications COMPONENT console)
+
+    # Mime types.
+    install(FILES console/linux/aspia-console.xml
+        DESTINATION share/mime/packages COMPONENT console)
+    install(CODE "execute_process(COMMAND update-mime-database /usr/share/mime)")
+
+    # Console icons.
+    install(FILES console/linux/icons/16x16/aspia_console.png
+        DESTINATION share/icons/hicolor/16x16/apps COMPONENT console)
+    install(FILES console/linux/icons/24x24/aspia_console.png
+        DESTINATION share/icons/hicolor/24x24/apps COMPONENT console)
+    install(FILES console/linux/icons/32x32/aspia_console.png
+        DESTINATION share/icons/hicolor/32x32/apps COMPONENT console)
+    install(FILES console/linux/icons/48x48/aspia_console.png
+        DESTINATION share/icons/hicolor/48x48/apps COMPONENT console)
+
+    # Address book icons.
+    install(FILES console/linux/icons/16x16/aspia_address_book.png
+        DESTINATION share/icons/hicolor/16x16/mimetypes COMPONENT console)
+    install(FILES console/linux/icons/24x24/aspia_address_book.png
+        DESTINATION share/icons/hicolor/24x24/mimetypes COMPONENT console)
+    install(FILES console/linux/icons/32x32/aspia_address_book.png
+        DESTINATION share/icons/hicolor/32x32/mimetypes COMPONENT console)
+    install(FILES console/linux/icons/48x48/aspia_address_book.png
+        DESTINATION share/icons/hicolor/48x48/mimetypes COMPONENT console)
+
+    set(CPACK_DEBIAN_CONSOLE_FILE_NAME
+        "${CPACK_COMPONENT_CONSOLE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+endif()
+
+#--------------------------------------------------------------------------------------------------
+# Client
+#--------------------------------------------------------------------------------------------------
+
+install(TARGETS aspia_client
+    BUNDLE DESTINATION . COMPONENT client
+    RUNTIME DESTINATION bin COMPONENT client)
+set(CPACK_COMPONENT_CLIENT_NAME "aspia-client")
+set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "Aspia Client")
+set(CPACK_COMPONENT_CLIENT_DESCRIPTION "Client for managing hosts.")
+
+if (LINUX)
+    # Desktop file.
+    install(FILES client/linux/aspia-client.desktop
+        DESTINATION share/applications COMPONENT client)
+
+    # Icons.
+    install(FILES client/linux/icons/16x16/aspia_client.png
+        DESTINATION share/icons/hicolor/16x16/apps COMPONENT client)
+    install(FILES client/linux/icons/24x24/aspia_client.png
+        DESTINATION share/icons/hicolor/24x24/apps COMPONENT client)
+    install(FILES client/linux/icons/32x32/aspia_client.png
+        DESTINATION share/icons/hicolor/32x32/apps COMPONENT client)
+    install(FILES client/linux/icons/48x48/aspia_client.png
+        DESTINATION share/icons/hicolor/48x48/apps COMPONENT client)
+
+    set(CPACK_DEBIAN_CLIENT_FILE_NAME
+        "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+endif()
+
+#--------------------------------------------------------------------------------------------------
+# Router
+#--------------------------------------------------------------------------------------------------
+
+install(TARGETS aspia_router
+    BUNDLE DESTINATION . COMPONENT router
+    RUNTIME DESTINATION bin COMPONENT router)
+set(CPACK_COMPONENT_ROUTER_NAME "aspia-router")
+set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
+set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
+set(CPACK_DEBIAN_ROUTER_FILE_NAME
+    "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+#--------------------------------------------------------------------------------------------------
+# Relay
+#--------------------------------------------------------------------------------------------------
+
+install(TARGETS aspia_relay
+    BUNDLE DESTINATION . COMPONENT relay
+    RUNTIME DESTINATION bin COMPONENT relay)
+set(CPACK_COMPONENT_RELAY_NAME "aspia-relay")
+set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
+set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
+set(CPACK_DEBIAN_RELAY_FILE_NAME
+    "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+if (LINUX)
+    set(CPACK_GENERATOR "DEB")
+
+    set(CPACK_DEB_COMPONENT_INSTALL ON)
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+    set(CPACK_COMPONENTS_ALL console client router relay)
+endif()
+
+include(CPack)
