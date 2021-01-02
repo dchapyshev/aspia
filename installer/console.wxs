@@ -6,7 +6,7 @@
 <?define Manufacturer="Dmitry Chapyshev"?>
 <?define Version="2.0.0"?>
 <?define InstallLocation="Aspia Console"?>
-<?define SourceFiles="..\build\Release"?>
+<?define SourceFiles="..\..\build\Release"?>
 <?define Executable="aspia_console.exe"?>
 
 <!-- Product description -->

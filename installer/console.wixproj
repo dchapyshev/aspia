@@ -40,8 +40,10 @@
     <EmbeddedResource Include="translations\console.de-de.wxl" />
     <EmbeddedResource Include="translations\console.en-us.wxl" />
     <EmbeddedResource Include="translations\console.nl-nl.wxl" />
+    <EmbeddedResource Include="translations\console.pt-br.wxl" />
     <EmbeddedResource Include="translations\console.ru-ru.wxl" />
     <EmbeddedResource Include="translations\console.uk-ua.wxl" />
+    <EmbeddedResource Include="translations\console.zh-cn.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
- <!-- Variables -->
-<?define ProductName="Aspia Host"?>
+<!-- Variables -->
+<?define ProductName="Aspia Client"?>
 <?define Manufacturer="Dmitry Chapyshev"?>
 <?define Version="2.0.0"?>
-<?define InstallLocation="Aspia Host"?>
+<?define InstallLocation="Aspia Client"?>
 <?define SourceFiles="..\..\build\Release"?>
-<?define ServiceName="aspia-host-service"?>
-<?define ServiceDisplayName="Aspia Host Service"?>
-<?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>
+<?define Executable="aspia_client.exe"?>
 
 <!-- Product description -->
-<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{B460F717-1546-4FFC-9EDE-B21FD07E07CB}">
+<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{33B57F67-C531-4713-B29B-06796E5BACD6}">
     <Package Id="*" InstallerVersion="405" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
@@ -30,7 +28,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFilesFolder">
             <Directory Id="VendorProgramFilesFolder" Name="Aspia">
-                <Directory Id="INSTALLLOCATION" Name="Host" />
+                <Directory Id="INSTALLLOCATION" Name="Client" />
             </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
@@ -41,9 +39,9 @@
 
     <!-- Program Menu Shortcut -->
     <DirectoryRef Id="ApplicationMenuFolder">
-        <Component Id="ProgramMenuShortcut" Guid="{C0DBE098-F1FD-49F6-8BD9-D18BDF9C80DA}">
+        <Component Id="ProgramMenuShortcut" Guid="{BDFBE311-E1ED-434C-AFBD-FF3AEC854D23}">
             <Condition>STARTMENU_SHORTCUT</Condition>
-            <Shortcut Id="ConfigProgramMenuShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]aspia_host.exe"/>
+            <Shortcut Id="ProgramMenuShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
             <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
@@ -51,28 +49,17 @@
 
     <!-- Desktop Shortcut -->
     <DirectoryRef Id="DesktopFolder">
-        <Component Id="DesktopShortcut" Guid="{6463EBB6-56AC-4FA7-9262-37BBC43435D5}">
+        <Component Id="DesktopShortcut" Guid="{56EADCC0-CF88-4230-9736-7479E9BC94A8}">
             <Condition>DESKTOP_SHORTCUT</Condition>
-            <Shortcut Id="ConfigDesktopShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]aspia_host.exe"/>
+            <Shortcut Id="DesktopShortcut" Name="!(loc.ShortcutName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]$(var.Executable)" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>
 
-    <!-- Host applications and service -->
+    <!-- Executable file -->
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
-        <Component Id ="Applications" DiskId="1" Guid="{A0E3C629-4A61-4ED0-BD9D-FE12C71D7E36}">
-            <File Id="aspia_desktop_agent.exe" Name="aspia_desktop_agent.exe" />
-            <File Id="aspia_host_service.exe" Name="aspia_host_service.exe" KeyPath="yes" />
-            <File Id="aspia_host.exe" Name="aspia_host.exe" />
-            <File Id="aspia_host_core.dll" Name="aspia_host_core.dll" />
-            <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
-                <ServiceDependency Id="RpcSs"/>
-                <ServiceDependency Id="Tcpip"/>
-                <ServiceDependency Id="NDIS"/>
-                <ServiceDependency Id="AFD"/>
-                <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
-            </ServiceInstall>
-            <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
+        <Component Id ="Applications" DiskId="1" Guid="{13CF58E8-7A9B-4100-AEC4-F35505A368AE}">
+            <File Id="$(var.Executable)" Name="$(var.Executable)" KeyPath="yes" />
         </Component>
     </DirectoryRef>
 
@@ -92,11 +79,6 @@
     <WixVariable Id="WixUINewIco" Value="resources/new.ico" />
     <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
-
-    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import [SourceDir]aspia-host-config.xml --silent" />
-    <InstallExecuteSequence>
-        <Custom Action="ImportSettings" After="InstallFiles">1</Custom>
-    </InstallExecuteSequence>
 
     <!-- UI description -->
     <UI Id="InstallerUI">

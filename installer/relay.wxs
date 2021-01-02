@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+ <!-- Variables -->
+<?define ProductName="Aspia Relay"?>
+<?define Manufacturer="Dmitry Chapyshev"?>
+<?define Version="2.0.0"?>
+<?define InstallLocation="Aspia Relay"?>
+<?define SourceFiles="..\..\build\Release"?>
+<?define ServiceName="aspia-relay"?>
+<?define ServiceDisplayName="Aspia Relay Service"?>
+<?define ServiceDescription="Proxies user traffic to bypass NAT."?>
+
+<!-- Product description -->
+<Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{063596B6-D797-4FAF-8BF9-821E0117163C}">
+    <Package Id="*" InstallerVersion="405" Compressed="yes" Manufacturer="$(var.Manufacturer)" InstallPrivileges="elevated" InstallScope="perMachine" />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" Schedule="afterInstallInitialize" AllowDowngrades="no" Disallow="no" />
+
+    <!-- Windows version checking -->
+    <Condition Message="This application is only supported on Windows 7, Windows Server 2008 R2, or higher.">
+        <![CDATA[Installed OR (VersionNT >= 601)]]>
+    </Condition>
+
+    <Icon Id="aspia.ico" SourceFile="resources/aspia.ico" />
+    <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="ProgramFilesFolder">
+            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+                <Directory Id="INSTALLLOCATION" Name="Relay" />
+            </Directory>
+        </Directory>
+    </Directory>
+
+    <!-- Relay service -->
+    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+        <Component Id ="Applications" DiskId="1" Guid="{A462DE7C-8791-4123-8690-D67E34B1ECA5}">
+            <File Id="aspia_relay.exe" Name="aspia_relay.exe" KeyPath="yes" />
+            <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
+                <ServiceDependency Id="RpcSs"/>
+                <ServiceDependency Id="Tcpip"/>
+                <ServiceDependency Id="NDIS"/>
+                <ServiceDependency Id="AFD"/>
+                <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
+            </ServiceInstall>
+            <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
+        </Component>
+    </DirectoryRef>
+
+    <!-- Product features -->
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" InstallDefault="local" ConfigurableDirectory="INSTALLLOCATION" Level="1">
+        <ComponentRef Id="Applications" />
+    </Feature>
+    <Property Id="INSTALLLEVEL" Value="1" />
+
+    <!-- Resource customization -->
+    <WixVariable Id="WixUIBannerBmp" Value="resources/banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="resources/dialog.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="resources/exclamation.ico" />
+    <WixVariable Id="WixUIInfoIco" Value="resources/info.ico" />
+    <WixVariable Id="WixUINewIco" Value="resources/new.ico" />
+    <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
+    <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
+
+    <!-- UI description -->
+    <UI Id="InstallerUI">
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+        <UIRef Id="WixUI_InstallDir" />
+        <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+</Product>
+</Wix>
