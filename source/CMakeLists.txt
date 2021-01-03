@@ -253,12 +253,6 @@ set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
 set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
 
 if (LINUX)
-    # Config file.
-    install(FILES router/router.json DESTINATION /etc/aspia COMPONENT router)
-
-    # Database file.
-    install(FILES router/router.db3 DESTINATION /var/lib/aspia COMPONENT router)
-
     # Service file.
     install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
 
@@ -278,9 +272,6 @@ set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
 set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
 
 if (LINUX)
-    # Config file.
-    install(FILES relay/relay.json DESTINATION /etc/aspia COMPONENT relay)
-
     # Service file.
     install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
 
