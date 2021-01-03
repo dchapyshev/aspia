@@ -49,7 +49,9 @@ if (WIN32)
         win/service.cc
         win/service.h
         win/service_constants.cc
-        win/service_constants.h)
+        win/service_constants.h
+        win/service_util.cc
+        win/service_util.h)
 endif()
 
 source_group("" FILES ${SOURCE_ROUTER})

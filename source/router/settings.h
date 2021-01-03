@@ -29,6 +29,9 @@ public:
     Settings();
     ~Settings();
 
+    static std::filesystem::path filePath();
+
+    void reset();
     void flush();
 
     void setPort(uint16_t port);

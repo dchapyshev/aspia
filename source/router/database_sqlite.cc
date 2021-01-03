@@ -234,6 +234,54 @@ DatabaseSqlite::~DatabaseSqlite()
 }
 
 // static
+std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
+{
+    std::filesystem::path file_path = filePath();
+    if (file_path.empty())
+    {
+        LOG(LS_WARNING) << "Invalid file path";
+        return nullptr;
+    }
+
+    std::error_code error_code;
+    if (std::filesystem::exists(file_path, error_code))
+    {
+        LOG(LS_WARNING) << "Database file already exists";
+        return nullptr;
+    }
+
+    std::unique_ptr<DatabaseSqlite> db = open();
+    if (!db)
+        return nullptr;
+
+    const char kSql[] = "BEGIN TRANSACTION;"
+        "CREATE TABLE IF NOT EXISTS \"users\" ("
+            "\"id\" INTEGER UNIQUE,"
+            "\"name\" TEXT NOT NULL UNIQUE,"
+            "\"group\" TEXT NOT NULL,"
+            "\"salt\" BLOB NOT NULL,"
+            "\"verifier\" BLOB NOT NULL,"
+            "\"sessions\" INTEGER DEFAULT 0,"
+            "\"flags\" INTEGER DEFAULT 0,"
+            "PRIMARY KEY(\"id\" AUTOINCREMENT));"
+        "CREATE TABLE IF NOT EXISTS \"hosts\" ("
+            "\"id\" INTEGER UNIQUE,"
+            "\"key\" BLOB NOT NULL UNIQUE,"
+            "PRIMARY KEY(\"id\" AUTOINCREMENT));"
+        "COMMIT;";
+
+    char* error_string = nullptr;
+    int ret = sqlite3_exec(db->db_, kSql, nullptr, nullptr, &error_string);
+    if (ret != SQLITE_OK)
+    {
+        LOG(LS_ERROR) << "sqlite3_exec failed: " << error_string;
+        return nullptr;
+    }
+
+    return db;
+}
+
+// static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 {
     std::filesystem::path file_path = filePath();
@@ -267,7 +315,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     if (!base::BasePaths::commonAppData(&file_path))
         return std::filesystem::path();
 
-    file_path.append(u"router.db3");
+    file_path.append(u"aspia/router.db3");
 #elif (OS_LINUX)
     file_path.append("/var/lib/aspia/router.db3");
 #else

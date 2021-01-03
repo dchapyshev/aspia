@@ -33,6 +33,7 @@ class DatabaseSqlite : public Database
 public:
     ~DatabaseSqlite();
 
+    static std::unique_ptr<DatabaseSqlite> create();
     static std::unique_ptr<DatabaseSqlite> open();
     static std::filesystem::path filePath();
 

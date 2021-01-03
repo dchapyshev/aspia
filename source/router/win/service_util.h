@@ -16,27 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_FACTORY_SQLITE_H
-#define ROUTER__DATABASE_FACTORY_SQLITE_H
-
-#include "base/macros_magic.h"
-#include "router/database_factory.h"
+#ifndef ROUTER__WIN__SERVICE_UTIL_H
+#define ROUTER__WIN__SERVICE_UTIL_H
 
 namespace router {
 
-class DatabaseFactorySqlite : public DatabaseFactory
-{
-public:
-    DatabaseFactorySqlite();
-    ~DatabaseFactorySqlite();
-
-    std::unique_ptr<Database> createDatabase() const override;
-    std::unique_ptr<Database> openDatabase() const override;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(DatabaseFactorySqlite);
-};
+void startService();
+void stopService();
+void installService();
+void removeService();
 
 } // namespace router
 
-#endif // ROUTER__DATABASE_FACTORY_SQLITE_H
+#endif // ROUTER__WIN__SERVICE_UTIL_H

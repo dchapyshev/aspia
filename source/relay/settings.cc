@@ -23,13 +23,44 @@
 
 namespace relay {
 
+namespace {
+
+const base::JsonSettings::Scope kScope = base::JsonSettings::Scope::SYSTEM;
+const char kApplicationName[] = "aspia";
+const char kFileName[] = "relay";
+
+} // namespace
+
 Settings::Settings()
-    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "relay")
+    : impl_(kScope, kApplicationName, kFileName)
 {
     // Nothing
 }
 
 Settings::~Settings() = default;
+
+// static
+std::filesystem::path Settings::filePath()
+{
+    return base::JsonSettings::filePath(kScope, kApplicationName, kFileName);
+}
+
+void Settings::reset()
+{
+    setRouterAddress(u"localhost");
+    setRouterPort(DEFAULT_ROUTER_TCP_PORT);
+    setRouterPublicKey(base::ByteArray());
+    setPeerAddress(std::u16string());
+    setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
+    setPeerIdleTimeout(std::chrono::minutes(5));
+    setMaxPeerCount(100);
+    setMinLogLevel(1);
+}
+
+void Settings::flush()
+{
+    impl_.flush();
+}
 
 void Settings::setRouterAddress(const std::u16string& address)
 {

@@ -20,12 +20,15 @@
 #include "base/logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
+#include "base/files/file_util.h"
+#include "base/peer/user.h"
+#include "router/database_factory_sqlite.h"
+#include "router/database.h"
 #include "router/settings.h"
 
 #if defined(OS_WIN)
-#include "base/win/service_controller.h"
 #include "router/win/service.h"
-#include "router/win/service_constants.h"
+#include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/message_loop/message_loop.h"
@@ -51,119 +54,134 @@ void shutdownLogging()
     base::shutdownLogging();
 }
 
-void generateAndPrintKeys()
+bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
 {
     base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!key_pair.isValid())
     {
         std::cout << "Failed to generate keys" << std::endl;
+        return false;
+    }
+
+    *private_key = key_pair.privateKey();
+    *public_key = key_pair.publicKey();
+
+    if (private_key->empty() || public_key->empty())
+    {
+        std::cout << "Empty keys generated";
+        return false;
+    }
+
+    return true;
+}
+
+void generateAndPrintKeys()
+{
+    base::ByteArray private_key;
+    base::ByteArray public_key;
+
+    if (!generateKeys(&private_key, &public_key))
+        return;
+
+    std::cout << "Private key: " << base::toHex(private_key) << std::endl;
+    std::cout << "Public key: " << base::toHex(public_key) << std::endl;
+}
+
+void createConfig()
+{
+    std::filesystem::path settings_file_path = router::Settings::filePath();
+
+    std::error_code error_code;
+    if (std::filesystem::exists(settings_file_path, error_code))
+    {
+        std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
         return;
     }
 
-    std::cout << "Private key: " << base::toHex(key_pair.privateKey()) << std::endl;
-    std::cout << "Public key: " << base::toHex(key_pair.publicKey()) << std::endl;
-}
-
-#if defined(OS_WIN)
-
-void startService()
-{
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(router::kServiceName);
-    if (!controller.isValid())
+    std::filesystem::path public_key_path;
+    if (!base::BasePaths::commonAppData(&public_key_path))
     {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-            << std::endl;
+        std::cout << "Failed to get the path to the current directory" << std::endl;
+        return;
+    }
+
+    public_key_path.append("aspia/router.pub");
+
+    if (std::filesystem::exists(public_key_path, error_code))
+    {
+        std::cout << "Public key file already exists. Continuation is impossible." << std::endl;
+        return;
+    }
+
+    std::unique_ptr<router::Database> db = router::DatabaseFactorySqlite().createDatabase();
+    if (!db)
+    {
+        db = router::DatabaseFactorySqlite().openDatabase();
+        if (db)
+        {
+            std::cout << "Database already exists. Continuation is impossible." << std::endl;
+            return;
+        }
+    }
+
+    const char16_t kUserName[] = u"admin";
+    const char16_t kPassword[] = u"admin";
+
+    base::User user = base::User::create(kUserName, kPassword);
+    if (!user.isValid())
+    {
+        std::cout << "Failed to create user" << std::endl;
+        return;
+    }
+
+    if (!db->addUser(user))
+    {
+        std::cout << "Failed to add user to database" << std::endl;
+        return;
+    }
+
+    std::cout << "User name: " << base::local8BitFromUtf16(kUserName) << std::endl;
+    std::cout << "Password: " << base::local8BitFromUtf16(kPassword) << std::endl;
+
+    base::ByteArray private_key;
+    base::ByteArray public_key;
+    if (!generateKeys(&private_key, &public_key))
+        return;
+
+    if (!base::writeFile(public_key_path, base::toHex(public_key)))
+    {
+        std::cout << "Failed to write public key to file: " << public_key_path << std::endl;
+        return;
     }
     else
     {
-        if (!controller.start())
-        {
-            std::cout << "Failed to start the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service started successfully." << std::endl;
-        }
-    }
-}
-
-void stopService()
-{
-    base::win::ServiceController controller =
-        base::win::ServiceController::open(router::kServiceName);
-    if (!controller.isValid())
-    {
-        std::cout << "Failed to access the service. Not enough rights or service not installed."
-            << std::endl;
-    }
-    else
-    {
-        if (!controller.stop())
-        {
-            std::cout << "Failed to stop the service." << std::endl;
-        }
-        else
-        {
-            std::cout << "The service has stopped successfully." << std::endl;
-        }
-    }
-}
-
-void installService()
-{
-    std::filesystem::path file_path;
-
-    if (!base::BasePaths::currentExecFile(&file_path))
-    {
-        std::cout << "Failed to get the path to the executable." << std::endl;
-    }
-    else
-    {
-        base::win::ServiceController controller = base::win::ServiceController::install(
-            router::kServiceName, router::kServiceDisplayName, file_path);
-        if (!controller.isValid())
-        {
-            std::cout << "Failed to install the service." << std::endl;
-        }
-        else
-        {
-            controller.setDescription(router::kServiceDescription);
-            std::cout << "The service has been successfully installed." << std::endl;
-        }
-    }
-}
-
-void removeService()
-{
-    if (base::win::ServiceController::isRunning(router::kServiceName))
-    {
-        stopService();
+        std::cout << "Public key file: " << public_key_path << std::endl;
     }
 
-    if (!base::win::ServiceController::remove(router::kServiceName))
-    {
-        std::cout << "Failed to remove the service." << std::endl;
-    }
-    else
-    {
-        std::cout << "The service was successfully deleted." << std::endl;
-    }
+    // Save the configuration file.
+    router::Settings settings;
+    settings.reset();
+    settings.setPrivateKey(private_key);
+    settings.flush();
+
+    std::cout << "Configuration successfully created. Don't forget to change your password!"
+              << std::endl;
 }
 
 void showHelp()
 {
     std::cout << "aspia_router [switch]" << std::endl
         << "Available switches:" << std::endl
+#if defined(OS_WIN)
         << '\t' << "--install" << '\t' << "Install service" << std::endl
         << '\t' << "--remove" << '\t' << "Remove service" << std::endl
         << '\t' << "--start" << '\t' << "Start service" << std::endl
         << '\t' << "--stop" << '\t' << "Stop service" << std::endl
+#endif // defined(OS_WIN)
+        << '\t' << "--create-config" << '\t' << "Creates a configuration" << std::endl
         << '\t' << "--keygen" << '\t' << "Generating public and private keys" << std::endl
         << '\t' << "--help" << '\t' << "Show help" << std::endl;
 }
-
-#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -177,23 +195,27 @@ int wmain()
 
     if (command_line->hasSwitch(u"install"))
     {
-        installService();
+        router::installService();
     }
     else if (command_line->hasSwitch(u"remove"))
     {
-        removeService();
+        router::removeService();
     }
     else if (command_line->hasSwitch(u"start"))
     {
-        startService();
+        router::startService();
     }
     else if (command_line->hasSwitch(u"stop"))
     {
-        stopService();
+        router::stopService();
     }
     else if (command_line->hasSwitch(u"keygen"))
     {
         generateAndPrintKeys();
+    }
+    else if (command_line->hasSwitch(u"create-config"))
+    {
+        createConfig();
     }
     else if (command_line->hasSwitch(u"help"))
     {
@@ -222,12 +244,13 @@ int main(int argc, const char* const* argv)
     {
         generateAndPrintKeys();
     }
+    else if (command_line->hasSwitch(u"create-config"))
+    {
+        createConfig();
+    }
     else if (command_line->hasSwitch(u"help"))
     {
-        std::cout << "aspia_router [switch]" << std::endl
-            << "Available switches:" << std::endl
-            << '\t' << "--keygen" << '\t' << "Generating public and private keys" << std::endl
-            << '\t' << "--help" << '\t' << "Show help" << std::endl;
+        showHelp();
     }
     else
     {

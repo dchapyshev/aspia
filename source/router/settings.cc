@@ -20,13 +20,34 @@
 
 namespace router {
 
+namespace {
+
+const base::JsonSettings::Scope kScope = base::JsonSettings::Scope::SYSTEM;
+const char kApplicationName[] = "aspia";
+const char kFileName[] = "router";
+
+} // namespace
+
 Settings::Settings()
-    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "router")
+    : impl_(kScope, kApplicationName, kFileName)
 {
     // Nothing
 }
 
 Settings::~Settings() = default;
+
+// static
+std::filesystem::path Settings::filePath()
+{
+    return base::JsonSettings::filePath(kScope, kApplicationName, kFileName);
+}
+
+void Settings::reset()
+{
+    setPort(DEFAULT_ROUTER_TCP_PORT);
+    setPrivateKey(base::ByteArray());
+    setMinLogLevel(1);
+}
 
 void Settings::flush()
 {

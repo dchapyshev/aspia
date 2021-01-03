@@ -31,6 +31,11 @@ public:
     Settings();
     ~Settings();
 
+    static std::filesystem::path filePath();
+
+    void reset();
+    void flush();
+
     void setRouterAddress(const std::u16string& address);
     std::u16string routerAddress() const;
 

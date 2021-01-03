@@ -30,6 +30,7 @@ class DatabaseFactory
 public:
     virtual ~DatabaseFactory() = default;
 
+    virtual std::unique_ptr<Database> createDatabase() const = 0;
     virtual std::unique_ptr<Database> openDatabase() const = 0;
 };
 
