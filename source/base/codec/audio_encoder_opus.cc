@@ -45,9 +45,9 @@ const int kFrameSamples = kOpusSamplingRate * kFrameSizeMs / std::chrono::millis
 const proto::AudioPacket::BytesPerSample kBytesPerSample =
     proto::AudioPacket::BYTES_PER_SAMPLE_2;
 
-bool IsSupportedSampleRate(int rate)
+bool isSupportedSampleRate(int rate)
 {
-    return rate == 44100 || rate == 48000;
+    return rate == 44100 || rate == 48000 || rate == 96000 || rate == 192000;
 }
 
 } // namespace
@@ -115,7 +115,7 @@ bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
         channels_ = packet.channels();
         sampling_rate_ = packet.sampling_rate();
 
-        if (channels_ <= 0 || channels_ > 2 || !IsSupportedSampleRate(sampling_rate_))
+        if (channels_ <= 0 || channels_ > 2 || !isSupportedSampleRate(sampling_rate_))
         {
             LOG(LS_WARNING) << "Unsupported OPUS parameters: "
                             << channels_ << " channels with "

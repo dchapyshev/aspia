@@ -149,6 +149,8 @@ message AudioPacket
         SAMPLING_RATE_INVALID = 0;
         SAMPLING_RATE_44100   = 44100;
         SAMPLING_RATE_48000   = 48000;
+        SAMPLING_RATE_96000   = 96000;
+        SAMPLING_RATE_192000  = 192000;
     }
 
     enum BytesPerSample

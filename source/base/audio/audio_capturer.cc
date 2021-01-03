@@ -29,6 +29,8 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
     {
         case proto::AudioPacket::SAMPLING_RATE_44100:
         case proto::AudioPacket::SAMPLING_RATE_48000:
+        case proto::AudioPacket::SAMPLING_RATE_96000:
+        case proto::AudioPacket::SAMPLING_RATE_192000:
             return true;
 
         default:
