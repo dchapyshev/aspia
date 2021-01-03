@@ -359,7 +359,7 @@ TEST(StringNumberConversionsTest, StringToUint64)
     // interpreted as junk after the number.
     const char input[] = "6\06";
     std::string input_string(input, std::size(input) - 1);
-    uint64_t output;
+    unsigned long long output;
     EXPECT_FALSE(stringToULong64(input_string, &output));
 }
 
