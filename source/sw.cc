@@ -1,5 +1,7 @@
 #pragma sw require header org.sw.demo.google.protobuf.protoc
-#pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc
+#pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc-5.15.0.0
+
+#define QT_VERSION "-=5.15.0.0"
 
 /*void configure(Build &s)
 {
@@ -17,11 +19,14 @@ void build(Solution &s)
     auto &aspia = s.addProject("aspia", "master");
     aspia += Git("https://github.com/dchapyshev/aspia", "", "{v}");
 
-    auto setup_target = [&aspia](auto &t, const String &name, bool add_tests = false) -> decltype(auto)
+    auto setup_target = [&aspia](auto &t, const String &name, bool add_tests = false, String dir = {}) -> decltype(auto)
     {
+        if (dir.empty())
+            dir = name;
+
         t += cpp17;
         t.Public += "."_idir;
-        t.setRootDirectory(name);
+        t.setRootDirectory(dir);
         t += IncludeDirectory("."s);
         t += ".*"_rr;
 
@@ -31,6 +36,8 @@ void build(Solution &s)
         // os specific
         t -= ".*_win.*"_rr;
         t -= ".*_linux.*"_rr;
+        t -= ".*/linux/.*"_rr;
+        t -= ".*_pulse.*"_rr;
         t -= ".*_mac.*"_rr;
         t -= ".*_posix.*"_rr;
         t -= ".*_x11.*"_rr;
@@ -40,7 +47,9 @@ void build(Solution &s)
             t += ".*_mac.*"_rr;
         else
         {
+            t += ".*_pulse.*"_rr;
             t += ".*_linux.*"_rr;
+            t += ".*/linux/.*"_rr;
             t += ".*_x11.*"_rr;
         }
         if (t.getBuildSettings().TargetOS.Type != OSType::Windows)
@@ -57,7 +66,7 @@ void build(Solution &s)
         {
             auto &bt = t.addExecutable("test");
             bt += cpp17;
-            bt += FileRegex(name, ".*_unittest.*", true);
+            bt += FileRegex(dir, ".*_unittest.*", true);
             bt += t;
             bt += "org.sw.demo.google.googletest.gmock"_dep;
             bt += "org.sw.demo.google.googletest.gtest.main"_dep;
@@ -67,9 +76,9 @@ void build(Solution &s)
         return t;
     };
 
-    auto add_lib = [&aspia, &setup_target](const String &name, bool add_tests = false) -> decltype(auto)
+    auto add_lib = [&aspia, &setup_target](const String &name, bool add_tests = false, String dir = {}) -> decltype(auto)
     {
-        return setup_target(aspia.addStaticLibrary(name), name, add_tests);
+        return setup_target(aspia.addStaticLibrary(name), name, add_tests, dir);
     };
 
     auto &protocol = aspia.addStaticLibrary("proto");
@@ -92,9 +101,9 @@ void build(Solution &s)
     base.Public += "WIN32_LEAN_AND_MEAN"_def;
     base.Public += "NOMINMAX"_def;
     base.Public += protocol;
-    base.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
-    base.Public += "org.sw.demo.qtproject.qt.base.network"_dep;
-    base.Public += "org.sw.demo.qtproject.qt.base.xml"_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.network" QT_VERSION ""_dep;
+    base.Public += "org.sw.demo.qtproject.qt.base.xml" QT_VERSION ""_dep;
     base.Public += "org.sw.demo.boost.align"_dep;
     base.Public += "org.sw.demo.imneme.pcg_cpp-master"_dep;
     base.Public += "org.sw.demo.chriskohlhoff.asio"_dep;
@@ -103,13 +112,15 @@ void build(Solution &s)
     base.Public += "org.sw.demo.google.protobuf.protobuf_lite"_dep;
     base.Public += "org.sw.demo.chromium.libyuv-master"_dep;
     base.Public += "org.sw.demo.webmproject.vpx"_dep;
+    base.Public += "org.sw.demo.webmproject.webm"_dep;
+    base.Public += "org.sw.demo.xiph.opus"_dep;
     if (base.getBuildSettings().TargetOS.Type == OSType::Windows)
     {
         base -= "x11/.*"_rr;
         base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
-        base += "comsuppw.lib"_slib, "Winspool.lib"_slib;
+        base += "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
     }
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, base);
+    automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 
     auto &relay = aspia.addExecutable("relay");
     relay += cpp17;
@@ -119,8 +130,6 @@ void build(Solution &s)
     auto &router = aspia.addExecutable("router");
     router += cpp17;
     router += "router/.*"_rr;
-    router -= "router/keygen.*"_rr;
-    router -= "router/manager.*"_rr;
     router += base;
     router += "org.sw.demo.sqlite3"_dep;
 
@@ -128,16 +137,16 @@ void build(Solution &s)
     {
         auto name = name_override.empty() ? t.getPackage().getPath().back() : name_override;
 
-        automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, t);
-        rcc("org.sw.demo.qtproject.qt.base.tools.rcc"_dep, t, t.SourceDir / path_override / ("resources/" + name + ".qrc"));
-        qt_uic("org.sw.demo.qtproject.qt.base.tools.uic"_dep, t);
+        automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, t);
+        rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t, t.SourceDir / path_override / ("resources/" + name + ".qrc"));
+        qt_uic("org.sw.demo.qtproject.qt.base.tools.uic" QT_VERSION ""_dep, t);
     };
 
     auto qt_progs2 = [](auto &t)
     {
-        automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, t);
-        rcc("org.sw.demo.qtproject.qt.base.tools.rcc"_dep, t, t.SourceDir / "ui/resources.qrc");
-        qt_uic("org.sw.demo.qtproject.qt.base.tools.uic"_dep, t);
+        automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, t);
+        rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t, t.SourceDir / "ui/resources.qrc");
+        qt_uic("org.sw.demo.qtproject.qt.base.tools.uic" QT_VERSION ""_dep, t);
     };
 
     auto qt_progs_and_tr = [&qt_progs](auto &t, const String &name_override = {}, const path &path_override = {})
@@ -147,10 +156,10 @@ void build(Solution &s)
         qt_progs(t, name_override, path_override);
 
         // trs
-        qt_tr("org.sw.demo.qtproject.qt"_dep, t);
+        qt_tr("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, t);
         t.configureFile(t.SourceDir / path_override / ("translations/" + name + "_translations.qrc"),
             t.BinaryDir / (name + "_translations.qrc"), ConfigureFlags::CopyOnly);
-        rcc("org.sw.demo.qtproject.qt.base.tools.rcc"_dep, t,
+        rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t,
             t.BinaryDir / (name + "_translations.qrc"))
             ->working_directory = t.BinaryDir;
     };
@@ -160,12 +169,11 @@ void build(Solution &s)
         qt_progs2(t);
 
         // trs
-        qt_tr("org.sw.demo.qtproject.qt"_dep, t);
+        qt_tr("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, t);
         t.configureFile(t.SourceDir / "ui/translations.qrc",
             t.BinaryDir / "translations.qrc", ConfigureFlags::CopyOnly);
-        rcc("org.sw.demo.qtproject.qt.base.tools.rcc"_dep, t,
-            t.BinaryDir / "translations.qrc")
-            ->working_directory = t.BinaryDir;
+        rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t,
+            t.BinaryDir / "translations.qrc")->working_directory = t.BinaryDir;
     };
 
     auto &common = add_lib("common");
@@ -176,51 +184,30 @@ void build(Solution &s)
     }
     common.Public += base, protocol;
     common.Public += "org.sw.demo.openssl.crypto"_dep;
-    common.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
-    common.Public += "org.sw.demo.qtproject.qt.winextras"_dep;
+    common.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
+    common.Public += "org.sw.demo.qtproject.qt.winextras" QT_VERSION ""_dep;
     qt_progs_and_tr(common);
 
     auto &qt_base = add_lib("qt_base");
     qt_base.Public += base;
-    qt_base.Public += "org.sw.demo.qtproject.qt.base.widgets"_dep;
-    automoc("org.sw.demo.qtproject.qt.base.tools.moc"_dep, qt_base);
-    qt_translations_rcc("org.sw.demo.qtproject.qt"_dep, aspia, qt_base, "qt_translations.qrc");
+    qt_base.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
+    automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, qt_base);
+    qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations.qrc");
 
     auto setup_exe = [](auto &t) -> decltype(auto)
     {
         if (auto L = t.getSelectedTool()->as<VisualStudioLinker*>(); L)
             L->Subsystem = vs::Subsystem::Windows;
-        t += "org.sw.demo.qtproject.qt.base.winmain"_dep;
+        t += "org.sw.demo.qtproject.qt.base.winmain" QT_VERSION ""_dep;
         return t;
     };
 
-    auto &keygen = router.addExecutable("keygen");
-    setup_exe(keygen);
-    keygen += cpp17;
-    keygen.setRootDirectory("router/keygen");
-    keygen += ".*"_rr;
-    keygen += qt_base;
-    keygen.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows"_dep;
-    keygen.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista"_dep;
-    qt_progs(keygen);
-
     //
-    auto &manager = router.addExecutable("manager");
-    setup_exe(manager);
-    manager += cpp17;
-    manager.setRootDirectory("router/manager");
-    manager += ".*"_rr;
-    manager += qt_base;
-    manager.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows"_dep;
-    manager.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista"_dep;
-    qt_progs_and_tr(manager, "router_manager");
-
-    //
-    auto &client = add_lib("client");
-    client.Public += common;
-    if (client.getBuildSettings().TargetOS.Type == OSType::Windows)
-        client.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows"_dep;
-    qt_progs_and_tr(client);
+    auto &client_core = add_lib("client");
+    client_core.Public += common;
+    if (client_core.getBuildSettings().TargetOS.Type == OSType::Windows)
+        client_core.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows" QT_VERSION ""_dep;
+    qt_progs_and_tr(client_core);
 
     auto add_exe = [&setup_exe](auto &base, const String &name) -> decltype(auto)
     {
@@ -230,11 +217,11 @@ void build(Solution &s)
     //
     auto &console = add_exe(aspia, "console");
     setup_target(console, "console");
-    console.Public += client, qt_base;
+    console.Public += client_core, qt_base;
     if (console.getBuildSettings().TargetOS.Type == OSType::Windows)
     {
-        console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows"_dep;
-        console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista"_dep;
+        console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
+        console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
     }
     qt_progs_and_tr(console);
 
@@ -247,13 +234,13 @@ void build(Solution &s)
         core.Public += "sas.lib"_slib;
     core.Public += common, qt_base;
     core.Public += "org.sw.demo.boost.property_tree"_dep;
-    core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows"_dep;
-    core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista"_dep;
+    core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
+    core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
     qt_progs_and_tr2(core);
 
     setup_exe(host);
-    host += "host/host_entry_point.cc";
-    host += "host/host.rc";
+    host += "host/ui/host_entry_point.cc";
+    host += "host/ui/host.rc";
     host += core;
 
     auto &service = add_exe(host, "service");
@@ -265,4 +252,9 @@ void build(Solution &s)
     desktop_agent += "host/desktop_agent_entry_point.cc";
     desktop_agent += "host/desktop_agent.rc";
     desktop_agent += core;
+
+    auto &client = add_exe(aspia, "client_exe");
+    client += "client/client_entry_point.cc";
+    client += "client/client.rc";
+    client += client_core, qt_base;
 }
