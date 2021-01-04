@@ -152,17 +152,25 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
     if (frame && video_encoder_ && scale_reducer_)
     {
-        const base::Size& source_size = frame->size();
-        base::Size current_size = preferred_size_;
-
-        if (current_size.width() > source_size.width() ||
-            current_size.height() > source_size.height())
+        if (source_size_ != frame->size())
         {
-            current_size = source_size;
+            // Every time we change the resolution, we have to reset the preferred size.
+            source_size_ = frame->size();
+            preferred_size_ = base::Size();
         }
 
+        base::Size current_size = preferred_size_;
+
+        // If the preferred size is larger than the original, then we use the original size.
+        if (current_size.width() > source_size_.width() ||
+            current_size.height() > source_size_.height())
+        {
+            current_size = source_size_;
+        }
+
+        // If we don't have a preferred size, then we use the original frame size.
         if (current_size.isEmpty())
-            current_size = source_size;
+            current_size = source_size_;
 
         const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
         if (!scaled_frame)

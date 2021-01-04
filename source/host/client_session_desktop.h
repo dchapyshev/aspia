@@ -71,6 +71,7 @@ private:
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
     DesktopSession::Config desktop_session_config_;
+    base::Size source_size_;
     base::Size preferred_size_;
 
     std::unique_ptr<proto::ClientToHost> incoming_message_;
