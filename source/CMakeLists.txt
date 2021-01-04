@@ -197,6 +197,8 @@ if (LINUX)
         DESTINATION share/icons/hicolor/48x48/apps COMPONENT console)
     install(FILES console/linux/icons/64x64/aspia_console.png
         DESTINATION share/icons/hicolor/64x64/apps COMPONENT console)
+    install(FILES console/linux/icons/128x128/aspia_console.png
+        DESTINATION share/icons/hicolor/128x128/apps COMPONENT console)
 
     # Address book icons.
     install(FILES console/linux/icons/16x16/aspia_address_book.png
@@ -243,6 +245,8 @@ if (LINUX)
         DESTINATION share/icons/hicolor/48x48/apps COMPONENT client)
     install(FILES client/linux/icons/64x64/aspia_client.png
         DESTINATION share/icons/hicolor/64x64/apps COMPONENT client)
+    install(FILES client/linux/icons/128x128/aspia_client.png
+        DESTINATION share/icons/hicolor/128x128/apps COMPONENT client)
 
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
