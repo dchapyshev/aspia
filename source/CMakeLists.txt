@@ -164,7 +164,6 @@ set(CPACK_PACKAGE_VERSION "2.0.0")
 set(CPACK_PACKAGE_VERSION_MAJOR "2")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
 #--------------------------------------------------------------------------------------------------
 # Console
@@ -213,6 +212,10 @@ if (LINUX)
         "${CPACK_COMPONENT_CONSOLE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 endif()
 
+if (APPLE)
+    set(CPACK_DMG_CONSOLE_FILE_NAME "${CPACK_COMPONENT_CONSOLE_NAME}-${CPACK_PACKAGE_VERSION}")
+endif()
+
 #--------------------------------------------------------------------------------------------------
 # Client
 #--------------------------------------------------------------------------------------------------
@@ -245,18 +248,22 @@ if (LINUX)
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 endif()
 
+if (APPLE)
+    set(CPACK_DMG_CLIENT_FILE_NAME "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}")
+endif()
+
 #--------------------------------------------------------------------------------------------------
 # Router
 #--------------------------------------------------------------------------------------------------
 
-install(TARGETS aspia_router
-    BUNDLE DESTINATION . COMPONENT router
-    RUNTIME DESTINATION bin COMPONENT router)
-set(CPACK_COMPONENT_ROUTER_NAME "aspia-router")
-set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
-set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
-
 if (LINUX)
+    install(TARGETS aspia_router
+        BUNDLE DESTINATION . COMPONENT router
+        RUNTIME DESTINATION bin COMPONENT router)
+    set(CPACK_COMPONENT_ROUTER_NAME "aspia-router")
+    set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
+    set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
+
     # Service file.
     install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
 
@@ -268,14 +275,14 @@ endif()
 # Relay
 #--------------------------------------------------------------------------------------------------
 
-install(TARGETS aspia_relay
-    BUNDLE DESTINATION . COMPONENT relay
-    RUNTIME DESTINATION bin COMPONENT relay)
-set(CPACK_COMPONENT_RELAY_NAME "aspia-relay")
-set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
-set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
-
 if (LINUX)
+    install(TARGETS aspia_relay
+        BUNDLE DESTINATION . COMPONENT relay
+        RUNTIME DESTINATION bin COMPONENT relay)
+    set(CPACK_COMPONENT_RELAY_NAME "aspia-relay")
+    set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
+    set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
+
     # Service file.
     install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
 
@@ -292,6 +299,13 @@ if (LINUX)
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
     set(CPACK_COMPONENTS_ALL console client router relay)
+endif()
+
+if (APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+
+    set(CPACK_COMPONENTS_GROUPING "IGNORE")
+    set(CPACK_COMPONENTS_ALL console client)
 endif()
 
 include(CPack)
