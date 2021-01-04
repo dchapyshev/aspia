@@ -29,10 +29,12 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
 {
     DCHECK(window_proxy_);
 
+#if defined(OS_WIN)
     if (!SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY))
     {
         PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
     }
+#endif // defined(OS_WIN)
 }
 
 UserSessionAgent::~UserSessionAgent() = default;

@@ -69,8 +69,14 @@ void UserSession::start(Delegate* delegate)
 
     if (channel_)
     {
+        LOG(LS_INFO) << "IPC channel exists";
+
         channel_->setListener(this);
         channel_->resume();
+    }
+    else
+    {
+        LOG(LS_INFO) << "IPC channel does NOT exist";
     }
 
     state_ = State::STARTED;
@@ -94,6 +100,8 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
     if (channel_)
     {
+        LOG(LS_INFO) << "IPC channel exists";
+
         channel_->setListener(this);
         channel_->resume();
 
@@ -106,6 +114,11 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         send_connection_list(desktop_clients_);
         send_connection_list(file_transfer_clients_);
         sendRouterState();
+        sendCredentials();
+    }
+    else
+    {
+        LOG(LS_INFO) << "IPC channel does NOT exist";
     }
 
     state_ = State::STARTED;
@@ -238,7 +251,14 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
     if (router_state.state() == proto::internal::RouterState::CONNECTED)
     {
         if (delegate_)
+        {
+            LOG(LS_INFO) << "Executing an ID request";
             delegate_->onUserSessionHostIdRequest(sessionName());
+        }
+        else
+        {
+            LOG(LS_INFO) << "There is no delegate. ID request will fail";
+        }
     }
     else
     {
