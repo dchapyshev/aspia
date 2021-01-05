@@ -176,6 +176,12 @@ proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)
         return proto::UserResult::INTERNAL_ERROR;
     }
 
+    if (!base::User::isValidUserName(new_user.name))
+    {
+        LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
+        return proto::UserResult::INVALID_DATA;
+    }
+
     std::unique_ptr<Database> database = openDatabase();
     if (!database)
     {
@@ -204,6 +210,12 @@ proto::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::User& user)
     {
         LOG(LS_ERROR) << "Failed to create user";
         return proto::UserResult::INTERNAL_ERROR;
+    }
+
+    if (!base::User::isValidUserName(new_user.name))
+    {
+        LOG(LS_ERROR) << "Invalid user name: " << new_user.name;
+        return proto::UserResult::INVALID_DATA;
     }
 
     std::unique_ptr<Database> database = openDatabase();
