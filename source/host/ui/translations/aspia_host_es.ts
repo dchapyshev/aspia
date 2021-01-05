@@ -403,10 +403,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The username you entered already exists.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -442,6 +438,10 @@
     </message>
     <message>
         <source>Double-click to change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

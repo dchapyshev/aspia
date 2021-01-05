@@ -40,7 +40,8 @@ bool isValidUserNameChar(char16_t username_char)
 
     if (username_char == '.' ||
         username_char == '_' ||
-        username_char == '-')
+        username_char == '-' ||
+        username_char == '@')
     {
         return true;
     }

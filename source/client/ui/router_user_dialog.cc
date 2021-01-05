@@ -126,7 +126,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The user name can not be empty and can contain only alphabet"
-                                    " characters, numbers and ""_"", ""-"", ""."" characters."),
+                                    " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."),
                                  QMessageBox::Ok);
 
             ui.edit_username->selectAll();

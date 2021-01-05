@@ -2169,7 +2169,7 @@
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="128"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

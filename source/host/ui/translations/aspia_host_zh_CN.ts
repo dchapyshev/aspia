@@ -547,9 +547,13 @@
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+        <translation type="vanished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="128"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="140"/>

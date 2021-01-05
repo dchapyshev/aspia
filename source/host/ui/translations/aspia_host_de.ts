@@ -730,9 +730,13 @@
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+        <translation type="vanished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="128"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="140"/>

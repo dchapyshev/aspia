@@ -838,9 +838,13 @@
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="128"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="140"/>
