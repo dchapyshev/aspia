@@ -119,6 +119,12 @@ if (APPLE)
     set_target_properties(aspia_console PROPERTIES OUTPUT_NAME "Aspia Console")
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_console_PLIST})
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_console_ICON})
+
+    add_custom_command(TARGET aspia_console POST_BUILD
+        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "./Aspia Console.app"
+        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+        COMMENT "Signing..."
+        VERBATIM)
 endif()
 
 if (WIN32)
