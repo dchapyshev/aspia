@@ -43,6 +43,18 @@ public:
     void setMinLogLevel(int level);
     int minLogLevel() const;
 
+    void setClientWhiteList(const std::vector<std::u16string>& list);
+    std::vector<std::u16string> clientWhiteList() const;
+
+    void setHostWhiteList(const std::vector<std::u16string>& list);
+    std::vector<std::u16string> hostWhiteList() const;
+
+    void setAdminWhiteList(const std::vector<std::u16string>& list);
+    std::vector<std::u16string> adminWhiteList() const;
+
+    void setRelayWhiteList(const std::vector<std::u16string>& list);
+    std::vector<std::u16string> relayWhiteList() const;
+
 private:
     base::JsonSettings impl_;
 };

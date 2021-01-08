@@ -19,6 +19,7 @@
 #include "router/server.h"
 
 #include "base/logging.h"
+#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
@@ -95,6 +96,58 @@ bool Server::start()
     {
         LOG(LS_ERROR) << "Invalid port specified in configuration file";
         return false;
+    }
+
+    client_white_list_ = settings.clientWhiteList();
+    if (client_white_list_.empty())
+    {
+        LOG(LS_INFO) << "Empty client white list. Connections from all clients will be allowed";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Client white list is not empty. Allowed clients:";
+
+        for (size_t i = 0; i < client_white_list_.size(); ++i)
+            LOG(LS_INFO) << "#" << (i + 1) << ": " << client_white_list_[i];
+    }
+
+    host_white_list_ = settings.hostWhiteList();
+    if (host_white_list_.empty())
+    {
+        LOG(LS_INFO) << "Empty host white list. Connections from all hosts will be allowed";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Host white list is not empty. Allowed hosts:";
+
+        for (size_t i = 0; i < host_white_list_.size(); ++i)
+            LOG(LS_INFO) << "#" << (i + 1) << ": " << host_white_list_[i];
+    }
+
+    admin_white_list_ = settings.adminWhiteList();
+    if (admin_white_list_.empty())
+    {
+        LOG(LS_INFO) << "Empty admin white list. Connections from all admins will be allowed";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Admin white list is not empty. Allowed admins:";
+
+        for (size_t i = 0; i < admin_white_list_.size(); ++i)
+            LOG(LS_INFO) << "#" << (i + 1) << ": " << admin_white_list_[i];
+    }
+
+    relay_white_list_ = settings.relayWhiteList();
+    if (relay_white_list_.empty())
+    {
+        LOG(LS_INFO) << "Empty relay white list. Connections from all relays will be allowed";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Relay white list is not empty. Allowed relays:";
+
+        for (size_t i = 0; i < relay_white_list_.size(); ++i)
+            LOG(LS_INFO) << "#" << (i + 1) << ": " << relay_white_list_[i];
     }
 
     std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
@@ -252,7 +305,7 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
-    std::string address = base::utf8FromUtf16(session_info.channel->peerAddress());
+    std::u16string address = session_info.channel->peerAddress();
     proto::RouterSession session_type =
         static_cast<proto::RouterSession>(session_info.session_type);
 
@@ -263,29 +316,52 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     switch (session_info.session_type)
     {
         case proto::ROUTER_SESSION_CLIENT:
+        {
+            if (!client_white_list_.empty() && !base::contains(client_white_list_, address))
+                break;
+
             session = std::make_unique<SessionClient>();
-            break;
+        }
+        break;
 
         case proto::ROUTER_SESSION_HOST:
+        {
+            if (!host_white_list_.empty() && !base::contains(host_white_list_, address))
+                break;
+
             session = std::make_unique<SessionHost>();
-            break;
+        }
+        break;
 
         case proto::ROUTER_SESSION_ADMIN:
+        {
+            if (!admin_white_list_.empty() && !base::contains(admin_white_list_, address))
+                break;
+
             session = std::make_unique<SessionAdmin>();
-            break;
+        }
+        break;
 
         case proto::ROUTER_SESSION_RELAY:
+        {
+            if (!relay_white_list_.empty() && !base::contains(relay_white_list_, address))
+                break;
+
             session = std::make_unique<SessionRelay>();
-            break;
+        }
+        break;
 
         default:
-            break;
+        {
+            LOG(LS_ERROR) << "Unsupported session type: "
+                          << static_cast<int>(session_info.session_type);
+        }
+        break;
     }
 
     if (!session)
     {
-        LOG(LS_ERROR) << "Unsupported session type: "
-                      << static_cast<int>(session_info.session_type);
+        LOG(LS_ERROR) << "Connection rejected for '" << address << "'";
         return;
     }
 

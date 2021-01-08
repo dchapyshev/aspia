@@ -18,6 +18,9 @@
 
 #include "router/settings.h"
 
+#include "base/strings/strcat.h"
+#include "base/strings/string_split.h"
+
 namespace router {
 
 namespace {
@@ -47,6 +50,10 @@ void Settings::reset()
     setPort(DEFAULT_ROUTER_TCP_PORT);
     setPrivateKey(base::ByteArray());
     setMinLogLevel(1);
+    setClientWhiteList(std::vector<std::u16string>());
+    setHostWhiteList(std::vector<std::u16string>());
+    setAdminWhiteList(std::vector<std::u16string>());
+    setRelayWhiteList(std::vector<std::u16string>());
 }
 
 void Settings::flush()
@@ -82,6 +89,78 @@ void Settings::setMinLogLevel(int level)
 int Settings::minLogLevel() const
 {
     return impl_.get<int>("MinLogLevel", 1);
+}
+
+void Settings::setClientWhiteList(const std::vector<std::u16string>& list)
+{
+    std::u16string result;
+
+    for (const auto& entry : list)
+        base::strAppend(&result, { entry, u";" });
+
+    impl_.set<std::u16string>("ClientWhiteList", result);
+}
+
+std::vector<std::u16string> Settings::clientWhiteList() const
+{
+    return base::splitString(impl_.get<std::u16string>("ClientWhiteList"),
+                             u";",
+                             base::TRIM_WHITESPACE,
+                             base::SPLIT_WANT_NONEMPTY);
+}
+
+void Settings::setHostWhiteList(const std::vector<std::u16string>& list)
+{
+    std::u16string result;
+
+    for (const auto& entry : list)
+        base::strAppend(&result, { entry, u";" });
+
+    impl_.set<std::u16string>("HostWhiteList", result);
+}
+
+std::vector<std::u16string> Settings::hostWhiteList() const
+{
+    return base::splitString(impl_.get<std::u16string>("HostWhiteList"),
+                             u";",
+                             base::TRIM_WHITESPACE,
+                             base::SPLIT_WANT_NONEMPTY);
+}
+
+void Settings::setAdminWhiteList(const std::vector<std::u16string>& list)
+{
+    std::u16string result;
+
+    for (const auto& entry : list)
+        base::strAppend(&result, { entry, u";" });
+
+    impl_.set<std::u16string>("AdminWhiteList", result);
+}
+
+std::vector<std::u16string> Settings::adminWhiteList() const
+{
+    return base::splitString(impl_.get<std::u16string>("AdminWhiteList"),
+                             u";",
+                             base::TRIM_WHITESPACE,
+                             base::SPLIT_WANT_NONEMPTY);
+}
+
+void Settings::setRelayWhiteList(const std::vector<std::u16string>& list)
+{
+    std::u16string result;
+
+    for (const auto& entry : list)
+        base::strAppend(&result, { entry, u";" });
+
+    impl_.set<std::u16string>("RelayWhiteList", result);
+}
+
+std::vector<std::u16string> Settings::relayWhiteList() const
+{
+    return base::splitString(impl_.get<std::u16string>("RelayWhiteList"),
+                             u";",
+                             base::TRIM_WHITESPACE,
+                             base::SPLIT_WANT_NONEMPTY);
 }
 
 } // namespace router

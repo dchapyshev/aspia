@@ -74,6 +74,11 @@ private:
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     std::vector<std::unique_ptr<Session>> sessions_;
 
+    std::vector<std::u16string> client_white_list_;
+    std::vector<std::u16string> host_white_list_;
+    std::vector<std::u16string> admin_white_list_;
+    std::vector<std::u16string> relay_white_list_;
+
     DISALLOW_COPY_AND_ASSIGN(Server);
 };
 
