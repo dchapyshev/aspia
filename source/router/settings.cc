@@ -18,6 +18,8 @@
 
 #include "router/settings.h"
 
+#include "base/logging.h"
+#include "base/net/ip_util.h"
 #include "base/strings/strcat.h"
 #include "base/strings/string_split.h"
 
@@ -50,10 +52,10 @@ void Settings::reset()
     setPort(DEFAULT_ROUTER_TCP_PORT);
     setPrivateKey(base::ByteArray());
     setMinLogLevel(1);
-    setClientWhiteList(std::vector<std::u16string>());
-    setHostWhiteList(std::vector<std::u16string>());
-    setAdminWhiteList(std::vector<std::u16string>());
-    setRelayWhiteList(std::vector<std::u16string>());
+    setClientWhiteList(WhiteList());
+    setHostWhiteList(WhiteList());
+    setAdminWhiteList(WhiteList());
+    setRelayWhiteList(WhiteList());
 }
 
 void Settings::flush()
@@ -93,74 +95,86 @@ int Settings::minLogLevel() const
 
 void Settings::setClientWhiteList(const std::vector<std::u16string>& list)
 {
-    std::u16string result;
-
-    for (const auto& entry : list)
-        base::strAppend(&result, { entry, u";" });
-
-    impl_.set<std::u16string>("ClientWhiteList", result);
+    setWhiteList("ClientWhiteList", list);
 }
 
-std::vector<std::u16string> Settings::clientWhiteList() const
+Settings::WhiteList Settings::clientWhiteList() const
 {
-    return base::splitString(impl_.get<std::u16string>("ClientWhiteList"),
-                             u";",
-                             base::TRIM_WHITESPACE,
-                             base::SPLIT_WANT_NONEMPTY);
+    return whiteList("ClientWhiteList");
 }
 
-void Settings::setHostWhiteList(const std::vector<std::u16string>& list)
+void Settings::setHostWhiteList(const WhiteList& list)
 {
-    std::u16string result;
-
-    for (const auto& entry : list)
-        base::strAppend(&result, { entry, u";" });
-
-    impl_.set<std::u16string>("HostWhiteList", result);
+    setWhiteList("HostWhiteList", list);
 }
 
-std::vector<std::u16string> Settings::hostWhiteList() const
+Settings::WhiteList Settings::hostWhiteList() const
 {
-    return base::splitString(impl_.get<std::u16string>("HostWhiteList"),
-                             u";",
-                             base::TRIM_WHITESPACE,
-                             base::SPLIT_WANT_NONEMPTY);
+    return whiteList("HostWhiteList");
 }
 
-void Settings::setAdminWhiteList(const std::vector<std::u16string>& list)
+void Settings::setAdminWhiteList(const WhiteList& list)
 {
-    std::u16string result;
-
-    for (const auto& entry : list)
-        base::strAppend(&result, { entry, u";" });
-
-    impl_.set<std::u16string>("AdminWhiteList", result);
+    setWhiteList("AdminWhiteList", list);
 }
 
-std::vector<std::u16string> Settings::adminWhiteList() const
+Settings::WhiteList Settings::adminWhiteList() const
 {
-    return base::splitString(impl_.get<std::u16string>("AdminWhiteList"),
-                             u";",
-                             base::TRIM_WHITESPACE,
-                             base::SPLIT_WANT_NONEMPTY);
+    return whiteList("AdminWhiteList");
 }
 
-void Settings::setRelayWhiteList(const std::vector<std::u16string>& list)
+void Settings::setRelayWhiteList(const WhiteList& list)
+{
+    setWhiteList("RelayWhiteList", list);
+}
+
+Settings::WhiteList Settings::relayWhiteList() const
+{
+    return whiteList("RelayWhiteList");
+}
+
+void Settings::setWhiteList(std::string_view key, const WhiteList& value)
 {
     std::u16string result;
 
-    for (const auto& entry : list)
-        base::strAppend(&result, { entry, u";" });
+    for (const auto& entry : value)
+    {
+        if (base::isValidIpV4Address(entry) || base::isValidIpV6Address(entry))
+        {
+            base::strAppend(&result, { entry, u";" });
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Invalid IP address '" << entry << "' in " << key;
+        }
+    }
 
-    impl_.set<std::u16string>("RelayWhiteList", result);
+    impl_.set<std::u16string>(key, result);
 }
 
-std::vector<std::u16string> Settings::relayWhiteList() const
+Settings::WhiteList Settings::whiteList(std::string_view key) const
 {
-    return base::splitString(impl_.get<std::u16string>("RelayWhiteList"),
-                             u";",
-                             base::TRIM_WHITESPACE,
-                             base::SPLIT_WANT_NONEMPTY);
+    WhiteList result =
+        base::splitString(impl_.get<std::u16string>(key),
+                          u";",
+                          base::TRIM_WHITESPACE,
+                          base::SPLIT_WANT_NONEMPTY);
+
+    auto it = result.begin();
+    while (it != result.end())
+    {
+        if (base::isValidIpV4Address(*it) || base::isValidIpV6Address(*it))
+        {
+            ++it;
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Invalid IP address '" << *it << "' in " << key;
+            it = result.erase(it);
+        }
+    }
+
+    return result;
 }
 
 } // namespace router
