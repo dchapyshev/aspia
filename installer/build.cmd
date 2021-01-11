@@ -88,7 +88,7 @@ echo "Creating MSI transforms for Aspia Host"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-pt-br.msi" -out "%1\host-pt-br.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-ru-ru.msi" -out "%1\host-ru-ru.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-uk-ua.msi" -out "%1\host-uk-ua.mst"
-"%WIX%\bin\torch" -p -t language "%1\aspia-host-zh-cn.msi" "%1\aspia-host-zh-cn.msi" -out "%1\host-zh-cn.mst"
+"%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-zh-cn.msi" -out "%1\host-zh-cn.mst"
 
 echo "Integration of transforms for Aspia Host"
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-de-de.mst" 1031
