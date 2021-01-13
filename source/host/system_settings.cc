@@ -82,6 +82,9 @@ void settingsMigration(base::JsonSettings* json_settings)
         base::Base64::decodeT<std::string, base::ByteArray>(
             xml_settings.get<std::string>("SeedKey")));
 
+    // Save settings to disk.
+    json_settings->flush();
+
     if (!std::filesystem::remove(old_file, ignored_error))
     {
         LOG(LS_WARNING) << "Failed to delete old settings file";
