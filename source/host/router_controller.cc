@@ -38,7 +38,7 @@ RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner
       peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner)
 {
-    // TODO
+    // Nothing
 }
 
 RouterController::~RouterController() = default;
@@ -63,6 +63,12 @@ void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 void RouterController::hostIdRequest(const std::string& session_name)
 {
     LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
+
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "No active connection to the router";
+        return;
+    }
 
     HostKeyStorage host_key_storage;
     base::ByteArray host_key = host_key_storage.key(session_name);
@@ -91,15 +97,23 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
 void RouterController::resetHostId(base::HostId host_id)
 {
+    LOG(LS_INFO) << "ResetHostId request: " << host_id;
+
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "No active connection to the router";
+        return;
+    }
+
     proto::PeerToRouter message;
     message.mutable_reset_host_id()->set_host_id(host_id);
-
-    LOG(LS_INFO) << "Send reset host ID request";
     channel_->send(base::serialize(message));
 }
 
 void RouterController::onConnected()
 {
+    DCHECK(channel_);
+
     LOG(LS_INFO) << "Connection to the router is established";
 
     channel_->setOwnKeepAlive(true);
