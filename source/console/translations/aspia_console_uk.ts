@@ -47,22 +47,22 @@
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати маршрутизатор</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation type="unfinished">Адреса:</translation>
+        <translation>Адреса:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation type="unfinished">Ім&apos;я користувача:</translation>
+        <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
         <source>Address</source>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../address_book_tab.ui" line="97"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса / ID</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="102"/>
@@ -167,7 +167,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключити згладжування шрифтів</translation>
     </message>
     <message>
         <source>Remote Screen</source>
@@ -202,12 +202,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="56"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Додатково</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="62"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути аудіо</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="76"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="92"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="98"/>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="128"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
 </context>
 <context>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса / ID:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="82"/>
@@ -415,7 +415,7 @@
     <message>
         <location filename="../main_window.ui" line="139"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Інструменти</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="154"/>
@@ -569,12 +569,12 @@
     <message>
         <location filename="../main_window.ui" line="473"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидке підключення</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="570"/>
         <source>Router Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Керування маршрутизатором</translation>
     </message>
     <message>
         <source>Fast Connect...</source>
@@ -593,7 +593,7 @@
     <message>
         <location filename="../main_window.ui" line="494"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховати</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="506"/>
@@ -628,17 +628,17 @@
     <message>
         <location filename="../main_window.ui" line="535"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="546"/>
         <source>Remember latest</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ятати останні</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="558"/>
         <source>Copy Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопіювати комп&apos;ютер</translation>
     </message>
 </context>
 <context>
@@ -837,17 +837,17 @@
     <message>
         <location filename="../fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидке підключення</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса / ID</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип сесії</translation>
     </message>
     <message>
         <source>Address:</source>
@@ -960,7 +960,7 @@
     <message>
         <location filename="../address_book_dialog.cc" line="100"/>
         <source>Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресна книга</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="232"/>
@@ -1027,17 +1027,17 @@
     <message>
         <location filename="../address_book_dialog.cc" line="330"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="341"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль маршрутизатора не може бути порожнім.</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -1143,7 +1143,7 @@
     <message>
         <location filename="../computer_dialog.cc" line="62"/>
         <source>(copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>(копіювати)</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="73"/>
@@ -1360,28 +1360,28 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="76"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Буде створено список введених адрес. Продовжити?</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="182"/>
         <location filename="../fast_connect_dialog.cc" line="202"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="183"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="203"/>
         <source>An invalid computer address was entered.</source>
-        <translation type="unfinished">Введено невірну адресу комп&apos;ютера.</translation>
+        <translation>Введено невірну адресу комп&apos;ютера.</translation>
     </message>
 </context>
 <context>
@@ -1439,12 +1439,12 @@
     <message>
         <location filename="../main_window.cc" line="837"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Список нещодавніх адрес буде очищено. Продовжити?</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="870"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховати</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="885"/>
@@ -1454,7 +1454,7 @@
     <message>
         <location filename="../main_window.cc" line="1151"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
         <source>&lt;empty&gt;</source>
@@ -1481,7 +1481,7 @@
     <message>
         <location filename="../mru_action.cc" line="29"/>
         <source>&lt;empty&gt;</source>
-        <translation type="unfinished">&lt;порожньо&gt;</translation>
+        <translation>&lt;порожньо&gt;</translation>
     </message>
 </context>
 <context>
@@ -1521,7 +1521,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочірня група</numerusform>
             <numerusform>%n дочірні групи</numerusform>
             <numerusform>%n дочірніх груп</numerusform>
@@ -1530,7 +1530,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочірній комп&apos;ютер</numerusform>
             <numerusform>%n дочірні комп&apos;ютери</numerusform>
             <numerusform>%n дочірніх комп&apos;ютерів</numerusform>

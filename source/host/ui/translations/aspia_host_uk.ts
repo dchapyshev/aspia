@@ -7,128 +7,128 @@
         <location filename="../config_dialog.ui" line="14"/>
         <location filename="../config_dialog.ui" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="30"/>
         <source>Service</source>
-        <translation type="unfinished">Служба</translation>
+        <translation>Служба</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="77"/>
         <source>Incoming Connections</source>
-        <translation type="unfinished">Вхідні підключення</translation>
+        <translation>Вхідні підключення</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
-        <translation type="unfinished">Порт:</translation>
+        <translation>Порт:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="125"/>
         <source>Import...</source>
-        <translation type="unfinished">Імпорт...</translation>
+        <translation>Імпорт...</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="132"/>
         <source>Export...</source>
-        <translation type="unfinished">Експорт...</translation>
+        <translation>Експорт...</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="156"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="162"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати маршрутизатор</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="174"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="193"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Публічний ключ:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="208"/>
         <location filename="../config_dialog.ui" line="301"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="222"/>
         <source>Add new user</source>
-        <translation type="unfinished">Додати нового окристувача</translation>
+        <translation>Додати нового окристувача</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="242"/>
         <source>Edit user</source>
-        <translation type="unfinished">Редагувати окристувача</translation>
+        <translation>Редагувати окристувача</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="262"/>
         <source>Delete user</source>
-        <translation type="unfinished">Видалити користувача</translation>
+        <translation>Видалити користувача</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="310"/>
         <source>Update</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="316"/>
         <source>Update Server</source>
-        <translation type="unfinished">Сервер оновлень</translation>
+        <translation>Сервер оновлень</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="322"/>
         <source>Use custom update server</source>
-        <translation type="unfinished">Використовувати інший сервер оновлень</translation>
+        <translation>Використовувати інший сервер оновлень</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="331"/>
         <source>Server:</source>
-        <translation type="unfinished">Сервер:</translation>
+        <translation>Сервер:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="381"/>
         <source>Check for updates</source>
-        <translation type="unfinished">Перевірити наявність оновлень</translation>
+        <translation>Перевірити наявність оновлень</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Додатково</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Захоплювати відео за допомогою:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="439"/>
         <source>Add</source>
-        <translation type="unfinished">Додати</translation>
+        <translation>Додати</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="448"/>
         <source>Modify</source>
-        <translation type="unfinished">Змінити</translation>
+        <translation>Змінити</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="457"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../host_main.cc" line="100"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="113"/>
@@ -326,57 +326,57 @@
     <message>
         <location filename="../main_window.ui" line="26"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="96"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш ID</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="160"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="287"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="333"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Допомога</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="341"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="354"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Вихід</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="363"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Онлайн допомога...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="375"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Про</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="384"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="389"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховати</translation>
     </message>
 </context>
 <context>
@@ -384,12 +384,12 @@
     <message>
         <location filename="../notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="unfinished">Підключення</translation>
+        <translation>Підключення</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="330"/>
         <source>Disconnect All</source>
-        <translation type="unfinished">Відключити все</translation>
+        <translation>Відключити всі</translation>
     </message>
 </context>
 <context>
@@ -433,33 +433,33 @@
         <location filename="../settings_util.cc" line="36"/>
         <location filename="../settings_util.cc" line="52"/>
         <source>Information</source>
-        <translation type="unfinished">Інформація</translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="37"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished">Конфігурацію імпортовано успішно.</translation>
+        <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="53"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished">Кофігурацію експортовано успішно.</translation>
+        <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="74"/>
         <location filename="../settings_util.cc" line="87"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="75"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
+        <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="88"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished">Неможливо записати цільовий файл.</translation>
+        <translation>Неможливо записати цільовий файл.</translation>
     </message>
 </context>
 <context>
@@ -521,13 +521,13 @@
     <message>
         <location filename="../config_dialog.cc" line="140"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартний</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="313"/>
         <location filename="../config_dialog.cc" line="343"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON файли (*.json)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="322"/>
@@ -561,12 +561,12 @@
     <message>
         <location filename="../config_dialog.cc" line="398"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено неправильну адресу маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="411"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено неправильний відкритий ключ маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="524"/>
@@ -780,59 +780,59 @@
     <message>
         <location filename="../main_window.cc" line="59"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="108"/>
         <location filename="../main_window.cc" line="303"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="185"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Не доступно</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="238"/>
         <source>Connecting to a router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="405"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка підключення</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="234"/>
         <location filename="../main_window.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="395"/>
         <source>Connecting to a router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="242"/>
         <source>Connected to a router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="400"/>
         <source>Connected to a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="246"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="308"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховати</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="340"/>
@@ -842,7 +842,7 @@
     <message>
         <location filename="../main_window.cc" line="341"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>
 </context>
 <context>
@@ -884,7 +884,7 @@
     <message>
         <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, -,  .,@.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="140"/>
