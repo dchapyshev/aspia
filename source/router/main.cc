@@ -134,6 +134,9 @@ void createConfig()
         return;
     }
 
+    user.sessions = proto::ROUTER_SESSION_ADMIN | proto::ROUTER_SESSION_CLIENT;
+    user.flags = base::User::ENABLED;
+
     if (!db->addUser(user))
     {
         std::cout << "Failed to add user to database" << std::endl;
