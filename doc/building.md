@@ -14,6 +14,7 @@ Instructions for building the project
 * libvpx
 * libyuv
 * openssl
+* opus
 * protobuf
 * qt5-base
 * qt5-translations
