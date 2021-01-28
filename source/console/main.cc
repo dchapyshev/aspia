@@ -16,8 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
+#include "qt_base/qt_logging.h"
 
 #include <QCommandLineParser>
 
@@ -33,6 +35,9 @@ int main(int argc, char *argv[])
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     console::Application application(argc, argv);
+
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Command line: " << application.arguments();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Console", "Aspia Console"));

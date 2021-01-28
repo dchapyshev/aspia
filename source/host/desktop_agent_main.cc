@@ -21,6 +21,7 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
+#include "build/version.h"
 #include "host/desktop_session_agent.h"
 
 void desktopAgentMain(int argc, const char* const* argv)
@@ -29,6 +30,9 @@ void desktopAgentMain(int argc, const char* const* argv)
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
 
     if (command_line->hasSwitch(u"channel_id"))
     {

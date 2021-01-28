@@ -18,7 +18,7 @@
 
 #include "client/client_main.h"
 
-#include "base/logging.h"
+#include "qt_base/qt_logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/ui/application.h"
@@ -42,6 +42,9 @@ int clientMain(int argc, char* argv[])
     client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     client::Application application(argc, argv);
+
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Command line: " << application.arguments();
 
     QCommandLineOption address_option("address",
         QApplication::translate("Client", "Remote computer address."), "address");

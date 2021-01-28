@@ -19,6 +19,7 @@
 #include "host/win/service_main.h"
 
 #include "base/logging.h"
+#include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/win/service.h"
 
@@ -27,6 +28,8 @@ namespace host {
 void hostServiceMain()
 {
     base::initLogging();
+
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
 
     if (!integrityCheck())
     {

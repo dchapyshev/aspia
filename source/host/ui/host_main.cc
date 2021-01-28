@@ -20,6 +20,7 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
@@ -71,6 +72,9 @@ int hostMain(int argc, char* argv[])
     Q_INIT_RESOURCE(common_translations);
 
     base::CommandLine command_line(argc, argv);
+
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Command line: " << command_line.commandLineString();
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (!is_hidden)
