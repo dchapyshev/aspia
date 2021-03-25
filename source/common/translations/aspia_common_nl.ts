@@ -39,12 +39,12 @@
     <message>
         <location filename="../ui/download_dialog.ui" line="14"/>
         <source>Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>De update wordt gedownload...</translation>
     </message>
 </context>
 <context>
@@ -52,17 +52,17 @@
     <message>
         <location filename="../session_type.cc" line="30"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureaublad Beheer</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="33"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureaublad Weergave</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestands Overdracht</translation>
     </message>
 </context>
 <context>
@@ -70,7 +70,7 @@
     <message>
         <location filename="../ui/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindings Status</translation>
     </message>
 </context>
 <context>
@@ -78,42 +78,42 @@
     <message>
         <location filename="../ui/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Update</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Controleren op updates</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="59"/>
         <source>Current version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Huidige versie:</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="66"/>
         <source>Available version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschikbare versie:</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="75"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="136"/>
         <source>Update description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Update beschrijving:</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="181"/>
         <source>Update now!</source>
-        <translation type="unfinished"></translation>
+        <translation>Update nu!</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.ui" line="188"/>
         <source>Close</source>
-        <translation type="unfinished">Sluiten</translation>
+        <translation>Sluiten</translation>
     </message>
 </context>
 <context>
@@ -194,12 +194,12 @@
     <message>
         <location filename="../ui/download_dialog.cc" line="51"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.cc" line="52"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een probleem opgetreden bij het downloaden van de update: %1</translation>
     </message>
 </context>
 <context>
@@ -207,62 +207,62 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="55"/>
         <source>Receiving information...</source>
-        <translation type="unfinished"></translation>
+        <translation>Informatie verkrijgen...</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="106"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuleer update controle. Een ogenblik geduld aub.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="125"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="126"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een probleem opgetreden bij het downloaden van de update informatie.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="147"/>
         <source>No updates available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen updates beschikbaar.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="157"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished"></translation>
+        <translation>De update wordt gedownload. Nadat de download voltooid is zal de applicatie automatisch sluiten.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="159"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle verbonden sessies worden afgesloten. Er kan geen verbinding gemaakt worden tot de update voltooid is.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="161"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle onopgeslagen data zal verloren gaan.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="162"/>
         <source>Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Doorgaan?</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="165"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="175"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een probleem opgetreden bij het installeren van de update: %1</translation>
     </message>
 </context>
 </TS>

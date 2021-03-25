@@ -11,17 +11,17 @@
     <message>
         <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers Naam</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="46"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Eenmalige wachtwoord verbinding</translation>
     </message>
     <message>
         <source>User Name:</source>
@@ -37,37 +37,37 @@
     <message>
         <location filename="../client_main.cc" line="47"/>
         <source>Remote computer address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres van computer op afstand</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="50"/>
         <source>Remote computer port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poort van computer op afstand</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="54"/>
         <source>Name of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="62"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="98"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="99"/>
         <source>Incorrect session type entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongeldig sessie type ingevoerd.</translation>
     </message>
 </context>
 <context>
@@ -106,32 +106,32 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="24"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="30"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik een router</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="39"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="unfinished">Gebruikers Naam:</translation>
+        <translation>Gebruikers Naam:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="unfinished">Wachtwoord:</translation>
+        <translation>Wachtwoord:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../ui/client_window.ui" line="14"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
     <message>
         <source>Address</source>
@@ -152,47 +152,47 @@
     <message>
         <location filename="../ui/client_window.ui" line="49"/>
         <source>ID / Address</source>
-        <translation type="unfinished"></translation>
+        <translation>ID / Adres</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="121"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie Type</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="257"/>
         <source>Connect</source>
-        <translation type="unfinished">Verbinden</translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="290"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Taal</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="295"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="311"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Online hulp...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="320"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="329"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="338"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Afsluiten</translation>
     </message>
     <message>
         <source>Session Type:</source>
@@ -354,7 +354,7 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="245"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaling</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="256"/>
@@ -410,23 +410,23 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="386"/>
         <source>Fit window</source>
-        <translation type="unfinished"></translation>
+        <translation>Scherm passend maken</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="395"/>
         <source>Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimaliseren</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="398"/>
         <source>Minimize window</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimaliseer scherm</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="403"/>
         <location filename="../ui/desktop_panel.ui" line="406"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistieken</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="219"/>
@@ -455,77 +455,77 @@
     <message>
         <location filename="../ui/file_error_code.cc" line="32"/>
         <source>Successfully completed</source>
-        <translation type="unfinished">Succesvol voltooid</translation>
+        <translation>Succesvol voltooid</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="36"/>
         <source>Invalid request</source>
-        <translation type="unfinished">Ongeldig verzoek</translation>
+        <translation>Ongeldig verzoek</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="40"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished">Ongeldige map of bestandsnaam</translation>
+        <translation>Ongeldige map of bestandsnaam</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="44"/>
         <source>Path not found</source>
-        <translation type="unfinished">Pad niet gevonden</translation>
+        <translation>Pad niet gevonden</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="48"/>
         <source>Path already exists</source>
-        <translation type="unfinished">Pad bestaat al</translation>
+        <translation>Pad bestaat al</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="52"/>
         <source>No drives found</source>
-        <translation type="unfinished">Geen schijven gevonden</translation>
+        <translation>Geen schijven gevonden</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="56"/>
         <source>Disk full</source>
-        <translation type="unfinished">Schijf vol</translation>
+        <translation>Schijf vol</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="60"/>
         <source>Access denied</source>
-        <translation type="unfinished">Toegang geweigerd</translation>
+        <translation>Toegang geweigerd</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="64"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished">Kon niet openen om te lezen</translation>
+        <translation>Kon niet openen om te lezen</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="68"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished">Kon bestand niet aanmaken of vervangen</translation>
+        <translation>Kon bestand niet aanmaken of vervangen</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="72"/>
         <source>Could not write to file</source>
-        <translation type="unfinished">Kon het bestand niet schrijven</translation>
+        <translation>Kon het bestand niet schrijven</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="76"/>
         <source>Could not read file</source>
-        <translation type="unfinished">Kon het bestand niet lezen</translation>
+        <translation>Kon het bestand niet lezen</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="80"/>
         <source>Drive not ready</source>
-        <translation type="unfinished">Schijf niet klaar</translation>
+        <translation>Schijf niet klaar</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="84"/>
         <source>No logged in user</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen ingelogde gebruiker</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="88"/>
         <source>Unknown error code</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende error code</translation>
     </message>
 </context>
 <context>
@@ -541,7 +541,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="165"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Omhoog</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="168"/>
@@ -551,7 +551,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="177"/>
         <source>Refresh</source>
-        <translation type="unfinished">Vernieuwen</translation>
+        <translation>Vernieuwen</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="180"/>
@@ -561,7 +561,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="192"/>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieuwe Map</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="195"/>
@@ -571,7 +571,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="207"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="210"/>
@@ -759,96 +759,96 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="20"/>
         <source>Router Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Router Beheer</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="37"/>
         <source>Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Hosts</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="45"/>
         <location filename="../ui/router_manager_window.ui" line="150"/>
         <source>Connections count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal verbindingen:</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="79"/>
         <location filename="../ui/router_manager_window.ui" line="175"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindings Tijd</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="74"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP Adres</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="89"/>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="94"/>
         <source>Value</source>
-        <translation type="unfinished">Waarde</translation>
+        <translation>Waarde</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="185"/>
         <source>Version</source>
-        <translation type="unfinished">Versie</translation>
+        <translation>Versie</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="69"/>
         <location filename="../ui/router_manager_window.ui" line="190"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer Naam</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="195"/>
         <source>Operating System</source>
-        <translation type="unfinished">Besturingssysteem</translation>
+        <translation>Besturingssysteem</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="118"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinding verbreken</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="125"/>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle verbindingen verbreken</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="132"/>
         <location filename="../ui/router_manager_window.ui" line="218"/>
         <source>Refresh</source>
-        <translation type="unfinished">Vernieuwen</translation>
+        <translation>Vernieuwen</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="142"/>
         <source>Relay</source>
-        <translation type="unfinished"></translation>
+        <translation>Relay</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="170"/>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="180"/>
         <source>Pool Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Pool Grootte</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="228"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="305"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers Naam</translation>
     </message>
 </context>
 <context>
@@ -856,7 +856,7 @@
     <message>
         <location filename="../ui/router_status_dialog.ui" line="14"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
 </context>
 <context>
@@ -864,32 +864,32 @@
     <message>
         <location filename="../ui/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers Eigenschappen</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="27"/>
         <source>Name:</source>
-        <translation type="unfinished">Naam:</translation>
+        <translation>Naam:</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="34"/>
         <source>Password:</source>
-        <translation type="unfinished">Wachtwoord:</translation>
+        <translation>Wachtwoord:</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="41"/>
         <source>Password (retry):</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord (opnieuw):</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers account uitschakelen</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>Toegestande Sessie Types:</translation>
     </message>
 </context>
 <context>
@@ -908,17 +908,17 @@
     <message>
         <location filename="../ui/statistics_dialog.ui" line="14"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistieken</translation>
     </message>
     <message>
         <location filename="../ui/statistics_dialog.ui" line="36"/>
         <source>Parameter</source>
-        <translation type="unfinished">Argument</translation>
+        <translation>Argument</translation>
     </message>
     <message>
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
-        <translation type="unfinished">Waarde</translation>
+        <translation>Waarde</translation>
     </message>
 </context>
 <context>
@@ -1106,7 +1106,7 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="452"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Root Map</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="455"/>
@@ -1145,17 +1145,17 @@
         <location filename="../ui/authorization_dialog.cc" line="113"/>
         <location filename="../ui/authorization_dialog.cc" line="123"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="114"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikersnaam veld mag niet leeg zijn.</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="124"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
 </context>
 <context>
@@ -1338,22 +1338,22 @@
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="91"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een ongelid router adres ingevoerd.</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>De gebruikersnaam mag niet leeg zijn, en alleen letters, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="111"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="135"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -1430,17 +1430,17 @@
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="202"/>
         <source>An invalid computer address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een ongelid computer adres ingevoerd.</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een host ID ingevoerd, maar de router was niet geconfigureerd. Configureer de router voor het maken van een verbinding.</translation>
     </message>
 </context>
 <context>
@@ -1475,7 +1475,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="211"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeldscherm %1 (primair)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="213"/>
@@ -1513,7 +1513,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="376"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaal</translation>
     </message>
 </context>
 <context>
@@ -1699,12 +1699,12 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="116"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
+        <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="121"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Kon &quot;%1&quot; niet verwijderen: %2.</translation>
+        <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="128"/>
@@ -1831,37 +1831,37 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="255"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een fout opgetreden bij het maken van de bestands lijst voor kopieren</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="261"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon de map &quot;%1&quot; niet maken: %2</translation>
+        <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="270"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet maken: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="278"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet openen: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="286"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="294"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
+        <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="302"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend probleem bij het kopieren van bestanden</translation>
     </message>
 </context>
 <context>
@@ -1890,7 +1890,7 @@
         <location filename="../ui/qt_desktop_window.cc" line="230"/>
         <location filename="../ui/qt_desktop_window.cc" line="561"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="223"/>
