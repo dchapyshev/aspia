@@ -7,128 +7,128 @@
         <location filename="../config_dialog.ui" line="14"/>
         <location filename="../config_dialog.ui" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished">Basis</translation>
+        <translation>Basis</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="30"/>
         <source>Service</source>
-        <translation type="unfinished">Service</translation>
+        <translation>Service</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="77"/>
         <source>Incoming Connections</source>
-        <translation type="unfinished">Binnenkomende Verbindingen</translation>
+        <translation>Binnenkomende Verbindingen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
-        <translation type="unfinished">Poort:</translation>
+        <translation>Poort:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="125"/>
         <source>Import...</source>
-        <translation type="unfinished">Importeren...</translation>
+        <translation>Importeren...</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="132"/>
         <source>Export...</source>
-        <translation type="unfinished">Exporteren...</translation>
+        <translation>Exporteren...</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="156"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="162"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik een router</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="174"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="193"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Public Key:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="208"/>
         <location filename="../config_dialog.ui" line="301"/>
         <source>Users</source>
-        <translation type="unfinished">Gebruikers</translation>
+        <translation>Gebruikers</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="222"/>
         <source>Add new user</source>
-        <translation type="unfinished">Nieuwe gebruiker toevoegen</translation>
+        <translation>Nieuwe gebruiker toevoegen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="242"/>
         <source>Edit user</source>
-        <translation type="unfinished">Gebruiker bewerken</translation>
+        <translation>Gebruiker bewerken</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="262"/>
         <source>Delete user</source>
-        <translation type="unfinished">Gebruiker verwijderen</translation>
+        <translation>Gebruiker verwijderen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="310"/>
         <source>Update</source>
-        <translation type="unfinished">Updaten</translation>
+        <translation>Updaten</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="316"/>
         <source>Update Server</source>
-        <translation type="unfinished">Update Server</translation>
+        <translation>Update Server</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="322"/>
         <source>Use custom update server</source>
-        <translation type="unfinished">Aangepaste update server gebruiken</translation>
+        <translation>Aangepaste update server gebruiken</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="331"/>
         <source>Server:</source>
-        <translation type="unfinished">Server:</translation>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="381"/>
         <source>Check for updates</source>
-        <translation type="unfinished">Controleer op updates</translation>
+        <translation>Controleer op updates</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="391"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerd</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="399"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorkeurs video input:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="439"/>
         <source>Add</source>
-        <translation type="unfinished">Toevoegen</translation>
+        <translation>Toevoegen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="448"/>
         <source>Modify</source>
-        <translation type="unfinished">Aanpassen</translation>
+        <translation>Aanpassen</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="457"/>
         <source>Delete</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../host_main.cc" line="100"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicatie integriteits controle gefaald. Missende of ontbrekende onderdelen.</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="113"/>
@@ -326,57 +326,57 @@
     <message>
         <location filename="../main_window.ui" line="26"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="96"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Uw ID</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="160"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="287"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="333"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="341"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Taal</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="354"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Exit</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="363"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Online Hulp...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="375"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="384"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="389"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbergen</translation>
     </message>
 </context>
 <context>
@@ -384,12 +384,12 @@
     <message>
         <location filename="../notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="unfinished">Verbindingen</translation>
+        <translation>Verbindingen</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="330"/>
         <source>Disconnect All</source>
-        <translation type="unfinished">Alle Verbreken</translation>
+        <translation>Alle Verbreken</translation>
     </message>
 </context>
 <context>
@@ -413,33 +413,33 @@
         <location filename="../settings_util.cc" line="36"/>
         <location filename="../settings_util.cc" line="52"/>
         <source>Information</source>
-        <translation type="unfinished">Informatie</translation>
+        <translation>Informatie</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="37"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished">De configuratie is successvol geimporteerd.</translation>
+        <translation>De configuratie is successvol geimporteerd.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="53"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>De configuratie is successvol geëxporteerd.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="74"/>
         <location filename="../settings_util.cc" line="87"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="75"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon het bronbestand niet lezen: het bestand is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="88"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan niet schrijven naar het bestand.</translation>
     </message>
 </context>
 <context>
@@ -501,13 +501,13 @@
     <message>
         <location filename="../config_dialog.cc" line="140"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="313"/>
         <location filename="../config_dialog.cc" line="343"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-bestanden (*.json)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="322"/>
@@ -541,12 +541,12 @@
     <message>
         <location filename="../config_dialog.cc" line="398"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongeldig router adres ingevoerd.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="411"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkeerde router public key ingevoerd.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="524"/>
@@ -740,59 +740,59 @@
     <message>
         <location filename="../main_window.cc" line="59"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="108"/>
         <location filename="../main_window.cc" line="303"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Weergeven</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="185"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet beschikbaar</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="238"/>
         <source>Connecting to a router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="405"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindings error</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="234"/>
         <location filename="../main_window.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="395"/>
         <source>Connecting to a router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden naar een router...</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="242"/>
         <source>Connected to a router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbonden met een router %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="400"/>
         <source>Connected to a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbonden met een router</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="246"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="308"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbergen</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="340"/>
@@ -802,7 +802,7 @@
     <message>
         <location filename="../main_window.cc" line="341"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
 </context>
 <context>
@@ -844,7 +844,7 @@
     <message>
         <location filename="../user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, ., @ karakters bevatten.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="140"/>
