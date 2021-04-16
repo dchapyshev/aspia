@@ -5,64 +5,64 @@
     <name>AddressBookDialog</name>
     <message>
         <location filename="../address_book_dialog.ui" line="17"/>
-        <source>Address Book Properties</source>
-        <translation type="unfinished"></translation>
+        <source>Properties Book Addresses</source>
+        <translation>Propiedades Libro Direcciones</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cifrado:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="58"/>
         <location filename="../address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraseña:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Repite Contraseña:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentarios:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation">Usa un router</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de Usuario:</translation>
     </message>
 </context>
 <context>
@@ -70,27 +70,27 @@
     <message>
         <location filename="../address_book_tab.ui" line="92"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre del Ordenador</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="97"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección / ID</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="102"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentario</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="107"/>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Creado</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="112"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificado</translation>
     </message>
 </context>
 <context>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propiedades del Ordenador</translation>
     </message>
 </context>
 <context>
@@ -106,62 +106,62 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="38"/>
         <source>Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="141"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloquear entrada remota</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="69"/>
         <source>Enable cursor shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar la forma del cursor</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="56"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Características</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="62"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar audio</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="76"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar portapapeles</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="92"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Apariencia</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="98"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar efectos de escritorio</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="105"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar fondo de escritorio</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar suavizado de fuentes</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="128"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloquear ordenador al desconectar</translation>
     </message>
 </context>
 <context>
@@ -169,32 +169,32 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="51"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Famila Grupo</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección / ID:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="82"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de Usuario:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="96"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraseña:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="141"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentario:</translation>
     </message>
 </context>
 <context>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar elemento secundario</translation>
     </message>
 </context>
 <context>
@@ -210,22 +210,22 @@
     <message>
         <location filename="../computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propiedades del Grupo de Ordenadores</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="27"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="34"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupo Padre:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="68"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Comentario:</translation>
     </message>
 </context>
 <context>
@@ -233,7 +233,7 @@
     <message>
         <location filename="../computer_group_item.cc" line="130"/>
         <source>Root Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupo raíz</translation>
     </message>
 </context>
 <context>
@@ -241,17 +241,17 @@
     <message>
         <location filename="../main.cc" line="38"/>
         <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Consola</translation>
     </message>
     <message>
         <location filename="../main.cc" line="41"/>
         <source>file</source>
-        <translation type="unfinished"></translation>
+        <translation>archivo</translation>
     </message>
     <message>
         <location filename="../main.cc" line="42"/>
         <source>The file to open.</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo para abrir.</translation>
     </message>
 </context>
 <context>
@@ -259,128 +259,128 @@
     <message>
         <location filename="../main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Consola</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="62"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="66"/>
         <source>Recent open</source>
-        <translation type="unfinished"></translation>
+        <translation>Abierto reciente</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="85"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="100"/>
         <source>&amp;Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tipo de Sesión</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="108"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ayuda</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="119"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ver</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="123"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Idioma</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="139"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramientas</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="154"/>
         <location filename="../main_window.ui" line="450"/>
         <source>Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra de Herramientas</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="198"/>
         <source>&amp;New address book</source>
-        <translation type="unfinished"></translation>
+        <translation">& amp;Nueva libreta de direcciones</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="201"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="210"/>
         <source>&amp;Open address book...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Abrir libreta de direcciones...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="213"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="225"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Guardar</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="228"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="236"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar &amp;como..</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="239"/>
         <source>Ctrl+Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="247"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cerrar</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="250"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="259"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="271"/>
         <source>Add Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir Grupo de Ordenadores</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="283"/>
         <source>Modify Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar Grupo de Ordenadores</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="295"/>
         <source>Delete Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar Grupo de Ordenadores</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="307"/>
         <source>Add Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir Ordenador</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="319"/>
