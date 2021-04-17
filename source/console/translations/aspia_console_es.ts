@@ -47,12 +47,12 @@
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation>Ruta</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation>Usa un router</translation>
+        <translation>Usa una Ruta</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
@@ -310,7 +310,7 @@
     <message>
         <location filename="../main_window.ui" line="198"/>
         <source>&amp;New address book</source>
-        <translation>&amp;Nueva libreta de direcciones</translation>
+        <translation>&amp;Nueva libro de direcciones</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="201"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../main_window.ui" line="210"/>
         <source>&amp;Open address book...</source>
-        <translation>&amp;Abrir libreta de direcciones...</translation>
+        <translation>&amp;Abrir libro de direcciones...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="213"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="../main_window.ui" line="403"/>
         <source>Address Book Properties</source>
-        <translation>Propiedades Libreta de Direcciones</translation>
+        <translation>Propiedades Libro de Direcciones</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="412"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../main_window.ui" line="570"/>
         <source>Router Manage</source>
-        <translation>Administrar Router</translation>
+        <translation>Administrar Ruta</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="481"/>
@@ -488,7 +488,7 @@
     <message>
         <location filename="../main_window.ui" line="517"/>
         <source>Close all</source>
-        <translation">Cerrar todo</translation>
+        <translation>Cerrar todo</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="520"/>
@@ -661,7 +661,7 @@
     <message>
         <location filename="../address_book_dialog.cc" line="330"/>
         <source>An invalid router address was entered.</source>
-        <translation>Se ingresó una dirección de router no válida.</translation>
+        <translation>Se ingresó una dirección de ruta no válida.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="341"/>
@@ -671,7 +671,7 @@
     <message>
         <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
-        <translation>Router contraseña no puede estar vacío.</translation>
+        <translation>Contraseña de la Ruta no puede estar vacío.</translation>
     </message>
 </context>
 <context>
@@ -684,7 +684,7 @@
     <message>
         <location filename="../address_book_tab.cc" line="219"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>No se puede leer el archivo de la libreta de direcciones &quot;%1&quot;.</translation>
+        <translation>No se puede leer el archivo del libro de direcciones &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="228"/>
@@ -745,13 +745,13 @@
     <message>
         <location filename="../address_book_tab.cc" line="878"/>
         <source>Root Group</source>
-        <translation">Grupo Raíz</translation>
+        <translation>Grupo Raíz</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="889"/>
         <location filename="../address_book_tab.cc" line="903"/>
         <source>Warning</source>
-        <translation">Advertencia</translation>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="891"/>
@@ -869,7 +869,7 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="183"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>Se especifica la conexión por ID, pero el router no está configurado. Verifique los parámetros del router en las propiedades de la libreta de direcciones.</translation>
+        <translation>Se especifica la conexión por ID, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="203"/>
@@ -888,7 +888,7 @@
     <message>
         <location filename="../main_window.cc" line="165"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation>Archivo de libreta de direcciones anclado &quot;%1&quot; no se encontró.&lt;br/&gt;Este archivo no se fijará.</translation>
+        <translation>El archivo libro de direcciones anclado &quot;%1&quot; no se encontró.&lt;br/&gt;Este archivo no se fijará.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="239"/>
