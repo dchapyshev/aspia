@@ -134,18 +134,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="99"/>
-        <location filename="../host_main.cc" line="112"/>
+        <location filename="../host_main.cc" line="103"/>
+        <location filename="../host_main.cc" line="116"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="100"/>
+        <location filename="../host_main.cc" line="104"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="113"/>
+        <location filename="../host_main.cc" line="117"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
