@@ -122,7 +122,7 @@ bool DataCryptorChaCha20Poly1305::encrypt(std::string_view in, std::string* out)
                           reinterpret_cast<uint8_t*>(out->data()) + kHeaderSize,
                           &length,
                           reinterpret_cast<const uint8_t*>(in.data()),
-                          in.size()) != 1)
+                          static_cast<int>(in.size())) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
         return false;
@@ -171,7 +171,7 @@ bool DataCryptorChaCha20Poly1305::decrypt(std::string_view in, std::string* out)
                           reinterpret_cast<uint8_t*>(out->data()),
                           &length,
                           reinterpret_cast<const uint8_t*>(in.data()) + kHeaderSize,
-                          in.size() - kHeaderSize) != 1)
+                          static_cast<int>(in.size() - kHeaderSize)) != 1)
     {
         LOG(LS_WARNING) << "EVP_DecryptUpdate failed";
         return false;

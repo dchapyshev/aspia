@@ -64,7 +64,7 @@ std::string BigNum::toStdString() const
         return std::string();
 
     std::string result;
-    result.resize(length);
+    result.resize(static_cast<std::string::size_type>(length));
 
     BN_bn2bin(num_.get(), reinterpret_cast<uint8_t*>(result.data()));
     return result;
@@ -80,7 +80,7 @@ ByteArray BigNum::toByteArray() const
         return ByteArray();
 
     ByteArray result;
-    result.resize(length);
+    result.resize(static_cast<std::string::size_type>(length));
 
     BN_bn2bin(num_.get(), result.data());
     return result;

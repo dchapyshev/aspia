@@ -96,7 +96,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 
     if (EVP_EncryptUpdate(ctx_.get(),
                           reinterpret_cast<uint8_t*>(out) + kTagSize, &length,
-                          reinterpret_cast<const uint8_t*>(in), in_size) != 1)
+                          reinterpret_cast<const uint8_t*>(in), static_cast<int>(in_size)) != 1)
     {
         LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
         return false;
