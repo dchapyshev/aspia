@@ -33,8 +33,8 @@ namespace host {
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
-      session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_proxy_(std::make_shared<DesktopSessionProxy>()),
+      session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
     // Nothing
