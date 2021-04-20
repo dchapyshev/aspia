@@ -340,7 +340,7 @@
     <message>
         <location filename="../main_window.ui" line="236"/>
         <source>Save &amp;as...</source>
-        <translation>Guardar &amp;como..</translation>
+        <translation>Guardar &amp;como...</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="239"/>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../main_window.ui" line="473"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexión rápida</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="570"/>
@@ -615,7 +615,10 @@
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="232"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</translation>
+        <translation>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="238"/>
@@ -625,7 +628,10 @@
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="245"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</translation>
+        <translation>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="271"/>
@@ -635,7 +641,10 @@
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="277"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>La contraseña no puede estar vacía y no debe exceder los %n caracteres.</translation>
+        <translation>
+            <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracter.</numerusform>
+            <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="285"/>
@@ -645,7 +654,10 @@
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="288"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracteres.</translation>
+        <translation>
+            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
+            <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="292"/>
@@ -797,7 +809,10 @@
     <message numerus="yes">
         <location filename="../computer_dialog_general.cc" line="107"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</translation>
+        <translation>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.cc" line="115"/>
@@ -812,7 +827,10 @@
     <message numerus="yes">
         <location filename="../computer_dialog_general.cc" line="135"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</translation>
+        <translation>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.cc" line="152"/>
@@ -830,7 +848,10 @@
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="68"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</translation>
+        <translation>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
+            <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="76"/>
@@ -840,7 +861,10 @@
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</translation>
+        <translation>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
+            <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracteres.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="112"/>
@@ -991,12 +1015,18 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation>%n grupo(s) secundario(s)</translation>
+        <translation>
+            <numerusform>%n grupo secundario</numerusform>
+            <numerusform>%n grupos secundarios</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">%n ordenador(es) secundario(s)</translation>
+        <translation>
+            <numerusform>%n ordenador secundario</numerusform>
+            <numerusform>%n ordenadores secundarios</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

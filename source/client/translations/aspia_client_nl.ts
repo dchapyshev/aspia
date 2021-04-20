@@ -35,37 +35,37 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="47"/>
+        <location filename="../client_main.cc" line="50"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="50"/>
+        <location filename="../client_main.cc" line="53"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="54"/>
+        <location filename="../client_main.cc" line="57"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="60"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="65"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="98"/>
+        <location filename="../client_main.cc" line="101"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="99"/>
+        <location filename="../client_main.cc" line="102"/>
         <source>Incorrect session type entered.</source>
         <translation>Ongeldig sessie type ingevoerd.</translation>
     </message>
@@ -2122,17 +2122,17 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="597"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Computer Naam</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IP Adres</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verbindings Tijd</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="600"/>
