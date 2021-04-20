@@ -79,7 +79,7 @@ bool integrityCheck()
             return false;
         }
 
-        size_t file_size = std::filesystem::file_size(file_path, error_code);
+        uintmax_t file_size = std::filesystem::file_size(file_path, error_code);
         if (file_size < kMinFileSize)
         {
             LOG(LS_ERROR) << "File '" << file_path << "' is not the correct size: " << file_size;
