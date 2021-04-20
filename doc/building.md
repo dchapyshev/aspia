@@ -14,6 +14,7 @@ Instructions for building the project
 * libvpx
 * libyuv
 * openssl
+* opus
 * protobuf
 * qt5-base
 * qt5-translations
@@ -25,7 +26,7 @@ Instructions for building the project
 7. Go to the source directory and run the following commands:
    **<br/>mkdir build
    <br/>cd build
-   <br/>cmake ..\source -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
+   <br/>cmake ..\ -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
    <br/>(replace <vcpkg_path> with real path to vcpkg)
 
    You can also use CMake GUI for these purposes.

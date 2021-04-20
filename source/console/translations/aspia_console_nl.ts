@@ -47,22 +47,22 @@
     <message>
         <location filename="../address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik een router</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation type="unfinished">Adres:</translation>
+        <translation>Adres:</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation type="unfinished">Gebruikers Naam:</translation>
+        <translation>Gebruikers Naam:</translation>
     </message>
     <message>
         <source>Address</source>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../address_book_tab.ui" line="97"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres / ID</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="102"/>
@@ -167,7 +167,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Font smoothing uitschakelen</translation>
     </message>
     <message>
         <source>Remote Screen</source>
@@ -202,12 +202,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="56"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Features</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="62"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Geluid inschakelen</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="76"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="92"/>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Uiterlijk</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="98"/>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="128"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Overige</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer vergrendelen bij verbroken verbinding</translation>
     </message>
 </context>
 <context>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres / ID:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="82"/>
@@ -415,7 +415,7 @@
     <message>
         <location filename="../main_window.ui" line="139"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Gereedschappen</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="154"/>
@@ -569,12 +569,12 @@
     <message>
         <location filename="../main_window.ui" line="473"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Snel Verbinden</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="570"/>
         <source>Router Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Router Beheer</translation>
     </message>
     <message>
         <source>Fast Connect...</source>
@@ -628,17 +628,17 @@
     <message>
         <location filename="../main_window.ui" line="535"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Wissen</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="546"/>
         <source>Remember latest</source>
-        <translation type="unfinished"></translation>
+        <translation>Herinner laatste</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="558"/>
         <source>Copy Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieer Computer</translation>
     </message>
 </context>
 <context>
@@ -837,17 +837,17 @@
     <message>
         <location filename="../fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Snel Verbinden</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres / ID</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie Type</translation>
     </message>
     <message>
         <source>Address:</source>
@@ -976,7 +976,7 @@
     <message>
         <location filename="../address_book_dialog.cc" line="100"/>
         <source>Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresboek</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="232"/>
@@ -1039,17 +1039,17 @@
     <message>
         <location filename="../address_book_dialog.cc" line="330"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een ongeldig router adres ingevoerd.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="341"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -1155,7 +1155,7 @@
     <message>
         <location filename="../computer_dialog.cc" line="62"/>
         <source>(copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>(kopieer)</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="73"/>
@@ -1367,28 +1367,28 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bevestiging</translation>
+        <translation>Bevestiging</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="76"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>De lijst van ingevoerde addressen zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="182"/>
         <location filename="../fast_connect_dialog.cc" line="202"/>
         <source>Warning</source>
-        <translation type="unfinished">Waarschuwing</translation>
+        <translation>Waarschuwing</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="183"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinding maken met ID is ingesteld maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="203"/>
         <source>An invalid computer address was entered.</source>
-        <translation type="unfinished">Er is een ongeldig computer adres ingevoerd.</translation>
+        <translation>Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
 </context>
 <context>
@@ -1446,7 +1446,7 @@
     <message>
         <location filename="../main_window.cc" line="837"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>De lijst van recent geopende adres boeken zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="870"/>
@@ -1461,7 +1461,7 @@
     <message>
         <location filename="../main_window.cc" line="1151"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
         <source>&lt;empty&gt;</source>
@@ -1488,7 +1488,7 @@
     <message>
         <location filename="../mru_action.cc" line="29"/>
         <source>&lt;empty&gt;</source>
-        <translation type="unfinished">&lt;leeg&gt;</translation>
+        <translation>&lt;leeg&gt;</translation>
     </message>
 </context>
 <context>
@@ -1542,7 +1542,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n onderliggende groep</numerusform>
             <numerusform>%n onderliggende groepen</numerusform>
         </translation>
@@ -1550,7 +1550,7 @@
     <message numerus="yes">
         <location filename="../statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n onderliggende computer</numerusform>
             <numerusform>%n onderliggende computers</numerusform>
         </translation>
