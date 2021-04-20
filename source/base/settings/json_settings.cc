@@ -312,9 +312,12 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
         prev.swap(segments);
     }
 
-    // End objects.
-    for (size_t i = 0; i < prev.size() - 1; ++i)
-        json.EndObject();
+    if (!prev.empty())
+    {
+        // End objects.
+        for (size_t i = 0; i < prev.size() - 1; ++i)
+            json.EndObject();
+    }
 
     // End JSON document.
     json.EndObject();
