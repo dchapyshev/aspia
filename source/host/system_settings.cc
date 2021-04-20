@@ -116,6 +116,11 @@ void SystemSettings::sync()
     settings_.sync();
 }
 
+void SystemSettings::flush()
+{
+    settings_.flush();
+}
+
 uint16_t SystemSettings::tcpPort() const
 {
     return settings_.get<uint16_t>("TcpPort", DEFAULT_HOST_TCP_PORT);

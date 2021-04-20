@@ -65,6 +65,10 @@ void Server::start()
 
     LOG(LS_INFO) << "Starting the host server";
 
+    // If the configuration file does not already exist, then you need to create it.
+    // Otherwise, change tracking (settings_watcher_) will not work.
+    settings_.flush();
+
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_.filePath(), false,
         std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
