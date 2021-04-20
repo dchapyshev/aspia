@@ -43,7 +43,7 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
     if (N_bytes <= 0)
         return BigNum();
 
-    const size_t xy_size = N_bytes + N_bytes;
+    const size_t xy_size = static_cast<size_t>(N_bytes + N_bytes);
     std::unique_ptr<uint8_t[]> xy = std::make_unique<uint8_t[]>(xy_size);
 
     if (BN_bn2binpad(x, xy.get(), N_bytes) < 0)

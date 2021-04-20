@@ -57,7 +57,7 @@ bool Random::fillBuffer(void* buffer, size_t size)
     if (!buffer || !size)
         return false;
 
-    return RAND_bytes(reinterpret_cast<uint8_t*>(buffer), size) > 0;
+    return RAND_bytes(reinterpret_cast<uint8_t*>(buffer), static_cast<int>(size)) > 0;
 }
 
 // static

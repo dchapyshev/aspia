@@ -119,7 +119,7 @@ ByteArray GenericHash::result() const
     CHECK_GT(len, 0);
 
     ByteArray result;
-    result.resize(len);
+    result.resize(static_cast<ByteArray::size_type>(len));
 
     int ret = EVP_DigestFinal(ctxt_, result.data(), nullptr);
     CHECK_EQ(ret, 1);

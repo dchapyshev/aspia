@@ -103,7 +103,7 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArra
         return nullptr;
     }
 
-    if (EVP_CIPHER_CTX_set_key_length(ctx.get(), key.size()) != 1)
+    if (EVP_CIPHER_CTX_set_key_length(ctx.get(), static_cast<int>(key.size())) != 1)
     {
         LOG(LS_WARNING) << "EVP_CIPHER_CTX_set_key_length failed";
         return nullptr;
