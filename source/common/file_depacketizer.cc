@@ -69,10 +69,22 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
     const size_t packet_size = packet.data().size();
     if (!packet_size)
     {
-        // If an empty data packet with the last packet flag set is received, the transfer
-        // is canceled.
         if (packet.flags() & proto::FilePacket::LAST_PACKET)
+        {
+            if (packet.flags() & proto::FilePacket::FIRST_PACKET)
+            {
+                // Zero-length file received.
+                file_size_ = 0;
+                file_stream_.close();
+            }
+            else
+            {
+                // If an empty data packet with the last packet flag set is received, the transfer
+                // is canceled.
+            }
+
             return true;
+        }
 
         LOG(LS_WARNING) << "Wrong packet size";
         return false;
