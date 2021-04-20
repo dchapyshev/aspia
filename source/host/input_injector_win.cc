@@ -79,6 +79,7 @@ InputInjectorWin::InputInjectorWin() = default;
 
 InputInjectorWin::~InputInjectorWin()
 {
+    setBlockInput(false);
     for (const auto& key : pressed_keys_)
     {
         int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
