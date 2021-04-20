@@ -48,6 +48,7 @@ public:
 
 private:
     explicit DatabaseSqlite(sqlite3* db);
+    static std::filesystem::path databaseDirectory();
 
     sqlite3* db_;
 

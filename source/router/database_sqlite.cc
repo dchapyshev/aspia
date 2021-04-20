@@ -236,6 +236,34 @@ DatabaseSqlite::~DatabaseSqlite()
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 {
+    std::filesystem::path dir_path = databaseDirectory();
+    if (dir_path.empty())
+    {
+        LOG(LS_WARNING) << "Invalid directory path";
+        return nullptr;
+    }
+
+    std::error_code error_code;
+    std::filesystem::file_status dir_status = std::filesystem::status(dir_path, error_code);
+    if (std::filesystem::exists(dir_status))
+    {
+        if (!std::filesystem::is_directory(dir_status))
+        {
+            LOG(LS_WARNING) << "Unable to create directory for database. Need to delete file '"
+                            << dir_path << "'";
+            return nullptr;
+        }
+    }
+    else
+    {
+        if (!std::filesystem::create_directories(dir_path, error_code))
+        {
+            LOG(LS_WARNING) << "Unable to create directory for database: "
+                            << base::utf16FromLocal8Bit(error_code.message());
+            return nullptr;
+        }
+    }
+
     std::filesystem::path file_path = filePath();
     if (file_path.empty())
     {
@@ -243,7 +271,6 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
         return nullptr;
     }
 
-    std::error_code error_code;
     if (std::filesystem::exists(file_path, error_code))
     {
         LOG(LS_WARNING) << "Database file already exists";
@@ -309,19 +336,11 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 // static
 std::filesystem::path DatabaseSqlite::filePath()
 {
-    std::filesystem::path file_path;
-
-#if defined(OS_WIN)
-    if (!base::BasePaths::commonAppData(&file_path))
+    std::filesystem::path file_path = databaseDirectory();
+    if (file_path.empty())
         return std::filesystem::path();
 
-    file_path.append(u"aspia/router.db3");
-#elif (OS_LINUX)
-    file_path.append("/var/lib/aspia/router.db3");
-#else
-    NOTIMPLEMENTED();
-#endif // defined(OS_*)
-
+    file_path.append(u"router.db3");
     return file_path;
 }
 
@@ -621,6 +640,25 @@ bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
 
     sqlite3_finalize(statement);
     return result;
+}
+
+// static
+std::filesystem::path DatabaseSqlite::databaseDirectory()
+{
+    std::filesystem::path dir_path;
+
+#if defined(OS_WIN)
+    if (!base::BasePaths::commonAppData(&dir_path))
+        return std::filesystem::path();
+
+    dir_path.append(u"aspia");
+#elif (OS_LINUX)
+    dir_path.append("/var/lib/aspia");
+#else
+    NOTIMPLEMENTED();
+#endif // defined(OS_*)
+
+    return dir_path;
 }
 
 } // namespace router
