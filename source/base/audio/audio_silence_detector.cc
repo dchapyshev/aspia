@@ -55,7 +55,7 @@ void AudioSilenceDetector::reset(int sampling_rate, int channels)
 
 bool AudioSilenceDetector::isSilence(const int16_t* samples, size_t frames)
 {
-    const int samples_count = frames * channels();
+    const int samples_count = static_cast<int>(frames) * channels();
     bool silent_packet = true;
     // Potentially this loop can be optimized (e.g. using SSE or adding special case for
     // threshold_==0), but it's not worth worrying about because the amount of data it processes is

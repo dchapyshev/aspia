@@ -55,7 +55,7 @@ bool DefaultAudioDeviceChangeDetector::getAndReset()
 }
 
 HRESULT DefaultAudioDeviceChangeDetector::OnDefaultDeviceChanged(
-    EDataFlow flow, ERole role, LPCWSTR pwstrDefaultDevice)
+    EDataFlow /* flow */, ERole /* role */, LPCWSTR /* pwstrDefaultDevice */)
 {
     {
         std::scoped_lock lock(lock_);
@@ -75,24 +75,24 @@ HRESULT DefaultAudioDeviceChangeDetector::QueryInterface(REFIID iid, void** obje
     return E_NOINTERFACE;
 }
 
-HRESULT DefaultAudioDeviceChangeDetector::OnDeviceAdded(LPCWSTR pwstrDeviceId)
+HRESULT DefaultAudioDeviceChangeDetector::OnDeviceAdded(LPCWSTR /* pwstrDeviceId */)
 {
     return S_OK;
 }
 
-HRESULT DefaultAudioDeviceChangeDetector::OnDeviceRemoved(LPCWSTR pwstrDeviceId)
+HRESULT DefaultAudioDeviceChangeDetector::OnDeviceRemoved(LPCWSTR /* pwstrDeviceId */)
 {
     return S_OK;
 }
 
 HRESULT DefaultAudioDeviceChangeDetector::OnDeviceStateChanged(
-    LPCWSTR pwstrDeviceId, DWORD dwNewState)
+    LPCWSTR /* pwstrDeviceId */, DWORD /* dwNewState */)
 {
     return S_OK;
 }
 
 HRESULT DefaultAudioDeviceChangeDetector::OnPropertyValueChanged(
-    LPCWSTR pwstrDeviceId, const PROPERTYKEY key)
+    LPCWSTR /* pwstrDeviceId */, const PROPERTYKEY /* key */)
 {
     return S_OK;
 }

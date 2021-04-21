@@ -43,7 +43,7 @@ bool AudioVolumeFilter::apply(int16_t* data, size_t frames)
     if (level == 1)
         return true;
 
-    const int sample_count = frames * silence_detector_.channels();
+    const int sample_count = static_cast<int>(frames) * silence_detector_.channels();
     const int32_t level_int = static_cast<int32_t>(level * 65536);
 
     for (int i = 0; i < sample_count; i++)

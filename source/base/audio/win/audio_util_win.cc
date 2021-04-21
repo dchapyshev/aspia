@@ -220,9 +220,6 @@ bool sharedModeInitialize(IAudioClient* client,
     }
 
     *endpoint_buffer_size = buffer_size_in_frames;
-    const double size_in_ms = static_cast<double>(buffer_size_in_frames) /
-        (format->Format.nSamplesPerSec / 1000.0);
-
     return true;
 }
 

@@ -433,7 +433,7 @@ HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
     return E_NOINTERFACE;
 }
 
-HRESULT AudioOutputWin::OnStateChanged(AudioSessionState new_state)
+HRESULT AudioOutputWin::OnStateChanged(AudioSessionState /* new_state */)
 {
     return S_OK;
 }
@@ -459,29 +459,32 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
     return S_OK;
 }
 
-HRESULT AudioOutputWin::OnDisplayNameChanged(LPCWSTR new_display_name, LPCGUID event_context)
+HRESULT AudioOutputWin::OnDisplayNameChanged(
+    LPCWSTR /* new_display_name */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
-HRESULT AudioOutputWin::OnIconPathChanged(LPCWSTR new_icon_path, LPCGUID event_context)
+HRESULT AudioOutputWin::OnIconPathChanged(LPCWSTR /* new_icon_path */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
 HRESULT AudioOutputWin::OnSimpleVolumeChanged(
-    float new_simple_volume, BOOL new_mute, LPCGUID event_context)
+    float /* new_simple_volume */, BOOL /* new_mute */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
 HRESULT AudioOutputWin::OnChannelVolumeChanged(
-    DWORD channel_count, float new_channel_volumes[], DWORD changed_channel, LPCGUID event_context)
+    DWORD /* channel_count */, float /* new_channel_volumes */[], DWORD /* changed_channel */,
+    LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
-HRESULT AudioOutputWin::OnGroupingParamChanged(LPCGUID new_grouping_param, LPCGUID event_context)
+HRESULT AudioOutputWin::OnGroupingParamChanged(
+    LPCGUID /* new_grouping_param */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
