@@ -42,7 +42,6 @@ const char16_t* const kSwitchPrefixes[] = { u"--", u"-", u"/" };
 const size_t kSwitchPrefixesCount = std::size(kSwitchPrefixes);
 
 const std::u16string kEmptyString;
-const std::filesystem::path kEmptyPath;
 
 size_t switchPrefixLength(std::u16string_view string)
 {
@@ -330,11 +329,11 @@ bool CommandLine::hasSwitch(std::u16string_view switch_string) const
     return switches_.find(switch_string) != switches_.end();
 }
 
-const std::filesystem::path& CommandLine::switchValuePath(std::u16string_view switch_string) const
+std::filesystem::path CommandLine::switchValuePath(std::u16string_view switch_string) const
 {
     DCHECK(toLower(switch_string) == switch_string);
     auto result = switches_.find(switch_string);
-    return result == switches_.end() ? kEmptyPath : result->second;
+    return result == switches_.end() ? std::filesystem::path() : std::filesystem::path(result->second);
 }
 
 const std::u16string& CommandLine::switchValue(std::u16string_view switch_string) const

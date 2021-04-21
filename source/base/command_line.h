@@ -109,7 +109,7 @@ public:
 
     // Returns the value associated with the given switch. If the switch has no value or isn't
     // present, this method returns the empty string. Switch names must be lowercase.
-    const std::filesystem::path& switchValuePath(std::u16string_view switch_string) const;
+    std::filesystem::path switchValuePath(std::u16string_view switch_string) const;
     const std::u16string& switchValue(std::u16string_view switch_string) const;
 
     void appendSwitch(std::u16string_view switch_string);
