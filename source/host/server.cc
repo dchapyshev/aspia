@@ -200,10 +200,12 @@ void Server::addFirewallRules()
     if (!firewall.isValid())
         return;
 
-    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, settings_.tcpPort()))
+    uint16_t tcp_port = settings_.tcpPort();
+
+    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
         return;
 
-    LOG(LS_INFO) << "Rule is added to the firewall";
+    LOG(LS_INFO) << "Rule is added to the firewall (TCP " << tcp_port << ")";
 }
 
 void Server::deleteFirewallRules()

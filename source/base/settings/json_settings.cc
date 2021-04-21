@@ -272,7 +272,11 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
     if (!std::filesystem::create_directories(file.parent_path(), error_code))
     {
         if (error_code)
+        {
+            LOG(LS_WARNING) << "create_directories failed: "
+                            << base::utf16FromLocal8Bit(error_code.message());
             return false;
+        }
     }
 
     rapidjson::StringBuffer buffer;
