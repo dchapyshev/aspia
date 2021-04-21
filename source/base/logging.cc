@@ -376,7 +376,7 @@ std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
     return out << base::utf8FromWide(wstr);
 }
 
-std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr)
+std::ostream& operator<<(std::ostream& out, const wchar_t* wstr)
 {
     return out << (wstr ? base::utf8FromWide(wstr) : "nullptr");
 }
