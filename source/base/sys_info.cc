@@ -32,7 +32,7 @@ std::string SysInfo::processorName()
 {
 #if defined(ARCH_CPU_X86_FAMILY)
     CpuidUtil cpuidUtil;
-    cpuidUtil.get(0x80000000);
+    cpuidUtil.get(static_cast<int>(0x80000000));
 
     uint32_t max_leaf = cpuidUtil.eax();
     if (max_leaf < 0x80000002)
@@ -45,7 +45,7 @@ std::string SysInfo::processorName()
 
     for (uint32_t leaf = 0x80000002, offset = 0; leaf <= max_leaf; ++leaf, offset += 16)
     {
-        cpuidUtil.get(leaf);
+        cpuidUtil.get(static_cast<int>(leaf));
 
         uint32_t eax = cpuidUtil.eax();
         uint32_t ebx = cpuidUtil.ebx();

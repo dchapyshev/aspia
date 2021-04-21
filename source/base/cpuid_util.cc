@@ -62,10 +62,10 @@ void CpuidUtil::get(int leaf, int subleaf)
     __get_cpuid_count(leaf, subleaf, &cpu_info[0], &cpu_info[1], &cpu_info[2], &cpu_info[3]);
 #endif
 
-    eax_ = cpu_info[0];
-    ebx_ = cpu_info[1];
-    ecx_ = cpu_info[2];
-    edx_ = cpu_info[3];
+    eax_ = static_cast<uint32_t>(cpu_info[0]);
+    ebx_ = static_cast<uint32_t>(cpu_info[1]);
+    ecx_ = static_cast<uint32_t>(cpu_info[2]);
+    edx_ = static_cast<uint32_t>(cpu_info[3]);
 }
 
 // static
