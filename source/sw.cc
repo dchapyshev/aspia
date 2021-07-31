@@ -109,7 +109,7 @@ void build(Solution &s)
     base.Public += "org.sw.demo.chriskohlhoff.asio"_dep;
     base.Public += "org.sw.demo.rapidxml"_dep;
     base.Public += "org.sw.demo.miloyip.rapidjson"_dep;
-    base.Public += "org.sw.demo.google.protobuf.protobuf_lite"_dep;
+    base.Public += "org.sw.demo.google.protobuf.protobuf"_dep; // should be protobuf_lite actually?
     base.Public += "org.sw.demo.chromium.libyuv-master"_dep;
     base.Public += "org.sw.demo.webmproject.vpx"_dep;
     base.Public += "org.sw.demo.webmproject.webm"_dep;
@@ -118,7 +118,7 @@ void build(Solution &s)
     {
         base -= "x11/.*"_rr;
         base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
-        base += "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
+        base += "Mswsock.lib"_slib, "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
     }
     automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 
