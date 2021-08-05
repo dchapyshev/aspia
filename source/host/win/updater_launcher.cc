@@ -25,8 +25,8 @@
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 
-#include <userenv.h>
-#include <wtsapi32.h>
+#include <UserEnv.h>
+#include <WtsApi32.h>
 
 namespace host {
 
