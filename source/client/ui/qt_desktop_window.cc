@@ -186,6 +186,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
     connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::onKeyEvent);
+
+    desktop_->setFocus();
 }
 
 QtDesktopWindow::~QtDesktopWindow()
