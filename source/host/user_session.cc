@@ -187,7 +187,6 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
             NOTREACHED();
             return;
         }
-        break;
     }
 
     client_session_ptr->setSessionId(sessionId());

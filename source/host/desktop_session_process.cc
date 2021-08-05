@@ -23,7 +23,7 @@
 #include "base/files/base_paths.h"
 #include "base/win/scoped_impersonator.h"
 
-#include <userenv.h>
+#include <UserEnv.h>
 
 namespace host {
 

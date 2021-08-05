@@ -43,9 +43,9 @@ void createSystemInfo(proto::SystemInfo* system_info)
     proto::system_info::Processor* processor = system_info->mutable_processor();
     processor->set_vendor(base::SysInfo::processorVendor());
     processor->set_model(base::SysInfo::processorName());
-    processor->set_packages(base::SysInfo::processorPackages());
-    processor->set_cores(base::SysInfo::processorCores());
-    processor->set_threads(base::SysInfo::processorThreads());
+    processor->set_packages(static_cast<uint32_t>(base::SysInfo::processorPackages()));
+    processor->set_cores(static_cast<uint32_t>(base::SysInfo::processorCores()));
+    processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));
 
     for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
@@ -129,7 +129,7 @@ void createSystemInfo(proto::SystemInfo* system_info)
         printer->set_shared(enumerator.isShared());
         printer->set_port(enumerator.portName());
         printer->set_driver(enumerator.driverName());
-        printer->set_jobs_count(enumerator.jobsCount());
+        printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
         printer->set_share_name(enumerator.shareName());
     }
 

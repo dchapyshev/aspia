@@ -176,7 +176,7 @@ void FileRemover::doCurrentTask()
     const std::string& path = tasks_.front().path();
 
     // Updating progress in UI.
-    remove_window_proxy_->setCurrentProgress(path, percentage);
+    remove_window_proxy_->setCurrentProgress(path, static_cast<int>(percentage));
 
     // Send a request to delete the next item.
     task_consumer_proxy_->doTask(task_factory_->remove(path));

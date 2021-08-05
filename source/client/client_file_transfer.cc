@@ -72,7 +72,7 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
 
-    if (!reply->ParseFromArray(buffer.data(), buffer.size()))
+    if (!reply->ParseFromArray(buffer.data(), static_cast<int>(buffer.size())))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;

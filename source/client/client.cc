@@ -232,7 +232,7 @@ void Client::startAuthentication()
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setUserName(config_.username);
     authenticator_->setPassword(config_.password);
-    authenticator_->setSessionType(config_.session_type);
+    authenticator_->setSessionType(static_cast<uint32_t>(config_.session_type));
 
     authenticator_->start(std::move(channel_),
                           [this](base::ClientAuthenticator::ErrorCode error_code)

@@ -29,7 +29,7 @@
 #include "common/file_worker.h"
 #include "proto/file_transfer.pb.h"
 
-#include <wtsapi32.h>
+#include <WtsApi32.h>
 
 namespace host {
 
@@ -98,7 +98,7 @@ class ClientSessionFileTransfer::Worker
 {
 public:
     Worker(base::SessionId session_id, std::shared_ptr<base::NetworkChannelProxy> channel_proxy);
-    ~Worker();
+    ~Worker() override;
 
     void start();
     void postRequest(std::unique_ptr<proto::FileRequest> request);

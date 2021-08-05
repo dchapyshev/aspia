@@ -96,7 +96,7 @@ void FileTransferQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task
                        last_task.targetPath(),
                        item.name(),
                        item.is_directory(),
-                       item.size());
+                       static_cast<int64_t>(item.size()));
     }
 
     doPendingTasks();

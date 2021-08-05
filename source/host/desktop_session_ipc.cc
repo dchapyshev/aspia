@@ -28,7 +28,7 @@ namespace host {
 class DesktopSessionIpc::SharedBuffer : public base::SharedMemoryBase
 {
 public:
-    ~SharedBuffer() = default;
+    ~SharedBuffer() override = default;
 
     static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
     {
