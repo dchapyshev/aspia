@@ -5,444 +5,444 @@
     <name>ConfigDialog</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurações</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Serviço</translation>
     </message>
     <message>
         <source>Incoming Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexões de entrada</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Porta:</translation>
     </message>
     <message>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar...</translation>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar...</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuários</translation>
     </message>
     <message>
         <source>Add new user</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar novo usuário</translation>
     </message>
     <message>
         <source>Edit user</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar usuário</translation>
     </message>
     <message>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar usuário</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar</translation>
     </message>
     <message>
         <source>Update Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor de atualização</translation>
     </message>
     <message>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar servidor de atualização personalizado</translation>
     </message>
     <message>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor:</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificar atualizações</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota</translation>
     </message>
     <message>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar o uso de roteador</translation>
     </message>
     <message>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço:</translation>
     </message>
     <message>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chave pública:</translation>
     </message>
     <message>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferência de captura de vídeo:</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Avançado</translation>
     </message>
 </context>
 <context>
     <name>Host</name>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="unfinished"></translation>
+        <translation>A verificação de integridade da aplicação falhou. Alguns componentes não foram encontrados ou estão corrompidos.</translation>
     </message>
     <message>
         <source>Export and import parameters can not be specified together.</source>
-        <translation type="unfinished"></translation>
+        <translation>Os parâmetros de importação e exportação não podem ser especificados juntos.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sua ID</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Senha</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuda</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Linguagem</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuda online...</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurações...</translation>
     </message>
     <message>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Esconder</translation>
     </message>
     <message>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Roteador desabilitado</translation>
     </message>
 </context>
 <context>
     <name>NotifierWindow</name>
     <message>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexões</translation>
     </message>
     <message>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation>Desconectar tudo</translation>
     </message>
 </context>
 <context>
     <name>SettingsUtil</name>
     <message>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação</translation>
     </message>
     <message>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>A configuração foi importada com sucesso.</translation>
     </message>
     <message>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>A configuração foi exportada com sucesso.</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossível ler o arquivo de origem. O arquivo pode estar corrompido ou em formato desconhecido.</translation>
     </message>
     <message>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossível gravar no arquivo selecionado.</translation>
     </message>
 </context>
 <context>
     <name>UserDialog</name>
     <message>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriedades do usuário</translation>
     </message>
     <message>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome de usuário:</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Senha:</translation>
     </message>
     <message>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Senha (repetir):</translation>
     </message>
     <message>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar conta de usuário</translation>
     </message>
     <message>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipos de sessões permitidas:</translation>
     </message>
 </context>
 <context>
     <name>host::ConfigDialog</name>
     <message>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmação</translation>
     </message>
     <message>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Você tem certeza que deseja apagar o usuário &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar</translation>
     </message>
     <message>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="unfinished"></translation>
+        <translation>As configurações foram alteradas. Para serem aplicadas agora, o serviço  precisa ser reiniciado. Deseja reiniciar o serviço agora?</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished"></translation>
+        <translation>A configuração não pôde ser salva. Certifique-se que possui direitos suficientes para gravar.</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <source>Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciado</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Parado</translation>
     </message>
     <message>
         <source>Not started</source>
-        <translation type="unfinished"></translation>
+        <translation>Não iniciado</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalado</translation>
     </message>
     <message>
         <source>Not installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Não instalado</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalar</translation>
     </message>
     <message>
         <source>Current state: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado: %1</translation>
     </message>
     <message>
         <source>The service could not be installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>O serviço não pôde ser instalado.</translation>
     </message>
     <message>
         <source>The service could not be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>O serviço não pôde ser removido.</translation>
     </message>
     <message>
         <source>Could not access the service.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossível acessar o serviço.</translation>
     </message>
     <message>
         <source>The service could not be started.</source>
-        <translation type="unfinished"></translation>
+        <translation>O serviço não pôde ser iniciado.</translation>
     </message>
     <message>
         <source>The service could not be stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>O serviço não pôde ser parado.</translation>
     </message>
     <message>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço do roteador incorreto.</translation>
     </message>
     <message>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>A chave pública inserida está incorreta.</translation>
     </message>
     <message>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-files (*.json)</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Padrão</translation>
     </message>
 </context>
 <context>
     <name>host::MainWindow</name>
     <message>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Não disponível</translation>
     </message>
     <message>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Exibir</translation>
     </message>
     <message>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Esconder</translation>
     </message>
     <message>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmação</translation>
     </message>
     <message>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Se você sair do Aspia, não será possível conectar-se a este computador até que você ligue o computador ou inicie o Aspia novamente manualmente. Tem certeza de que deseja sair do aplicativo?</translation>
     </message>
     <message>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Roteador desabilitado</translation>
     </message>
     <message>
         <source>Connecting to a router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectando ao roteador...</translation>
     </message>
     <message>
         <source>Connected to a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectado ao roteador</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro de conexão</translation>
     </message>
     <message>
         <source>Connected to a router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectado ao roteador %1</translation>
     </message>
     <message>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro ao conectar ao roteador %1</translation>
     </message>
     <message>
         <source>Connecting to a router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectando ao roteador %1...</translation>
     </message>
 </context>
 <context>
     <name>host::NotifierWindow</name>
     <message>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Desconectar</translation>
     </message>
 </context>
 <context>
     <name>host::UserDialog</name>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome de usuário já existe.</translation>
     </message>
     <message>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>As senhas digitadas não correspondem.</translation>
     </message>
     <message numerus="yes">
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>A senha não pode ficar em branco e não pode exceder %n caracteres.</numerusform>
+            <numerusform>A senha não pode ficar em branco e não pode exceder %n caracteres.</numerusform>
         </translation>
     </message>
     <message>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>A senha que você digitou não atende aos requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de %n caracteres.</numerusform>
+            <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de %n caracteres.</numerusform>
         </translation>
     </message>
     <message>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseja inserir uma senha diferente?</translation>
     </message>
     <message>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro interno desconhecido ao criar ou modificar um usuário.</translation>
     </message>
     <message>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique duas vezes para alterar</translation>
     </message>
     <message>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do usuário não pode estar vazio e deve conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
     </message>
 </context>
 </TS>
