@@ -1888,7 +1888,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="224"/>
         <location filename="../ui/qt_desktop_window.cc" line="232"/>
-        <location filename="../ui/qt_desktop_window.cc" line="563"/>
+        <location filename="../ui/qt_desktop_window.cc" line="569"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1907,17 +1907,17 @@
         <translation type="obsolete">Selecteer een video encoding is geannuleerd door de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="541"/>
+        <location filename="../ui/qt_desktop_window.cc" line="547"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="543"/>
+        <location filename="../ui/qt_desktop_window.cc" line="549"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="563"/>
+        <location filename="../ui/qt_desktop_window.cc" line="569"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>

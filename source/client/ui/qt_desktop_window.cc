@@ -398,7 +398,13 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
     else if (object == panel_)
     {
         if (event->type() == QEvent::Resize)
+        {
             panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+        }
+        else if (event->type() == QEvent::Leave)
+        {
+            desktop_->setFocus();
+        }
     }
 
     return QWidget::eventFilter(object, event);
