@@ -543,7 +543,7 @@ void RegistryValueIterator::initialize(HKEY root_key,
         }
         else
         {
-            index_ = count - 1;
+            index_ = static_cast<int>(count - 1);
         }
     }
 
@@ -589,7 +589,7 @@ bool RegistryValueIterator::read()
         // |value_size_| is in bytes. Reserve the last character for a NUL.
         value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(wchar_t));
 
-        LONG result = RegEnumValueW(key_, index_, writeInto(&name_, name_size),
+        LONG result = RegEnumValueW(key_, static_cast<DWORD>(index_), writeInto(&name_, name_size),
                                     &name_size, nullptr, &type_,
                                     reinterpret_cast<BYTE*>(value_.data()),
                                     &value_size_);
@@ -610,7 +610,7 @@ bool RegistryValueIterator::read()
             value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(wchar_t));
             name_size = name_size == capacity ? MAX_REGISTRY_NAME_SIZE : capacity;
 
-            result = RegEnumValueW(key_, index_, writeInto(&name_, name_size),
+            result = RegEnumValueW(key_, static_cast<DWORD>(index_), writeInto(&name_, name_size),
                                    &name_size, nullptr, &type_,
                                    reinterpret_cast<BYTE*>(value_.data()),
                                    &value_size_);
@@ -681,7 +681,7 @@ bool RegistryKeyIterator::read()
         DWORD ncount = ARRAYSIZE(name_);
         FILETIME written;
 
-        LONG r = RegEnumKeyExW(key_, index_, name_, &ncount, nullptr, nullptr,
+        LONG r = RegEnumKeyExW(key_, static_cast<DWORD>(index_), name_, &ncount, nullptr, nullptr,
                                nullptr, &written);
         if (ERROR_SUCCESS == r)
             return true;
@@ -716,7 +716,7 @@ void RegistryKeyIterator::initialize(HKEY root_key,
         }
         else
         {
-            index_ = count - 1;
+            index_ = static_cast<int>(count - 1);
         }
     }
 

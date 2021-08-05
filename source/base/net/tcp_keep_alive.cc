@@ -21,7 +21,7 @@
 #include "base/logging.h"
 
 #if defined(OS_WIN)
-#include <winsock2.h>
+#include <WinSock2.h>
 #include <mstcpip.h>
 #endif // defined(OS_WIN)
 

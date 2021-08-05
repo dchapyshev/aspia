@@ -22,7 +22,7 @@
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
-#include <ws2tcpip.h>
+#include <WS2tcpip.h>
 #elif defined(OS_POSIX)
 #include <arpa/inet.h>
 #else

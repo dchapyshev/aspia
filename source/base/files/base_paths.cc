@@ -31,7 +31,7 @@
 #endif // defined(OS_LINUX)
 
 #if defined(OS_WIN)
-#include <shlobj.h>
+#include <ShlObj.h>
 #endif // defined(OS_WIN)
 
 #if defined(OS_MAC)

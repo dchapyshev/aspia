@@ -21,8 +21,8 @@
 #include "base/win/process_util.h"
 #include "base/win/scoped_impersonator.h"
 
-#include <psapi.h>
-#include <tlhelp32.h>
+#include <Psapi.h>
+#include <TlHelp32.h>
 
 namespace base::win {
 
@@ -179,7 +179,7 @@ int Process::exitCode() const
         return 0;
     }
 
-    return exit_code;
+    return static_cast<int>(exit_code);
 }
 
 void Process::kill()
@@ -203,7 +203,7 @@ void Process::terminate()
 
     ProcessId process_id = processId();
 
-    EnumWindows(terminateEnumProc, process_id);
+    EnumWindows(terminateEnumProc, static_cast<LPARAM>(process_id));
 
     if (!thread_.isValid())
     {

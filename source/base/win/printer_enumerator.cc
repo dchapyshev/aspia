@@ -61,7 +61,7 @@ PrinterEnumerator::PrinterEnumerator()
     }
 
     info_ = reinterpret_cast<PPRINTER_INFO_2W>(info_buffer_.get());
-    count_ = count;
+    count_ = static_cast<int>(count);
 }
 
 PrinterEnumerator::~PrinterEnumerator() = default;
@@ -192,7 +192,7 @@ std::string PrinterEnumerator::comment() const
 
 int PrinterEnumerator::jobsCount() const
 {
-    return info_[current_].cJobs;
+    return static_cast<int>(info_[current_].cJobs);
 }
 
 } // namespace base::win

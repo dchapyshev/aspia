@@ -194,7 +194,7 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
             break;
     }
 
-    processors_ = system_info.dwNumberOfProcessors;
+    processors_ = static_cast<int>(system_info.dwNumberOfProcessors);
     allocation_granularity_ = system_info.dwAllocationGranularity;
 
     if (version_info.dwMajorVersion == 6 || version_info.dwMajorVersion == 10)
@@ -283,9 +283,9 @@ Version OSInfo::kernel32Version() const
     base::Version base_version = kernel32BaseVersion();
 
     static const Version kernel32_version =
-        majorMinorBuildToVersion(base_version.components()[0],
-                                 base_version.components()[1],
-                                 base_version.components()[2]);
+        majorMinorBuildToVersion(static_cast<int>(base_version.components()[0]),
+                                 static_cast<int>(base_version.components()[1]),
+                                 static_cast<int>(base_version.components()[2]));
     return kernel32_version;
 }
 

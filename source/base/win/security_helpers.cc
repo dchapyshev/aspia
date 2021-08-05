@@ -22,7 +22,7 @@
 #include "base/win/scoped_local.h"
 #include "base/win/scoped_object.h"
 
-#include <objidl.h>
+#include <ObjIdl.h>
 #include <sddl.h>
 
 namespace base::win {

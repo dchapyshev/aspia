@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/win/message_window.h"
 
-#include <wtsapi32.h>
+#include <WtsApi32.h>
 
 namespace base::win {
 

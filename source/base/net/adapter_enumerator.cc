@@ -23,7 +23,7 @@
 #include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
-#include <ws2tcpip.h>
+#include <WS2tcpip.h>
 #include <iphlpapi.h>
 #endif // defined(OS_WIN)
 

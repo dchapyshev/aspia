@@ -22,7 +22,7 @@
 #include "base/win/process.h"
 
 #include <Windows.h>
-#include <tlhelp32.h>
+#include <TlHelp32.h>
 #include <shellapi.h>
 
 namespace base::win {

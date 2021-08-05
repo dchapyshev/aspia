@@ -276,7 +276,7 @@ bool NetworkChannel::setOwnKeepAlive(bool enable, const Seconds& interval, const
 
 bool NetworkChannel::setReadBufferSize(size_t size)
 {
-    asio::socket_base::receive_buffer_size option(size);
+    asio::socket_base::receive_buffer_size option(static_cast<int>(size));
 
     asio::error_code error_code;
     socket_.set_option(option, error_code);
@@ -293,7 +293,7 @@ bool NetworkChannel::setReadBufferSize(size_t size)
 
 bool NetworkChannel::setWriteBufferSize(size_t size)
 {
-    asio::socket_base::send_buffer_size option(size);
+    asio::socket_base::send_buffer_size option(static_cast<int>(size));
 
     asio::error_code error_code;
     socket_.set_option(option, error_code);
