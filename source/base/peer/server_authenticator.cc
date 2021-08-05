@@ -524,7 +524,7 @@ void ServerAuthenticator::doSessionChallenge()
 
     session_challenge->set_os_name(SysInfo::operatingSystemName());
     session_challenge->set_computer_name(SysInfo::computerName());
-    session_challenge->set_cpu_cores(SysInfo::processorThreads());
+    session_challenge->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
 
     LOG(LS_INFO) << "Sending: SessionChallenge";
     sendMessage(*session_challenge);

@@ -211,7 +211,8 @@ void MessagePumpForWin::waitForWork()
             // some time to process its input messages by looping back to MsgWaitForMultipleObjectsEx
             // above when there are no messages for the current thread.
 
-            MSG msg = { 0 };
+            MSG msg;
+            memset(&msg, 0, sizeof(msg));
 
             bool has_pending_sent_message =
                 (HIWORD(GetQueueStatus(QS_SENDMESSAGE)) & QS_SENDMESSAGE) != 0;

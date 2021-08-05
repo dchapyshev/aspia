@@ -51,7 +51,7 @@ bool wideToLocalImpl(InputType in, std::string* out)
     if (out_len <= 0)
         return false;
 
-    out->resize(out_len);
+    out->resize(static_cast<size_t>(out_len));
 
     if (WideCharToMultiByte(CP_ACP, 0,
                             reinterpret_cast<const wchar_t*>(in.data()),
@@ -78,7 +78,7 @@ bool localToWideImpl(std::string_view in, OutputType* out)
     if (out_len <= 0)
         return false;
 
-    out->resize(out_len);
+    out->resize(static_cast<size_t>(out_len));
 
     if (MultiByteToWideChar(CP_ACP, 0, in.data(), static_cast<int>(in_len),
                             reinterpret_cast<wchar_t*>(out->data()), out_len) != out_len)
@@ -105,7 +105,7 @@ bool wideToUtf8Impl(InputType in, std::string* out)
     if (out_len <= 0)
         return false;
 
-    out->resize(out_len);
+    out->resize(static_cast<size_t>(out_len));
 
     if (WideCharToMultiByte(CP_UTF8, 0,
                             reinterpret_cast<const wchar_t*>(in.data()),
@@ -132,7 +132,7 @@ bool utf8ToWideImpl(std::string_view in, OutputType* out)
     if (out_len <= 0)
         return false;
 
-    out->resize(out_len);
+    out->resize(static_cast<size_t>(out_len));
 
     if (MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in_len),
                             reinterpret_cast<wchar_t*>(out->data()), out_len) != out_len)

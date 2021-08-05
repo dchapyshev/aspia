@@ -28,8 +28,10 @@ int compareCaseInsensitive(std::u16string_view first, std::u16string_view second
 {
     int ret = CompareStringW(LOCALE_INVARIANT,
                              NORM_IGNORECASE,
-                             reinterpret_cast<const wchar_t*>(first.data()), first.size(),
-                             reinterpret_cast<const wchar_t*>(second.data()), second.size());
+                             reinterpret_cast<const wchar_t*>(first.data()),
+                             static_cast<int>(first.size()),
+                             reinterpret_cast<const wchar_t*>(second.data()),
+                             static_cast<int>(second.size()));
     CHECK_NE(ret, 0);
 
     // To maintain the C runtime convention of comparing strings, the value 2 can be subtracted
@@ -48,8 +50,8 @@ std::u16string toUpper(std::u16string_view in)
 
     if (!LCMapStringW(LOCALE_INVARIANT,
                       LCMAP_UPPERCASE,
-                      reinterpret_cast<const wchar_t*>(in.data()), in.size(),
-                      reinterpret_cast<wchar_t*>(out.data()), out.size()))
+                      reinterpret_cast<const wchar_t*>(in.data()), static_cast<int>(in.size()),
+                      reinterpret_cast<wchar_t*>(out.data()), static_cast<int>(out.size())))
     {
         return std::u16string();
     }
@@ -67,8 +69,8 @@ std::u16string toLower(std::u16string_view in)
 
     if (!LCMapStringW(LOCALE_INVARIANT,
                       LCMAP_LOWERCASE,
-                      reinterpret_cast<const wchar_t*>(in.data()), in.size(),
-                      reinterpret_cast<wchar_t*>(out.data()), out.size()))
+                      reinterpret_cast<const wchar_t*>(in.data()), static_cast<int>(in.size()),
+                      reinterpret_cast<wchar_t*>(out.data()), static_cast<int>(out.size())))
     {
         return std::u16string();
     }

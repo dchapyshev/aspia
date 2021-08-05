@@ -32,7 +32,7 @@
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
-#include <psapi.h>
+#include <Psapi.h>
 #endif // defined(OS_WIN)
 
 namespace base {

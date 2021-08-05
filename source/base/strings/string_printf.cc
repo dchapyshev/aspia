@@ -77,9 +77,9 @@ StringType stringPrintfVT(const typename StringType::value_type* format, va_list
     }
 
     StringType result;
-    result.resize(length);
+    result.resize(static_cast<size_t>(length));
 
-    const int ret = vsnprintfT(result.data(), length + 1, format, args_copy);
+    const int ret = vsnprintfT(result.data(), static_cast<size_t>(length + 1), format, args_copy);
     va_end(args_copy);
 
     if (ret < 0 || ret > length)

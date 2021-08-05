@@ -58,7 +58,7 @@ public:
     {
         ScreenId id;
         std::string title;
-        bool is_primary;
+        bool is_primary = false;
     };
 
     using ScreenList = std::vector<Screen>;

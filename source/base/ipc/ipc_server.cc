@@ -106,7 +106,9 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
         return false;
     }
 
-    SECURITY_ATTRIBUTES security_attributes = { 0 };
+    SECURITY_ATTRIBUTES security_attributes;
+    memset(&security_attributes, 0, sizeof(security_attributes));
+
     security_attributes.nLength = sizeof(security_attributes);
     security_attributes.lpSecurityDescriptor = sd.get();
     security_attributes.bInheritHandle = FALSE;
@@ -150,7 +152,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
 
             default:
                 overlapped_->complete(
-                    std::error_code(last_error, asio::error::get_system_category()), 0);
+                    std::error_code(static_cast<int>(last_error), asio::error::get_system_category()), 0);
                 return false;
         }
     }

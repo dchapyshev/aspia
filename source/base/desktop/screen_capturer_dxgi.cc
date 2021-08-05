@@ -79,10 +79,10 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 
     DCHECK_EQ(device_names.size(), screens.size());
 
-    for (int i = 0; i < static_cast<int>(screens.size()); ++i)
+    for (size_t i = 0; i < screens.size(); ++i)
     {
         if (screens[i].id == id)
-            return i;
+            return static_cast<int>(i);
     }
 
     return -1;

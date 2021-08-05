@@ -28,7 +28,8 @@ namespace {
 
 HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& description)
 {
-    REASON_CONTEXT context = { 0 };
+    REASON_CONTEXT context;
+    memset(&context, 0, sizeof(context));
 
     context.Version = POWER_REQUEST_CONTEXT_VERSION;
     context.Flags = POWER_REQUEST_CONTEXT_SIMPLE_STRING;

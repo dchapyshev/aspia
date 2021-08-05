@@ -26,7 +26,7 @@
 #include "base/win/windows_version.h"
 #include "build/build_config.h"
 
-#include <lm.h>
+#include <LM.h>
 
 namespace base {
 

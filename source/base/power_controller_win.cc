@@ -23,7 +23,7 @@
 #include "base/logging.h"
 
 #include <Windows.h>
-#include <wtsapi32.h>
+#include <WtsApi32.h>
 
 namespace base {
 
