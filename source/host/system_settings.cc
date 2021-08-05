@@ -116,9 +116,9 @@ void SystemSettings::sync()
     settings_.sync();
 }
 
-void SystemSettings::flush()
+bool SystemSettings::flush()
 {
-    settings_.flush();
+    return settings_.flush();
 }
 
 uint16_t SystemSettings::tcpPort() const

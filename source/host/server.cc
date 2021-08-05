@@ -65,12 +65,24 @@ void Server::start()
 
     LOG(LS_INFO) << "Starting the host server";
 
+    std::filesystem::path settings_file = settings_.filePath();
+    LOG(LS_INFO) << "Configuration file path: " << settings_file;
+
     // If the configuration file does not already exist, then you need to create it.
     // Otherwise, change tracking (settings_watcher_) will not work.
-    settings_.flush();
+    if (!settings_.flush())
+    {
+        LOG(LS_WARNING) << "Unable to write configuration file to disk";
+    }
+
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(settings_file, ignored_code))
+    {
+        LOG(LS_WARNING) << "Configuration file does not exist";
+    }
 
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
-    settings_watcher_->watch(settings_.filePath(), false,
+    settings_watcher_->watch(settings_file, false,
         std::bind(&Server::updateConfiguration, this, std::placeholders::_1, std::placeholders::_2));
 
     authenticator_manager_ = std::make_unique<base::ServerAuthenticatorManager>(task_runner_, this);

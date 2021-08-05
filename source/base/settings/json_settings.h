@@ -41,7 +41,7 @@ public:
 
     bool isWritable() const;
     void sync();
-    void flush();
+    bool flush();
 
     const std::filesystem::path& filePath() const { return path_; }
 

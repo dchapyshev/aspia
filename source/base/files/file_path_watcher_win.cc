@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/strings/unicode.h"
 #include "base/win/object_watcher.h"
 
 namespace base {
@@ -120,6 +121,11 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
     {
         last_modified_ = last_modified;
         first_notification_ = Clock::now();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "std::filesystem::last_write_time failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
     }
 
     if (!updateWatch())

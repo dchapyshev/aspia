@@ -39,7 +39,7 @@ public:
     const std::filesystem::path& filePath() const;
     bool isWritable() const;
     void sync();
-    void flush();
+    bool flush();
 
     uint16_t tcpPort() const;
     void setTcpPort(uint16_t port);

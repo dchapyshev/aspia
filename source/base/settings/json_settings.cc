@@ -149,9 +149,9 @@ void JsonSettings::sync()
     readFile(path_, map());
 }
 
-void JsonSettings::flush()
+bool JsonSettings::flush()
 {
-    writeFile(path_, map());
+    return writeFile(path_, map());
 }
 
 // static
