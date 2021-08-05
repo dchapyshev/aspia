@@ -4,9 +4,13 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.ui" line="17"/>
         <source>Properties Book Addresses</source>
-        <translation>Propiedades Libro Direcciones</translation>
+        <translation type="vanished">Propiedades Libro Direcciones</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="17"/>
+        <source>Address Book Properties</source>
+        <translation type="unfinished">Propiedades Libro de Direcciones</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="27"/>
@@ -239,17 +243,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="38"/>
+        <location filename="../main.cc" line="43"/>
         <source>Aspia Console</source>
         <translation>Aspia Consola</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="41"/>
+        <location filename="../main.cc" line="46"/>
         <source>file</source>
         <translation>archivo</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="42"/>
+        <location filename="../main.cc" line="47"/>
         <source>The file to open.</source>
         <translation>El archivo para abrir.</translation>
     </message>
@@ -548,8 +552,8 @@
     </message>
     <message>
         <location filename="../open_address_book_dialog.ui" line="53"/>
-        <source>El Libro de direcciones está cifrado. Para abrir, debe ingresar una contraseña.</source>
-        <translation></translation>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.ui" line="66"/>
