@@ -172,8 +172,8 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
 
         item->set_path(drive_info.path().u8string());
         item->set_name(drive_info.volumeName());
-        item->set_total_space(drive_info.totalSpace());
-        item->set_free_space(drive_info.freeSpace());
+        item->set_total_space(static_cast<int64_t>(drive_info.totalSpace()));
+        item->set_free_space(static_cast<int64_t>(drive_info.freeSpace()));
     }
 #elif (OS_POSIX)
     proto::DriveList::Item* root_directory = drive_list->add_item();
@@ -248,7 +248,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doFileListRequest(
 
         proto::FileList::Item* item = file_list->add_item();
         item->set_name(file_info.u8name());
-        item->set_size(file_info.size());
+        item->set_size(static_cast<uint64_t>(file_info.size()));
         item->set_modification_time(file_info.lastWriteTime());
         item->set_is_directory(file_info.isDirectory());
 

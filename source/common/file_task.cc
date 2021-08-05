@@ -28,8 +28,8 @@ FileTask::FileTask(std::shared_ptr<FileTaskProducerProxy> producer_proxy,
                    std::unique_ptr<proto::FileRequest> request,
                    Target target)
     : producer_proxy_(std::move(producer_proxy)),
-      request_(std::move(request)),
-      target_(target)
+      target_(target),
+      request_(std::move(request))
 {
     DCHECK(producer_proxy_);
     DCHECK(request_);

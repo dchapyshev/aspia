@@ -37,7 +37,7 @@ FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     : file_stream_(std::move(file_stream))
 {
     file_stream_.seekg(0, file_stream_.end);
-    file_size_ = file_stream_.tellg();
+    file_size_ = static_cast<uint64_t>(file_stream_.tellg());
     file_stream_.seekg(0);
     left_size_ = file_size_;
 }
@@ -75,7 +75,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     char* packet_buffer = outputBuffer(packet.get(), packet_buffer_size);
 
     // Moving to a new position in file.
-    file_stream_.seekg(file_size_ - left_size_);
+    file_stream_.seekg(static_cast<std::streamoff>(file_size_ - left_size_));
 
     file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())

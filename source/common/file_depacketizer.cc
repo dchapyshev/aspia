@@ -97,7 +97,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
         left_size_ = file_size_;
     }
 
-    file_stream_.seekp(file_size_ - left_size_);
+    file_stream_.seekp(static_cast<std::streamoff>(file_size_ - left_size_));
     file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {

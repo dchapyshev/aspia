@@ -70,7 +70,7 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     {
         if (bytes_total != 0)
         {
-            int percentage = (bytes_received * 100) / bytes_total;
+            int percentage = static_cast<int>((bytes_received * 100) / bytes_total);
             ui.progress_bar->setValue(percentage);
         }
     });
