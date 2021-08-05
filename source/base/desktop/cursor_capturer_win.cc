@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/cursor.h"
+#include "base/logging.h"
 
 namespace base {
 
@@ -44,9 +45,17 @@ CursorCapturerWin::~CursorCapturerWin() = default;
 const MouseCursor* CursorCapturerWin::captureCursor()
 {
     if (!desktop_dc_.isValid())
+    {
         desktop_dc_.getDC(nullptr);
+        if (!desktop_dc_.isValid())
+        {
+            LOG(LS_WARNING) << "Unable to get desktop DC";
+            return nullptr;
+        }
+    }
 
-    CURSORINFO cursor_info = { 0 };
+    CURSORINFO cursor_info;
+    memset(&cursor_info, 0, sizeof(cursor_info));
 
     // Note: cursor_info.hCursor does not need to be freed.
     cursor_info.cbSize = sizeof(cursor_info);
@@ -56,10 +65,17 @@ const MouseCursor* CursorCapturerWin::captureCursor()
         {
             if (cursor_info.flags == 0)
             {
+                LOG(LS_INFO) << "No hardware cursor attached. Using default mouse cursor";
+
                 // Host machine does not have a hardware mouse attached, we will send a default one
                 // instead. Note, Windows automatically caches cursor resource, so we do not need
                 // to cache the result of LoadCursor.
                 cursor_info.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+                if (!cursor_info.hCursor)
+                {
+                    PLOG(LS_WARNING) << "LoadCursorW failed";
+                    return nullptr;
+                }
             }
 
             mouse_cursor_.reset(mouseCursorFromHCursor(desktop_dc_, cursor_info.hCursor));
@@ -69,6 +85,10 @@ const MouseCursor* CursorCapturerWin::captureCursor()
                 return mouse_cursor_.get();
             }
         }
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "GetCursorInfo failed";
     }
 
     return nullptr;
