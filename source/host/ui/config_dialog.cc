@@ -431,10 +431,11 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         // Update the parameters.
-        settings.setTcpPort(ui.spinbox_port->value());
+        settings.setTcpPort(static_cast<uint16_t>(ui.spinbox_port->value()));
         settings.setUserList(*user_list);
         settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
         settings.setPreferredVideoCapturer(ui.combo_video_capturer->currentData().toUInt());
+        settings.flush();
 
         setConfigChanged(false);
 
