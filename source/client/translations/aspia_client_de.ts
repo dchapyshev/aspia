@@ -1551,32 +1551,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="261"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="268"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="278"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="286"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="282"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="302"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="296"/>
         <source>Unknown error type while copying files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1876,7 +1876,7 @@
         <location filename="../ui/router_user_dialog.cc" line="155"/>
         <location filename="../ui/router_user_dialog.cc" line="169"/>
         <location filename="../ui/router_user_dialog.cc" line="192"/>
-        <location filename="../ui/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_user_dialog.cc" line="216"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -1922,22 +1922,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="218"/>
+        <location filename="../ui/router_user_dialog.cc" line="217"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="266"/>
+        <location filename="../ui/router_user_dialog.cc" line="265"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="290"/>
+        <location filename="../ui/router_user_dialog.cc" line="289"/>
         <source>Administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="294"/>
+        <location filename="../ui/router_user_dialog.cc" line="293"/>
         <source>Client</source>
         <translation type="unfinished"></translation>
     </message>

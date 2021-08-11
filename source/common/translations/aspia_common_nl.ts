@@ -139,52 +139,52 @@
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="115"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="121"/>
+        <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="123"/>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="125"/>
+        <location filename="../ui/about_dialog.cc" line="124"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="142"/>
+        <location filename="../ui/about_dialog.cc" line="141"/>
         <source>Path: %1</source>
         <translation>Pad: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="143"/>
+        <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Compilation date: %1</source>
         <translation>Compilatie datum: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="144"/>
+        <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Compilation time: %1</source>
         <translation>Compilatie tijd: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="147"/>
         <source>%1 version: %2</source>
         <translation>%1 versie: %2</translation>
     </message>

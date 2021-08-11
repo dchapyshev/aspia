@@ -139,52 +139,52 @@
         <translation type="unfinished">Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="115"/>
         <source>Links:</source>
         <translation type="unfinished">Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Home page:</source>
         <translation type="unfinished">Webseite:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>GitHub page:</source>
         <translation type="unfinished">GitHub-Seite:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="121"/>
+        <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Developers:</source>
         <translation type="unfinished">Entwickler:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="123"/>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Translators:</source>
         <translation type="unfinished">Übersetzer:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="125"/>
+        <location filename="../ui/about_dialog.cc" line="124"/>
         <source>Third-party components:</source>
         <translation type="unfinished">Komponenten von Drittanbietern:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="142"/>
+        <location filename="../ui/about_dialog.cc" line="141"/>
         <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="143"/>
+        <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Compilation date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="144"/>
+        <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Compilation time: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="147"/>
         <source>%1 version: %2</source>
         <translation type="unfinished"></translation>
     </message>

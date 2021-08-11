@@ -529,12 +529,12 @@
         <location filename="../config_dialog.cc" line="365"/>
         <location filename="../config_dialog.cc" line="397"/>
         <location filename="../config_dialog.cc" line="410"/>
-        <location filename="../config_dialog.cc" line="590"/>
-        <location filename="../config_dialog.cc" line="609"/>
-        <location filename="../config_dialog.cc" line="624"/>
-        <location filename="../config_dialog.cc" line="634"/>
-        <location filename="../config_dialog.cc" line="650"/>
-        <location filename="../config_dialog.cc" line="660"/>
+        <location filename="../config_dialog.cc" line="591"/>
+        <location filename="../config_dialog.cc" line="610"/>
+        <location filename="../config_dialog.cc" line="625"/>
+        <location filename="../config_dialog.cc" line="635"/>
+        <location filename="../config_dialog.cc" line="651"/>
+        <location filename="../config_dialog.cc" line="661"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -549,75 +549,75 @@
         <translation>Verkeerde router public key ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="524"/>
+        <location filename="../config_dialog.cc" line="525"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="533"/>
+        <location filename="../config_dialog.cc" line="534"/>
         <source>Started</source>
         <translation>Gestart</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="534"/>
+        <location filename="../config_dialog.cc" line="535"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="539"/>
+        <location filename="../config_dialog.cc" line="540"/>
         <source>Not started</source>
         <translation>Niet gestart</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="540"/>
-        <location filename="../config_dialog.cc" line="547"/>
-        <location filename="../config_dialog.cc" line="560"/>
+        <location filename="../config_dialog.cc" line="541"/>
+        <location filename="../config_dialog.cc" line="548"/>
+        <location filename="../config_dialog.cc" line="561"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="546"/>
+        <location filename="../config_dialog.cc" line="547"/>
         <source>Installed</source>
         <translation>Geinstalleerd</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="557"/>
+        <location filename="../config_dialog.cc" line="558"/>
         <source>Not installed</source>
         <translation>Niet geinstalleerd</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="559"/>
+        <location filename="../config_dialog.cc" line="560"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="564"/>
+        <location filename="../config_dialog.cc" line="565"/>
         <source>Current state: %1</source>
         <translation>Huidige status: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="591"/>
+        <location filename="../config_dialog.cc" line="592"/>
         <source>The service could not be installed.</source>
         <translation>De service kon niet worden geinstalleerd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="610"/>
+        <location filename="../config_dialog.cc" line="611"/>
         <source>The service could not be removed.</source>
         <translation>De service kon niet worden verwijderd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="625"/>
-        <location filename="../config_dialog.cc" line="651"/>
+        <location filename="../config_dialog.cc" line="626"/>
+        <location filename="../config_dialog.cc" line="652"/>
         <source>Could not access the service.</source>
         <translation>Kon de service niet bereiken.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="635"/>
+        <location filename="../config_dialog.cc" line="636"/>
         <source>The service could not be started.</source>
         <translation>De service kon niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="661"/>
+        <location filename="../config_dialog.cc" line="662"/>
         <source>The service could not be stopped.</source>
         <translation>De service kon niet worden gestopt.</translation>
     </message>
@@ -833,7 +833,7 @@
         <location filename="../user_dialog.cc" line="150"/>
         <location filename="../user_dialog.cc" line="161"/>
         <location filename="../user_dialog.cc" line="183"/>
-        <location filename="../user_dialog.cc" line="200"/>
+        <location filename="../user_dialog.cc" line="199"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -883,12 +883,12 @@
         <translation>Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="201"/>
+        <location filename="../user_dialog.cc" line="200"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Onbekende interne fout bij het aanmaken of aanpassen van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="255"/>
+        <location filename="../user_dialog.cc" line="254"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>

@@ -139,52 +139,52 @@
         <translation>您还可以在这里获得GNU GPL许可证的翻译：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="115"/>
         <source>Links:</source>
         <translation>链接：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Home page:</source>
         <translation>主页：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>GitHub page:</source>
         <translation>GitHub页面：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="121"/>
+        <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Developers:</source>
         <translation>开发人员：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="123"/>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Translators:</source>
         <translation>翻译成员：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="125"/>
+        <location filename="../ui/about_dialog.cc" line="124"/>
         <source>Third-party components:</source>
         <translation>第三方组件：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="142"/>
+        <location filename="../ui/about_dialog.cc" line="141"/>
         <source>Path: %1</source>
         <translation>路径： %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="143"/>
+        <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Compilation date: %1</source>
         <translation>编译日期：%1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="144"/>
+        <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Compilation time: %1</source>
         <translation>编译时间： %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="147"/>
         <source>%1 version: %2</source>
         <translation>%1 版本： %2</translation>
     </message>

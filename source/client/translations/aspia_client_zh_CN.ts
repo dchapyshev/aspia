@@ -1485,32 +1485,32 @@
         <translation>生成用于复制的文件队列时出错</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="261"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>创建目录失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="268"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>未能创建文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="278"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>无法打开文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="286"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="282"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>无法写入文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>读取文件失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="302"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="296"/>
         <source>Unknown error type while copying files</source>
         <translation>复制文件时出现未知错误类型</translation>
     </message>
@@ -1791,7 +1791,7 @@
         <location filename="../ui/router_user_dialog.cc" line="155"/>
         <location filename="../ui/router_user_dialog.cc" line="169"/>
         <location filename="../ui/router_user_dialog.cc" line="192"/>
-        <location filename="../ui/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_user_dialog.cc" line="216"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1839,22 +1839,22 @@
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="218"/>
+        <location filename="../ui/router_user_dialog.cc" line="217"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="266"/>
+        <location filename="../ui/router_user_dialog.cc" line="265"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="290"/>
+        <location filename="../ui/router_user_dialog.cc" line="289"/>
         <source>Administrator</source>
         <translation>管理员</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="294"/>
+        <location filename="../ui/router_user_dialog.cc" line="293"/>
         <source>Client</source>
         <translation>客户端</translation>
     </message>

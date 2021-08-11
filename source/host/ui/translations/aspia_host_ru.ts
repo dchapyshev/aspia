@@ -673,12 +673,12 @@
         <location filename="../config_dialog.cc" line="365"/>
         <location filename="../config_dialog.cc" line="397"/>
         <location filename="../config_dialog.cc" line="410"/>
-        <location filename="../config_dialog.cc" line="590"/>
-        <location filename="../config_dialog.cc" line="609"/>
-        <location filename="../config_dialog.cc" line="624"/>
-        <location filename="../config_dialog.cc" line="634"/>
-        <location filename="../config_dialog.cc" line="650"/>
-        <location filename="../config_dialog.cc" line="660"/>
+        <location filename="../config_dialog.cc" line="591"/>
+        <location filename="../config_dialog.cc" line="610"/>
+        <location filename="../config_dialog.cc" line="625"/>
+        <location filename="../config_dialog.cc" line="635"/>
+        <location filename="../config_dialog.cc" line="651"/>
+        <location filename="../config_dialog.cc" line="661"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -693,75 +693,75 @@
         <translation>Введен некорректный публичный ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="524"/>
+        <location filename="../config_dialog.cc" line="525"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="533"/>
+        <location filename="../config_dialog.cc" line="534"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="534"/>
+        <location filename="../config_dialog.cc" line="535"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="539"/>
+        <location filename="../config_dialog.cc" line="540"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="540"/>
-        <location filename="../config_dialog.cc" line="547"/>
-        <location filename="../config_dialog.cc" line="560"/>
+        <location filename="../config_dialog.cc" line="541"/>
+        <location filename="../config_dialog.cc" line="548"/>
+        <location filename="../config_dialog.cc" line="561"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="546"/>
+        <location filename="../config_dialog.cc" line="547"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="557"/>
+        <location filename="../config_dialog.cc" line="558"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="559"/>
+        <location filename="../config_dialog.cc" line="560"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="564"/>
+        <location filename="../config_dialog.cc" line="565"/>
         <source>Current state: %1</source>
         <translation>Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="591"/>
+        <location filename="../config_dialog.cc" line="592"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="610"/>
+        <location filename="../config_dialog.cc" line="611"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="625"/>
-        <location filename="../config_dialog.cc" line="651"/>
+        <location filename="../config_dialog.cc" line="626"/>
+        <location filename="../config_dialog.cc" line="652"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="635"/>
+        <location filename="../config_dialog.cc" line="636"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="661"/>
+        <location filename="../config_dialog.cc" line="662"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
@@ -1037,7 +1037,7 @@
         <location filename="../user_dialog.cc" line="150"/>
         <location filename="../user_dialog.cc" line="161"/>
         <location filename="../user_dialog.cc" line="183"/>
-        <location filename="../user_dialog.cc" line="200"/>
+        <location filename="../user_dialog.cc" line="199"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1089,12 +1089,12 @@
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="201"/>
+        <location filename="../user_dialog.cc" line="200"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="255"/>
+        <location filename="../user_dialog.cc" line="254"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
