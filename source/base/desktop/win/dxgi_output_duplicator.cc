@@ -26,8 +26,8 @@
 #include <cstring>
 
 #include <comdef.h>
-#include <DXGI.h>
-#include <DXGIFormat.h>
+#include <dxgi.h>
+#include <dxgiformat.h>
 #include <Windows.h>
 
 namespace base {

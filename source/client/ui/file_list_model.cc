@@ -132,7 +132,7 @@ void FileListModel::setFileList(const proto::FileList& list)
             File file;
             file.name       = QString::fromStdString(item.name());
             file.last_write = item.modification_time();
-            file.size       = item.size();
+            file.size       = static_cast<int64_t>(item.size());
 
             QPair<QIcon, QString> file_info = common::FilePlatformUtil::fileTypeInfo(file.name);
             file.icon = file_info.first;

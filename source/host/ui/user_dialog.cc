@@ -181,8 +181,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 if (QMessageBox::warning(this,
                                          tr("Warning"),
-                                         QString("<b>%1</b><br/>%2<br/>%3")
-                                             .arg(unsafe).arg(safe).arg(question),
+                                         QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                                          QMessageBox::Yes,
                                          QMessageBox::No) == QMessageBox::Yes)
                 {

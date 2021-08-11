@@ -254,7 +254,6 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
         {
             return tr("An error occurred while building the file queue for copying");
         }
-        break;
 
         case FileTransfer::Error::Type::CREATE_DIRECTORY:
         {
@@ -262,7 +261,6 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
                 .arg(QString::fromStdString(error.path()))
                 .arg(fileErrorToString(error.code()));
         }
-        break;
 
         case FileTransfer::Error::Type::CREATE_FILE:
         case FileTransfer::Error::Type::ALREADY_EXISTS:
@@ -271,7 +269,6 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
                 .arg(QString::fromStdString(error.path()))
                 .arg(fileErrorToString(error.code()));
         }
-        break;
 
         case FileTransfer::Error::Type::OPEN_FILE:
         {
@@ -279,7 +276,6 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
                 .arg(QString::fromStdString(error.path()))
                 .arg(fileErrorToString(error.code()));
         }
-        break;
 
         case FileTransfer::Error::Type::WRITE_FILE:
         {
@@ -287,7 +283,6 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
                 .arg(QString::fromStdString(error.path()))
                 .arg(fileErrorToString(error.code()));
         }
-        break;
 
         case FileTransfer::Error::Type::READ_FILE:
         {
@@ -295,13 +290,11 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
                 .arg(QString::fromStdString(error.path()))
                 .arg(fileErrorToString(error.code()));
         }
-        break;
 
         default:
         {
             return tr("Unknown error type while copying files");
         }
-        break;
     }
 }
 

@@ -47,7 +47,8 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
         switch (i)
         {
             case 0:
-                item->setText(1, duration_.addSecs(metrics.duration.count()).toString());
+                item->setText(1, duration_.addSecs(
+                    static_cast<int>(metrics.duration.count())).toString());
                 break;
 
             case 1:

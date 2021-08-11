@@ -339,7 +339,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
                     if (role == Qt::EditRole || drive.name.isEmpty())
                         return drive.path;
 
-                    return QString("%1 (%2)").arg(drive.path).arg(drive.name);
+                    return QString("%1 (%2)").arg(drive.path, drive.name);
                 }
 
                 if (index.column() == COLUMN_TYPE)

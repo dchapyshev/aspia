@@ -43,14 +43,14 @@ public:
         : session(session)
     {
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
     }
 
-    ~HostTreeItem() = default;
+    ~HostTreeItem() override = default;
 
     proto::Session session;
 
@@ -64,7 +64,7 @@ public:
     explicit RelayTreeItem(const proto::Session& session)
     {
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
@@ -592,7 +592,7 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
         };
 
         QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(session.timepoint()), QLocale::ShortFormat);
+            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         add_item(tr("Computer Name"), QString::fromStdString(session.computer_name()));
         add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));

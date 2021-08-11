@@ -87,7 +87,7 @@ QString createList(const QString& title, const char* array[], size_t array_size)
             list.append(QLatin1String("<br/>"));
     }
 
-    return QString("<b>%1</b><br>%2").arg(title).arg(list);
+    return QString("<b>%1</b><br>%2").arg(title, list);
 }
 
 } // namespace
@@ -102,20 +102,19 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
-        .arg(tr("Aspia is free software released under GNU General Public License 3."))
-        .arg(tr("You can get a copy of license here:"))
-        .arg(kGplLink);
+        .arg(tr("Aspia is free software released under GNU General Public License 3."),
+             tr("You can get a copy of license here:"),
+             kGplLink);
 
     QString license_translation =
         QString("%1<br><a href='%2'>%2</a>")
-        .arg(tr("You can also get a translation of GNU GPL license here:"))
-        .arg(kGplTranslationLink);
+        .arg(tr("You can also get a translation of GNU GPL license here:"), kGplTranslationLink);
 
     QString links =
         QString("<b>%1</b><br>%2 <a href='%3'>%3</a><br>%4 <a href='%5'>%5</a>")
-        .arg(tr("Links:"))
-        .arg(tr("Home page:")).arg(kHomeLink)
-        .arg(tr("GitHub page:")).arg(kGitHubLink);
+        .arg(tr("Links:"),
+             tr("Home page:"), kHomeLink,
+             tr("GitHub page:"), kGitHubLink);
 
     QString developers =
         createList(tr("Developers:"), kDevelopers, std::size(kDevelopers));
@@ -145,7 +144,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     auto add_version = [list](const char* name, const QString& version)
     {
-        list->addItem(tr("%1 version: %2").arg(name).arg(version));
+        list->addItem(tr("%1 version: %2").arg(name, version));
     };
 
     add_version("asio", QString("%1.%2.%3")

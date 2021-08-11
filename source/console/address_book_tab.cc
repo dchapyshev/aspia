@@ -346,7 +346,7 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
     client::RouterConfig router_config;
 
     router_config.address  = base::utf16FromUtf8(router.address());
-    router_config.port     = router.port();
+    router_config.port     = static_cast<uint16_t>(router.port());
     router_config.username = base::utf16FromUtf8(router.username());
     router_config.password = base::utf16FromUtf8(router.password());
 

@@ -1159,7 +1159,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     config.router_config = router_config;
     config.computer_name = base::utf16FromUtf8(computer.name());
     config.address_or_id = base::utf16FromUtf8(computer.address());
-    config.port          = computer.port();
+    config.port          = static_cast<uint16_t>(computer.port());
     config.username      = base::utf16FromUtf8(computer.username());
     config.password      = base::utf16FromUtf8(computer.password());
     config.session_type  = computer.session_type();

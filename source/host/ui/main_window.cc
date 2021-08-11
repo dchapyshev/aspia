@@ -202,7 +202,7 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);
         address.setHost(base::utf16FromUtf8(state.host_name()));
-        address.setPort(state.host_port());
+        address.setPort(static_cast<uint16_t>(state.host_port()));
 
         router = QString::fromStdU16String(address.toString());
     }

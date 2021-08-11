@@ -295,7 +295,7 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
                     group << mk(tr("Manufacturer"), module.manufacturer());
 
                 if (module.size())
-                    group << mk(tr("Size"), sizeToString(module.size()));
+                    group << mk(tr("Size"), sizeToString(static_cast<int64_t>(module.size())));
 
                 if (module.speed())
                     group << mk(tr("Speed"), tr("%1 MHz").arg(module.speed()));
@@ -344,15 +344,15 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
             else
             {
                 param = QString("%1 (%2)")
-                    .arg(QString::fromStdString(drive.path()))
-                    .arg(QString::fromStdString(drive.file_system()));
+                    .arg(QString::fromStdString(drive.path()),
+                         QString::fromStdString(drive.file_system()));
             }
 
             if (drive.total_size() && drive.total_size() != static_cast<uint64_t>(-1))
             {
                 value = tr("%1 (%2 free)")
-                    .arg(sizeToString(drive.total_size()))
-                    .arg(sizeToString(drive.free_size()));
+                    .arg(sizeToString(static_cast<int64_t>(drive.total_size())),
+                         sizeToString(static_cast<int64_t>(drive.free_size())));
             }
 
             items << mk(param, value);
@@ -399,8 +399,8 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
             for (int j = 0; j < adapter.address_size(); ++j)
             {
                 QString value = QString("%1 / %2")
-                    .arg(QString::fromStdString(adapter.address(j).ip()))
-                    .arg(QString::fromStdString(adapter.address(j).mask()));
+                    .arg(QString::fromStdString(adapter.address(j).ip()),
+                         QString::fromStdString(adapter.address(j).mask()));
 
                 QString param = (adapter.address_size() > 1) ?
                     tr("Address #%1").arg(j + 1) : tr("Address");
@@ -563,9 +563,9 @@ QString SystemInfoWindow::delayToString(uint64_t delay)
     uint64_t minutes = ((delay % 86400) % 3600) / 60;
     uint64_t seconds = ((delay % 86400) % 3600) % 60;
 
-    QString seconds_string = tr("%n seconds", "", seconds);
-    QString minutes_string = tr("%n minutes", "", minutes);
-    QString hours_string = tr("%n hours", "", hours);
+    QString seconds_string = tr("%n seconds", "", static_cast<int>(seconds));
+    QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
+    QString hours_string = tr("%n hours", "", static_cast<int>(hours));
 
     if (!days)
     {
@@ -589,7 +589,7 @@ QString SystemInfoWindow::delayToString(uint64_t delay)
     }
     else
     {
-        QString days_string = tr("%n days", "", days);
+        QString days_string = tr("%n days", "", static_cast<int>(days));
 
         return days_string + QLatin1Char(' ') +
                hours_string + QLatin1Char(' ') +

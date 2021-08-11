@@ -22,7 +22,7 @@
 
 #include <algorithm>
 
-#include <DXGI.h>
+#include <dxgi.h>
 #include <comdef.h>
 
 namespace base {
@@ -62,7 +62,7 @@ bool DxgiAdapterDuplicator::doInitialize()
     {
         ComPtr<IDXGIOutput> output;
 
-        _com_error error = device_.dxgiAdapter()->EnumOutputs(i, output.GetAddressOf());
+        _com_error error = device_.dxgiAdapter()->EnumOutputs(static_cast<UINT>(i), output.GetAddressOf());
         if (error.Error() == DXGI_ERROR_NOT_FOUND)
             break;
 
