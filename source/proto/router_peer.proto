@@ -44,8 +44,16 @@ message ResetHostId
 
 message HostIdResponse
 {
-    fixed64 host_id = 1;
-    bytes key       = 2;
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN       = 1;
+        NO_HOST_FOUND = 2;
+    }
+
+    fixed64 host_id      = 1;
+    bytes key            = 2;
+    ErrorCode error_code = 3;
 }
 
 message ConnectionRequest
