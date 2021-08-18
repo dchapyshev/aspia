@@ -33,7 +33,7 @@ const char kActivateMessage[] = "activate";
 class EventFilter : public QAbstractNativeEventFilter
 {
 public:
-    ~EventFilter() = default;
+    ~EventFilter() override = default;
 
     static EventFilter* instance();
 
