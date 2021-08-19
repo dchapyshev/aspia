@@ -90,28 +90,70 @@ void generateAndPrintKeys()
 
 void createConfig()
 {
+    LOG(LS_INFO) << "Creation of initial configuration started";
+
     std::filesystem::path settings_file_path = router::Settings::filePath();
+
+    LOG(LS_INFO) << "Settings file path: " << settings_file_path;
 
     std::error_code error_code;
     if (std::filesystem::exists(settings_file_path, error_code))
     {
-        std::cout << "Settings file already exists. Continuation is impossible." << std::endl;
+        const char kMessage[] = "Settings file already exists. Continuation is impossible.";
+        LOG(LS_WARNING) << kMessage;
+        std::cout << kMessage << std::endl;
         return;
     }
 
-    std::filesystem::path public_key_path;
-    if (!base::BasePaths::commonAppData(&public_key_path))
+    std::filesystem::path public_key_dir;
+    if (!base::BasePaths::commonAppData(&public_key_dir))
     {
+        LOG(LS_WARNING) << "base::BasePaths::commonAppData failed";
         std::cout << "Failed to get the path to the current directory" << std::endl;
         return;
     }
 
-    public_key_path.append("aspia/router.pub");
+    public_key_dir.append("aspia");
 
-    if (std::filesystem::exists(public_key_path, error_code))
+    LOG(LS_INFO) << "Public key directory: " << public_key_dir;
+
+    if (!std::filesystem::exists(public_key_dir, error_code))
     {
-        std::cout << "Public key file already exists. Continuation is impossible." << std::endl;
+        LOG(LS_INFO) << "Public key directory does not exist ("
+                     << base::utf16FromLocal8Bit(error_code.message()) << "). Attempt to create...";
+
+        if (!std::filesystem::create_directories(public_key_dir, error_code))
+        {
+            LOG(LS_WARNING) << "Failed to create directory for public key: "
+                            << base::utf16FromLocal8Bit(error_code.message());
+            std::cout << "Failed to create directory for public key" << std::endl;
+            return;
+        }
+        else
+        {
+            LOG(LS_INFO) << "Public key directory created successfully";
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "Public key directory already exists";
+    }
+
+    std::filesystem::path public_key_file = public_key_dir;
+    public_key_file.append("router.pub");
+
+    LOG(LS_INFO) << "Public key file: " << public_key_file;
+
+    if (std::filesystem::exists(public_key_file, error_code))
+    {
+        const char kMessage[] = "Public key file already exists. Continuation is impossible.";
+        LOG(LS_WARNING) << kMessage;
+        std::cout << kMessage << std::endl;
         return;
+    }
+    else
+    {
+        LOG(LS_INFO) << "Public key does not exist yet";
     }
 
     std::unique_ptr<router::Database> db = router::DatabaseFactorySqlite().createDatabase();
@@ -120,10 +162,20 @@ void createConfig()
         db = router::DatabaseFactorySqlite().openDatabase();
         if (db)
         {
-            std::cout << "Database already exists. Continuation is impossible." << std::endl;
-            return;
+            const char kMessage[] = "Database already exists. Continuation is impossible.";
+            LOG(LS_WARNING) << kMessage;
+            std::cout << kMessage << std::endl;
         }
+        else
+        {
+            const char kMessage[] = "Failed to create new database.";
+            LOG(LS_WARNING) << kMessage;
+            std::cout << kMessage << std::endl;
+        }
+        return;
     }
+
+    LOG(LS_INFO) << "Creating a user...";
 
     const char16_t kUserName[] = u"admin";
     const char16_t kPassword[] = u"admin";
@@ -131,35 +183,54 @@ void createConfig()
     base::User user = base::User::create(kUserName, kPassword);
     if (!user.isValid())
     {
-        std::cout << "Failed to create user" << std::endl;
+        const char kMessage[] = "Failed to create user";
+        LOG(LS_WARNING) << kMessage;
+        std::cout << kMessage << std::endl;
         return;
     }
+
+    LOG(LS_INFO) << "User has been created. Adding a user to the database...";
 
     user.sessions = proto::ROUTER_SESSION_ADMIN | proto::ROUTER_SESSION_CLIENT;
     user.flags = base::User::ENABLED;
 
     if (!db->addUser(user))
     {
-        std::cout << "Failed to add user to database" << std::endl;
+        const char kMessage[] = "Failed to add user to database";
+        LOG(LS_WARNING) << kMessage;
+        std::cout << kMessage << std::endl;
         return;
     }
+
+    LOG(LS_INFO) << "User was successfully added to the database";
 
     std::cout << "User name: " << base::local8BitFromUtf16(kUserName) << std::endl;
     std::cout << "Password: " << base::local8BitFromUtf16(kPassword) << std::endl;
 
+    LOG(LS_INFO) << "Generating encryption keys...";
+
     base::ByteArray private_key;
     base::ByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
-        return;
-
-    if (!base::writeFile(public_key_path, base::toHex(public_key)))
     {
-        std::cout << "Failed to write public key to file: " << public_key_path << std::endl;
+        LOG(LS_WARNING) << "Failed to generate private and public keys";
+        return;
+    }
+
+    LOG(LS_INFO) << "Private and public keys have been successfully generated";
+    LOG(LS_INFO) << "Writing a public key to a file...";
+
+    if (!base::writeFile(public_key_file, base::toHex(public_key)))
+    {
+        const char kMessage[] = "Failed to write public key to file: ";
+        LOG(LS_WARNING) << kMessage << public_key_file;
+        std::cout << kMessage << public_key_file << std::endl;
         return;
     }
     else
     {
-        std::cout << "Public key file: " << public_key_path << std::endl;
+        LOG(LS_INFO) << "Public key was successfully written to the file";
+        std::cout << "Public key file: " << public_key_file << std::endl;
     }
 
     // Save the configuration file.
