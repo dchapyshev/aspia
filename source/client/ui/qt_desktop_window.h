@@ -74,6 +74,8 @@ protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;
+    void changeEvent(QEvent* event) override;
+    void focusOutEvent(QFocusEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
