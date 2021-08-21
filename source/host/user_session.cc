@@ -295,9 +295,6 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
         {
             LOG(LS_INFO) << "New credentials requested";
             updateCredentials();
-
-            if (delegate_)
-                delegate_->onUserSessionCredentialsChanged();
         }
         else
         {
@@ -538,6 +535,15 @@ void UserSession::updateCredentials()
     generator.setLength(kPasswordLength);
 
     password_ = generator.result();
+
+    if (delegate_)
+    {
+        delegate_->onUserSessionCredentialsChanged();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Delegate is nullptr";
+    }
 }
 
 void UserSession::sendCredentials()
