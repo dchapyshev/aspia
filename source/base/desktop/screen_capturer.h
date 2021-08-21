@@ -53,18 +53,17 @@ public:
     };
 
     using ScreenId = intptr_t;
-
-    struct Screen
-    {
-        ScreenId id;
-        std::string title;
-        bool is_primary = false;
-    };
-
     using ScreenList = std::vector<Screen>;
 
     static const ScreenId kFullDesktopScreenId = -1;
     static const ScreenId kInvalidScreenId = -2;
+
+    struct Screen
+    {
+        ScreenId id = kInvalidScreenId;
+        std::string title;
+        bool is_primary = false;
+    };
 
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
