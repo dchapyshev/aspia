@@ -47,7 +47,9 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
         return ByteArray();
 
     ByteArray image;
-    image.resize(cursor_shape.width() * cursor_shape.height() * sizeof(uint32_t));
+    image.resize(static_cast<size_t>(cursor_shape.width()) *
+                 static_cast<size_t>(cursor_shape.height()) *
+                 sizeof(uint32_t));
 
     size_t ret = ZSTD_initDStream(stream_.get());
     DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
@@ -140,7 +142,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
         return nullptr;
     }
 
-    return cache_.at(cache_index);
+    return cache_[cache_index];
 }
 
 } // namespace base
