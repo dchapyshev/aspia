@@ -476,14 +476,16 @@ void NetworkChannel::addWriteTask(WriteTask::Type type, ByteArray&& data)
 
 void NetworkChannel::doWrite()
 {
-    const ByteArray& source_buffer = write_queue_.front().data();
+    const WriteTask& task = write_queue_.front();
+    const ByteArray& source_buffer = task.data();
+
     if (source_buffer.empty())
     {
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    if (write_queue_.front().type() == WriteTask::Type::USER_DATA)
+    if (task.type() == WriteTask::Type::USER_DATA)
     {
         // Calculate the size of the encrypted message.
         const size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
@@ -512,7 +514,7 @@ void NetworkChannel::doWrite()
     }
     else
     {
-        DCHECK_EQ(write_queue_.front().type(), WriteTask::Type::SERVICE_DATA);
+        DCHECK_EQ(task.type(), WriteTask::Type::SERVICE_DATA);
 
         resizeBuffer(&write_buffer_, source_buffer.size());
 
