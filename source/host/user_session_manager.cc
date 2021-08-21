@@ -363,6 +363,11 @@ void UserSessionManager::onUserSessionHostIdRequest(const std::string& session_n
     delegate_->onHostIdRequest(session_name);
 }
 
+void UserSessionManager::onUserSessionCredentialsChanged()
+{
+    delegate_->onUserListChanged();
+}
+
 void UserSessionManager::onUserSessionDettached()
 {
     delegate_->onUserListChanged();
@@ -390,14 +395,24 @@ void UserSessionManager::onUserSessionFinished()
 void UserSessionManager::startSessionProcess(base::SessionId session_id)
 {
     if (session_id == base::kServiceSessionId)
+    {
+        LOG(LS_WARNING) << "Invalid session ID";
         return;
+    }
+
+    LOG(LS_INFO) << "Starting session process for session ID: " << session_id;
 
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
+    {
+        LOG(LS_WARNING) << "Failed to get user token";
         return;
+    }
 
     if (!user_token.isValid())
     {
+        LOG(LS_INFO) << "Invalid user token. User is not logged in";
+
         // If there is no user logged in, but the session exists, then add the session without
         // connecting to UI (we cannot start UI if the user is not logged in).
         addUserSession(session_id, nullptr);
@@ -406,14 +421,21 @@ void UserSessionManager::startSessionProcess(base::SessionId session_id)
 
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
+    {
+        LOG(LS_WARNING) << "Failed to get current exec directory";
         return;
+    }
 
     file_path.append(kExecutableNameForUi);
 
     base::CommandLine command_line(file_path);
     command_line.appendSwitch(u"hidden");
 
-    createProcessWithToken(user_token, command_line);
+    if (!createProcessWithToken(user_token, command_line))
+    {
+        LOG(LS_WARNING) << "Failed to start process with user token ("
+                        << command_line.commandLineString() << ")";
+    }
 }
 
 void UserSessionManager::addUserSession(

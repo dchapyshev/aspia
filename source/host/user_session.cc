@@ -293,11 +293,16 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
+            LOG(LS_INFO) << "New credentials requested";
             updateCredentials();
+
+            if (delegate_)
+                delegate_->onUserSessionCredentialsChanged();
         }
         else
         {
             DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
+            LOG(LS_INFO) << "Credentials update requested";
         }
 
         sendCredentials();
@@ -441,7 +446,10 @@ void UserSession::onClientSessionFinished()
     delete_finished(&file_transfer_clients_);
 
     if (desktop_clients_.empty())
+    {
+        LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent";
         desktop_session_proxy_->control(proto::internal::Control::DISABLE);
+    }
 }
 
 void UserSession::onSessionDettached(const base::Location& location)
@@ -492,6 +500,8 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     if (!channel_)
         return;
 
+    LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id();
+
     outgoing_message_.Clear();
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
@@ -507,6 +517,8 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
     if (!channel_)
         return;
 
+    LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id;
+
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_id(session_id);
     channel_->send(base::serialize(outgoing_message_));
@@ -514,13 +526,14 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 
 void UserSession::updateCredentials()
 {
-    base::PasswordGenerator generator;
+    LOG(LS_INFO) << "Updating credentials";
 
     static const uint32_t kPasswordCharacters = base::PasswordGenerator::UPPER_CASE |
         base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::DIGITS;
     static const int kPasswordLength = 6;
 
     // TODO: Get password parameters from settings.
+    base::PasswordGenerator generator;
     generator.setCharacters(kPasswordCharacters);
     generator.setLength(kPasswordLength);
 
@@ -556,6 +569,8 @@ void UserSession::killClientSession(uint32_t id)
             }
         }
     };
+
+    LOG(LS_INFO) << "Kill client session with ID: " << id;
 
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&file_transfer_clients_, id);
