@@ -276,7 +276,7 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
             else
                 xml.startElement("Group");
 
-            xml.attribute("Name", segments.at(i));
+            xml.attribute("Name", segments[i]);
         }
 
         xml.text(map_item.second);

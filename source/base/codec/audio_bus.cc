@@ -312,7 +312,10 @@ void AudioBus::Scale(float volume)
     if (volume > 0 && volume != 1)
     {
         for (int i = 0; i < channels(); ++i)
-            FMUL(channel(i), volume, frames(), channel(i));
+        {
+            float* ch = channel(i);
+            FMUL(ch, volume, frames(), ch);
+        }
     }
     else if (volume == 0)
     {

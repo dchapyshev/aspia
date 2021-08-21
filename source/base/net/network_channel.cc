@@ -582,7 +582,7 @@ void NetworkChannel::onReadSize(const std::error_code& error_code, size_t bytes_
     std::optional<size_t> size = variable_size_reader_.messageSize();
     if (size.has_value())
     {
-        size_t message_size = size.value();
+        size_t message_size = *size;
 
         if (message_size > kMaxMessageSize)
         {
