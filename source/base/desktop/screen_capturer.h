@@ -53,7 +53,6 @@ public:
     };
 
     using ScreenId = intptr_t;
-    using ScreenList = std::vector<Screen>;
 
     static const ScreenId kFullDesktopScreenId = -1;
     static const ScreenId kInvalidScreenId = -2;
@@ -64,6 +63,8 @@ public:
         std::string title;
         bool is_primary = false;
     };
+
+    using ScreenList = std::vector<Screen>;
 
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
