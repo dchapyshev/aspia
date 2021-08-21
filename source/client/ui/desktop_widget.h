@@ -59,6 +59,7 @@ public slots:
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.
     void enableKeyCombinations(bool enable);
+    void userLeftFromWindow();
 
 signals:
     void sig_mouseEvent(const proto::MouseEvent& event);
@@ -79,6 +80,9 @@ protected:
 
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
+    void enableKeyHooks(bool enable);
+    void releaseMouseButtons();
+    void releaseKeyboardButtons();
 
     QPainter painter_;
 

@@ -113,8 +113,16 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
                 break;
 
             case 16:
-                item->setText(1, QString::number(metrics.drop_mouse));
-                break;
+            {
+                int total_mouse = metrics.send_mouse + metrics.drop_mouse;
+                int percentage = 0;
+
+                if (total_mouse != 0)
+                    percentage = (metrics.drop_mouse * 100) / total_mouse;
+
+                item->setText(1, QString("%1 (%2 %)").arg(metrics.drop_mouse).arg(percentage));
+            }
+            break;
 
             case 17:
                 item->setText(1, QString::number(metrics.send_key));

@@ -60,6 +60,7 @@ protected:
 
     // UserSession::Delegate implementation.
     void onUserSessionHostIdRequest(const std::string& session_name) override;
+    void onUserSessionCredentialsChanged() override;
     void onUserSessionDettached() override;
     void onUserSessionFinished() override;
 

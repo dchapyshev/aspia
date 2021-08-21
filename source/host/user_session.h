@@ -56,6 +56,7 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onUserSessionHostIdRequest(const std::string& session_name) = 0;
+        virtual void onUserSessionCredentialsChanged() = 0;
         virtual void onUserSessionDettached() = 0;
         virtual void onUserSessionFinished() = 0;
     };

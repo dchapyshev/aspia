@@ -90,7 +90,11 @@ void generateAndPrintKeys()
 
 void createConfig()
 {
+    std::cout << "Creation of initial configuration started." << std::endl;
+
     std::filesystem::path settings_file_path = router::Settings::filePath();
+
+    std::cout << "Settings file path: " << settings_file_path << std::endl;
 
     std::error_code error_code;
     if (std::filesystem::exists(settings_file_path, error_code))
@@ -99,19 +103,53 @@ void createConfig()
         return;
     }
 
-    std::filesystem::path public_key_path;
-    if (!base::BasePaths::commonAppData(&public_key_path))
+    std::cout << "Settings file does not exist yet." << std::endl;
+
+    std::filesystem::path public_key_dir;
+    if (!base::BasePaths::commonAppData(&public_key_dir))
     {
-        std::cout << "Failed to get the path to the current directory" << std::endl;
+        std::cout << "Failed to get the path to the config directory." << std::endl;
         return;
     }
 
-    public_key_path.append("aspia/router.pub");
+    public_key_dir.append("aspia");
 
-    if (std::filesystem::exists(public_key_path, error_code))
+    std::cout << "Public key directory path: " << public_key_dir << std::endl;
+
+    if (!std::filesystem::exists(public_key_dir, error_code))
+    {
+        std::cout << "Public key directory does not exist (" << error_code.message()
+                  << "). Attempt to create..." << std::endl;
+
+        if (!std::filesystem::create_directories(public_key_dir, error_code))
+        {
+            std::cout << "Failed to create directory for public key: "
+                      << error_code.message() << std::endl;
+            return;
+        }
+        else
+        {
+            std::cout << "Public key directory created successfully." << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Public key directory already exists." << std::endl;
+    }
+
+    std::filesystem::path public_key_file = public_key_dir;
+    public_key_file.append("router.pub");
+
+    std::cout << "Public key file: " << public_key_file << std::endl;
+
+    if (std::filesystem::exists(public_key_file, error_code))
     {
         std::cout << "Public key file already exists. Continuation is impossible." << std::endl;
         return;
+    }
+    else
+    {
+        std::cout << "Public key does not exist yet." << std::endl;
     }
 
     std::unique_ptr<router::Database> db = router::DatabaseFactorySqlite().createDatabase();
@@ -121,9 +159,15 @@ void createConfig()
         if (db)
         {
             std::cout << "Database already exists. Continuation is impossible." << std::endl;
-            return;
         }
+        else
+        {
+            std::cout << "Failed to create new database." << std::endl;
+        }
+        return;
     }
+
+    std::cout << "Creating a user..." << std::endl;
 
     const char16_t kUserName[] = u"admin";
     const char16_t kPassword[] = u"admin";
@@ -131,35 +175,36 @@ void createConfig()
     base::User user = base::User::create(kUserName, kPassword);
     if (!user.isValid())
     {
-        std::cout << "Failed to create user" << std::endl;
+        std::cout << "Failed to create user." << std::endl;
         return;
     }
+
+    std::cout << "User has been created. Adding a user to the database..." << std::endl;
 
     user.sessions = proto::ROUTER_SESSION_ADMIN | proto::ROUTER_SESSION_CLIENT;
     user.flags = base::User::ENABLED;
 
     if (!db->addUser(user))
     {
-        std::cout << "Failed to add user to database" << std::endl;
+        std::cout << "Failed to add user to database." << std::endl;
         return;
     }
 
-    std::cout << "User name: " << base::local8BitFromUtf16(kUserName) << std::endl;
-    std::cout << "Password: " << base::local8BitFromUtf16(kPassword) << std::endl;
+    std::cout << "User was successfully added to the database." << std::endl;
+    std::cout << "Generating encryption keys..." << std::endl;
 
     base::ByteArray private_key;
     base::ByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
         return;
 
-    if (!base::writeFile(public_key_path, base::toHex(public_key)))
+    std::cout << "Private and public keys have been successfully generated." << std::endl;
+    std::cout << "Writing a public key to a file..." << std::endl;
+
+    if (!base::writeFile(public_key_file, base::toHex(public_key)))
     {
-        std::cout << "Failed to write public key to file: " << public_key_path << std::endl;
+        std::cout << "Failed to write public key to file: " << public_key_file << std::endl;
         return;
-    }
-    else
-    {
-        std::cout << "Public key file: " << public_key_path << std::endl;
     }
 
     // Save the configuration file.
@@ -170,6 +215,9 @@ void createConfig()
 
     std::cout << "Configuration successfully created. Don't forget to change your password!"
               << std::endl;
+    std::cout << "User name: " << base::local8BitFromUtf16(kUserName) << std::endl;
+    std::cout << "Password: " << base::local8BitFromUtf16(kPassword) << std::endl;
+    std::cout << "Public key file: " << public_key_file << std::endl;
 }
 
 void showHelp()

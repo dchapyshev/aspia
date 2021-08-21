@@ -208,7 +208,8 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     uint32_t usb_keycode = common::KeycodeConverter::invalidUsbKeycode();
 
 #if !defined(OS_MAC)
-    usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+        static_cast<int>(event->nativeScanCode()));
 #else
     if (isModifierKey(key))
         usb_keycode = common::KeycodeConverter::qtKeycodeToUsbKeycode(key);
@@ -302,13 +303,14 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
 void DesktopWidget::enableKeyCombinations(bool enable)
 {
     enable_key_sequenses_ = enable;
+    enableKeyHooks(enable);
+}
 
-#if defined(OS_WIN)
-    if (enable)
-        keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
-    else
-        keyboard_hook_.reset();
-#endif // defined(OS_WIN)
+void DesktopWidget::userLeftFromWindow()
+{
+    enableKeyHooks(false);
+    releaseMouseButtons();
+    releaseKeyboardButtons();
 }
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
@@ -317,7 +319,6 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     if (frame)
     {
         painter_.begin(this);
-
 
 #if !defined(OS_MAC)
         // SmoothPixmapTransform causes too much CPU load in MacOSX.
@@ -361,60 +362,22 @@ void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
 
 void DesktopWidget::leaveEvent(QEvent* event)
 {
-#if defined(OS_WIN)
-    keyboard_hook_.reset();
-#endif // defined(OS_WIN)
-
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
-    if (prev_mask_ != 0)
-    {
-        proto::MouseEvent mouse_event;
-        mouse_event.set_x(prev_pos_.x());
-        mouse_event.set_y(prev_pos_.y());
-
-        emit sig_mouseEvent(mouse_event);
-        prev_mask_ = 0;
-    }
-
+    releaseMouseButtons();
     QWidget::leaveEvent(event);
 }
 
 void DesktopWidget::focusInEvent(QFocusEvent* event)
 {
-#if defined(OS_WIN)
     if (enable_key_sequenses_)
-        keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
-#endif // defined(OS_WIN)
+        enableKeyHooks(true);
 
     QWidget::focusInEvent(event);
 }
 
 void DesktopWidget::focusOutEvent(QFocusEvent* event)
 {
-#if defined(OS_WIN)
-    keyboard_hook_.reset();
-#endif // defined(OS_WIN)
-
-    // Release all pressed keys of the keyboard.
-    if (!pressed_keys_.empty())
-    {
-        uint32_t flags = 0;
-
-        flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
-        flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
-
-        proto::KeyEvent key_event;
-        key_event.set_flags(flags);
-
-        auto it = pressed_keys_.begin();
-        while (it != pressed_keys_.end())
-        {
-            key_event.set_usb_keycode(*it);
-            emit sig_keyEvent(key_event);
-            it = pressed_keys_.erase(it);
-        }
-    }
-
+    userLeftFromWindow();
     QWidget::focusOutEvent(event);
 }
 
@@ -430,6 +393,50 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     event.set_flags(flags);
 
     emit sig_keyEvent(event);
+}
+
+void DesktopWidget::enableKeyHooks(bool enable)
+{
+#if defined(OS_WIN)
+    if (enable)
+        keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
+    else
+        keyboard_hook_.reset();
+#endif // defined(OS_WIN)
+}
+
+void DesktopWidget::releaseMouseButtons()
+{
+    if (prev_mask_ == 0)
+        return;
+
+    proto::MouseEvent mouse_event;
+    mouse_event.set_x(prev_pos_.x());
+    mouse_event.set_y(prev_pos_.y());
+
+    emit sig_mouseEvent(mouse_event);
+    prev_mask_ = 0;
+}
+
+void DesktopWidget::releaseKeyboardButtons()
+{
+    if (pressed_keys_.empty())
+        return;
+
+    uint32_t flags = 0;
+    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+
+    proto::KeyEvent key_event;
+    key_event.set_flags(flags);
+
+    auto it = pressed_keys_.begin();
+    while (it != pressed_keys_.end())
+    {
+        key_event.set_usb_keycode(*it);
+        emit sig_keyEvent(key_event);
+        it = pressed_keys_.erase(it);
+    }
 }
 
 #if defined(OS_WIN)
@@ -457,7 +464,7 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
                     scan_code |= 0x100;
 
                 uint32_t usb_keycode =
-                    common::KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
+                    common::KeycodeConverter::nativeKeycodeToUsbKeycode(static_cast<int>(scan_code));
                 if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
                 {
                     self->executeKeyEvent(usb_keycode, flags);

@@ -128,19 +128,39 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
         return;
     }
 
-    base::HostId host_id = database->hostId(key_hash);
-    if (host_id == base::kInvalidHostId)
+    base::HostId host_id = base::kInvalidHostId;
+
+    switch (database->hostId(key_hash, &host_id))
     {
-        LOG(LS_ERROR) << "Failed to get host ID";
-        return;
+        case Database::ErrorCode::SUCCESS:
+        {
+            if (host_id != base::kInvalidHostId)
+            {
+                host_id_response->set_error_code(proto::HostIdResponse::SUCCESS);
+                host_id_response->set_host_id(host_id);
+
+                host_id_list_.emplace_back(host_id);
+
+                // Notify the server that the ID has been assigned.
+                server().onHostSessionWithId(this);
+            }
+            else
+            {
+                host_id_response->set_error_code(proto::HostIdResponse::UNKNOWN);
+                LOG(LS_ERROR) << "Invalid host id";
+            }
+        }
+        break;
+
+        case Database::ErrorCode::NO_HOST_FOUND:
+            host_id_response->set_error_code(proto::HostIdResponse::NO_HOST_FOUND);
+            break;
+
+        default:
+            host_id_response->set_error_code(proto::HostIdResponse::UNKNOWN);
+            break;
     }
 
-    host_id_list_.emplace_back(host_id);
-
-    // Notify the server that the ID has been assigned.
-    server().onHostSessionWithId(this);
-
-    host_id_response->set_host_id(host_id);
     sendMessage(*message);
 }
 

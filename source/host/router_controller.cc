@@ -164,14 +164,14 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
 
 void RouterController::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToPeer message;
-    if (!base::parse(buffer, &message))
+    proto::RouterToPeer in_message;
+    if (!base::parse(buffer, &in_message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (message.has_host_id_response())
+    if (in_message.has_host_id_response())
     {
         if (pending_id_requests_.empty())
         {
@@ -179,7 +179,32 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        const proto::HostIdResponse& host_id_response = message.host_id_response();
+        const proto::HostIdResponse& host_id_response = in_message.host_id_response();
+
+        switch (host_id_response.error_code())
+        {
+            case proto::HostIdResponse::SUCCESS:
+                break;
+
+            // The specified host is not in the router's database.
+            case proto::HostIdResponse::NO_HOST_FOUND:
+            {
+                LOG(LS_INFO) << "Host is not in the router's database. Reset ID";
+
+                proto::PeerToRouter out_message;
+                out_message.mutable_host_id_request()->set_type(proto::HostIdRequest::NEW_ID);
+
+                // Send host ID request.
+                LOG(LS_INFO) << "Send ID request to router";
+                channel_->send(base::serialize(out_message));
+                return;
+            }
+
+            default:
+                LOG(LS_WARNING) << "Unknown error code: " << host_id_response.error_code();
+                return;
+        }
+
         if (host_id_response.host_id() == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Invalid host ID received";
@@ -200,11 +225,11 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
         pending_id_requests_.pop();
     }
-    else if (message.has_connection_offer())
+    else if (in_message.has_connection_offer())
     {
         LOG(LS_INFO) << "New connection offer";
 
-        const proto::ConnectionOffer& connection_offer = message.connection_offer();
+        const proto::ConnectionOffer& connection_offer = in_message.connection_offer();
 
         if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS &&
             connection_offer.peer_role() == proto::ConnectionOffer::HOST)

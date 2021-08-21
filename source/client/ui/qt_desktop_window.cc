@@ -365,6 +365,19 @@ void QtDesktopWindow::leaveEvent(QEvent* event)
     QWidget::leaveEvent(event);
 }
 
+void QtDesktopWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::WindowStateChange && isMinimized())
+        desktop_->userLeftFromWindow();
+    QWidget::changeEvent(event);
+}
+
+void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
+{
+    desktop_->userLeftFromWindow();
+    QWidget::focusOutEvent(event);
+}
+
 bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == desktop_)
@@ -478,8 +491,8 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
         proto::MouseEvent out_event;
 
         out_event.set_mask(event.mask());
-        out_event.set_x((static_cast<double>(pos.x() * 100) / scale));
-        out_event.set_y((static_cast<double>(pos.y() * 100) / scale));
+        out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
+        out_event.set_y(static_cast<int>(static_cast<double>(pos.y() * 100) / scale));
 
         desktop_control_proxy_->onMouseEvent(out_event);
     }
