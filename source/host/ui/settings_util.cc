@@ -90,14 +90,14 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     }
     else
     {
-        uintmax_t fileSize = std::filesystem::file_size(source_path, error_code);
+        uintmax_t file_size = std::filesystem::file_size(source_path, error_code);
         if (error_code)
         {
             LOG(LS_WARNING) << "Failed to get settings file size ("
                             << base::utf16FromLocal8Bit(error_code.message()) << ")";
         }
 
-        LOG(LS_INFO) << "Source settings file exist (" << fileSize << " bytes)";
+        LOG(LS_INFO) << "Source settings file exist (" << file_size << " bytes)";
     }
 
     base::JsonSettings::Map settings_map;
