@@ -150,18 +150,18 @@
         <translation type="vanished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="105"/>
-        <location filename="../host_main.cc" line="124"/>
+        <location filename="../host_main.cc" line="106"/>
+        <location filename="../host_main.cc" line="125"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="106"/>
+        <location filename="../host_main.cc" line="107"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="125"/>
+        <location filename="../host_main.cc" line="126"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
