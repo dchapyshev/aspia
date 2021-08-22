@@ -37,6 +37,7 @@ void hostServiceMain()
     }
     else
     {
+        LOG(LS_INFO) << "Integrity check passed successfully";
         Service().exec();
     }
 
