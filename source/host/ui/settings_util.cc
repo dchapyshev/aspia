@@ -72,8 +72,26 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
                                 bool silent,
                                 QWidget* parent)
 {
-    base::JsonSettings::Map settings_map;
+    std::error_code error_code;
+    if (!std::filesystem::exists(source_path, error_code))
+    {
+        LOG(LS_WARNING) << "Source settings file does't exist ("
+                        << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        return false;
+    }
+    else
+    {
+        uintmax_t fileSize = std::filesystem::file_size(source_path, error_code);
+        if (error_code)
+        {
+            LOG(LS_WARNING) << "Failed to get settings file size ("
+                            << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        }
 
+        LOG(LS_INFO) << "Source settings file exist (" << fileSize << " bytes)";
+    }
+
+    base::JsonSettings::Map settings_map;
     if (!base::JsonSettings::readFile(source_path, settings_map))
     {
         LOG(LS_WARNING) << "Failed to read source file: " << source_path;
@@ -92,6 +110,15 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     else
     {
         LOG(LS_INFO) << "File read successfully: " << source_path;
+    }
+
+    if (std::filesystem::exists(target_path, error_code))
+    {
+        LOG(LS_INFO) << "Target settings file already exist and will be overwritten";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Target settings file does't exist. New file will be created";
     }
 
     if (!base::JsonSettings::writeFile(target_path, settings_map))
