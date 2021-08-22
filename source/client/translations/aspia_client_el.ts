@@ -1464,7 +1464,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="600"/>
+        <location filename="../ui/router_manager_window.cc" line="601"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>

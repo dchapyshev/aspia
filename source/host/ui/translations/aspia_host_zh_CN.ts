@@ -134,18 +134,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="103"/>
-        <location filename="../host_main.cc" line="116"/>
+        <location filename="../host_main.cc" line="105"/>
+        <location filename="../host_main.cc" line="124"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="104"/>
+        <location filename="../host_main.cc" line="106"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="117"/>
+        <location filename="../host_main.cc" line="125"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
@@ -236,34 +236,34 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="36"/>
-        <location filename="../settings_util.cc" line="52"/>
+        <location filename="../settings_util.cc" line="41"/>
+        <location filename="../settings_util.cc" line="61"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="37"/>
+        <location filename="../settings_util.cc" line="42"/>
         <source>The configuration was successfully imported.</source>
         <translation>配置已成功导入。</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="53"/>
+        <location filename="../settings_util.cc" line="62"/>
         <source>The configuration was successfully exported.</source>
         <translation>配置已成功导出。</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="74"/>
-        <location filename="../settings_util.cc" line="87"/>
+        <location filename="../settings_util.cc" line="103"/>
+        <location filename="../settings_util.cc" line="131"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="75"/>
+        <location filename="../settings_util.cc" line="104"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>无法读取源文件：文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="88"/>
+        <location filename="../settings_util.cc" line="132"/>
         <source>Unable to write the target file.</source>
         <translation>无法写入目标文件。</translation>
     </message>

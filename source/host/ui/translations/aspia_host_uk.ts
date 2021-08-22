@@ -150,18 +150,18 @@
         <translation type="vanished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="103"/>
-        <location filename="../host_main.cc" line="116"/>
+        <location filename="../host_main.cc" line="105"/>
+        <location filename="../host_main.cc" line="124"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="104"/>
+        <location filename="../host_main.cc" line="106"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="117"/>
+        <location filename="../host_main.cc" line="125"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
@@ -430,34 +430,34 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="36"/>
-        <location filename="../settings_util.cc" line="52"/>
+        <location filename="../settings_util.cc" line="41"/>
+        <location filename="../settings_util.cc" line="61"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="37"/>
+        <location filename="../settings_util.cc" line="42"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфігурацію імпортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="53"/>
+        <location filename="../settings_util.cc" line="62"/>
         <source>The configuration was successfully exported.</source>
         <translation>Кофігурацію експортовано успішно.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="74"/>
-        <location filename="../settings_util.cc" line="87"/>
+        <location filename="../settings_util.cc" line="103"/>
+        <location filename="../settings_util.cc" line="131"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="75"/>
+        <location filename="../settings_util.cc" line="104"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="88"/>
+        <location filename="../settings_util.cc" line="132"/>
         <source>Unable to write the target file.</source>
         <translation>Неможливо записати цільовий файл.</translation>
     </message>
