@@ -46,6 +46,7 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
+    scoped_logging.h
     session_id.cc
     session_id.h
     smbios.h

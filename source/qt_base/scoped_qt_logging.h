@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,30 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_main.h"
+#ifndef QT_BASE__SCOPED_QT_LOGGING_H
+#define QT_BASE__SCOPED_QT_LOGGING_H
 
-#include "base/scoped_logging.h"
-#include "build/version.h"
-#include "host/integrity_check.h"
-#include "host/win/service.h"
+#include "qt_base/qt_logging.h"
 
-namespace host {
+namespace qt_base {
 
-void hostServiceMain()
+class ScopedQtLogging
 {
-    base::ScopedLogging scoped_logging;
-
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
-
-    if (!integrityCheck())
+public:
+    ScopedQtLogging(const base::LoggingSettings& settings = base::LoggingSettings())
     {
-        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
+        initialized_ = base::initLogging(settings);
+        if (initialized_)
+            initQtLogging();
     }
-    else
-    {
-        LOG(LS_INFO) << "Integrity check passed successfully";
-        Service().exec();
-    }
-}
 
-} // namespace host
+    ~ScopedQtLogging()
+    {
+        if (initialized_)
+            base::shutdownLogging();
+    }
+
+private:
+    bool initialized_ = false;
+};
+
+} // namespace qt_base
+
+#endif // QT_BASE__SCOPED_QT_LOGGING_H

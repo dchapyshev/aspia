@@ -19,7 +19,7 @@
 #include "build/version.h"
 #include "console/application.h"
 #include "console/main_window.h"
-#include "qt_base/qt_logging.h"
+#include "qt_base/scoped_qt_logging.h"
 
 #include <QCommandLineParser>
 
@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
+
+    qt_base::ScopedQtLogging scoped_logging;
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

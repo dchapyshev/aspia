@@ -19,14 +19,14 @@
 #include "host/desktop_agent_main.h"
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/scoped_logging.h"
 #include "base/message_loop/message_loop.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 
 void desktopAgentMain(int argc, const char* const* argv)
 {
-    base::initLogging();
+    base::ScopedLogging scoped_logging;
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -49,6 +49,4 @@ void desktopAgentMain(int argc, const char* const* argv)
     {
         LOG(LS_ERROR) << "Parameter channel_id is not specified";
     }
-
-    base::shutdownLogging();
 }

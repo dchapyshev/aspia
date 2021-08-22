@@ -18,7 +18,6 @@
 
 #include "client/client_main.h"
 
-#include "qt_base/qt_logging.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/ui/application.h"
@@ -26,6 +25,7 @@
 #include "client/ui/client_window.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "qt_base/scoped_qt_logging.h"
 
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -37,6 +37,8 @@ int clientMain(int argc, char* argv[])
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
+
+    qt_base::ScopedQtLogging scoped_logging;
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

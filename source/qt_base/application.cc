@@ -108,9 +108,6 @@ bool isSameApplication(const QLocalSocket* socket)
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
-    base::initLogging();
-    qt_base::initQtLogging();
-
 #if defined(OS_WIN)
     DWORD id = 0;
     ProcessIdToSessionId(GetCurrentProcessId(), &id);
@@ -157,8 +154,6 @@ Application::~Application()
 
     if (is_locked)
         QFile::remove(lock_file_name_);
-
-    base::shutdownLogging();
 }
 
 // static

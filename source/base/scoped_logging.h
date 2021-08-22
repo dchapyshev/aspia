@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,30 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_main.h"
+#ifndef BASE__SCOPED_LOGGING_H
+#define BASE__SCOPED_LOGGING_H
 
-#include "base/scoped_logging.h"
-#include "build/version.h"
-#include "host/integrity_check.h"
-#include "host/win/service.h"
+#include "base/logging.h"
 
-namespace host {
+namespace base {
 
-void hostServiceMain()
+class ScopedLogging
 {
-    base::ScopedLogging scoped_logging;
-
-    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
-
-    if (!integrityCheck())
+public:
+    ScopedLogging(const LoggingSettings& settings = LoggingSettings())
     {
-        LOG(LS_ERROR) << "Integrity check failed. Application stopped";
+        initialized_ = initLogging(settings);
     }
-    else
-    {
-        LOG(LS_INFO) << "Integrity check passed successfully";
-        Service().exec();
-    }
-}
 
-} // namespace host
+    ~ScopedLogging()
+    {
+        if (initialized_)
+            shutdownLogging();
+    }
+
+private:
+    bool initialized_ = false;
+};
+
+} // namespace base
+
+#endif // BASE__SCOPED_LOGGING_H
