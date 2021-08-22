@@ -98,6 +98,8 @@ int hostMain(int argc, char* argv[])
 
     if (!host::integrityCheck())
     {
+        LOG(LS_WARNING) << "Integrity check failed";
+
         QMessageBox::warning(
             nullptr,
             QApplication::translate("Host", "Warning"),
@@ -106,9 +108,15 @@ int hostMain(int argc, char* argv[])
             QMessageBox::Ok);
         return 1;
     }
+    else
+    {
+        LOG(LS_INFO) << "Integrity check passed successfully";
+    }
 
     if (command_line.hasSwitch(u"import") && command_line.hasSwitch(u"export"))
     {
+        LOG(LS_WARNING) << "Import and export are specified at the same time";
+
         if (!command_line.hasSwitch(u"silent"))
         {
             QMessageBox::warning(

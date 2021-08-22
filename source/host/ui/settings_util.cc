@@ -19,6 +19,7 @@
 #include "host/ui/settings_util.h"
 
 #include "base/settings/json_settings.h"
+#include "base/logging.h"
 #include "host/system_settings.h"
 
 #include <QMessageBox>
@@ -28,7 +29,11 @@ namespace host {
 // static
 bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(path, SystemSettings().filePath(), silent, parent);
+    std::filesystem::path target_path = SystemSettings().filePath();
+
+    LOG(LS_INFO) << "Import settings from '" << path << "' to '" << target_path << "'";
+
+    bool result = copySettings(path, target_path, silent, parent);
 
     if (!silent && result)
     {
@@ -44,7 +49,11 @@ bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent
 // static
 bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(SystemSettings().filePath(), path, silent, parent);
+    std::filesystem::path source_path = SystemSettings().filePath();
+
+    LOG(LS_INFO) << "Export settings from '" << source_path << "' to '" << path << "'";
+
+    bool result = copySettings(source_path, path, silent, parent);
 
     if (!silent && result)
     {
@@ -67,6 +76,8 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
 
     if (!base::JsonSettings::readFile(source_path, settings_map))
     {
+        LOG(LS_WARNING) << "Failed to read source file: " << source_path;
+
         if (!silent)
         {
             QMessageBox::warning(
@@ -78,9 +89,15 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
 
         return false;
     }
+    else
+    {
+        LOG(LS_INFO) << "File read successfully: " << source_path;
+    }
 
     if (!base::JsonSettings::writeFile(target_path, settings_map))
     {
+        LOG(LS_WARNING) << "Failed to write destination file: " << target_path;
+
         if (!silent)
         {
             QMessageBox::warning(parent,
@@ -90,6 +107,10 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         }
 
         return false;
+    }
+    else
+    {
+        LOG(LS_INFO) << "File written successfully: " << target_path;
     }
 
     return true;
