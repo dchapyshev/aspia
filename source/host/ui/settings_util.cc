@@ -77,6 +77,15 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     {
         LOG(LS_WARNING) << "Source settings file does't exist ("
                         << base::utf16FromLocal8Bit(error_code.message()) << ")";
+
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Source settings file does not exist."),
+                                 QMessageBox::Ok);
+        }
+
         return false;
     }
     else
@@ -114,6 +123,18 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
 
     if (std::filesystem::exists(target_path, error_code))
     {
+        if (!silent)
+        {
+            if (QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("The existing settings will be overwritten. Continue?"),
+                                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+            {
+                LOG(LS_INFO) << "Copy settings canceled by user";
+                return false;
+            }
+        }
+
         LOG(LS_INFO) << "Target settings file already exist and will be overwritten";
     }
     else

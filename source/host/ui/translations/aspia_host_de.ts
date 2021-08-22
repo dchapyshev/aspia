@@ -342,18 +342,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="103"/>
-        <location filename="../settings_util.cc" line="131"/>
+        <location filename="../settings_util.cc" line="84"/>
+        <location filename="../settings_util.cc" line="112"/>
+        <location filename="../settings_util.cc" line="129"/>
+        <location filename="../settings_util.cc" line="152"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="104"/>
+        <location filename="../settings_util.cc" line="85"/>
+        <source>Source settings file does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="113"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="132"/>
+        <location filename="../settings_util.cc" line="130"/>
+        <source>The existing settings will be overwritten. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="153"/>
         <source>Unable to write the target file.</source>
         <translation type="unfinished"></translation>
     </message>
