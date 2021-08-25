@@ -243,17 +243,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="45"/>
+        <location filename="../main.cc" line="53"/>
         <source>Aspia Console</source>
         <translation>Aspia Consola</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="48"/>
+        <location filename="../main.cc" line="56"/>
         <source>file</source>
         <translation>archivo</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="49"/>
+        <location filename="../main.cc" line="57"/>
         <source>The file to open.</source>
         <translation>El archivo para abrir.</translation>
     </message>

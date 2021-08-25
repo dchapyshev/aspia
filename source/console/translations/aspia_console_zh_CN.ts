@@ -355,17 +355,17 @@
         <translation type="vanished">打开客户端以连接到计算机。</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="45"/>
+        <location filename="../main.cc" line="53"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="48"/>
+        <location filename="../main.cc" line="56"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="49"/>
+        <location filename="../main.cc" line="57"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>
