@@ -559,6 +559,8 @@ if (WIN32)
         win/file_version_info.h
         win/message_window.cc
         win/message_window.h
+        win/mini_dump_writer.cc
+        win/mini_dump_writer.h
         win/object_watcher.cc
         win/object_watcher.h
         win/printer_enumerator.cc
