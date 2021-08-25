@@ -21,6 +21,10 @@
 #include "console/main_window.h"
 #include "qt_base/scoped_qt_logging.h"
 
+#if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
+#endif
+
 #include <QCommandLineParser>
 
 int main(int argc, char *argv[])
@@ -30,6 +34,10 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
+
+#if defined(OS_WIN)
+    base::installFailureHandler(L"aspia_console");
+#endif
 
     qt_base::ScopedQtLogging scoped_logging;
 

@@ -19,6 +19,7 @@
 #include "host/win/service_main.h"
 
 #include "base/scoped_logging.h"
+#include "base/win/mini_dump_writer.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/win/service.h"
@@ -27,8 +28,9 @@ namespace host {
 
 void hostServiceMain()
 {
-    base::ScopedLogging scoped_logging;
+    base::installFailureHandler(L"aspia_host_service");
 
+    base::ScopedLogging scoped_logging;
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
 
     if (!integrityCheck())

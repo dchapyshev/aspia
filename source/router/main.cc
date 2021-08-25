@@ -28,6 +28,7 @@
 #include "router/settings.h"
 
 #if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
 #include "router/win/service.h"
 #include "router/win/service_util.h"
 #else
@@ -240,6 +241,7 @@ void showHelp()
 #if defined(OS_WIN)
 int wmain()
 {
+    base::installFailureHandler(L"aspia_router");
     initLogging();
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.

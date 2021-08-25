@@ -29,6 +29,7 @@
 #include "qt_base/scoped_qt_logging.h"
 
 #if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_thread_desktop.h"
 #endif // defined(OS_WIN)
@@ -70,6 +71,10 @@ int hostMain(int argc, char* argv[])
     Q_INIT_RESOURCE(qt_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
+
+#if defined(OS_WIN)
+    base::installFailureHandler(L"aspia_host");
+#endif
 
     qt_base::ScopedQtLogging scoped_logging;
     base::CommandLine command_line(argc, argv);

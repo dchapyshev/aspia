@@ -210,6 +210,7 @@ if (WIN32)
     set(CLIENT_PLATFORM_LIBS
         avrt
         crypt32
+        dbghelp
         dwmapi
         imm32
         iphlpapi
