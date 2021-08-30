@@ -66,7 +66,10 @@ bool createPrivilegedToken(base::win::ScopedHandle* token_out)
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &privileged_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     // Get the LUID for the SE_TCB_NAME privilege.
     TOKEN_PRIVILEGES state;
@@ -99,17 +102,26 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &session_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     base::win::ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
+    {
+        LOG(LS_WARNING) << "createPrivilegedToken failed";
         return false;
+    }
 
     base::win::ScopedImpersonator impersonator;
 
     if (!impersonator.loggedOnUser(privileged_token))
+    {
+        LOG(LS_WARNING) << "Failed to impersonate thread";
         return false;
+    }
 
     // Change the session ID of the token.
     if (!SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id)))
