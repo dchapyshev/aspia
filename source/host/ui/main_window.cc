@@ -157,9 +157,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 {
     if (!notifier_)
     {
+        LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, [this](uint32_t id)
+        connect(notifier_, &NotifierWindow::killSession, this, [this](uint32_t id)
         {
             if (agent_proxy_)
                 agent_proxy_->killClient(id);
@@ -168,6 +169,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
         notifier_->activateWindow();
+    }
+    else
+    {
+        LOG(LS_INFO) << "NotifierWindow already exists";
     }
 
     notifier_->onClientListChanged(clients);
@@ -318,9 +323,7 @@ void MainWindow::onHelp()
 void MainWindow::onAbout()
 {
     QApplication::setQuitOnLastWindowClosed(false);
-
     common::AboutDialog(this).exec();
-
     QApplication::setQuitOnLastWindowClosed(true);
 }
 

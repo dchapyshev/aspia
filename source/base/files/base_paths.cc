@@ -262,7 +262,10 @@ bool BasePaths::currentExecDir(std::filesystem::path* result)
     std::filesystem::path exe_path;
 
     if (!currentExecFile(&exe_path))
+    {
+        LOG(LS_ERROR) << "currentExecFile failed";
         return false;
+    }
 
     *result = exe_path.parent_path();
     return true;

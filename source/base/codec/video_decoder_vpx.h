@@ -28,7 +28,7 @@ namespace base {
 class VideoDecoderVPX : public VideoDecoder
 {
 public:
-    ~VideoDecoderVPX() = default;
+    ~VideoDecoderVPX();
 
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();

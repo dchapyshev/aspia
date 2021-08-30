@@ -186,12 +186,15 @@ void IpcServer::Listener::onNewConnetion(
 IpcServer::IpcServer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
 {
+    LOG(LS_INFO) << "IpcServer Ctor";
+
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
 }
 
 IpcServer::~IpcServer()
 {
+    LOG(LS_INFO) << "IpcServer Dtor";
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     stop();
 }
@@ -223,6 +226,8 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
 
+    LOG(LS_INFO) << "Starting IPC server";
+
     if (channel_id.empty())
     {
         DLOG(LS_ERROR) << "Empty channel id";
@@ -243,6 +248,7 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
 
 void IpcServer::stop()
 {
+    LOG(LS_INFO) << "Stopping IPC server";
     delegate_ = nullptr;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
@@ -266,10 +272,16 @@ bool IpcServer::runListener(size_t index)
 
 void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel)
 {
+    LOG(LS_INFO) << "New IPC connecting";
+
     if (delegate_)
     {
         delegate_->onNewConnection(std::move(channel));
         runListener(index);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No delegate";
     }
 }
 
@@ -279,7 +291,13 @@ void IpcServer::onErrorOccurred(const Location& location)
                     << " (" << location.toString() << ")";
 
     if (delegate_)
+    {
         delegate_->onErrorOccurred();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No delegate";
+    }
 }
 
 } // namespace base

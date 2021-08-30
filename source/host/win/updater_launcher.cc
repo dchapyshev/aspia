@@ -139,7 +139,7 @@ bool launchUpdater(base::SessionId session_id)
 {
     if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
     {
-        DLOG(LS_ERROR) << "Invalid session id: " << session_id;
+        LOG(LS_ERROR) << "Invalid session id: " << session_id;
         return false;
     }
 

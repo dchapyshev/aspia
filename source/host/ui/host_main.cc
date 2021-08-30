@@ -85,14 +85,24 @@ int hostMain(int argc, char* argv[])
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (!is_hidden)
     {
+        LOG(LS_INFO) << "No 'hidden' switch";
+
         if (!base::win::isProcessElevated())
         {
+            LOG(LS_INFO) << "Process not elevated";
+
             if (base::win::createProcess(command_line, base::win::ProcessExecuteMode::ELEVATE))
                 return 0;
+        }
+        else
+        {
+            LOG(LS_INFO) << "Process elevated";
         }
     }
     else
     {
+        LOG(LS_INFO) << "Has 'hidden' switch";
+
         if (!waitForValidInputDesktop())
             return 1;
     }
@@ -167,21 +177,25 @@ int hostMain(int argc, char* argv[])
     {
         if (application.isRunning())
         {
+            LOG(LS_INFO) << "Application already running";
             application.activate();
         }
         else
         {
-            host::MainWindow window;
+            LOG(LS_INFO) << "Application not running yet";
 
+            host::MainWindow window;
             QObject::connect(&application, &host::Application::activated,
                              &window, &host::MainWindow::activateHost);
 
             if (is_hidden)
             {
+                LOG(LS_INFO) << "Hide window to tray";
                 window.hideToTray();
             }
             else
             {
+                LOG(LS_INFO) << "Show window";
                 window.show();
                 window.activateWindow();
             }

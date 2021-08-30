@@ -193,7 +193,10 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
-    DCHECK_EQ(ret, VPX_CODEC_OK);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed";
+    }
 
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(),
@@ -203,7 +206,10 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
                                std::chrono::microseconds(kTargetFrameInterval).count()),
                            0, // flags
                            VPX_DL_REALTIME);
-    DCHECK_EQ(ret, VPX_CODEC_OK);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_encode failed";
+    }
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;
@@ -243,7 +249,10 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed";
+    }
 
     setCommonCodecParameters(&config_, size);
 
@@ -261,19 +270,31 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     config_.rc_target_bitrate = 1000;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_init failed";
+    }
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed";
+    }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed";
+    }
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
+    }
 }
 
 void VideoEncoderVPX::createVp9Codec(const Size& size)
@@ -284,7 +305,10 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     vpx_codec_iface_t* algo = vpx_codec_vp9_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed";
+    }
 
     setCommonCodecParameters(&config_, size);
 
@@ -298,24 +322,39 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     config_.rc_target_bitrate = 1000;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_init failed";
+    }
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
     // lossy or lossless.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 6);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed";
+    }
 
     ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed";
+    }
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
     // inter-prediction mode.
     ret = vpx_codec_control(codec_.get(), VP9E_SET_NOISE_SENSITIVITY, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed";
+    }
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
     ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeCyclicRefresh);
-    DCHECK_EQ(VPX_CODEC_OK, ret);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed";
+    }
 }
 
 void VideoEncoderVPX::prepareImageAndActiveMap(
