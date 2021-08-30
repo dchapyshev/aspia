@@ -134,18 +134,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="111"/>
-        <location filename="../host_main.cc" line="130"/>
+        <location filename="../host_main.cc" line="121"/>
+        <location filename="../host_main.cc" line="140"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="112"/>
+        <location filename="../host_main.cc" line="122"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="131"/>
+        <location filename="../host_main.cc" line="141"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -648,63 +648,63 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="108"/>
-        <location filename="../main_window.cc" line="303"/>
+        <location filename="../main_window.cc" line="308"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="185"/>
+        <location filename="../main_window.cc" line="190"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="238"/>
+        <location filename="../main_window.cc" line="243"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="405"/>
+        <location filename="../main_window.cc" line="408"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="234"/>
-        <location filename="../main_window.cc" line="390"/>
+        <location filename="../main_window.cc" line="239"/>
+        <location filename="../main_window.cc" line="393"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="398"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="242"/>
+        <location filename="../main_window.cc" line="247"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="400"/>
+        <location filename="../main_window.cc" line="403"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
+        <location filename="../main_window.cc" line="251"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="308"/>
+        <location filename="../main_window.cc" line="313"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="340"/>
+        <location filename="../main_window.cc" line="343"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="341"/>
+        <location filename="../main_window.cc" line="344"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
