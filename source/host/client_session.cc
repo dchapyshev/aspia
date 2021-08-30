@@ -36,6 +36,13 @@ ClientSession::ClientSession(
     // Session IDs must start with 1.
     static uint32_t id_counter = 0;
     id_ = ++id_counter;
+
+    LOG(LS_INFO) << "ClientSession Ctor: " << id_;
+}
+
+ClientSession::~ClientSession()
+{
+    LOG(LS_INFO) << "ClientSession Dtor: " << id_;
 }
 
 // static
@@ -77,11 +84,15 @@ void ClientSession::start(Delegate* delegate)
 
     if (version_ >= base::Version(2, 0, 0))
     {
+        LOG(LS_INFO) << "Enable own keep alive";
+
         // Versions 2.0.0+ support their own implementation keep alive.
         channel_->setOwnKeepAlive(true);
     }
     else
     {
+        LOG(LS_INFO) << "Enable tcp keep alive";
+
         // Otherwise use TCP keep alive.
         channel_->setTcpKeepAlive(true);
     }
@@ -92,6 +103,8 @@ void ClientSession::start(Delegate* delegate)
 
 void ClientSession::stop()
 {
+    LOG(LS_INFO) << "Stop client session";
+
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();
 }

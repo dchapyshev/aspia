@@ -38,11 +38,13 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
+    LOG(LS_INFO) << "Server Ctor";
     DCHECK(task_runner_);
 }
 
 Server::~Server()
 {
+    LOG(LS_INFO) << "Server Dtor";
     LOG(LS_INFO) << "Stopping the server...";
 
     settings_watcher_.reset();
@@ -97,19 +99,32 @@ void Server::start()
     server_->start(settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
+    {
+        LOG(LS_INFO) << "Router enabled";
         connectToRouter();
+    }
 
     LOG(LS_INFO) << "Host server is started successfully";
 }
 
 void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
+    LOG(LS_INFO) << "Session event";
+
     if (user_session_manager_)
+    {
         user_session_manager_->setSessionEvent(status, session_id);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid user session manager";
+    }
 }
 
 void Server::setPowerEvent(uint32_t power_event)
 {
+    LOG(LS_INFO) << "Power event: " << power_event;
+
     switch (power_event)
     {
         case PBT_APMSUSPEND:
@@ -121,7 +136,10 @@ void Server::setPowerEvent(uint32_t power_event)
         case PBT_APMRESUMEAUTOMATIC:
         {
             if (settings_.isRouterEnabled())
+            {
+                LOG(LS_INFO) << "Router enabled";
                 connectToRouter();
+            }
         }
         break;
 
@@ -139,6 +157,7 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 
 void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
+    LOG(LS_INFO) << "Router state changed";
     user_session_manager_->setRouterState(router_state);
 }
 
@@ -156,6 +175,8 @@ void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
 
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
+    LOG(LS_INFO) << "New client session";
+
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
 
@@ -165,57 +186,94 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
         session->setComputerName(session_info.computer_name);
         session->setUserName(session_info.user_name);
     }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid client session";
+        return;
+    }
 
     if (user_session_manager_)
+    {
         user_session_manager_->addNewSession(std::move(session));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid user session manager";
+    }
 }
 
 void Server::onHostIdRequest(const std::string& session_name)
 {
     if (!router_controller_)
+    {
+        LOG(LS_WARNING) << "No router controller";
         return;
+    }
 
+    LOG(LS_INFO) << "New host ID request for session name: " << session_name;
     router_controller_->hostIdRequest(session_name);
 }
 
 void Server::onResetHostId(base::HostId host_id)
 {
     if (!router_controller_)
+    {
+        LOG(LS_WARNING) << "No router controller";
         return;
+    }
 
+    LOG(LS_INFO) << "Reset host ID for: " << host_id;
     router_controller_->resetHostId(host_id);
 }
 
 void Server::onUserListChanged()
 {
+    LOG(LS_INFO) << "User list changed";
     reloadUserList();
 }
 
 void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
 {
+    LOG(LS_INFO) << "Start authentication";
+
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
 
     channel->setReadBufferSize(kReadBufferSize);
     channel->setNoDelay(true);
 
     if (authenticator_manager_)
+    {
         authenticator_manager_->addNewChannel(std::move(channel));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid authenticator manager";
+    }
 }
 
 void Server::addFirewallRules()
 {
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
+    {
+        LOG(LS_WARNING) << "currentExecFile failed";
         return;
+    }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
+    {
+        LOG(LS_WARNING) << "Invalid firewall manager";
         return;
+    }
 
     uint16_t tcp_port = settings_.tcpPort();
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
+    {
+        LOG(LS_WARNING) << "Unable to add firewall rule";
         return;
+    }
 
     LOG(LS_INFO) << "Rule is added to the firewall (TCP " << tcp_port << ")";
 }
@@ -224,12 +282,19 @@ void Server::deleteFirewallRules()
 {
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
+    {
+        LOG(LS_WARNING) << "currentExecFile failed";
         return;
+    }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
+    {
+        LOG(LS_WARNING) << "Invalid firewall manager";
         return;
+    }
 
+    LOG(LS_INFO) << "Delete firewall rule";
     firewall.deleteRuleByName(kFirewallRuleName);
 }
 
@@ -250,8 +315,12 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
         // If a controller instance already exists.
         if (router_controller_)
         {
+            LOG(LS_INFO) << "Has router controller";
+
             if (settings_.isRouterEnabled())
             {
+                LOG(LS_INFO) << "Router enabled";
+
                 // Check if the connection parameters have changed.
                 if (router_controller_->address() != settings_.routerAddress() ||
                     router_controller_->port() != settings_.routerPort() ||
@@ -260,6 +329,10 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
                     // Reconnect to the router with new parameters.
                     LOG(LS_INFO) << "Router parameters have changed";
                     connectToRouter();
+                }
+                else
+                {
+                    LOG(LS_INFO) << "Router parameters without changes";
                 }
             }
             else
@@ -275,14 +348,25 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
         }
         else
         {
+            LOG(LS_INFO) << "No router controller";
+
             if (settings_.isRouterEnabled())
+            {
+                LOG(LS_INFO) << "Router enabled";
                 connectToRouter();
+            }
         }
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Error detected";
     }
 }
 
 void Server::reloadUserList()
 {
+    LOG(LS_INFO) << "Reloading user list";
+
     // Read the list of regular users.
     std::unique_ptr<base::UserList> user_list(settings_.userList().release());
 
@@ -313,10 +397,16 @@ void Server::connectToRouter()
 
 void Server::disconnectFromRouter()
 {
+    LOG(LS_INFO) << "Disconnect from router";
+
     if (router_controller_)
     {
         router_controller_.reset();
         LOG(LS_INFO) << "Disconnected from router";
+    }
+    else
+    {
+        LOG(LS_INFO) << "No router controller";
     }
 }
 

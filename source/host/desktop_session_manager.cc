@@ -37,11 +37,13 @@ DesktopSessionManager::DesktopSessionManager(
       session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
-    // Nothing
+    LOG(LS_INFO) << "DesktopSessionManager Ctor";
 }
 
 DesktopSessionManager::~DesktopSessionManager()
 {
+    LOG(LS_INFO) << "DesktopSessionManager Dtor";
+
     state_ = State::STOPPING;
     dettachSession(FROM_HERE);
 }
@@ -86,6 +88,8 @@ void DesktopSessionManager::attachSession(
         onErrorOccurred();
         return;
     }
+
+    LOG(LS_INFO) << "Desktop session process created";
 }
 
 void DesktopSessionManager::dettachSession(const base::Location& location)
@@ -137,6 +141,7 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
 
     if (server_)
     {
+        LOG(LS_INFO) << "IPC server already exists. Stop it";
         server_->stop();
         task_runner_->deleteSoon(std::move(server_));
     }

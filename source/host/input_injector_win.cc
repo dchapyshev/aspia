@@ -76,10 +76,15 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
-InputInjectorWin::InputInjectorWin() = default;
+InputInjectorWin::InputInjectorWin()
+{
+    LOG(LS_INFO) << "InputInjectorWin Ctor";
+}
 
 InputInjectorWin::~InputInjectorWin()
 {
+    LOG(LS_INFO) << "InputInjectorWin Dtor";
+
     setBlockInput(false);
     for (const auto& key : pressed_keys_)
     {
@@ -88,6 +93,10 @@ InputInjectorWin::~InputInjectorWin()
         {
             sendKeyboardScancode(
                 static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Invalid key code: " << key;
         }
     }
 }
@@ -256,7 +265,10 @@ void InputInjectorWin::switchToInputDesktop()
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
         desktop_.setThreadDesktop(std::move(input_desktop));
 
-    BlockInput(!!block_input_);
+    if (!BlockInput(!!block_input_))
+    {
+        PLOG(LS_WARNING) << "BlockInput failed";
+    }
 
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.

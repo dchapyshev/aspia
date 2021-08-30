@@ -35,7 +35,7 @@ class DesktopSessionProxy;
 class ClientSession : public base::NetworkChannel::Listener
 {
 public:
-    virtual ~ClientSession() = default;
+    virtual ~ClientSession();
 
     class Delegate
     {

@@ -145,11 +145,17 @@ bool launchUpdater(base::SessionId session_id)
 
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
+    {
+        LOG(LS_WARNING) << "createLoggedOnUserToken failed";
         return false;
+    }
 
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
+    {
+        LOG(LS_WARNING) << "currentExecDir failed";
         return false;
+    }
 
     file_path.append("aspia_host.exe");
 

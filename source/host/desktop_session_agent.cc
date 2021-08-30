@@ -62,16 +62,29 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       outgoing_message_(std::make_unique<proto::internal::DesktopToService>())
 {
+    LOG(LS_INFO) << "DesktopSessionAgent Ctor";
+
     // At the end of the user's session, the program ends later than the others.
-    SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
-    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+    if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
+    {
+        PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
+    }
+
+    if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
+    {
+        PLOG(LS_WARNING) << "SetPriorityClass failed";
+    }
 
     SystemSettings settings;
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
+    LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
 }
 
-DesktopSessionAgent::~DesktopSessionAgent() = default;
+DesktopSessionAgent::~DesktopSessionAgent()
+{
+    LOG(LS_INFO) << "DesktopSessionAgent Dtor";
+}
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
@@ -80,7 +93,10 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
     channel_ = std::make_unique<base::IpcChannel>();
 
     if (!channel_->connect(channel_id))
+    {
+        LOG(LS_WARNING) << "Connection failed";
         return;
+    }
 
     channel_->setListener(this);
     channel_->resume();
@@ -88,6 +104,8 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
 void DesktopSessionAgent::onDisconnected()
 {
+    LOG(LS_INFO) << "IPC channel disconnected";
+
     setEnabled(false);
     task_runner_->postQuit();
 }
@@ -384,7 +402,10 @@ void DesktopSessionAgent::captureBegin()
 void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_interval)
 {
     if (!capture_scheduler_)
+    {
+        LOG(LS_WARNING) << "No capture scheduler";
         return;
+    }
 
     capture_scheduler_->endCapture();
 

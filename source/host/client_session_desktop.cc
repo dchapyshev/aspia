@@ -40,10 +40,13 @@ ClientSessionDesktop::ClientSessionDesktop(
       incoming_message_(std::make_unique<proto::ClientToHost>()),
       outgoing_message_(std::make_unique<proto::HostToClient>())
 {
-    // Nothing
+    LOG(LS_INFO) << "ClientSessionDesktop Ctor";
 }
 
-ClientSessionDesktop::~ClientSessionDesktop() = default;
+ClientSessionDesktop::~ClientSessionDesktop()
+{
+    LOG(LS_INFO) << "ClientSessionDesktop Dtor";
+}
 
 void ClientSessionDesktop::setDesktopSessionProxy(
     std::shared_ptr<DesktopSessionProxy> desktop_session_proxy)

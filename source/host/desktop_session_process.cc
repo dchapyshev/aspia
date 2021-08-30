@@ -198,13 +198,19 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
+    {
+        LOG(LS_WARNING) << "createSessionToken failed";
         return nullptr;
+    }
 
     base::win::ScopedHandle process_handle;
     base::win::ScopedHandle thread_handle;
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
+    {
+        LOG(LS_WARNING) << "startProcessWithToken failed";
         return nullptr;
+    }
 
     return std::unique_ptr<DesktopSessionProcess>(
         new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
@@ -215,7 +221,10 @@ std::filesystem::path DesktopSessionProcess::filePath()
 {
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
+    {
+        LOG(LS_WARNING) << "currentExecDir failed";
         return std::filesystem::path();
+    }
 
     file_path.append(kDesktopAgentFile);
     return file_path;
@@ -229,7 +238,10 @@ void DesktopSessionProcess::kill()
         return;
     }
 
-    TerminateProcess(process_, 0);
+    if (!TerminateProcess(process_, 0))
+    {
+        PLOG(LS_WARNING) << "TerminateProcess failed";
+    }
 }
 
 } // namespace host

@@ -74,16 +74,25 @@ DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, 
       incoming_message_(std::make_unique<proto::internal::DesktopToService>()),
       delegate_(delegate)
 {
+    LOG(LS_INFO) << "DesktopSessionIpc Ctor";
     DCHECK(channel_);
     DCHECK(delegate_);
 }
 
-DesktopSessionIpc::~DesktopSessionIpc() = default;
+DesktopSessionIpc::~DesktopSessionIpc()
+{
+    LOG(LS_INFO) << "DesktopSessionIpc Dtor";
+}
 
 void DesktopSessionIpc::start()
 {
+    LOG(LS_INFO) << "Start IPC desktop session";
+
     if (!delegate_)
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
         return;
+    }
 
     channel_->setListener(this);
     channel_->resume();
@@ -93,11 +102,14 @@ void DesktopSessionIpc::start()
 
 void DesktopSessionIpc::stop()
 {
+    LOG(LS_INFO) << "Stop IPC desktop session";
     delegate_ = nullptr;
 }
 
 void DesktopSessionIpc::control(proto::internal::Control::Action action)
 {
+    LOG(LS_INFO) << "Send CONTROL with action: " << action;
+
     outgoing_message_->Clear();
     outgoing_message_->mutable_control()->set_action(action);
     channel_->send(base::serialize(*outgoing_message_));
@@ -105,6 +117,8 @@ void DesktopSessionIpc::control(proto::internal::Control::Action action)
 
 void DesktopSessionIpc::configure(const Config& config)
 {
+    LOG(LS_INFO) << "Send CONFIGURE";
+
     outgoing_message_->Clear();
 
     proto::internal::Configure* configure = outgoing_message_->mutable_configure();
@@ -119,6 +133,8 @@ void DesktopSessionIpc::configure(const Config& config)
 
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
+    LOG(LS_INFO) << "Send SELECT_SCREEN";
+
     outgoing_message_->Clear();
     outgoing_message_->mutable_select_source()->mutable_screen()->CopyFrom(screen);
     channel_->send(base::serialize(*outgoing_message_));
@@ -130,10 +146,17 @@ void DesktopSessionIpc::captureScreen()
     {
         last_frame_->updatedRegion()->addRect(base::Rect::makeSize(last_frame_->size()));
 
-        if (last_screen_list_)
-            delegate_->onScreenListChanged(*last_screen_list_);
+        if (delegate_)
+        {
+            if (last_screen_list_)
+                delegate_->onScreenListChanged(*last_screen_list_);
 
-        delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
+            delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Invalid delegate";
+        }
     }
     else
     {
@@ -166,14 +189,25 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 
 void DesktopSessionIpc::onDisconnected()
 {
+    LOG(LS_INFO) << "IPC channel disconnected";
+
     if (delegate_)
+    {
         delegate_->onDesktopSessionStopped();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
     if (!delegate_)
+    {
+        LOG(LS_INFO) << "Invalid delegate";
         return;
+    }
 
     incoming_message_->Clear();
 
@@ -274,7 +308,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         mouse_cursor = last_mouse_cursor_.get();
     }
 
-    delegate_->onScreenCaptured(frame, mouse_cursor);
+    if (delegate_)
+    {
+        delegate_->onScreenCaptured(frame, mouse_cursor);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_next_screen_capture()->set_update_interval(40);
@@ -283,7 +324,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
 void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
-    delegate_->onAudioCaptured(audio_packet);
+    if (delegate_)
+    {
+        delegate_->onAudioCaptured(audio_packet);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
@@ -309,7 +357,10 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
     shared_buffers_.erase(shared_buffer_id);
 
     if (shared_buffers_.empty())
+    {
+        LOG(LS_INFO) << "Reset last frame";
         last_frame_.reset();
+    }
 }
 
 std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer(
