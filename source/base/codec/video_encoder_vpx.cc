@@ -48,8 +48,8 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     config->g_timebase.den = static_cast<int>(
         std::chrono::microseconds(std::chrono::seconds(1)).count());
 
-    config->g_w = size.width();
-    config->g_h = size.height();
+    config->g_w = static_cast<unsigned int>(size.width());
+    config->g_h = static_cast<unsigned int>(size.height());
     config->g_pass = VPX_RC_ONE_PASS;
 
     // Start emitting packets immediately.
@@ -84,8 +84,8 @@ void createImage(const Size& size,
 
     memset(image.get(), 0, sizeof(vpx_image_t));
 
-    image->d_w = image->w = size.width();
-    image->d_h = image->h = size.height();
+    image->d_w = image->w = static_cast<unsigned int>(size.width());
+    image->d_h = image->h = static_cast<unsigned int>(size.height());
 
     image->fmt = VPX_IMG_FMT_YV12;
     image->x_chroma_shift = 1;
@@ -224,8 +224,10 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 
 void VideoEncoderVPX::createActiveMap(const Size& size)
 {
-    active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
-    active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
+    active_map_.cols = static_cast<unsigned int>(
+        (size.width() + kMacroBlockSize - 1) / kMacroBlockSize);
+    active_map_.rows = static_cast<unsigned int>(
+        (size.height() + kMacroBlockSize - 1) / kMacroBlockSize);
 
     active_map_buffer_.resize(active_map_.cols * active_map_.rows);
     active_map_.active_map = active_map_buffer_.data();
@@ -319,7 +321,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
 void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
 {
-    Rect image_rect = Rect::makeWH(image_->w, image_->h);
+    Rect image_rect = Rect::makeWH(static_cast<int32_t>(image_->w), static_cast<int32_t>(image_->h));
     Region updated_region;
 
     if (!is_key_frame)
