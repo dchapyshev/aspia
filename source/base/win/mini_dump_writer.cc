@@ -66,7 +66,7 @@ LONG WINAPI exceptionFilter(EXCEPTION_POINTERS* exception_pointers)
     MiniDumpWriteDump(GetCurrentProcess(),
                       GetCurrentProcessId(),
                       dump_file,
-                      MiniDumpWithDataSegs,
+                      MiniDumpWithFullMemory,
                       &exception_information,
                       nullptr,
                       nullptr);
