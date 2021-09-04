@@ -149,7 +149,14 @@ void DesktopSessionIpc::captureScreen()
         if (delegate_)
         {
             if (last_screen_list_)
+            {
+                LOG(LS_INFO) << "Has last screen list";
                 delegate_->onScreenListChanged(*last_screen_list_);
+            }
+            else
+            {
+                LOG(LS_INFO) << "No last screen list";
+            }
 
             delegate_->onScreenCaptured(last_frame_.get(), last_mouse_cursor_.get());
         }

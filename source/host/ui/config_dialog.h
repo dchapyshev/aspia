@@ -31,7 +31,7 @@ class ConfigDialog : public QDialog
 
 public:
     ConfigDialog(QWidget* parent = nullptr);
-    ~ConfigDialog() = default;
+    ~ConfigDialog();
 
 private slots:
     void onUserContextMenu(const QPoint& point);

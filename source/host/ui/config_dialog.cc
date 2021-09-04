@@ -43,6 +43,7 @@ namespace host {
 ConfigDialog::ConfigDialog(QWidget* parent)
     : QDialog(parent)
 {
+    LOG(LS_INFO) << "ConfigDialog Ctor";
     ui.setupUi(this);
 
     //---------------------------------------------------------------------------------------------
@@ -77,7 +78,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui.label_router_public_key->setEnabled(is_router_enabled);
     ui.edit_router_public_key->setEnabled(is_router_enabled);
 
-    connect(ui.checkbox_enable_router, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
     {
         setConfigChanged(true);
         ui.label_router_address->setEnabled(checked);
@@ -113,7 +114,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // Update Tab
     //---------------------------------------------------------------------------------------------
 
-    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, this, [this](bool checked)
     {
         setConfigChanged(true);
 
@@ -126,7 +127,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.edit_update_server, &QLineEdit::textEdited,
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui.button_check_updates, &QPushButton::clicked, [this]()
+    connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
     {
         common::UpdateDialog(
             QString::fromStdU16String(SystemSettings().updateServer()), "host", this).exec();
@@ -160,7 +161,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     if (current_video_capturer != -1)
         ui.combo_video_capturer->setCurrentIndex(current_video_capturer);
 
-    connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), [this]()
+    connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
     {
         setConfigChanged(true);
     });
@@ -173,6 +174,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &ConfigDialog::onButtonBoxClicked);
     reloadAll();
+}
+
+ConfigDialog::~ConfigDialog()
+{
+    LOG(LS_INFO) << "ConfigDialog Dtor";
 }
 
 void ConfigDialog::onUserContextMenu(const QPoint& point)

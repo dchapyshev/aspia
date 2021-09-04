@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget* parent)
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "MainWindow Ctor";
+
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
@@ -62,7 +64,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     createLanguageMenu(Application::instance()->settings().locale());
 
-    connect(&tray_icon_, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
     {
         if (reason == QSystemTrayIcon::Context)
             return;
@@ -79,25 +81,30 @@ MainWindow::MainWindow(QWidget* parent)
 
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_new_password, &QPushButton::clicked, [this]()
+    connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
         if (agent_proxy_)
             agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow()
+{
+    LOG(LS_INFO) << "MainWindow Dtor";
+}
 
 void MainWindow::connectToService()
 {
     agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
         qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
 
+    LOG(LS_INFO) << "Connecting to service";
     agent_proxy_->start();
 }
 
 void MainWindow::activateHost()
 {
+    LOG(LS_INFO) << "Activating host";
     show();
     activateWindow();
     connectToService();

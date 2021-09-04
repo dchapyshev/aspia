@@ -284,6 +284,8 @@ void RouterController::delayedConnectToRouter()
 
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
+    LOG(LS_INFO) << "Router state changed: " << state;
+
     if (!delegate_)
     {
         LOG(LS_INFO) << "Invalid delegate";
