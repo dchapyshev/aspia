@@ -35,6 +35,7 @@ namespace client {
 Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner))
 {
+    LOG(LS_INFO) << "Client Ctor";
     DCHECK(io_task_runner_);
 
 #if defined(OS_MAC)
@@ -44,6 +45,7 @@ Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
 
 Client::~Client()
 {
+    LOG(LS_INFO) << "Client Dtor";
     DCHECK(io_task_runner_->belongsToCurrentThread());
     stop();
 
@@ -246,11 +248,15 @@ void Client::startAuthentication()
 
             if (authenticator_->peerVersion() >= base::Version(2, 0, 0))
             {
+                LOG(LS_INFO) << "Using own keep alive";
+
                 // Versions 2.0.0+ support their own implementation keep alive.
                 channel_->setOwnKeepAlive(true);
             }
             else
             {
+                LOG(LS_INFO) << "Using TCP keep alive";
+
                 // Otherwise use TCP keep alive.
                 channel_->setTcpKeepAlive(true);
             }

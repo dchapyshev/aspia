@@ -80,7 +80,10 @@ KeyPair KeyPair::create(Type type)
 KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
 {
     if (private_key.empty())
+    {
+        LOG(LS_ERROR) << "Empty private key";
         return KeyPair();
+    }
 
     return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(
         EVP_PKEY_X25519, nullptr, private_key.data(), private_key.size())));
@@ -162,7 +165,10 @@ ByteArray KeyPair::publicKey() const
 ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
 {
     if (peer_public_key.empty())
+    {
+        LOG(LS_ERROR) << "Empty peer public key";
         return ByteArray();
+    }
 
     EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(
         EVP_PKEY_X25519, nullptr, peer_public_key.data(), peer_public_key.size()));

@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget* parent)
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "MainWindow Ctor";
+
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
@@ -62,7 +64,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     createLanguageMenu(Application::instance()->settings().locale());
 
-    connect(&tray_icon_, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
     {
         if (reason == QSystemTrayIcon::Context)
             return;
@@ -79,25 +81,30 @@ MainWindow::MainWindow(QWidget* parent)
 
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_new_password, &QPushButton::clicked, [this]()
+    connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
         if (agent_proxy_)
             agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
     });
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow()
+{
+    LOG(LS_INFO) << "MainWindow Dtor";
+}
 
 void MainWindow::connectToService()
 {
     agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
         qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
 
+    LOG(LS_INFO) << "Connecting to service";
     agent_proxy_->start();
 }
 
 void MainWindow::activateHost()
 {
+    LOG(LS_INFO) << "Activating host";
     show();
     activateWindow();
     connectToService();
@@ -157,9 +164,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 {
     if (!notifier_)
     {
+        LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, [this](uint32_t id)
+        connect(notifier_, &NotifierWindow::killSession, this, [this](uint32_t id)
         {
             if (agent_proxy_)
                 agent_proxy_->killClient(id);
@@ -168,6 +176,10 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
         notifier_->activateWindow();
+    }
+    else
+    {
+        LOG(LS_INFO) << "NotifierWindow already exists";
     }
 
     notifier_->onClientListChanged(clients);
@@ -318,9 +330,7 @@ void MainWindow::onHelp()
 void MainWindow::onAbout()
 {
     QApplication::setQuitOnLastWindowClosed(false);
-
     common::AboutDialog(this).exec();
-
     QApplication::setQuitOnLastWindowClosed(true);
 }
 

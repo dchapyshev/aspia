@@ -71,6 +71,7 @@ private:
 NotifierWindow::NotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
+    LOG(LS_INFO) << "NotifierWindow Ctor";
     ui.setupUi(this);
 
     ui.label_title->installEventFilter(this);
@@ -93,7 +94,10 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::updateWindowPosition);
 }
 
-NotifierWindow::~NotifierWindow() = default;
+NotifierWindow::~NotifierWindow()
+{
+    LOG(LS_INFO) << "NotifierWindow Dtor";
+}
 
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {

@@ -41,7 +41,11 @@ void settingsMigration(base::JsonSettings* json_settings)
         return;
     }
 
+    LOG(LS_INFO) << "Start settings migration";
+
     base::XmlSettings xml_settings(base::XmlSettings::Scope::SYSTEM, "aspia", "host");
+
+    LOG(LS_INFO) << "Old file path: " << xml_settings.filePath();
 
     // TcpPort
     json_settings->set<uint16_t>(
@@ -83,11 +87,23 @@ void settingsMigration(base::JsonSettings* json_settings)
             xml_settings.get<std::string>("SeedKey")));
 
     // Save settings to disk.
-    json_settings->flush();
+    if (!json_settings->flush())
+    {
+        LOG(LS_WARNING) << "Failed to write settings file";
+    }
+    else
+    {
+        LOG(LS_INFO) << "New file has been successfully written to disk";
+        LOG(LS_INFO) << "New file path: " << json_settings->filePath();
+    }
 
     if (!std::filesystem::remove(old_file, ignored_error))
     {
         LOG(LS_WARNING) << "Failed to delete old settings file";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Old file removed";
     }
 }
 

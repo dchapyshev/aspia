@@ -90,6 +90,7 @@ if (WIN32)
     set(CONSOLE_PLATFORM_LIBS
         avrt
         crypt32
+        dbghelp
         dwmapi
         imm32
         iphlpapi

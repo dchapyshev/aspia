@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,38 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__APPLICATION_H
-#define HOST__UI__APPLICATION_H
+#ifndef QT_BASE__SCOPED_QT_LOGGING_H
+#define QT_BASE__SCOPED_QT_LOGGING_H
 
-#include "host/ui/user_settings.h"
-#include "qt_base/application.h"
+#include "qt_base/qt_logging.h"
 
-namespace host {
+namespace qt_base {
 
-class Application : public qt_base::Application
+class ScopedQtLogging
 {
-    Q_OBJECT
-
 public:
-    Application(int& argc, char* argv[]);
-    virtual ~Application();
+    ScopedQtLogging(const base::LoggingSettings& settings = base::LoggingSettings())
+    {
+        initialized_ = base::initLogging(settings);
+        if (initialized_)
+            initQtLogging();
+    }
 
-    static Application* instance();
-
-    UserSettings& settings() { return settings_; }
-
-public slots:
-    void activate();
-
-signals:
-    void activated();
+    ~ScopedQtLogging()
+    {
+        if (initialized_)
+            base::shutdownLogging();
+    }
 
 private:
-    UserSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(Application);
+    bool initialized_ = false;
 };
 
-} // namespace host
+} // namespace qt_base
 
-#endif // HOST__UI__APPLICATION_H
+#endif // QT_BASE__SCOPED_QT_LOGGING_H

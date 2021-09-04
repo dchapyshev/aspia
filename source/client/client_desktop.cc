@@ -59,11 +59,12 @@ ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
       incoming_message_(std::make_unique<proto::HostToClient>()),
       outgoing_message_(std::make_unique<proto::ClientToHost>())
 {
-    // Nothing
+    LOG(LS_INFO) << "ClientDesktop Ctor";
 }
 
 ClientDesktop::~ClientDesktop()
 {
+    LOG(LS_INFO) << "ClientDesktop Dtor";
     desktop_control_proxy_->dettach();
 }
 

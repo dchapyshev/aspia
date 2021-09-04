@@ -379,11 +379,17 @@ void UserSessionManager::onUserSessionFinished()
     {
         if (it->get()->state() == UserSession::State::FINISHED)
         {
+            LOG(LS_INFO) << "Finished session found in list. Reset host ID for invalid session";
+
             // User session ended, host ID is no longer valid.
             delegate_->onResetHostId(it->get()->hostId());
 
+            LOG(LS_INFO) << "Delete session from list...";
+
             task_runner_->deleteSoon(std::move(*it));
             it = sessions_.erase(it);
+
+            LOG(LS_INFO) << "Session deleted from list";
         }
         else
         {

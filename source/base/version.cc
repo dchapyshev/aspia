@@ -233,10 +233,13 @@ int Version::compareToWildcardString(std::string_view wildcard_string) const
 int Version::compareTo(const Version& other) const
 {
     if (!other.isValid() && !isValid())
-        return true;
+        return 0;
 
-    if (!other.isValid() || !isValid())
-        return false;
+    if (!other.isValid() && isValid())
+        return 1;
+
+    if (other.isValid() && !isValid())
+        return -1;
 
     return compareVersionComponents(components_, other.components_);
 }

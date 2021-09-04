@@ -31,7 +31,7 @@ class UserDialog : public QDialog
 
 public:
     UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent);
-    ~UserDialog() = default;
+    ~UserDialog();
 
     base::User user() { return user_; }
 

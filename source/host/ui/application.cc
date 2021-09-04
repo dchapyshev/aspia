@@ -71,6 +71,8 @@ bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* me
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
+    LOG(LS_INFO) << "Application Ctor";
+
     setOrganizationName(QStringLiteral("Aspia"));
     setApplicationName(QStringLiteral("Host"));
     setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
@@ -83,6 +85,7 @@ Application::Application(int& argc, char* argv[])
     {
         if (message == kActivateMessage)
         {
+            LOG(LS_INFO) << "Activate message received";
             emit activated();
         }
         else
@@ -97,6 +100,11 @@ Application::Application(int& argc, char* argv[])
     setLocale(settings_.locale());
 }
 
+Application::~Application()
+{
+    LOG(LS_INFO) << "Application Dtor";
+}
+
 // static
 Application* Application::instance()
 {
@@ -105,6 +113,7 @@ Application* Application::instance()
 
 void Application::activate()
 {
+    LOG(LS_INFO) << "Sending activate message";
     sendMessage(kActivateMessage);
 }
 

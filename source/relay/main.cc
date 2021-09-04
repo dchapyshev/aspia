@@ -23,6 +23,7 @@
 #include "relay/settings.h"
 
 #if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
 #include "relay/win/service.h"
 #include "relay/win/service_util.h"
 #else
@@ -88,6 +89,7 @@ void showHelp()
 #if defined(OS_WIN)
 int wmain()
 {
+    base::installFailureHandler(L"aspia_relay");
     initLogging();
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.

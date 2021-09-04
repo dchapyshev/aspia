@@ -203,6 +203,14 @@
         <source>Unable to write the target file.</source>
         <translation>Impossível gravar no arquivo selecionado.</translation>
     </message>
+    <message>
+        <source>Source settings file does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The existing settings will be overwritten. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserDialog</name>

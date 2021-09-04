@@ -74,11 +74,11 @@ public:
         {
             setText(2, QString::number(session_data.pool_size()));
         }
+
+        const proto::Version& version = session.version();
         
         setText(3, QString("%1.%2.%3")
-                .arg(session.version().major())
-                .arg(session.version().minor())
-                .arg(session.version().patch()));
+            .arg(version.major()).arg(version.minor()).arg(version.patch()));
         setText(4, QString::fromStdString(session.computer_name()));
         setText(5, QString::fromStdString(session.os_name()));
     }
@@ -96,9 +96,9 @@ public:
         setText(0, QString::fromStdString(user.name()));
 
         if (user.flags() & base::User::ENABLED)
-            setIcon(0, QIcon(QLatin1String(":/img/user.png")));
+            setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
         else
-            setIcon(0, QIcon(QLatin1String(":/img/user-disabled.png")));
+            setIcon(0, QIcon(QStringLiteral(":/img/user-disabled.png")));
     }
 
     base::User user;
@@ -597,9 +597,9 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
         add_item(tr("Computer Name"), QString::fromStdString(session.computer_name()));
         add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));
         add_item(tr("Connect Time"), time);
-        add_item(tr("Version"), QString("%1.%2.%3").arg(session.version().major())
-                                                   .arg(session.version().minor())
-                                                   .arg(session.version().patch()));
+        const proto::Version& version = session.version();
+        add_item(tr("Version"), QString("%1.%2.%3")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()));
         add_item(tr("Operating System"), QString::fromStdString(session.os_name()));
 
         proto::HostSessionData session_data;

@@ -73,6 +73,8 @@ void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& even
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
 {
+    LOG(LS_INFO) << "Desktop session attach";
+
     desktop_session_ = desktop_session;
     DCHECK(desktop_session_);
 
@@ -81,6 +83,8 @@ void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
 
 void DesktopSessionProxy::stopAndDettach()
 {
+    LOG(LS_INFO) << "Desktop session dettach";
+
     if (desktop_session_)
     {
         desktop_session_->stop();

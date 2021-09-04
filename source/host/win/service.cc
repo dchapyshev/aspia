@@ -69,10 +69,13 @@ std::string powerEventToString(uint32_t event)
 Service::Service()
     : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
-    // Nothing
+    LOG(LS_INFO) << "Service Ctor";
 }
 
-Service::~Service() = default;
+Service::~Service()
+{
+    LOG(LS_INFO) << "Service Dtor";
+}
 
 void Service::onStart()
 {

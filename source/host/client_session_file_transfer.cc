@@ -127,16 +127,18 @@ ClientSessionFileTransfer::Worker::Worker(
     : session_id_(session_id),
       channel_proxy_(std::move(channel_proxy))
 {
-    // Nothing
+    LOG(LS_INFO) << "Worker Ctor";
 }
 
 ClientSessionFileTransfer::Worker::~Worker()
 {
+    LOG(LS_INFO) << "Worker Dtor";
     thread_.stop();
 }
 
 void ClientSessionFileTransfer::Worker::start()
 {
+    LOG(LS_INFO) << "Start worker";
     thread_.start(base::MessageLoop::Type::DEFAULT, this);
 }
 
@@ -159,13 +161,21 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
 
 void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 {
+    LOG(LS_INFO) << "After thread running";
+
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id_, &user_token))
+    {
+        LOG(LS_WARNING) << "createLoggedOnUserToken failed";
         return;
+    }
 
     impersonator_ = std::make_unique<base::win::ScopedImpersonator>();
     if (!impersonator_->loggedOnUser(user_token))
+    {
+        LOG(LS_WARNING) << "loggedOnUser failed";
         return;
+    }
 
     producer_proxy_ = std::make_shared<common::FileTaskProducerProxy>(this);
     impl_ = std::make_unique<common::FileWorker>(thread_.taskRunner());
@@ -173,10 +183,16 @@ void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 
 void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
 {
+    LOG(LS_INFO) << "Before thread running";
+
     if (producer_proxy_)
     {
         producer_proxy_->dettach();
         producer_proxy_.reset();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid producer proxy";
     }
 
     impl_.reset();
@@ -191,10 +207,13 @@ void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileT
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
-    // Nothing
+    LOG(LS_INFO) << "ClientSessionFileTransfer Ctor";
 }
 
-ClientSessionFileTransfer::~ClientSessionFileTransfer() = default;
+ClientSessionFileTransfer::~ClientSessionFileTransfer()
+{
+    LOG(LS_INFO) << "ClientSessionFileTransfer Dtor";
+}
 
 void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 {
@@ -208,6 +227,8 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
 
     if (!worker_)
     {
+        LOG(LS_INFO) << "Create worker";
+
         worker_ = std::make_unique<Worker>(sessionId(), channelProxy());
         worker_->start();
     }

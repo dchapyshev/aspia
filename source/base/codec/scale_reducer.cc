@@ -25,9 +25,15 @@
 
 namespace base {
 
-ScaleReducer::ScaleReducer() = default;
+ScaleReducer::ScaleReducer()
+{
+    LOG(LS_INFO) << "ScaleReducer Ctor";
+}
 
-ScaleReducer::~ScaleReducer() = default;
+ScaleReducer::~ScaleReducer()
+{
+    LOG(LS_INFO) << "ScaleReducer Dtor";
+}
 
 const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& target_size)
 {

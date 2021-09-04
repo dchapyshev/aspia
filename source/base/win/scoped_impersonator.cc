@@ -21,10 +21,7 @@
 
 namespace base::win {
 
-ScopedImpersonator::ScopedImpersonator()
-{
-    // Nothing
-}
+ScopedImpersonator::ScopedImpersonator() = default;
 
 ScopedImpersonator::~ScopedImpersonator()
 {

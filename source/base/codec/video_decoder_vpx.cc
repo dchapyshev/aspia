@@ -89,6 +89,7 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
+    LOG(LS_INFO) << "VideoDecoderVPX(" << encoding << ") Ctor";
     codec_.reset(new vpx_codec_ctx_t());
 
     vpx_codec_dec_cfg_t config;
@@ -116,6 +117,11 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 
     int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
     CHECK_EQ(ret, VPX_CODEC_OK);
+}
+
+VideoDecoderVPX::~VideoDecoderVPX()
+{
+    LOG(LS_INFO) << "VideoDecoderVPX Dtor";
 }
 
 bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
@@ -147,7 +153,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
         return false;
     }
 
-    if (base::Size(image->d_w, image->d_h) != frame->size())
+    if (base::Size(static_cast<int32_t>(image->d_w), static_cast<int32_t>(image->d_h)) != frame->size())
     {
         LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
         return false;

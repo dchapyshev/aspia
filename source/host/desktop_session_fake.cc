@@ -36,7 +36,7 @@ class DesktopSessionFake::FrameGenerator : public std::enable_shared_from_this<F
 {
 public:
     explicit FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner);
-    ~FrameGenerator() = default;
+    ~FrameGenerator();
 
     void start(Delegate* delegate);
     void stop();
@@ -57,6 +57,7 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
       frame_(base::FrameSimple::create(base::Size(kFrameWidth, kFrameHeight)))
 
 {
+    LOG(LS_INFO) << "FrameGenerator Ctor";
     DCHECK(task_runner_);
 
     if (!frame_)
@@ -71,8 +72,15 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
     frame_->setDpi(base::Point(96, 96));
 }
 
+DesktopSessionFake::FrameGenerator::~FrameGenerator()
+{
+    LOG(LS_INFO) << "FrameGenerator Dtor";
+}
+
 void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
 {
+    LOG(LS_INFO) << "Start frame generator";
+
     delegate_ = delegate;
     DCHECK(delegate);
 
@@ -81,6 +89,7 @@ void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
 
 void DesktopSessionFake::FrameGenerator::stop()
 {
+    LOG(LS_INFO) << "Stop frame generator";
     delegate_ = nullptr;
 }
 
@@ -106,6 +115,7 @@ void DesktopSessionFake::FrameGenerator::generateFrame()
     }
     else
     {
+        LOG(LS_INFO) << "Reset desktop frame";
         frame_.reset();
     }
 }
@@ -115,22 +125,34 @@ DesktopSessionFake::DesktopSessionFake(
     : frame_generator_(std::make_shared<FrameGenerator>(std::move(task_runner))),
       delegate_(delegate)
 {
+    LOG(LS_INFO) << "DesktopSessionFake Ctor";
     DCHECK(delegate_);
 }
 
 DesktopSessionFake::~DesktopSessionFake()
 {
+    LOG(LS_INFO) << "DesktopSessionFake Dtor";
     frame_generator_->stop();
 }
 
 void DesktopSessionFake::start()
 {
+    LOG(LS_INFO) << "Start called for fake session";
+
     if (delegate_)
+    {
         delegate_->onDesktopSessionStarted();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void DesktopSessionFake::stop()
 {
+    LOG(LS_INFO) << "Stop called for fake session";
+
     delegate_ = nullptr;
     frame_generator_->stop();
 }
@@ -140,11 +162,17 @@ void DesktopSessionFake::control(proto::internal::Control::Action action)
     switch (action)
     {
         case proto::internal::Control::ENABLE:
+        {
+            LOG(LS_INFO) << "Control::ENABLE for fake session";
             frame_generator_->start(delegate_);
-            break;
+        }
+        break;
 
         case proto::internal::Control::DISABLE:
+        {
+            LOG(LS_INFO) << "Control::DISABLE for fake session";
             frame_generator_->stop();
+        }
             break;
 
         default:

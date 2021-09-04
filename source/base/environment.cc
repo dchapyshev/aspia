@@ -44,7 +44,7 @@ bool getImpl(std::string_view variable_name, std::string* result)
 
     if (result)
     {
-        std::unique_ptr<wchar_t[]> value(new wchar_t[value_length]);
+        std::unique_ptr<wchar_t[]> value = std::make_unique<wchar_t[]>(value_length);
         GetEnvironmentVariableW(
             wideFromUtf8(variable_name).c_str(), value.get(), value_length);
         *result = utf8FromWide(value.get());

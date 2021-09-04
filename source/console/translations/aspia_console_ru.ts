@@ -387,17 +387,17 @@
         <translation type="vanished">Запуск программы с упрощенным интерфейсом пользователя.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="43"/>
+        <location filename="../main.cc" line="53"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="46"/>
+        <location filename="../main.cc" line="56"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="47"/>
+        <location filename="../main.cc" line="57"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>

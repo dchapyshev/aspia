@@ -19,6 +19,7 @@
 #include "host/ui/settings_util.h"
 
 #include "base/settings/json_settings.h"
+#include "base/logging.h"
 #include "host/system_settings.h"
 
 #include <QMessageBox>
@@ -28,7 +29,11 @@ namespace host {
 // static
 bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(path, SystemSettings().filePath(), silent, parent);
+    std::filesystem::path target_path = SystemSettings().filePath();
+
+    LOG(LS_INFO) << "Import settings from '" << path << "' to '" << target_path << "'";
+
+    bool result = copySettings(path, target_path, silent, parent);
 
     if (!silent && result)
     {
@@ -44,7 +49,11 @@ bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent
 // static
 bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
-    bool result = copySettings(SystemSettings().filePath(), path, silent, parent);
+    std::filesystem::path source_path = SystemSettings().filePath();
+
+    LOG(LS_INFO) << "Export settings from '" << source_path << "' to '" << path << "'";
+
+    bool result = copySettings(source_path, path, silent, parent);
 
     if (!silent && result)
     {
@@ -63,10 +72,39 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
                                 bool silent,
                                 QWidget* parent)
 {
-    base::JsonSettings::Map settings_map;
+    std::error_code error_code;
+    if (!std::filesystem::exists(source_path, error_code))
+    {
+        LOG(LS_WARNING) << "Source settings file does't exist ("
+                        << base::utf16FromLocal8Bit(error_code.message()) << ")";
 
+        if (!silent)
+        {
+            QMessageBox::warning(parent,
+                                 tr("Warning"),
+                                 tr("Source settings file does not exist."),
+                                 QMessageBox::Ok);
+        }
+
+        return false;
+    }
+    else
+    {
+        uintmax_t file_size = std::filesystem::file_size(source_path, error_code);
+        if (error_code)
+        {
+            LOG(LS_WARNING) << "Failed to get settings file size ("
+                            << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        }
+
+        LOG(LS_INFO) << "Source settings file exist (" << file_size << " bytes)";
+    }
+
+    base::JsonSettings::Map settings_map;
     if (!base::JsonSettings::readFile(source_path, settings_map))
     {
+        LOG(LS_WARNING) << "Failed to read source file: " << source_path;
+
         if (!silent)
         {
             QMessageBox::warning(
@@ -78,9 +116,36 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
 
         return false;
     }
+    else
+    {
+        LOG(LS_INFO) << "File read successfully: " << source_path;
+    }
+
+    if (std::filesystem::exists(target_path, error_code))
+    {
+        if (!silent)
+        {
+            if (QMessageBox::warning(parent,
+                                     tr("Warning"),
+                                     tr("The existing settings will be overwritten. Continue?"),
+                                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+            {
+                LOG(LS_INFO) << "Copy settings canceled by user";
+                return false;
+            }
+        }
+
+        LOG(LS_INFO) << "Target settings file already exist and will be overwritten";
+    }
+    else
+    {
+        LOG(LS_INFO) << "Target settings file does't exist. New file will be created";
+    }
 
     if (!base::JsonSettings::writeFile(target_path, settings_map))
     {
+        LOG(LS_WARNING) << "Failed to write destination file: " << target_path;
+
         if (!silent)
         {
             QMessageBox::warning(parent,
@@ -90,6 +155,10 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         }
 
         return false;
+    }
+    else
+    {
+        LOG(LS_INFO) << "File written successfully: " << target_path;
     }
 
     return true;

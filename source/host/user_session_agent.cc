@@ -27,6 +27,7 @@ namespace host {
 UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy)
     : window_proxy_(std::move(window_proxy))
 {
+    LOG(LS_INFO) << "UserSessionAgent Ctor";
     DCHECK(window_proxy_);
 
 #if defined(OS_WIN)
@@ -37,7 +38,10 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
 #endif // defined(OS_WIN)
 }
 
-UserSessionAgent::~UserSessionAgent() = default;
+UserSessionAgent::~UserSessionAgent()
+{
+    LOG(LS_INFO) << "UserSessionAgent Dtor";
+}
 
 void UserSessionAgent::start()
 {
@@ -48,17 +52,22 @@ void UserSessionAgent::start()
 
     if (ipc_channel_->connect(kIpcChannelIdForUI))
     {
+        LOG(LS_INFO) << "IPC channel connected";
+
         window_proxy_->onStatusChanged(Status::CONNECTED_TO_SERVICE);
         ipc_channel_->resume();
     }
     else
     {
+        LOG(LS_INFO) << "IPC channel not connected";
+
         window_proxy_->onStatusChanged(Status::SERVICE_NOT_AVAILABLE);
     }
 }
 
 void UserSessionAgent::onDisconnected()
 {
+    LOG(LS_INFO) << "IPC channel disconncted";
     window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 

@@ -40,6 +40,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
       attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id)
 {
+    LOG(LS_INFO) << "UserSession Ctor";
     DCHECK(task_runner_);
 
     type_ = UserSession::Type::CONSOLE;
@@ -48,9 +49,14 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
         type_ = UserSession::Type::RDP;
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
+
+    LOG(LS_INFO) << "Session type: " << static_cast<int>(type_);
 }
 
-UserSession::~UserSession() = default;
+UserSession::~UserSession()
+{
+    LOG(LS_INFO) << "UserSession Dtor";
+}
 
 void UserSession::start(Delegate* delegate)
 {
@@ -127,7 +133,10 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 std::string UserSession::sessionName() const
 {
     if (type_ == Type::CONSOLE)
+    {
+        LOG(LS_INFO) << "Session name for console session is empty string";
         return std::string();
+    }
 
     DCHECK_EQ(type_, Type::RDP);
 
@@ -138,13 +147,19 @@ std::string UserSession::sessionName() const
         return std::string();
     }
 
-    return session_info.userName();
+    std::string user_name = session_info.userName();
+
+    LOG(LS_INFO) << "Session name for RDP session: " << user_name;
+    return user_name;
 }
 
 base::User UserSession::user() const
 {
     if (host_id_ == base::kInvalidHostId)
+    {
+        LOG(LS_INFO) << "Invalid host ID";
         return base::User();
+    }
 
     std::u16string username = u'#' + base::numberToString16(host_id_);
     base::User user = base::User::create(username, base::utf16FromAscii(password_));
@@ -166,6 +181,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
+            LOG(LS_INFO) << "New desktop session";
             desktop_clients_.emplace_back(std::move(client_session));
 
             ClientSessionDesktop* desktop_client_session =
@@ -178,6 +194,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
+            LOG(LS_INFO) << "New file transfer session";
             file_transfer_clients_.emplace_back(std::move(client_session));
         }
         break;
@@ -189,6 +206,7 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
         }
     }
 
+    LOG(LS_INFO) << "Starting session...";
     client_session_ptr->setSessionId(sessionId());
     client_session_ptr->start(this);
 
@@ -202,6 +220,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     {
         case base::win::SessionStatus::CONSOLE_CONNECT:
         {
+            LOG(LS_INFO) << "CONSOLE_CONNECT event";
             session_id_ = session_id;
 
             for (const auto& client : desktop_clients_)
@@ -214,6 +233,8 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 
         case base::win::SessionStatus::CONSOLE_DISCONNECT:
         {
+            LOG(LS_INFO) << "CONSOLE_DISCONNECT event";
+
             if (desktop_session_)
                 desktop_session_->dettachSession(FROM_HERE);
 
@@ -223,6 +244,8 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 
         case base::win::SessionStatus::REMOTE_DISCONNECT:
         {
+            LOG(LS_INFO) << "REMOTE_DISCONNECT event";
+
             if (type_ == Type::RDP && state_ == State::DETTACHED)
             {
                 LOG(LS_INFO) << "RDP session finished";
@@ -243,6 +266,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 
 void UserSession::setRouterState(const proto::internal::RouterState& router_state)
 {
+    LOG(LS_INFO) << "Router state updated";
     router_state_ = router_state;
 
     sendRouterState();
@@ -376,7 +400,12 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 void UserSession::onClientSessionConfigured()
 {
     if (desktop_clients_.empty())
+    {
+        LOG(LS_INFO) << "No desktop clients";
         return;
+    }
+
+    LOG(LS_INFO) << "Client session configured";
 
     DesktopSession::Config system_config;
     memset(&system_config, 0, sizeof(system_config));
@@ -439,6 +468,8 @@ void UserSession::onClientSessionFinished()
         }
     };
 
+    LOG(LS_INFO) << "Client session finished";
+
     delete_finished(&desktop_clients_);
     delete_finished(&file_transfer_clients_);
 
@@ -482,6 +513,8 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
     else
     {
+        LOG(LS_INFO) << "Starting attach timer";
+
         attach_timer_.start(std::chrono::minutes(1), [this]()
         {
             LOG(LS_INFO) << "Session attach timeout";
@@ -495,7 +528,10 @@ void UserSession::onSessionDettached(const base::Location& location)
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
         return;
+    }
 
     LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id();
 
@@ -512,7 +548,10 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
 void UserSession::sendDisconnectEvent(uint32_t session_id)
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
         return;
+    }
 
     LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id;
 
@@ -548,8 +587,17 @@ void UserSession::updateCredentials()
 
 void UserSession::sendCredentials()
 {
-    if (!channel_ || host_id_ == base::kInvalidHostId)
+    if (!channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
         return;
+    }
+
+    if (host_id_ == base::kInvalidHostId)
+    {
+        LOG(LS_WARNING) << "Invalid host ID";
+        return;
+    }
 
     LOG(LS_INFO) << "Sending credentials to UI for host " << host_id_;
 
@@ -585,7 +633,10 @@ void UserSession::killClientSession(uint32_t id)
 void UserSession::sendRouterState()
 {
     if (!channel_)
+    {
+        LOG(LS_WARNING) << "No active IPC channel";
         return;
+    }
 
     LOG(LS_INFO) << "Sending router state to UI";
     LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();

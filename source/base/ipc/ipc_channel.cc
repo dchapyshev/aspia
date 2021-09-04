@@ -115,6 +115,8 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
       is_connected_(true)
 {
+    LOG(LS_INFO) << "IpcChannel Ctor";
+
 #if defined(OS_WIN)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
@@ -123,6 +125,7 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
 
 IpcChannel::~IpcChannel()
 {
+    LOG(LS_INFO) << "IpcChannel Dtor";
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     proxy_->willDestroyCurrentChannel();
@@ -140,6 +143,7 @@ std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 
 void IpcChannel::setListener(Listener* listener)
 {
+    LOG(LS_INFO) << "Listener changed (" << (listener != nullptr) << ")";
     listener_ = listener;
 }
 
@@ -205,6 +209,7 @@ void IpcChannel::disconnect()
     if (!is_connected_)
         return;
 
+    LOG(LS_INFO) << "disconnect called";
     is_connected_ = false;
 
     std::error_code ignored_code;
@@ -238,6 +243,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
+    LOG(LS_INFO) << "resume called";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -317,6 +323,10 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     {
         listener_->onDisconnected();
         listener_ = nullptr;
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No listener";
     }
 }
 
@@ -425,7 +435,13 @@ void IpcChannel::doReadMessage()
 void IpcChannel::onMessageReceived()
 {
     if (listener_)
+    {
         listener_->onMessageReceived(read_buffer_);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No listener";
+    }
 
     read_size_ = 0;
 }

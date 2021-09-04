@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,33 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__VIDEO_DECODER_VPX_H
-#define BASE__CODEC__VIDEO_DECODER_VPX_H
+#ifndef BASE__SCOPED_LOGGING_H
+#define BASE__SCOPED_LOGGING_H
 
-#include "base/macros_magic.h"
-#include "base/codec/scoped_vpx_codec.h"
-#include "base/codec/video_decoder.h"
+#include "base/logging.h"
 
 namespace base {
 
-class VideoDecoderVPX : public VideoDecoder
+class ScopedLogging
 {
 public:
-    ~VideoDecoderVPX();
+    ScopedLogging(const LoggingSettings& settings = LoggingSettings())
+    {
+        initialized_ = initLogging(settings);
+    }
 
-    static std::unique_ptr<VideoDecoderVPX> createVP8();
-    static std::unique_ptr<VideoDecoderVPX> createVP9();
-
-    bool decode(const proto::VideoPacket& packet, Frame* frame) override;
+    ~ScopedLogging()
+    {
+        if (initialized_)
+            shutdownLogging();
+    }
 
 private:
-    explicit VideoDecoderVPX(proto::VideoEncoding encoding);
-
-    ScopedVpxCodec codec_;
-
-    DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
+    bool initialized_ = false;
 };
 
 } // namespace base
 
-#endif // BASE__CODEC__VIDEO_DECODER_VPX_H
+#endif // BASE__SCOPED_LOGGING_H

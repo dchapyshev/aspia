@@ -27,37 +27,37 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="50"/>
+        <location filename="../client_main.cc" line="60"/>
         <source>Remote computer address.</source>
         <translation>Endereço do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="53"/>
+        <location filename="../client_main.cc" line="63"/>
         <source>Remote computer port.</source>
         <translation>Porta do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="67"/>
         <source>Name of user.</source>
         <translation>Nome do usuário.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="70"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Tipo de sessão. Valores possíveis: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="65"/>
+        <location filename="../client_main.cc" line="75"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="101"/>
+        <location filename="../client_main.cc" line="111"/>
         <source>Warning</source>
         <translation>AAviso</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="102"/>
+        <location filename="../client_main.cc" line="112"/>
         <source>Incorrect session type entered.</source>
         <translation>Tipo de sessão incorreta.</translation>
     </message>
@@ -1464,7 +1464,7 @@
         <translation>Tempo de conexão</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="600"/>
+        <location filename="../ui/router_manager_window.cc" line="601"/>
         <source>Version</source>
         <translation>Versão</translation>
     </message>

@@ -30,7 +30,7 @@ class DesktopSessionIpc
 {
 public:
     DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
-    ~DesktopSessionIpc();
+    ~DesktopSessionIpc() override;
 
     // DesktopSession implementation.
     void start() override;

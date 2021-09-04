@@ -19,6 +19,7 @@
 #include "host/input_injector_win.h"
 
 #include "base/logging.h"
+#include "base/stl_util.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
 
@@ -75,10 +76,15 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
-InputInjectorWin::InputInjectorWin() = default;
+InputInjectorWin::InputInjectorWin()
+{
+    LOG(LS_INFO) << "InputInjectorWin Ctor";
+}
 
 InputInjectorWin::~InputInjectorWin()
 {
+    LOG(LS_INFO) << "InputInjectorWin Dtor";
+
     setBlockInput(false);
     for (const auto& key : pressed_keys_)
     {
@@ -87,6 +93,10 @@ InputInjectorWin::~InputInjectorWin()
         {
             sendKeyboardScancode(
                 static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Invalid key code: " << key;
         }
     }
 }
@@ -111,18 +121,28 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
 
         if (event.usb_keycode() == kUsbCodeDelete && isCtrlAndAltPressed())
         {
+            LOG(LS_INFO) << "CTRL+ALT+DEL detected";
             injectSAS();
             return;
         }
     }
     else
     {
+        if (!base::contains(pressed_keys_, event.usb_keycode()))
+        {
+            LOG(LS_INFO) << "No pressed key in the list";
+            return;
+        }
+
         pressed_keys_.erase(event.usb_keycode());
     }
 
     int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (scancode == common::KeycodeConverter::invalidNativeKeycode())
+    {
+        LOG(LS_WARNING) << "Invalid key code: " << event.usb_keycode();
         return;
+    }
 
     switchToInputDesktop();
 
@@ -159,7 +179,10 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
     base::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (full_size.width() <= 1 || full_size.height() <= 1)
+    {
+        LOG(LS_WARNING) << "Invalid screen size: " << full_size;
         return;
+    }
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
     base::Point pos(((event.x() + screen_offset_.x()) * 65535) / (full_size.width() - 1),
@@ -242,7 +265,10 @@ void InputInjectorWin::switchToInputDesktop()
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
         desktop_.setThreadDesktop(std::move(input_desktop));
 
-    BlockInput(!!block_input_);
+    if (!BlockInput(!!block_input_))
+    {
+        PLOG(LS_WARNING) << "BlockInput failed";
+    }
 
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.

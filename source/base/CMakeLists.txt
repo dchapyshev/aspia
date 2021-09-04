@@ -46,6 +46,7 @@ list(APPEND SOURCE_BASE
     process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
+    scoped_logging.h
     session_id.cc
     session_id.h
     smbios.h
@@ -558,6 +559,8 @@ if (WIN32)
         win/file_version_info.h
         win/message_window.cc
         win/message_window.h
+        win/mini_dump_writer.cc
+        win/mini_dump_writer.h
         win/object_watcher.cc
         win/object_watcher.h
         win/printer_enumerator.cc

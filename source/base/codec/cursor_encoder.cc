@@ -48,6 +48,8 @@ uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 CursorEncoder::CursorEncoder()
     : stream_(ZSTD_createCStream())
 {
+    LOG(LS_INFO) << "CursorEncoder Ctor";
+
     static_assert(kCacheSize >= 2 && kCacheSize <= 30);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
 
@@ -55,16 +57,45 @@ CursorEncoder::CursorEncoder()
     cache_.reserve(kCacheSize);
 }
 
-CursorEncoder::~CursorEncoder() = default;
+CursorEncoder::~CursorEncoder()
+{
+    LOG(LS_INFO) << "CursorEncoder Dtor";
+}
 
 bool CursorEncoder::compressCursor(
     const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const
 {
-    size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (!cursor_shape)
+    {
+        LOG(LS_ERROR) << "Invalid pointer";
+        return false;
+    }
 
-    const size_t input_size = mouse_cursor.constImage().size();
-    const uint8_t* input_data = mouse_cursor.constImage().data();
+    if (mouse_cursor.width() <= 0 || mouse_cursor.height() <= 0)
+    {
+        LOG(LS_WARNING) << "Invalid cursor size: "
+                        << mouse_cursor.width() << "x" << mouse_cursor.height();
+        return false;
+    }
+
+    const ByteArray& image = mouse_cursor.constImage();
+
+    if (!image.data() || !image.size())
+    {
+        LOG(LS_WARNING) << "Invalid cursor image buffer";
+        return false;
+    }
+
+    size_t ret = ZSTD_initCStream(stream_.get(), kCompressionRatio);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_WARNING) << "ZSTD_initCStream failed: " << ZSTD_getErrorName(ret)
+                        << " (" << ret << ")";
+        return false;
+    }
+
+    const size_t input_size = image.size();
+    const uint8_t* input_data = image.data();
 
     const size_t output_size = ZSTD_compressBound(input_size);
     uint8_t* output_data = outputBuffer(cursor_shape, output_size);
@@ -83,7 +114,11 @@ bool CursorEncoder::compressCursor(
     }
 
     ret = ZSTD_endStream(stream_.get(), &output);
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_WARNING) << "ZSTD_endStream failed: " << ZSTD_getErrorName(ret) << " (" << ret << ")";
+        return false;
+    }
 
     cursor_shape->mutable_data()->resize(output.pos);
     return true;
@@ -126,10 +161,15 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* 
 
     // Compress the cursor using ZSTD.
     if (!compressCursor(mouse_cursor, cursor_shape))
+    {
+        LOG(LS_WARNING) << "compressCursor failed";
         return false;
+    }
 
     if (cache_.empty())
     {
+        LOG(LS_INFO) << "Empty cursor cache";
+
         // If the cache is empty, then set the cache reset flag on the client side and pass the
         // maximum cache size.
         cursor_shape->set_flags(proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F));

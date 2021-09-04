@@ -38,10 +38,13 @@ RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner
       peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner)
 {
-    // Nothing
+    LOG(LS_INFO) << "RouterController Ctor";
 }
 
-RouterController::~RouterController() = default;
+RouterController::~RouterController()
+{
+    LOG(LS_INFO) << "RouterController Dtor";
+}
 
 void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 {
@@ -250,8 +253,16 @@ void RouterController::onMessageWritten(size_t /* pending */)
 
 void RouterController::onNewPeerConnected(std::unique_ptr<base::NetworkChannel> channel)
 {
+    LOG(LS_INFO) << "New peer connected";
+
     if (delegate_)
+    {
         delegate_->onClientConnected(std::move(channel));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void RouterController::connectToRouter()
@@ -273,8 +284,13 @@ void RouterController::delayedConnectToRouter()
 
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
+    LOG(LS_INFO) << "Router state changed: " << state;
+
     if (!delegate_)
+    {
+        LOG(LS_INFO) << "Invalid delegate";
         return;
+    }
 
     proto::internal::RouterState router_state;
     router_state.set_state(state);

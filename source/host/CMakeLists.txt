@@ -133,6 +133,7 @@ if (WIN32)
 
     set(HOST_PLATFORM_LIBS
         crypt32
+        dbghelp
         dwmapi
         dxgi
         d3d11
