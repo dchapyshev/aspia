@@ -150,18 +150,18 @@
         <translation type="vanished">Applicatie update uitvoeren.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="121"/>
-        <location filename="../host_main.cc" line="140"/>
+        <location filename="../host_main.cc" line="133"/>
+        <location filename="../host_main.cc" line="152"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="122"/>
+        <location filename="../host_main.cc" line="134"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Applicatie integriteits controle gefaald. Missende of ontbrekende onderdelen.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="141"/>
+        <location filename="../host_main.cc" line="153"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
@@ -755,64 +755,64 @@
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="115"/>
-        <location filename="../main_window.cc" line="315"/>
+        <location filename="../main_window.cc" line="126"/>
+        <location filename="../main_window.cc" line="354"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="197"/>
+        <location filename="../main_window.cc" line="221"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="250"/>
+        <location filename="../main_window.cc" line="274"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="415"/>
+        <location filename="../main_window.cc" line="461"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
-        <location filename="../main_window.cc" line="400"/>
+        <location filename="../main_window.cc" line="270"/>
+        <location filename="../main_window.cc" line="446"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="405"/>
+        <location filename="../main_window.cc" line="451"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="254"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="456"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="258"/>
+        <location filename="../main_window.cc" line="282"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="320"/>
+        <location filename="../main_window.cc" line="359"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="350"/>
+        <location filename="../main_window.cc" line="394"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="351"/>
+        <location filename="../main_window.cc" line="395"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
