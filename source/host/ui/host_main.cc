@@ -98,14 +98,17 @@ int hostMain(int argc, char* argv[])
 
         if (!base::win::isProcessElevated())
         {
-            LOG(LS_INFO) << "Process not elevated";
+            LOG(LS_INFO) << "Process not elevated yet";
 
             if (base::win::createProcess(command_line, base::win::ProcessExecuteMode::ELEVATE))
+            {
+                LOG(LS_INFO) << "Elevated process started";
                 return 0;
+            }
         }
         else
         {
-            LOG(LS_INFO) << "Process elevated";
+            LOG(LS_INFO) << "Process already elevated";
         }
     }
     else
