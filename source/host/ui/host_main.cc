@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
+#include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/system_settings.h"
@@ -81,6 +82,14 @@ int hostMain(int argc, char* argv[])
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
     LOG(LS_INFO) << "Command line: " << command_line.commandLineString();
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
+                 << " (vendor: " << base::SysInfo::processorVendor()
+                 << " packages: " << base::SysInfo::processorPackages()
+                 << " cores: " << base::SysInfo::processorCores()
+                 << " threads: " << base::SysInfo::processorThreads() << ")";
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (!is_hidden)
