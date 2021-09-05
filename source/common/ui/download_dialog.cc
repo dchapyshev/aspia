@@ -32,7 +32,7 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {
         reject();
         close();
@@ -41,7 +41,7 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
     network_manager_.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    connect(&network_manager_, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
+    connect(&network_manager_, &QNetworkAccessManager::finished, this, [this](QNetworkReply* reply)
     {
         reject();
 
@@ -66,7 +66,7 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     QNetworkReply* reply = network_manager_.get(QNetworkRequest(url));
 
     connect(reply, &QNetworkReply::downloadProgress,
-            [this](qint64 bytes_received, qint64 bytes_total)
+            this, [this](qint64 bytes_received, qint64 bytes_total)
     {
         if (bytes_total != 0)
         {

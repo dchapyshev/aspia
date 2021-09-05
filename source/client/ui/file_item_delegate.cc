@@ -40,7 +40,7 @@ public:
     {
         FileNameValidator* validator = new FileNameValidator(this);
 
-        connect(validator, &FileNameValidator::invalidNameEntered, [this]()
+        connect(validator, &FileNameValidator::invalidNameEntered, this, [this]()
         {
             QString characters;
 

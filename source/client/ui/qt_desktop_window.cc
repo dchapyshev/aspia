@@ -111,32 +111,32 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(panel_, &DesktopPanel::minimizeSession, this, &QtDesktopWindow::showMinimized);
     connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
 
-    connect(panel_, &DesktopPanel::screenSelected, [this](const proto::Screen& screen)
+    connect(panel_, &DesktopPanel::screenSelected, this, [this](const proto::Screen& screen)
     {
         desktop_control_proxy_->setCurrentScreen(screen);
     });
 
-    connect(panel_, &DesktopPanel::powerControl, [this](proto::PowerControl::Action action)
+    connect(panel_, &DesktopPanel::powerControl, this, [this](proto::PowerControl::Action action)
     {
         desktop_control_proxy_->onPowerControl(action);
     });
 
-    connect(panel_, &DesktopPanel::startRemoteUpdate, [this]()
+    connect(panel_, &DesktopPanel::startRemoteUpdate, this, [this]()
     {
         desktop_control_proxy_->onRemoteUpdate();
     });
 
-    connect(panel_, &DesktopPanel::startSystemInfo, [this]()
+    connect(panel_, &DesktopPanel::startSystemInfo, this, [this]()
     {
         desktop_control_proxy_->onSystemInfoRequest();
     });
 
-    connect(panel_, &DesktopPanel::startStatistics, [this]()
+    connect(panel_, &DesktopPanel::startStatistics, this, [this]()
     {
         desktop_control_proxy_->onMetricsRequest();
     });
 
-    connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
+    connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
     {
         if (fullscreen)
         {
@@ -158,7 +158,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    connect(panel_, &DesktopPanel::startSession, [this](proto::SessionType session_type)
+    connect(panel_, &DesktopPanel::startSession, this, [this](proto::SessionType session_type)
     {
         client::Config session_config = config();
         session_config.session_type = session_type;
@@ -280,7 +280,7 @@ void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
         system_info_ = new SystemInfoWindow(this);
         system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(system_info_, &SystemInfoWindow::systemInfoRequired, [this]()
+        connect(system_info_, &SystemInfoWindow::systemInfoRequired, this, [this]()
         {
             desktop_control_proxy_->onSystemInfoRequest();
         });
@@ -298,7 +298,7 @@ void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(statistics_dialog_, &StatisticsDialog::metricsRequired, [this]()
+        connect(statistics_dialog_, &StatisticsDialog::metricsRequired, this, [this]()
         {
             desktop_control_proxy_->onMetricsRequest();
         });

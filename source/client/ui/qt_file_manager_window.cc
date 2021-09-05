@@ -275,7 +275,7 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
     transfer_dialog_ = new FileTransferDialog(this);
     transfer_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(transfer_dialog_, &FileRemoveDialog::finished, [this]()
+    connect(transfer_dialog_, &FileRemoveDialog::finished, this, [this]()
     {
         refresh();
         activateWindow();
@@ -312,23 +312,23 @@ void QtFileManagerWindow::initPanel(
     panel->setPanelName(title);
     panel->setMimeType(mime_type);
 
-    connect(panel, &FilePanel::driveList, [this, target]()
+    connect(panel, &FilePanel::driveList, this, [this, target]()
     {
         file_control_proxy_->driveList(target);
     });
 
-    connect(panel, &FilePanel::fileList, [this, target](const QString& path)
+    connect(panel, &FilePanel::fileList, this, [this, target](const QString& path)
     {
         file_control_proxy_->fileList(target, path.toStdString());
     });
 
     connect(panel, &FilePanel::rename,
-            [this, target](const QString& old_path, const QString& new_path)
+            this, [this, target](const QString& old_path, const QString& new_path)
     {
         file_control_proxy_->rename(target, old_path.toStdString(), new_path.toStdString());
     });
 
-    connect(panel, &FilePanel::createDirectory, [this, target](const QString& path)
+    connect(panel, &FilePanel::createDirectory, this, [this, target](const QString& path)
     {
         file_control_proxy_->createDirectory(target, path.toStdString());
     });

@@ -68,7 +68,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
         sessionTypeChanged(current_session_type);
     }
 
-    connect(ui.button_clear, &QPushButton::clicked, [this]()
+    connect(ui.button_clear, &QPushButton::clicked, this, [this]()
     {
         int ret = QMessageBox::question(
             this,

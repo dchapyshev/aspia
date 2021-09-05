@@ -81,7 +81,7 @@ Application::Application(int& argc, char* argv[])
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
         EventFilter::instance());
 
-    connect(this, &Application::messageReceived, [this](const QByteArray& message)
+    connect(this, &Application::messageReceived, this, [this](const QByteArray& message)
     {
         if (message == kActivateMessage)
         {

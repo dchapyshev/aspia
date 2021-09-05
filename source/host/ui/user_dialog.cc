@@ -79,7 +79,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 
-    connect(ui.edit_username, &QLineEdit::textEdited, [this]()
+    connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
     {
         setAccountChanged(true);
     });

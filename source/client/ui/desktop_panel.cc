@@ -43,8 +43,8 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     screens_group_ = new QActionGroup(screens_menu_);
     ui.action_monitors->setMenu(screens_menu_);
 
-    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(screens_menu_, &QMenu::aboutToHide, [this]()
+    connect(screens_menu_, &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
+    connect(screens_menu_, &QMenu::aboutToHide, this, [this]()
     {
         allow_hide_ = true;
 
@@ -55,7 +55,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
             delayedHide();
     });
 
-    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    connect(screens_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
         emit screenSelected(static_cast<SelectScreenAction*>(action)->screen());
     });
@@ -92,7 +92,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
         ui.action_cad->setVisible(false);
     }
 
-    connect(ui.action_file_transfer, &QAction::triggered, [this]()
+    connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
     {
         emit startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
@@ -402,7 +402,7 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
                 this, &DesktopPanel::keyCombinationsChanged);
     }
 
-    connect(scale_group_, &QActionGroup::triggered, [this](QAction* action)
+    connect(scale_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
         if (action == ui.action_scale100)
             scale_ = 100;
@@ -422,7 +422,7 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
         emit scaleChanged();
     });
 
-    connect(ui.action_fit_window, &QAction::toggled, [this](bool checked)
+    connect(ui.action_fit_window, &QAction::toggled, this, [this](bool checked)
     {
         ui.action_autoscroll->setEnabled(!checked);
         scale_group_->setEnabled(!checked);
@@ -451,8 +451,8 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
-    connect(additional_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(additional_menu_, &QMenu::aboutToHide, [this]()
+    connect(additional_menu_, &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
+    connect(additional_menu_, &QMenu::aboutToHide, this, [this]()
     {
         allow_hide_ = true;
 

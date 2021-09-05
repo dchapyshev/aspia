@@ -58,13 +58,13 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &ComputerDialogGeneral::showPasswordButtonToggled);
 
-    connect(ui.edit_address, &QLineEdit::textEdited, [this](const QString& text)
+    connect(ui.edit_address, &QLineEdit::textEdited, this, [this](const QString& text)
     {
         if (!has_name_)
             ui.edit_name->setText(text);
     });
 
-    connect(ui.edit_name, &QLineEdit::textEdited, [this](const QString& text)
+    connect(ui.edit_name, &QLineEdit::textEdited, this, [this](const QString& text)
     {
         has_name_ = !text.isEmpty();
     });

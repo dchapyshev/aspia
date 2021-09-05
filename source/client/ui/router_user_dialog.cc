@@ -78,7 +78,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
     add_session(proto::ROUTER_SESSION_ADMIN);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
-    connect(ui.edit_username, &QLineEdit::textEdited, [this]()
+    connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
     {
         setAccountChanged(true);
     });

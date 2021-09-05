@@ -175,7 +175,7 @@ AboutDialog::AboutDialog(QWidget* parent)
     if (file.open(QFile::ReadOnly))
         ui->edit_license->setPlainText(file.readAll());
 
-    connect(ui->push_button_donate, &QPushButton::clicked, []()
+    connect(ui->push_button_donate, &QPushButton::clicked, this, []()
     {
         QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/donate")));
     });

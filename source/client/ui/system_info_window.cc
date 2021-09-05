@@ -100,7 +100,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.action_save, &QAction::triggered, [this]()
+    connect(ui.action_save, &QAction::triggered, this, [this]()
     {
         QString file_path =
             QFileDialog::getSaveFileName(this,
@@ -121,7 +121,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         }
     });
 
-    connect(ui.action_print, &QAction::triggered, [this]()
+    connect(ui.action_print, &QAction::triggered, this, [this]()
     {
         QString html = treeToHtmlString(ui.tree);
 
@@ -139,17 +139,17 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
     connect(ui.action_refresh, &QAction::triggered, this, &SystemInfoWindow::systemInfoRequired);
 
-    connect(ui.action_copy_row, &QAction::triggered, [this]()
+    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
     {
         copyRow(ui.tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, [this]()
+    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
     {
         copyColumn(ui.tree->currentItem(), 0);
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, [this]()
+    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
     {
         copyColumn(ui.tree->currentItem(), 1);
     });
@@ -158,7 +158,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
             this, &SystemInfoWindow::onContextMenu);
 
     connect(ui.tree, &QTreeWidget::itemDoubleClicked,
-            [this](QTreeWidgetItem* item, int /* column */)
+            this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });

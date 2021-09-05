@@ -181,7 +181,7 @@ MainWindow::MainWindow(const QString& file_path)
 
 #if defined(OS_WIN)
     connect(ui.action_check_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
-    connect(ui.action_update_settings, &QAction::triggered, [this]()
+    connect(ui.action_update_settings, &QAction::triggered, this, [this]()
     {
         UpdateSettingsDialog(this).exec();
     });
@@ -408,14 +408,14 @@ void MainWindow::onDeleteComputerGroup()
 
 void MainWindow::onOnlineHelp()
 {
-    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
 }
 
 void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
     common::UpdateDialog(Application::instance()->settings().updateServer(),
-                         QLatin1String("console"),
+                         QStringLiteral("console"),
                          this).exec();
 #endif
 }
@@ -781,12 +781,12 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
                     return;
             }
 
-            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book-pinned.png"));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
             mru_.pinFile(current_path);
         }
         else
         {
-            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book.png"));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(QStringLiteral(":/img/address-book.png")));
             mru_.unpinFile(current_path);
         }
 
@@ -1017,13 +1017,13 @@ void MainWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(":/img/main.png"));
+        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.png")));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();
 
         connect(tray_icon_.get(), &QSystemTrayIcon::activated,
-                [this](QSystemTrayIcon::ActivationReason reason)
+                this, [this](QSystemTrayIcon::ActivationReason reason)
         {
             if (reason == QSystemTrayIcon::Context)
                 return;
@@ -1065,8 +1065,8 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &MainWindow::onComputerDoubleClicked);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
-        QIcon(":/img/address-book-pinned.png") :
-        QIcon(":/img/address-book.png");
+        QIcon(QStringLiteral(":/img/address-book-pinned.png")) :
+        QIcon(QStringLiteral(":/img/address-book.png"));
 
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 

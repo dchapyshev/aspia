@@ -42,7 +42,7 @@ Application::Application(int& argc, char* argv[])
     setQuitOnLastWindowClosed(false);
     setWindowIcon(QIcon(QStringLiteral(":/img/main.ico")));
 
-    connect(this, &Application::messageReceived, [this](const QByteArray& message)
+    connect(this, &Application::messageReceived, this, [this](const QByteArray& message)
     {
         if (message.startsWith(kActivateWindow))
         {
