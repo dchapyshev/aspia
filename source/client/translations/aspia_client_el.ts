@@ -877,18 +877,18 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="113"/>
-        <location filename="../ui/authorization_dialog.cc" line="123"/>
+        <location filename="../ui/authorization_dialog.cc" line="119"/>
+        <location filename="../ui/authorization_dialog.cc" line="129"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="114"/>
+        <location filename="../ui/authorization_dialog.cc" line="120"/>
         <source>Username cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="124"/>
+        <location filename="../ui/authorization_dialog.cc" line="130"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
