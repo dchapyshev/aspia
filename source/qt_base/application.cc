@@ -108,9 +108,14 @@ bool isSameApplication(const QLocalSocket* socket)
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
+    LOG(LS_INFO) << "Application Ctor";
+
 #if defined(OS_WIN)
     DWORD id = 0;
-    ProcessIdToSessionId(GetCurrentProcessId(), &id);
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
     QString session_id = QString::number(id);
 #else
     QString session_id = QString::number(getuid());
@@ -143,6 +148,8 @@ Application::Application(int& argc, char* argv[])
 
 Application::~Application()
 {
+    LOG(LS_INFO) << "Application Dtor";
+
     io_thread_.stop();
 
     bool is_locked = lock_file_->isLocked();
@@ -224,7 +231,7 @@ void Application::sendMessage(const QByteArray& message)
 {
     if (server_)
     {
-        DLOG(LS_ERROR) << "Attempt to send a message from the first instance of the application";
+        LOG(LS_ERROR) << "Attempt to send a message from the first instance of the application";
         return;
     }
 
@@ -250,7 +257,7 @@ void Application::sendMessage(const QByteArray& message)
     }
 
     QDataStream stream(&socket);
-    stream.writeBytes(message.constData(), message.size());
+    stream.writeBytes(message.constData(), static_cast<uint>(message.size()));
 
     if (!socket.waitForBytesWritten(kWriteTimeoutMs))
     {

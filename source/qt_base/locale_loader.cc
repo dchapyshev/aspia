@@ -29,14 +29,14 @@ namespace qt_base {
 
 namespace {
 
-const QString kTranslationsDir = QLatin1String(":/tr/");
+const QString kTranslationsDir = QStringLiteral(":/tr/");
 
 } // namespace
 
 LocaleLoader::LocaleLoader()
 {
     const QStringList qm_file_list =
-        QDir(kTranslationsDir).entryList(QStringList(QLatin1String("*.qm")), QDir::Files);
+        QDir(kTranslationsDir).entryList(QStringList(QStringLiteral("*.qm")), QDir::Files);
 
     for (const auto& qm_file : qm_file_list)
     {
@@ -89,7 +89,7 @@ LocaleLoader::LocaleList LocaleLoader::localeList() const
         list.push_back(Locale(locale_code, name));
     };
 
-    add_locale(QLatin1String("en"));
+    add_locale(QStringLiteral("en"));
 
     for (auto it = locale_list_.constBegin(); it != locale_list_.constEnd(); ++it)
         add_locale(it.key());
