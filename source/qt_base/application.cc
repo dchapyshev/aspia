@@ -39,7 +39,7 @@
 
 #if defined(OS_WIN)
 #include <Windows.h>
-#include <psapi.h>
+#include <Psapi.h>
 #endif // defined(OS_WIN)
 
 #if defined(OS_POSIX)
@@ -313,13 +313,13 @@ void Application::onNewConnection()
     }
 
     QByteArray message;
-    message.resize(remaining);
+    message.resize(static_cast<int>(remaining));
 
     char* buffer = message.data();
 
     do
     {
-        int read_bytes = stream.readRawData(buffer, remaining);
+        int read_bytes = stream.readRawData(buffer, static_cast<int>(remaining));
         if (read_bytes < 0)
         {
             LOG(LS_ERROR) << "Could not read message";
