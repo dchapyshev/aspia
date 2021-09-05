@@ -74,10 +74,13 @@ bool verifyNg(std::string_view N, std::string_view g)
 ClientAuthenticator::ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
-    // Nothing
+    LOG(LS_INFO) << "ClientAuthenticator Ctor";
 }
 
-ClientAuthenticator::~ClientAuthenticator() = default;
+ClientAuthenticator::~ClientAuthenticator()
+{
+    LOG(LS_INFO) << "ClientAuthenticator Dtor";
+}
 
 void ClientAuthenticator::setPeerPublicKey(const ByteArray& public_key)
 {

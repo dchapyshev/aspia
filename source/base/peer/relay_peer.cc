@@ -140,6 +140,10 @@ void RelayPeer::onConnected()
                 delegate_->onRelayConnectionReady(
                     std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket_))));
             }
+            else
+            {
+                LOG(LS_WARNING) << "Invalid delegate";
+            }
         });
     });
 }
@@ -152,7 +156,13 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
 
     is_finished_ = true;
     if (delegate_)
+    {
         delegate_->onRelayConnectionError();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 // static
@@ -207,12 +217,18 @@ ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std
     std::unique_ptr<MessageEncryptor> encryptor =
         MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, fromStdString(key.iv()));
     if (!encryptor)
+    {
+        LOG(LS_ERROR) << "createForChaCha20Poly1305 failed";
         return ByteArray();
+    }
 
     std::string encrypted_secret;
     encrypted_secret.resize(encryptor->encryptedDataSize(secret.size()));
     if (!encryptor->encrypt(secret.data(), secret.size(), encrypted_secret.data()))
+    {
+        LOG(LS_ERROR) << "encrypt failed";
         return ByteArray();
+    }
 
     proto::PeerToRelay message;
 

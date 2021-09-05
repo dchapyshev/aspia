@@ -45,7 +45,13 @@ void RelayPeerManager::addConnectionOffer(const proto::RelayCredentials& credent
 void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<NetworkChannel> channel)
 {
     if (delegate_)
+    {
         delegate_->onNewPeerConnected(std::move(channel));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 
     cleanup();
 }

@@ -52,7 +52,7 @@ class QtTaskRunner::Impl : public QObject
 {
 public:
     Impl();
-    ~Impl();
+    ~Impl() override;
 
     bool belongsToCurrentThread() const;
     void postTask(Callback&& callback, int priority);
