@@ -92,7 +92,7 @@ bool SessionWindow::connectToHost(Config config)
     client_proxy_ = std::make_unique<ClientProxy>(
         qt_base::Application::ioTaskRunner(), std::move(client), config);
 
-    LOG(LS_INFO) << "Start clinet proxy";
+    LOG(LS_INFO) << "Start client proxy";
     client_proxy_->start();
     return true;
 }
