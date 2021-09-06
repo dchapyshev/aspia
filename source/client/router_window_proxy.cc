@@ -30,16 +30,19 @@ RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     : ui_task_runner_(std::move(ui_task_runner)),
       router_window_(router_window)
 {
+    LOG(LS_INFO) << "RouterWindowProxy Ctor";
     DCHECK(ui_task_runner_ && router_window_);
 }
 
 RouterWindowProxy::~RouterWindowProxy()
 {
+    LOG(LS_INFO) << "RouterWindowProxy Dtor";
     DCHECK(!router_window_);
 }
 
 void RouterWindowProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach router window";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     router_window_ = nullptr;
 }
