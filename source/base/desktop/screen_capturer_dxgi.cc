@@ -35,7 +35,10 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     ScreenCapturer::ScreenList gdi_screens;
 
     if (!ScreenCaptureUtils::screenList(&gdi_screens))
+    {
+        LOG(LS_WARNING) << "screenList failed";
         return false;
+    }
 
     ScreenCapturer::ScreenId max_screen_id = -1;
 
