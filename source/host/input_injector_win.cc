@@ -265,10 +265,7 @@ void InputInjectorWin::switchToInputDesktop()
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
         desktop_.setThreadDesktop(std::move(input_desktop));
 
-    if (!BlockInput(!!block_input_))
-    {
-        PLOG(LS_WARNING) << "BlockInput failed";
-    }
+    BlockInput(!!block_input_);
 
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.
