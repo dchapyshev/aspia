@@ -115,6 +115,10 @@ void Client::stop()
 
         LOG(LS_INFO) << "Client stopped";
     }
+    else
+    {
+        LOG(LS_WARNING) << "Client already stopped";
+    }
 }
 
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
@@ -195,17 +199,21 @@ int Client::speedTx()
 
 void Client::onConnected()
 {
+    LOG(LS_INFO) << "Connection established";
     startAuthentication();
 }
 
 void Client::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
+    LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
+
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
 }
 
 void Client::onHostConnected(std::unique_ptr<base::NetworkChannel> channel)
 {
+    LOG(LS_INFO) << "Host connected";
     DCHECK(channel);
 
     channel_ = std::move(channel);
@@ -224,6 +232,8 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 
 void Client::startAuthentication()
 {
+    LOG(LS_INFO) << "Start authentication";
+
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
     channel_->setReadBufferSize(kReadBufferSize);
@@ -241,6 +251,8 @@ void Client::startAuthentication()
     {
         if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
+            LOG(LS_INFO) << "Successful authentication";
+
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
@@ -272,6 +284,8 @@ void Client::startAuthentication()
         }
         else
         {
+            LOG(LS_INFO) << "Failed authentication: "
+                         << base::ClientAuthenticator::errorToString(error_code);
             status_window_proxy_->onAccessDenied(error_code);
         }
 

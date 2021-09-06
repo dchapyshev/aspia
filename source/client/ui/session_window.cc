@@ -33,19 +33,22 @@ SessionWindow::SessionWindow(QWidget* parent)
       status_window_proxy_(
           std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
-    // Nothing
+    LOG(LS_INFO) << "SessionWindow Ctor";
 }
 
 SessionWindow::~SessionWindow()
 {
+    LOG(LS_INFO) << "SessionWindow Dtor";
     status_window_proxy_->dettach();
 }
 
 bool SessionWindow::connectToHost(Config config)
 {
+    LOG(LS_INFO) << "Connecting to host";
+
     if (client_proxy_)
     {
-        DLOG(LS_ERROR) << "Attempt to start an already running client";
+        LOG(LS_ERROR) << "Attempt to start an already running client";
         return false;
     }
 
@@ -54,6 +57,8 @@ bool SessionWindow::connectToHost(Config config)
 
     if (config.username.empty() || config.password.empty())
     {
+        LOG(LS_INFO) << "Empty user name or password";
+
         AuthorizationDialog auth_dialog(this);
 
         auth_dialog.setOneTimePasswordEnabled(config.router_config.has_value());
@@ -61,7 +66,10 @@ bool SessionWindow::connectToHost(Config config)
         auth_dialog.setPassword(QString::fromStdU16String(config.password));
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+        {
+            LOG(LS_INFO) << "Authorization rejected by user";
             return false;
+        }
 
         config.username = auth_dialog.userName().toStdU16String();
         config.password = auth_dialog.password().toStdU16String();
@@ -70,7 +78,10 @@ bool SessionWindow::connectToHost(Config config)
     // When connecting with a one-time password, the username must be in the following format:
     // #host_id.
     if (config.username.empty())
+    {
+        LOG(LS_INFO) << "User name is empty. Connection by ID";
         config.username = u"#" + config.address_or_id;
+    }
 
     // Create a client instance.
     std::unique_ptr<Client> client = createClient();
@@ -81,6 +92,7 @@ bool SessionWindow::connectToHost(Config config)
     client_proxy_ = std::make_unique<ClientProxy>(
         qt_base::Application::ioTaskRunner(), std::move(client), config);
 
+    LOG(LS_INFO) << "Start client proxy";
     client_proxy_->start();
     return true;
 }
@@ -92,15 +104,24 @@ Config SessionWindow::config() const
 
 void SessionWindow::closeEvent(QCloseEvent* /* event */)
 {
+    LOG(LS_INFO) << "Close event";
+
     if (client_proxy_)
     {
+        LOG(LS_INFO) << "Stopping client proxy";
         client_proxy_->stop();
         client_proxy_.reset();
+    }
+    else
+    {
+        LOG(LS_INFO) << "No client proxy";
     }
 }
 
 void SessionWindow::onStarted(const std::u16string& address_or_id)
 {
+    LOG(LS_INFO) << "Attempt to establish a connection";
+
     // Create a dialog to display the connection status.
     status_dialog_ = new common::StatusDialog(this);
 
@@ -113,27 +134,34 @@ void SessionWindow::onStarted(const std::u16string& address_or_id)
 
 void SessionWindow::onStopped()
 {
+    LOG(LS_INFO) << "Connection stopped";
     status_dialog_->close();
 }
 
 void SessionWindow::onConnected()
 {
+    LOG(LS_INFO) << "Connection established";
+
     status_dialog_->addMessageAndActivate(tr("Connection established."));
     status_dialog_->hide();
 }
 
 void SessionWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
+    LOG(LS_INFO) << "Network error";
     onErrorOccurred(netErrorToString(error_code));
 }
 
 void SessionWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
+    LOG(LS_INFO) << "Authentication error";
     onErrorOccurred(authErrorToString(error_code));
 }
 
 void SessionWindow::onRouterError(const RouterController::Error& error)
 {
+    LOG(LS_INFO) << "Router error";
+
     switch (error.type)
     {
         case RouterController::ErrorType::NETWORK:
