@@ -22,7 +22,7 @@
 #include "base/win/scoped_object.h"
 
 #include <Windows.h>
-#include <wtsapi32.h>
+#include <WtsApi32.h>
 
 namespace base {
 

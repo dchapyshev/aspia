@@ -75,7 +75,10 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
     ScreenCapturer::ScreenList screens;
 
     if (!screenListFromDeviceNames(device_names, &screens))
+    {
+        LOG(LS_WARNING) << "screenListFromDeviceNames failed";
         return -1;
+    }
 
     DCHECK_EQ(device_names.size(), screens.size());
 
@@ -85,6 +88,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
             return static_cast<int>(i);
     }
 
+    LOG(LS_WARNING) << "Screen with ID " << id << " not found";
     return -1;
 }
 
@@ -94,10 +98,13 @@ ScreenCapturerDxgi::ScreenCapturerDxgi()
     : ScreenCapturer(Type::WIN_DXGI),
       controller_(std::make_shared<DxgiDuplicatorController>())
 {
-    // Nothing
+    LOG(LS_INFO) << "ScreenCapturerDxgi Ctor";
 }
 
-ScreenCapturerDxgi::~ScreenCapturerDxgi() = default;
+ScreenCapturerDxgi::~ScreenCapturerDxgi()
+{
+    LOG(LS_INFO) << "ScreenCapturerDxgi Dtor";
+}
 
 bool ScreenCapturerDxgi::isSupported()
 {
@@ -121,13 +128,18 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
     std::vector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
+    {
+        LOG(LS_WARNING) << "deviceNames failed";
         return false;
+    }
 
     return screenListFromDeviceNames(device_names, screens);
 }
 
 bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
+    LOG(LS_INFO) << "Select screen with ID: " << screen_id;
+
     if (screen_id == kFullDesktopScreenId)
     {
         current_screen_id_ = screen_id;
@@ -137,11 +149,17 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     std::vector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
+    {
+        LOG(LS_WARNING) << "deviceNames failed";
         return false;
+    }
 
     int index = indexFromScreenId(screen_id, device_names);
     if (index == -1)
+    {
+        LOG(LS_WARNING) << "indexFromScreenId failed";
         return false;
+    }
 
     current_screen_id_ = index;
     return true;

@@ -32,11 +32,13 @@ namespace base {
 ScreenCapturerGdi::ScreenCapturerGdi()
     : ScreenCapturer(Type::WIN_GDI)
 {
-    // Nothing
+    LOG(LS_INFO) << "ScreenCapturerGdi Ctor";
 }
 
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
+    LOG(LS_INFO) << "ScreenCapturerGdi Dtor";
+
     if (composition_changed_)
         DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
 }
@@ -53,8 +55,13 @@ bool ScreenCapturerGdi::screenList(ScreenList* screens)
 
 bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 {
+    LOG(LS_INFO) << "Select screen with ID: " << screen_id;
+
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
+    {
+        LOG(LS_WARNING) << "Invalid screen";
         return false;
+    }
 
     // At next screen capture, the resources are recreated.
     desktop_dc_rect_ = Rect();
@@ -123,12 +130,23 @@ const Frame* ScreenCapturerGdi::captureImage()
         win::ScopedSelectObject select_object(
             memory_dc_, static_cast<FrameDib*>(current)->bitmap());
 
-        BitBlt(memory_dc_,
-               0, 0,
-               screen_rect.width(), screen_rect.height(),
-               desktop_dc_,
-               screen_rect.left(), screen_rect.top(),
-               CAPTUREBLT | SRCCOPY);
+        if (!BitBlt(memory_dc_,
+                    0, 0,
+                    screen_rect.width(), screen_rect.height(),
+                    desktop_dc_,
+                    screen_rect.left(), screen_rect.top(),
+                    CAPTUREBLT | SRCCOPY))
+        {
+            static thread_local int count = 0;
+
+            if (count == 0)
+            {
+                LOG(LS_WARNING) << "BitBlt failed";
+            }
+
+            if (++count > 10)
+                count = 0;
+        }
     }
 
     current->setTopLeft(screen_rect.topLeft().subtract(desktop_dc_rect_.topLeft()));
@@ -157,6 +175,8 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     // If the display bounds have changed then recreate GDI resources.
     if (desktop_rect != desktop_dc_rect_)
     {
+        LOG(LS_INFO) << "Desktop rect changed from " << desktop_dc_rect_ << " to " << desktop_rect;
+
         desktop_dc_.close();
         memory_dc_.reset();
 

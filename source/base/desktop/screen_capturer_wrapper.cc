@@ -47,6 +47,8 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(std::make_unique<DesktopEnvironment>())
 {
+    LOG(LS_INFO) << "ScreenCapturerWrapper Ctor";
+
 #if defined(OS_WIN)
     // If the monitor is turned off, this call will turn it on.
     SetThreadExecutionState(ES_DISPLAY_REQUIRED);
@@ -56,7 +58,10 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     selectCapturer();
 }
 
-ScreenCapturerWrapper::~ScreenCapturerWrapper() = default;
+ScreenCapturerWrapper::~ScreenCapturerWrapper()
+{
+    LOG(LS_INFO) << "ScreenCapturerWrapper Dtor";
+}
 
 void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
@@ -215,6 +220,11 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
+        wchar_t desktop_name[128] = { 0 };
+        input_desktop.name(desktop_name, sizeof(desktop_name));
+
+        LOG(LS_INFO) << "Input desktop changed to " << desktop_name;
+
         if (screen_capturer_)
             screen_capturer_->reset();
 
