@@ -49,6 +49,8 @@ void Router::setPassword(std::u16string_view password)
 
 void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
+    LOG(LS_INFO) << "Connecting to router " << address.data() << ":" << port;
+
     channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
     channel_->connect(address, port);
@@ -128,6 +130,8 @@ void Router::deleteUser(int64_t entry_id)
 
 void Router::onConnected()
 {
+    LOG(LS_INFO) << "Router connected";
+
     channel_->setOwnKeepAlive(true);
     channel_->setNoDelay(true);
 
@@ -136,6 +140,8 @@ void Router::onConnected()
     {
         if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
+            LOG(LS_INFO) << "Successful authentication";
+
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
@@ -148,6 +154,8 @@ void Router::onConnected()
         }
         else
         {
+            LOG(LS_INFO) << "Failed authentication: "
+                         << base::ClientAuthenticator::errorToString(error_code);
             window_proxy_->onAccessDenied(error_code);
         }
 
@@ -158,6 +166,7 @@ void Router::onConnected()
 
 void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
+    LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
     window_proxy_->onDisconnected(error_code);
 }
 

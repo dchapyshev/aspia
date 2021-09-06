@@ -205,7 +205,7 @@ void Client::onConnected()
 
 void Client::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection terminated";
+    LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
@@ -251,6 +251,8 @@ void Client::startAuthentication()
     {
         if (error_code == base::ClientAuthenticator::ErrorCode::SUCCESS)
         {
+            LOG(LS_INFO) << "Successful authentication";
+
             // The authenticator takes the listener on itself, we return the receipt of
             // notifications.
             channel_ = authenticator_->takeChannel();
@@ -282,6 +284,8 @@ void Client::startAuthentication()
         }
         else
         {
+            LOG(LS_INFO) << "Failed authentication: "
+                         << base::ClientAuthenticator::errorToString(error_code);
             status_window_proxy_->onAccessDenied(error_code);
         }
 
