@@ -113,7 +113,7 @@
     <message>
         <location filename="../ui/update_dialog.ui" line="188"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
