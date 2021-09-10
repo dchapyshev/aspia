@@ -31,7 +31,7 @@
     <message>
         <location filename="../ui/about_dialog.ui" line="144"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
