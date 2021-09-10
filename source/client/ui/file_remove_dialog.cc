@@ -141,7 +141,7 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
     if (available_actions & FileRemover::ACTION_ABORT)
         dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
-    connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
+    connect(dialog, &QMessageBox::buttonClicked, this, [&](QAbstractButton* button)
     {
         if (button != nullptr)
         {

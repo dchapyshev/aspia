@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt-PT">
+<TS version="2.1" language="pt_PT">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../ui/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation>Sobre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="61"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="88"/>
         <source>License</source>
-        <translation>Licença</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="105"/>
         <source>Service Information</source>
-        <translation>Informação do Serviço</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="120"/>
         <source>Donate!</source>
-        <translation>Doe!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="144"/>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation type="unfinished">Fechar</translation>
     </message>
 </context>
 <context>
@@ -52,17 +52,17 @@
     <message>
         <location filename="../session_type.cc" line="30"/>
         <source>Desktop Manage</source>
-        <translation>Gerenciar Desktops</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="33"/>
         <source>Desktop View</source>
-        <translation>Visualizar Desktop</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation>Transferência de Arquivo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -121,72 +121,72 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="101"/>
         <source>Version: %1</source>
-        <translation>Versão: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="105"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia é um software livre que utiliza a licença GNU GPL 3.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="106"/>
         <source>You can get a copy of license here:</source>
-        <translation>Você pode obter uma cópia da licença aqui:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="111"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation>Você também pode obter uma tradução da licença GNU GPL aqui:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="115"/>
         <source>Links:</source>
-        <translation>Links:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Home page:</source>
-        <translation>Página inicial:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="117"/>
         <source>GitHub page:</source>
-        <translation>Página do GitHub:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Developers:</source>
-        <translation>Desenvolvedores:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Translators:</source>
-        <translation>Tradutores:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="124"/>
         <source>Third-party components:</source>
-        <translation>Componentes de terceiros:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="141"/>
         <source>Path: %1</source>
-        <translation>Caminho: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Compilation date: %1</source>
-        <translation>Data de compilação: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Compilation time: %1</source>
-        <translation>Hora de compilação: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="147"/>
         <source>%1 version: %2</source>
-        <translation>%1 versão: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

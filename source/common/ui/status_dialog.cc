@@ -31,7 +31,7 @@ StatusDialog::StatusDialog(QWidget* parent)
 {
     ui->setupUi(this);
 
-    connect(ui->buttonbox, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
+    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         if (ui->buttonbox->standardButton(button) == QDialogButtonBox::Close)
             close();

@@ -44,7 +44,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
         ui.edit_server->setEnabled(true);
     }
 
-    connect(ui.checkbox_custom_server, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_custom_server, &QCheckBox::toggled, this, [this](bool checked)
     {
         ui.edit_server->setEnabled(checked);
 
@@ -52,7 +52,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
             ui.edit_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
     });
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
         {

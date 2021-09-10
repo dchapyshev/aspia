@@ -66,6 +66,7 @@ bool D3dDevice::initialize(const ComPtr<IDXGIAdapter>& adapter)
                         << feature_level << ". Following initialization may fail";
         // D3D_FEATURE_LEVEL_11_0 is not officially documented on MSDN to be a requirement of Dxgi
         // duplicator APIs.
+        return false;
     }
 
     error = d3d_device_.As(&dxgi_device_);

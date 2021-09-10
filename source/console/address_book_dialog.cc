@@ -165,7 +165,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.edit_router_username->setText(QString::fromStdString(router.username()));
     ui.edit_router_password->setText(QString::fromStdString(router.password()));
 
-    connect(ui.button_show_password, &QPushButton::toggled, [this](bool checked)
+    connect(ui.button_show_password, &QPushButton::toggled, this, [this](bool checked)
     {
         if (checked)
         {
@@ -183,7 +183,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         ui.edit_router_password->setFocus();
     });
 
-    connect(ui.checkbox_use_router, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_use_router, &QCheckBox::toggled, this, [this](bool checked)
     {
         ui.label_router_address->setEnabled(checked);
         ui.edit_router_address->setEnabled(checked);
@@ -294,7 +294,7 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                     if (QMessageBox::warning(this,
                                              tr("Warning"),
                                              QString("<b>%1</b><br/>%2<br/>%3")
-                                                 .arg(unsafe).arg(safe).arg(question),
+                                                 .arg(unsafe, safe, question),
                                              QMessageBox::Yes,
                                              QMessageBox::No) == QMessageBox::Yes)
                     {

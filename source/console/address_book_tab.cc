@@ -134,7 +134,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     restore_child(group_item);
 
-    connect(ui.tree_group, &ComputerGroupTree::itemSelectionChanged, [this]()
+    connect(ui.tree_group, &ComputerGroupTree::itemSelectionChanged, this, [this]()
     {
         if (ui.tree_group->dragging())
             return;

@@ -112,7 +112,8 @@ void alphaMul(uint32_t* data, int width, int height)
 // Converts an HCURSOR into a |MouseCursor| instance.
 MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
-    ICONINFO icon_info = { 0 };
+    ICONINFO icon_info;
+    memset(&icon_info, 0, sizeof(icon_info));
 
     if (!GetIconInfo(cursor, &icon_info))
     {
@@ -138,11 +139,13 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     int width = bitmap_info.bmWidth;
     int height = bitmap_info.bmHeight;
 
-    std::unique_ptr<uint32_t[]> mask_data = std::make_unique<uint32_t[]>(width * height);
+    std::unique_ptr<uint32_t[]> mask_data =
+        std::make_unique<uint32_t[]>(static_cast<size_t>(width * height));
 
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.
-    BITMAPV5HEADER bmi = { 0 };
+    BITMAPV5HEADER bmi;
+    memset(&bmi, 0, sizeof(bmi));
 
     bmi.bV5Size        = sizeof(bmi);
     bmi.bV5Width       = width;
@@ -157,7 +160,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     if (!GetDIBits(dc,
                    scoped_mask,
                    0,
-                   height,
+                   static_cast<UINT>(height),
                    mask_data.get(),
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
@@ -174,13 +177,13 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (is_color)
     {
-        image.resize(width * height * kBytesPerPixel);
+        image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
 
         // Get the pixels from the color bitmap.
         if (!GetDIBits(dc,
                        scoped_color,
                        0,
-                       height,
+                       static_cast<UINT>(height),
                        image.data(),
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
@@ -200,7 +203,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // need to divide by 2 to get the correct mask height.
         height /= 2;
 
-        image.resize(width * height * kBytesPerPixel);
+        image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
 
         // The XOR mask becomes the color bitmap.
         memcpy(image.data(), mask_plane + (width * height), image.size());
@@ -264,7 +267,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     return new MouseCursor(std::move(image),
                            Size(width, height),
-                           Point(icon_info.xHotspot, icon_info.yHotspot));
+                           Point(static_cast<int>(icon_info.xHotspot),
+                                 static_cast<int>(icon_info.yHotspot)));
 }
 
 } // namespace base

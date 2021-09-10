@@ -36,7 +36,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
         device.cb = sizeof(device);
 
         // |enum_result| is 0 if we have enumerated all devices.
-        if (!EnumDisplayDevicesW(nullptr, device_index, &device, 0))
+        if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(device_index), &device, 0))
             break;
 
         // We only care about active displays.
@@ -66,8 +66,11 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
 
-    if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
+    if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
+    {
+        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
         return false;
+    }
 
     *device_key = device.DeviceKey;
     return true;
@@ -91,27 +94,36 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
 
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
-    if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
+    if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen), &device, 0))
+    {
+        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
         return Rect();
+    }
 
     // Verifies the device index still maps to the same display device, to make sure we are
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
     if (device.DeviceKey != device_key)
+    {
+        LOG(LS_WARNING) << "Invalid device key";
         return Rect();
+    }
 
     DEVMODEW device_mode;
     device_mode.dmSize = sizeof(device_mode);
     device_mode.dmDriverExtra = 0;
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
+    {
+        PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
         return Rect();
+    }
 
     return Rect::makeXYWH(device_mode.dmPosition.x,
                           device_mode.dmPosition.y,
-                          device_mode.dmPelsWidth,
-                          device_mode.dmPelsHeight);
+                          static_cast<int32_t>(device_mode.dmPelsWidth),
+                          static_cast<int32_t>(device_mode.dmPelsHeight));
 }
 
 // static

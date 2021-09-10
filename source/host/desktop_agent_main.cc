@@ -20,6 +20,7 @@
 
 #include "base/command_line.h"
 #include "base/scoped_logging.h"
+#include "base/sys_info.h"
 #include "base/message_loop/message_loop.h"
 #include "base/win/mini_dump_writer.h"
 #include "build/version.h"
@@ -36,6 +37,14 @@ void desktopAgentMain(int argc, const char* const* argv)
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
+                 << " (vendor: " << base::SysInfo::processorVendor()
+                 << " packages: " << base::SysInfo::processorPackages()
+                 << " cores: " << base::SysInfo::processorCores()
+                 << " threads: " << base::SysInfo::processorThreads() << ")";
 
     if (command_line->hasSwitch(u"channel_id"))
     {

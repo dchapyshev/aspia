@@ -27,7 +27,7 @@ RouterStatusDialog::RouterStatusDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked, [this](QAbstractButton* button)
+    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
         if (standard_button != QDialogButtonBox::Cancel)

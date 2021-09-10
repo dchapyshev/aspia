@@ -18,6 +18,8 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include "qt_base/qt_logging.h"
+
 #include <QMessageBox>
 #include <QTimer>
 
@@ -26,6 +28,7 @@ namespace client {
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
 {
+    LOG(LS_INFO) << "AuthorizationDialog Ctor";
     ui.setupUi(this);
 
     connect(ui.button_show_password, &QPushButton::toggled,
@@ -34,7 +37,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     connect(ui.buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
 
-    connect(ui.checkbox_one_time_password, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_one_time_password, &QCheckBox::toggled, this, [this](bool checked)
     {
         ui.label_username->setVisible(!checked);
         ui.edit_username->setVisible(!checked);
@@ -46,7 +49,10 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     fitSize();
 }
 
-AuthorizationDialog::~AuthorizationDialog() = default;
+AuthorizationDialog::~AuthorizationDialog()
+{
+    LOG(LS_INFO) << "AuthorizationDialog Dtor";
+}
 
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
@@ -138,7 +144,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 
 void AuthorizationDialog::fitSize()
 {
-    QTimer::singleShot(0, [this]()
+    QTimer::singleShot(0, this, [this]()
     {
         setFixedHeight(sizeHint().height());
     });

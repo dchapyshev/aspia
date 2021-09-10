@@ -6,7 +6,7 @@
 /installer/.vs/
 /installer/bin/
 /installer/obj/
-/source/CMakeLists.txt.user
+/CMakeLists.txt.user
 
 # VS generated files
 *.obj

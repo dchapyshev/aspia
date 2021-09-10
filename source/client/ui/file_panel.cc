@@ -73,7 +73,7 @@ FilePanel::FilePanel(QWidget* parent)
     connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
     connect(ui.list, &FileList::fileListDropped,
-            [this](const QString& folder_name, const std::vector<FileTransfer::Item>& items)
+            this, [this](const QString& folder_name, const std::vector<FileTransfer::Item>& items)
     {
         QString target_folder = currentPath();
         if (!folder_name.isEmpty())

@@ -35,16 +35,19 @@ DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task
     : ui_task_runner_(std::move(ui_task_runner)),
       desktop_window_(desktop_window)
 {
+    LOG(LS_INFO) << "DesktopWindowProxy Ctor";
     frame_factory_ = desktop_window_->frameFactory();
 }
 
 DesktopWindowProxy::~DesktopWindowProxy()
 {
+    LOG(LS_INFO) << "DesktopWindowProxy Dtor";
     DCHECK(!desktop_window_);
 }
 
 void DesktopWindowProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach desktop window";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     desktop_window_ = nullptr;
 }

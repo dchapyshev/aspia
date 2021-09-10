@@ -55,7 +55,7 @@ void UpdateCheckerImpl::start()
     // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
     network_manager_->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    connect(network_manager_, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
+    connect(network_manager_, &QNetworkAccessManager::finished, this, [this](QNetworkReply* reply)
     {
         if (reply->error())
         {

@@ -56,10 +56,15 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 {
     win::ScopedHandle request_handle(handle);
     if (!request_handle.isValid())
+    {
+        LOG(LS_WARNING) << "Invalid handle for power request";
         return;
+    }
 
-    BOOL success = PowerClearRequest(request_handle, type);
-    DCHECK(success);
+    if (!PowerClearRequest(request_handle, type))
+    {
+        PLOG(LS_WARNING) << "PowerClearRequest failed";
+    }
 }
 
 #endif // defined(OS_WIN)
@@ -68,6 +73,8 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 
 PowerSaveBlocker::PowerSaveBlocker()
 {
+    LOG(LS_INFO) << "PowerSaveBlocker Ctor";
+
 #if defined(OS_WIN)
     static const wchar_t kDescription[] = L"Aspia session is active";
 
@@ -80,6 +87,8 @@ PowerSaveBlocker::PowerSaveBlocker()
 
 PowerSaveBlocker::~PowerSaveBlocker()
 {
+    LOG(LS_INFO) << "PowerSaveBlocker Dtor";
+
 #if defined(OS_WIN)
     deletePowerRequest(PowerRequestDisplayRequired, handle_.release());
 #endif // defined(OS_WIN)

@@ -150,18 +150,18 @@
         <translation type="vanished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="121"/>
-        <location filename="../host_main.cc" line="140"/>
+        <location filename="../host_main.cc" line="133"/>
+        <location filename="../host_main.cc" line="152"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="122"/>
+        <location filename="../host_main.cc" line="134"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="141"/>
+        <location filename="../host_main.cc" line="153"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
@@ -795,64 +795,64 @@
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="115"/>
-        <location filename="../main_window.cc" line="315"/>
+        <location filename="../main_window.cc" line="126"/>
+        <location filename="../main_window.cc" line="354"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="197"/>
+        <location filename="../main_window.cc" line="221"/>
         <source>Not available</source>
         <translation>Не доступно</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="250"/>
+        <location filename="../main_window.cc" line="274"/>
         <source>Connecting to a router %1...</source>
         <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="415"/>
+        <location filename="../main_window.cc" line="461"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="246"/>
-        <location filename="../main_window.cc" line="400"/>
+        <location filename="../main_window.cc" line="270"/>
+        <location filename="../main_window.cc" line="446"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="405"/>
+        <location filename="../main_window.cc" line="451"/>
         <source>Connecting to a router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="254"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Connected to a router %1</source>
         <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="456"/>
         <source>Connected to a router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="258"/>
+        <location filename="../main_window.cc" line="282"/>
         <source>Failed to connect to router %1</source>
         <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="320"/>
+        <location filename="../main_window.cc" line="359"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="350"/>
+        <location filename="../main_window.cc" line="394"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="351"/>
+        <location filename="../main_window.cc" line="395"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>

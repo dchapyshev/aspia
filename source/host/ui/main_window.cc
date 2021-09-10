@@ -95,16 +95,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToService()
 {
-    agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
-        qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
+    if (agent_proxy_)
+    {
+        LOG(LS_INFO) << "Already connected to service";
+        agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+    }
+    else
+    {
+        agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
+            qt_base::Application::ioTaskRunner(), std::make_unique<UserSessionAgent>(window_proxy_));
 
-    LOG(LS_INFO) << "Connecting to service";
-    agent_proxy_->start();
+        LOG(LS_INFO) << "Connecting to service";
+        agent_proxy_->start();
+    }
 }
 
 void MainWindow::activateHost()
 {
     LOG(LS_INFO) << "Activating host";
+
     show();
     activateWindow();
     connectToService();
@@ -112,6 +121,8 @@ void MainWindow::activateHost()
 
 void MainWindow::hideToTray()
 {
+    LOG(LS_INFO) << "Hide application to system tray";
+
     ui.action_show_hide->setText(tr("Show"));
     setVisible(false);
 }
@@ -120,6 +131,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
     {
+        LOG(LS_INFO) << "Ignored close event";
+
         hideToTray();
         event->ignore();
     }
@@ -128,8 +141,12 @@ void MainWindow::closeEvent(QCloseEvent* event)
         window_proxy_->dettach();
 
         if (notifier_)
+        {
+            LOG(LS_INFO) << "Close notifier window";
             notifier_->close();
+        }
 
+        LOG(LS_INFO) << "Application quit";
         QApplication::quit();
     }
 }
@@ -170,7 +187,14 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         connect(notifier_, &NotifierWindow::killSession, this, [this](uint32_t id)
         {
             if (agent_proxy_)
+            {
+                LOG(LS_INFO) << "Killing session with ID: " << id;
                 agent_proxy_->killClient(id);
+            }
+            else
+            {
+                LOG(LS_WARNING) << "No agent proxy";
+            }
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -230,8 +254,8 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
         ui.label_icon_password->setEnabled(false);
         ui.button_new_password->setEnabled(false);
 
-        ui.edit_id->setText("-");
-        ui.edit_password->setText("-");
+        ui.edit_id->setText(QStringLiteral("-"));
+        ui.edit_password->setText(QStringLiteral("-"));
     }
     else
     {
@@ -278,6 +302,8 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 
 void MainWindow::realClose()
 {
+    LOG(LS_INFO) << "realClose called";
+
     should_be_quit_ = true;
     close();
 }
@@ -285,6 +311,9 @@ void MainWindow::realClose()
 void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
+
+    LOG(LS_INFO) << "Language changed: " << new_locale;
+
     Application* application = Application::instance();
 
     application->settings().setLocale(new_locale);
@@ -298,14 +327,24 @@ void MainWindow::onLanguageChanged(QAction* action)
     updateStatusBar();
 
     if (agent_proxy_)
+    {
         agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No agent proxy";
+    }
 }
 
 void MainWindow::onSettings()
 {
+    LOG(LS_INFO) << "Settings dialog open";
+
     QApplication::setQuitOnLastWindowClosed(false);
     ConfigDialog(this).exec();
     QApplication::setQuitOnLastWindowClosed(true);
+
+    LOG(LS_INFO) << "Settings dialog close";
 }
 
 void MainWindow::onShowHide()
@@ -329,9 +368,13 @@ void MainWindow::onHelp()
 
 void MainWindow::onAbout()
 {
+    LOG(LS_INFO) << "About dialog open";
+
     QApplication::setQuitOnLastWindowClosed(false);
     common::AboutDialog(this).exec();
     QApplication::setQuitOnLastWindowClosed(true);
+
+    LOG(LS_INFO) << "About dialog close";
 }
 
 void MainWindow::onExit()
@@ -339,6 +382,7 @@ void MainWindow::onExit()
     // If the connection to the service is not established, then exit immediately.
     if (!agent_proxy_)
     {
+        LOG(LS_INFO) << "No agent proxy";
         realClose();
         return;
     }
@@ -360,10 +404,12 @@ void MainWindow::onExit()
     {
         if (!notifier_)
         {
+            LOG(LS_INFO) << "No notifier";
             realClose();
         }
         else
         {
+            LOG(LS_INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
             connect(notifier_, &NotifierWindow::finished, this, &MainWindow::realClose);
             notifier_->disconnectAll();
         }

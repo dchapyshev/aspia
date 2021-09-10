@@ -51,7 +51,7 @@ AddressBar::AddressBar(QWidget* parent)
             this, &AddressBar::onPathIndexChanged,
             Qt::QueuedConnection);
 
-    connect(model_, &AddressBarModel::invalidPathEntered, [this]()
+    connect(model_, &AddressBarModel::invalidPathEntered, this, [this]()
     {
         QMessageBox::warning(this,
                              tr("Warning"),
@@ -59,7 +59,7 @@ AddressBar::AddressBar(QWidget* parent)
                              QMessageBox::Ok);
     });
 
-    connect(this, QOverload<int>::of(&AddressBar::activated), [this](int /* index */)
+    connect(this, QOverload<int>::of(&AddressBar::activated), this, [this](int /* index */)
     {
         setCurrentPath(currentPath());
     });

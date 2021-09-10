@@ -28,16 +28,18 @@ StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     : ui_task_runner_(std::move(ui_task_runner)),
       status_window_(status_window)
 {
-    // Nothing
+    LOG(LS_INFO) << "StatusWindowProxy Ctor";
 }
 
 StatusWindowProxy::~StatusWindowProxy()
 {
+    LOG(LS_INFO) << "StatusWindowProxy Dtor";
     DCHECK(!status_window_);
 }
 
 void StatusWindowProxy::dettach()
 {
+    LOG(LS_INFO) << "Dettach status window";
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     status_window_ = nullptr;
 }

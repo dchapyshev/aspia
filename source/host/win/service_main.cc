@@ -19,6 +19,7 @@
 #include "host/win/service_main.h"
 
 #include "base/scoped_logging.h"
+#include "base/sys_info.h"
 #include "base/win/mini_dump_writer.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -32,6 +33,14 @@ void hostServiceMain()
 
     base::ScopedLogging scoped_logging;
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
+                 << " (vendor: " << base::SysInfo::processorVendor()
+                 << " packages: " << base::SysInfo::processorPackages()
+                 << " cores: " << base::SysInfo::processorCores()
+                 << " threads: " << base::SysInfo::processorThreads() << ")";
 
     if (!integrityCheck())
     {

@@ -57,7 +57,7 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
         ui.edit_password->setEnabled(false);
     }
 
-    connect(ui.checkbox_enable_router, &QCheckBox::toggled, [this](bool checked)
+    connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
     {
         ui.label_address->setEnabled(checked);
         ui.edit_address->setEnabled(checked);

@@ -118,7 +118,7 @@ void build(Solution &s)
     {
         base -= "x11/.*"_rr;
         base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
-        base += "Mswsock.lib"_slib, "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
+        base += "Dbghelp.lib"_slib, "Mswsock.lib"_slib, "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
     }
     automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 

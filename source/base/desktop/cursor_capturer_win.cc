@@ -37,10 +37,14 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 
 CursorCapturerWin::CursorCapturerWin()
 {
+    LOG(LS_INFO) << "CursorCapturerWin Ctor";
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
-CursorCapturerWin::~CursorCapturerWin() = default;
+CursorCapturerWin::~CursorCapturerWin()
+{
+    LOG(LS_INFO) << "CursorCapturerWin Dtor";
+}
 
 const MouseCursor* CursorCapturerWin::captureCursor()
 {
