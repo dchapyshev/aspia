@@ -1870,138 +1870,138 @@
 <context>
     <name>client::SessionWindow</name>
     <message>
-        <location filename="../ui/session_window.cc" line="111"/>
+        <location filename="../ui/session_window.cc" line="132"/>
         <source>Attempt to connect to %1.</source>
         <translation>尝试连接到 %1.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="121"/>
+        <location filename="../ui/session_window.cc" line="145"/>
         <source>Connection established.</source>
         <translation>已建立连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="141"/>
+        <location filename="../ui/session_window.cc" line="169"/>
         <source>Network error when connecting to the router: %1</source>
         <translation>连接到路由器时出现网络错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="148"/>
+        <location filename="../ui/session_window.cc" line="176"/>
         <source>Authentication error when connecting to the router: %1</source>
         <translation>连接到路由器时发生身份验证错误： %1</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="172"/>
+        <location filename="../ui/session_window.cc" line="200"/>
         <source>Desktop Manage</source>
         <translation>桌面管理</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="176"/>
+        <location filename="../ui/session_window.cc" line="204"/>
         <source>Desktop View</source>
         <translation>桌面查看</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="180"/>
+        <location filename="../ui/session_window.cc" line="208"/>
         <source>File Transfer</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="222"/>
+        <location filename="../ui/session_window.cc" line="250"/>
         <source>Violation of the communication protocol.</source>
         <translation>违反通信协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="226"/>
+        <location filename="../ui/session_window.cc" line="254"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密错误（消息加密或解密失败）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="230"/>
+        <location filename="../ui/session_window.cc" line="258"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>网络发生错误（例如，网络电缆被意外地拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="234"/>
+        <location filename="../ui/session_window.cc" line="262"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>连接被对方拒绝（或超时）。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="238"/>
+        <location filename="../ui/session_window.cc" line="266"/>
         <source>Remote host closed the connection.</source>
         <translation>远程主机已关闭连接。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="242"/>
+        <location filename="../ui/session_window.cc" line="270"/>
         <source>Host address was not found.</source>
         <translation>找不到主机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="246"/>
+        <location filename="../ui/session_window.cc" line="274"/>
         <source>Socket operation timed out.</source>
         <translation>套接字操作超时。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="250"/>
+        <location filename="../ui/session_window.cc" line="278"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的地址已在使用中，并被设置为独占地址。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="254"/>
+        <location filename="../ui/session_window.cc" line="282"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定的地址的主机不可用。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="264"/>
-        <location filename="../ui/session_window.cc" line="300"/>
+        <location filename="../ui/session_window.cc" line="292"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>An unknown error occurred.</source>
         <translation>出现未知错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="280"/>
+        <location filename="../ui/session_window.cc" line="308"/>
         <source>Authentication successfully completed.</source>
         <translation>身份验证成功。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="284"/>
+        <location filename="../ui/session_window.cc" line="312"/>
         <source>Network authentication error.</source>
         <translation>网络身份验证错误。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="288"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>违反数据交换协议。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="292"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Wrong user name or password.</source>
         <translation>错误的用户名或密码。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="296"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>用户不允许指定的会话类型。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="315"/>
+        <location filename="../ui/session_window.cc" line="343"/>
         <source>No host with the specified ID was found.</source>
         <translation>找不到具有指定ID的主机。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="319"/>
+        <location filename="../ui/session_window.cc" line="347"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>没有可用的中继或密钥池为空。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="323"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>Failed to connect to the relay server.</source>
         <translation>无法连接到中继服务器。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="327"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>Access is denied.</source>
         <translation>访问被拒绝。</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="331"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.1" language="pl">
 <context>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="14"/>
         <source>Authorization</source>
-        <translation>Autorisierung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="26"/>
@@ -22,14 +22,6 @@
         <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Kennwort:</translation>
     </message>
 </context>
 <context>
@@ -62,43 +54,12 @@
     <message>
         <location filename="../client_main.cc" line="111"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="112"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ClientDialog</name>
-    <message>
-        <source>Connection</source>
-        <translation type="vanished">Verbindung</translation>
-    </message>
-    <message>
-        <source>Server Address:</source>
-        <translation type="vanished">Serveradresse:</translation>
-    </message>
-    <message>
-        <source>Server Port:</source>
-        <translation type="vanished">Server Port:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="vanished">Sitzungstyp:</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Verbinden</translation>
     </message>
 </context>
 <context>
@@ -126,12 +87,12 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="unfinished">Benutzername:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -154,7 +115,7 @@
     <message>
         <location filename="../ui/client_window.ui" line="257"/>
         <source>Connect</source>
-        <translation type="unfinished">Verbinden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="290"/>
@@ -186,24 +147,13 @@
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="obsolete">Sitzungstyp:</translation>
-    </message>
-</context>
-<context>
-    <name>Console</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
 </context>
 <context>
     <name>DesktopConfigDialog</name>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="20"/>
         <source>Session Configuration</source>
-        <translation>Sitzungskonfiguration</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="32"/>
@@ -211,20 +161,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Color depth:</source>
-        <translation type="vanished">Farbtiefe:</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">Kompressionsrate:</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">Schnell</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">Beste</translation>
+        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="135"/>
@@ -234,7 +173,7 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="63"/>
         <source>Enable cursor shape</source>
-        <translation>Cursorform erlauben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="50"/>
@@ -249,22 +188,17 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="70"/>
         <source>Enable clipboard</source>
-        <translation>Zwischenablage erlauben</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
-        <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="92"/>
         <source>Disable desktop effects</source>
-        <translation>Desktop-Effekte deaktivieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="99"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Desktop-Hintergrundbild deaktivieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="106"/>
@@ -287,27 +221,27 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="125"/>
         <source>Lock toolbar</source>
-        <translation>Symbolleiste sperren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="137"/>
         <source>Session configuration</source>
-        <translation>Sitzungskonfiguration</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="149"/>
         <source>Monitor selection</source>
-        <translation>Bildschirmauswahl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="164"/>
         <source>Automatic window size</source>
-        <translation>Automatische Fenstergröße</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="179"/>
         <source>Switch to full screen mode or back</source>
-        <translation>In den Vollbildmodus wechseln (oder zurück)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="190"/>
@@ -315,8 +249,25 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="202"/>
+        <source>Send Ctrl+Alt+Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="214"/>
         <source>Advanced menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="219"/>
+        <location filename="../ui/desktop_panel.ui" line="222"/>
+        <location filename="../ui/desktop_panel.ui" line="225"/>
+        <source>Save screenshot...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="237"/>
+        <source>File transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -368,7 +319,7 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="324"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="327"/>
@@ -396,90 +347,73 @@
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="219"/>
-        <location filename="../ui/desktop_panel.ui" line="222"/>
-        <location filename="../ui/desktop_panel.ui" line="225"/>
-        <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="237"/>
-        <source>File transfer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="202"/>
-        <source>Send Ctrl+Alt+Delete</source>
-        <translation>Strg+Alt+Entf senden</translation>
-    </message>
 </context>
 <context>
     <name>FileError</name>
     <message>
         <location filename="../ui/file_error_code.cc" line="32"/>
         <source>Successfully completed</source>
-        <translation type="unfinished">Erfolgreich abgeschlossen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="36"/>
         <source>Invalid request</source>
-        <translation type="unfinished">Ungültige Anfrage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="40"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished">Ungültiger Verzeichnis- oder Dateiname</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="44"/>
         <source>Path not found</source>
-        <translation type="unfinished">Pfad nicht gefunden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="48"/>
         <source>Path already exists</source>
-        <translation type="unfinished">Pfad existiert bereits</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="52"/>
         <source>No drives found</source>
-        <translation type="unfinished">Keine Laufwerke gefunden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="56"/>
         <source>Disk full</source>
-        <translation type="unfinished">Festplatte voll</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="60"/>
         <source>Access denied</source>
-        <translation type="unfinished">Zugriff verweigert</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="64"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished">Datei konnte nicht zum Lesen geöffnet werden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="68"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished">Datei konnte nicht erstellt oder ersetzt werden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="72"/>
         <source>Could not write to file</source>
-        <translation type="unfinished">Konnte nicht in die Datei schreiben</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="76"/>
         <source>Could not read file</source>
-        <translation type="unfinished">Datei konnte nicht gelesen werden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="80"/>
         <source>Drive not ready</source>
-        <translation type="unfinished">Laufwerk nicht bereit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="84"/>
@@ -497,7 +431,7 @@
     <message>
         <location filename="../ui/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
-        <translation>Der Name darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -510,7 +444,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation>Zum übergeordneten Ordner navigieren (Backspace)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="177"/>
@@ -520,7 +454,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="180"/>
         <source>Refresh (F5)</source>
-        <translation>Aktualisieren (F5)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="192"/>
@@ -530,7 +464,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="195"/>
         <source>Create a new folder</source>
-        <translation>Neuen Ordner erstellen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="207"/>
@@ -540,17 +474,17 @@
     <message>
         <location filename="../ui/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation>Ausgewählte(n) Objekt(e) löschen (Entf)</translation>
-    </message>
-    <message>
-        <location filename="../ui/file_panel.ui" line="225"/>
-        <source>Send selected object(s) (F11)</source>
-        <translation>Ausgewählte(n) Objekt(e) senden (F11)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="222"/>
         <source>Send</source>
-        <translation>Senden</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.ui" line="225"/>
+        <source>Send selected object(s) (F11)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -558,12 +492,12 @@
     <message>
         <location filename="../ui/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
-        <translation>Elemente löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
-        <translation>Liste der zu löschenden Dateien erstellen...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -571,143 +505,37 @@
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="14"/>
         <source>File Transfer</source>
-        <translation>Dateiübertragung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
-        <translation>Aktuelle Aufgabe: Liste der zu kopierenden Dateien erstellen...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
-        <translation>Von: ...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
-        <translation>Zu: ...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
-        <translation>Fortschritt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
-        <translation>Gesamt:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
-        <translation>Element:</translation>
-    </message>
-</context>
-<context>
-    <name>QCoreApplication</name>
-    <message>
-        <source>Successfully completed</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Erfolgreich abgeschlossen</translation>
-    </message>
-    <message>
-        <source>Invalid request</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Ungültige Anfrage</translation>
-    </message>
-    <message>
-        <source>Invalid directory or file name</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Ungültiger Verzeichnis- oder Dateiname</translation>
-    </message>
-    <message>
-        <source>Path not found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Pfad nicht gefunden</translation>
-    </message>
-    <message>
-        <source>Path already exists</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Pfad existiert bereits</translation>
-    </message>
-    <message>
-        <source>No drives found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Keine Laufwerke gefunden</translation>
-    </message>
-    <message>
-        <source>Disk full</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Festplatte voll</translation>
-    </message>
-    <message>
-        <source>Access denied</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Zugriff verweigert</translation>
-    </message>
-    <message>
-        <source>Could not open file for reading</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht zum Lesen geöffnet werden</translation>
-    </message>
-    <message>
-        <source>Could not create or replace file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht erstellt oder ersetzt werden</translation>
-    </message>
-    <message>
-        <source>Could not write to file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Konnte nicht in die Datei schreiben</translation>
-    </message>
-    <message>
-        <source>Could not read file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht gelesen werden</translation>
-    </message>
-    <message>
-        <source>Drive not ready</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Laufwerk nicht bereit</translation>
-    </message>
-    <message>
-        <source>Unknown status code</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Unbekannter Statuscode</translation>
-    </message>
-</context>
-<context>
-    <name>QtFileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokaler Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Remote Computer</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-</context>
-<context>
-    <name>RouterListDialog</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -742,7 +570,7 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="89"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="94"/>
@@ -830,7 +658,7 @@
     <message>
         <location filename="../ui/router_user_dialog.ui" line="34"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="41"/>
@@ -864,17 +692,6 @@
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Verbindungsstatus</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Schließen</translation>
     </message>
 </context>
 <context>
@@ -937,14 +754,7 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Aktualisieren (F5)</translation>
-    </message>
-</context>
-<context>
-    <name>client</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -952,16 +762,12 @@
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="58"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished">Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
-    </message>
-    <message>
-        <source>The path can not contain characters %1.</source>
-        <translation type="obsolete">Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -970,67 +776,67 @@
         <location filename="../ui/address_bar_model.cc" line="82"/>
         <location filename="../ui/address_bar_model.cc" line="446"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Home-Ordner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="278"/>
         <source>Computer</source>
-        <translation type="unfinished">Computer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="391"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="394"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="397"/>
         <source>Total Space</source>
-        <translation type="unfinished">Gesamter Speicherplatz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="400"/>
         <source>Free Space</source>
-        <translation type="unfinished">Freier Speicherplatz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="431"/>
         <source>Optical Drive</source>
-        <translation type="unfinished">Optisches Laufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="434"/>
         <source>Removable Drive</source>
-        <translation type="unfinished">Wechsellaufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="437"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished">Festes Laufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="440"/>
         <source>Network Drive</source>
-        <translation type="unfinished">Netzlaufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="443"/>
         <source>RAM Drive</source>
-        <translation type="unfinished">RAM-Laufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="449"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished">Desktopordner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="452"/>
@@ -1040,32 +846,32 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="455"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished">Unbekanntes Laufwerk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="472"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="477"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="482"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="487"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="492"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1074,7 +880,7 @@
         <location filename="../ui/authorization_dialog.cc" line="119"/>
         <location filename="../ui/authorization_dialog.cc" line="129"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="120"/>
@@ -1085,29 +891,6 @@
         <location filename="../ui/authorization_dialog.cc" line="130"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::ClientDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>
@@ -1130,44 +913,16 @@
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="135"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <source>Attempt to connect to %1:%2.</source>
-        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
-    </message>
-    <message>
-        <source>Attempt to connect to %1.</source>
-        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen. {1.?}</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Session started.</source>
-        <translation type="obsolete">Die Sitzung wurde gestartet.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="202"/>
@@ -1178,33 +933,6 @@
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="obsolete">True color (32 Bit)</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="obsolete">High color (16 Bit)</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="obsolete">256 Farben (8 Bit)</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="obsolete">64 Farben (6 Bit)</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="obsolete">8 Farben (3 Bit)</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="obsolete">Kompressionsrate: %1</translation>
     </message>
 </context>
 <context>
@@ -1225,7 +953,7 @@
         <location filename="../ui/desktop_panel.cc" line="342"/>
         <location filename="../ui/desktop_panel.cc" line="353"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="321"/>
@@ -1254,86 +982,56 @@
     </message>
 </context>
 <context>
-    <name>client::DesktopWindow</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-</context>
-<context>
     <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="99"/>
         <source>Folder</source>
-        <translation type="unfinished">Ordner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="361"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="364"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="367"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="370"/>
         <source>Modified</source>
-        <translation type="unfinished">Geändert</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="527"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="532"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="537"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="542"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_list_model.cc" line="547"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokaler Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Remote Computer</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1341,69 +1039,69 @@
     <message>
         <location filename="../ui/file_panel.cc" line="429"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="92"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="107"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="131"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="142"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="258"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="277"/>
         <location filename="../ui/file_panel.cc" line="295"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="283"/>
         <location filename="../ui/file_panel.cc" line="301"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="322"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished">&amp;Senden F11</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="324"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished">&amp;Löschen Entf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="334"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished">&amp;Ordner erstellen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="395"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="396"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1411,27 +1109,27 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>Deleting: %1</source>
-        <translation type="unfinished">Löschen: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="116"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="121"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="128"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Skip</source>
-        <translation type="unfinished">Überspringen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="139"/>
@@ -1441,56 +1139,7 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="142"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileRemoveQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileRemover</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileTransfer</name>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>An unexpected response to the request was received</source>
-        <translation type="obsolete">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1498,27 +1147,27 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="98"/>
         <source>Current Task: Copying items.</source>
-        <translation type="unfinished">Aktuelle Aufgabe: Elemente kopieren.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="110"/>
         <source>From: %1</source>
-        <translation type="unfinished">Von: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="115"/>
         <source>To: %1</source>
-        <translation type="unfinished">Zu: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="155"/>
         <source>Skip</source>
-        <translation type="unfinished">Überspringen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="158"/>
@@ -1528,17 +1177,17 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="161"/>
         <source>Replace</source>
-        <translation type="unfinished">Ersetzen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="164"/>
         <source>Replace All</source>
-        <translation type="unfinished">Alle ersetzen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="167"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="241"/>
@@ -1553,27 +1202,27 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="268"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="275"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="282"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="289"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="296"/>
@@ -1582,32 +1231,13 @@
     </message>
 </context>
 <context>
-    <name>client::FileTransferQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
-    </message>
-</context>
-<context>
     <name>client::QtDesktopWindow</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="224"/>
         <location filename="../ui/qt_desktop_window.cc" line="232"/>
         <location filename="../ui/qt_desktop_window.cc" line="582"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="225"/>
@@ -1640,36 +1270,22 @@
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="52"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Lokaler Computer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="53"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Remote Computer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="86"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterListDialog</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
     </message>
 </context>
 <context>
@@ -1798,7 +1414,7 @@
         <location filename="../ui/router_manager_window.cc" line="411"/>
         <location filename="../ui/router_manager_window.cc" line="543"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="399"/>
@@ -1815,7 +1431,7 @@
         <location filename="../ui/router_manager_window.cc" line="461"/>
         <location filename="../ui/router_manager_window.cc" line="548"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="462"/>
@@ -1878,7 +1494,7 @@
         <location filename="../ui/router_user_dialog.cc" line="192"/>
         <location filename="../ui/router_user_dialog.cc" line="216"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="128"/>
@@ -1901,6 +1517,7 @@
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1912,6 +1529,7 @@
         <location filename="../ui/router_user_dialog.cc" line="185"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1947,7 +1565,7 @@
     <message>
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation type="unfinished">Vollen Desktop</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1955,7 +1573,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="132"/>
         <source>Attempt to connect to %1.</source>
-        <translation type="unfinished">Versuch, eine Verbindung mit %1:%2 herzustellen. {1.?}</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="145"/>
@@ -1975,17 +1593,17 @@
     <message>
         <location filename="../ui/session_window.cc" line="200"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Desktopverwaltung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="204"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Desktopansicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="208"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="250"/>
@@ -2090,29 +1708,6 @@
     </message>
 </context>
 <context>
-    <name>client::StatisticDialog</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-</context>
-<context>
     <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="107"/>
@@ -2127,7 +1722,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="118"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="119"/>
@@ -2138,7 +1733,7 @@
         <location filename="../ui/system_info_window.cc" line="179"/>
         <location filename="../ui/system_info_window.cc" line="202"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="182"/>
@@ -2158,7 +1753,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="192"/>
         <source>Computer</source>
-        <translation type="unfinished">Computer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="205"/>
@@ -2227,7 +1822,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="298"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="301"/>
@@ -2242,7 +1837,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="304"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="307"/>
@@ -2387,32 +1982,33 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="530"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="535"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="540"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="545"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="550"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="566"/>
         <source>%n seconds</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -2423,6 +2019,7 @@
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -2431,12 +2028,14 @@
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/system_info_window.cc" line="592"/>
         <source>%n days</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
