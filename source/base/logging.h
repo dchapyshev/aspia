@@ -121,13 +121,17 @@ struct LoggingSettings
     //
     //  destination: LOG_DEFAULT
     //  min_log_level: LOG_LS_INFO
+    //  max_log_file_size: 2 Mb
+    //  max_log_file_age: 14 days
     LoggingSettings();
 
     LoggingDestination destination;
     LoggingSeverity min_log_level;
 
     std::filesystem::path log_dir;
+
     size_t max_log_file_size;
+    size_t max_log_file_age;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,

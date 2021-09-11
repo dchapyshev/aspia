@@ -49,11 +49,13 @@ namespace base {
 namespace {
 
 const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
+const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 
 LoggingSeverity g_min_log_level = LOG_LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 size_t g_max_log_file_size = kDefaultMaxLogFileSize;
+size_t g_max_log_file_age = kDefaultMaxLogFileAge;
 int g_log_file_number = -1;
 
 std::filesystem::path g_log_dir_path;
@@ -74,6 +76,23 @@ const char* severityName(LoggingSeverity severity)
         return kLogSeverityNames[severity];
 
     return "UNKNOWN";
+}
+
+void removeOldFiles(const std::filesystem::path& path,
+                    const std::filesystem::file_time_type& current_time,
+                    size_t max_file_age)
+{
+    std::filesystem::file_time_type time = current_time - std::chrono::hours(24U * max_file_age);
+
+    std::error_code ignored_code;
+    for (const auto& item : std::filesystem::directory_iterator(path, ignored_code))
+    {
+        if (item.is_directory())
+            continue;
+
+        if (item.last_write_time() < time)
+            std::filesystem::remove(item.path(), ignored_code);
+    }
 }
 
 std::filesystem::path defaultLogFileDir()
@@ -140,6 +159,11 @@ bool initLoggingUnlocked(const std::string& prefix)
     if (!g_log_file.is_open())
         return false;
 
+    std::filesystem::file_time_type file_time =
+        std::filesystem::last_write_time(file_path, error_code);
+    if (!error_code)
+        removeOldFiles(file_dir, file_time, g_max_log_file_age);
+
     g_log_file_path = std::move(file_path);
     return true;
 }
@@ -154,7 +178,8 @@ std::ostream* g_swallow_stream;
 LoggingSettings::LoggingSettings()
     : destination(LOG_DEFAULT),
       min_log_level(LOG_LS_INFO),
-      max_log_file_size(kDefaultMaxLogFileSize)
+      max_log_file_size(kDefaultMaxLogFileSize),
+      max_log_file_age(kDefaultMaxLogFileAge)
 {
     // Nothing
 }
@@ -198,6 +223,8 @@ bool initLogging(const LoggingSettings& settings)
 
         g_logging_destination = settings.destination;
         g_log_dir_path = settings.log_dir;
+        g_max_log_file_size = settings.max_log_file_size;
+        g_max_log_file_age = settings.max_log_file_age;
 
         if (!initLoggingUnlocked(logFilePrefix()))
             return false;
