@@ -41,6 +41,8 @@ private slots:
     void onDeleteUser();
     void onServiceInstallRemove();
     void onServiceStartStop();
+    void onPassProtectClicked();
+    void onChangePassClicked();
     void onImport();
     void onExport();
     void onConfigChanged() { setConfigChanged(true); }

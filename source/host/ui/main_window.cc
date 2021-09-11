@@ -27,7 +27,9 @@
 #include "host/user_session_agent.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
+#include "host/system_settings.h"
 #include "host/ui/application.h"
+#include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "qt_base/qt_logging.h"
@@ -341,7 +343,21 @@ void MainWindow::onSettings()
     LOG(LS_INFO) << "Settings dialog open";
 
     QApplication::setQuitOnLastWindowClosed(false);
-    ConfigDialog(this).exec();
+
+    SystemSettings settings;
+    if (settings.passwordProtection())
+    {
+        CheckPasswordDialog dialog(this);
+        if (dialog.exec() == CheckPasswordDialog::Accepted)
+        {
+            ConfigDialog(this).exec();
+        }
+    }
+    else
+    {
+        ConfigDialog(this).exec();
+    }
+
     QApplication::setQuitOnLastWindowClosed(true);
 
     LOG(LS_INFO) << "Settings dialog close";

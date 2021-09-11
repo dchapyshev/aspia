@@ -2,10 +2,55 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
+    <name>ChangePasswordDialog</name>
+    <message>
+        <source>User Properties</source>
+        <translation type="obsolete">Benutzereigenschaften</translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.ui" line="14"/>
+        <source>Change Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.ui" line="22"/>
+        <source>Old password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.ui" line="39"/>
+        <source>New password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.ui" line="56"/>
+        <source>New password (repeat):</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CheckPasswordDialog</name>
+    <message>
+        <location filename="../check_password_dialog.ui" line="14"/>
+        <source>Password Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../check_password_dialog.ui" line="20"/>
+        <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../check_password_dialog.ui" line="36"/>
+        <source>Password:</source>
+        <translation type="unfinished">Kennwort:</translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <location filename="../config_dialog.ui" line="14"/>
-        <location filename="../config_dialog.ui" line="106"/>
+        <location filename="../config_dialog.ui" line="153"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -30,103 +75,117 @@
         <translation type="unfinished">Port:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="125"/>
-        <source>Import...</source>
+        <location filename="../config_dialog.ui" line="106"/>
+        <source>Password Protection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="132"/>
-        <source>Export...</source>
+        <source>Install</source>
+        <translation type="obsolete">Installieren</translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="134"/>
+        <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="156"/>
+        <location filename="../config_dialog.ui" line="172"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="179"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="203"/>
         <source>Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="162"/>
+        <location filename="../config_dialog.ui" line="209"/>
         <source>Enable the use of a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="174"/>
+        <location filename="../config_dialog.ui" line="221"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="193"/>
+        <location filename="../config_dialog.ui" line="240"/>
         <source>Public Key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="208"/>
-        <location filename="../config_dialog.ui" line="301"/>
+        <location filename="../config_dialog.ui" line="255"/>
+        <location filename="../config_dialog.ui" line="348"/>
         <source>Users</source>
         <translation type="unfinished">Benutzer</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="222"/>
+        <location filename="../config_dialog.ui" line="269"/>
         <source>Add new user</source>
         <translation type="unfinished">Neuen Benutzer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="242"/>
+        <location filename="../config_dialog.ui" line="289"/>
         <source>Edit user</source>
         <translation type="unfinished">Benutzer bearbeiten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="262"/>
+        <location filename="../config_dialog.ui" line="309"/>
         <source>Delete user</source>
         <translation type="unfinished">Benutzer löschen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="310"/>
+        <location filename="../config_dialog.ui" line="357"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="316"/>
+        <location filename="../config_dialog.ui" line="363"/>
         <source>Update Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="322"/>
+        <location filename="../config_dialog.ui" line="369"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="331"/>
+        <location filename="../config_dialog.ui" line="378"/>
         <source>Server:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="381"/>
+        <location filename="../config_dialog.ui" line="428"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="391"/>
+        <location filename="../config_dialog.ui" line="438"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="399"/>
+        <location filename="../config_dialog.ui" line="446"/>
         <source>Preffered video capturer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="439"/>
+        <location filename="../config_dialog.ui" line="486"/>
         <source>Add</source>
         <translation type="unfinished">Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="448"/>
+        <location filename="../config_dialog.ui" line="495"/>
         <source>Modify</source>
         <translation type="unfinished">Ändern</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="457"/>
+        <location filename="../config_dialog.ui" line="504"/>
         <source>Delete</source>
         <translation type="unfinished">Löschen</translation>
     </message>
@@ -404,144 +463,216 @@
     </message>
 </context>
 <context>
+    <name>host::ChangePasswordDialog</name>
+    <message>
+        <location filename="../change_password_dialog.cc" line="84"/>
+        <location filename="../change_password_dialog.cc" line="93"/>
+        <location filename="../change_password_dialog.cc" line="110"/>
+        <location filename="../change_password_dialog.cc" line="119"/>
+        <location filename="../change_password_dialog.cc" line="128"/>
+        <location filename="../change_password_dialog.cc" line="137"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.cc" line="85"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.cc" line="111"/>
+        <source>You must enter your old password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.cc" line="120"/>
+        <source>You entered an incorrect old password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.cc" line="129"/>
+        <source>New password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../change_password_dialog.cc" line="94"/>
+        <location filename="../change_password_dialog.cc" line="138"/>
+        <source>The passwords entered do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>host::CheckPasswordDialog</name>
+    <message>
+        <location filename="../check_password_dialog.cc" line="62"/>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <location filename="../check_password_dialog.cc" line="63"/>
+        <source>You entered an incorrect password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="141"/>
+        <location filename="../config_dialog.cc" line="149"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="258"/>
-        <location filename="../config_dialog.cc" line="333"/>
-        <location filename="../config_dialog.cc" line="386"/>
+        <location filename="../config_dialog.cc" line="266"/>
+        <location filename="../config_dialog.cc" line="407"/>
+        <location filename="../config_dialog.cc" line="460"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="259"/>
+        <location filename="../config_dialog.cc" line="267"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="319"/>
+        <location filename="../config_dialog.cc" line="393"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="319"/>
-        <location filename="../config_dialog.cc" line="349"/>
+        <location filename="../config_dialog.cc" line="393"/>
+        <location filename="../config_dialog.cc" line="423"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="328"/>
-        <location filename="../config_dialog.cc" line="381"/>
+        <location filename="../config_dialog.cc" line="402"/>
+        <location filename="../config_dialog.cc" line="455"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="349"/>
+        <location filename="../config_dialog.cc" line="423"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="368"/>
+        <location filename="../config_dialog.cc" line="442"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="371"/>
-        <location filename="../config_dialog.cc" line="403"/>
-        <location filename="../config_dialog.cc" line="416"/>
-        <location filename="../config_dialog.cc" line="597"/>
-        <location filename="../config_dialog.cc" line="616"/>
-        <location filename="../config_dialog.cc" line="631"/>
-        <location filename="../config_dialog.cc" line="641"/>
-        <location filename="../config_dialog.cc" line="657"/>
-        <location filename="../config_dialog.cc" line="667"/>
+        <location filename="../config_dialog.cc" line="339"/>
+        <location filename="../config_dialog.cc" line="375"/>
+        <location filename="../config_dialog.cc" line="445"/>
+        <location filename="../config_dialog.cc" line="477"/>
+        <location filename="../config_dialog.cc" line="490"/>
+        <location filename="../config_dialog.cc" line="684"/>
+        <location filename="../config_dialog.cc" line="703"/>
+        <location filename="../config_dialog.cc" line="718"/>
+        <location filename="../config_dialog.cc" line="728"/>
+        <location filename="../config_dialog.cc" line="744"/>
+        <location filename="../config_dialog.cc" line="754"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="404"/>
+        <location filename="../config_dialog.cc" line="340"/>
+        <location filename="../config_dialog.cc" line="376"/>
+        <source>An error occurred while processing the password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="478"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="417"/>
+        <location filename="../config_dialog.cc" line="491"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="531"/>
+        <location filename="../config_dialog.cc" line="581"/>
+        <source>Current state: Not installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="587"/>
+        <source>Current state: Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="588"/>
+        <location filename="../config_dialog.cc" line="618"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="540"/>
+        <location filename="../config_dialog.cc" line="627"/>
         <source>Started</source>
         <translation>Gestartet</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="541"/>
+        <location filename="../config_dialog.cc" line="628"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="546"/>
+        <location filename="../config_dialog.cc" line="633"/>
         <source>Not started</source>
         <translation>Nicht gestartet</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="547"/>
-        <location filename="../config_dialog.cc" line="554"/>
-        <location filename="../config_dialog.cc" line="567"/>
+        <location filename="../config_dialog.cc" line="634"/>
+        <location filename="../config_dialog.cc" line="641"/>
+        <location filename="../config_dialog.cc" line="654"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="553"/>
+        <location filename="../config_dialog.cc" line="640"/>
         <source>Installed</source>
         <translation>Installiert</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="564"/>
+        <location filename="../config_dialog.cc" line="651"/>
         <source>Not installed</source>
         <translation>Nicht installiert</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="566"/>
+        <location filename="../config_dialog.cc" line="582"/>
+        <location filename="../config_dialog.cc" line="653"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="571"/>
+        <location filename="../config_dialog.cc" line="658"/>
         <source>Current state: %1</source>
         <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="598"/>
+        <location filename="../config_dialog.cc" line="685"/>
         <source>The service could not be installed.</source>
         <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="617"/>
+        <location filename="../config_dialog.cc" line="704"/>
         <source>The service could not be removed.</source>
         <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="632"/>
-        <location filename="../config_dialog.cc" line="658"/>
+        <location filename="../config_dialog.cc" line="719"/>
+        <location filename="../config_dialog.cc" line="745"/>
         <source>Could not access the service.</source>
         <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="642"/>
+        <location filename="../config_dialog.cc" line="729"/>
         <source>The service could not be started.</source>
         <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="668"/>
+        <location filename="../config_dialog.cc" line="755"/>
         <source>The service could not be stopped.</source>
         <translation>Dienst konnte nicht angehalten werden.</translation>
     </message>
@@ -642,70 +773,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="61"/>
-        <location filename="../main_window.cc" line="374"/>
+        <location filename="../main_window.cc" line="63"/>
+        <location filename="../main_window.cc" line="390"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="126"/>
-        <location filename="../main_window.cc" line="354"/>
+        <location filename="../main_window.cc" line="128"/>
+        <location filename="../main_window.cc" line="370"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="221"/>
+        <location filename="../main_window.cc" line="223"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="274"/>
+        <location filename="../main_window.cc" line="276"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="461"/>
+        <location filename="../main_window.cc" line="477"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="270"/>
-        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="272"/>
+        <location filename="../main_window.cc" line="462"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="451"/>
+        <location filename="../main_window.cc" line="467"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="280"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="456"/>
+        <location filename="../main_window.cc" line="472"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="282"/>
+        <location filename="../main_window.cc" line="284"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="359"/>
+        <location filename="../main_window.cc" line="375"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="394"/>
+        <location filename="../main_window.cc" line="410"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="411"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>

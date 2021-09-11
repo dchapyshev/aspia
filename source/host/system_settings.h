@@ -36,6 +36,10 @@ public:
     SystemSettings();
     ~SystemSettings();
 
+    static bool createPasswordHash(
+        std::string_view password, base::ByteArray* hash, base::ByteArray* salt);
+    static bool isValidPassword(std::string_view password);
+
     const std::filesystem::path& filePath() const;
     bool isWritable() const;
     void sync();
@@ -64,6 +68,15 @@ public:
 
     uint32_t preferredVideoCapturer() const;
     void setPreferredVideoCapturer(uint32_t type);
+
+    bool passwordProtection() const;
+    void setPasswordProtection(bool enable);
+
+    base::ByteArray passwordHash() const;
+    void setPasswordHash(const base::ByteArray& hash);
+
+    base::ByteArray passwordHashSalt() const;
+    void setPasswordHashSalt(const base::ByteArray& salt);
 
 private:
     base::JsonSettings settings_;

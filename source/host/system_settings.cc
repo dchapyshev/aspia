@@ -20,6 +20,7 @@
 
 #include "base/base64.h"
 #include "base/logging.h"
+#include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/peer/user_list.h"
 #include "base/settings/xml_settings.h"
@@ -27,6 +28,8 @@
 namespace host {
 
 namespace {
+
+const size_t kPasswordHashSaltSize = 256;
 
 // This should be removed in the next release.
 void settingsMigration(base::JsonSettings* json_settings)
@@ -116,6 +119,49 @@ SystemSettings::SystemSettings()
 }
 
 SystemSettings::~SystemSettings() = default;
+
+// static
+bool SystemSettings::createPasswordHash(
+    std::string_view password, base::ByteArray* hash, base::ByteArray* salt)
+{
+    if (password.empty() || !hash || !salt)
+        return false;
+
+    base::ByteArray salt_temp = base::Random::byteArray(kPasswordHashSaltSize);
+    if (salt_temp.empty())
+        return false;
+
+    base::ByteArray hash_temp =
+        base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, salt_temp);
+    if (hash_temp.empty())
+        return false;
+
+    *salt = std::move(salt_temp);
+    *hash = std::move(hash_temp);
+    return true;
+}
+
+// static
+bool SystemSettings::isValidPassword(std::string_view password)
+{
+    if (password.empty())
+        return false;
+
+    SystemSettings settings;
+
+    base::ByteArray password_hash_salt = settings.passwordHashSalt();
+    base::ByteArray password_hash = settings.passwordHash();
+
+    if (password_hash_salt.empty() || password_hash.empty())
+        return false;
+
+    base::ByteArray verifiable_password_hash =
+        base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, password_hash_salt);
+    if (verifiable_password_hash.empty())
+        return false;
+
+    return base::equals(verifiable_password_hash, password_hash);
+}
 
 const std::filesystem::path& SystemSettings::filePath() const
 {
@@ -255,6 +301,36 @@ uint32_t SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(uint32_t type)
 {
     settings_.set("PreferredVideoCapturer", type);
+}
+
+bool SystemSettings::passwordProtection() const
+{
+    return settings_.get<bool>("PasswordProtection", false);
+}
+
+void SystemSettings::setPasswordProtection(bool enable)
+{
+    settings_.set("PasswordProtection", enable);
+}
+
+base::ByteArray SystemSettings::passwordHash() const
+{
+    return settings_.get<base::ByteArray>("PasswordHash");
+}
+
+void SystemSettings::setPasswordHash(const base::ByteArray& hash)
+{
+    settings_.set("PasswordHash", hash);
+}
+
+base::ByteArray SystemSettings::passwordHashSalt() const
+{
+    return settings_.get<base::ByteArray>("PasswordHashSalt");
+}
+
+void SystemSettings::setPasswordHashSalt(const base::ByteArray& salt)
+{
+    settings_.set("PasswordHashSalt", salt);
 }
 
 } // namespace host

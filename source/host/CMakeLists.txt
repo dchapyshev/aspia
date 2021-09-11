@@ -89,6 +89,12 @@ endif()
 list(APPEND SOURCE_HOST_CORE_UI
     ui/application.cc
     ui/application.h
+    ui/change_password_dialog.cc
+    ui/change_password_dialog.h
+    ui/change_password_dialog.ui
+    ui/check_password_dialog.cc
+    ui/check_password_dialog.h
+    ui/check_password_dialog.ui
     ui/config_dialog.cc
     ui/config_dialog.h
     ui/config_dialog.ui

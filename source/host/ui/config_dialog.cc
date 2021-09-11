@@ -25,6 +25,8 @@
 #include "base/win/service_controller.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
+#include "host/ui/change_password_dialog.h"
+#include "host/ui/check_password_dialog.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
 #include "host/ui/user_settings.h"
@@ -36,6 +38,7 @@
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
+#include <QTimer>
 #include <QTranslator>
 
 namespace host {
@@ -57,6 +60,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
             this, &ConfigDialog::onServiceInstallRemove);
     connect(ui.button_service_start_stop, &QPushButton::clicked,
             this, &ConfigDialog::onServiceStartStop);
+
+    connect(ui.button_change_password, &QPushButton::clicked,
+            this, &ConfigDialog::onChangePassClicked);
+    connect(ui.button_pass_protection, &QPushButton::clicked,
+            this, &ConfigDialog::onPassProtectClicked);
 
     connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
@@ -313,6 +321,72 @@ void ConfigDialog::onServiceStartStop()
     reloadServiceStatus();
 }
 
+void ConfigDialog::onPassProtectClicked()
+{
+    SystemSettings settings;
+
+    if (!settings.passwordProtection())
+    {
+        ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this);
+        if (dialog.exec() == ChangePasswordDialog::Accepted)
+        {
+            base::ByteArray hash;
+            base::ByteArray salt;
+
+            if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("An error occurred while processing the password."),
+                                     QMessageBox::Ok);
+                return;
+            }
+
+            settings.setPasswordProtection(true);
+            settings.setPasswordHash(hash);
+            settings.setPasswordHashSalt(salt);
+        }
+    }
+    else
+    {
+        CheckPasswordDialog dialog(this);
+        if (dialog.exec() == CheckPasswordDialog::Accepted)
+        {
+            settings.setPasswordProtection(false);
+            settings.setPasswordHash(base::ByteArray());
+            settings.setPasswordHashSalt(base::ByteArray());
+        }
+    }
+
+    QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
+}
+
+void ConfigDialog::onChangePassClicked()
+{
+    ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this);
+    if (dialog.exec() == ChangePasswordDialog::Accepted)
+    {
+        base::ByteArray hash;
+        base::ByteArray salt;
+
+        if (!SystemSettings::createPasswordHash(dialog.newPassword().toStdString(), &hash, &salt))
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("An error occurred while processing the password."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
+        SystemSettings settings;
+        settings.setPasswordProtection(true);
+        settings.setPasswordHash(hash);
+        settings.setPasswordHashSalt(salt);
+    }
+
+    QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
+}
+
 void ConfigDialog::onImport()
 {
     QString file_path =
@@ -501,6 +575,19 @@ void ConfigDialog::reloadAll()
     ui.edit_update_server->setText(QString::fromStdU16String(settings.updateServer()));
 
     ui.edit_update_server->setEnabled(ui.checkbox_use_custom_server->isChecked());
+
+    if (!settings.passwordProtection())
+    {
+        ui.label_pass_protection->setText(tr("Current state: Not installed"));
+        ui.button_pass_protection->setText(tr("Install"));
+        ui.button_change_password->setVisible(false);
+    }
+    else
+    {
+        ui.label_pass_protection->setText(tr("Current state: Installed"));
+        ui.button_pass_protection->setText(tr("Remove"));
+        ui.button_change_password->setVisible(true);
+    }
 
     setConfigChanged(false);
 }

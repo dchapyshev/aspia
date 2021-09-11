@@ -2,6 +2,40 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="no">
 <context>
+    <name>ChangePasswordDialog</name>
+    <message>
+        <source>Old password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New password (repeat):</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CheckPasswordDialog</name>
+    <message>
+        <source>Password Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <source>Settings</source>
@@ -21,14 +55,6 @@
     </message>
     <message>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -101,6 +127,22 @@
     </message>
     <message>
         <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -240,6 +282,44 @@
     </message>
 </context>
 <context>
+    <name>host::ChangePasswordDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must enter your old password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You entered an incorrect old password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The passwords entered do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>host::CheckPasswordDialog</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You entered an incorrect password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>host::ConfigDialog</name>
     <message>
         <source>Confirmation</source>
@@ -339,6 +419,18 @@
     </message>
     <message>
         <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current state: Not installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current state: Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

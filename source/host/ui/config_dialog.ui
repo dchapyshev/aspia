@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>296</height>
+    <width>419</width>
+    <height>379</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -101,6 +101,53 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Password Protection</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_pass_protection">
+            <property name="text">
+             <string notr="true">Current state:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>48</width>
+                <height>17</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_change_password">
+              <property name="text">
+               <string>Change password</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_pass_protection">
+              <property name="text">
+               <string notr="true">Install</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupbox_import_export">
          <property name="title">
           <string>Settings</string>
@@ -113,7 +160,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>113</width>
+              <width>192</width>
               <height>20</height>
              </size>
             </property>
@@ -122,14 +169,14 @@
           <item>
            <widget class="QPushButton" name="button_import">
             <property name="text">
-             <string>Import...</string>
+             <string>Import</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="button_export">
             <property name="text">
-             <string>Export...</string>
+             <string>Export</string>
             </property>
            </widget>
           </item>
@@ -144,7 +191,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>2</height>
+           <height>13</height>
           </size>
          </property>
         </spacer>
