@@ -371,7 +371,7 @@ void MainWindow::onAbout()
     LOG(LS_INFO) << "About dialog open";
 
     QApplication::setQuitOnLastWindowClosed(false);
-    common::AboutDialog(this).exec();
+    common::AboutDialog(tr("Aspia Host"), this).exec();
     QApplication::setQuitOnLastWindowClosed(true);
 
     LOG(LS_INFO) << "About dialog close";

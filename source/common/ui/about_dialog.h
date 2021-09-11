@@ -34,7 +34,7 @@ class AboutDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AboutDialog(QWidget* parent = nullptr);
+    explicit AboutDialog(const QString& application_name, QWidget* parent = nullptr);
     ~AboutDialog();
 
 private:

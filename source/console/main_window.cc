@@ -422,7 +422,7 @@ void MainWindow::onCheckUpdates()
 
 void MainWindow::onAbout()
 {
-    common::AboutDialog(this).exec();
+    common::AboutDialog(tr("Aspia Console"), this).exec();
 }
 
 void MainWindow::onFastConnect()

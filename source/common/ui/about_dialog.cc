@@ -92,12 +92,13 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 
 } // namespace
 
-AboutDialog::AboutDialog(QWidget* parent)
+AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     : QDialog(parent),
       ui(new Ui::AboutDialog())
 {
     ui->setupUi(this);
 
+    ui->label_name->setText(application_name);
     ui->label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
 
     QString license =

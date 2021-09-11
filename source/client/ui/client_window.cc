@@ -106,7 +106,7 @@ void ClientWindow::onHelp()
 
 void ClientWindow::onAbout()
 {
-    common::AboutDialog(this).exec();
+    common::AboutDialog(tr("Aspia Client"), this).exec();
 }
 
 void ClientWindow::sessionTypeChanged(int item_index)
