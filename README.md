@@ -14,17 +14,14 @@ Currently supported
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
-
-Plans
------
-The next stable release will include
 - NAT traversal
 - Audio support
-- Console for MacOS X and Linux
+- Client and Console for MacOS X and Linux
 
 System requirements
 -------------------
-x86 or x86_64 CPU with SSE2 support, Windows 7/2008 R2 or higher.
+- x86 or x86_64 CPU with SSE2 support
+- Windows 7/2008 R2 or higher, Debian/Ubuntu Linux, MacOS X
 
 Night builds
 ------------
