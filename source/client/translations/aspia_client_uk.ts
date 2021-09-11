@@ -1435,6 +1435,11 @@
         <translation type="obsolete">Підтвердження</translation>
     </message>
     <message>
+        <location filename="../ui/client_window.cc" line="109"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished">Клієнт Aspia</translation>
+    </message>
+    <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>

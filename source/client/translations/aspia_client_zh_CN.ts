@@ -1177,6 +1177,11 @@
         <translation type="obsolete">输入的地址列表将被清除，继续吗？</translation>
     </message>
     <message>
+        <location filename="../ui/client_window.cc" line="109"/>
+        <source>Aspia Client</source>
+        <translation type="unfinished">Aspia 客户端</translation>
+    </message>
+    <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>

@@ -1555,6 +1555,11 @@
         <translation type="vanished">Список введенных адресов будет очищен. Продолжить?</translation>
     </message>
     <message>
+        <location filename="../ui/client_window.cc" line="109"/>
+        <source>Aspia Client</source>
+        <translation>Клиент Aspia</translation>
+    </message>
+    <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>

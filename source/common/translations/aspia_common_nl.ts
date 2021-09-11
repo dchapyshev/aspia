@@ -119,72 +119,72 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="101"/>
+        <location filename="../ui/about_dialog.cc" line="102"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="105"/>
+        <location filename="../ui/about_dialog.cc" line="106"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="106"/>
+        <location filename="../ui/about_dialog.cc" line="107"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="111"/>
+        <location filename="../ui/about_dialog.cc" line="112"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="115"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="118"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="120"/>
+        <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="122"/>
+        <location filename="../ui/about_dialog.cc" line="123"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="124"/>
+        <location filename="../ui/about_dialog.cc" line="125"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="141"/>
+        <location filename="../ui/about_dialog.cc" line="142"/>
         <source>Path: %1</source>
         <translation>Pad: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="142"/>
+        <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Compilation date: %1</source>
         <translation>Compilatie datum: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="143"/>
+        <location filename="../ui/about_dialog.cc" line="144"/>
         <source>Compilation time: %1</source>
         <translation>Compilatie tijd: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="147"/>
+        <location filename="../ui/about_dialog.cc" line="148"/>
         <source>%1 version: %2</source>
         <translation>%1 versie: %2</translation>
     </message>

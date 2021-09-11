@@ -983,6 +983,7 @@
         <translation>Mostrar</translation>
     </message>
     <message>
+        <location filename="../main_window.cc" line="425"/>
         <location filename="../main_window.cc" line="1021"/>
         <source>Aspia Console</source>
         <translation>Consola Aspia</translation>

@@ -643,6 +643,7 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="61"/>
+        <location filename="../main_window.cc" line="374"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
