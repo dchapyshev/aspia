@@ -127,6 +127,7 @@ struct LoggingSettings
     LoggingSeverity min_log_level;
 
     std::filesystem::path log_dir;
+    size_t max_log_file_size;
 };
 
 // Sets the log file name and other global logging state. Calling this function is recommended,

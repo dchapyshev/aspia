@@ -48,9 +48,15 @@ namespace base {
 
 namespace {
 
+const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
+
 LoggingSeverity g_min_log_level = LOG_LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
+size_t g_max_log_file_size = kDefaultMaxLogFileSize;
+int g_log_file_number = -1;
+
+std::filesystem::path g_log_dir_path;
 std::filesystem::path g_log_file_path;
 std::ofstream g_log_file;
 std::mutex g_log_file_lock;
@@ -82,17 +88,17 @@ std::filesystem::path defaultLogFileDir()
     return path;
 }
 
-bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::path& file_name)
+bool initLoggingUnlocked(const std::string& prefix)
 {
-    std::scoped_lock lock(g_log_file_lock);
     g_log_file.close();
-
-    g_logging_destination = settings.destination;
 
     if (!(g_logging_destination & LOG_TO_FILE))
         return true;
 
-    std::filesystem::path file_dir = settings.log_dir;
+    // The next log file must have a number higher than the current one.
+    ++g_log_file_number;
+
+    std::filesystem::path file_dir = g_log_dir_path;
     if (file_dir.empty())
         file_dir = defaultLogFileDir();
 
@@ -112,7 +118,7 @@ bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::pat
     SystemTime time = SystemTime::now();
 
     std::ostringstream file_name_stream;
-    file_name_stream << file_name.c_str() << '-'
+    file_name_stream << prefix.c_str() << '-'
                      << std::setfill('0')
                      << std::setw(4) << time.year()
                      << std::setw(2) << time.month()
@@ -123,6 +129,8 @@ bool initLoggingImpl(const LoggingSettings& settings, const std::filesystem::pat
                      << std::setw(2) << time.second()
                      << '.'
                      << std::setw(3) << time.millisecond()
+                     << '.'
+                     << g_log_file_number
                      << ".log";
 
     std::filesystem::path file_path(file_dir);
@@ -145,14 +153,16 @@ std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
     : destination(LOG_DEFAULT),
-      min_log_level(LOG_LS_INFO)
+      min_log_level(LOG_LS_INFO),
+      max_log_file_size(kDefaultMaxLogFileSize)
 {
     // Nothing
 }
 
-bool initLogging(const LoggingSettings& settings)
+std::filesystem::path execFilePath()
 {
     std::filesystem::path exec_file_path;
+
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
     GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
@@ -170,13 +180,30 @@ bool initLogging(const LoggingSettings& settings)
 #error Not implemented
 #endif
 
-    std::filesystem::path file_name = exec_file_path.filename();
-    file_name.replace_extension();
+    return exec_file_path;
+}
 
-    if (!initLoggingImpl(settings, file_name))
-        return false;
+std::string logFilePrefix()
+{
+    std::filesystem::path exec_file_path = execFilePath();
+    std::filesystem::path exec_file_name = exec_file_path.filename();
+    exec_file_name.replace_extension();
+    return exec_file_name.string();
+}
 
-    LOG(LS_INFO) << "Executable file: " << exec_file_path.c_str();
+bool initLogging(const LoggingSettings& settings)
+{
+    {
+        std::scoped_lock lock(g_log_file_lock);
+
+        g_logging_destination = settings.destination;
+        g_log_dir_path = settings.log_dir;
+
+        if (!initLoggingUnlocked(logFilePrefix()))
+            return false;
+    }
+
+    LOG(LS_INFO) << "Executable file: " << execFilePath();
     if (g_logging_destination & LOG_TO_FILE)
     {
         // If log output is enabled, then we output information about the file.
@@ -314,6 +341,14 @@ LogMessage::~LogMessage()
     if ((g_logging_destination & LOG_TO_FILE) != 0)
     {
         std::scoped_lock lock(g_log_file_lock);
+
+        if (g_log_file.tellp() >= g_max_log_file_size)
+        {
+            // The maximum size of the log file has been exceeded. Close the current log file and
+            // create a new one.
+            initLoggingUnlocked(logFilePrefix());
+        }
+
         g_log_file.write(message.c_str(), message.size());
         g_log_file.flush();
     }
