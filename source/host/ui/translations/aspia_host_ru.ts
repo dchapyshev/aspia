@@ -1070,13 +1070,13 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="63"/>
-        <location filename="../main_window.cc" line="390"/>
+        <location filename="../main_window.cc" line="393"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="128"/>
-        <location filename="../main_window.cc" line="370"/>
+        <location filename="../main_window.cc" line="373"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -1091,7 +1091,7 @@
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="477"/>
+        <location filename="../main_window.cc" line="480"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
@@ -1101,7 +1101,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="462"/>
+        <location filename="../main_window.cc" line="465"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -1127,7 +1127,7 @@
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="467"/>
+        <location filename="../main_window.cc" line="470"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
@@ -1137,7 +1137,7 @@
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="472"/>
+        <location filename="../main_window.cc" line="475"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
@@ -1146,17 +1146,17 @@
         <translation type="vanished">Произошла ошибка</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="375"/>
+        <location filename="../main_window.cc" line="378"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="413"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="411"/>
+        <location filename="../main_window.cc" line="414"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
@@ -1164,7 +1164,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="195"/>
+        <location filename="../notifier_window.cc" line="200"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>

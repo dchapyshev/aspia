@@ -35,6 +35,7 @@ public:
 public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void disconnectAll();
+    void retranslateUi();
 
 signals:
     void killSession(uint32_t id);

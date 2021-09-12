@@ -890,13 +890,13 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="63"/>
-        <location filename="../main_window.cc" line="390"/>
+        <location filename="../main_window.cc" line="393"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="128"/>
-        <location filename="../main_window.cc" line="370"/>
+        <location filename="../main_window.cc" line="373"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
@@ -911,18 +911,18 @@
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="477"/>
+        <location filename="../main_window.cc" line="480"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="462"/>
+        <location filename="../main_window.cc" line="465"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="467"/>
+        <location filename="../main_window.cc" line="470"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
@@ -932,7 +932,7 @@
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="472"/>
+        <location filename="../main_window.cc" line="475"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
@@ -942,17 +942,17 @@
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="375"/>
+        <location filename="../main_window.cc" line="378"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="413"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="411"/>
+        <location filename="../main_window.cc" line="414"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
@@ -960,7 +960,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="195"/>
+        <location filename="../notifier_window.cc" line="200"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>

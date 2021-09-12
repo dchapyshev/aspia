@@ -323,6 +323,9 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     ui.retranslateUi(this);
 
+    if (notifier_)
+        notifier_->retranslateUi();
+
     if (status_dialog_)
         status_dialog_->retranslateUi();
 

@@ -130,6 +130,11 @@ void NotifierWindow::disconnectAll()
     }
 }
 
+void NotifierWindow::retranslateUi()
+{
+    ui.retranslateUi(this);
+}
+
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui.label_title || object == ui.label_connections)

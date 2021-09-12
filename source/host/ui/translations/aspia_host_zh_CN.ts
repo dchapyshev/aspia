@@ -603,13 +603,13 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="63"/>
-        <location filename="../main_window.cc" line="390"/>
+        <location filename="../main_window.cc" line="393"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="128"/>
-        <location filename="../main_window.cc" line="370"/>
+        <location filename="../main_window.cc" line="373"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
@@ -619,13 +619,13 @@
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="477"/>
+        <location filename="../main_window.cc" line="480"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="462"/>
+        <location filename="../main_window.cc" line="465"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
@@ -643,7 +643,7 @@
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="467"/>
+        <location filename="../main_window.cc" line="470"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
@@ -653,7 +653,7 @@
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="472"/>
+        <location filename="../main_window.cc" line="475"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
@@ -663,17 +663,17 @@
         <translation>正在连接到路由器 %1 ...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="375"/>
+        <location filename="../main_window.cc" line="378"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="413"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="411"/>
+        <location filename="../main_window.cc" line="414"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>
@@ -681,7 +681,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="195"/>
+        <location filename="../notifier_window.cc" line="200"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
