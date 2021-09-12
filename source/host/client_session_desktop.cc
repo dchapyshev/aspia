@@ -26,10 +26,12 @@
 #include "base/codec/video_encoder_vpx.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
+#include "base/win/safe_mode_util.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"
+#include "host/win/service_constants.h"
 #include "proto/desktop_internal.pb.h"
 
 namespace host {
@@ -252,12 +254,18 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
         outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
         sendMessage(base::serialize(*outgoing_message_));
     }
+    else
+    {
+        LOG(LS_WARNING) << "Clipboard event can only be handled in a desktop manage session";
+    }
 }
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
 {
     if (extension.name() == common::kSelectScreenExtension)
     {
+        LOG(LS_INFO) << "Select screen request";
+
         proto::Screen screen;
 
         if (!screen.ParseFromString(extension.data()))
@@ -314,20 +322,69 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         switch (power_control.action())
         {
             case proto::PowerControl::ACTION_SHUTDOWN:
-                base::PowerController::shutdown();
-                break;
+            {
+                LOG(LS_INFO) << "SHUTDOWN command";
+
+                if (!base::PowerController::shutdown())
+                {
+                    LOG(LS_WARNING) << "Unable to shutdown";
+                }
+            }
+            break;
 
             case proto::PowerControl::ACTION_REBOOT:
-                base::PowerController::reboot();
-                break;
+            {
+                LOG(LS_INFO) << "REBOOT command";
+
+                if (!base::PowerController::reboot())
+                {
+                    LOG(LS_WARNING) << "Unable to reboot";
+                }
+            }
+            break;
+
+            case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
+            {
+                LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
+
+                if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
+                {
+                    LOG(LS_INFO) << "Service added successfully to start in safe mode";
+
+                    if (base::win::SafeModeUtil::setSafeMode(true))
+                    {
+                        LOG(LS_INFO) << "Safe Mode boot enabled successfully";
+
+                        if (!base::PowerController::reboot())
+                        {
+                            LOG(LS_WARNING) << "Unable to reboot";
+                        }
+                    }
+                    else
+                    {
+                        LOG(LS_WARNING) << "Failed to enable boot in Safe Mode";
+                    }
+                }
+                else
+                {
+                    LOG(LS_WARNING) << "Failed to add service to start in safe mode";
+                }
+            }
+            break;
 
             case proto::PowerControl::ACTION_LOGOFF:
+            {
+                LOG(LS_INFO) << "LOGOFF command";
                 desktop_session_proxy_->control(proto::internal::Control::LOGOFF);
-                break;
+            }
+            break;
 
             case proto::PowerControl::ACTION_LOCK:
+            {
+                LOG(LS_INFO) << "LOCK command";
                 desktop_session_proxy_->control(proto::internal::Control::LOCK);
-                break;
+            }
+            break;
 
             default:
                 LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
@@ -336,6 +393,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
+        LOG(LS_INFO) << "Remote update requested";
+
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
         {
             launchUpdater(sessionId());

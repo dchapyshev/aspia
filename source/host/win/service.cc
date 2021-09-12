@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/strings/string_printf.h"
+#include "base/win/safe_mode_util.h"
 #include "base/win/session_status.h"
 #include "host/win/service_constants.h"
 #include "host/server.h"
@@ -81,7 +82,20 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
-    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+    if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
+    {
+        PLOG(LS_WARNING) << "SetPriorityClass failed";
+    }
+
+    if (!base::win::SafeModeUtil::setSafeMode(false))
+    {
+        LOG(LS_WARNING) << "Failed to turn off boot in safe mode";
+    }
+
+    if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
+    {
+        LOG(LS_WARNING) << "Failed to remove service from boot in Safe Mode";
+    }
 
     server_ = std::make_unique<Server>(taskRunner());
     server_->start();

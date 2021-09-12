@@ -56,11 +56,12 @@ message PowerControl
 {
     enum Action
     {
-        ACTION_UNKNOWN  = 0;
-        ACTION_SHUTDOWN = 1;
-        ACTION_REBOOT   = 2;
-        ACTION_LOGOFF   = 3;
-        ACTION_LOCK     = 4;
+        ACTION_UNKNOWN          = 0;
+        ACTION_SHUTDOWN         = 1;
+        ACTION_REBOOT           = 2;
+        ACTION_LOGOFF           = 3;
+        ACTION_LOCK             = 4;
+        ACTION_REBOOT_SAFE_MODE = 5;
     }
 
     Action action = 1;

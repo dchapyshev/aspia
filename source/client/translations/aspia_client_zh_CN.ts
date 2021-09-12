@@ -425,6 +425,16 @@
         <source>Statistics</source>
         <translation>统计</translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="411"/>
+        <source>Reboot (Safe mode)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="414"/>
+        <source>Reboot in safe mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
@@ -1228,45 +1238,51 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="211"/>
+        <location filename="../ui/desktop_panel.cc" line="212"/>
         <source>Monitor %1 (primary)</source>
         <translation>监视器%1（主）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="213"/>
+        <location filename="../ui/desktop_panel.cc" line="214"/>
         <source>Monitor %1</source>
         <translation>监视器 %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
-        <location filename="../ui/desktop_panel.cc" line="353"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="365"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="355"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="366"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="376"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Scale</source>
         <translation>缩放</translation>
     </message>

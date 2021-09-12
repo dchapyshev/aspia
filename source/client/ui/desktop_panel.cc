@@ -137,6 +137,7 @@ void DesktopPanel::enablePowerControl(bool enable)
         power_menu_.reset(new QMenu());
         power_menu_->addAction(ui.action_shutdown);
         power_menu_->addAction(ui.action_reboot);
+        power_menu_->addAction(ui.action_reboot_safe_mode);
         power_menu_->addAction(ui.action_logoff);
         power_menu_->addAction(ui.action_lock);
 
@@ -147,8 +148,8 @@ void DesktopPanel::enablePowerControl(bool enable)
         button->setPopupMode(QToolButton::InstantPopup);
 
         connect(power_menu_.get(), &QMenu::triggered, this, &DesktopPanel::onPowerControl);
-        connect(power_menu_.get(), &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-        connect(power_menu_.get(), &QMenu::aboutToHide, [this]()
+        connect(power_menu_.get(), &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
+        connect(power_menu_.get(), &QMenu::aboutToHide, this, [this]()
         {
             allow_hide_ = true;
 
@@ -334,6 +335,17 @@ void DesktopPanel::onPowerControl(QAction* action)
                                   QMessageBox::No) == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_REBOOT);
+        }
+    }
+    else if (action == ui.action_reboot_safe_mode)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Confirmation"),
+                                  tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
+                                  QMessageBox::Yes,
+                                  QMessageBox::No) == QMessageBox::Yes)
+        {
+            emit powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
         }
     }
     else if (action == ui.action_logoff)

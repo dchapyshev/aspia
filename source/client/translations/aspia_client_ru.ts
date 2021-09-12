@@ -457,6 +457,16 @@
         <translation>Статистика</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="411"/>
+        <source>Reboot (Safe mode)</source>
+        <translation>Перезагрузка (безопасный режим)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="414"/>
+        <source>Reboot in safe mode</source>
+        <translation>Перезагрузка в безопасном режиме</translation>
+    </message>
+    <message>
         <source>Statistic</source>
         <translation type="vanished">Статистика</translation>
     </message>
@@ -1610,45 +1620,55 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="211"/>
+        <location filename="../ui/desktop_panel.cc" line="212"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="213"/>
+        <location filename="../ui/desktop_panel.cc" line="214"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
-        <location filename="../ui/desktop_panel.cc" line="353"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="365"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to restart the remote computer in Safe Mode?</source>
+        <translation type="vanished">Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="355"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="366"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="376"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>

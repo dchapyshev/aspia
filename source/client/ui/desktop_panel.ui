@@ -406,6 +406,14 @@
     <string>Statistics</string>
    </property>
   </action>
+  <action name="action_reboot_safe_mode">
+   <property name="text">
+    <string>Reboot (Safe mode)</string>
+   </property>
+   <property name="toolTip">
+    <string>Reboot in safe mode</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../resources/client.qrc"/>

@@ -429,6 +429,16 @@
         <translation>Statistieken</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="411"/>
+        <source>Reboot (Safe mode)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="414"/>
+        <source>Reboot in safe mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="219"/>
         <location filename="../ui/desktop_panel.ui" line="222"/>
         <location filename="../ui/desktop_panel.ui" line="225"/>
@@ -1478,45 +1488,51 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="211"/>
+        <location filename="../ui/desktop_panel.cc" line="212"/>
         <source>Monitor %1 (primary)</source>
         <translation>Beeldscherm %1 (primair)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="213"/>
+        <location filename="../ui/desktop_panel.cc" line="214"/>
         <source>Monitor %1</source>
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="320"/>
-        <location filename="../ui/desktop_panel.cc" line="331"/>
-        <location filename="../ui/desktop_panel.cc" line="342"/>
-        <location filename="../ui/desktop_panel.cc" line="353"/>
+        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="365"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="321"/>
+        <location filename="../ui/desktop_panel.cc" line="322"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="332"/>
+        <location filename="../ui/desktop_panel.cc" line="333"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_panel.cc" line="344"/>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="355"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="354"/>
+        <location filename="../ui/desktop_panel.cc" line="366"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="376"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Scale</source>
         <translation>Schaal</translation>
     </message>
