@@ -573,6 +573,8 @@ if (WIN32)
         win/registry.h
         win/resource_util.cc
         win/resource_util.h
+        win/safe_mode_util.cc
+        win/safe_mode_util.h
         win/scoped_clipboard.cc
         win/scoped_clipboard.h
         win/scoped_co_mem.h
