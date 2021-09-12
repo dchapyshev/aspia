@@ -58,7 +58,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
 
         if (user.isValid())
         {
-            if (user.sessions & session_type)
+            if (user.sessions & static_cast<uint32_t>(session_type))
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -214,7 +214,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
             if (item->checkState(0) == Qt::Checked)
-                sessions |= item->data(0, Qt::UserRole).toInt();
+                sessions |= item->data(0, Qt::UserRole).toUInt();
         }
 
         uint32_t flags = 0;
