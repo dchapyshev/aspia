@@ -184,7 +184,17 @@
         <translation>Hora de compilação: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="145"/>
+        <source>Git branch: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="146"/>
+        <source>Git commit: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="150"/>
         <source>%1 version: %2</source>
         <translation>%1 versão: %2</translation>
     </message>

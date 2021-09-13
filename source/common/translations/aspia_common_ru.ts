@@ -184,7 +184,17 @@
         <translation>Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="145"/>
+        <source>Git branch: %1</source>
+        <translation>Ветка Git: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="146"/>
+        <source>Git commit: %1</source>
+        <translation>Коммит Git: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="150"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>

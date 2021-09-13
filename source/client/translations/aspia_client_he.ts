@@ -27,37 +27,37 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="60"/>
+        <location filename="../client_main.cc" line="62"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="63"/>
+        <location filename="../client_main.cc" line="65"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="67"/>
+        <location filename="../client_main.cc" line="69"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="70"/>
+        <location filename="../client_main.cc" line="72"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="75"/>
+        <location filename="../client_main.cc" line="77"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="111"/>
+        <location filename="../client_main.cc" line="113"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="112"/>
+        <location filename="../client_main.cc" line="114"/>
         <source>Incorrect session type entered.</source>
         <translation type="unfinished"></translation>
     </message>

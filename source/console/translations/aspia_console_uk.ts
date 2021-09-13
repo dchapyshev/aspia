@@ -351,17 +351,17 @@
         <translation type="vanished">Запустити програму із спрощеним інтерфейсом користувача.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="53"/>
+        <location filename="../main.cc" line="55"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="58"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="57"/>
+        <location filename="../main.cc" line="59"/>
         <source>The file to open.</source>
         <translation>Файл для відкриття.</translation>
     </message>

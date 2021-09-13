@@ -351,17 +351,17 @@
         <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="53"/>
+        <location filename="../main.cc" line="55"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="58"/>
         <source>file</source>
         <translation>bestand</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="57"/>
+        <location filename="../main.cc" line="59"/>
         <source>The file to open.</source>
         <translation>Het bestand om te openen.</translation>
     </message>
