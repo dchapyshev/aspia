@@ -143,6 +143,22 @@ message(STATUS "Linker flags (static debug): ${CMAKE_STATIC_LINKER_FLAGS_DEBUG}"
 message(STATUS "Linker flags (exe release): ${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 message(STATUS "Linker flags (exe debug): ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 
+# Get git branch info.
+execute_process(COMMAND git rev-parse --abbrev-ref HEAD
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE GIT_CURRENT_BRANCH
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# Get git commin hash.
+execute_process(COMMAND git rev-parse HEAD
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE GIT_COMMIT_HASH
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+# Add git branch and commin hash to definitions.
+add_definitions(-DGIT_CURRENT_BRANCH=\"${GIT_CURRENT_BRANCH}\"
+                -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\")
+
 add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)

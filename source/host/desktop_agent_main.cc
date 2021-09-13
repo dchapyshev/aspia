@@ -36,6 +36,8 @@ void desktopAgentMain(int argc, const char* const* argv)
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
+    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
     LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
                  << " (version: " << base::SysInfo::operatingSystemVersion()

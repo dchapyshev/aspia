@@ -142,6 +142,8 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     list->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
     list->addItem(tr("Compilation date: %1").arg(__DATE__));
     list->addItem(tr("Compilation time: %1").arg(__TIME__));
+    list->addItem(tr("Git branch: %1").arg(GIT_CURRENT_BRANCH));
+    list->addItem(tr("Git commit: %1").arg(GIT_COMMIT_HASH));
 
     auto add_version = [list](const char* name, const QString& version)
     {

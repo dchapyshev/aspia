@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
     console::Application application(argc, argv);
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
+    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
     QCommandLineParser parser;
