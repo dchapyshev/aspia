@@ -22,6 +22,8 @@
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 
+#include <filesystem>
+
 namespace client {
 
 class DesktopControl
@@ -32,6 +34,7 @@ public:
     virtual void setDesktopConfig(const proto::DesktopConfig& desktop_config) = 0;
     virtual void setCurrentScreen(const proto::Screen& screen) = 0;
     virtual void setPreferredSize(int width, int height) = 0;
+    virtual void setVideoRecording(bool enable, const std::filesystem::path& file_path) = 0;
 
     virtual void onKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void onMouseEvent(const proto::MouseEvent& event) = 0;

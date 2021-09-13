@@ -24,6 +24,8 @@
 #include "base/codec/audio_decoder_opus.h"
 #include "base/codec/cursor_decoder.h"
 #include "base/codec/video_decoder.h"
+#include "base/codec/webm_file_writer.h"
+#include "base/codec/webm_video_encoder.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window.h"
@@ -206,6 +208,49 @@ void ClientDesktop::setPreferredSize(int width, int height)
     sendMessage(*outgoing_message_);
 }
 
+void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& file_path)
+{
+    proto::VideoRecording video_recording;
+
+    if (enable)
+    {
+        video_recording.set_action(proto::VideoRecording::ACTION_STARTED);
+
+        webm_file_writer_ = std::make_unique<base::WebmFileWriter>(file_path, computerName());
+        webm_video_encoder_ = std::make_unique<base::WebmVideoEncoder>();
+
+        webm_video_encode_timer_ = std::make_unique<base::WaitableTimer>(
+            base::WaitableTimer::Type::REPEATED, ioTaskRunner());
+        webm_video_encode_timer_->start(std::chrono::milliseconds(60), [this]()
+        {
+            if (!webm_video_encoder_ || !webm_file_writer_ || !desktop_frame_)
+                return;
+
+            proto::VideoPacket packet;
+
+            if (webm_video_encoder_->encode(*desktop_frame_, &packet))
+                webm_file_writer_->addVideoPacket(packet);
+        });
+    }
+    else
+    {
+        video_recording.set_action(proto::VideoRecording::ACTION_STOPPED);
+
+        webm_video_encode_timer_.reset();
+        webm_video_encoder_.reset();
+        webm_file_writer_.reset();
+    }
+
+    outgoing_message_->Clear();
+
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+
+    extension->set_name(common::kVideoRecordingExtension);
+    extension->set_data(video_recording.SerializeAsString());
+
+    sendMessage(*outgoing_message_);
+}
+
 void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
 {
     std::optional<proto::KeyEvent> out_event = input_event_filter_.keyEvent(event);
@@ -332,7 +377,7 @@ void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_
         config_request.extensions(), config_request.video_encodings());
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & desktop_config_.video_encoding()))
+    if (!(config_request.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
     {
         LOG(LS_WARNING) << "Current video encoding not supported";
 
@@ -425,6 +470,9 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
 void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
 {
+    if (webm_file_writer_)
+        webm_file_writer_->addAudioPacket(packet);
+
     if (!audio_player_)
         return;
 
