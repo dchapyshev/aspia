@@ -51,6 +51,9 @@ find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 
+find_library(WEBM_RELEASE_LIB NAMES libwebm webm)
+find_library(WEBM_DEBUG_LIB NAMES libwebmd webmd)
+
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 if (WIN32)

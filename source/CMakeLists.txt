@@ -89,6 +89,7 @@ set(THIRD_PARTY_LIBS
     OpenSSL::SSL
     Opus::opus
     modp_b64
+    optimized ${WEBM_RELEASE_LIB} debug ${WEBM_DEBUG_LIB}
     unofficial::libvpx::libvpx
     x11region
     yuv)
