@@ -84,6 +84,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("Password cannot be empty."),
                                      QMessageBox::Ok);
+                ui.edit_new_pass->selectAll();
+                ui.edit_new_pass->setFocus();
                 return;
             }
 
@@ -93,6 +95,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),
                                      QMessageBox::Ok);
+                ui.edit_new_pass->selectAll();
+                ui.edit_new_pass->setFocus();
                 return;
             }
         }
@@ -110,6 +114,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("You must enter your old password."),
                                      QMessageBox::Ok);
+                ui.edit_old_pass->setFocus();
                 return;
             }
 
@@ -119,6 +124,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("You entered an incorrect old password."),
                                      QMessageBox::Ok);
+                ui.edit_old_pass->selectAll();
+                ui.edit_old_pass->setFocus();
                 return;
             }
 
@@ -128,6 +135,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("New password cannot be empty."),
                                      QMessageBox::Ok);
+                ui.edit_new_pass->setFocus();
                 return;
             }
 
@@ -137,6 +145,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                                      tr("Warning"),
                                      tr("The passwords entered do not match."),
                                      QMessageBox::Ok);
+                ui.edit_new_pass->selectAll();
+                ui.edit_new_pass->setFocus();
                 return;
             }
         }

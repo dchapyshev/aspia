@@ -217,18 +217,18 @@
         <translation type="vanished">Запустити оновлення програми.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="133"/>
-        <location filename="../host_main.cc" line="152"/>
+        <location filename="../host_main.cc" line="135"/>
+        <location filename="../host_main.cc" line="154"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="134"/>
+        <location filename="../host_main.cc" line="136"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="153"/>
+        <location filename="../host_main.cc" line="155"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
@@ -578,11 +578,11 @@
     <name>host::ChangePasswordDialog</name>
     <message>
         <location filename="../change_password_dialog.cc" line="84"/>
-        <location filename="../change_password_dialog.cc" line="93"/>
-        <location filename="../change_password_dialog.cc" line="110"/>
-        <location filename="../change_password_dialog.cc" line="119"/>
-        <location filename="../change_password_dialog.cc" line="128"/>
-        <location filename="../change_password_dialog.cc" line="137"/>
+        <location filename="../change_password_dialog.cc" line="95"/>
+        <location filename="../change_password_dialog.cc" line="114"/>
+        <location filename="../change_password_dialog.cc" line="124"/>
+        <location filename="../change_password_dialog.cc" line="135"/>
+        <location filename="../change_password_dialog.cc" line="145"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
@@ -592,23 +592,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="111"/>
+        <location filename="../change_password_dialog.cc" line="115"/>
         <source>You must enter your old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="120"/>
+        <location filename="../change_password_dialog.cc" line="125"/>
         <source>You entered an incorrect old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="129"/>
+        <location filename="../change_password_dialog.cc" line="136"/>
         <source>New password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="94"/>
-        <location filename="../change_password_dialog.cc" line="138"/>
+        <location filename="../change_password_dialog.cc" line="96"/>
+        <location filename="../change_password_dialog.cc" line="146"/>
         <source>The passwords entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
