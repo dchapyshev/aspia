@@ -27,12 +27,13 @@ const char kPreferredSizeExtension[] = "preferred_size";
 const char kPowerControlExtension[] = "power_control";
 const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
+const char kVideoRecordingExtension[] = "video_recording";
 
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info";
+    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording";
 
 const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;system_info";
+    "select_screen;preferred_size;system_info;video_recording";
 
 const uint32_t kSupportedVideoEncodings = proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9;
 const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;

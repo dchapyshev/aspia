@@ -81,3 +81,17 @@ message SystemInfo
     system_info.Printers printers                = 8;
     system_info.NetworkAdapters network_adapters = 9;
 }
+
+// Extension name: "video_recording"
+// Sent by host to client and by client to host.
+message VideoRecording
+{
+    enum Action
+    {
+        ACTION_UNKNOWN = 0;
+        ACTION_STARTED = 1;
+        ACTION_STOPPED = 2;
+    }
+
+    Action action = 1;
+}
