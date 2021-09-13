@@ -96,6 +96,8 @@ WaitableTimer::~WaitableTimer()
 void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
+    stop();
+
     impl_ = std::make_shared<Impl>(type_, std::move(signal_callback), task_runner_);
     impl_->start(time_delta);
 }
