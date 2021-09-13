@@ -35,37 +35,37 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="64"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="65"/>
+        <location filename="../client_main.cc" line="67"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="69"/>
+        <location filename="../client_main.cc" line="71"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="72"/>
+        <location filename="../client_main.cc" line="74"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="77"/>
+        <location filename="../client_main.cc" line="79"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="113"/>
+        <location filename="../client_main.cc" line="115"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="114"/>
+        <location filename="../client_main.cc" line="116"/>
         <source>Incorrect session type entered.</source>
         <translation>Введен некорректный тип сессии.</translation>
     </message>

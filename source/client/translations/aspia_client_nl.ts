@@ -35,37 +35,37 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="62"/>
+        <location filename="../client_main.cc" line="64"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="65"/>
+        <location filename="../client_main.cc" line="67"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="69"/>
+        <location filename="../client_main.cc" line="71"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="72"/>
+        <location filename="../client_main.cc" line="74"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="77"/>
+        <location filename="../client_main.cc" line="79"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="113"/>
+        <location filename="../client_main.cc" line="115"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="114"/>
+        <location filename="../client_main.cc" line="116"/>
         <source>Incorrect session type entered.</source>
         <translation>Ongeldig sessie type ingevoerd.</translation>
     </message>
