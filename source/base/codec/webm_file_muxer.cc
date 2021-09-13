@@ -33,6 +33,8 @@ WebmFileMuxer::~WebmFileMuxer() = default;
 
 bool WebmFileMuxer::init(FILE* file)
 {
+    DCHECK(file);
+
     // Construct and Init |WebMChunkWriter|. It handles writes coming from libwebm.
     writer_ = std::make_unique<mkvmuxer::MkvWriter>(file);
 
