@@ -162,47 +162,47 @@
         <translation type="obsolete">Адрес</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="49"/>
+        <location filename="../ui/client_window.ui" line="48"/>
         <source>ID / Address</source>
         <translation>ID / Адрес</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="121"/>
+        <location filename="../ui/client_window.ui" line="120"/>
         <source>Session Type</source>
         <translation>Тип сессии</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="257"/>
+        <location filename="../ui/client_window.ui" line="256"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="290"/>
+        <location filename="../ui/client_window.ui" line="289"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="295"/>
+        <location filename="../ui/client_window.ui" line="294"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="311"/>
+        <location filename="../ui/client_window.ui" line="310"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="320"/>
+        <location filename="../ui/client_window.ui" line="319"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="329"/>
+        <location filename="../ui/client_window.ui" line="328"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="338"/>
+        <location filename="../ui/client_window.ui" line="337"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>

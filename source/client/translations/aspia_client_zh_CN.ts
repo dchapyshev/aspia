@@ -138,47 +138,47 @@
         <translation type="obsolete">地址</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="49"/>
+        <location filename="../ui/client_window.ui" line="48"/>
         <source>ID / Address</source>
         <translation>ID / 地址</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="121"/>
+        <location filename="../ui/client_window.ui" line="120"/>
         <source>Session Type</source>
         <translation>会话类型</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="257"/>
+        <location filename="../ui/client_window.ui" line="256"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="290"/>
+        <location filename="../ui/client_window.ui" line="289"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="295"/>
+        <location filename="../ui/client_window.ui" line="294"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="311"/>
+        <location filename="../ui/client_window.ui" line="310"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="320"/>
+        <location filename="../ui/client_window.ui" line="319"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="329"/>
+        <location filename="../ui/client_window.ui" line="328"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="338"/>
+        <location filename="../ui/client_window.ui" line="337"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
