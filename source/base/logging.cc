@@ -65,10 +65,7 @@ std::mutex g_log_file_lock;
 
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] =
-    {
-        "INFO", "WARNING", "ERROR", "FATAL"
-    };
+    static const char* const kLogSeverityNames[] = { "I", "W", "E", "F" };
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
