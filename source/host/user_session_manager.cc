@@ -19,6 +19,7 @@
 #include "host/user_session_manager.h"
 
 #include "base/command_line.h"
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
@@ -50,15 +51,15 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-            DWORD error_code = GetLastError();
-            if (error_code == ERROR_NO_TOKEN)
-            {
-                token_out->reset();
-                return true;
-            }
+        DWORD error_code = GetLastError();
+        if (error_code == ERROR_NO_TOKEN)
+        {
+            token_out->reset();
+            return true;
+        }
 
-            PLOG(LS_WARNING) << "WTSQueryUserToken failed";
-            return false;
+        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        return false;
     }
 
     TOKEN_ELEVATION_TYPE elevation_type;
@@ -168,19 +169,28 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
+    LOG(LS_INFO) << "UserSessionManager Ctor";
     DCHECK(task_runner_);
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
-UserSessionManager::~UserSessionManager() = default;
+UserSessionManager::~UserSessionManager()
+{
+    LOG(LS_INFO) << "UserSessionManager Dtor";
+}
 
 bool UserSessionManager::start(Delegate* delegate)
 {
     DCHECK(delegate);
     DCHECK(!delegate_);
 
+    LOG(LS_INFO) << "Starting user session manager";
+
     if (ipc_server_)
+    {
+        LOG(LS_WARNING) << "IPC server already exists";
         return false;
+    }
 
     delegate_ = delegate;
 
@@ -188,14 +198,18 @@ bool UserSessionManager::start(Delegate* delegate)
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(kIpcChannelIdForUI, this))
+    {
+        LOG(LS_WARNING) << "Failed to start IPC servcer for UI";
         return false;
+    }
 
     for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
     {
         // Start UI process in user session.
-        startSessionProcess(session.sessionId());
+        startSessionProcess(FROM_HERE, session.sessionId());
     }
 
+    LOG(LS_INFO) << "User session manager is started";
     return true;
 }
 
@@ -209,10 +223,11 @@ void UserSessionManager::setSessionEvent(
     switch (status)
     {
         case base::win::SessionStatus::CONSOLE_CONNECT:
+        case base::win::SessionStatus::REMOTE_CONNECT:
         case base::win::SessionStatus::SESSION_LOGON:
         {
             // Start UI process in user session.
-            startSessionProcess(session_id);
+            startSessionProcess(FROM_HERE, session_id);
         }
         break;
 
@@ -226,6 +241,8 @@ void UserSessionManager::setSessionEvent(
 
 void UserSessionManager::setRouterState(const proto::internal::RouterState& router_state)
 {
+    LOG(LS_INFO) << "New router state";
+
     router_state_ = router_state;
 
     // Send an event of each session.
@@ -235,16 +252,22 @@ void UserSessionManager::setRouterState(const proto::internal::RouterState& rout
 
 void UserSessionManager::setHostId(const std::string& session_name, base::HostId host_id)
 {
+    LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
+
     // Send an event of each session.
     for (const auto& session : sessions_)
     {
         if (session->sessionName() == session_name)
         {
+            LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
+
             session->setHostId(host_id);
             delegate_->onUserListChanged();
             return;
         }
     }
+
+    LOG(LS_WARNING) << "Session '" << session_name << "' NOT found";
 }
 
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
@@ -327,16 +350,25 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
     std::unique_ptr<base::UserList> user_list = base::UserList::createEmpty();
 
     for (const auto& session : sessions_)
-        user_list->add(session->user());
+    {
+        base::User user = session->user();
+        if (user.isValid())
+            user_list->add(user);
+    }
 
     return user_list;
 }
 
 void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
+    LOG(LS_INFO) << "New IPC connection";
+
     std::filesystem::path reference_path;
     if (!base::BasePaths::currentExecDir(&reference_path))
+    {
+        LOG(LS_WARNING) << "currentExecDir failed";
         return;
+    }
 
     reference_path.append(kExecutableNameForUi);
 
@@ -348,7 +380,10 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
 
     base::SessionId session_id = channel->peerSessionId();
     if (session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_WARNING) << "Invalid session id";
         return;
+    }
 
     addUserSession(session_id, std::move(channel));
 }
@@ -398,15 +433,16 @@ void UserSessionManager::onUserSessionFinished()
     }
 }
 
-void UserSessionManager::startSessionProcess(base::SessionId session_id)
+void UserSessionManager::startSessionProcess(const base::Location& location, base::SessionId session_id)
 {
+    LOG(LS_INFO) << "Starting UI process for session ID: " << session_id
+                 << " (from: " << location.toString() << ")";
+
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_WARNING) << "Invalid session ID";
         return;
     }
-
-    LOG(LS_INFO) << "Starting session process for session ID: " << session_id;
 
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
@@ -447,10 +483,13 @@ void UserSessionManager::startSessionProcess(base::SessionId session_id)
 void UserSessionManager::addUserSession(
     base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel)
 {
+    LOG(LS_INFO) << "Add user session: " << session_id;
+
     for (const auto& session : sessions_)
     {
         if (session->sessionId() == session_id)
         {
+            LOG(LS_INFO) << "Restart user session";
             session->restart(std::move(channel));
             return;
         }
@@ -460,6 +499,7 @@ void UserSessionManager::addUserSession(
         task_runner_, session_id, std::move(channel));
     user_session->setRouterState(router_state_);
 
+    LOG(LS_INFO) << "Start user session";
     sessions_.emplace_back(std::move(user_session));
     sessions_.back()->start(this);
 }

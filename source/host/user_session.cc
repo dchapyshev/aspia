@@ -27,6 +27,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/win/session_info.h"
+#include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
 #include "host/desktop_session_proxy.h"
 
@@ -40,22 +41,29 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
       attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id)
 {
-    LOG(LS_INFO) << "UserSession Ctor";
-    DCHECK(task_runner_);
-
     type_ = UserSession::Type::CONSOLE;
 
-    if (session_id_ != base::activeConsoleSessionId())
+    base::SessionId console_session_id = base::activeConsoleSessionId();
+    if (console_session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_WARNING) << "Invalid console session ID";
+    }
+
+    if (session_id_ != console_session_id)
         type_ = UserSession::Type::RDP;
 
-    router_state_.set_state(proto::internal::RouterState::DISABLED);
+    LOG(LS_INFO) << "UserSession Ctor (session ID: " << session_id_
+                 << " type: " << static_cast<int>(type_) << ")";
+    DCHECK(task_runner_);
 
-    LOG(LS_INFO) << "Session type: " << static_cast<int>(type_);
+    router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
 UserSession::~UserSession()
 {
-    LOG(LS_INFO) << "UserSession Dtor";
+    LOG(LS_INFO) << "UserSession Dtor (session ID: " << session_id_
+                 << " type: " << static_cast<int>(type_)
+                 << " state: " << static_cast<int>(state_) << ")";
 }
 
 void UserSession::start(Delegate* delegate)
@@ -64,7 +72,7 @@ void UserSession::start(Delegate* delegate)
     DCHECK(delegate_);
 
     LOG(LS_INFO) << "User session started "
-                 << (channel_ ? "with" : "without")
+                 << (channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI";
 
     desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
@@ -96,7 +104,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     channel_ = std::move(channel);
 
     LOG(LS_INFO) << "User session restarted "
-                 << (channel_ ? "with" : "without")
+                 << (channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI";
 
     attach_timer_.stop();
@@ -161,6 +169,12 @@ base::User UserSession::user() const
         return base::User();
     }
 
+    if (password_.empty())
+    {
+        LOG(LS_INFO) << "No password for user";
+        return base::User();
+    }
+
     std::u16string username = u'#' + base::numberToString16(host_id_);
     base::User user = base::User::create(username, base::utf16FromAscii(password_));
 
@@ -216,11 +230,28 @@ void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
 
 void UserSession::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
+    LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
+                 << " (event ID: " << session_id << " current ID: " << session_id_
+                 << " type: " << static_cast<int>(type_)
+                 << " state: " << static_cast<int>(state_) << ")";
+
     switch (status)
     {
         case base::win::SessionStatus::CONSOLE_CONNECT:
         {
-            LOG(LS_INFO) << "CONSOLE_CONNECT event";
+            if (state_ == State::FINISHED)
+            {
+                LOG(LS_INFO) << "User session is finished";
+                return;
+            }
+
+            if (state_ != State::DETTACHED)
+            {
+                LOG(LS_INFO) << "User session not in DETTACHED state";
+                return;
+            }
+
+            LOG(LS_INFO) << "User session ID changed from " << session_id_ << " to " << session_id;
             session_id_ = session_id;
 
             for (const auto& client : desktop_clients_)
@@ -233,7 +264,12 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 
         case base::win::SessionStatus::CONSOLE_DISCONNECT:
         {
-            LOG(LS_INFO) << "CONSOLE_DISCONNECT event";
+            if (session_id != session_id_)
+            {
+                LOG(LS_WARNING) << "Not equals session IDs (event ID: '" << session_id
+                                << "' current ID: '" << session_id_ << "')";
+                return;
+            }
 
             if (desktop_session_)
                 desktop_session_->dettachSession(FROM_HERE);
@@ -244,15 +280,20 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 
         case base::win::SessionStatus::REMOTE_DISCONNECT:
         {
-            LOG(LS_INFO) << "REMOTE_DISCONNECT event";
-
-            if (type_ == Type::RDP && state_ == State::DETTACHED)
+            if (session_id != session_id_)
             {
-                LOG(LS_INFO) << "RDP session finished";
-
-                state_ = State::FINISHED;
-                delegate_->onUserSessionFinished();
+                LOG(LS_WARNING) << "Not equals session IDs (event ID: '" << session_id
+                                << "' current ID: '" << session_id_ << "')";
+                return;
             }
+
+            if (type_ != Type::RDP)
+            {
+                LOG(LS_WARNING) << "REMOTE_DISCONNECT not for RDP session";
+            }
+
+            state_ = State::FINISHED;
+            delegate_->onUserSessionFinished();
         }
         break;
 
@@ -344,7 +385,10 @@ void UserSession::onDesktopSessionStarted()
 
     proto::internal::Control::Action action = proto::internal::Control::ENABLE;
     if (desktop_clients_.empty())
+    {
+        LOG(LS_INFO) << "No desktop clients. Disable session";
         action = proto::internal::Control::DISABLE;
+    }
 
     desktop_session_proxy_->control(action);
     onClientSessionConfigured();
@@ -356,6 +400,8 @@ void UserSession::onDesktopSessionStopped()
 
     if (type_ == Type::RDP)
     {
+        LOG(LS_INFO) << "Session type is RDP. Disconnect all";
+
         desktop_clients_.clear();
         file_transfer_clients_.clear();
 
@@ -452,6 +498,9 @@ void UserSession::onClientSessionFinished()
 
             if (client_session->state() == ClientSession::State::FINISHED)
             {
+                LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
+                             << " finished. Delete it";
+
                 // Notification of the UI about disconnecting the client.
                 sendDisconnectEvent(client_session->id());
 
@@ -483,7 +532,10 @@ void UserSession::onClientSessionFinished()
 void UserSession::onSessionDettached(const base::Location& location)
 {
     if (state_ == State::DETTACHED)
+    {
+        LOG(LS_INFO) << "Session already dettached";
         return;
+    }
 
     LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
 
@@ -515,6 +567,11 @@ void UserSession::onSessionDettached(const base::Location& location)
     {
         LOG(LS_INFO) << "Starting attach timer";
 
+        if (attach_timer_.isActive())
+        {
+            LOG(LS_INFO) << "Attach timer is active";
+        }
+
         attach_timer_.start(std::chrono::minutes(1), [this]()
         {
             LOG(LS_INFO) << "Session attach timeout";
@@ -523,6 +580,8 @@ void UserSession::onSessionDettached(const base::Location& location)
             delegate_->onUserSessionFinished();
         });
     }
+
+    LOG(LS_INFO) << "Session dettached";
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)

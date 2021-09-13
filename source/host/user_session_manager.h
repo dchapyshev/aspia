@@ -65,7 +65,7 @@ protected:
     void onUserSessionFinished() override;
 
 private:
-    void startSessionProcess(base::SessionId session_id);
+    void startSessionProcess(const base::Location& location, base::SessionId session_id);
     void addUserSession(base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel);
 
     std::shared_ptr<base::TaskRunner> task_runner_;

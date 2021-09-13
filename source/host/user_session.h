@@ -39,15 +39,15 @@ class UserSession
 public:
     enum class Type
     {
-        CONSOLE,
-        RDP
+        CONSOLE = 0,
+        RDP = 1
     };
 
     enum class State
     {
-        STARTED,
-        DETTACHED,
-        FINISHED
+        STARTED = 0,
+        DETTACHED = 1,
+        FINISHED = 2
     };
 
     class Delegate

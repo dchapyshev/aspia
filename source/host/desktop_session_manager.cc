@@ -95,7 +95,10 @@ void DesktopSessionManager::attachSession(
 void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
+    {
+        LOG(LS_INFO) << "Session already stopped or dettached (" << static_cast<int>(state_) << ")";
         return;
+    }
 
     LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
 
