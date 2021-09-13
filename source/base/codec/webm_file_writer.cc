@@ -28,7 +28,7 @@
 
 namespace base {
 
-WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::string_view name)
+WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string_view name)
     : path_(path),
       name_(name)
 {

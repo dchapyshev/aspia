@@ -37,7 +37,7 @@ class WebmFileMuxer;
 class WebmFileWriter
 {
 public:
-    WebmFileWriter(const std::filesystem::path& path, std::string_view name);
+    WebmFileWriter(const std::filesystem::path& path, std::u16string_view name);
     ~WebmFileWriter();
 
     void addVideoPacket(const proto::VideoPacket& packet);
@@ -48,7 +48,7 @@ private:
     void close();
 
     std::filesystem::path path_;
-    std::string name_;
+    std::u16string name_;
     int file_counter_ = 0;
     FILE* file_ = nullptr;
 
