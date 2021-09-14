@@ -23,9 +23,11 @@
 #include "base/task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
+#include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
+#include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
 #include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
@@ -35,11 +37,13 @@ namespace host {
 
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
-                         std::unique_ptr<base::IpcChannel> channel)
+                         std::unique_ptr<base::IpcChannel> channel,
+                         Delegate* delegate)
     : task_runner_(task_runner),
       channel_(std::move(channel)),
       attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
-      session_id_(session_id)
+      session_id_(session_id),
+      delegate_(delegate)
 {
     type_ = UserSession::Type::CONSOLE;
 
@@ -53,8 +57,9 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
         type_ = UserSession::Type::RDP;
 
     LOG(LS_INFO) << "UserSession Ctor (session ID: " << session_id_
-                 << " type: " << static_cast<int>(type_) << ")";
-    DCHECK(task_runner_);
+                 << " type: " << typeToString(type_) << ")";
+    CHECK(task_runner_);
+    CHECK(delegate_);
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
@@ -62,18 +67,52 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 UserSession::~UserSession()
 {
     LOG(LS_INFO) << "UserSession Dtor (session ID: " << session_id_
-                 << " type: " << static_cast<int>(type_)
-                 << " state: " << static_cast<int>(state_) << ")";
+                 << " type: " << typeToString(type_)
+                 << " state: " << stateToString(state_) << ")";
 }
 
-void UserSession::start(Delegate* delegate)
+// static
+const char* UserSession::typeToString(Type type)
 {
-    delegate_ = delegate;
-    DCHECK(delegate_);
+    switch (type)
+    {
+        case Type::CONSOLE:
+            return "CONSOLE";
 
+        case Type::RDP:
+            return "RDP";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
+// static
+const char* UserSession::stateToString(State state)
+{
+    switch (state)
+    {
+        case State::STARTED:
+            return "STARTED";
+
+        case State::DETTACHED:
+            return "DETTACHED";
+
+        case State::FINISHED:
+            return "FINISHED";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
+void UserSession::start(const proto::internal::RouterState& router_state)
+{
     LOG(LS_INFO) << "User session started "
                  << (channel_ ? "WITH" : "WITHOUT")
                  << " connection to UI";
+
+    router_state_ = router_state;
 
     desktop_session_ = std::make_unique<DesktopSessionManager>(task_runner_, this);
     desktop_session_proxy_ = desktop_session_->sessionProxy();
@@ -87,6 +126,9 @@ void UserSession::start(Delegate* delegate)
 
         channel_->setListener(this);
         channel_->resume();
+
+        sendRouterState();
+        sendCredentials();
     }
     else
     {
@@ -96,7 +138,9 @@ void UserSession::start(Delegate* delegate)
     state_ = State::STARTED;
 
     // Session started, request for host ID.
-    delegate_->onUserSessionHostIdRequest(sessionName());
+    std::optional<std::string> session_name = sessionName();
+    if (session_name.has_value())
+        delegate_->onUserSessionHostIdRequest(*session_name);
 }
 
 void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
@@ -138,8 +182,12 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     state_ = State::STARTED;
 }
 
-std::string UserSession::sessionName() const
+std::optional<std::string> UserSession::sessionName() const
 {
+    LOG(LS_INFO) << "Session name request (session ID: " << session_id_
+                 << " type: " << typeToString(type_)
+                 << " state: " << stateToString(state_) << ")";
+
     if (type_ == Type::CONSOLE)
     {
         LOG(LS_INFO) << "Session name for console session is empty string";
@@ -148,17 +196,67 @@ std::string UserSession::sessionName() const
 
     DCHECK_EQ(type_, Type::RDP);
 
-    base::win::SessionInfo session_info(sessionId());
-    if (!session_info.isValid())
+    base::win::SessionInfo current_session_info(sessionId());
+    if (!current_session_info.isValid())
     {
         LOG(LS_ERROR) << "Failed to get session information";
-        return std::string();
+        return std::nullopt;
     }
 
-    std::string user_name = session_info.userName();
+    std::u16string user_name = base::toLower(current_session_info.userName16());
+    std::u16string domain = base::toLower(current_session_info.domain16());
 
-    LOG(LS_INFO) << "Session name for RDP session: " << user_name;
-    return user_name;
+    if (user_name.empty())
+    {
+        LOG(LS_INFO) << "User is not logged in yet";
+        return std::nullopt;
+    }
+
+    using TimeInfo = std::pair<base::SessionId, int64_t>;
+    using TimeInfoList = std::vector<TimeInfo>;
+
+    // Enumarate all user sessions.
+    TimeInfoList times;
+    for (base::win::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    {
+        if (user_name != base::toLower(it.userName16()))
+            continue;
+
+        base::win::SessionInfo session_info(it.sessionId());
+        if (!session_info.isValid())
+            continue;
+
+        // In Windows Server can have multiple RDP sessions with the same username. We get a list of
+        // sessions with the same username and session connection time.
+        times.emplace_back(session_info.sessionId(), session_info.connectTime());
+    }
+
+    // Sort the list by the time it was connected to the server.
+    std::sort(times.begin(), times.end(), [](const TimeInfo& p1, const TimeInfo& p2)
+    {
+        return p1.second < p2.second;
+    });
+
+    // We are looking for the current session in the sorted list.
+    size_t user_number = 0;
+    for (size_t i = 0; i < times.size(); ++i)
+    {
+        if (times[i].first == current_session_info.sessionId())
+        {
+            // Save the user number in the list.
+            user_number = i;
+            break;
+        }
+    }
+
+    // The session name contains the username and domain to reliably distinguish between local and
+    // domain users. It also contains the user number found above. This way, users will receive the
+    // same ID based on the time they were connected to the server.
+    std::string session_name = base::strCat({ base::utf8FromUtf16(user_name), "@",
+        base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
+
+    LOG(LS_INFO) << "Session name for RDP session: " << session_name;
+    return std::move(session_name);
 }
 
 base::User UserSession::user() const
@@ -182,6 +280,11 @@ base::User UserSession::user() const
     user.flags = base::User::ENABLED;
 
     return user;
+}
+
+size_t UserSession::clientsCount() const
+{
+    return desktop_clients_.size() + file_transfer_clients_.size();
 }
 
 void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
@@ -232,8 +335,8 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
 {
     LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
                  << " (event ID: " << session_id << " current ID: " << session_id_
-                 << " type: " << static_cast<int>(type_)
-                 << " state: " << static_cast<int>(state_) << ")";
+                 << " type: " << typeToString(type_)
+                 << " state: " << stateToString(state_) << ")";
 
     switch (status)
     {
@@ -297,6 +400,15 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
         }
         break;
 
+        case base::win::SessionStatus::SESSION_LOGON:
+        {
+            // Request for host ID.
+            std::optional<std::string> session_name = sessionName();
+            if (session_name.has_value())
+                delegate_->onUserSessionHostIdRequest(*session_name);
+        }
+        break;
+
         default:
         {
             // Ignore other events.
@@ -314,15 +426,11 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
 
     if (router_state.state() == proto::internal::RouterState::CONNECTED)
     {
-        if (delegate_)
-        {
-            LOG(LS_INFO) << "Executing an ID request";
-            delegate_->onUserSessionHostIdRequest(sessionName());
-        }
-        else
-        {
-            LOG(LS_INFO) << "There is no delegate. ID request will fail";
-        }
+        LOG(LS_INFO) << "Executing an ID request";
+
+        std::optional<std::string> session_name = sessionName();
+        if (session_name.has_value())
+            delegate_->onUserSessionHostIdRequest(*session_name);
     }
     else
     {
@@ -539,7 +647,12 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
 
-    task_runner_->deleteSoon(std::move(channel_));
+    if (channel_)
+    {
+        channel_->setListener(nullptr);
+        task_runner_->deleteSoon(std::move(channel_));
+    }
+
     password_.clear();
 
     // Stop one-time desktop clients.
@@ -634,14 +747,7 @@ void UserSession::updateCredentials()
 
     password_ = generator.result();
 
-    if (delegate_)
-    {
-        delegate_->onUserSessionCredentialsChanged();
-    }
-    else
-    {
-        LOG(LS_WARNING) << "Delegate is nullptr";
-    }
+    delegate_->onUserSessionCredentialsChanged();
 }
 
 void UserSession::sendCredentials()
@@ -658,7 +764,7 @@ void UserSession::sendCredentials()
         return;
     }
 
-    LOG(LS_INFO) << "Sending credentials to UI for host " << host_id_;
+    LOG(LS_INFO) << "Sending credentials to UI for host: " << host_id_;
 
     outgoing_message_.Clear();
 

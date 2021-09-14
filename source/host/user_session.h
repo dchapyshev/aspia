@@ -63,18 +63,23 @@ public:
 
     UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                 base::SessionId session_id,
-                std::unique_ptr<base::IpcChannel> channel);
+                std::unique_ptr<base::IpcChannel> channel,
+                Delegate* delegate);
     ~UserSession();
 
-    void start(Delegate* delegate);
+    static const char* typeToString(Type type);
+    static const char* stateToString(State state);
+
+    void start(const proto::internal::RouterState& router_state);
     void restart(std::unique_ptr<base::IpcChannel> channel);
 
     Type type() const { return type_; }
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
     base::HostId hostId() const { return host_id_; }
-    std::string sessionName() const;
+    std::optional<std::string> sessionName() const;
     base::User user() const;
+    size_t clientsCount() const;
 
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);

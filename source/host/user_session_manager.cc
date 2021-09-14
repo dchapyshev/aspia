@@ -21,6 +21,7 @@
 #include "base/command_line.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/scoped_task_runner.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/files/base_paths.h"
@@ -171,6 +172,8 @@ UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_ru
 {
     LOG(LS_INFO) << "UserSessionManager Ctor";
     DCHECK(task_runner_);
+
+    scoped_task_runner_ = std::make_unique<base::ScopedTaskRunner>(task_runner_);
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
@@ -242,7 +245,6 @@ void UserSessionManager::setSessionEvent(
 void UserSessionManager::setRouterState(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "New router state";
-
     router_state_ = router_state;
 
     // Send an event of each session.
@@ -257,7 +259,8 @@ void UserSessionManager::setHostId(const std::string& session_name, base::HostId
     // Send an event of each session.
     for (const auto& session : sessions_)
     {
-        if (session->sessionName() == session_name)
+        std::optional<std::string> name = session->sessionName();
+        if (name.has_value() && name == session_name)
         {
             LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
 
@@ -410,30 +413,34 @@ void UserSessionManager::onUserSessionDettached()
 
 void UserSessionManager::onUserSessionFinished()
 {
-    for (auto it = sessions_.begin(); it != sessions_.end();)
+    scoped_task_runner_->postTask([this]()
     {
-        if (it->get()->state() == UserSession::State::FINISHED)
+        for (auto it = sessions_.begin(); it != sessions_.end();)
         {
-            LOG(LS_INFO) << "Finished session found in list. Reset host ID for invalid session";
+            if (it->get()->state() == UserSession::State::FINISHED)
+            {
+                UserSession* session = it->get();
 
-            // User session ended, host ID is no longer valid.
-            delegate_->onResetHostId(it->get()->hostId());
+                LOG(LS_INFO) << "Finished session " << session->sessionId()
+                             << " found in list. Reset host ID "
+                             << session->hostId() << " for invalid session";
 
-            LOG(LS_INFO) << "Delete session from list...";
+                // User session ended, host ID is no longer valid.
+                delegate_->onResetHostId(session->hostId());
 
-            task_runner_->deleteSoon(std::move(*it));
-            it = sessions_.erase(it);
-
-            LOG(LS_INFO) << "Session deleted from list";
+                task_runner_->deleteSoon(std::move(*it));
+                it = sessions_.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
-        else
-        {
-            ++it;
-        }
-    }
+    });
 }
 
-void UserSessionManager::startSessionProcess(const base::Location& location, base::SessionId session_id)
+void UserSessionManager::startSessionProcess(
+    const base::Location& location, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Starting UI process for session ID: " << session_id
                  << " (from: " << location.toString() << ")";
@@ -496,12 +503,11 @@ void UserSessionManager::addUserSession(
     }
 
     std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
-        task_runner_, session_id, std::move(channel));
-    user_session->setRouterState(router_state_);
+        task_runner_, session_id, std::move(channel), this);
 
     LOG(LS_INFO) << "Start user session";
     sessions_.emplace_back(std::move(user_session));
-    sessions_.back()->start(this);
+    sessions_.back()->start(router_state_);
 }
 
 } // namespace host

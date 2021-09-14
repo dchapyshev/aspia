@@ -163,7 +163,7 @@ void Server::onRouterStateChanged(const proto::internal::RouterState& router_sta
 
 void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
 {
-    LOG(LS_INFO) << "New host ID assigned: " << host_id << " (" << session_name << ")";
+    LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
     user_session_manager_->setHostId(session_name, host_id);
 }
 
