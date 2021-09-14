@@ -111,6 +111,7 @@ private:
     void sendCredentials();
     void killClientSession(uint32_t id);
     void sendRouterState();
+    void sendHostIdRequest(const base::Location& location);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;

@@ -67,7 +67,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
 {
     LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
 
-    if (!channel_)
+    if (!channel_ || !channel_->isConnected())
     {
         LOG(LS_INFO) << "No active connection to the router";
         return;
@@ -102,7 +102,7 @@ void RouterController::resetHostId(base::HostId host_id)
 {
     LOG(LS_INFO) << "ResetHostId request: " << host_id;
 
-    if (!channel_)
+    if (!channel_ || !channel_->isConnected())
     {
         LOG(LS_INFO) << "No active connection to the router";
         return;
@@ -223,7 +223,8 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
             host_key_storage.setKey(pending_id_requests_.front(), host_key);
         }
 
-        LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id();
+        LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id()
+                     << " session name: " << pending_id_requests_.front();
 
         delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
         pending_id_requests_.pop();

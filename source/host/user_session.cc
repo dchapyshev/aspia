@@ -136,11 +136,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     }
 
     state_ = State::STARTED;
-
-    // Session started, request for host ID.
-    std::optional<std::string> session_name = sessionName();
-    if (session_name.has_value())
-        delegate_->onUserSessionHostIdRequest(*session_name);
+    sendHostIdRequest(FROM_HERE);
 }
 
 void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
@@ -403,9 +399,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
         case base::win::SessionStatus::SESSION_LOGON:
         {
             // Request for host ID.
-            std::optional<std::string> session_name = sessionName();
-            if (session_name.has_value())
-                delegate_->onUserSessionHostIdRequest(*session_name);
+            sendHostIdRequest(FROM_HERE);
         }
         break;
 
@@ -426,11 +420,7 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
 
     if (router_state.state() == proto::internal::RouterState::CONNECTED)
     {
-        LOG(LS_INFO) << "Executing an ID request";
-
-        std::optional<std::string> session_name = sessionName();
-        if (session_name.has_value())
-            delegate_->onUserSessionHostIdRequest(*session_name);
+        sendHostIdRequest(FROM_HERE);
     }
     else
     {
@@ -810,6 +800,21 @@ void UserSession::sendRouterState()
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
     channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSession::sendHostIdRequest(const base::Location& location)
+{
+    LOG(LS_INFO) << "Send host id request (from: " << location.toString() << ")";
+
+    if (router_state_.state() != proto::internal::RouterState::CONNECTED)
+    {
+        LOG(LS_INFO) << "Router not connected yet";
+        return;
+    }
+
+    std::optional<std::string> session_name = sessionName();
+    if (session_name.has_value())
+        delegate_->onUserSessionHostIdRequest(*session_name);
 }
 
 } // namespace host
