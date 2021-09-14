@@ -53,8 +53,13 @@ public:
     ConnectState connectState() const;
 
     std::string winStationName() const;
+    std::u16string winStationName16() const;
+
     std::string domain() const;
+    std::u16string domain16() const;
+
     std::string userName() const;
+    std::u16string userName16() const;
 
     int64_t connectTime() const;
     int64_t disconnectTime() const;

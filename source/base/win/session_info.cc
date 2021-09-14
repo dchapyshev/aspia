@@ -66,26 +66,41 @@ SessionInfo::ConnectState SessionInfo::connectState() const
 
 std::string SessionInfo::winStationName() const
 {
-    if (!isValid())
-        return std::string();
+    return utf8FromUtf16(winStationName16());
+}
 
-    return utf8FromWide(info_->WinStationName);
+std::u16string SessionInfo::winStationName16() const
+{
+    if (!isValid())
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_->WinStationName));
 }
 
 std::string SessionInfo::domain() const
 {
-    if (!isValid())
-        return std::string();
+    return utf8FromUtf16(domain16());
+}
 
-    return utf8FromWide(info_->Domain);
+std::u16string SessionInfo::domain16() const
+{
+    if (!isValid())
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_->Domain));
 }
 
 std::string SessionInfo::userName() const
 {
-    if (!isValid())
-        return std::string();
+    return utf8FromUtf16(userName16());
+}
 
-    return utf8FromWide(info_->UserName);
+std::u16string SessionInfo::userName16() const
+{
+    if (!isValid())
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_->UserName));
 }
 
 int64_t SessionInfo::connectTime() const

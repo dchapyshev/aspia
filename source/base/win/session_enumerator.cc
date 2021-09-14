@@ -58,42 +58,67 @@ SessionId SessionEnumerator::sessionId() const
 
 std::string SessionEnumerator::sessionName() const
 {
-    if (!info_[current_]->pSessionName)
-        return std::string();
+    return base::utf8FromUtf16(sessionName16());
+}
 
-    return base::utf8FromWide(info_[current_]->pSessionName);
+std::u16string SessionEnumerator::sessionName16() const
+{
+    if (!info_[current_]->pSessionName)
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pSessionName));
 }
 
 std::string SessionEnumerator::hostName() const
 {
-    if (!info_[current_]->pHostName)
-        return std::string();
+    return base::utf8FromUtf16(hostName16());
+}
 
-    return base::utf8FromWide(info_[current_]->pHostName);
+std::u16string SessionEnumerator::hostName16() const
+{
+    if (!info_[current_]->pHostName)
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pHostName));
 }
 
 std::string SessionEnumerator::userName() const
 {
-    if (!info_[current_]->pUserName)
-        return std::string();
+    return base::utf8FromUtf16(userName16());
+}
 
-    return base::utf8FromWide(info_[current_]->pUserName);
+std::u16string SessionEnumerator::userName16() const
+{
+    if (!info_[current_]->pUserName)
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pUserName));
 }
 
 std::string SessionEnumerator::domainName() const
 {
-    if (!info_[current_]->pDomainName)
-        return std::string();
+    return base::utf8FromUtf16(domainName16());
+}
 
-    return base::utf8FromWide(info_[current_]->pDomainName);
+std::u16string SessionEnumerator::domainName16() const
+{
+    if (!info_[current_]->pDomainName)
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pDomainName));
 }
 
 std::string SessionEnumerator::farmName() const
 {
-    if (!info_[current_]->pFarmName)
-        return std::string();
+    return base::utf8FromUtf16(farmName16());
+}
 
-    return base::utf8FromWide(info_[current_]->pFarmName);
+std::u16string SessionEnumerator::farmName16() const
+{
+    if (!info_[current_]->pFarmName)
+        return std::u16string();
+
+    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pFarmName));
 }
 
 } // namespace base::win

@@ -42,22 +42,27 @@ public:
     // A string that contains the name of this session. For example, "services", "console",
     // or "RDP-Tcp#0".
     std::string sessionName() const;
+    std::u16string sessionName16() const;
 
     // A string that contains the name of the computer that the session is running on.
     std::string hostName() const;
+    std::u16string hostName16() const;
 
     // A string that contains the name of the user who is logged on to the session.
     // If no user is logged on to the session, the string is empty.
     std::string userName() const;
+    std::u16string userName16() const;
 
     // A string that contains the domain name of the user who is logged on to the session.
     // If no user is logged on to the session, the string is empty.
     std::string domainName() const;
+    std::u16string domainName16() const;
 
     // A string that contains the name of the farm that the virtual machine is joined to.
     // If the session is not running on a virtual machine that is joined to a farm, the string
     // is empty.
     std::string farmName() const;
+    std::u16string farmName16() const;
 
 private:
     base::win::ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
