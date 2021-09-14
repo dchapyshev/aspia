@@ -74,7 +74,7 @@ std::u16string SessionInfo::winStationName16() const
     if (!isValid())
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_->WinStationName));
+    return reinterpret_cast<const char16_t*>(info_->WinStationName);
 }
 
 std::string SessionInfo::domain() const
@@ -87,7 +87,7 @@ std::u16string SessionInfo::domain16() const
     if (!isValid())
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_->Domain));
+    return reinterpret_cast<const char16_t*>(info_->Domain);
 }
 
 std::string SessionInfo::userName() const
@@ -100,7 +100,7 @@ std::u16string SessionInfo::userName16() const
     if (!isValid())
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_->UserName));
+    return reinterpret_cast<const char16_t*>(info_->UserName);
 }
 
 int64_t SessionInfo::connectTime() const

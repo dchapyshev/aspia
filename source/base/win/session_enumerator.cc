@@ -66,7 +66,7 @@ std::u16string SessionEnumerator::sessionName16() const
     if (!info_[current_]->pSessionName)
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pSessionName));
+    return reinterpret_cast<const char16_t*>(info_[current_]->pSessionName);
 }
 
 std::string SessionEnumerator::hostName() const
@@ -79,7 +79,7 @@ std::u16string SessionEnumerator::hostName16() const
     if (!info_[current_]->pHostName)
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pHostName));
+    return reinterpret_cast<const char16_t*>(info_[current_]->pHostName);
 }
 
 std::string SessionEnumerator::userName() const
@@ -92,7 +92,7 @@ std::u16string SessionEnumerator::userName16() const
     if (!info_[current_]->pUserName)
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pUserName));
+    return reinterpret_cast<const char16_t*>(info_[current_]->pUserName);
 }
 
 std::string SessionEnumerator::domainName() const
@@ -105,7 +105,7 @@ std::u16string SessionEnumerator::domainName16() const
     if (!info_[current_]->pDomainName)
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pDomainName));
+    return reinterpret_cast<const char16_t*>(info_[current_]->pDomainName);
 }
 
 std::string SessionEnumerator::farmName() const
@@ -118,7 +118,7 @@ std::u16string SessionEnumerator::farmName16() const
     if (!info_[current_]->pFarmName)
         return std::u16string();
 
-    return std::u16string(reinterpret_cast<const char16_t*>(info_[current_]->pFarmName));
+    return reinterpret_cast<const char16_t*>(info_[current_]->pFarmName);
 }
 
 } // namespace base::win
