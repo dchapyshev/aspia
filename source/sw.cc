@@ -1,7 +1,7 @@
 #pragma sw require header org.sw.demo.google.protobuf.protoc
-#pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc
+#pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc-5
 
-#define QT_VERSION ""
+#define QT_VERSION "-5"
 
 /*void configure(Build &s)
 {
