@@ -47,6 +47,8 @@ list(APPEND SOURCE_BASE
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     scoped_logging.h
+    scoped_task_runner.cc
+    scoped_task_runner.h
     session_id.cc
     session_id.h
     smbios.h
