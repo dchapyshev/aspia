@@ -284,7 +284,7 @@ void RouterController::delayedConnectToRouter()
 
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
-    LOG(LS_INFO) << "Router state changed: " << state;
+    LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
 
     if (!delegate_)
     {
@@ -299,6 +299,28 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
     router_state.set_host_port(router_info_.port);
 
     delegate_->onRouterStateChanged(router_state);
+}
+
+// static
+const char* RouterController::routerStateToString(proto::internal::RouterState::State state)
+{
+    switch (state)
+    {
+        case proto::internal::RouterState::DISABLED:
+            return "DISABLED";
+
+        case proto::internal::RouterState::CONNECTING:
+            return "CONNECTING";
+
+        case proto::internal::RouterState::CONNECTED:
+            return "CONNECTED";
+
+        case proto::internal::RouterState::FAILED:
+            return "FAILED";
+
+        default:
+            return "UNKNOWN";
+    }
 }
 
 } // namespace host

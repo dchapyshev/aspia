@@ -79,6 +79,7 @@ private:
     void connectToRouter();
     void delayedConnectToRouter();
     void routerStateChanged(proto::internal::RouterState::State state);
+    static const char* routerStateToString(proto::internal::RouterState::State state);
 
     Delegate* delegate_ = nullptr;
 
