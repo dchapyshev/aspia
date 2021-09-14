@@ -75,6 +75,8 @@ public:
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
+
+    static const char* controlActionToString(proto::internal::Control::Action action);
 };
 
 } // namespace host

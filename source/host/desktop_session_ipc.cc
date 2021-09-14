@@ -108,7 +108,7 @@ void DesktopSessionIpc::stop()
 
 void DesktopSessionIpc::control(proto::internal::Control::Action action)
 {
-    LOG(LS_INFO) << "Send CONTROL with action: " << action;
+    LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action);
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_control()->set_action(action);

@@ -159,20 +159,16 @@ void DesktopSessionFake::stop()
 
 void DesktopSessionFake::control(proto::internal::Control::Action action)
 {
+    LOG(LS_INFO) << "CONTROL with action: " << controlActionToString(action);
+
     switch (action)
     {
         case proto::internal::Control::ENABLE:
-        {
-            LOG(LS_INFO) << "Control::ENABLE for fake session";
             frame_generator_->start(delegate_);
-        }
-        break;
+            break;
 
         case proto::internal::Control::DISABLE:
-        {
-            LOG(LS_INFO) << "Control::DISABLE for fake session";
             frame_generator_->stop();
-        }
             break;
 
         default:

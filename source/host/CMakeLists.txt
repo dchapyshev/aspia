@@ -27,6 +27,7 @@ list(APPEND SOURCE_HOST_CORE
     client_session_file_transfer.h
     desktop_agent_main.cc
     desktop_agent_main.h
+    desktop_session.cc
     desktop_session.h
     desktop_session_manager.cc
     desktop_session_manager.h
