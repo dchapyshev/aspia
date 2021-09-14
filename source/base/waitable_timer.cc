@@ -62,6 +62,7 @@ WaitableTimer::Impl::~Impl()
 
 void WaitableTimer::Impl::start(const std::chrono::milliseconds& time_delta)
 {
+    time_delta_ = time_delta;
     task_runner_->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
 }
 
