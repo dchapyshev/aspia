@@ -221,7 +221,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
 
     if (!std::filesystem::is_regular_file(status))
     {
-        LOG(LS_ERROR) << "The specified configuration file is not a file";
+        LOG(LS_ERROR) << "Specified configuration file is not a file: '" << file << "'";
         return false;
     }
 
@@ -231,10 +231,19 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
         return true;
     }
 
+    static const uintmax_t kMaxFileSize = 5 * 1024 * 2024; // 5 Mb.
+
+    uintmax_t file_size = std::filesystem::file_size(file, ignored_code);
+    if (file_size > kMaxFileSize)
+    {
+        LOG(LS_ERROR) << "Too big settings file: '" << file << "' (" << file_size << " bytes)";
+        return false;
+    }
+
     std::string buffer;
     if (!base::readFile(file, &buffer))
     {
-        LOG(LS_ERROR) << "Failed to read config file";
+        LOG(LS_ERROR) << "Failed to read config file: '" << file << "'";
         return false;
     }
 
@@ -243,7 +252,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
         std::string decrypted;
         if (!OSCrypt::decryptString(buffer, &decrypted))
         {
-            LOG(LS_ERROR) << "Failed to decrypt config file";
+            LOG(LS_ERROR) << "Failed to decrypt config file: '" << file << "'";
             return false;
         }
 
@@ -256,7 +265,8 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
 
     if (doc.HasParseError())
     {
-        LOG(LS_ERROR) << "The configuration file is damaged: " << doc.GetParseError();
+        LOG(LS_ERROR) << "The configuration file is damaged: '"
+                      << file << "' (" << doc.GetParseError() << ")";
         return false;
     }
 
