@@ -4,7 +4,7 @@
  <!-- Variables -->
 <?define ProductName="Aspia Router"?>
 <?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.0.0"?>
+<?define Version="2.1.0"?>
 <?define InstallLocation="Aspia Router"?>
 <?define SourceFiles="..\..\build\Release"?>
 <?define ServiceName="aspia-router"?>

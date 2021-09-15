@@ -4,7 +4,7 @@
 <!-- Variables -->
 <?define ProductName="Aspia Console"?>
 <?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.0.0"?>
+<?define Version="2.1.0"?>
 <?define InstallLocation="Aspia Console"?>
 <?define SourceFiles="..\..\build\Release"?>
 <?define Executable="aspia_console.exe"?>
