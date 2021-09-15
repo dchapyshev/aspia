@@ -208,6 +208,28 @@ bool UserSessionManager::start(Delegate* delegate)
 
     for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
     {
+        base::SessionId session_id = session.sessionId();
+
+        // Skip invalid session ID.
+        if (session_id == base::kInvalidSessionId)
+            continue;
+
+        // Never run processes in a service session.
+        if (session_id == base::kServiceSessionId)
+            continue;
+
+        std::u16string name = session.sessionName16();
+        if (base::compareCaseInsensitive(name, u"console") != 0)
+        {
+            // RDP session detected.
+            if (session.state() != WTSActive)
+            {
+                LOG(LS_INFO) << "RDP session with ID " << session_id << " not in active state. "
+                             << "Session process will not be started";
+                continue;
+            }
+        }
+
         // Start UI process in user session.
         startSessionProcess(FROM_HERE, session.sessionId());
     }
