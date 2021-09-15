@@ -118,7 +118,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     desktop_session_proxy_ = desktop_session_->sessionProxy();
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
-    updateCredentials();
+    updateCredentials(FROM_HERE);
 
     if (channel_)
     {
@@ -148,7 +148,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
                  << " connection to UI";
 
     attach_timer_.stop();
-    updateCredentials();
+    updateCredentials(FROM_HERE);
 
     desktop_session_->attachSession(FROM_HERE, session_id_);
 
@@ -457,7 +457,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
             LOG(LS_INFO) << "New credentials requested";
-            updateCredentials();
+            updateCredentials(FROM_HERE);
         }
         else
         {
@@ -722,9 +722,9 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
     channel_->send(base::serialize(outgoing_message_));
 }
 
-void UserSession::updateCredentials()
+void UserSession::updateCredentials(const base::Location& location)
 {
-    LOG(LS_INFO) << "Updating credentials";
+    LOG(LS_INFO) << "Updating credentials (from: " << location.toString() << ")";
 
     static const uint32_t kPasswordCharacters = base::PasswordGenerator::UPPER_CASE |
         base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::DIGITS;

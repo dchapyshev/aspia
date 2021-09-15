@@ -107,7 +107,7 @@ private:
     void onSessionDettached(const base::Location& location);
     void sendConnectEvent(const ClientSession& client_session);
     void sendDisconnectEvent(uint32_t session_id);
-    void updateCredentials();
+    void updateCredentials(const base::Location& location);
     void sendCredentials(const base::Location& location);
     void killClientSession(uint32_t id);
     void sendRouterState(const base::Location& location);
