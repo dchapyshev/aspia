@@ -108,9 +108,9 @@ private:
     void sendConnectEvent(const ClientSession& client_session);
     void sendDisconnectEvent(uint32_t session_id);
     void updateCredentials();
-    void sendCredentials();
+    void sendCredentials(const base::Location& location);
     void killClientSession(uint32_t id);
-    void sendRouterState();
+    void sendRouterState(const base::Location& location);
     void sendHostIdRequest(const base::Location& location);
 
     std::shared_ptr<base::TaskRunner> task_runner_;

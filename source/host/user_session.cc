@@ -127,8 +127,8 @@ void UserSession::start(const proto::internal::RouterState& router_state)
         channel_->setListener(this);
         channel_->resume();
 
-        sendRouterState();
-        sendCredentials();
+        sendRouterState(FROM_HERE);
+        sendCredentials(FROM_HERE);
     }
     else
     {
@@ -167,8 +167,8 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
         send_connection_list(desktop_clients_);
         send_connection_list(file_transfer_clients_);
-        sendRouterState();
-        sendCredentials();
+        sendRouterState(FROM_HERE);
+        sendCredentials(FROM_HERE);
     }
     else
     {
@@ -416,7 +416,7 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
     LOG(LS_INFO) << "Router state updated";
     router_state_ = router_state;
 
-    sendRouterState();
+    sendRouterState(FROM_HERE);
 
     if (router_state.state() == proto::internal::RouterState::CONNECTED)
     {
@@ -431,7 +431,7 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
 void UserSession::setHostId(base::HostId host_id)
 {
     host_id_ = host_id;
-    sendCredentials();
+    sendCredentials(FROM_HERE);
 }
 
 void UserSession::onDisconnected()
@@ -465,7 +465,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             LOG(LS_INFO) << "Credentials update requested";
         }
 
-        sendCredentials();
+        sendCredentials(FROM_HERE);
     }
     else if (incoming_message_.has_kill_session())
     {
@@ -740,8 +740,11 @@ void UserSession::updateCredentials()
     delegate_->onUserSessionCredentialsChanged();
 }
 
-void UserSession::sendCredentials()
+void UserSession::sendCredentials(const base::Location& location)
 {
+    LOG(LS_INFO) << "Send credentials for host ID: " << host_id_
+                 << " (from: " << location.toString() << ")";
+
     if (!channel_)
     {
         LOG(LS_WARNING) << "No active IPC channel";
@@ -753,8 +756,6 @@ void UserSession::sendCredentials()
         LOG(LS_WARNING) << "Invalid host ID";
         return;
     }
-
-    LOG(LS_INFO) << "Sending credentials to UI for host: " << host_id_;
 
     outgoing_message_.Clear();
 
@@ -785,15 +786,16 @@ void UserSession::killClientSession(uint32_t id)
     stop_by_id(&file_transfer_clients_, id);
 }
 
-void UserSession::sendRouterState()
+void UserSession::sendRouterState(const base::Location& location)
 {
+    LOG(LS_INFO) << "Sending router state to UI (from: " << location.toString() << ")";
+
     if (!channel_)
     {
         LOG(LS_WARNING) << "No active IPC channel";
         return;
     }
 
-    LOG(LS_INFO) << "Sending router state to UI";
     LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();
     LOG(LS_INFO) << "New state: " << router_state_.state();
 
