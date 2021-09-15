@@ -370,9 +370,6 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
                 return;
             }
 
-            if (desktop_session_)
-                desktop_session_->dettachSession(FROM_HERE);
-
             onSessionDettached(FROM_HERE);
         }
         break;
@@ -637,6 +634,9 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
 
+    if (desktop_session_)
+        desktop_session_->dettachSession(FROM_HERE);
+
     if (channel_)
     {
         channel_->setListener(nullptr);
@@ -675,7 +675,7 @@ void UserSession::onSessionDettached(const base::Location& location)
             LOG(LS_INFO) << "Attach timer is active";
         }
 
-        attach_timer_.start(std::chrono::minutes(1), [this]()
+        attach_timer_.start(std::chrono::seconds(60), [this]()
         {
             LOG(LS_INFO) << "Session attach timeout";
 
