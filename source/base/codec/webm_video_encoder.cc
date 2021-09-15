@@ -22,6 +22,8 @@
 #include "base/desktop/frame.h"
 #include "proto/desktop.pb.h"
 
+#include <thread>
+
 #include <libyuv/convert.h>
 
 namespace base {
