@@ -21,6 +21,7 @@
 #include "build/build_config.h"
 #include "qt_base/qt_logging.h"
 
+#include <QHideEvent>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
@@ -91,6 +92,19 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, &NotifierWindow::updateWindowPosition);
 
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this]
+    {
+        setWindowFlag(Qt::WindowStaysOnTopHint);
+
+        if (!isVisible())
+        {
+            show();
+            activateWindow();
+        }
+    });
+    timer->start(std::chrono::seconds(3));
+
     QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::updateWindowPosition);
 }
 
@@ -113,7 +127,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
         LOG(LS_INFO) << "Empty session list. Notifier closed";
 
         emit finished();
-        close();
+        closeNotifier();
     }
 }
 
@@ -133,6 +147,12 @@ void NotifierWindow::disconnectAll()
 void NotifierWindow::retranslateUi()
 {
     ui.retranslateUi(this);
+}
+
+void NotifierWindow::closeNotifier()
+{
+    should_be_close_ = true;
+    close();
 }
 
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
@@ -178,9 +198,20 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void NotifierWindow::hideEvent(QHideEvent* /* event */)
+void NotifierWindow::hideEvent(QHideEvent* event)
 {
-    show();
+    event->ignore();
+}
+
+void NotifierWindow::closeEvent(QCloseEvent* event)
+{
+    if (!should_be_close_)
+    {
+        event->ignore();
+        return;
+    }
+
+    QWidget::closeEvent(event);
 }
 
 void NotifierWindow::onShowHidePressed()

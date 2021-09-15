@@ -36,6 +36,7 @@ public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void disconnectAll();
     void retranslateUi();
+    void closeNotifier();
 
 signals:
     void killSession(uint32_t id);
@@ -45,6 +46,7 @@ protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
     void hideEvent(QHideEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private slots:
     void onShowHidePressed();
@@ -58,6 +60,7 @@ private:
 
     Ui::NotifierWindow ui;
 
+    bool should_be_close_ = false;
     QPoint start_pos_;
     QRect window_rect_;
 

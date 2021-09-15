@@ -681,7 +681,7 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="200"/>
+        <location filename="../notifier_window.cc" line="231"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>

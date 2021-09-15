@@ -145,7 +145,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
         if (notifier_)
         {
             LOG(LS_INFO) << "Close notifier window";
-            notifier_->close();
+            notifier_->closeNotifier();
         }
 
         LOG(LS_INFO) << "Application quit";
