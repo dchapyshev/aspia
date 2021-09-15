@@ -31,7 +31,8 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
     DCHECK(window_proxy_);
 
 #if defined(OS_WIN)
-    if (!SetProcessShutdownParameters(0x3FF, SHUTDOWN_NORETRY))
+    // 0x100-0x1FF Application reserved last shutdown range.
+    if (!SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY))
     {
         PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
     }

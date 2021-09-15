@@ -118,7 +118,8 @@ private:
 
     Type type_;
     State state_ = State::DETTACHED;
-    base::WaitableTimer attach_timer_;
+    base::WaitableTimer ui_attach_timer_;
+    base::WaitableTimer desktop_dettach_timer_;
 
     base::SessionId session_id_;
     proto::internal::RouterState router_state_;
