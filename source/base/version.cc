@@ -244,14 +244,18 @@ int Version::compareTo(const Version& other) const
     return compareVersionComponents(components_, other.components_);
 }
 
-const std::string Version::toString() const
+const std::string Version::toString(size_t components_count) const
 {
-    if (!isValid())
+    if (!isValid() || !components_count)
         return std::string();
 
     std::string version_str;
 
-    const size_t count = components_.size() - 1;
+    size_t count = components_.size() - 1;
+
+    if (components_count != std::numeric_limits<size_t>::max())
+        count = std::min(count, components_count - 1);
+
     for (size_t i = 0; i < count; ++i)
     {
         version_str.append(numberToString(components_[i]));

@@ -70,7 +70,7 @@ public:
     int compareToWildcardString(std::string_view wildcard_string) const;
 
     // Return the string representation of this version.
-    const std::string toString() const;
+    const std::string toString(size_t components_count = std::numeric_limits<size_t>::max()) const;
 
     const std::vector<uint32_t>& components() const { return components_; }
 
