@@ -41,6 +41,14 @@ function getPackageId($mysqli, $package)
 
 function getUpdates($mysqli, $package_id, $version)
 {
+    $pieces = explode(".", $version);
+
+    // We only support 3 groups of digits in the version number.
+    while (count($pieces) > 3)
+        array_pop($pieces);
+
+    $version = implode(".", $pieces);
+
     $sql = "SELECT target_version, description, url
             FROM updates
             WHERE package_id = '$package_id' AND source_version = '$version'";
