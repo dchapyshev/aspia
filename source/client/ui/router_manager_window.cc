@@ -188,7 +188,7 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
                                .arg(peer_address_)
                                .arg(peer_port_)
-                               .arg(QString::fromStdString(peer_version.toString())));
+                               .arg(QString::fromStdString(peer_version.toString(3))));
     show();
     activateWindow();
 

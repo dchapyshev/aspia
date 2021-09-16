@@ -76,7 +76,7 @@ void UpdateCheckerImpl::start()
     url.setPath(QStringLiteral("/update.php"));
     url.setQuery(QUrlQuery(
         QString("package=%1&version=%2")
-        .arg(package_name_, QString::fromStdString(current_version.toString()))));
+        .arg(package_name_, QString::fromStdString(current_version.toString(3)))));
 
     network_manager_->get(QNetworkRequest(url));
 }
