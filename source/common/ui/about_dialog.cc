@@ -60,7 +60,7 @@ const char* kTranslators[] =
 const char* kThirdParty[] =
 {
     "asio &copy; 2003-2018 Christopher M. Kohlhoff; Boost Software License 1.0",
-    "icu &copy; 2016 and later Unicode, Inc. and others; ICU License",
+    "icu &copy; 2016 Unicode, Inc. and others; ICU License",
     "libvpx &copy; 2010, The WebM Project authors; BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors; BSD 3-Clause License",
     "openssl &copy; 1998-2018 The OpenSSL Project; OpenSSL License",
