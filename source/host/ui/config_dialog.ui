@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>379</height>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_10">
    <item>
     <widget class="QTabWidget" name="tab_bar">
      <property name="currentIndex">
@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -101,44 +101,58 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupbox_update_server">
          <property name="title">
-          <string>Password Protection</string>
+          <string>Update Server</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QLabel" name="label_pass_protection">
+           <widget class="QCheckBox" name="checkbox_use_custom_server">
             <property name="text">
-             <string notr="true">Current state:</string>
+             <string>Use custom update server</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <spacer name="horizontalSpacer_4">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Server:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="edit_update_server">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string notr="true">update.aspia.org</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>48</width>
-                <height>17</height>
+                <width>40</width>
+                <height>20</height>
                </size>
               </property>
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="button_change_password">
+             <widget class="QPushButton" name="button_check_updates">
               <property name="text">
-               <string>Change password</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="button_pass_protection">
-              <property name="text">
-               <string notr="true">Install</string>
+               <string>Check for updates</string>
               </property>
              </widget>
             </item>
@@ -192,6 +206,159 @@
           <size>
            <width>20</width>
            <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_security">
+      <attribute name="title">
+       <string>Security</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QGroupBox" name="groupbox_pass_protect">
+         <property name="title">
+          <string>Password Protection of Settings</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>173</width>
+              <height>17</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_change_password">
+            <property name="text">
+             <string>Change password</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_pass_protection">
+            <property name="text">
+             <string notr="true">Install</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupbox_onetime_pass">
+         <property name="title">
+          <string>One-time Password</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="checkbox_onetime_password">
+            <property name="text">
+             <string>Enable one-time password</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_onetime_pass_change">
+              <property name="text">
+               <string>Change password:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="combobox_onetime_pass_change"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_onetime_pass_chars">
+              <property name="text">
+               <string>Characters:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="combobox_onetime_pass_chars"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_onetime_pass_char_count">
+              <property name="text">
+               <string>Characters count:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="spinbox_onetime_pass_char_count">
+              <property name="minimum">
+               <number>6</number>
+              </property>
+              <property name="maximum">
+               <number>16</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupbox_conn_confirm">
+         <property name="title">
+          <string>Connection Confirmation</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="checkbox_conn_confirm_require">
+            <property name="text">
+             <string>Require confirmation when connected to a computer</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_conn_confirm_auto">
+              <property name="text">
+               <string>Automatic confirmation of connection via:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="combobox_conn_confirm_auto"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_no_user_action">
+              <property name="text">
+               <string>If there is no active user:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="combobox_no_user_action"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>262</height>
           </size>
          </property>
         </spacer>
@@ -349,87 +516,6 @@
           </property>
          </column>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_update">
-      <attribute name="title">
-       <string>Update</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_8">
-       <item>
-        <widget class="QGroupBox" name="groupbox_update_server">
-         <property name="title">
-          <string>Update Server</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QCheckBox" name="checkbox_use_custom_server">
-            <property name="text">
-             <string>Use custom update server</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Server:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="edit_update_server">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string notr="true">update.aspia.org</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>83</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="button_check_updates">
-           <property name="text">
-            <string>Check for updates</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>

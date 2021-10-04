@@ -78,6 +78,33 @@ public:
     base::ByteArray passwordHashSalt() const;
     void setPasswordHashSalt(const base::ByteArray& salt);
 
+    bool oneTimePassword() const;
+    void setOneTimePassword(bool enable);
+
+    std::chrono::milliseconds oneTimePasswordExpire() const;
+    void setOneTimePasswordExpire(const std::chrono::milliseconds& interval);
+
+    int oneTimePasswordLength() const;
+    void setOneTimePasswordLength(int length);
+
+    uint32_t oneTimePasswordCharacters() const;
+    void setOneTimePasswordCharacters(uint32_t characters);
+
+    bool connConfirm() const;
+    void setConnConfirm(bool enable);
+
+    enum class NoUserAction
+    {
+        ACCEPT = 0,
+        REJECT = 1
+    };
+
+    NoUserAction connConfirmNoUserAction() const;
+    void setConnConfirmNoUserAction(NoUserAction action);
+
+    std::chrono::milliseconds autoConnConfirmInterval() const;
+    void setAutoConnConfirmInterval(const std::chrono::milliseconds& interval);
+
 private:
     base::JsonSettings settings_;
 

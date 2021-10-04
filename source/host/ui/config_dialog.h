@@ -30,10 +30,12 @@ class ConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    ConfigDialog(QWidget* parent = nullptr);
-    ~ConfigDialog();
+    explicit ConfigDialog(QWidget* parent = nullptr);
+    ~ConfigDialog() override;
 
 private slots:
+    void onOneTimeStateChanged(int state);
+    void onConnConfirmStateChanged(int state);
     void onUserContextMenu(const QPoint& point);
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onAddUser();

@@ -20,6 +20,7 @@
 
 #include "base/base64.h"
 #include "base/logging.h"
+#include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/peer/user_list.h"
@@ -331,6 +332,124 @@ base::ByteArray SystemSettings::passwordHashSalt() const
 void SystemSettings::setPasswordHashSalt(const base::ByteArray& salt)
 {
     settings_.set("PasswordHashSalt", salt);
+}
+
+bool SystemSettings::oneTimePassword() const
+{
+    return settings_.get<bool>("OneTimePassword", true);
+}
+
+void SystemSettings::setOneTimePassword(bool enable)
+{
+    settings_.set("OneTimePassword", enable);
+}
+
+std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
+{
+    static const std::chrono::milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
+    static const std::chrono::milliseconds kMinValue { 0 };
+    static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
+
+    std::chrono::milliseconds value(
+        settings_.get<int64_t>("OneTimePasswordExpire", kDefaultValue.count()));
+
+    if (value < kMinValue)
+        value = kMinValue;
+    else if (value > kMaxValue)
+        value = kMaxValue;
+
+    return value;
+}
+
+void SystemSettings::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
+{
+    settings_.set("OneTimePasswordExpire", interval.count());
+}
+
+int SystemSettings::oneTimePasswordLength() const
+{
+    static const int kDefaultValue = 8;
+    static const int kMinValue = 6;
+    static const int kMaxValue = 16;
+
+    int value = settings_.get<int>("OneTimePasswordLength", kDefaultValue);
+
+    if (value < kMinValue)
+        value = kMinValue;
+    else if (value > kMaxValue)
+        value = kMaxValue;
+
+    return value;
+}
+
+void SystemSettings::setOneTimePasswordLength(int length)
+{
+    settings_.set("OneTimePasswordLength", length);
+}
+
+uint32_t SystemSettings::oneTimePasswordCharacters() const
+{
+    uint32_t kDefaultValue = base::PasswordGenerator::DIGITS | base::PasswordGenerator::LOWER_CASE |
+        base::PasswordGenerator::UPPER_CASE;
+
+    uint32_t value = settings_.get<uint32_t>("OneTimePasswordCharacters", kDefaultValue);
+
+    if (!(value & base::PasswordGenerator::DIGITS) &&
+        !(value & base::PasswordGenerator::LOWER_CASE) &&
+        !(value & base::PasswordGenerator::UPPER_CASE))
+    {
+        value = kDefaultValue;
+    }
+
+    return value;
+}
+
+void SystemSettings::setOneTimePasswordCharacters(uint32_t characters)
+{
+    settings_.set("OneTimePasswordCharacters", characters);
+}
+
+bool SystemSettings::connConfirm() const
+{
+    return settings_.get<bool>("ConnConfirm", false);
+}
+
+void SystemSettings::setConnConfirm(bool enable)
+{
+    settings_.set("ConnConfirm", enable);
+}
+
+SystemSettings::NoUserAction SystemSettings::connConfirmNoUserAction() const
+{
+    return static_cast<NoUserAction>(
+        settings_.get<int>("ConnConfirmNoUserAction", static_cast<int>(NoUserAction::ACCEPT)));
+}
+
+void SystemSettings::setConnConfirmNoUserAction(NoUserAction action)
+{
+    settings_.set("ConnConfirmNoUserAction", static_cast<int>(action));
+}
+
+std::chrono::milliseconds SystemSettings::autoConnConfirmInterval() const
+{
+    static const std::chrono::milliseconds kDefaultValue { 0 };
+    static const std::chrono::milliseconds kMinValue { 0 };
+    static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
+
+    std::chrono::milliseconds value(
+        settings_.get<int64_t>("AutoConnConfirmInterval", kDefaultValue.count()));
+
+    if (value < kMinValue)
+        value = kMinValue;
+    else if (value > kMaxValue)
+        value = kMaxValue;
+
+    return value;
+}
+
+void SystemSettings::setAutoConnConfirmInterval(const std::chrono::milliseconds& interval)
+{
+    settings_.set("AutoConnConfirmInterval", interval.count());
 }
 
 } // namespace host

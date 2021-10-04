@@ -74,10 +74,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Update Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -138,11 +134,51 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password Protection</source>
+        <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change password</source>
+        <source>Security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password Protection of Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One-time Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable one-time password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Characters count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Characters:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection Confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Require confirmation when connected to a computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic confirmation of connection via:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If there is no active user:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -422,15 +458,75 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Current state: Not installed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current state: Installed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>An error occurred while processing the password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 30 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 6 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 12 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Every 24 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>45 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Letters and digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accept connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reject connection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

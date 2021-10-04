@@ -19,6 +19,7 @@
 #include "host/ui/config_dialog.h"
 
 #include "base/logging.h"
+#include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
@@ -61,30 +62,88 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_service_start_stop, &QPushButton::clicked,
             this, &ConfigDialog::onServiceStartStop);
 
+    connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
+    connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
+
+    //---------------------------------------------------------------------------------------------
+    // Security Tab
+    //---------------------------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------------------------
+    // Password Protection of Settings
+
     connect(ui.button_change_password, &QPushButton::clicked,
             this, &ConfigDialog::onChangePassClicked);
     connect(ui.button_pass_protection, &QPushButton::clicked,
             this, &ConfigDialog::onPassProtectClicked);
 
-    connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
-    connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
+    //---------------------------------------------------------------------------------------------
+    // One-time Password
+    connect(ui.checkbox_onetime_password, &QCheckBox::stateChanged,
+            this, &ConfigDialog::onOneTimeStateChanged);
+
+    ui.combobox_onetime_pass_change->addItem(tr("On reboot"), 0);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 5 minutes"), 5);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 30 minutes"), 30);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 1 hour"), 60);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 6 hours"), 360);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 12 hours"), 720);
+    ui.combobox_onetime_pass_change->addItem(tr("Every 24 hours"), 1440);
+
+    connect(ui.combobox_onetime_pass_change, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this]()
+    {
+        setConfigChanged(true);
+    });
+
+    ui.combobox_onetime_pass_chars->addItem(tr("Letters and digits"),
+        base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::UPPER_CASE |
+        base::PasswordGenerator::DIGITS);
+    ui.combobox_onetime_pass_chars->addItem(tr("Letters"),
+        base::PasswordGenerator::UPPER_CASE | base::PasswordGenerator::LOWER_CASE);
+    ui.combobox_onetime_pass_chars->addItem(tr("Digits"),
+        base::PasswordGenerator::DIGITS);
+
+    connect(ui.combobox_onetime_pass_chars, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this]()
+    {
+        setConfigChanged(true);
+    });
+
+    connect(ui.spinbox_onetime_pass_char_count, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &ConfigDialog::onConfigChanged);
+
+    //---------------------------------------------------------------------------------------------
+    // Connection Confirmation
+    connect(ui.checkbox_conn_confirm_require, &QCheckBox::stateChanged,
+            this, &ConfigDialog::onConnConfirmStateChanged);
+
+    ui.combobox_conn_confirm_auto->addItem(tr("Never"), 0);
+    ui.combobox_conn_confirm_auto->addItem(tr("15 seconds"), 15);
+    ui.combobox_conn_confirm_auto->addItem(tr("30 seconds"), 30);
+    ui.combobox_conn_confirm_auto->addItem(tr("45 seconds"), 45);
+    ui.combobox_conn_confirm_auto->addItem(tr("60 seconds"), 60);
+
+    connect(ui.combobox_conn_confirm_auto, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this]()
+    {
+        setConfigChanged(true);
+    });
+
+    ui.combobox_no_user_action->addItem(tr("Accept connection"),
+                                        static_cast<int>(SystemSettings::NoUserAction::ACCEPT));
+    ui.combobox_no_user_action->addItem(tr("Reject connection"),
+                                        static_cast<int>(SystemSettings::NoUserAction::REJECT));
+
+    connect(ui.combobox_no_user_action, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this]()
+    {
+        setConfigChanged(true);
+    });
 
     //---------------------------------------------------------------------------------------------
     // Router Tab
     //---------------------------------------------------------------------------------------------
-
-    SystemSettings settings;
-    bool is_router_enabled = settings.isRouterEnabled();
-
-    ui.checkbox_enable_router->setChecked(is_router_enabled);
-    ui.edit_router_address->setText(QString::fromStdU16String(settings.routerAddress()));
-    ui.edit_router_public_key->setPlainText(
-        QString::fromStdString(base::toHex(settings.routerPublicKey())));
-
-    ui.label_router_address->setEnabled(is_router_enabled);
-    ui.edit_router_address->setEnabled(is_router_enabled);
-    ui.label_router_public_key->setEnabled(is_router_enabled);
-    ui.edit_router_public_key->setEnabled(is_router_enabled);
 
     connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
     {
@@ -137,8 +196,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        common::UpdateDialog(
-            QString::fromStdU16String(SystemSettings().updateServer()), "host", this).exec();
+        common::UpdateDialog(QString::fromStdU16String(SystemSettings().updateServer()),
+                             QStringLiteral("host"),
+                             this).exec();
     });
 
     //---------------------------------------------------------------------------------------------
@@ -164,11 +224,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 #error Platform support not implemented
 #endif
 
-    int current_video_capturer =
-        ui.combo_video_capturer->findData(settings.preferredVideoCapturer());
-    if (current_video_capturer != -1)
-        ui.combo_video_capturer->setCurrentIndex(current_video_capturer);
-
     connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
     {
         setConfigChanged(true);
@@ -187,6 +242,32 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 ConfigDialog::~ConfigDialog()
 {
     LOG(LS_INFO) << "ConfigDialog Dtor";
+}
+
+void ConfigDialog::onOneTimeStateChanged(int state)
+{
+    bool enable = (state == Qt::Checked);
+
+    ui.label_onetime_pass_change->setEnabled(enable);
+    ui.combobox_onetime_pass_change->setEnabled(enable);
+    ui.label_onetime_pass_chars->setEnabled(enable);
+    ui.combobox_onetime_pass_chars->setEnabled(enable);
+    ui.label_onetime_pass_char_count->setEnabled(enable);
+    ui.spinbox_onetime_pass_char_count->setEnabled(enable);
+
+    setConfigChanged(true);
+}
+
+void ConfigDialog::onConnConfirmStateChanged(int state)
+{
+    bool enable = (state == Qt::Checked);
+
+    ui.label_conn_confirm_auto->setEnabled(enable);
+    ui.combobox_conn_confirm_auto->setEnabled(enable);
+    ui.label_no_user_action->setEnabled(enable);
+    ui.combobox_no_user_action->setEnabled(enable);
+
+    setConfigChanged(true);
 }
 
 void ConfigDialog::onUserContextMenu(const QPoint& point)
@@ -515,6 +596,20 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUserList(*user_list);
         settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
         settings.setPreferredVideoCapturer(ui.combo_video_capturer->currentData().toUInt());
+
+        settings.setOneTimePassword(ui.checkbox_onetime_password->isChecked());
+        settings.setOneTimePasswordExpire(std::chrono::minutes(
+            ui.combobox_onetime_pass_change->currentData().toInt()));
+        settings.setOneTimePasswordCharacters(
+            ui.combobox_onetime_pass_chars->currentData().toUInt());
+        settings.setOneTimePasswordLength(ui.spinbox_onetime_pass_char_count->value());
+
+        settings.setConnConfirm(ui.checkbox_conn_confirm_require->isChecked());
+        settings.setAutoConnConfirmInterval(std::chrono::seconds(
+            ui.combobox_conn_confirm_auto->currentData().toInt()));
+        settings.setConnConfirmNoUserAction(static_cast<SystemSettings::NoUserAction>(
+            ui.combobox_no_user_action->currentData().toInt()));
+
         settings.flush();
 
         setConfigChanged(false);
@@ -567,6 +662,55 @@ void ConfigDialog::reloadAll()
 {
     SystemSettings settings;
 
+    bool enable_one_time_pass = settings.oneTimePassword();
+    ui.checkbox_onetime_password->setChecked(enable_one_time_pass);
+    onOneTimeStateChanged(enable_one_time_pass ? Qt::Checked : Qt::Unchecked);
+
+    std::chrono::minutes onetime_pass_change =
+        std::chrono::duration_cast<std::chrono::minutes>(settings.oneTimePasswordExpire());
+    int item_index = ui.combobox_onetime_pass_change->findData(onetime_pass_change.count());
+    if (item_index != -1)
+        ui.combobox_onetime_pass_change->setCurrentIndex(item_index);
+
+    uint32_t onetime_pass_chars = settings.oneTimePasswordCharacters();
+    item_index = ui.combobox_onetime_pass_chars->findData(onetime_pass_chars);
+    if (item_index != -1)
+        ui.combobox_onetime_pass_chars->setCurrentIndex(item_index);
+
+    ui.spinbox_onetime_pass_char_count->setValue(settings.oneTimePasswordLength());
+
+    bool conn_confirm = settings.connConfirm();
+    ui.checkbox_conn_confirm_require->setChecked(conn_confirm);
+    onConnConfirmStateChanged(conn_confirm ? Qt::Checked : Qt::Unchecked);
+
+    std::chrono::seconds auto_conn_confirm =
+        std::chrono::duration_cast<std::chrono::seconds>(settings.autoConnConfirmInterval());
+    item_index = ui.combobox_conn_confirm_auto->findData(auto_conn_confirm.count());
+    if (item_index != -1)
+        ui.combobox_conn_confirm_auto->setCurrentIndex(item_index);
+
+    SystemSettings::NoUserAction no_user_action = settings.connConfirmNoUserAction();
+    item_index = ui.combobox_no_user_action->findData(static_cast<int>(no_user_action));
+    if (item_index != -1)
+        ui.combobox_no_user_action->setCurrentIndex(item_index);
+
+    bool is_router_enabled = settings.isRouterEnabled();
+
+    ui.checkbox_enable_router->setChecked(is_router_enabled);
+    ui.edit_router_address->setText(QString::fromStdU16String(settings.routerAddress()));
+    ui.edit_router_public_key->setPlainText(
+        QString::fromStdString(base::toHex(settings.routerPublicKey())));
+
+    ui.label_router_address->setEnabled(is_router_enabled);
+    ui.edit_router_address->setEnabled(is_router_enabled);
+    ui.label_router_public_key->setEnabled(is_router_enabled);
+    ui.edit_router_public_key->setEnabled(is_router_enabled);
+
+    int current_video_capturer =
+        ui.combo_video_capturer->findData(settings.preferredVideoCapturer());
+    if (current_video_capturer != -1)
+        ui.combo_video_capturer->setCurrentIndex(current_video_capturer);
+
     reloadServiceStatus();
     reloadUserList(*settings.userList());
 
@@ -578,13 +722,11 @@ void ConfigDialog::reloadAll()
 
     if (!settings.passwordProtection())
     {
-        ui.label_pass_protection->setText(tr("Current state: Not installed"));
         ui.button_pass_protection->setText(tr("Install"));
         ui.button_change_password->setVisible(false);
     }
     else
     {
-        ui.label_pass_protection->setText(tr("Current state: Installed"));
         ui.button_pass_protection->setText(tr("Remove"));
         ui.button_change_password->setVisible(true);
     }
