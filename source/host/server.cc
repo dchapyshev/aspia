@@ -309,6 +309,9 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
         // Synchronize the parameters from the file.
         settings_.sync();
 
+        // Apply settings for user sessions BEFORE reloading the user list.
+        user_session_manager_->onSettingsChanged();
+
         // Reload user lists.
         reloadUserList();
 

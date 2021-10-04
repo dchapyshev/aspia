@@ -54,6 +54,7 @@ public:
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void setRouterState(const proto::internal::RouterState& router_state);
     void setHostId(const std::string& session_name, base::HostId host_id);
+    void onSettingsChanged();
     void addNewSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
 

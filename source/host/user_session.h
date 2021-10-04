@@ -85,6 +85,7 @@ public:
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
     void setRouterState(const proto::internal::RouterState& router_state);
     void setHostId(base::HostId host_id);
+    void onSettingsChanged();
 
 protected:
     // base::IpcChannel::Listener implementation.
@@ -124,6 +125,12 @@ private:
     base::SessionId session_id_;
     proto::internal::RouterState router_state_;
     base::HostId host_id_ = base::kInvalidHostId;
+
+    bool password_enabled_ = false;
+    uint32_t password_characters_ = 0;
+    int password_length_ = 0;
+    std::chrono::milliseconds password_expire_interval_ { 0 };
+    base::WaitableTimer password_expire_timer_;
     std::string password_;
 
     using ClientSessionPtr = std::unique_ptr<ClientSession>;

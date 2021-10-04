@@ -32,6 +32,7 @@
 #include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
 #include "host/desktop_session_proxy.h"
+#include "host/system_settings.h"
 
 namespace host {
 
@@ -44,6 +45,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
       ui_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       desktop_dettach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id),
+      password_expire_timer_(base::WaitableTimer::Type::REPEATED, task_runner),
       delegate_(delegate)
 {
     type_ = UserSession::Type::CONSOLE;
@@ -63,6 +65,12 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     CHECK(delegate_);
 
     router_state_.set_state(proto::internal::RouterState::DISABLED);
+
+    SystemSettings settings;
+    password_enabled_ = settings.oneTimePassword();
+    password_characters_ = settings.oneTimePasswordCharacters();
+    password_length_ = settings.oneTimePasswordLength();
+    password_expire_interval_ = settings.oneTimePasswordExpire();
 }
 
 UserSession::~UserSession()
@@ -441,6 +449,26 @@ void UserSession::setHostId(base::HostId host_id)
     sendCredentials(FROM_HERE);
 }
 
+void UserSession::onSettingsChanged()
+{
+    SystemSettings settings;
+
+    bool enabled = settings.oneTimePassword();
+    uint32_t characters = settings.oneTimePasswordCharacters();
+    int length = settings.oneTimePasswordLength();
+    std::chrono::milliseconds expire_interval = settings.oneTimePasswordExpire();
+
+    if (password_enabled_ != enabled || password_characters_ != characters ||
+        password_length_ != length || password_expire_interval_ != expire_interval)
+    {
+        updateCredentials(FROM_HERE);
+    }
+    else
+    {
+        LOG(LS_INFO) << "No changes in password settings";
+    }
+}
+
 void UserSession::onDisconnected()
 {
     desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
@@ -739,16 +767,32 @@ void UserSession::updateCredentials(const base::Location& location)
 {
     LOG(LS_INFO) << "Updating credentials (from: " << location.toString() << ")";
 
-    static const uint32_t kPasswordCharacters = base::PasswordGenerator::UPPER_CASE |
-        base::PasswordGenerator::LOWER_CASE | base::PasswordGenerator::DIGITS;
-    static const int kPasswordLength = 6;
+    if (password_enabled_)
+    {
+        base::PasswordGenerator generator;
+        generator.setCharacters(password_characters_);
+        generator.setLength(static_cast<size_t>(password_length_));
 
-    // TODO: Get password parameters from settings.
-    base::PasswordGenerator generator;
-    generator.setCharacters(kPasswordCharacters);
-    generator.setLength(kPasswordLength);
+        password_ = generator.result();
 
-    password_ = generator.result();
+        if (password_expire_interval_ > std::chrono::milliseconds(0))
+        {
+            password_expire_timer_.start(password_expire_interval_, [this]()
+            {
+                updateCredentials(FROM_HERE);
+                sendCredentials(FROM_HERE);
+            });
+        }
+        else
+        {
+            password_expire_timer_.stop();
+        }
+    }
+    else
+    {
+        password_expire_timer_.stop();
+        password_.clear();
+    }
 
     delegate_->onUserSessionCredentialsChanged();
 }

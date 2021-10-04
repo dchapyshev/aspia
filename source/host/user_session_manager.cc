@@ -295,6 +295,13 @@ void UserSessionManager::setHostId(const std::string& session_name, base::HostId
     LOG(LS_WARNING) << "Session '" << session_name << "' NOT found";
 }
 
+void UserSessionManager::onSettingsChanged()
+{
+    // Send an event of each session.
+    for (const auto& session : sessions_)
+        session->onSettingsChanged();
+}
+
 void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
