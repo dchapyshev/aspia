@@ -45,7 +45,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
       ui_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       desktop_dettach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       session_id_(session_id),
-      password_expire_timer_(base::WaitableTimer::Type::REPEATED, task_runner),
+      password_expire_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
     type_ = UserSession::Type::CONSOLE;
@@ -461,7 +461,13 @@ void UserSession::onSettingsChanged()
     if (password_enabled_ != enabled || password_characters_ != characters ||
         password_length_ != length || password_expire_interval_ != expire_interval)
     {
+        password_enabled_ = enabled;
+        password_characters_ = characters;
+        password_length_ = length;
+        password_expire_interval_ = expire_interval;
+
         updateCredentials(FROM_HERE);
+        sendCredentials(FROM_HERE);
     }
     else
     {
