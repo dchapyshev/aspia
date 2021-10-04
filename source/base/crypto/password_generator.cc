@@ -73,13 +73,13 @@ std::string PasswordGenerator::result() const
 
     std::shuffle(table.begin(), table.end(), engine);
 
-    std::uniform_int_distribution<> uniform_distance(0, table.size() - 1);
+    std::uniform_int_distribution<> uniform_distance(0, static_cast<int>(table.size() - 1));
 
     std::string result;
     result.resize(length_);
 
     for (size_t i = 0; i < length_; ++i)
-        result[i] = table[uniform_distance(engine)];
+        result[i] = table[static_cast<size_t>(uniform_distance(engine))];
 
     return result;
 }
