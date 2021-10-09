@@ -55,6 +55,8 @@ list(APPEND SOURCE_HOST_CORE
     system_info.h
     system_settings.cc
     system_settings.h
+    unconfirmed_client_session.cc
+    unconfirmed_client_session.h
     user_session.cc
     user_session.h
     user_session_agent.cc
@@ -99,6 +101,9 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/config_dialog.cc
     ui/config_dialog.h
     ui/config_dialog.ui
+    ui/connect_confirm_dialog.cc
+    ui/connect_confirm_dialog.h
+    ui/connect_confirm_dialog.ui
     ui/host_main.cc
     ui/host_main.h
     ui/main_window.cc

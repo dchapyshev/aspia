@@ -27,13 +27,20 @@
 #include "base/win/session_status.h"
 #include "host/client_session.h"
 #include "host/desktop_session_manager.h"
+#include "host/system_settings.h"
+#include "host/unconfirmed_client_session.h"
 #include "proto/host_internal.pb.h"
+
+namespace base {
+class ScopedTaskRunner;
+} // namespace base
 
 namespace host {
 
 class UserSession
     : public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
+      public UnconfirmedClientSession::Delegate,
       public ClientSession::Delegate
 {
 public:
@@ -81,10 +88,10 @@ public:
     base::User user() const;
     size_t clientsCount() const;
 
-    void addNewSession(std::unique_ptr<ClientSession> client_session);
-    void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
-    void setRouterState(const proto::internal::RouterState& router_state);
-    void setHostId(base::HostId host_id);
+    void onClientSession(std::unique_ptr<ClientSession> client_session);
+    void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onHostIdChanged(base::HostId host_id);
     void onSettingsChanged();
 
 protected:
@@ -100,6 +107,10 @@ protected:
     void onScreenListChanged(const proto::ScreenList& list) override;
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
+    // UnconfirmedClientSession::Delegate implementation.
+    void onUnconfirmedSessionAccept(uint32_t id) override;
+    void onUnconfirmedSessionReject(uint32_t id) override;
+
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() override;
     void onClientSessionFinished() override;
@@ -113,8 +124,10 @@ private:
     void killClientSession(uint32_t id);
     void sendRouterState(const base::Location& location);
     void sendHostIdRequest(const base::Location& location);
+    void addNewClientSession(std::unique_ptr<ClientSession> client_session);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
+    std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;
     std::unique_ptr<base::IpcChannel> channel_;
 
     Type type_;
@@ -133,9 +146,16 @@ private:
     base::WaitableTimer password_expire_timer_;
     std::string password_;
 
+    bool connection_confirmation_ = false;
+    SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;
+    std::chrono::milliseconds auto_confirmation_interval_ { 0 };
+
     using ClientSessionPtr = std::unique_ptr<ClientSession>;
     using ClientSessionList = std::vector<ClientSessionPtr>;
+    using UnconfirmedClientSessionPtr = std::unique_ptr<UnconfirmedClientSession>;
+    using UnconfirmedClientSessionList = std::vector<UnconfirmedClientSessionPtr>;
 
+    UnconfirmedClientSessionList pending_clients_;
     ClientSessionList desktop_clients_;
     ClientSessionList file_transfer_clients_;
 

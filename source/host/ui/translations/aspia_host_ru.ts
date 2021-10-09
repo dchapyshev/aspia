@@ -256,6 +256,18 @@
     </message>
 </context>
 <context>
+    <name>ConnectConfirmDialog</name>
+    <message>
+        <source>Password Protection</source>
+        <translation type="obsolete">Защита паролем</translation>
+    </message>
+    <message>
+        <location filename="../connect_confirm_dialog.ui" line="14"/>
+        <source>Confirmation of connection</source>
+        <translation>Подтверждение подключения</translation>
+    </message>
+</context>
+<context>
     <name>Host</name>
     <message>
         <source>Launches the application as hidden.</source>
@@ -1066,6 +1078,37 @@
     </message>
 </context>
 <context>
+    <name>host::ConnectConfirmDialog</name>
+    <message>
+        <location filename="../connect_confirm_dialog.cc" line="57"/>
+        <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
+        <translation>Пользователь %1 (%2) пытается подключиться к вашему компьютеру с типом сессии %3.</translation>
+    </message>
+    <message>
+        <location filename="../connect_confirm_dialog.cc" line="59"/>
+        <source>Allow the connection?</source>
+        <translation>Разрешить подключение?</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../connect_confirm_dialog.cc" line="109"/>
+        <source>The connection will be automatically accepted after %n seconds.</source>
+        <translation>
+            <numerusform>Подключение будет автоматически принято через %n секунду.</numerusform>
+            <numerusform>Подключение будет автоматически принято через %n секунды.</numerusform>
+            <numerusform>Подключение будет автоматически принято через %n секунд.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../connect_confirm_dialog.cc" line="114"/>
+        <source>The connection will be automatically rejected after %n seconds.</source>
+        <translation>
+            <numerusform>Подключение будет автоматически отклонено через %n секунду.</numerusform>
+            <numerusform>Подключение будет автоматически отклонено через %n секунды.</numerusform>
+            <numerusform>Подключение будет автоматически отклонено через %n секунд.</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>host::HostConfigDialog</name>
     <message>
         <source>Warning</source>
@@ -1217,29 +1260,29 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="63"/>
-        <location filename="../main_window.cc" line="393"/>
+        <location filename="../main_window.cc" line="65"/>
+        <location filename="../main_window.cc" line="410"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="128"/>
-        <location filename="../main_window.cc" line="373"/>
+        <location filename="../main_window.cc" line="130"/>
+        <location filename="../main_window.cc" line="390"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="223"/>
+        <location filename="../main_window.cc" line="225"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="280"/>
+        <location filename="../main_window.cc" line="283"/>
         <source>Connected to a router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="480"/>
+        <location filename="../main_window.cc" line="497"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
@@ -1248,8 +1291,8 @@
         <translation type="vanished">Подключение к маршрутизатору %1:%2...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="465"/>
+        <location filename="../main_window.cc" line="275"/>
+        <location filename="../main_window.cc" line="482"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -1270,22 +1313,22 @@
         <translation type="vanished">Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="284"/>
+        <location filename="../main_window.cc" line="287"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="487"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="276"/>
+        <location filename="../main_window.cc" line="279"/>
         <source>Connecting to a router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="475"/>
+        <location filename="../main_window.cc" line="492"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
@@ -1294,17 +1337,17 @@
         <translation type="vanished">Произошла ошибка</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="378"/>
+        <location filename="../main_window.cc" line="395"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="413"/>
+        <location filename="../main_window.cc" line="430"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="414"/>
+        <location filename="../main_window.cc" line="431"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

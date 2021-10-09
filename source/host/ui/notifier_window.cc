@@ -275,7 +275,7 @@ void NotifierWindow::showNotifier()
         move(window_pos);
         setFixedSize(window_size);
 
-        ui.button_show_hide->setIcon(QIcon(":/img/arrow-left-gray.png"));
+        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-left-gray.png")));
     }
     else
     {

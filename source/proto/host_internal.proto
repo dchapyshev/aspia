@@ -78,10 +78,26 @@ message RouterState
     State state      = 3;
 }
 
+message ConnectConfirmationRequest
+{
+    uint32 id                   = 1;
+    uint32 timeout              = 2;
+    string user_name            = 3;
+    string computer_name        = 4;
+    SessionType session_type    = 5;
+}
+
+message ConnectConfirmation
+{
+    uint32 id              = 1;
+    bool accept_connection = 2;
+}
+
 message UiToService
 {
     CredentialsRequest credentials_request = 1;
     KillSession kill_session = 2;
+    ConnectConfirmation connect_confirmation = 3;
 }
 
 message ServiceToUi
@@ -90,4 +106,5 @@ message ServiceToUi
     Credentials credentials          = 2;
     ConnectEvent connect_event       = 3;
     DisconnectEvent disconnect_event = 4;
+    ConnectConfirmationRequest connect_confirmation_request = 5;
 }

@@ -39,6 +39,7 @@ public:
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(uint32_t id);
+    void connectConfirmation(uint32_t id, bool accept);
 
 private:
     class Impl;

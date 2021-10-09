@@ -82,7 +82,14 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    if (incoming_message_.has_connect_event())
+    if (incoming_message_.has_connect_confirmation_request())
+    {
+        LOG(LS_INFO) << "Connect confirmation request received";
+
+        window_proxy_->onConnectConfirmationRequest(
+            incoming_message_.connect_confirmation_request());
+    }
+    else if (incoming_message_.has_connect_event())
     {
         LOG(LS_INFO) << "Connect event received";
 
@@ -137,6 +144,19 @@ void UserSessionAgent::killClient(uint32_t id)
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_kill_session()->set_id(id);
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
+{
+    LOG(LS_INFO) << "Connect confirmation (id: " << id << " accept: " << accept << ")";
+
+    outgoing_message_.Clear();
+    proto::internal::ConnectConfirmation* confirmation =
+        outgoing_message_.mutable_connect_confirmation();
+    confirmation->set_id(id);
+    confirmation->set_accept_connection(accept);
+
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 

@@ -97,4 +97,18 @@ void UserSessionWindowProxy::onRouterStateChanged(const proto::internal::RouterS
         window_->onRouterStateChanged(state);
 }
 
+void UserSessionWindowProxy::onConnectConfirmationRequest(
+    const proto::internal::ConnectConfirmationRequest& request)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &UserSessionWindowProxy::onConnectConfirmationRequest, shared_from_this(), request));
+        return;
+    }
+
+    if (window_)
+        window_->onConnectConfirmationRequest(request);
+}
+
 } // namespace host

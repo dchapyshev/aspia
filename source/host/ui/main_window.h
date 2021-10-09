@@ -59,6 +59,8 @@ protected:
     void onClientListChanged(const UserSessionAgent::ClientList& clients) override;
     void onCredentialsChanged(const proto::internal::Credentials& credentials) override;
     void onRouterStateChanged(const proto::internal::RouterState& state) override;
+    void onConnectConfirmationRequest(
+        const proto::internal::ConnectConfirmationRequest& request) override;
 
 private slots:
     void realClose();

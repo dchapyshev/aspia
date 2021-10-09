@@ -248,6 +248,14 @@
     </message>
 </context>
 <context>
+    <name>ConnectConfirmDialog</name>
+    <message>
+        <location filename="../connect_confirm_dialog.ui" line="14"/>
+        <source>Confirmation of connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Host</name>
     <message>
         <source>The path to the file to import.</source>
@@ -898,6 +906,35 @@
     </message>
 </context>
 <context>
+    <name>host::ConnectConfirmDialog</name>
+    <message>
+        <location filename="../connect_confirm_dialog.cc" line="57"/>
+        <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../connect_confirm_dialog.cc" line="59"/>
+        <source>Allow the connection?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../connect_confirm_dialog.cc" line="109"/>
+        <source>The connection will be automatically accepted after %n seconds.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../connect_confirm_dialog.cc" line="114"/>
+        <source>The connection will be automatically rejected after %n seconds.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>host::HostConfigDialog</name>
     <message>
         <source>Warning</source>
@@ -1013,70 +1050,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="63"/>
-        <location filename="../main_window.cc" line="393"/>
+        <location filename="../main_window.cc" line="65"/>
+        <location filename="../main_window.cc" line="410"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="128"/>
-        <location filename="../main_window.cc" line="373"/>
+        <location filename="../main_window.cc" line="130"/>
+        <location filename="../main_window.cc" line="390"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="223"/>
+        <location filename="../main_window.cc" line="225"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="276"/>
+        <location filename="../main_window.cc" line="279"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="480"/>
+        <location filename="../main_window.cc" line="497"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="272"/>
-        <location filename="../main_window.cc" line="465"/>
+        <location filename="../main_window.cc" line="275"/>
+        <location filename="../main_window.cc" line="482"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="487"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="280"/>
+        <location filename="../main_window.cc" line="283"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="475"/>
+        <location filename="../main_window.cc" line="492"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="284"/>
+        <location filename="../main_window.cc" line="287"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="378"/>
+        <location filename="../main_window.cc" line="395"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="413"/>
+        <location filename="../main_window.cc" line="430"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="414"/>
+        <location filename="../main_window.cc" line="431"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>

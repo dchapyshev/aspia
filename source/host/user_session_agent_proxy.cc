@@ -34,6 +34,7 @@ public:
     void stop();
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(uint32_t id);
+    void connectConfirmation(uint32_t id, bool accept);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -104,6 +105,19 @@ void UserSessionAgentProxy::Impl::killClient(uint32_t id)
         agent_->killClient(id);
 }
 
+void UserSessionAgentProxy::Impl::connectConfirmation(uint32_t id, bool accept)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&Impl::connectConfirmation, shared_from_this(), id, accept));
+        return;
+    }
+
+    if (agent_)
+        agent_->connectConfirmation(id, accept);
+}
+
 UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                              std::unique_ptr<UserSessionAgent> agent)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
@@ -135,6 +149,11 @@ void UserSessionAgentProxy::updateCredentials(
 void UserSessionAgentProxy::killClient(uint32_t id)
 {
     impl_->killClient(id);
+}
+
+void UserSessionAgentProxy::connectConfirmation(uint32_t id, bool accept)
+{
+    impl_->connectConfirmation(id, accept);
 }
 
 } // namespace host

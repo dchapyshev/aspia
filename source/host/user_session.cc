@@ -21,6 +21,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/scoped_task_runner.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/frame.h"
 #include "base/strings/strcat.h"
@@ -32,7 +33,6 @@
 #include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
 #include "host/desktop_session_proxy.h"
-#include "host/system_settings.h"
 
 namespace host {
 
@@ -41,6 +41,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          std::unique_ptr<base::IpcChannel> channel,
                          Delegate* delegate)
     : task_runner_(task_runner),
+      scoped_task_runner_(std::make_unique<base::ScopedTaskRunner>(task_runner)),
       channel_(std::move(channel)),
       ui_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       desktop_dettach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
@@ -67,10 +68,15 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 
     SystemSettings settings;
+
     password_enabled_ = settings.oneTimePassword();
     password_characters_ = settings.oneTimePasswordCharacters();
     password_length_ = settings.oneTimePasswordLength();
     password_expire_interval_ = settings.oneTimePasswordExpire();
+
+    connection_confirmation_ = settings.connConfirm();
+    no_user_action_ = settings.connConfirmNoUserAction();
+    auto_confirmation_interval_ = settings.autoConnConfirmInterval();
 }
 
 UserSession::~UserSession()
@@ -294,51 +300,68 @@ size_t UserSession::clientsCount() const
     return desktop_clients_.size() + file_transfer_clients_.size();
 }
 
-void UserSession::addNewSession(std::unique_ptr<ClientSession> client_session)
+void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
     DCHECK(client_session);
 
-    ClientSession* client_session_ptr = client_session.get();
-
-    switch (client_session_ptr->sessionType())
+    if (connection_confirmation_)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        LOG(LS_INFO) << "User confirmation of connection is required (state: "
+                     << stateToString(state_) << ")";
+
+        if (state_ == State::STARTED && !channel_)
         {
-            LOG(LS_INFO) << "New desktop session";
-            desktop_clients_.emplace_back(std::move(client_session));
+            if (no_user_action_ == SystemSettings::NoUserAction::ACCEPT)
+            {
+                LOG(LS_INFO) << "Accept client session";
 
-            ClientSessionDesktop* desktop_client_session =
-                static_cast<ClientSessionDesktop*>(client_session_ptr);
-
-            desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->control(proto::internal::Control::ENABLE);
+                // There is no active user and automatic accept of connections is indicated.
+                addNewClientSession(std::move(client_session));
+            }
+            else
+            {
+                LOG(LS_INFO) << "Reject client session";
+            }
         }
-        break;
-
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        else
         {
-            LOG(LS_INFO) << "New file transfer session";
-            file_transfer_clients_.emplace_back(std::move(client_session));
-        }
-        break;
+            LOG(LS_INFO) << "New unconfirmed client session";
 
-        default:
-        {
-            NOTREACHED();
-            return;
+            outgoing_message_.Clear();
+            proto::internal::ConnectConfirmationRequest* request =
+                outgoing_message_.mutable_connect_confirmation_request();
+
+            request->set_id(client_session->id());
+            request->set_session_type(client_session->sessionType());
+            request->set_computer_name(client_session->computerName());
+            request->set_user_name(client_session->userName());
+            request->set_timeout(static_cast<uint32_t>(auto_confirmation_interval_.count()));
+
+            std::unique_ptr<UnconfirmedClientSession> unconfirmed_client_session =
+                std::make_unique<UnconfirmedClientSession>(std::move(client_session), task_runner_, this);
+
+            unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
+            pending_clients_.emplace_back(std::move(unconfirmed_client_session));
+
+            if (channel_)
+            {
+                LOG(LS_INFO) << "Sending connect request to UI process";
+                channel_->send(base::serialize(outgoing_message_));
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Invalid IPC channel";
+            }
         }
     }
-
-    LOG(LS_INFO) << "Starting session...";
-    client_session_ptr->setSessionId(sessionId());
-    client_session_ptr->start(this);
-
-    // Notify the UI of a new connection.
-    sendConnectEvent(*client_session_ptr);
+    else
+    {
+        LOG(LS_INFO) << "No confirmation of connection is required from the user";
+        addNewClientSession(std::move(client_session));
+    }
 }
 
-void UserSession::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
+void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
                  << " (event ID: " << session_id << " current ID: " << session_id_
@@ -426,7 +449,7 @@ void UserSession::setSessionEvent(base::win::SessionStatus status, base::Session
     }
 }
 
-void UserSession::setRouterState(const proto::internal::RouterState& router_state)
+void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state updated";
     router_state_ = router_state;
@@ -443,7 +466,7 @@ void UserSession::setRouterState(const proto::internal::RouterState& router_stat
     }
 }
 
-void UserSession::setHostId(base::HostId host_id)
+void UserSession::onHostIdChanged(base::HostId host_id)
 {
     host_id_ = host_id;
     sendCredentials(FROM_HERE);
@@ -453,18 +476,18 @@ void UserSession::onSettingsChanged()
 {
     SystemSettings settings;
 
-    bool enabled = settings.oneTimePassword();
-    uint32_t characters = settings.oneTimePasswordCharacters();
-    int length = settings.oneTimePasswordLength();
-    std::chrono::milliseconds expire_interval = settings.oneTimePasswordExpire();
+    bool password_enabled = settings.oneTimePassword();
+    uint32_t password_characters = settings.oneTimePasswordCharacters();
+    int password_length = settings.oneTimePasswordLength();
+    std::chrono::milliseconds password_expire_interval = settings.oneTimePasswordExpire();
 
-    if (password_enabled_ != enabled || password_characters_ != characters ||
-        password_length_ != length || password_expire_interval_ != expire_interval)
+    if (password_enabled_ != password_enabled || password_characters_ != password_characters ||
+        password_length_ != password_length || password_expire_interval_ != password_expire_interval)
     {
-        password_enabled_ = enabled;
-        password_characters_ = characters;
-        password_length_ = length;
-        password_expire_interval_ = expire_interval;
+        password_enabled_ = password_enabled;
+        password_characters_ = password_characters;
+        password_length_ = password_length;
+        password_expire_interval_ = password_expire_interval;
 
         updateCredentials(FROM_HERE);
         sendCredentials(FROM_HERE);
@@ -473,6 +496,10 @@ void UserSession::onSettingsChanged()
     {
         LOG(LS_INFO) << "No changes in password settings";
     }
+
+    connection_confirmation_ = settings.connConfirm();
+    no_user_action_ = settings.connConfirmNoUserAction();
+    auto_confirmation_interval_ = settings.autoConnConfirmInterval();
 }
 
 void UserSession::onDisconnected()
@@ -517,6 +544,16 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
     else if (incoming_message_.has_kill_session())
     {
         killClientSession(incoming_message_.kill_session().id());
+    }
+    else if (incoming_message_.has_connect_confirmation())
+    {
+        proto::internal::ConnectConfirmation connect_confirmation =
+            incoming_message_.connect_confirmation();
+
+        if (connect_confirmation.accept_connection())
+            onUnconfirmedSessionAccept(connect_confirmation.id());
+        else
+            onUnconfirmedSessionReject(connect_confirmation.id());
     }
     else
     {
@@ -586,6 +623,43 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
+}
+
+void UserSession::onUnconfirmedSessionAccept(uint32_t id)
+{
+    LOG(LS_INFO) << "Client session '" << id << "' is accepted";
+
+    scoped_task_runner_->postTask([=]()
+    {
+        for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
+        {
+            if ((*it)->id() != id)
+                continue;
+
+            std::unique_ptr<ClientSession> client_session = (*it)->takeClientSession();
+            addNewClientSession(std::move(client_session));
+
+            pending_clients_.erase(it);
+            return;
+        }
+    });
+}
+
+void UserSession::onUnconfirmedSessionReject(uint32_t id)
+{
+    LOG(LS_INFO) << "Client session '" << id << "' is rejected";
+
+    scoped_task_runner_->postTask([=]()
+    {
+        for (auto it = pending_clients_.begin(); it != pending_clients_.end(); ++it)
+        {
+            if ((*it)->id() != id)
+                continue;
+
+            pending_clients_.erase(it);
+            return;
+        }
+    });
 }
 
 void UserSession::onClientSessionConfigured()
@@ -880,6 +954,50 @@ void UserSession::sendHostIdRequest(const base::Location& location)
     std::optional<std::string> session_name = sessionName();
     if (session_name.has_value())
         delegate_->onUserSessionHostIdRequest(*session_name);
+}
+
+void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_session)
+{
+    DCHECK(client_session);
+
+    ClientSession* client_session_ptr = client_session.get();
+
+    switch (client_session_ptr->sessionType())
+    {
+        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            LOG(LS_INFO) << "New desktop session";
+            desktop_clients_.emplace_back(std::move(client_session));
+
+            ClientSessionDesktop* desktop_client_session =
+                static_cast<ClientSessionDesktop*>(client_session_ptr);
+
+            desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
+            desktop_session_proxy_->control(proto::internal::Control::ENABLE);
+        }
+        break;
+
+        case proto::SESSION_TYPE_FILE_TRANSFER:
+        {
+            LOG(LS_INFO) << "New file transfer session";
+            file_transfer_clients_.emplace_back(std::move(client_session));
+        }
+        break;
+
+        default:
+        {
+            NOTREACHED();
+            return;
+        }
+    }
+
+    LOG(LS_INFO) << "Starting session...";
+    client_session_ptr->setSessionId(sessionId());
+    client_session_ptr->start(this);
+
+    // Notify the UI of a new connection.
+    sendConnectEvent(*client_session_ptr);
 }
 
 } // namespace host

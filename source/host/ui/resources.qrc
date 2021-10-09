@@ -25,5 +25,6 @@
     <file alias="monitor.png">resources/monitor.png</file>
     <file alias="monitor-keyboard.png">resources/monitor-keyboard.png</file>
     <file alias="document.png">resources/document.png</file>
+    <file alias="question.png">resources/question.png</file>
   </qresource>
 </RCC>

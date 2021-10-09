@@ -51,11 +51,11 @@ public:
     };
 
     bool start(Delegate* delegate);
-    void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
-    void setRouterState(const proto::internal::RouterState& router_state);
-    void setHostId(const std::string& session_name, base::HostId host_id);
+    void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);
+    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onHostIdChanged(const std::string& session_name, base::HostId host_id);
     void onSettingsChanged();
-    void addNewSession(std::unique_ptr<ClientSession> client_session);
+    void onClientSession(std::unique_ptr<ClientSession> client_session);
     std::unique_ptr<base::UserList> userList() const;
 
 protected:

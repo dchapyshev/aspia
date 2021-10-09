@@ -31,6 +31,7 @@
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
+#include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "qt_base/qt_logging.h"
 
@@ -225,6 +226,7 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     bool has_password = !credentials.password().empty();
 
     ui.label_icon_password->setEnabled(has_password);
+    ui.button_new_password->setEnabled(has_password);
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
     ui.edit_password->setText(QString::fromStdString(credentials.password()));
@@ -300,6 +302,20 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     }
 
     status_dialog_->addMessage(status);
+}
+
+void MainWindow::onConnectConfirmationRequest(
+    const proto::internal::ConnectConfirmationRequest& request)
+{
+    QApplication::setQuitOnLastWindowClosed(false);
+
+    ConnectConfirmDialog dialog(request, this);
+    bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
+
+    QApplication::setQuitOnLastWindowClosed(true);
+
+    if (agent_proxy_)
+        agent_proxy_->connectConfirmation(request.id(), accept);
 }
 
 void MainWindow::realClose()

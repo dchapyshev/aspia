@@ -113,7 +113,7 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
 
     if (user_session_manager_)
     {
-        user_session_manager_->setSessionEvent(status, session_id);
+        user_session_manager_->onUserSessionEvent(status, session_id);
     }
     else
     {
@@ -158,13 +158,13 @@ void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
 void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state changed";
-    user_session_manager_->setRouterState(router_state);
+    user_session_manager_->onRouterStateChanged(router_state);
 }
 
 void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
-    user_session_manager_->setHostId(session_name, host_id);
+    user_session_manager_->onHostIdChanged(session_name, host_id);
 }
 
 void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
@@ -194,7 +194,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     if (user_session_manager_)
     {
-        user_session_manager_->addNewSession(std::move(session));
+        user_session_manager_->onClientSession(std::move(session));
     }
     else
     {
@@ -346,7 +346,7 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 
                 proto::internal::RouterState router_state;
                 router_state.set_state(proto::internal::RouterState::DISABLED);
-                user_session_manager_->setRouterState(router_state);
+                user_session_manager_->onRouterStateChanged(router_state);
             }
         }
         else

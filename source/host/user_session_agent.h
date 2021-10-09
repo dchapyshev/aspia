@@ -69,6 +69,7 @@ private:
 
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(uint32_t id);
+    void connectConfirmation(uint32_t id, bool accept);
 
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;

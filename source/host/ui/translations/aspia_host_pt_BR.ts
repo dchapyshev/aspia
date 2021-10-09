@@ -203,6 +203,13 @@
     </message>
 </context>
 <context>
+    <name>ConnectConfirmDialog</name>
+    <message>
+        <source>Confirmation of connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Host</name>
     <message>
         <source>Warning</source>
@@ -548,6 +555,31 @@
     <message>
         <source>Reject connection</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>host::ConnectConfirmDialog</name>
+    <message>
+        <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow the connection?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>The connection will be automatically accepted after %n seconds.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The connection will be automatically rejected after %n seconds.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

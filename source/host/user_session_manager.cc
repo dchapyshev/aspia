@@ -238,12 +238,12 @@ bool UserSessionManager::start(Delegate* delegate)
     return true;
 }
 
-void UserSessionManager::setSessionEvent(
+void UserSessionManager::onUserSessionEvent(
     base::win::SessionStatus status, base::SessionId session_id)
 {
     // Send an event of each session.
     for (const auto& session : sessions_)
-        session->setSessionEvent(status, session_id);
+        session->onUserSessionEvent(status, session_id);
 
     switch (status)
     {
@@ -264,17 +264,17 @@ void UserSessionManager::setSessionEvent(
     }
 }
 
-void UserSessionManager::setRouterState(const proto::internal::RouterState& router_state)
+void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "New router state";
     router_state_ = router_state;
 
     // Send an event of each session.
     for (const auto& session : sessions_)
-        session->setRouterState(router_state);
+        session->onRouterStateChanged(router_state);
 }
 
-void UserSessionManager::setHostId(const std::string& session_name, base::HostId host_id)
+void UserSessionManager::onHostIdChanged(const std::string& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
 
@@ -286,7 +286,7 @@ void UserSessionManager::setHostId(const std::string& session_name, base::HostId
         {
             LOG(LS_INFO) << "Session '" << session_name << "' found. Host ID assigned";
 
-            session->setHostId(host_id);
+            session->onHostIdChanged(host_id);
             delegate_->onUserListChanged();
             return;
         }
@@ -302,7 +302,7 @@ void UserSessionManager::onSettingsChanged()
         session->onSettingsChanged();
 }
 
-void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_session)
+void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
 
@@ -371,7 +371,7 @@ void UserSessionManager::addNewSession(std::unique_ptr<ClientSession> client_ses
                 }
             }
 
-            session->addNewSession(std::move(client_session));
+            session->onClientSession(std::move(client_session));
             break;
         }
     }
