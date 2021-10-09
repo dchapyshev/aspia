@@ -185,23 +185,28 @@
         <translation>Публичный ключ:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="422"/>
-        <location filename="../config_dialog.ui" line="515"/>
+        <location filename="../config_dialog.ui" line="421"/>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.ui" line="438"/>
+        <location filename="../config_dialog.ui" line="531"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="436"/>
+        <location filename="../config_dialog.ui" line="452"/>
         <source>Add new user</source>
         <translation>Добавить нового пользователя</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="456"/>
+        <location filename="../config_dialog.ui" line="472"/>
         <source>Edit user</source>
         <translation>Редактировать пользователя</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="476"/>
+        <location filename="../config_dialog.ui" line="492"/>
         <source>Delete user</source>
         <translation>Удалить пользователя</translation>
     </message>
@@ -230,27 +235,27 @@
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="524"/>
+        <location filename="../config_dialog.ui" line="540"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="532"/>
+        <location filename="../config_dialog.ui" line="548"/>
         <source>Preffered video capturer:</source>
         <translation>Предпочитаемый тип захвата видео:</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="572"/>
+        <location filename="../config_dialog.ui" line="588"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="581"/>
+        <location filename="../config_dialog.ui" line="597"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="590"/>
+        <location filename="../config_dialog.ui" line="606"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -1260,29 +1265,29 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="65"/>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="64"/>
+        <location filename="../main_window.cc" line="409"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="130"/>
-        <location filename="../main_window.cc" line="390"/>
+        <location filename="../main_window.cc" line="129"/>
+        <location filename="../main_window.cc" line="389"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="225"/>
+        <location filename="../main_window.cc" line="224"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="283"/>
+        <location filename="../main_window.cc" line="282"/>
         <source>Connected to a router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="497"/>
+        <location filename="../main_window.cc" line="496"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
@@ -1291,8 +1296,8 @@
         <translation type="vanished">Подключение к маршрутизатору %1:%2...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="275"/>
-        <location filename="../main_window.cc" line="482"/>
+        <location filename="../main_window.cc" line="274"/>
+        <location filename="../main_window.cc" line="481"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -1313,22 +1318,22 @@
         <translation type="vanished">Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="287"/>
+        <location filename="../main_window.cc" line="286"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="487"/>
+        <location filename="../main_window.cc" line="486"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="279"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Connecting to a router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="492"/>
+        <location filename="../main_window.cc" line="491"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
@@ -1337,17 +1342,17 @@
         <translation type="vanished">Произошла ошибка</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="394"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="430"/>
+        <location filename="../main_window.cc" line="429"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="431"/>
+        <location filename="../main_window.cc" line="430"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

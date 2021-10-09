@@ -134,6 +134,11 @@
         <translation>Wachtwoord:</translation>
     </message>
     <message>
+        <location filename="../ui/client_settings_dialog.ui" line="99"/>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Name:</source>
         <translation type="obsolete">Naam:</translation>
     </message>

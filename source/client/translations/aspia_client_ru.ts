@@ -146,6 +146,11 @@
         <translation>Пароль:</translation>
     </message>
     <message>
+        <location filename="../ui/client_settings_dialog.ui" line="99"/>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
+    </message>
+    <message>
         <source>Name:</source>
         <translation type="obsolete">Имя:</translation>
     </message>

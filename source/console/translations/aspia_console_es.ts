@@ -68,6 +68,11 @@
         <source>User Name:</source>
         <translation>Nombre de Usuario:</translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="225"/>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>

@@ -181,6 +181,10 @@
         <source>If there is no active user:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConnectConfirmDialog</name>
