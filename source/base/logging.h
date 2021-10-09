@@ -150,17 +150,17 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
 #define COMPACT_LOG_EX_LS_INFO(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_INFO, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_INFO, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_WARNING(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_WARNING, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_WARNING, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_ERROR(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_ERROR, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_ERROR, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_FATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_FATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_FATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DFATAL(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_DFATAL, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DFATAL, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_LS_DCHECK(ClassName, ...) \
-    ::base::ClassName(__FILE__, __LINE__, ::base::LOG_LS_DCHECK, ##__VA_ARGS__)
+    ::base::ClassName(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DCHECK, ##__VA_ARGS__)
 
 #define COMPACT_LOG_LS_INFO    COMPACT_LOG_EX_LS_INFO(LogMessage)
 #define COMPACT_LOG_LS_WARNING COMPACT_LOG_EX_LS_WARNING(LogMessage)
@@ -246,7 +246,7 @@ private:
 
 // Do as much work as possible out of line to reduce inline code size.
 #define CHECK(condition)                                                                         \
-    LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
+    LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                                        \
     LAZY_STREAM(PLOG_STREAM(LS_FATAL), !(condition)) << "Check failed: " #condition ". "
@@ -262,7 +262,7 @@ private:
   if (::base::CheckOpResult true_if_passed =                                                     \
       ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                       \
   else                                                                                           \
-      ::base::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
+      ::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, true_if_passed.message()).stream()
 
 template <typename T, typename = void>
 struct SupportsOstreamOperator : std::false_type {};
@@ -430,7 +430,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
         DCHECK_IS_ON() ?                                                                         \
         ::base::check##name##Impl((val1), (val2),  #val1 " " #op " " #val2) : nullptr);          \
     else                                                                                         \
-        ::base::LogMessage(__FILE__, __LINE__, ::base::LOG_LS_DCHECK,                            \
+        ::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_LS_DCHECK,              \
                            true_if_passed.message()).stream()
 
 #else // DCHECK_IS_ON()
@@ -486,17 +486,18 @@ class LogMessage
 {
 public:
     // Used for LOG(severity).
-    LogMessage(std::string_view file, int line, LoggingSeverity severity);
+    LogMessage(std::string_view file, int line, std::string_view function, LoggingSeverity severity);
 
     // Used for CHECK(). Implied severity = LOG_FATAL.
-    LogMessage(std::string_view file, int line, const char* condition);
+    LogMessage(std::string_view file, int line, std::string_view function, const char* condition);
 
     // Used for CHECK_EQ(), etc. Takes ownership of the given string.
     // Implied severity = LOG_FATAL.
-    LogMessage(std::string_view file, int line, std::string* result);
+    LogMessage(std::string_view file, int line, std::string_view function, std::string* result);
 
     // Used for DCHECK_EQ(), etc. Takes ownership of the given string.
-    LogMessage(std::string_view file, int line, LoggingSeverity severity, std::string* result);
+    LogMessage(std::string_view file, int line, std::string_view function, LoggingSeverity severity,
+               std::string* result);
 
     ~LogMessage();
 
@@ -506,7 +507,7 @@ public:
     std::string str() { return stream_.str(); }
 
 private:
-    void init(std::string_view file, int line);
+    void init(std::string_view file, int line, std::string_view function);
 
     LoggingSeverity severity_;
     std::ostringstream stream_;
@@ -533,7 +534,8 @@ public:
 class ErrorLogMessage
 {
 public:
-    ErrorLogMessage(std::string_view file, int line, LoggingSeverity severity, SystemError error);
+    ErrorLogMessage(std::string_view file, int line, std::string_view function,
+                    LoggingSeverity severity, SystemError error);
 
     // Appends the error message before destructing the encapsulated class.
     ~ErrorLogMessage();

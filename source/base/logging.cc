@@ -307,35 +307,45 @@ std::string* makeCheckOpString(const std::string& v1, const std::string& v2, con
     return makeCheckOpString<std::string, std::string>(v1, v2, names);
 }
 
-LogMessage::LogMessage(std::string_view file, int line, LoggingSeverity severity)
+LogMessage::LogMessage(std::string_view file,
+                       int line,
+                       std::string_view function,
+                       LoggingSeverity severity)
     : severity_(severity)
 {
-    init(file, line);
+    init(file, line, function);
 }
 
-LogMessage::LogMessage(std::string_view file, int line, const char* condition)
+LogMessage::LogMessage(std::string_view file,
+                       int line,
+                       std::string_view function,
+                       const char* condition)
     : severity_(LOG_LS_FATAL)
 {
-    init(file, line);
+    init(file, line, function);
     stream_ << "Check failed: " << condition << ". ";
 }
 
-LogMessage::LogMessage(std::string_view file, int line, std::string* result)
+LogMessage::LogMessage(std::string_view file,
+                       int line,
+                       std::string_view function,
+                       std::string* result)
     : severity_(LOG_LS_FATAL)
 {
     std::unique_ptr<std::string> result_deleter(result);
-    init(file, line);
+    init(file, line, function);
     stream_ << "Check failed: " << *result;
 }
 
 LogMessage::LogMessage(std::string_view file,
                        int line,
+                       std::string_view function,
                        LoggingSeverity severity,
                        std::string* result)
     : severity_(severity)
 {
     std::unique_ptr<std::string> result_deleter(result);
-    init(file, line);
+    init(file, line, function);
     stream_ << "Check failed: " << *result;
 }
 
@@ -385,7 +395,7 @@ LogMessage::~LogMessage()
 }
 
 // Writes the common header info to the stream.
-void LogMessage::init(std::string_view file, int line)
+void LogMessage::init(std::string_view file, int line, std::string_view function)
 {
     size_t last_slash_pos = file.find_last_of("\\/");
     if (last_slash_pos != std::string_view::npos)
@@ -400,17 +410,18 @@ void LogMessage::init(std::string_view file, int line)
             << std::setw(3) << time.millisecond() << ' '
             << std::this_thread::get_id()         << ' '
             << severityName(severity_)            << ' '
-            << file.data() << ":" << line << "] ";
+            << file.data() << ":" << line << " " << function.data() << "] ";
 
     message_start_ = stream_.str().length();
 }
 
 ErrorLogMessage::ErrorLogMessage(std::string_view file,
                                  int line,
+                                 std::string_view function,
                                  LoggingSeverity severity,
                                  SystemError error)
     : error_(error),
-      log_message_(file, line, severity)
+      log_message_(file, line, function, severity)
 {
     // Nothing
 }
@@ -418,11 +429,6 @@ ErrorLogMessage::ErrorLogMessage(std::string_view file,
 ErrorLogMessage::~ErrorLogMessage()
 {
     stream() << ": " << error_.toString();
-}
-
-void logErrorNotReached(const char* file, int line)
-{
-    LogMessage(file, line, LOG_LS_ERROR).stream() << "NOTREACHED() hit.";
 }
 
 } // namespace base

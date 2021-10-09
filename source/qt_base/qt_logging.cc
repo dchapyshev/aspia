@@ -52,7 +52,7 @@ void messageHandler(QtMsgType type,
     if (!filename)
         filename = "<empty>";
 
-    base::LogMessage log_message(filename, context.line, messageTypeToSeverity(type));
+    base::LogMessage log_message(filename, context.line, context.function, messageTypeToSeverity(type));
     log_message.stream() << msg;
 }
 
