@@ -24,6 +24,8 @@
 #include "host/integrity_check.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
+#include "host/ui/check_password_dialog.h"
+#include "host/ui/config_dialog.h"
 #include "host/ui/main_window.h"
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
@@ -188,6 +190,29 @@ int hostMain(int argc, char* argv[])
     else if (command_line.hasSwitch(u"help"))
     {
         // TODO
+    }
+    else if (command_line.hasSwitch(u"config"))
+    {
+        if (base::win::isProcessElevated())
+        {
+            host::SystemSettings settings;
+            if (settings.passwordProtection())
+            {
+                host::CheckPasswordDialog dialog;
+                if (dialog.exec() == host::CheckPasswordDialog::Accepted)
+                {
+                    host::ConfigDialog().exec();
+                }
+            }
+            else
+            {
+                host::ConfigDialog().exec();
+            }
+        }
+        else
+        {
+            LOG(LS_INFO) << "Process not eleavated";
+        }
     }
     else
     {

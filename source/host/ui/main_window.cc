@@ -18,9 +18,11 @@
 
 #include "host/ui/main_window.h"
 
+#include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/strings/unicode.h"
+#include "base/win/process_util.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
@@ -39,6 +41,12 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QUrl>
+
+#if defined(Q_OS_WIN)
+#include <QWinEventNotifier>
+#include <qt_windows.h>
+#include <shellapi.h>
+#endif // defined(Q_OS_WIN)
 
 namespace host {
 
@@ -359,6 +367,54 @@ void MainWindow::onLanguageChanged(QAction* action)
 
 void MainWindow::onSettings()
 {
+#if defined(OS_WIN)
+    if (!base::win::isProcessElevated())
+    {
+        LOG(LS_INFO) << "Process not elevated";
+
+        std::filesystem::path current_exec_file;
+        if (base::BasePaths::currentExecFile(&current_exec_file))
+        {
+            SHELLEXECUTEINFOW sei;
+            memset(&sei, 0, sizeof(sei));
+
+            sei.cbSize = sizeof(sei);
+            sei.lpVerb = L"runas";
+            sei.lpFile = current_exec_file.c_str();
+            sei.hwnd = reinterpret_cast<HWND>(winId());
+            sei.nShow = SW_SHOW;
+            sei.lpParameters = L"--config";
+            sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+
+            if (ShellExecuteExW(&sei))
+            {
+                QWinEventNotifier* process_watcher = new QWinEventNotifier(this);
+
+                connect(process_watcher, &QWinEventNotifier::activated, this, [=]
+                {
+                    process_watcher->deleteLater();
+                    ui.action_settings->setEnabled(true);
+                });
+
+                ui.action_settings->setEnabled(false);
+
+                process_watcher->setHandle(sei.hProcess);
+                process_watcher->setEnabled(true);
+            }
+            else
+            {
+                PLOG(LS_ERROR) << "ShellExecuteExW failed";
+            }
+        }
+        else
+        {
+            LOG(LS_ERROR) << "currentExecFile failed";
+        }
+
+        return;
+    }
+#endif
+
     LOG(LS_INFO) << "Settings dialog open";
 
     QApplication::setQuitOnLastWindowClosed(false);
