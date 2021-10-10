@@ -21,6 +21,7 @@
 #include "common/session_type.h"
 
 #include <QAbstractButton>
+#include <QScreen>
 #include <QTimer>
 
 namespace host {
@@ -61,6 +62,16 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
     updateMessage();
 
     timer_->start(std::chrono::seconds(1));
+
+    QTimer::singleShot(0, this, [this]()
+    {
+        QRect screen_rect = QApplication::primaryScreen()->geometry();
+
+        int x = (screen_rect.width() / 2) - (width() / 2);
+        int y = (screen_rect.height() / 2) - (height() / 2);
+
+        move(x, y);
+    });
 }
 
 ConnectConfirmDialog::~ConnectConfirmDialog() = default;

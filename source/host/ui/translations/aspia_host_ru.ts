@@ -1085,17 +1085,17 @@
 <context>
     <name>host::ConnectConfirmDialog</name>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="57"/>
+        <location filename="../connect_confirm_dialog.cc" line="58"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
         <translation>Пользователь %1 (%2) пытается подключиться к вашему компьютеру с типом сессии %3.</translation>
     </message>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="59"/>
+        <location filename="../connect_confirm_dialog.cc" line="60"/>
         <source>Allow the connection?</source>
         <translation>Разрешить подключение?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="109"/>
+        <location filename="../connect_confirm_dialog.cc" line="120"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation>
             <numerusform>Подключение будет автоматически принято через %n секунду.</numerusform>
@@ -1104,7 +1104,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="114"/>
+        <location filename="../connect_confirm_dialog.cc" line="125"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation>
             <numerusform>Подключение будет автоматически отклонено через %n секунду.</numerusform>
