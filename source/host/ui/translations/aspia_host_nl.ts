@@ -724,12 +724,12 @@
         <location filename="../config_dialog.cc" line="526"/>
         <location filename="../config_dialog.cc" line="558"/>
         <location filename="../config_dialog.cc" line="571"/>
-        <location filename="../config_dialog.cc" line="826"/>
-        <location filename="../config_dialog.cc" line="845"/>
-        <location filename="../config_dialog.cc" line="860"/>
-        <location filename="../config_dialog.cc" line="870"/>
-        <location filename="../config_dialog.cc" line="886"/>
-        <location filename="../config_dialog.cc" line="896"/>
+        <location filename="../config_dialog.cc" line="830"/>
+        <location filename="../config_dialog.cc" line="849"/>
+        <location filename="../config_dialog.cc" line="864"/>
+        <location filename="../config_dialog.cc" line="874"/>
+        <location filename="../config_dialog.cc" line="890"/>
+        <location filename="../config_dialog.cc" line="900"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -825,46 +825,46 @@
         <translation>Verkeerde router public key ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="730"/>
-        <location filename="../config_dialog.cc" line="760"/>
+        <location filename="../config_dialog.cc" line="734"/>
+        <location filename="../config_dialog.cc" line="764"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="769"/>
+        <location filename="../config_dialog.cc" line="773"/>
         <source>Started</source>
         <translation>Gestart</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="770"/>
+        <location filename="../config_dialog.cc" line="774"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="775"/>
+        <location filename="../config_dialog.cc" line="779"/>
         <source>Not started</source>
         <translation>Niet gestart</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="776"/>
-        <location filename="../config_dialog.cc" line="783"/>
-        <location filename="../config_dialog.cc" line="796"/>
+        <location filename="../config_dialog.cc" line="780"/>
+        <location filename="../config_dialog.cc" line="787"/>
+        <location filename="../config_dialog.cc" line="800"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="782"/>
+        <location filename="../config_dialog.cc" line="786"/>
         <source>Installed</source>
         <translation>Geinstalleerd</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="793"/>
+        <location filename="../config_dialog.cc" line="797"/>
         <source>Not installed</source>
         <translation>Niet geinstalleerd</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="725"/>
-        <location filename="../config_dialog.cc" line="795"/>
+        <location filename="../config_dialog.cc" line="729"/>
+        <location filename="../config_dialog.cc" line="799"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
@@ -879,33 +879,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="800"/>
+        <location filename="../config_dialog.cc" line="804"/>
         <source>Current state: %1</source>
         <translation>Huidige status: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="827"/>
+        <location filename="../config_dialog.cc" line="831"/>
         <source>The service could not be installed.</source>
         <translation>De service kon niet worden geinstalleerd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="846"/>
+        <location filename="../config_dialog.cc" line="850"/>
         <source>The service could not be removed.</source>
         <translation>De service kon niet worden verwijderd.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="861"/>
-        <location filename="../config_dialog.cc" line="887"/>
+        <location filename="../config_dialog.cc" line="865"/>
+        <location filename="../config_dialog.cc" line="891"/>
         <source>Could not access the service.</source>
         <translation>Kon de service niet bereiken.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="871"/>
+        <location filename="../config_dialog.cc" line="875"/>
         <source>The service could not be started.</source>
         <translation>De service kon niet worden gestart.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="897"/>
+        <location filename="../config_dialog.cc" line="901"/>
         <source>The service could not be stopped.</source>
         <translation>De service kon niet worden gestopt.</translation>
     </message>
@@ -1055,70 +1055,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="73"/>
-        <location filename="../main_window.cc" line="466"/>
+        <location filename="../main_window.cc" line="72"/>
+        <location filename="../main_window.cc" line="465"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="138"/>
-        <location filename="../main_window.cc" line="446"/>
+        <location filename="../main_window.cc" line="137"/>
+        <location filename="../main_window.cc" line="445"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="233"/>
+        <location filename="../main_window.cc" line="232"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="287"/>
+        <location filename="../main_window.cc" line="286"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="553"/>
+        <location filename="../main_window.cc" line="552"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="283"/>
-        <location filename="../main_window.cc" line="538"/>
+        <location filename="../main_window.cc" line="282"/>
+        <location filename="../main_window.cc" line="537"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="543"/>
+        <location filename="../main_window.cc" line="542"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="291"/>
+        <location filename="../main_window.cc" line="290"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="548"/>
+        <location filename="../main_window.cc" line="547"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="295"/>
+        <location filename="../main_window.cc" line="294"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="451"/>
+        <location filename="../main_window.cc" line="450"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="486"/>
+        <location filename="../main_window.cc" line="485"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="487"/>
+        <location filename="../main_window.cc" line="486"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>

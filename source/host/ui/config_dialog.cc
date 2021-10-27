@@ -696,8 +696,12 @@ void ConfigDialog::reloadAll()
 
     bool is_router_enabled = settings.isRouterEnabled();
 
+    base::Address router_address(DEFAULT_ROUTER_TCP_PORT);
+    router_address.setHost(settings.routerAddress());
+    router_address.setPort(settings.routerPort());
+
     ui.checkbox_enable_router->setChecked(is_router_enabled);
-    ui.edit_router_address->setText(QString::fromStdU16String(settings.routerAddress()));
+    ui.edit_router_address->setText(QString::fromStdU16String(router_address.toString()));
     ui.edit_router_public_key->setPlainText(
         QString::fromStdString(base::toHex(settings.routerPublicKey())));
 
