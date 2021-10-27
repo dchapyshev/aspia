@@ -28,12 +28,13 @@ namespace base {
 
 void DesktopEnvironment::disableWallpaper()
 {
-    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
+    wchar_t path[] = L"";
+    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path, SPIF_SENDCHANGE);
 }
 
 void DesktopEnvironment::disableFontSmoothing()
 {
-    SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, 0, SPIF_SENDCHANGE);
+    SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, nullptr, SPIF_SENDCHANGE);
 }
 
 void DesktopEnvironment::disableEffects()
@@ -60,7 +61,7 @@ void DesktopEnvironment::disableEffects()
         }
     }
 
-    SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, 0, SPIF_SENDCHANGE);
+    SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, nullptr, SPIF_SENDCHANGE);
     SystemParametersInfoW(SPI_SETUIEFFECTS, 0, FALSE, SPIF_SENDCHANGE);
     SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION, 0, FALSE, SPIF_SENDCHANGE);
 }
