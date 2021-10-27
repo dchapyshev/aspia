@@ -83,7 +83,7 @@ void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
     {
         base::Address address(DEFAULT_HOST_TCP_PORT);
         address.setHost(base::utf16FromUtf8(computer.address()));
-        address.setPort(computer.port());
+        address.setPort(static_cast<uint16_t>(computer.port()));
 
         ui.edit_address->setText(QString::fromStdU16String(address.toString()));
     }
