@@ -498,8 +498,8 @@
     <name>host::ConfigDialog</name>
     <message>
         <location filename="../config_dialog.cc" line="347"/>
-        <location filename="../config_dialog.cc" line="488"/>
-        <location filename="../config_dialog.cc" line="541"/>
+        <location filename="../config_dialog.cc" line="494"/>
+        <location filename="../config_dialog.cc" line="547"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
@@ -509,7 +509,7 @@
         <translation>您确定要删除用户 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="474"/>
+        <location filename="../config_dialog.cc" line="480"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
@@ -523,39 +523,39 @@
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="474"/>
-        <location filename="../config_dialog.cc" line="504"/>
+        <location filename="../config_dialog.cc" line="480"/>
+        <location filename="../config_dialog.cc" line="510"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-文件 (*.json)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="483"/>
-        <location filename="../config_dialog.cc" line="536"/>
+        <location filename="../config_dialog.cc" line="489"/>
+        <location filename="../config_dialog.cc" line="542"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>服务配置已更改。 为了使更改生效，您必须重新启动服务。 立即重新启动服务？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="504"/>
+        <location filename="../config_dialog.cc" line="510"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="523"/>
+        <location filename="../config_dialog.cc" line="529"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>该配置无法写入。 确保您具有足够的写权限。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="420"/>
-        <location filename="../config_dialog.cc" line="456"/>
-        <location filename="../config_dialog.cc" line="526"/>
-        <location filename="../config_dialog.cc" line="558"/>
-        <location filename="../config_dialog.cc" line="571"/>
-        <location filename="../config_dialog.cc" line="830"/>
-        <location filename="../config_dialog.cc" line="849"/>
-        <location filename="../config_dialog.cc" line="864"/>
-        <location filename="../config_dialog.cc" line="874"/>
-        <location filename="../config_dialog.cc" line="890"/>
-        <location filename="../config_dialog.cc" line="900"/>
+        <location filename="../config_dialog.cc" line="426"/>
+        <location filename="../config_dialog.cc" line="462"/>
+        <location filename="../config_dialog.cc" line="532"/>
+        <location filename="../config_dialog.cc" line="564"/>
+        <location filename="../config_dialog.cc" line="577"/>
+        <location filename="../config_dialog.cc" line="836"/>
+        <location filename="../config_dialog.cc" line="855"/>
+        <location filename="../config_dialog.cc" line="870"/>
+        <location filename="../config_dialog.cc" line="880"/>
+        <location filename="../config_dialog.cc" line="896"/>
+        <location filename="../config_dialog.cc" line="906"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -635,62 +635,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="421"/>
-        <location filename="../config_dialog.cc" line="457"/>
+        <location filename="../config_dialog.cc" line="427"/>
+        <location filename="../config_dialog.cc" line="463"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="559"/>
+        <location filename="../config_dialog.cc" line="565"/>
         <source>Incorrect router address entered.</source>
         <translation>输入了错误的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="572"/>
+        <location filename="../config_dialog.cc" line="578"/>
         <source>Incorrect router public key entered.</source>
         <translation>输入了错误的路由器公钥。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="734"/>
-        <location filename="../config_dialog.cc" line="764"/>
+        <location filename="../config_dialog.cc" line="740"/>
+        <location filename="../config_dialog.cc" line="770"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="773"/>
+        <location filename="../config_dialog.cc" line="779"/>
         <source>Started</source>
         <translation>已开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="774"/>
+        <location filename="../config_dialog.cc" line="780"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="779"/>
+        <location filename="../config_dialog.cc" line="785"/>
         <source>Not started</source>
         <translation>没有开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="780"/>
-        <location filename="../config_dialog.cc" line="787"/>
-        <location filename="../config_dialog.cc" line="800"/>
+        <location filename="../config_dialog.cc" line="786"/>
+        <location filename="../config_dialog.cc" line="793"/>
+        <location filename="../config_dialog.cc" line="806"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="786"/>
+        <location filename="../config_dialog.cc" line="792"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="797"/>
+        <location filename="../config_dialog.cc" line="803"/>
         <source>Not installed</source>
         <translation>未安装</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="729"/>
-        <location filename="../config_dialog.cc" line="799"/>
+        <location filename="../config_dialog.cc" line="735"/>
+        <location filename="../config_dialog.cc" line="805"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
@@ -705,33 +705,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="804"/>
+        <location filename="../config_dialog.cc" line="810"/>
         <source>Current state: %1</source>
         <translation>当前状态 %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="831"/>
+        <location filename="../config_dialog.cc" line="837"/>
         <source>The service could not be installed.</source>
         <translation>无法安装该服务。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="850"/>
+        <location filename="../config_dialog.cc" line="856"/>
         <source>The service could not be removed.</source>
         <translation>该服务无法删除。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="865"/>
-        <location filename="../config_dialog.cc" line="891"/>
+        <location filename="../config_dialog.cc" line="871"/>
+        <location filename="../config_dialog.cc" line="897"/>
         <source>Could not access the service.</source>
         <translation>无法访问该服务。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="875"/>
+        <location filename="../config_dialog.cc" line="881"/>
         <source>The service could not be started.</source>
         <translation>该服务无法启动。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="901"/>
+        <location filename="../config_dialog.cc" line="907"/>
         <source>The service could not be stopped.</source>
         <translation>该服务无法停止。</translation>
     </message>

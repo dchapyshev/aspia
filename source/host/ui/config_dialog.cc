@@ -353,6 +353,12 @@ void ConfigDialog::onDeleteUser()
         delete user_item;
         setConfigChanged(true);
     }
+
+    if (ui.tree_users->topLevelItemCount() <= 0)
+    {
+        ui.button_modify->setEnabled(false);
+        ui.button_delete->setEnabled(false);
+    }
 }
 
 void ConfigDialog::onServiceInstallRemove()
