@@ -28,7 +28,7 @@ namespace base {
 class Address
 {
 public:
-    Address(uint16_t default_port);
+    explicit Address(uint16_t default_port);
 
     Address(const Address& other);
     Address& operator=(const Address& other);
