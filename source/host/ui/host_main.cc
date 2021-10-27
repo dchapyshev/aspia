@@ -98,26 +98,7 @@ int hostMain(int argc, char* argv[])
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
-    if (!is_hidden)
-    {
-        LOG(LS_INFO) << "No 'hidden' switch";
-
-        if (!base::win::isProcessElevated())
-        {
-            LOG(LS_INFO) << "Process not elevated yet";
-
-            if (base::win::createProcess(command_line, base::win::ProcessExecuteMode::ELEVATE))
-            {
-                LOG(LS_INFO) << "Elevated process started";
-                return 0;
-            }
-        }
-        else
-        {
-            LOG(LS_INFO) << "Process already elevated";
-        }
-    }
-    else
+    if (is_hidden)
     {
         LOG(LS_INFO) << "Has 'hidden' switch";
 
