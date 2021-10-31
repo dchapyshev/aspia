@@ -143,7 +143,8 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        LOG(LS_WARNING) << "CoInitializeSecurity failed: " << SystemError::toString(result);
+        LOG(LS_WARNING) << "CoInitializeSecurity failed: "
+                        << SystemError::toString(static_cast<DWORD>(result));
         return false;
     }
 
