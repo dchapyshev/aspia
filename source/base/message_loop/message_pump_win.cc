@@ -93,7 +93,10 @@ void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
 
     // Create a WM_TIMER event that will wake us up to check for any pending timers (in case we are
     // running within a nested, external sub-pump).
-    SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this), delay_msec, nullptr);
+    SetTimer(message_window_.hwnd(),
+             reinterpret_cast<UINT_PTR>(this),
+             static_cast<UINT>(delay_msec),
+             nullptr);
 }
 
 void MessagePumpForWin::runWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher)
