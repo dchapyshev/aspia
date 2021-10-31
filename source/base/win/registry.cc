@@ -233,7 +233,7 @@ bool RegistryKey::hasValue(const wchar_t* name) const
 DWORD RegistryKey::valueCount() const
 {
     DWORD count = 0;
-    LONG result = RegQueryInfoKeyW(key_, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &count,
+    LONG result = RegQueryInfoKeyW(key_, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, &count,
                                    nullptr, nullptr, nullptr, nullptr);
     return (result == ERROR_SUCCESS) ? count : 0;
 }
@@ -420,7 +420,7 @@ LONG RegistryKey::deleteEmptyKey(const wchar_t* name)
         return result;
 
     DWORD count = 0;
-    result = RegQueryInfoKeyW(target_key, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &count,
+    result = RegQueryInfoKeyW(target_key, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, &count,
                               nullptr, nullptr, nullptr, nullptr);
 
     RegCloseKey(target_key);
