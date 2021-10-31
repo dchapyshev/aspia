@@ -33,11 +33,14 @@ NetworkChannelProxy::NetworkChannelProxy(
 
 void NetworkChannelProxy::send(ByteArray&& buffer)
 {
-    std::scoped_lock lock(incoming_queue_lock_);
+    bool schedule_write;
 
-    bool schedule_write = incoming_queue_.empty();
+    {
+        std::scoped_lock lock(incoming_queue_lock_);
 
-    incoming_queue_.emplace(WriteTask::Type::USER_DATA, std::move(buffer));
+        schedule_write = incoming_queue_.empty();
+        incoming_queue_.emplace(WriteTask::Type::USER_DATA, std::move(buffer));
+    }
 
     if (!schedule_write)
         return;
