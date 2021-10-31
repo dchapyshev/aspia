@@ -128,7 +128,9 @@ OSInfo** OSInfo::instanceStorage()
     // and it's convenient for other modules to use this class without it.
     static OSInfo* info = []()
     {
-        _OSVERSIONINFOEXW version_info = { sizeof(version_info) };
+        _OSVERSIONINFOEXW version_info;
+        memset(&version_info, 0, sizeof(version_info));
+        version_info.dwOSVersionInfoSize = sizeof(version_info);
 
 #pragma warning(push)
 #pragma warning(disable:4996)
@@ -143,7 +145,7 @@ OSInfo** OSInfo::instanceStorage()
         GetProductInfo(version_info.dwMajorVersion, version_info.dwMinorVersion,
                        0, 0, &os_type);
 
-        return new OSInfo(version_info, system_info, os_type);
+        return new OSInfo(version_info, system_info, static_cast<int>(os_type));
     }();
 
     return &info;
@@ -162,9 +164,9 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
       architecture_(OTHER_ARCHITECTURE),
       wow64_status_(wow64StatusForProcess())
 {
-    version_number_.major = version_info.dwMajorVersion;
-    version_number_.minor = version_info.dwMinorVersion;
-    version_number_.build = version_info.dwBuildNumber;
+    version_number_.major = static_cast<int>(version_info.dwMajorVersion);
+    version_number_.minor = static_cast<int>(version_info.dwMinorVersion);
+    version_number_.build = static_cast<int>(version_info.dwBuildNumber);
     version_number_.patch = readUBR();
     version_ = majorMinorBuildToVersion(
         version_number_.major, version_number_.minor, version_number_.build);
