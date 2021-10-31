@@ -294,7 +294,7 @@ std::string* makeCheckOpString(const unsigned long long& v1,
 
 std::string* makeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names)
 {
-    return makeCheckOpString<unsigned long, int>(v1, v2, names);
+    return makeCheckOpString<unsigned long, unsigned int>(v1, v2, names);
 }
 
 std::string* makeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names)
