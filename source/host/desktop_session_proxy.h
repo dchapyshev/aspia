@@ -32,13 +32,22 @@ public:
     DesktopSessionProxy();
     ~DesktopSessionProxy();
 
-    void control(proto::internal::Control::Action action);
+    void control(proto::internal::DesktopControl::Action action);
     void configure(const DesktopSession::Config& config);
     void selectScreen(const proto::Screen& screen);
     void captureScreen();
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectMouseEvent(const proto::MouseEvent& event);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
+
+    bool isMouseLocked() const { return is_mouse_locked_; }
+    void setMouseLock(bool enable);
+
+    bool isKeyboardLocked() const { return is_keyboard_locked_; }
+    void setKeyboardLock(bool enable);
+
+    bool isPaused() const { return is_paused_; }
+    void setPaused(bool enable);
 
 private:
     friend class DesktopSessionManager;
@@ -47,6 +56,10 @@ private:
     void stopAndDettach();
 
     DesktopSession* desktop_session_ = nullptr;
+
+    bool is_mouse_locked_ = false;
+    bool is_keyboard_locked_ = false;
+    bool is_paused_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };

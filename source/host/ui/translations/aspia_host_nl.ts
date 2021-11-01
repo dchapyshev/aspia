@@ -516,9 +516,38 @@
         <translation>Verbindingen</translation>
     </message>
     <message>
-        <location filename="../notifier_window.ui" line="330"/>
+        <location filename="../notifier_window.ui" line="349"/>
+        <source>Voice chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.ui" line="363"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.ui" line="377"/>
+        <source>Lock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.ui" line="391"/>
+        <source>Lock keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.ui" line="405"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.ui" line="419"/>
+        <source>Disconnect all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Disconnect All</source>
-        <translation>Alle Verbreken</translation>
+        <translation type="vanished">Alle Verbreken</translation>
     </message>
 </context>
 <context>
@@ -1056,69 +1085,69 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="72"/>
-        <location filename="../main_window.cc" line="465"/>
+        <location filename="../main_window.cc" line="494"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="137"/>
-        <location filename="../main_window.cc" line="445"/>
+        <location filename="../main_window.cc" line="474"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="232"/>
+        <location filename="../main_window.cc" line="261"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="286"/>
+        <location filename="../main_window.cc" line="315"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="552"/>
+        <location filename="../main_window.cc" line="581"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="282"/>
-        <location filename="../main_window.cc" line="537"/>
+        <location filename="../main_window.cc" line="311"/>
+        <location filename="../main_window.cc" line="566"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="542"/>
+        <location filename="../main_window.cc" line="571"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="290"/>
+        <location filename="../main_window.cc" line="319"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="547"/>
+        <location filename="../main_window.cc" line="576"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="294"/>
+        <location filename="../main_window.cc" line="323"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="450"/>
+        <location filename="../main_window.cc" line="479"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="485"/>
+        <location filename="../main_window.cc" line="514"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="486"/>
+        <location filename="../main_window.cc" line="515"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
@@ -1126,9 +1155,39 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="231"/>
+        <location filename="../notifier_window.cc" line="170"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="214"/>
+        <source>Unlock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="219"/>
+        <source>Lock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="238"/>
+        <source>Unlock keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="243"/>
+        <source>Lock keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="262"/>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../notifier_window.cc" line="267"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

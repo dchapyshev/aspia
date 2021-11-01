@@ -157,17 +157,17 @@ void DesktopSessionFake::stop()
     frame_generator_->stop();
 }
 
-void DesktopSessionFake::control(proto::internal::Control::Action action)
+void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "CONTROL with action: " << controlActionToString(action);
 
     switch (action)
     {
-        case proto::internal::Control::ENABLE:
+        case proto::internal::DesktopControl::ENABLE:
             frame_generator_->start(delegate_);
             break;
 
-        case proto::internal::Control::DISABLE:
+        case proto::internal::DesktopControl::DISABLE:
             frame_generator_->stop();
             break;
 

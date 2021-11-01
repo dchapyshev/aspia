@@ -262,7 +262,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Disconnect All</source>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnect all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -627,6 +647,30 @@
     <name>host::NotifierWindow</name>
     <message>
         <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

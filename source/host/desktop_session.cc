@@ -21,20 +21,20 @@
 namespace host {
 
 // static
-const char* DesktopSession::controlActionToString(proto::internal::Control::Action action)
+const char* DesktopSession::controlActionToString(proto::internal::DesktopControl::Action action)
 {
     switch (action)
     {
-        case proto::internal::Control::ENABLE:
+        case proto::internal::DesktopControl::ENABLE:
             return "ENABLE";
 
-        case proto::internal::Control::DISABLE:
+        case proto::internal::DesktopControl::DISABLE:
             return "DISABLE";
 
-        case proto::internal::Control::LOGOFF:
+        case proto::internal::DesktopControl::LOGOFF:
             return "LOGOFF";
 
-        case proto::internal::Control::LOCK:
+        case proto::internal::DesktopControl::LOCK:
             return "LOCK";
 
         default:

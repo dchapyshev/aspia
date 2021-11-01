@@ -106,7 +106,7 @@ void DesktopSessionIpc::stop()
     delegate_ = nullptr;
 }
 
-void DesktopSessionIpc::control(proto::internal::Control::Action action)
+void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action);
 

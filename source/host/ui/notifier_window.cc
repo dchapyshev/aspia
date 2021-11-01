@@ -27,6 +27,7 @@
 #include <QScreen>
 #include <QTimer>
 #include <QTranslator>
+#include <QToolButton>
 
 namespace host {
 
@@ -67,6 +68,36 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
+QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QString tooltip)
+{
+    static const QString kStyle = QStringLiteral("\
+        QToolButton {\
+            border:1px solid #FAFAFA;\
+            border-radius:2px;\
+            background:transparent;\
+            padding:1px;\
+        }\
+        QToolButton:hover {\
+            border:1px solid #AAAAAA;\
+            background:#EBEBEB;\
+        }\
+        QToolButton:pressed {\
+            border:1px solid #AAAAAA;\
+            background:#D7D7D7;\
+        }");
+
+    QToolButton* button = new QToolButton(parent);
+
+    button->setIcon(QIcon(icon));
+    button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    button->setFixedWidth(20);
+    button->setFixedHeight(20);
+    button->setStyleSheet(kStyle);
+    button->setToolTip(tooltip);
+
+    return button;
+}
+
 } // namespace
 
 NotifierWindow::NotifierWindow(QWidget* parent)
@@ -78,14 +109,18 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     ui.label_title->installEventFilter(this);
     ui.label_connections->installEventFilter(this);
 
-    connect(ui.button_show_hide, &QPushButton::clicked,
-            this, &NotifierWindow::onShowHidePressed);
+    connect(ui.button_show_hide, &QPushButton::clicked, this, &NotifierWindow::onShowHidePressed);
+    connect(ui.button_voice_chat, &QToolButton::clicked, this, &NotifierWindow::onVoiceChat);
+    connect(ui.button_text_chat, &QToolButton::clicked, this, &NotifierWindow::onTextChat);
+    connect(ui.button_lock_mouse, &QToolButton::clicked, this, &NotifierWindow::onLockMouse);
+    connect(ui.button_lock_keyboard, &QToolButton::clicked, this, &NotifierWindow::onLockKeyboard);
+    connect(ui.button_pause, &QToolButton::clicked, this, &NotifierWindow::onPause);
+    connect(ui.button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
 
-    connect(ui.button_disconnect_all, &QPushButton::clicked,
-            this, &NotifierWindow::disconnectAll);
-
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
-            this, &NotifierWindow::onContextMenu);
+#if 1
+    ui.button_text_chat->setVisible(false);
+    ui.button_voice_chat->setVisible(false);
+#endif
 
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -120,7 +155,31 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
         ui.tree->clear();
 
         for (const auto& client : clients)
-            ui.tree->addTopLevelItem(new SessionTreeItem(client));
+        {
+            SessionTreeItem* tree_item = new SessionTreeItem(client);
+
+            tree_item->setTextAlignment(0, Qt::AlignLeft | Qt::AlignVCenter);
+            tree_item->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+            tree_item->setFlags(Qt::ItemIsEnabled);
+
+            ui.tree->addTopLevelItem(tree_item);
+
+            QToolButton* stop_button =
+                createSessionButton(ui.tree,
+                                    QStringLiteral(":/img/control-stop.png"),
+                                    tr("Disconnect"));
+            connect(stop_button, &QToolButton::clicked, this, [=]()
+            {
+                emit killSession(tree_item->id());
+            });
+
+            ui.tree->setItemWidget(tree_item, 1, stop_button);
+        }
+
+        ui.tree->resizeColumnToContents(1);
+
+        int first_column_width = ui.tree->header()->width() - ui.tree->columnWidth(1);
+        ui.tree->setColumnWidth(0, first_column_width);
     }
     else
     {
@@ -131,7 +190,90 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     }
 }
 
-void NotifierWindow::disconnectAll()
+void NotifierWindow::onVoiceChat()
+{
+    is_voice_chat_ = !is_voice_chat_;
+    emit voiceChat(is_voice_chat_);
+}
+
+void NotifierWindow::onTextChat()
+{
+    emit textChat();
+}
+
+void NotifierWindow::onLockMouse()
+{
+    is_mouse_locked_ = !is_mouse_locked_;
+
+    QString icon;
+    QString tooltip;
+
+    if (is_mouse_locked_)
+    {
+        icon = QStringLiteral(":/img/mouse-lock.png");
+        tooltip = tr("Unlock mouse");
+    }
+    else
+    {
+        icon = QStringLiteral(":/img/mouse-unlock.png");
+        tooltip = tr("Lock mouse");
+    }
+
+    ui.button_lock_mouse->setIcon(QIcon(icon));
+    ui.button_lock_mouse->setToolTip(tooltip);
+
+    emit lockMouse(is_mouse_locked_);
+}
+
+void NotifierWindow::onLockKeyboard()
+{
+    is_keyboard_locked_ = !is_keyboard_locked_;
+
+    QString icon;
+    QString tooltip;
+
+    if (is_keyboard_locked_)
+    {
+        icon = QStringLiteral(":/img/keyboard-lock.png");
+        tooltip = tr("Unlock keyboard");
+    }
+    else
+    {
+        icon = QStringLiteral(":/img/keyboard.png");
+        tooltip = tr("Lock keyboard");
+    }
+
+    ui.button_lock_keyboard->setIcon(QIcon(icon));
+    ui.button_lock_keyboard->setToolTip(tooltip);
+
+    emit lockKeyboard(is_keyboard_locked_);
+}
+
+void NotifierWindow::onPause()
+{
+    is_paused_ = !is_paused_;
+
+    QString icon;
+    QString tooltip;
+
+    if (is_paused_)
+    {
+        icon = QStringLiteral(":/img/control-start.png");
+        tooltip = tr("Resume");
+    }
+    else
+    {
+        icon = QStringLiteral(":/img/control-pause.png");
+        tooltip = tr("Pause");
+    }
+
+    ui.button_pause->setIcon(QIcon(icon));
+    ui.button_pause->setToolTip(tooltip);
+
+    emit pause(is_paused_);
+}
+
+void NotifierWindow::onStop()
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -221,7 +363,7 @@ void NotifierWindow::onShowHidePressed()
     else
         showNotifier();
 }
-
+/*
 void NotifierWindow::onContextMenu(const QPoint& point)
 {
     SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->itemAt(point));
@@ -239,7 +381,7 @@ void NotifierWindow::onContextMenu(const QPoint& point)
         emit killSession(item->id());
     }
 }
-
+*/
 void NotifierWindow::updateWindowPosition()
 {
     showNotifier();

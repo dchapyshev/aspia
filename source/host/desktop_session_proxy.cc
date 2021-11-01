@@ -29,7 +29,7 @@ DesktopSessionProxy::~DesktopSessionProxy()
     DCHECK(!desktop_session_);
 }
 
-void DesktopSessionProxy::control(proto::internal::Control::Action action)
+void DesktopSessionProxy::control(proto::internal::DesktopControl::Action action)
 {
     if (desktop_session_)
         desktop_session_->control(action);
@@ -37,38 +37,74 @@ void DesktopSessionProxy::control(proto::internal::Control::Action action)
 
 void DesktopSessionProxy::configure(const DesktopSession::Config& config)
 {
+    if (is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->configure(config);
 }
 
 void DesktopSessionProxy::selectScreen(const proto::Screen& screen)
 {
+    if (is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->selectScreen(screen);
 }
 
 void DesktopSessionProxy::captureScreen()
 {
+    if (is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->captureScreen();
 }
 
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
 {
+    if (is_keyboard_locked_ || is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->injectKeyEvent(event);
 }
 
 void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 {
+    if (is_mouse_locked_ || is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->injectMouseEvent(event);
 }
 
 void DesktopSessionProxy::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
+    if (is_paused_)
+        return;
+
     if (desktop_session_)
         desktop_session_->injectClipboardEvent(event);
+}
+
+void DesktopSessionProxy::setMouseLock(bool enable)
+{
+    is_mouse_locked_ = enable;
+}
+
+void DesktopSessionProxy::setKeyboardLock(bool enable)
+{
+    is_keyboard_locked_ = enable;
+}
+
+void DesktopSessionProxy::setPaused(bool enable)
+{
+    is_paused_ = enable;
+
+    control(enable ? proto::internal::DesktopControl::DISABLE :
+                     proto::internal::DesktopControl::ENABLE);
 }
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)

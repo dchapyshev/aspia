@@ -26,5 +26,13 @@
     <file alias="monitor-keyboard.png">resources/monitor-keyboard.png</file>
     <file alias="document.png">resources/document.png</file>
     <file alias="question.png">resources/question.png</file>
+    <file alias="control-pause.png">resources/control-pause.png</file>
+    <file alias="control-start.png">resources/control-start.png</file>
+    <file alias="control-stop.png">resources/control-stop.png</file>
+    <file alias="mouse-lock.png">resources/mouse-lock.png</file>
+    <file alias="mouse-unlock.png">resources/mouse-unlock.png</file>
+    <file alias="text-chat.png">resources/text-chat.png</file>
+    <file alias="headphone.png">resources/headphone.png</file>
+    <file alias="keyboard-lock.png">resources/keyboard-lock.png</file>
   </qresource>
 </RCC>

@@ -195,7 +195,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, this, [this](uint32_t id)
+        connect(notifier_, &NotifierWindow::killSession, this, [=](uint32_t id)
         {
             if (agent_proxy_)
             {
@@ -206,6 +206,35 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
             {
                 LOG(LS_WARNING) << "No agent proxy";
             }
+        });
+
+        connect(notifier_, &NotifierWindow::voiceChat, this, [=](bool enable)
+        {
+            if (agent_proxy_)
+                agent_proxy_->setVoiceChat(enable);
+        });
+
+        connect(notifier_, &NotifierWindow::textChat, this, [=]()
+        {
+            // TODO
+        });
+
+        connect(notifier_, &NotifierWindow::lockMouse, this, [=](bool enable)
+        {
+            if (agent_proxy_)
+                agent_proxy_->setMouseLock(enable);
+        });
+
+        connect(notifier_, &NotifierWindow::lockKeyboard, this, [=](bool enable)
+        {
+            if (agent_proxy_)
+                agent_proxy_->setKeyboardLock(enable);
+        });
+
+        connect(notifier_, &NotifierWindow::pause, this, [=](bool enable)
+        {
+            if (agent_proxy_)
+                agent_proxy_->setPause(enable);
         });
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
@@ -502,7 +531,7 @@ void MainWindow::onExit()
         {
             LOG(LS_INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
             connect(notifier_, &NotifierWindow::finished, this, &MainWindow::realClose);
-            notifier_->disconnectAll();
+            notifier_->onStop();
         }
     }
 }

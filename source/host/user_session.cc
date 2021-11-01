@@ -541,10 +541,6 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
         sendCredentials(FROM_HERE);
     }
-    else if (incoming_message_.has_kill_session())
-    {
-        killClientSession(incoming_message_.kill_session().id());
-    }
     else if (incoming_message_.has_connect_confirmation())
     {
         proto::internal::ConnectConfirmation connect_confirmation =
@@ -554,6 +550,74 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             onUnconfirmedSessionAccept(connect_confirmation.id());
         else
             onUnconfirmedSessionReject(connect_confirmation.id());
+    }
+    else if (incoming_message_.has_control())
+    {
+        const proto::internal::ServiceControl& control = incoming_message_.control();
+
+        switch (control.code())
+        {
+            case proto::internal::ServiceControl::CODE_KILL:
+            {
+                if (!control.has_unsigned_integer())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_KILL";
+                    return;
+                }
+
+                killClientSession(static_cast<uint32_t>(control.unsigned_integer()));
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_PAUSE:
+            {
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE";
+                    return;
+                }
+
+                desktop_session_proxy_->setPaused(control.boolean());
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
+            {
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE";
+                    return;
+                }
+
+                desktop_session_proxy_->setMouseLock(control.boolean());
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
+            {
+                if (!control.has_boolean())
+                {
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD";
+                    return;
+                }
+
+                desktop_session_proxy_->setKeyboardLock(control.boolean());
+            }
+            break;
+
+            case proto::internal::ServiceControl::CODE_VOICE_CHAT:
+            {
+                // TODO
+                NOTIMPLEMENTED();
+            }
+            break;
+
+            default:
+            {
+                LOG(LS_ERROR) << "Unhandled control code: " << control.code();
+                return;
+            }
+        }
     }
     else
     {
@@ -565,11 +629,11 @@ void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected";
 
-    proto::internal::Control::Action action = proto::internal::Control::ENABLE;
+    proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
     if (desktop_clients_.empty())
     {
         LOG(LS_INFO) << "No desktop clients. Disable session";
-        action = proto::internal::Control::DISABLE;
+        action = proto::internal::DesktopControl::DISABLE;
     }
 
     desktop_session_proxy_->control(action);
@@ -744,7 +808,11 @@ void UserSession::onClientSessionFinished()
     if (desktop_clients_.empty())
     {
         LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent";
-        desktop_session_proxy_->control(proto::internal::Control::DISABLE);
+        desktop_session_proxy_->control(proto::internal::DesktopControl::DISABLE);
+
+        desktop_session_proxy_->setMouseLock(false);
+        desktop_session_proxy_->setKeyboardLock(false);
+        desktop_session_proxy_->setPaused(false);
     }
 }
 
@@ -974,7 +1042,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->control(proto::internal::Control::ENABLE);
+            desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
         }
         break;
 

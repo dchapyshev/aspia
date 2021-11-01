@@ -24,6 +24,7 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "common.proto";
+import "text_chat.proto";
 
 package proto.internal;
 
@@ -53,11 +54,6 @@ message ConnectEvent
 }
 
 message DisconnectEvent
-{
-    uint32 id = 1;
-}
-
-message KillSession
 {
     uint32 id = 1;
 }
@@ -93,11 +89,34 @@ message ConnectConfirmation
     bool accept_connection = 2;
 }
 
+message ServiceControl
+{
+    enum Code
+    {
+        CODE_UNKNOWN       = 0;
+        CODE_KILL          = 1;
+        CODE_PAUSE         = 2;
+        CODE_LOCK_MOUSE    = 3;
+        CODE_LOCK_KEYBOARD = 4;
+        CODE_VOICE_CHAT    = 5;
+    }
+
+    Code code = 1;
+    oneof value
+    {
+        int64 signed_integer    = 2;
+        uint64 unsigned_integer = 3;
+        bool boolean            = 4;
+        string utf8_string      = 5;
+    }
+}
+
 message UiToService
 {
     CredentialsRequest credentials_request = 1;
-    KillSession kill_session = 2;
-    ConnectConfirmation connect_confirmation = 3;
+    ConnectConfirmation connect_confirmation = 2;
+    ServiceControl control = 3;
+    TextChat text_chat = 4;
 }
 
 message ServiceToUi
@@ -107,4 +126,5 @@ message ServiceToUi
     ConnectEvent connect_event       = 3;
     DisconnectEvent disconnect_event = 4;
     ConnectConfirmationRequest connect_confirmation_request = 5;
+    TextChat text_chat = 6;
 }

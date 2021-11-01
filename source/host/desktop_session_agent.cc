@@ -34,20 +34,20 @@ namespace host {
 
 namespace {
 
-const char* controlActionToString(proto::internal::Control::Action action)
+const char* controlActionToString(proto::internal::DesktopControl::Action action)
 {
     switch (action)
     {
-        case proto::internal::Control::ENABLE:
+        case proto::internal::DesktopControl::ENABLE:
             return "ENABLE";
 
-        case proto::internal::Control::DISABLE:
+        case proto::internal::DesktopControl::DISABLE:
             return "DISABLE";
 
-        case proto::internal::Control::LOCK:
+        case proto::internal::DesktopControl::LOCK:
             return "LOCK";
 
-        case proto::internal::Control::LOGOFF:
+        case proto::internal::DesktopControl::LOGOFF:
             return "LOGOFF";
 
         default:
@@ -194,19 +194,19 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         switch (incoming_message_->control().action())
         {
-            case proto::internal::Control::ENABLE:
+            case proto::internal::DesktopControl::ENABLE:
                 setEnabled(true);
                 break;
 
-            case proto::internal::Control::DISABLE:
+            case proto::internal::DesktopControl::DISABLE:
                 setEnabled(false);
                 break;
 
-            case proto::internal::Control::LOGOFF:
+            case proto::internal::DesktopControl::LOGOFF:
                 base::PowerController::logoff();
                 break;
 
-            case proto::internal::Control::LOCK:
+            case proto::internal::DesktopControl::LOCK:
                 base::PowerController::lock();
                 break;
 

@@ -40,6 +40,10 @@ public:
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(uint32_t id);
     void connectConfirmation(uint32_t id, bool accept);
+    void setVoiceChat(bool enable);
+    void setMouseLock(bool enable);
+    void setKeyboardLock(bool enable);
+    void setPause(bool enable);
 
 private:
     class Impl;

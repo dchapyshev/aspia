@@ -67,7 +67,7 @@ public:
     virtual void start() = 0;
     virtual void stop() = 0;
 
-    virtual void control(proto::internal::Control::Action action) = 0;
+    virtual void control(proto::internal::DesktopControl::Action action) = 0;
     virtual void configure(const Config& config) = 0;
     virtual void selectScreen(const proto::Screen& screen) = 0;
     virtual void captureScreen() = 0;
@@ -76,7 +76,7 @@ public:
     virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;
     virtual void injectClipboardEvent(const proto::ClipboardEvent& event) = 0;
 
-    static const char* controlActionToString(proto::internal::Control::Action action);
+    static const char* controlActionToString(proto::internal::DesktopControl::Action action);
 };
 
 } // namespace host

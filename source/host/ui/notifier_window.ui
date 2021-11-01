@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>213</width>
+    <width>203</width>
     <height>152</height>
    </rect>
   </property>
@@ -243,23 +243,20 @@ padding: 30px;
         </property>
         <property name="styleSheet">
          <string notr="true">QTreeWidget {
+show-decoration-selected: 0;
 border: none;
 margin: 2px;
 }
 QTreeWidget::item {
-border: 1px solid white;
+border: 0;
 color: #505050;
-}
-QTreeWidget::item:hover {
-border: 1px solid #AAAAAA;
-background: #EBEBEB;
-}
-QTreeWidget::item:selected {
-background: #EBEBEB;
 }</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
         </property>
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectRows</enum>
@@ -270,72 +267,168 @@ background: #EBEBEB;
         <attribute name="headerVisible">
          <bool>false</bool>
         </attribute>
+        <attribute name="headerCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="headerMinimumSectionSize">
+         <number>20</number>
+        </attribute>
+        <attribute name="headerStretchLastSection">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string notr="true">0</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignTrailing|AlignVCenter</set>
+         </property>
+        </column>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="bottom_layout">
-        <property name="spacing">
-         <number>3</number>
-        </property>
-        <property name="topMargin">
-         <number>3</number>
-        </property>
-        <property name="rightMargin">
-         <number>3</number>
-        </property>
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item>
-         <spacer name="horizontal_spacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="button_disconnect_all">
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
+       <widget class="QWidget" name="toolbar" native="true">
+        <property name="styleSheet">
+         <string notr="true">#toolbar {
+background:#FAFAFA;
+border: 1px solid #A7A7A7;
+}
+QToolButton {
 border: 1px solid #FAFAFA;
 border-radius: 2px;
 background:#FAFAFA;
 color: #505050;
-padding: 3px;
+padding: 2px;
 }
-QPushButton:hover {
+QToolButton:hover {
 border: 1px solid #AAAAAA;
 background: #EBEBEB;
 }
-QPushButton:pressed {
+QToolButton:pressed {
 border: 1px solid #AAAAAA;
 background: #D7D7D7;
-}
-QPushButton:disabled {
-color: gray;
 }</string>
-          </property>
-          <property name="text">
-           <string>Disconnect All</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>3</number>
+         </property>
+         <property name="leftMargin">
+          <number>3</number>
+         </property>
+         <property name="topMargin">
+          <number>3</number>
+         </property>
+         <property name="rightMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>194</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_voice_chat">
+           <property name="toolTip">
+            <string>Voice chat</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/img/headphone.png</normaloff>:/img/headphone.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_text_chat">
+           <property name="toolTip">
+            <string>Chat</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_lock_mouse">
+           <property name="toolTip">
+            <string>Lock mouse</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/img/mouse-unlock.png</normaloff>:/img/mouse-unlock.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_lock_keyboard">
+           <property name="toolTip">
+            <string>Lock keyboard</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../client/resources/client.qrc">
+             <normaloff>:/img/keyboard.png</normaloff>:/img/keyboard.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_pause">
+           <property name="toolTip">
+            <string>Pause</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/img/control-pause.png</normaloff>:/img/control-pause.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_stop">
+           <property name="toolTip">
+            <string>Disconnect all</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/img/control-stop.png</normaloff>:/img/control-stop.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -343,6 +436,7 @@ color: gray;
   </layout>
  </widget>
  <resources>
+  <include location="../../client/resources/client.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>

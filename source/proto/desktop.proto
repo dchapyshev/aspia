@@ -203,6 +203,7 @@ enum DesktopFlags
     DISABLE_FONT_SMOOTHING    = 16;
     BLOCK_REMOTE_INPUT        = 32;
     LOCK_AT_DISCONNECT        = 64;
+    CURSOR_POSITION           = 128;
 }
 
 message DesktopConfig
@@ -235,4 +236,5 @@ message ClientToHost
     ClipboardEvent clipboard_event = 5;
     DesktopExtension extension     = 6;
     DesktopConfig config           = 7;
+    AudioPacket audio_packet       = 8;
 }

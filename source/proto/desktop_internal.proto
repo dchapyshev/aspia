@@ -85,7 +85,7 @@ message Configure
     bool lock_at_disconnect     = 5;
 }
 
-message Control
+message DesktopControl
 {
     enum Action
     {
@@ -101,7 +101,7 @@ message Control
 
 message ServiceToDesktop
 {
-    Control control                       = 1;
+    DesktopControl control                = 1;
     Configure configure                   = 2;
     SelectSource select_source            = 3;
     NextScreenCapture next_screen_capture = 4;

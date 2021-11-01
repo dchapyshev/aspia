@@ -35,6 +35,10 @@ public:
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
     void killClient(uint32_t id);
     void connectConfirmation(uint32_t id, bool accept);
+    void setVoiceChat(bool enable);
+    void setMouseLock(bool enable);
+    void setKeyboardLock(bool enable);
+    void setPause(bool enable);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -118,6 +122,54 @@ void UserSessionAgentProxy::Impl::connectConfirmation(uint32_t id, bool accept)
         agent_->connectConfirmation(id, accept);
 }
 
+void UserSessionAgentProxy::Impl::setVoiceChat(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::setVoiceChat, shared_from_this(), enable));
+        return;
+    }
+
+    if (agent_)
+        agent_->setVoiceChat(enable);
+}
+
+void UserSessionAgentProxy::Impl::setMouseLock(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::setMouseLock, shared_from_this(), enable));
+        return;
+    }
+
+    if (agent_)
+        agent_->setMouseLock(enable);
+}
+
+void UserSessionAgentProxy::Impl::setKeyboardLock(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::setKeyboardLock, shared_from_this(), enable));
+        return;
+    }
+
+    if (agent_)
+        agent_->setKeyboardLock(enable);
+}
+
+void UserSessionAgentProxy::Impl::setPause(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::setPause, shared_from_this(), enable));
+        return;
+    }
+
+    if (agent_)
+        agent_->setPause(enable);
+}
+
 UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                              std::unique_ptr<UserSessionAgent> agent)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
@@ -154,6 +206,26 @@ void UserSessionAgentProxy::killClient(uint32_t id)
 void UserSessionAgentProxy::connectConfirmation(uint32_t id, bool accept)
 {
     impl_->connectConfirmation(id, accept);
+}
+
+void UserSessionAgentProxy::setVoiceChat(bool enable)
+{
+    impl_->setVoiceChat(enable);
+}
+
+void UserSessionAgentProxy::setMouseLock(bool enable)
+{
+    impl_->setMouseLock(enable);
+}
+
+void UserSessionAgentProxy::setKeyboardLock(bool enable)
+{
+    impl_->setKeyboardLock(enable);
+}
+
+void UserSessionAgentProxy::setPause(bool enable)
+{
+    impl_->setPause(enable);
 }
 
 } // namespace host

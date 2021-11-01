@@ -143,7 +143,11 @@ void UserSessionAgent::killClient(uint32_t id)
     LOG(LS_INFO) << "Kill client request: " << id;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_kill_session()->set_id(id);
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_KILL);
+    control->set_unsigned_integer(id);
+
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
@@ -156,6 +160,58 @@ void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
         outgoing_message_.mutable_connect_confirmation();
     confirmation->set_id(id);
     confirmation->set_accept_connection(accept);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSessionAgent::setVoiceChat(bool enable)
+{
+    LOG(LS_INFO) << "Voice chat: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_VOICE_CHAT);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSessionAgent::setMouseLock(bool enable)
+{
+    LOG(LS_INFO) << "Mouse lock: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSessionAgent::setKeyboardLock(bool enable)
+{
+    LOG(LS_INFO) << "Keyboard lock: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
+    control->set_boolean(enable);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSessionAgent::setPause(bool enable)
+{
+    LOG(LS_INFO) << "Pause: " << enable;
+
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
+
+    control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
+    control->set_boolean(enable);
 
     ipc_channel_->send(base::serialize(outgoing_message_));
 }

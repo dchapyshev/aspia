@@ -35,7 +35,7 @@ public:
     // DesktopSession implementation.
     void start() override;
     void stop() override;
-    void control(proto::internal::Control::Action action) override;
+    void control(proto::internal::DesktopControl::Action action) override;
     void configure(const Config& config) override;
     void selectScreen(const proto::Screen& screen) override;
     void captureScreen() override;

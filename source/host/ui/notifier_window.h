@@ -34,12 +34,22 @@ public:
 
 public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
-    void disconnectAll();
+    void onVoiceChat();
+    void onTextChat();
+    void onLockMouse();
+    void onLockKeyboard();
+    void onPause();
+    void onStop();
     void retranslateUi();
     void closeNotifier();
 
 signals:
     void killSession(uint32_t id);
+    void voiceChat(bool enable);
+    void textChat();
+    void lockMouse(bool enable);
+    void lockKeyboard(bool enable);
+    void pause(bool enable);
     void finished();
 
 protected:
@@ -50,7 +60,6 @@ protected:
 
 private slots:
     void onShowHidePressed();
-    void onContextMenu(const QPoint& point);
     void updateWindowPosition();
 
 private:
@@ -63,6 +72,11 @@ private:
     bool should_be_close_ = false;
     QPoint start_pos_;
     QRect window_rect_;
+
+    bool is_voice_chat_ = false;
+    bool is_mouse_locked_ = false;
+    bool is_keyboard_locked_ = false;
+    bool is_paused_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(NotifierWindow);
 };

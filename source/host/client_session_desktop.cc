@@ -375,14 +375,14 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
             case proto::PowerControl::ACTION_LOGOFF:
             {
                 LOG(LS_INFO) << "LOGOFF command";
-                desktop_session_proxy_->control(proto::internal::Control::LOGOFF);
+                desktop_session_proxy_->control(proto::internal::DesktopControl::LOGOFF);
             }
             break;
 
             case proto::PowerControl::ACTION_LOCK:
             {
                 LOG(LS_INFO) << "LOCK command";
-                desktop_session_proxy_->control(proto::internal::Control::LOCK);
+                desktop_session_proxy_->control(proto::internal::DesktopControl::LOCK);
             }
             break;
 
