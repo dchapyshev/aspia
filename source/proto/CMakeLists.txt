@@ -30,7 +30,8 @@ list(APPEND SOURCE_PROTO
     router_common.proto
     router_peer.proto
     router_relay.proto
-    system_info.proto)
+    system_info.proto
+    text_chat.proto)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 
