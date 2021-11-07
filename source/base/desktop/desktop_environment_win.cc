@@ -18,6 +18,7 @@
 
 #include "base/desktop/desktop_environment.h"
 
+#include "base/logging.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 
@@ -88,14 +89,20 @@ void DesktopEnvironment::revertAll()
     win::ScopedHandle user_token;
 
     if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), user_token.recieve()))
+    {
+        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
         return;
+    }
 
     win::ScopedImpersonator impersonator;
 
     // The process of the desktop session is running with "SYSTEM" account.
     // We need the current real user, not "SYSTEM".
     if (!impersonator.loggedOnUser(user_token))
+    {
+        LOG(LS_WARNING) << "loggedOnUser failed";
         return;
+    }
 
     HMODULE module = GetModuleHandleW(L"user32.dll");
     if (module)
@@ -111,8 +118,19 @@ void DesktopEnvironment::revertAll()
         {
             // WARNING! Undocumented function!
             // Any ideas how to update user settings without using it?
-            update_per_user_system_parameters(0x06);
+            if (!update_per_user_system_parameters(0x06))
+            {
+                PLOG(LS_WARNING) << "UpdatePerUserSystemParameters failed";
+            }
         }
+        else
+        {
+            PLOG(LS_WARNING) << "GetProcAddress failed";
+        }
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "GetModuleHandleW failed";
     }
 }
 
