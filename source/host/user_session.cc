@@ -638,6 +638,12 @@ void UserSession::onDesktopSessionStarted()
         LOG(LS_INFO) << "No desktop clients. Disable session";
         action = proto::internal::DesktopControl::DISABLE;
     }
+    else
+    {
+        desktop_session_proxy_->setKeyboardLock(false);
+        desktop_session_proxy_->setMouseLock(false);
+        desktop_session_proxy_->setPaused(false);
+    }
 
     desktop_session_proxy_->control(action);
     onClientSessionConfigured();
@@ -1040,13 +1046,17 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         {
             LOG(LS_INFO) << "New desktop session";
 
+            bool enable_required = desktop_clients_.empty();
+
             desktop_clients_.emplace_back(std::move(client_session));
 
             ClientSessionDesktop* desktop_client_session =
                 static_cast<ClientSessionDesktop*>(client_session_ptr);
 
             desktop_client_session->setDesktopSessionProxy(desktop_session_proxy_);
-            desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
+
+            if (enable_required)
+                desktop_session_proxy_->control(proto::internal::DesktopControl::ENABLE);
         }
         break;
 
