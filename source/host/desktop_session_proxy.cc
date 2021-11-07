@@ -102,9 +102,6 @@ void DesktopSessionProxy::setKeyboardLock(bool enable)
 void DesktopSessionProxy::setPaused(bool enable)
 {
     is_paused_ = enable;
-
-    control(enable ? proto::internal::DesktopControl::DISABLE :
-                     proto::internal::DesktopControl::ENABLE);
 }
 
 void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)

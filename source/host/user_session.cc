@@ -578,6 +578,9 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
                 }
 
                 desktop_session_proxy_->setPaused(control.boolean());
+                desktop_session_proxy_->control(control.boolean() ?
+                    proto::internal::DesktopControl::ENABLE :
+                    proto::internal::DesktopControl::DISABLE);
             }
             break;
 
@@ -1036,6 +1039,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
             LOG(LS_INFO) << "New desktop session";
+
             desktop_clients_.emplace_back(std::move(client_session));
 
             ClientSessionDesktop* desktop_client_session =
