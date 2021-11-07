@@ -579,8 +579,8 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
                 desktop_session_proxy_->setPaused(control.boolean());
                 desktop_session_proxy_->control(control.boolean() ?
-                    proto::internal::DesktopControl::ENABLE :
-                    proto::internal::DesktopControl::DISABLE);
+                    proto::internal::DesktopControl::DISABLE :
+                    proto::internal::DesktopControl::ENABLE);
             }
             break;
 
