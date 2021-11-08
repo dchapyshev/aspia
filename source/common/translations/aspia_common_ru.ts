@@ -74,6 +74,45 @@
     </message>
 </context>
 <context>
+    <name>TextChatIncomingMessage</name>
+    <message>
+        <location filename="../ui/text_chat_incoming_message.ui" line="191"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TextChatOutgoingMessage</name>
+    <message>
+        <location filename="../ui/text_chat_outgoing_message.ui" line="48"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TextChatWindow</name>
+    <message>
+        <location filename="../ui/text_chat_window.ui" line="20"/>
+        <source>Aspia Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.ui" line="158"/>
+        <source>Send message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.ui" line="204"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.ui" line="227"/>
+        <source>···</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UpdateDialog</name>
     <message>
         <location filename="../ui/update_dialog.ui" line="14"/>
@@ -210,6 +249,64 @@
         <location filename="../ui/download_dialog.cc" line="52"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Произошла ошибка при загрузке обновления: %1</translation>
+    </message>
+</context>
+<context>
+    <name>common::TextChatWindow</name>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="60"/>
+        <source>Save chat...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="61"/>
+        <source>Clear chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="109"/>
+        <source>%1 is typing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="113"/>
+        <source>User %1 started a chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="117"/>
+        <source>User %1 finished a chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="183"/>
+        <location filename="../ui/text_chat_window.cc" line="235"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/text_chat_window.cc" line="184"/>
+        <source>The message is too long. The maximum message length is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="224"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="226"/>
+        <source>TXT files (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_window.cc" line="236"/>
+        <source>Could not open file for writing.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
