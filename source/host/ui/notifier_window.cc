@@ -118,7 +118,6 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(ui.button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
 
 #if 1
-    ui.button_text_chat->setVisible(false);
     ui.button_voice_chat->setVisible(false);
 #endif
 
@@ -363,25 +362,7 @@ void NotifierWindow::onShowHidePressed()
     else
         showNotifier();
 }
-/*
-void NotifierWindow::onContextMenu(const QPoint& point)
-{
-    SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->itemAt(point));
-    if (!item)
-        return;
 
-    QAction disconnect_action(tr("Disconnect"));
-
-    QMenu menu;
-    menu.addAction(&disconnect_action);
-
-    if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
-    {
-        LOG(LS_INFO) << "Disconnect session with ID: " << item->id();
-        emit killSession(item->id());
-    }
-}
-*/
 void NotifierWindow::updateWindowPosition()
 {
     showNotifier();
