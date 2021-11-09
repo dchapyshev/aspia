@@ -14,7 +14,15 @@ jobs:
     - uses: egorpugin/sw-action@master
 
     - name: build
-      run: ./sw build source
+      run: ./sw build source -static
 
     #- name: test
       #run: ./sw test source
+
+    - name: Upload Unit Test Results
+      if: always() && matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: Binaries (${{ matrix.os }})
+        path: .sw/out/**
+        
