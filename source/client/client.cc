@@ -72,6 +72,12 @@ void Client::start(const Config& config)
     {
         LOG(LS_INFO) << "Starting RELAY connection";
 
+        if (!config_.router_config.has_value())
+        {
+            LOG(LS_FATAL) << "No router config. Continuation is impossible";
+            return;
+        }
+
         // Show the status window.
         status_window_proxy_->onStarted(config_.address_or_id);
 

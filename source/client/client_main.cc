@@ -20,6 +20,7 @@
 
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "client/router_config_storage.h"
 #include "client/ui/application.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/client_window.h"
@@ -89,7 +90,9 @@ int clientMain(int argc, char* argv[])
 
     if (parser.isSet(address_option))
     {
+        client::RouterConfig router_config = client::RouterConfigStorage().routerConfig();
         client::Config config;
+
         config.address_or_id = parser.value(address_option).toStdU16String();
         config.port = parser.value(port_option).toUShort();
         config.username = parser.value(username_option).toStdU16String();
@@ -116,6 +119,27 @@ int clientMain(int argc, char* argv[])
                 QApplication::translate("Client", "Incorrect session type entered."),
                 QMessageBox::Ok);
             return 1;
+        }
+
+        if (base::isHostId(config.address_or_id))
+        {
+            LOG(LS_INFO) << "Relay connection selected";
+
+            if (!router_config.isValid())
+            {
+                QString title = QApplication::translate("Client", "Warning");
+                QString message = QApplication::translate("Client",
+                    "A host ID was entered, but the router was not configured. You need to "
+                    "configure your router before connecting.");
+                QMessageBox::warning(nullptr, title, message, QMessageBox::Ok);
+                return 1;
+            }
+
+            config.router_config = router_config;
+        }
+        else
+        {
+            LOG(LS_INFO) << "Direct connection selected";
         }
 
         client::SessionWindow* session_window = nullptr;

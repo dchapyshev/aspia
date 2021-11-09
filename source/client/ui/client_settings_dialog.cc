@@ -23,6 +23,7 @@
 #include "client/router_config_storage.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 namespace client {
 
@@ -71,6 +72,8 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked,
             this, &ClientSettingsDialog::onButtonBoxClicked);
+
+    QTimer::singleShot(0, this, &ClientSettingsDialog::adjustSize);
 }
 
 ClientSettingsDialog::~ClientSettingsDialog() = default;

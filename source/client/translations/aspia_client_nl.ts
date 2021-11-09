@@ -35,39 +35,45 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="64"/>
+        <location filename="../client_main.cc" line="65"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="67"/>
+        <location filename="../client_main.cc" line="68"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="71"/>
+        <location filename="../client_main.cc" line="72"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="74"/>
+        <location filename="../client_main.cc" line="75"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="79"/>
+        <location filename="../client_main.cc" line="80"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="115"/>
+        <location filename="../client_main.cc" line="118"/>
+        <location filename="../client_main.cc" line="130"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="116"/>
+        <location filename="../client_main.cc" line="119"/>
         <source>Incorrect session type entered.</source>
         <translation>Ongeldig sessie type ingevoerd.</translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="131"/>
+        <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
+        <translation type="unfinished">Er is een host ID ingevoerd, maar de router was niet geconfigureerd. Configureer de router voor het maken van een verbinding.</translation>
     </message>
 </context>
 <context>
@@ -1351,22 +1357,22 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="91"/>
+        <location filename="../ui/client_settings_dialog.cc" line="94"/>
         <source>An invalid router address was entered.</source>
         <translation>Er is een ongelid router adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="102"/>
+        <location filename="../ui/client_settings_dialog.cc" line="105"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen letters, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="111"/>
+        <location filename="../ui/client_settings_dialog.cc" line="114"/>
         <source>Password cannot be empty.</source>
         <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="135"/>
+        <location filename="../ui/client_settings_dialog.cc" line="138"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
