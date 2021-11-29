@@ -825,6 +825,13 @@ void UserSession::onClientSessionFinished()
     }
 }
 
+void UserSession::onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat)
+{
+    outgoing_message_.Clear();
+    outgoing_message_.set_allocated_text_chat(text_chat.release());
+    channel_->send(base::serialize(outgoing_message_));
+}
+
 void UserSession::onSessionDettached(const base::Location& location)
 {
     if (state_ == State::DETTACHED)

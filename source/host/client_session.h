@@ -23,6 +23,7 @@
 #include "base/version.h"
 #include "base/net/network_channel.h"
 #include "proto/common.pb.h"
+#include "proto/text_chat.pb.h"
 
 namespace base {
 class NetworkChannelProxy;
@@ -44,12 +45,13 @@ public:
 
         virtual void onClientSessionConfigured() = 0;
         virtual void onClientSessionFinished() = 0;
+        virtual void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) = 0;
     };
 
     enum class State
     {
-        CREATED, // Session created but not yet started.
-        STARTED, // Session started.
+        CREATED, // Session is created but not yet started.
+        STARTED, // Session is started.
         FINISHED // Session is stopped.
     };
 

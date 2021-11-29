@@ -114,6 +114,7 @@ protected:
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() override;
     void onClientSessionFinished() override;
+    void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) override;
 
 private:
     void onSessionDettached(const base::Location& location);
