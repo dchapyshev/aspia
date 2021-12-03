@@ -93,7 +93,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation>Nome de usuário:</translation>
+        <translation>Usuário:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="67"/>
@@ -669,7 +669,7 @@
     <message>
         <location filename="../ui/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation>Propriedade do Usuário</translation>
+        <translation>Propriedades do Usuário</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="27"/>
@@ -1407,7 +1407,7 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="279"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Ocorreu um erro durante a autenticação: nome de usuário ou senha incorretos.</translation>
+        <translation>Ocorreu um erro durante a autenticação: usuário ou senha incorretos.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="283"/>
@@ -1531,12 +1531,12 @@
     <message>
         <location filename="../ui/router_user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation>O nome do usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
+        <translation>O usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="143"/>
         <source>The username you entered already exists.</source>
-        <translation>O nome de usuário que você digitou já existe.</translation>
+        <translation>O usuário que você digitou já existe.</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="156"/>
