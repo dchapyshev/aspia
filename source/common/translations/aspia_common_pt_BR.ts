@@ -271,7 +271,7 @@
     <message>
         <location filename="../ui/text_chat_window.cc" line="113"/>
         <source>User %1 started a chat.</source>
-        <translation>Usuárior %1 inicou uma conversa.</translation>
+        <translation>Usuário %1 inicou uma conversa.</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="117"/>
