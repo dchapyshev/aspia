@@ -73,7 +73,7 @@
     <message>
         <location filename="../client_main.cc" line="131"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished">Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
+        <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
 </context>
 <context>

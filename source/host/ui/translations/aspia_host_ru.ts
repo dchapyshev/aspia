@@ -654,32 +654,32 @@
     <message>
         <location filename="../notifier_window.ui" line="349"/>
         <source>Voice chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосовой чат</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="363"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="377"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать мышь</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="391"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать клавиатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="405"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключить всех</translation>
     </message>
     <message>
         <source>Disconnect All</source>
@@ -1396,32 +1396,32 @@
     <message>
         <location filename="../notifier_window.cc" line="214"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать мышь</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="219"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать мышь</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="238"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать клавиатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="243"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать клавиатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="262"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Возобновить</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="267"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
 </context>
 <context>
