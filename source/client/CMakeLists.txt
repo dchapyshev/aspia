@@ -18,6 +18,8 @@
 
 include(translations)
 
+set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM 1)
+
 list(APPEND SOURCE_CLIENT_CORE
     client.cc
     client.h
@@ -200,7 +202,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/source/client/*.h
         ${PROJECT_SOURCE_DIR}/source/client/*.ui)
 
-    create_translation(TS_CLIENT_CORE_UPDATE ${CLIENT_CORE_TR_SOURCES} ${CLIENT_CORE_TS_FILES})
+    create_translation(TS_CLIENT_CORE_UPDATE ${CLIENT_CORE_TR_SOURCES} ${CLIENT_CORE_TS_FILES} OPTIONS "-no-obsolete")
     add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_CORE_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")

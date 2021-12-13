@@ -18,6 +18,8 @@
 
 include(translations)
 
+set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM 1)
+
 list(APPEND SOURCE_CONSOLE
     address_book_dialog.cc
     address_book_dialog.h
@@ -164,7 +166,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/source/console/*.h
         ${PROJECT_SOURCE_DIR}/source/console/*.ui)
 
-    create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES})
+    create_translation(TS_CONSOLE_UPDATE ${CONSOLE_TR_SOURCES} ${CONSOLE_TS_FILES} OPTIONS "-no-obsolete")
     add_custom_target(aspia_console_ts_update DEPENDS ${TS_CONSOLE_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
