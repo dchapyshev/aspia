@@ -38,15 +38,15 @@ void StatusBar::setCurrentComputerGroup(
     QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
 
     QLabel* first_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
+        QStringLiteral("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
         .arg(QString::fromStdString(computer_group.name())), this);
 
     QLabel* second_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
+        QStringLiteral("<table><tr><td><img src=':/img/folder.png'></td><td>%1</td></tr></table>")
         .arg(child_groups), this);
 
     QLabel* third_label = new QLabel(
-        QString("<table><tr><td><img src=':/img/computer.png'></td><td>%1</td></tr></table>")
+        QStringLiteral("<table><tr><td><img src=':/img/computer.png'></td><td>%1</td></tr></table>")
         .arg(child_computers), this);
 
     first_label->setTextFormat(Qt::RichText);
