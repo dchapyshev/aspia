@@ -42,7 +42,7 @@ base::ByteArray serialize(const google::protobuf::MessageLite& message);
 template <class T>
 bool parse(const base::ByteArray& buffer, T* message)
 {
-    return message->ParseFromArray(buffer.data(), buffer.size());
+    return message->ParseFromArray(buffer.data(), static_cast<int>(buffer.size()));
 }
 
 int compare(const base::ByteArray& first, const base::ByteArray& second);

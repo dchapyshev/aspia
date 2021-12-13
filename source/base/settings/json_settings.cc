@@ -314,14 +314,14 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
             if (i != segments.size() - 1)
             {
                 std::string_view& segment = segments[i];
-                json.Key(segment.data(), segment.length());
+                json.Key(segment.data(), static_cast<rapidjson::SizeType>(segment.length()));
                 json.StartObject();
             }
         }
 
         std::string_view& segment = segments.back();
-        json.Key(segment.data(), segment.length());
-        json.String(map_item.second.data(), map_item.second.length());
+        json.Key(segment.data(), static_cast<rapidjson::SizeType>(segment.length()));
+        json.String(map_item.second.data(), static_cast<rapidjson::SizeType>(map_item.second.length()));
 
         prev.swap(segments);
     }

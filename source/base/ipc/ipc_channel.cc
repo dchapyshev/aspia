@@ -281,7 +281,7 @@ std::filesystem::path IpcChannel::peerFilePath() const
 
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetModuleFileNameExW(process.get(), nullptr, buffer, std::size(buffer)))
+    if (!GetModuleFileNameExW(process.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
         PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
         return std::filesystem::path();
@@ -332,7 +332,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 
 void IpcChannel::doWrite()
 {
-    write_size_ = write_queue_.front().size();
+    write_size_ = static_cast<uint32_t>(write_queue_.front().size());
 
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {

@@ -35,7 +35,7 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 
     if (is_endian.little || (reinterpret_cast<size_t>(buffer) % sizeof(size_t)) != 0)
     {
-        uint32_t n = buffer_size;
+        uint32_t n = static_cast<uint32_t>(buffer_size);
         uint32_t c = 1;
 
         do
