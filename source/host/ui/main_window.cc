@@ -26,6 +26,7 @@
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
+#include "common/ui/text_chat_window.h"
 #include "host/user_session_agent.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
@@ -353,6 +354,22 @@ void MainWindow::onConnectConfirmationRequest(
 
     if (agent_proxy_)
         agent_proxy_->connectConfirmation(request.id(), accept);
+}
+
+void MainWindow::onTextChat(const proto::TextChat& text_chat)
+{
+    if (text_chat.has_chat_message())
+    {
+        // TODO
+    }
+    else if (text_chat.has_chat_status())
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled text chat message";
+    }
 }
 
 void MainWindow::realClose()

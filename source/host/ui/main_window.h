@@ -61,6 +61,7 @@ protected:
     void onRouterStateChanged(const proto::internal::RouterState& state) override;
     void onConnectConfirmationRequest(
         const proto::internal::ConnectConfirmationRequest& request) override;
+    void onTextChat(const proto::TextChat& text_chat) override;
 
 private slots:
     void realClose();

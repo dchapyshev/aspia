@@ -123,6 +123,10 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         window_proxy_->onRouterStateChanged(incoming_message_.router_state());
     }
+    else if (incoming_message_.has_text_chat())
+    {
+        window_proxy_->onTextChat(incoming_message_.text_chat());
+    }
     else
     {
         LOG(LS_ERROR) << "Unhandled message from service";

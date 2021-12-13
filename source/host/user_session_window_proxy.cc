@@ -111,4 +111,17 @@ void UserSessionWindowProxy::onConnectConfirmationRequest(
         window_->onConnectConfirmationRequest(request);
 }
 
+void UserSessionWindowProxy::onTextChat(const proto::TextChat& text_chat)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &UserSessionWindowProxy::onTextChat, shared_from_this(), text_chat));
+        return;
+    }
+
+    if (window_)
+        window_->onTextChat(text_chat);
+}
+
 } // namespace host

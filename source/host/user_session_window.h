@@ -34,6 +34,7 @@ public:
     virtual void onRouterStateChanged(const proto::internal::RouterState& state) = 0;
     virtual void onConnectConfirmationRequest(
         const proto::internal::ConnectConfirmationRequest& request) = 0;
+    virtual void onTextChat(const proto::TextChat& text_chat) = 0;
 };
 
 } // namespace host
