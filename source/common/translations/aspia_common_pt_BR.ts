@@ -52,12 +52,12 @@
     <message>
         <location filename="../session_type.cc" line="30"/>
         <source>Desktop Manage</source>
-        <translation>Gerenciar Desktops</translation>
+        <translation>Controlar Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="33"/>
         <source>Desktop View</source>
-        <translation>Visualizar Desktop</translation>
+        <translation>Visualizar Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../session_type.cc" line="36"/>
@@ -70,7 +70,7 @@
     <message>
         <location filename="../ui/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation>Status da conexão</translation>
+        <translation>Status da Conexão</translation>
     </message>
 </context>
 <context>
@@ -78,7 +78,7 @@
     <message>
         <location filename="../ui/text_chat_incoming_message.ui" line="191"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Horário</translation>
     </message>
 </context>
 <context>
@@ -86,7 +86,7 @@
     <message>
         <location filename="../ui/text_chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Horário</translation>
     </message>
 </context>
 <context>
@@ -94,22 +94,22 @@
     <message>
         <location filename="../ui/text_chat_window.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Chat</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.ui" line="158"/>
         <source>Send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar mensagem</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.ui" line="204"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferramentas</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.ui" line="227"/>
         <source>···</source>
-        <translation type="unfinished"></translation>
+        <translation>···</translation>
     </message>
 </context>
 <context>
@@ -225,12 +225,12 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="147"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git branch: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="148"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git commit: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="153"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../ui/download_dialog.cc" line="51"/>
         <source>Warning</source>
-        <translation>Aviso</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.cc" line="52"/>
@@ -256,56 +256,56 @@
     <message>
         <location filename="../ui/text_chat_window.cc" line="60"/>
         <source>Save chat...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar conversa...</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="61"/>
         <source>Clear chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar conversa</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="109"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 está digitando...</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="113"/>
         <source>User %1 started a chat.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuário %1 inicou uma conversa.</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="117"/>
         <source>User %1 finished a chat.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuário %1 encerrou a conversa.</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="183"/>
         <location filename="../ui/text_chat_window.cc" line="235"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Atenção</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/text_chat_window.cc" line="184"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>A mensagem é muito longa. O mensagem pode ter no máximo %n caracteres.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="224"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar Arquivo</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="226"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_window.cc" line="236"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível abrir o arquivo para gravação.</translation>
     </message>
 </context>
 <context>
@@ -343,7 +343,7 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="159"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation>Todas as sessões conectadas serão encerradas. Você não pode estabelecer uma conexão até que a atualização seja concluída.</translation>
+        <translation>Todas as sessões conectadas serão encerradas. Você não poderá estabelecer uma conexão até que a atualização seja concluída.</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="161"/>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../ui/update_dialog.cc" line="175"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/update_dialog.cc" line="176"/>

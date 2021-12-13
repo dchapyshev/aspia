@@ -11,7 +11,7 @@
     <message>
         <location filename="../ui/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation>Nome de usuário</translation>
+        <translation>Usuário</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.ui" line="46"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="../ui/authorization_dialog.ui" line="96"/>
         <source>One-time password connection</source>
-        <translation>Conexão com única senha</translation>
+        <translation>Conexão com senha de uso único</translation>
     </message>
 </context>
 <context>
@@ -39,12 +39,12 @@
     <message>
         <location filename="../client_main.cc" line="72"/>
         <source>Name of user.</source>
-        <translation>Nome do usuário.</translation>
+        <translation>Usuário.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="75"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation>Tipo de sessão. Valores possíveis: desktop-manage, desktop-view, file-transfer.</translation>
+        <translation>Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="80"/>
@@ -55,7 +55,7 @@
         <location filename="../client_main.cc" line="118"/>
         <location filename="../client_main.cc" line="130"/>
         <source>Warning</source>
-        <translation>AAviso</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="119"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../client_main.cc" line="131"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished">Uma ID de host foi inserida, mas a rota não foi configurada. Você precisa configurar a rotar antes de conectar.</translation>
+        <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
 </context>
 <context>
@@ -93,7 +93,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation>Nome de usuário:</translation>
+        <translation>Usuário:</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="67"/>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>É necessário um roteador para se conectar a um computador se não houver uma conexão direta (bypass NAT). O Aspia não fornece um, mas você pode instalar o seu próprio roteador público. Baixe o roteador no &lt;a href=&quot;https://aspia.org&quot;&gt;site oficial&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -116,12 +116,12 @@
     <message>
         <location filename="../ui/client_window.ui" line="48"/>
         <source>ID / Address</source>
-        <translation>ID / Address</translation>
+        <translation>ID / Endereço</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="120"/>
         <source>Session Type</source>
-        <translation>Tipo de sessão</translation>
+        <translation>Tipo de Sessão</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="256"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../ui/client_window.ui" line="289"/>
         <source>Language</source>
-        <translation>Linguagem</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="294"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="20"/>
         <source>Session Configuration</source>
-        <translation>Configuração de sessão</translation>
+        <translation>Configuração da Sessão</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="32"/>
@@ -237,17 +237,17 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="137"/>
         <source>Session configuration</source>
-        <translation>Configuração de sessão</translation>
+        <translation>Configuração da sessão</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="149"/>
         <source>Monitor selection</source>
-        <translation>Seleção de monitor</translation>
+        <translation>Seleção do monitor</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="164"/>
         <source>Automatic window size</source>
-        <translation>Tamanho automático da janela</translation>
+        <translation>Tamanho da janela automático</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="179"/>
@@ -257,12 +257,12 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="190"/>
         <source>Automatic scrolling</source>
-        <translation>Scroll automático</translation>
+        <translation>Rolagem automática</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="202"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation>Enviar CTRL +ALT+DEL</translation>
+        <translation>Enviar CTRL+ALT+DEL</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="214"/>
@@ -274,7 +274,7 @@
         <location filename="../ui/desktop_panel.ui" line="222"/>
         <location filename="../ui/desktop_panel.ui" line="225"/>
         <source>Save screenshot...</source>
-        <translation>Salvar foto da tela...</translation>
+        <translation>Salvar captura de tela...</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="237"/>
@@ -325,7 +325,7 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="312"/>
         <source>System Information</source>
-        <translation>Informações do sistema</translation>
+        <translation>Informações do Sistema</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="324"/>
@@ -335,12 +335,12 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="327"/>
         <source>Close session</source>
-        <translation>Fechar janela</translation>
+        <translation>Fechar sessão</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="386"/>
         <source>Fit window</source>
-        <translation>Ajustar janela</translation>
+        <translation>Ajustar a janela</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="395"/>
@@ -361,12 +361,12 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="411"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar (Modo seguro)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="414"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar no modo seguro</translation>
     </message>
 </context>
 <context>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../ui/file_error_code.cc" line="40"/>
         <source>Invalid directory or file name</source>
-        <translation>Nome do arquivo ou pasta inválidos</translation>
+        <translation>Nome do arquivo ou pasta inválido</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="44"/>
@@ -424,12 +424,12 @@
     <message>
         <location filename="../ui/file_error_code.cc" line="72"/>
         <source>Could not write to file</source>
-        <translation>Erro de escrita ao gravar o arquivo</translation>
+        <translation>Não foi possível gravar no arquivo</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="76"/>
         <source>Could not read file</source>
-        <translation>O arquivo não pode ser lido</translation>
+        <translation>Não foi possível ler o arquivo</translation>
     </message>
     <message>
         <location filename="../ui/file_error_code.cc" line="80"/>
@@ -460,12 +460,12 @@
     <message>
         <location filename="../ui/file_panel.ui" line="165"/>
         <source>Up</source>
-        <translation>Cima</translation>
+        <translation>Acima</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation>Buscar pasta raíz (Backspace)</translation>
+        <translation>Ir para a pasta raíz (Backspace)</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="177"/>
@@ -490,12 +490,12 @@
     <message>
         <location filename="../ui/file_panel.ui" line="207"/>
         <source>Delete</source>
-        <translation>Apagar</translation>
+        <translation>Excluir</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation>Apagar objetos selecionados (Delete)</translation>
+        <translation>Excluir objetos selecionados (Delete)</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.ui" line="222"/>
@@ -505,7 +505,7 @@
     <message>
         <location filename="../ui/file_panel.ui" line="225"/>
         <source>Send selected object(s) (F11)</source>
-        <translation>Enviar objetos selecionados</translation>
+        <translation>Enviar objeto(s) selecionado(s) (F11)</translation>
     </message>
 </context>
 <context>
@@ -513,12 +513,12 @@
     <message>
         <location filename="../ui/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
-        <translation>Removendo itens</translation>
+        <translation>Excluindo itens</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
-        <translation>Criando lista de arquivos para serem removidos...</translation>
+        <translation>Criando lista de arquivos a serem excluídos...</translation>
     </message>
 </context>
 <context>
@@ -569,13 +569,13 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="37"/>
         <source>Hosts</source>
-        <translation>Host</translation>
+        <translation>Hosts</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="45"/>
         <location filename="../ui/router_manager_window.ui" line="150"/>
         <source>Connections count:</source>
-        <translation>Contador de conexões:</translation>
+        <translation>Número de conexões:</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="79"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="125"/>
         <source>Disconnect All</source>
-        <translation>Desconectar de todos</translation>
+        <translation>Desconectar todos</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="132"/>
@@ -653,7 +653,7 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="305"/>
         <source>User Name</source>
-        <translation>Nome de usuário</translation>
+        <translation>Usuário</translation>
     </message>
 </context>
 <context>
@@ -669,7 +669,7 @@
     <message>
         <location filename="../ui/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation>Propriedade do usuário</translation>
+        <translation>Propriedades do Usuário</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="27"/>
@@ -689,12 +689,12 @@
     <message>
         <location filename="../ui/router_user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
-        <translation>Desabilitar conta de usuário</translation>
+        <translation>Desabilitar Usuário</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
-        <translation>Tipos de sessões permitidas:</translation>
+        <translation>Tipos de sessões Permitidas:</translation>
     </message>
 </context>
 <context>
@@ -720,12 +720,12 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
         <source>System Information</source>
-        <translation>Informação do sistema</translation>
+        <translation>Informação do Sistema</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation>Parêmetro</translation>
+        <translation>Parâmetro</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="54"/>
@@ -740,7 +740,7 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="112"/>
         <source>Save (Ctrl+S)</source>
-        <translation>Salvar (CTRL + S)</translation>
+        <translation>Salvar (CTRL+S)</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="124"/>
@@ -755,17 +755,17 @@
     <message>
         <location filename="../ui/system_info_window.ui" line="135"/>
         <source>Copy Row</source>
-        <translation>Copiar coluna</translation>
+        <translation>Copiar Linha</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="140"/>
         <source>Copy Name</source>
-        <translation>Copiar nome</translation>
+        <translation>Copiar Nome</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="145"/>
         <source>Copy Value</source>
-        <translation>Copiar valor</translation>
+        <translation>Copiar Valor</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.ui" line="154"/>
@@ -783,12 +783,12 @@
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/address_bar.cc" line="58"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation>O caminho inserido está incorreto.</translation>
+        <translation>Foi inserido um caminho incorreto para a pasta..</translation>
     </message>
 </context>
 <context>
@@ -797,12 +797,12 @@
         <location filename="../ui/address_bar_model.cc" line="82"/>
         <location filename="../ui/address_bar_model.cc" line="446"/>
         <source>Home Folder</source>
-        <translation>Pasta principal</translation>
+        <translation>Pasta Principal</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation>Área de trabalho</translation>
+        <translation>Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="278"/>
@@ -837,7 +837,7 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="434"/>
         <source>Removable Drive</source>
-        <translation>Unidade removível</translation>
+        <translation>Unidade Removível</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="437"/>
@@ -847,7 +847,7 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="440"/>
         <source>Network Drive</source>
-        <translation>Unidade de rede</translation>
+        <translation>Unidade de Rede</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="443"/>
@@ -857,17 +857,17 @@
     <message>
         <location filename="../ui/address_bar_model.cc" line="449"/>
         <source>Desktop Folder</source>
-        <translation>Pasta Área de Trabalho</translation>
+        <translation>Pasta da Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="452"/>
         <source>Root Directory</source>
-        <translation>Diretório principal</translation>
+        <translation>Diretório Raiz</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="455"/>
         <source>Unknown Drive</source>
-        <translation>Unidade desconhecida</translation>
+        <translation>Unidade Desconhecida</translation>
     </message>
     <message>
         <location filename="../ui/address_bar_model.cc" line="472"/>
@@ -901,12 +901,12 @@
         <location filename="../ui/authorization_dialog.cc" line="119"/>
         <location filename="../ui/authorization_dialog.cc" line="129"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="120"/>
         <source>Username cannot be empty.</source>
-        <translation>Nome de usuário não pode ficar em branco.</translation>
+        <translation>Usuário não pode ficar em branco.</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="130"/>
@@ -924,7 +924,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="105"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>O nome do usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,. .</translation>
+        <translation>O Usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,. .</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="114"/>
@@ -934,7 +934,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="138"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
 </context>
 <context>
@@ -942,13 +942,13 @@
     <message>
         <location filename="../ui/client_window.cc" line="109"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Aspia Client</translation>
+        <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="201"/>
         <location filename="../ui/client_window.cc" line="218"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="202"/>
@@ -958,7 +958,7 @@
     <message>
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation>Uma ID de host foi inserida, mas a rota não foi configurada. Você precisa configurar a rotar antes de conectar.</translation>
+        <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
 </context>
 <context>
@@ -995,7 +995,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="345"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="356"/>
@@ -1071,7 +1071,7 @@
     <message>
         <location filename="../ui/file_panel.cc" line="429"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="92"/>
@@ -1113,17 +1113,17 @@
     <message>
         <location filename="../ui/file_panel.cc" line="322"/>
         <source>&amp;Send	F11</source>
-        <translation></translation>
+        <translation>&amp;Enviar	F11</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="324"/>
         <source>&amp;Delete	Delete</source>
-        <translation></translation>
+        <translation>&amp;Excluir	Delete</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="334"/>
         <source>&amp;Create Folder</source>
-        <translation></translation>
+        <translation>&amp;Criar Pasta</translation>
     </message>
     <message>
         <location filename="../ui/file_panel.cc" line="395"/>
@@ -1141,7 +1141,7 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>Deleting: %1</source>
-        <translation>Removendo: %1</translation>
+        <translation>Excluindo: %1</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="116"/>
@@ -1156,7 +1156,7 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="128"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="136"/>
@@ -1194,7 +1194,7 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="143"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="155"/>
@@ -1269,7 +1269,7 @@
         <location filename="../ui/qt_desktop_window.cc" line="232"/>
         <location filename="../ui/qt_desktop_window.cc" line="582"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="225"/>
@@ -1312,12 +1312,12 @@
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="86"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
-        <translation>Erro na sessão:%1</translation>
+        <translation>Erro de sessão:%1</translation>
     </message>
 </context>
 <context>
@@ -1407,7 +1407,7 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="279"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation>Ocorreu um erro durante a autenticação: nome de usuário ou senha incorretos.</translation>
+        <translation>Ocorreu um erro durante a autenticação: usuário ou senha incorretos.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="283"/>
@@ -1446,7 +1446,7 @@
         <location filename="../ui/router_manager_window.cc" line="411"/>
         <location filename="../ui/router_manager_window.cc" line="543"/>
         <source>Warning</source>
-        <translation>Aviso</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="399"/>
@@ -1526,17 +1526,17 @@
         <location filename="../ui/router_user_dialog.cc" line="192"/>
         <location filename="../ui/router_user_dialog.cc" line="216"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="128"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation>O nome do usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
+        <translation>O usuário não pode estar vazio e pode conter apenas caracteres do alfabeto, números e _, -,., @.</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="143"/>
         <source>The username you entered already exists.</source>
-        <translation>O nome de usuário que você digitou já existe.</translation>
+        <translation>O usuário que você digitou já existe.</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="156"/>
@@ -1572,12 +1572,12 @@
     <message>
         <location filename="../ui/router_user_dialog.cc" line="217"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation>Erro interno desconhecido ao criar ou modificar um usuário.</translation>
+        <translation>Erro interno desconhecido ao criar ou editar usuário.</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="265"/>
         <source>Double-click to change</source>
-        <translation>Clique duas vezes para mudar</translation>
+        <translation>Clique duas vezes para alterar</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="289"/>
@@ -1623,12 +1623,12 @@
     <message>
         <location filename="../ui/session_window.cc" line="200"/>
         <source>Desktop Manage</source>
-        <translation>Gerenciar área de trabalho</translation>
+        <translation>Controlar área de trabalho</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="204"/>
         <source>Desktop View</source>
-        <translation>Visualização da área de trabalho</translation>
+        <translation>Visualizar da área de trabalho</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="208"/>
@@ -1704,7 +1704,7 @@
     <message>
         <location filename="../ui/session_window.cc" line="320"/>
         <source>Wrong user name or password.</source>
-        <translation>Nome de usuário ou senha incorretos.</translation>
+        <translation>Usuário ou senha incorretos.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="324"/>
@@ -1752,7 +1752,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="118"/>
         <source>Warning</source>
-        <translation>Aviso</translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="119"/>
