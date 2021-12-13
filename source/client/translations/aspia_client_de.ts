@@ -23,14 +23,6 @@
         <source>One-time password connection</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Kennwort:</translation>
-    </message>
 </context>
 <context>
     <name>Client</name>
@@ -74,37 +66,6 @@
         <location filename="../client_main.cc" line="131"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ClientDialog</name>
-    <message>
-        <source>Connection</source>
-        <translation type="vanished">Verbindung</translation>
-    </message>
-    <message>
-        <source>Server Address:</source>
-        <translation type="vanished">Serveradresse:</translation>
-    </message>
-    <message>
-        <source>Server Port:</source>
-        <translation type="vanished">Server Port:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="vanished">Sitzungstyp:</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Verbinden</translation>
     </message>
 </context>
 <context>
@@ -197,17 +158,6 @@
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="obsolete">Sitzungstyp:</translation>
-    </message>
-</context>
-<context>
-    <name>Console</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
 </context>
 <context>
     <name>DesktopConfigDialog</name>
@@ -220,22 +170,6 @@
         <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color depth:</source>
-        <translation type="vanished">Farbtiefe:</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">Kompressionsrate:</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">Schnell</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">Beste</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="135"/>
@@ -626,112 +560,6 @@
     </message>
 </context>
 <context>
-    <name>QCoreApplication</name>
-    <message>
-        <source>Successfully completed</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Erfolgreich abgeschlossen</translation>
-    </message>
-    <message>
-        <source>Invalid request</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Ungültige Anfrage</translation>
-    </message>
-    <message>
-        <source>Invalid directory or file name</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Ungültiger Verzeichnis- oder Dateiname</translation>
-    </message>
-    <message>
-        <source>Path not found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Pfad nicht gefunden</translation>
-    </message>
-    <message>
-        <source>Path already exists</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Pfad existiert bereits</translation>
-    </message>
-    <message>
-        <source>No drives found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Keine Laufwerke gefunden</translation>
-    </message>
-    <message>
-        <source>Disk full</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Festplatte voll</translation>
-    </message>
-    <message>
-        <source>Access denied</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Zugriff verweigert</translation>
-    </message>
-    <message>
-        <source>Could not open file for reading</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht zum Lesen geöffnet werden</translation>
-    </message>
-    <message>
-        <source>Could not create or replace file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht erstellt oder ersetzt werden</translation>
-    </message>
-    <message>
-        <source>Could not write to file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Konnte nicht in die Datei schreiben</translation>
-    </message>
-    <message>
-        <source>Could not read file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Datei konnte nicht gelesen werden</translation>
-    </message>
-    <message>
-        <source>Drive not ready</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Laufwerk nicht bereit</translation>
-    </message>
-    <message>
-        <source>Unknown status code</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Unbekannter Statuscode</translation>
-    </message>
-</context>
-<context>
-    <name>QtFileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokaler Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Remote Computer</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-</context>
-<context>
-    <name>RouterListDialog</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
-    </message>
-</context>
-<context>
     <name>RouterManagerWindow</name>
     <message>
         <location filename="../ui/router_manager_window.ui" line="20"/>
@@ -888,17 +716,6 @@
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Verbindungsstatus</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Schließen</translation>
-    </message>
-</context>
-<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
@@ -962,13 +779,6 @@
     </message>
 </context>
 <context>
-    <name>client</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-</context>
-<context>
     <name>client::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
@@ -979,10 +789,6 @@
         <location filename="../ui/address_bar.cc" line="58"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation type="unfinished">Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
-    </message>
-    <message>
-        <source>The path can not contain characters %1.</source>
-        <translation type="obsolete">Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
     </message>
 </context>
 <context>
@@ -1109,29 +915,6 @@
     </message>
 </context>
 <context>
-    <name>client::ClientDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-</context>
-<context>
     <name>client::ClientSettingsDialog</name>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="94"/>
@@ -1157,34 +940,6 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <source>Attempt to connect to %1:%2.</source>
-        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
-    </message>
-    <message>
-        <source>Attempt to connect to %1.</source>
-        <translation type="obsolete">Versuch, eine Verbindung mit %1:%2 herzustellen. {1.?}</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Session started.</source>
-        <translation type="obsolete">Die Sitzung wurde gestartet.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
         <location filename="../ui/client_window.cc" line="109"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
@@ -1204,33 +959,6 @@
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="obsolete">True color (32 Bit)</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="obsolete">High color (16 Bit)</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="obsolete">256 Farben (8 Bit)</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="obsolete">64 Farben (6 Bit)</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="obsolete">8 Farben (3 Bit)</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="obsolete">Kompressionsrate: %1</translation>
     </message>
 </context>
 <context>
@@ -1286,21 +1014,6 @@
     </message>
 </context>
 <context>
-    <name>client::DesktopWindow</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
-</context>
-<context>
     <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="99"/>
@@ -1351,21 +1064,6 @@
         <location filename="../ui/file_list_model.cc" line="547"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Lokaler Computer</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Remote Computer</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
     </message>
 </context>
 <context>
@@ -1477,55 +1175,6 @@
     </message>
 </context>
 <context>
-    <name>client::FileRemoveQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileRemover</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="obsolete">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileTransfer</name>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>An unexpected response to the request was received</source>
-        <translation type="obsolete">Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="obsolete">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
-    </message>
-</context>
-<context>
     <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="98"/>
@@ -1614,26 +1263,7 @@
     </message>
 </context>
 <context>
-    <name>client::FileTransferQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="obsolete">Eine unerwartete Antwort wurde erhalten.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="obsolete">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
-    </message>
-</context>
-<context>
     <name>client::QtDesktopWindow</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Desktopansicht</translation>
-    </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="224"/>
         <location filename="../ui/qt_desktop_window.cc" line="232"/>
@@ -1688,20 +1318,6 @@
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterListDialog</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
     </message>
 </context>
 <context>
@@ -2119,29 +1735,6 @@
         <location filename="../ui/session_window.cc" line="359"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::StatisticDialog</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">TB</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">GB</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">MB</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">kB</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
     </message>
 </context>
 <context>

@@ -4,10 +4,6 @@
 <context>
     <name>ChangePasswordDialog</name>
     <message>
-        <source>User Properties</source>
-        <translation type="obsolete">Propriedades do usuário</translation>
-    </message>
-    <message>
         <source>Old password:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -62,14 +58,6 @@
         <translation>Porta:</translation>
     </message>
     <message>
-        <source>Import...</source>
-        <translation type="vanished">Importar...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">Exportar...</translation>
-    </message>
-    <message>
         <source>Users</source>
         <translation>Usuários</translation>
     </message>
@@ -84,10 +72,6 @@
     <message>
         <source>Delete user</source>
         <translation>Apagar usuário</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="vanished">Atualizar</translation>
     </message>
     <message>
         <source>Update Server</source>
@@ -140,10 +124,6 @@
     <message>
         <source>Advanced</source>
         <translation>Avançado</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">Instalar</translation>
     </message>
     <message>
         <source>Import</source>
@@ -280,10 +260,6 @@
     <message>
         <source>Connections</source>
         <translation>Conexões</translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">Desconectar tudo</translation>
     </message>
     <message>
         <source>Chat</source>

@@ -4,10 +4,6 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <source>Properties Book Addresses</source>
-        <translation type="vanished">Propiedades Libro Direcciones</translation>
-    </message>
-    <message>
         <location filename="../address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
         <translation type="unfinished">Propiedades Libro de Direcciones</translation>

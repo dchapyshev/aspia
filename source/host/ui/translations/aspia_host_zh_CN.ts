@@ -4,10 +4,6 @@
 <context>
     <name>ChangePasswordDialog</name>
     <message>
-        <source>User Properties</source>
-        <translation type="obsolete">用户属性</translation>
-    </message>
-    <message>
         <location filename="../change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
         <translation type="unfinished"></translation>
@@ -73,18 +69,6 @@
         <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation>端口：</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="vanished">导入...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">导出...</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">安装</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="242"/>
@@ -203,10 +187,6 @@
         <translation>删除用户</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation type="vanished">更新</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.ui" line="106"/>
         <source>Update Server</source>
         <translation>更新服务器</translation>
@@ -292,18 +272,6 @@
         <translation>你的 ID</translation>
     </message>
     <message>
-        <source>Your IP</source>
-        <translation type="vanished">你的 IP</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="vanished">用户</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="obsolete">无法使用</translation>
-    </message>
-    <message>
         <location filename="../main_window.ui" line="160"/>
         <source>Password</source>
         <translation>密码</translation>
@@ -385,10 +353,6 @@
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">全部断开</translation>
     </message>
 </context>
 <context>
@@ -541,10 +505,6 @@
         <location filename="../config_dialog.cc" line="480"/>
         <source>Import</source>
         <translation>导入</translation>
-    </message>
-    <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-文件 (*.xml)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="209"/>
@@ -823,14 +783,6 @@
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">连接到路由器 %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">已连接到路由器 %1</translation>
-    </message>
-    <message>
         <location filename="../main_window.cc" line="324"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
@@ -920,10 +872,6 @@
         <location filename="../user_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>警告</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="134"/>

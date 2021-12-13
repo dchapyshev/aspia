@@ -4,10 +4,6 @@
 <context>
     <name>ChangePasswordDialog</name>
     <message>
-        <source>User Properties</source>
-        <translation type="obsolete">Benutzereigenschaften</translation>
-    </message>
-    <message>
         <location filename="../change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
         <translation type="unfinished"></translation>
@@ -73,10 +69,6 @@
         <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation type="unfinished">Port:</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">Installieren</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="242"/>
@@ -268,101 +260,6 @@
     </message>
 </context>
 <context>
-    <name>HostConfig</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>HostConfigDialog</name>
-    <message>
-        <source>Host Configuration</source>
-        <translation type="vanished">Hostkonfiguration</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="vanished">Allgemein</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="vanished">Benutzeroberfläche</translation>
-    </message>
-    <message>
-        <source>Language:</source>
-        <translation type="vanished">Sprache:</translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation type="vanished">Dienst</translation>
-    </message>
-    <message>
-        <source>Incoming Connections</source>
-        <translation type="vanished">Eingehende Verbindugen</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation type="vanished">Port:</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Benutzer</translation>
-    </message>
-    <message>
-        <source>Add new user</source>
-        <translation type="vanished">Neuen Benutzer hinzufügen</translation>
-    </message>
-    <message>
-        <source>Edit user</source>
-        <translation type="vanished">Benutzer bearbeiten</translation>
-    </message>
-    <message>
-        <source>Delete user</source>
-        <translation type="vanished">Benutzer löschen</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="vanished">Hinzufügen</translation>
-    </message>
-    <message>
-        <source>Modify</source>
-        <translation type="vanished">Ändern</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="vanished">Löschen</translation>
-    </message>
-</context>
-<context>
-    <name>HostMainWindow</name>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Starten</translation>
-    </message>
-</context>
-<context>
-    <name>HostNotifierWindow</name>
-    <message>
-        <source>Connections</source>
-        <translation type="vanished">Verbindungen</translation>
-    </message>
-</context>
-<context>
-    <name>HostWindow</name>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Starten</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="../main_window.ui" line="26"/>
@@ -456,13 +353,6 @@
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
     </message>
 </context>
 <context>
@@ -865,99 +755,6 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="obsolete">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
-    </message>
-    <message>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="obsolete">Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
-    </message>
-    <message>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="obsolete">Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Löschen</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="obsolete">Gestartet</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="obsolete">Stopp</translation>
-    </message>
-    <message>
-        <source>Not started</source>
-        <translation type="obsolete">Nicht gestartet</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="obsolete">Starten</translation>
-    </message>
-    <message>
-        <source>Installed</source>
-        <translation type="obsolete">Installiert</translation>
-    </message>
-    <message>
-        <source>Not installed</source>
-        <translation type="obsolete">Nicht installiert</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">Installieren</translation>
-    </message>
-    <message>
-        <source>Current state: %1</source>
-        <translation type="obsolete">Aktueller Zustand: %1</translation>
-    </message>
-    <message>
-        <source>The service could not be installed.</source>
-        <translation type="obsolete">Dienst konnte nicht installiert werden.</translation>
-    </message>
-    <message>
-        <source>The service could not be removed.</source>
-        <translation type="obsolete">Dienst konnte nicht gelöscht werden.</translation>
-    </message>
-    <message>
-        <source>Could not access the service.</source>
-        <translation type="obsolete">Kann nicht auf den Dienst zugreifen.</translation>
-    </message>
-    <message>
-        <source>The service could not be started.</source>
-        <translation type="obsolete">Dienst konnte nicht gestartet werden.</translation>
-    </message>
-    <message>
-        <source>The service could not be stopped.</source>
-        <translation type="obsolete">Dienst konnte nicht angehalten werden.</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostNotifierWindow</name>
-    <message>
-        <source>Disconnect</source>
-        <translation type="obsolete">Trennen</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostWindow</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bestätigung</translation>
-    </message>
-</context>
-<context>
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="73"/>
@@ -1069,18 +866,6 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Dateiübertragung</translation>
-    </message>
-    <message>
         <location filename="../user_dialog.cc" line="133"/>
         <location filename="../user_dialog.cc" line="145"/>
         <location filename="../user_dialog.cc" line="156"/>
@@ -1089,10 +874,6 @@
         <location filename="../user_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>Warnung</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="134"/>

@@ -69,22 +69,6 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Adresse</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">Erweitert</translation>
-    </message>
-    <message>
-        <source>Password hashing</source>
-        <translation type="vanished">Kennwort-Hashing</translation>
-    </message>
-    <message>
-        <source>Salt of data</source>
-        <translation type="vanished">Salz der Daten</translation>
-    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -92,10 +76,6 @@
         <location filename="../address_book_tab.ui" line="92"/>
         <source>Computer Name</source>
         <translation>Computername</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adresse</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="97"/>
@@ -132,14 +112,6 @@
         <location filename="../computer_dialog_desktop.ui" line="38"/>
         <source>Codec</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Name:</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Erweitert</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="141"/>
@@ -208,10 +180,6 @@
         <location filename="../computer_dialog_general.ui" line="51"/>
         <source>Parent Group:</source>
         <translation type="unfinished">Elterngruppe:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
@@ -289,10 +257,6 @@
         <location filename="../main.cc" line="61"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>
@@ -502,10 +466,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fast Connect...</source>
-        <translation type="vanished">Schnelle Verbindung...</translation>
-    </message>
-    <message>
         <location filename="../main_window.ui" line="481"/>
         <source>Show tray icon</source>
         <translation type="unfinished"></translation>
@@ -567,153 +527,6 @@
     </message>
 </context>
 <context>
-    <name>ConsoleWindow</name>
-    <message>
-        <source>&amp;File</source>
-        <translation type="vanished">&amp;Datei</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">&amp;Bearbeiten</translation>
-    </message>
-    <message>
-        <source>&amp;Session Type</source>
-        <translation type="vanished">&amp;Sitzungstyp</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation type="vanished">&amp;Hilfe</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation type="vanished">&amp;Ansicht</translation>
-    </message>
-    <message>
-        <source>&amp;Language</source>
-        <translation type="vanished">&amp;Sprache</translation>
-    </message>
-    <message>
-        <source>Tool Bar</source>
-        <translation type="vanished">Symbolleiste</translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation type="vanished">Strg+N</translation>
-    </message>
-    <message>
-        <source>Ctrl+O</source>
-        <translation type="vanished">Strg+O</translation>
-    </message>
-    <message>
-        <source>&amp;Save</source>
-        <translation type="vanished">&amp;Speichern</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="vanished">Strg+S</translation>
-    </message>
-    <message>
-        <source>&amp;New address book</source>
-        <translation type="vanished">&amp;Neues Adressbuch</translation>
-    </message>
-    <message>
-        <source>&amp;Open address book...</source>
-        <translation type="vanished">&amp;Adressbuch öffnen...</translation>
-    </message>
-    <message>
-        <source>Save &amp;as...</source>
-        <translation type="vanished">Speichern &amp;unter...</translation>
-    </message>
-    <message>
-        <source>Ctrl+Alt+S</source>
-        <translation type="vanished">Strg+Alt+S</translation>
-    </message>
-    <message>
-        <source>&amp;Close</source>
-        <translation type="vanished">&amp;Schließen</translation>
-    </message>
-    <message>
-        <source>Ctrl+W</source>
-        <translation type="vanished">Strg+W</translation>
-    </message>
-    <message>
-        <source>&amp;Exit</source>
-        <translation type="vanished">&amp;Beenden</translation>
-    </message>
-    <message>
-        <source>Add Computer Group</source>
-        <translation type="vanished">Computergruppe hinzufügen</translation>
-    </message>
-    <message>
-        <source>Modify Computer Group</source>
-        <translation type="vanished">Computergruppe bearbeiten</translation>
-    </message>
-    <message>
-        <source>Delete Computer Group</source>
-        <translation type="vanished">Computergruppe löschen</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="vanished">Computer hinzufügen</translation>
-    </message>
-    <message>
-        <source>Modify Computer</source>
-        <translation type="vanished">Computer bearbeiten</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="vanished">Computer löschen</translation>
-    </message>
-    <message>
-        <source>Desktop &amp;Manage</source>
-        <translation type="vanished">&amp;Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop &amp;View</source>
-        <translation type="vanished">&amp;Desktopansicht</translation>
-    </message>
-    <message>
-        <source>&amp;File Transfer</source>
-        <translation type="vanished">&amp;Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>&amp;Online Help...</source>
-        <translation type="vanished">&amp;Onlinehilfe...</translation>
-    </message>
-    <message>
-        <source>F1</source>
-        <translation type="vanished">F1</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation type="vanished">&amp;Über das Programm</translation>
-    </message>
-    <message>
-        <source>Address Book Properties</source>
-        <translation type="vanished">Adressbucheigenschaften</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Desktopverwaltung</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Desktopansicht</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Dateiübertragung</translation>
-    </message>
-    <message>
-        <source>Status Bar</source>
-        <translation type="vanished">Statusleiste</translation>
-    </message>
-    <message>
-        <source>Fast Connect...</source>
-        <translation type="vanished">Schnelle Verbindung...</translation>
-    </message>
-</context>
-<context>
     <name>FastConnectDialog</name>
     <message>
         <location filename="../fast_connect_dialog.ui" line="20"/>
@@ -729,10 +542,6 @@
         <location filename="../fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
     </message>
 </context>
 <context>
@@ -761,51 +570,6 @@
         <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
         <translation>Kennwort:</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Name:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">Kommentar:</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>
@@ -925,14 +689,6 @@
         <location filename="../address_book_dialog.cc" line="350"/>
         <source>Router password cannot be empty.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="obsolete">Um die Größe des Hashing-Salzes zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
     </message>
 </context>
 <context>
@@ -1055,10 +811,6 @@
 </context>
 <context>
     <name>console::ComputerDialogGeneral</name>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
-    </message>
     <message numerus="yes">
         <location filename="../computer_dialog_general.cc" line="107"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
@@ -1126,59 +878,7 @@
     </message>
 </context>
 <context>
-    <name>console::ConsoleStatusBar</name>
-    <message numerus="yes">
-        <source>%n child group(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n Kindgruppe(n)</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="obsolete">
-            <numerusform>%n Kindcomputer</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-</context>
-<context>
-    <name>console::ConsoleWindow</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
-    </message>
-    <message>
-        <source>Open Address Book</source>
-        <translation type="obsolete">Adressbuch öffnen</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="obsolete">Aspia Adressbuch (*.aab)</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="obsolete">Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="obsolete">Information</translation>
-    </message>
-    <message>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="obsolete">Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
-    </message>
-</context>
-<context>
     <name>console::FastConnectDialog</name>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
-    </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
@@ -1314,31 +1014,6 @@
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>console::RouterDialog</name>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Warnung</translation>
     </message>
 </context>
 <context>

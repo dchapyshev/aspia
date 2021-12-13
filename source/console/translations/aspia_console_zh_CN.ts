@@ -69,57 +69,9 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Routers</source>
-        <translation type="vanished">路由器</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">名字</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">地址</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="vanished">端口</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">高级</translation>
-    </message>
-    <message>
-        <source>Password hashing</source>
-        <translation type="vanished">密码哈希</translation>
-    </message>
-    <message>
-        <source>Size of salt for password hashing:</source>
-        <translation type="vanished">密码哈希的salt大小：</translation>
-    </message>
-    <message>
-        <source> bytes</source>
-        <translation type="vanished"> bytes</translation>
-    </message>
-    <message>
-        <source>Salt of data</source>
-        <translation type="vanished">Salt数据</translation>
-    </message>
-    <message>
-        <source>Size of salt before the data:</source>
-        <translation type="vanished">数据之前salt的大小：</translation>
-    </message>
-    <message>
-        <source>Size of salt after the data:</source>
-        <translation type="vanished">数据之后salt的大小：</translation>
-    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
-    <message>
-        <source>Routers</source>
-        <translation type="obsolete">路由器</translation>
-    </message>
     <message>
         <location filename="../address_book_tab.ui" line="92"/>
         <source>Computer Name</source>
@@ -160,34 +112,6 @@
         <location filename="../computer_dialog_desktop.ui" line="38"/>
         <source>Codec</source>
         <translation>编码</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="vanished">名字：</translation>
-    </message>
-    <message>
-        <source>Color depth:</source>
-        <translation type="vanished">颜色深度：</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">压缩率：</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">最快</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">最好</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">高级</translation>
-    </message>
-    <message>
-        <source>Lock at disconnect</source>
-        <translation type="vanished">锁定断开连接</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="141"/>
@@ -258,14 +182,6 @@
         <translation>父级：</translation>
     </message>
     <message>
-        <source>Router:</source>
-        <translation type="vanished">路由：</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">地址：</translation>
-    </message>
-    <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
         <translation>地址 / ID：</translation>
@@ -328,38 +244,6 @@
 <context>
     <name>Console</name>
     <message>
-        <source>Remote computer address.</source>
-        <translation type="vanished">远程计算机地址。</translation>
-    </message>
-    <message>
-        <source>address</source>
-        <translation type="vanished">地址</translation>
-    </message>
-    <message>
-        <source>Remote computer port.</source>
-        <translation type="vanished">远程计算机端口。</translation>
-    </message>
-    <message>
-        <source>port</source>
-        <translation type="vanished">端口</translation>
-    </message>
-    <message>
-        <source>Name of user.</source>
-        <translation type="vanished">用户名称。</translation>
-    </message>
-    <message>
-        <source>username</source>
-        <translation type="vanished">用户名</translation>
-    </message>
-    <message>
-        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation type="vanished">会话类型，可能的值：桌面管理、桌面视图、文件传输。</translation>
-    </message>
-    <message>
-        <source>Open the client to connect to the computer.</source>
-        <translation type="vanished">打开客户端以连接到计算机。</translation>
-    </message>
-    <message>
         <location filename="../main.cc" line="57"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
@@ -373,14 +257,6 @@
         <location filename="../main.cc" line="61"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">警告</translation>
-    </message>
-    <message>
-        <source>Incorrect session type entered.</source>
-        <translation type="vanished">输入的会话类型不正确。</translation>
     </message>
 </context>
 <context>
@@ -590,10 +466,6 @@
         <translation>路由器管理</translation>
     </message>
     <message>
-        <source>Fast Connect...</source>
-        <translation type="vanished">快速连接...</translation>
-    </message>
-    <message>
         <location filename="../main_window.ui" line="481"/>
         <source>Show tray icon</source>
         <translation>显示托盘图标</translation>
@@ -671,14 +543,6 @@
         <source>Session Type</source>
         <translation>会话类型</translation>
     </message>
-    <message>
-        <source>Router:</source>
-        <translation type="obsolete">路由：</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
 </context>
 <context>
     <name>OpenAddressBookDialog</name>
@@ -706,49 +570,6 @@
         <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
         <translation>密码：</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>Router Properties</source>
-        <translation type="vanished">路由器属性</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="vanished">名字：</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">地址：</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">用户名：</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">密码：</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="vanished">描述：</translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="obsolete">名称不能为空。</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
-    </message>
-    <message>
-        <source>An invalid router address was entered.</source>
-        <translation type="obsolete">输入了无效的路由器地址。</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -865,18 +686,6 @@
         <source>Router password cannot be empty.</source>
         <translation>路由器密码不能为空。</translation>
     </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">确认</translation>
-    </message>
-    <message>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="vanished">在更改哈希salt的大小时，需要重新输入密码，继续吗？</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to remove router &quot;%1&quot;?</source>
-        <translation type="vanished">确定要删除路由器吗 &quot;%1&quot;?</translation>
-    </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
@@ -909,10 +718,6 @@
         <location filename="../address_book_tab.cc" line="265"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>通讯录文件使用不受支持的加密类型加密。</translation>
-    </message>
-    <message>
-        <source>Routers</source>
-        <translation type="obsolete">路由器</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="503"/>
@@ -1001,42 +806,7 @@
     </message>
 </context>
 <context>
-    <name>console::ComputerDialogDesktop</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="vanished">真彩色(32位)</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="vanished">高色彩(16位)</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="vanished">256色(8位)</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="vanished">64色(6位)</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="vanished">8色(3位)</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="vanished">压缩率：%1</translation>
-    </message>
-</context>
-<context>
     <name>console::ComputerDialogGeneral</name>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">地址：</translation>
-    </message>
-    <message>
-        <source>Without Router</source>
-        <translation type="vanished">没有路由器</translation>
-    </message>
     <message numerus="yes">
         <location filename="../computer_dialog_general.cc" line="107"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
@@ -1060,10 +830,6 @@
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>The ID can only contain numbers.</source>
-        <translation type="vanished">ID只能包含数字。</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.cc" line="152"/>
@@ -1106,10 +872,6 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
-    <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
         <translation>确认</translation>
@@ -1134,10 +896,6 @@
         <location filename="../fast_connect_dialog.cc" line="203"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
-    </message>
-    <message>
-        <source>Without Router</source>
-        <translation type="obsolete">没有路由器</translation>
     </message>
 </context>
 <context>
@@ -1228,10 +986,6 @@
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
-    <message>
-        <source>The computer properties indicate the use of the router, but the specified router was not found in the list. Check if the router is specified correctly.</source>
-        <translation type="vanished">计算机属性指示路由器的使用，但是在列表中找不到指定的路由器。 检查是否正确指定了路由器。</translation>
-    </message>
 </context>
 <context>
     <name>console::MruAction</name>
@@ -1252,37 +1006,6 @@
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-</context>
-<context>
-    <name>console::RouterDialog</name>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>名字太长， 名称的最大长度为 %n 个字符。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="vanished">名称不能为空。</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="vanished">
-            <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>An invalid router address was entered.</source>
-        <translation type="vanished">输入了无效的路由器地址。</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">警告</translation>
     </message>
 </context>
 <context>

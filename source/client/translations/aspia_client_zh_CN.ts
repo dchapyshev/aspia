@@ -23,14 +23,6 @@
         <source>One-time password connection</source>
         <translation>一次性密码连接</translation>
     </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">用户名：</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">密码：</translation>
-    </message>
 </context>
 <context>
     <name>Client</name>
@@ -77,25 +69,6 @@
     </message>
 </context>
 <context>
-    <name>ClientDialog</name>
-    <message>
-        <source>Aspia Client</source>
-        <translation type="vanished">Aspia 客户端</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="vanished">地址：</translation>
-    </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="vanished">会话类型：</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">连接</translation>
-    </message>
-</context>
-<context>
     <name>ClientSettingsDialog</name>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="14"/>
@@ -132,10 +105,6 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">名称：</translation>
-    </message>
 </context>
 <context>
     <name>ClientWindow</name>
@@ -143,10 +112,6 @@
         <location filename="../ui/client_window.ui" line="14"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">地址</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="48"/>
@@ -193,21 +158,6 @@
         <source>Exit</source>
         <translation>退出</translation>
     </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="obsolete">会话类型：</translation>
-    </message>
-</context>
-<context>
-    <name>Console</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
-    </message>
 </context>
 <context>
     <name>DesktopConfigDialog</name>
@@ -220,34 +170,6 @@
         <location filename="../ui/desktop_config_dialog.ui" line="32"/>
         <source>Codec</source>
         <translation>编码</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="vanished">名称：</translation>
-    </message>
-    <message>
-        <source>Color depth:</source>
-        <translation type="vanished">颜色深度：</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">压缩比：</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">最快</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">最好</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">高级</translation>
-    </message>
-    <message>
-        <source>Lock at disconnect</source>
-        <translation type="vanished">断开时锁定</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="135"/>
@@ -638,36 +560,6 @@
     </message>
 </context>
 <context>
-    <name>RouterDialog</name>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">名称：</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">用户名：</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密码：</translation>
-    </message>
-</context>
-<context>
-    <name>RouterListDialog</name>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">地址</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="obsolete">端口</translation>
-    </message>
-</context>
-<context>
     <name>RouterManagerWindow</name>
     <message>
         <location filename="../ui/router_manager_window.ui" line="20"/>
@@ -821,17 +713,6 @@
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation>值</translation>
-    </message>
-</context>
-<context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">连接状态</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">关闭</translation>
     </message>
 </context>
 <context>
@@ -1034,29 +915,6 @@
     </message>
 </context>
 <context>
-    <name>client::ClientDialog</name>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">确认</translation>
-    </message>
-    <message>
-        <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="vanished">输入的地址列表将被清除，继续吗？</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">警告</translation>
-    </message>
-    <message>
-        <source>An invalid computer address was entered.</source>
-        <translation type="vanished">输入了无效的计算机地址。</translation>
-    </message>
-</context>
-<context>
     <name>client::ClientSettingsDialog</name>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="94"/>
@@ -1082,122 +940,6 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <source>Attempt to connect to %1.</source>
-        <translation type="vanished">尝试连接到 %1.</translation>
-    </message>
-    <message>
-        <source>Connection established.</source>
-        <translation type="vanished">已建立连接。</translation>
-    </message>
-    <message>
-        <source>Network error when connecting to the router: %1</source>
-        <translation type="vanished">连接到路由器时出现网络错误： %1</translation>
-    </message>
-    <message>
-        <source>Authentication error when connecting to the router: %1</source>
-        <translation type="vanished">连接到路由器时发生身份验证错误： %1</translation>
-    </message>
-    <message>
-        <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="vanished">加密错误（消息加密或解密失败）。</translation>
-    </message>
-    <message>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="vanished">网络发生错误（例如，网络电缆被意外地拔出）。</translation>
-    </message>
-    <message>
-        <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="vanished">连接被对方拒绝（或超时）。</translation>
-    </message>
-    <message>
-        <source>Remote host closed the connection.</source>
-        <translation type="vanished">远程主机已关闭连接。</translation>
-    </message>
-    <message>
-        <source>Host address was not found.</source>
-        <translation type="vanished">找不到主机地址。</translation>
-    </message>
-    <message>
-        <source>Socket operation timed out.</source>
-        <translation type="vanished">套接字操作超时。</translation>
-    </message>
-    <message>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="vanished">指定的地址已在使用中，并被设置为独占地址。</translation>
-    </message>
-    <message>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="vanished">指定的地址的主机不可用。</translation>
-    </message>
-    <message>
-        <source>An unknown error occurred.</source>
-        <translation type="vanished">出现未知错误。</translation>
-    </message>
-    <message>
-        <source>Authentication successfully completed.</source>
-        <translation type="vanished">身份验证成功。</translation>
-    </message>
-    <message>
-        <source>Network authentication error.</source>
-        <translation type="vanished">网络身份验证错误。</translation>
-    </message>
-    <message>
-        <source>Violation of the data exchange protocol.</source>
-        <translation type="vanished">违反数据交换协议。</translation>
-    </message>
-    <message>
-        <source>Wrong user name or password.</source>
-        <translation type="vanished">错误的用户名或密码。</translation>
-    </message>
-    <message>
-        <source>Specified session type is not allowed for the user.</source>
-        <translation type="vanished">用户不允许指定的会话类型。</translation>
-    </message>
-    <message>
-        <source>No host with the specified ID was found.</source>
-        <translation type="vanished">找不到具有指定ID的主机。</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">没有可用的中继或密钥池为空。</translation>
-    </message>
-    <message>
-        <source>Failed to connect to the relay server.</source>
-        <translation type="vanished">无法连接到中继服务器。</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">访问被拒绝。</translation>
-    </message>
-    <message>
-        <source>Unknown error.</source>
-        <translation type="vanished">未知错误。</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">桌面管理</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">桌面查看</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">文件传输</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">地址：</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">确认</translation>
-    </message>
-    <message>
-        <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation type="obsolete">输入的地址列表将被清除，继续吗？</translation>
-    </message>
-    <message>
         <location filename="../ui/client_window.cc" line="109"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
@@ -1217,33 +959,6 @@
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
-    </message>
-</context>
-<context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="vanished">真彩色（32位）</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="vanished">高颜色（16位）</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="vanished">256色（8位）</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="vanished">64色（6位）</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="vanished">8色（3位）</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="vanished">压缩比：%1</translation>
     </message>
 </context>
 <context>
@@ -1606,20 +1321,6 @@
     </message>
 </context>
 <context>
-    <name>client::RouterDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">警告</translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterListDialog</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">确认</translation>
-    </message>
-</context>
-<context>
     <name>client::RouterManagerWindow</name>
     <message>
         <location filename="../ui/router_manager_window.cc" line="162"/>
@@ -1826,10 +1527,6 @@
         <location filename="../ui/router_user_dialog.cc" line="216"/>
         <source>Warning</source>
         <translation>警告</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">用户名不能为空，只能包含字母，数字和_，-，.。 字符。</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="128"/>

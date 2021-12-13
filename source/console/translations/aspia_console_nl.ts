@@ -69,38 +69,6 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Adres</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">Geavanceerd</translation>
-    </message>
-    <message>
-        <source>Password hashing</source>
-        <translation type="vanished">Wachtwoord hashing</translation>
-    </message>
-    <message>
-        <source>Size of salt for password hashing:</source>
-        <translation type="vanished">Grootte van de salt voor hashing:</translation>
-    </message>
-    <message>
-        <source> bytes</source>
-        <translation type="vanished"> bytes</translation>
-    </message>
-    <message>
-        <source>Size of salt before the data:</source>
-        <translation type="vanished">Grotte van de salt voor data:</translation>
-    </message>
-    <message>
-        <source>Size of salt after the data:</source>
-        <translation type="vanished">Grotte van de salt na data:</translation>
-    </message>
-    <message>
-        <source>Salt of data</source>
-        <translation type="vanished">Salt van de data</translation>
-    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -108,10 +76,6 @@
         <location filename="../address_book_tab.ui" line="92"/>
         <source>Computer Name</source>
         <translation>Computer Naam</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adres</translation>
     </message>
     <message>
         <location filename="../address_book_tab.ui" line="97"/>
@@ -150,49 +114,9 @@
         <translation>Codec</translation>
     </message>
     <message>
-        <source>Name:</source>
-        <translation type="vanished">Naam:</translation>
-    </message>
-    <message>
-        <source>Color depth:</source>
-        <translation type="vanished">Kleur diepte:</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">Compressie ratio:</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">Snel</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">Beste</translation>
-    </message>
-    <message>
         <location filename="../computer_dialog_desktop.ui" line="112"/>
         <source>Disable font smoothing</source>
         <translation>Font smoothing uitschakelen</translation>
-    </message>
-    <message>
-        <source>Remote Screen</source>
-        <translation type="vanished">Scherm op afstand</translation>
-    </message>
-    <message>
-        <source>Scale factor:</source>
-        <translation type="vanished">Schaal factor:</translation>
-    </message>
-    <message>
-        <source>Update interval:</source>
-        <translation type="vanished">Verversings snelheid:</translation>
-    </message>
-    <message>
-        <source>ms</source>
-        <translation type="vanished">ms</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">Geavanceerd</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="141"/>
@@ -258,10 +182,6 @@
         <translation>Groep:</translation>
     </message>
     <message>
-        <source>Address:</source>
-        <translation type="vanished">Adres:</translation>
-    </message>
-    <message>
         <location filename="../computer_dialog_general.ui" line="68"/>
         <source>Address / ID:</source>
         <translation>Adres / ID:</translation>
@@ -324,38 +244,6 @@
 <context>
     <name>Console</name>
     <message>
-        <source>Remote computer address.</source>
-        <translation type="vanished">Adres van computer op afstand.</translation>
-    </message>
-    <message>
-        <source>address</source>
-        <translation type="vanished">adres</translation>
-    </message>
-    <message>
-        <source>Remote computer port.</source>
-        <translation type="vanished">Poort van computer op afstand.</translation>
-    </message>
-    <message>
-        <source>port</source>
-        <translation type="vanished">poort</translation>
-    </message>
-    <message>
-        <source>Name of user.</source>
-        <translation type="vanished">Naam van de gebruiker.</translation>
-    </message>
-    <message>
-        <source>username</source>
-        <translation type="vanished">gebruikersnaam</translation>
-    </message>
-    <message>
-        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation type="vanished">Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
-    </message>
-    <message>
-        <source>Run the program with a simplified user interface.</source>
-        <translation type="vanished">Voer het programma uit met een versimpelde user interface.</translation>
-    </message>
-    <message>
         <location filename="../main.cc" line="57"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
@@ -369,10 +257,6 @@
         <location filename="../main.cc" line="61"/>
         <source>The file to open.</source>
         <translation>Het bestand om te openen.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -582,10 +466,6 @@
         <translation>Router Beheer</translation>
     </message>
     <message>
-        <source>Fast Connect...</source>
-        <translation type="vanished">Snel Verbinden...</translation>
-    </message>
-    <message>
         <location filename="../main_window.ui" line="481"/>
         <source>Show tray icon</source>
         <translation>Toon tray icon</translation>
@@ -647,197 +527,6 @@
     </message>
 </context>
 <context>
-    <name>ConsoleWindow</name>
-    <message>
-        <source>&amp;File</source>
-        <translation type="vanished">&amp;Bestand</translation>
-    </message>
-    <message>
-        <source>Recent open</source>
-        <translation type="vanished">Recentelijk geopend</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">B&amp;ewerken</translation>
-    </message>
-    <message>
-        <source>&amp;Session Type</source>
-        <translation type="vanished">&amp;Sessie Type</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation type="vanished">&amp;Help</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation type="vanished">&amp;Beeld</translation>
-    </message>
-    <message>
-        <source>&amp;Language</source>
-        <translation type="vanished">&amp;Taal</translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation type="vanished">Ctrl+N</translation>
-    </message>
-    <message>
-        <source>Ctrl+O</source>
-        <translation type="vanished">Ctrl+O</translation>
-    </message>
-    <message>
-        <source>&amp;Save</source>
-        <translation type="vanished">O&amp;pslaan</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="vanished">Ctrl+P</translation>
-    </message>
-    <message>
-        <source>Ctrl+Alt+S</source>
-        <translation type="vanished">Ctrl+Alt+A</translation>
-    </message>
-    <message>
-        <source>&amp;Close</source>
-        <translation type="vanished">S&amp;luiten</translation>
-    </message>
-    <message>
-        <source>Ctrl+W</source>
-        <translation type="vanished">Ctrl+W</translation>
-    </message>
-    <message>
-        <source>&amp;Exit</source>
-        <translation type="vanished">&amp;Beeindigen</translation>
-    </message>
-    <message>
-        <source>Add Computer Group</source>
-        <translation type="vanished">Computer Groep Toevoegen</translation>
-    </message>
-    <message>
-        <source>Modify Computer Group</source>
-        <translation type="vanished">Computer Groep Aanpassen</translation>
-    </message>
-    <message>
-        <source>Delete Computer Group</source>
-        <translation type="vanished">Computer Groep Verwijderen</translation>
-    </message>
-    <message>
-        <source>Add Computer</source>
-        <translation type="vanished">Computer Toevoegen</translation>
-    </message>
-    <message>
-        <source>Modify Computer</source>
-        <translation type="vanished">Computer Aanpassen</translation>
-    </message>
-    <message>
-        <source>Delete Computer</source>
-        <translation type="vanished">Computer Verwijderen</translation>
-    </message>
-    <message>
-        <source>Desktop &amp;Manage</source>
-        <translation type="vanished">Bureaublad &amp;Beheren</translation>
-    </message>
-    <message>
-        <source>Desktop &amp;View</source>
-        <translation type="vanished">Bureaublad &amp;Weergeven</translation>
-    </message>
-    <message>
-        <source>&amp;File Transfer</source>
-        <translation type="vanished">&amp;Bestands Overdracht</translation>
-    </message>
-    <message>
-        <source>&amp;Online Help...</source>
-        <translation type="vanished">Online &amp;Hulp...</translation>
-    </message>
-    <message>
-        <source>F1</source>
-        <translation type="vanished">F1</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation type="vanished">&amp;Over</translation>
-    </message>
-    <message>
-        <source>Address Book Properties</source>
-        <translation type="vanished">Adresboek eigenschappen</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Bureaublad Beheren</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Bureaublad Weergeven</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Bestands Overdracht</translation>
-    </message>
-    <message>
-        <source>Show tray icon</source>
-        <translation type="vanished">Toon tray icon</translation>
-    </message>
-    <message>
-        <source>Minimize to tray</source>
-        <translation type="vanished">Minimaliseer naar de tray</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Verbergen</translation>
-    </message>
-    <message>
-        <source>Save all</source>
-        <translation type="vanished">Alles opslaan</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+S</source>
-        <translation type="vanished">Ctrl+Shift+S</translation>
-    </message>
-    <message>
-        <source>Close all</source>
-        <translation type="vanished">Alles sluiten</translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+W</source>
-        <translation type="vanished">Ctrl+Shift+W</translation>
-    </message>
-    <message>
-        <source>Check for updates...</source>
-        <translation type="vanished">Controleer voor updates...</translation>
-    </message>
-    <message>
-        <source>Update Settings</source>
-        <translation type="vanished">Update Instellingen</translation>
-    </message>
-    <message>
-        <source>Tool Bar</source>
-        <translation type="vanished">Werkbalk</translation>
-    </message>
-    <message>
-        <source>Aspia Console</source>
-        <translation type="vanished">Aspia Console</translation>
-    </message>
-    <message>
-        <source>&amp;New address book</source>
-        <translation type="vanished">&amp;Nieuw adres boek</translation>
-    </message>
-    <message>
-        <source>&amp;Open address book...</source>
-        <translation type="vanished">&amp;Open adres boek...</translation>
-    </message>
-    <message>
-        <source>Save &amp;as...</source>
-        <translation type="vanished">Opslaan &amp;als...</translation>
-    </message>
-    <message>
-        <source>Status Bar</source>
-        <translation type="vanished">Status Balk</translation>
-    </message>
-    <message>
-        <source>Fast Connect...</source>
-        <translation type="vanished">Snel Verbinden...</translation>
-    </message>
-</context>
-<context>
     <name>FastConnectDialog</name>
     <message>
         <location filename="../fast_connect_dialog.ui" line="20"/>
@@ -853,10 +542,6 @@
         <location filename="../fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
         <translation>Sessie Type</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adres:</translation>
     </message>
 </context>
 <context>
@@ -885,55 +570,6 @@
         <location filename="../open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Naam:</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adres:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Gebruikers Naam:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Wachtwoord:</translation>
-    </message>
-    <message>
-        <source>Comment:</source>
-        <translation type="obsolete">Commentaar:</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
-            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="obsolete">Naam mag niet leeg zijn.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
     </message>
 </context>
 <context>
@@ -1056,14 +692,6 @@
         <source>Router password cannot be empty.</source>
         <translation>Router wachtwoord mag niet leeg zijn.</translation>
     </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bevestiging</translation>
-    </message>
-    <message>
-        <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="vanished">Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
-    </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
@@ -1184,38 +812,7 @@
     </message>
 </context>
 <context>
-    <name>console::ComputerDialogDesktop</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="vanished">Ware kleuren (32 bit)</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="vanished">Hoge kleuren (16 bit)</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="vanished">256 kleuren (8 bit)</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="vanished">64 kleuren (6 bit)</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="vanished">8 kleuren (3 bit)</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="vanished">Compressie ratio: %1</translation>
-    </message>
-</context>
-<context>
     <name>console::ComputerDialogGeneral</name>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adres:</translation>
-    </message>
     <message numerus="yes">
         <location filename="../computer_dialog_general.cc" line="107"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
@@ -1283,92 +880,7 @@
     </message>
 </context>
 <context>
-    <name>console::ConsoleStatusBar</name>
-    <message numerus="yes">
-        <source>%n child group(s)</source>
-        <translation type="vanished">
-            <numerusform>%n onderliggende groep</numerusform>
-            <numerusform>%n onderliggende groepen</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n child computer(s)</source>
-        <translation type="vanished">
-            <numerusform>%n onderliggende computer</numerusform>
-            <numerusform>%n onderliggende computers</numerusform>
-        </translation>
-    </message>
-</context>
-<context>
-    <name>console::ConsoleWindow</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation type="vanished">Het vastgepinde adres boek bestand &quot;%1&quot; is niet gevonden.&lt;br/&gt;Het bestand zal ge-unpind worden.</translation>
-    </message>
-    <message>
-        <source>Open Address Book</source>
-        <translation type="vanished">Open Adresboek</translation>
-    </message>
-    <message>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation type="vanished">Aspia Adresboek (*.aab)</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Bevestiging</translation>
-    </message>
-    <message>
-        <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="vanished">Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
-    </message>
-    <message>
-        <source>Close other tabs</source>
-        <translation type="vanished">Sluit andere tabs</translation>
-    </message>
-    <message>
-        <source>Close tab</source>
-        <translation type="vanished">Sluit tab</translation>
-    </message>
-    <message>
-        <source>Pin tab</source>
-        <translation type="vanished">Pin tab</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Verbergen</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">Weergeven</translation>
-    </message>
-    <message>
-        <source>&lt;empty&gt;</source>
-        <translatorcomment>Are you sure we should translate this?</translatorcomment>
-        <translation type="vanished">&lt;leeg&gt;</translation>
-    </message>
-    <message>
-        <source>Aspia Console</source>
-        <translation type="vanished">Aspia Console</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Informatie</translation>
-    </message>
-    <message>
-        <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="vanished">Adresboek &quot;%1&quot; is al geopend.</translation>
-    </message>
-</context>
-<context>
     <name>console::FastConnectDialog</name>
-    <message>
-        <source>Address:</source>
-        <translation type="obsolete">Adres:</translation>
-    </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="75"/>
         <source>Confirmation</source>
@@ -1469,10 +981,6 @@
         <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <source>&lt;empty&gt;</source>
-        <translation type="vanished">&lt;leeg&gt;</translation>
-    </message>
-    <message>
         <location filename="../main_window.cc" line="425"/>
         <location filename="../main_window.cc" line="1021"/>
         <source>Aspia Console</source>
@@ -1508,39 +1016,6 @@
         <location filename="../open_address_book_dialog.cc" line="46"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
-    </message>
-</context>
-<context>
-    <name>console::RouterDialog</name>
-    <message numerus="yes">
-        <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
-            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Name can not be empty.</source>
-        <translation type="obsolete">Naam mag niet leeg zijn.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
-            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>An invalid computer address was entered.</source>
-        <translation type="obsolete">Er is een ongeldig computer adres ingevoerd.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Waarschuwing</translation>
     </message>
 </context>
 <context>

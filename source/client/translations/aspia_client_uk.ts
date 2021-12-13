@@ -23,14 +23,6 @@
         <source>One-time password connection</source>
         <translation>Не запам&apos;ятовувати</translation>
     </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Ім&apos;я користувача:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
 </context>
 <context>
     <name>Client</name>
@@ -77,37 +69,6 @@
     </message>
 </context>
 <context>
-    <name>ClientDialog</name>
-    <message>
-        <source>Connection</source>
-        <translation type="vanished">Підключення</translation>
-    </message>
-    <message>
-        <source>Server Address:</source>
-        <translation type="vanished">Адреса сервера:</translation>
-    </message>
-    <message>
-        <source>Server Port:</source>
-        <translation type="vanished">Порт сервера:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Ім&apos;я користувача:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Пароль:</translation>
-    </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="vanished">Тип сесії:</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Підключити</translation>
-    </message>
-</context>
-<context>
     <name>ClientSettingsDialog</name>
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="14"/>
@@ -144,10 +105,6 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Ім&apos;я:</translation>
-    </message>
 </context>
 <context>
     <name>ClientWindow</name>
@@ -155,10 +112,6 @@
         <location filename="../ui/client_window.ui" line="14"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Адреса</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="48"/>
@@ -205,17 +158,6 @@
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
-    <message>
-        <source>Session Type:</source>
-        <translation type="obsolete">Тип сесії:</translation>
-    </message>
-</context>
-<context>
-    <name>Console</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
 </context>
 <context>
     <name>DesktopConfigDialog</name>
@@ -230,49 +172,9 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <source>Name:</source>
-        <translation type="vanished">Ім&apos;я:</translation>
-    </message>
-    <message>
-        <source>Color depth:</source>
-        <translation type="vanished">Глибина кольору:</translation>
-    </message>
-    <message>
-        <source>Compression ratio:</source>
-        <translation type="vanished">Стиснення:</translation>
-    </message>
-    <message>
-        <source>Fast</source>
-        <translation type="vanished">Швидко</translation>
-    </message>
-    <message>
-        <source>Best</source>
-        <translation type="vanished">Якісно</translation>
-    </message>
-    <message>
         <location filename="../ui/desktop_config_dialog.ui" line="106"/>
         <source>Disable font smoothing</source>
         <translation>Відключити згладжування шрифтів</translation>
-    </message>
-    <message>
-        <source>Remote Screen</source>
-        <translation type="vanished">Віддалений екран</translation>
-    </message>
-    <message>
-        <source>Scale factor:</source>
-        <translation type="vanished">Масштаб:</translation>
-    </message>
-    <message>
-        <source>Update interval:</source>
-        <translation type="vanished">Частота оновлення:</translation>
-    </message>
-    <message>
-        <source>ms</source>
-        <translation type="vanished">мс</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="vanished">Додатково</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="135"/>
@@ -460,10 +362,6 @@
         <location filename="../ui/desktop_panel.ui" line="237"/>
         <source>File transfer</source>
         <translation>Передача файлів</translation>
-    </message>
-    <message>
-        <source>Scaling an image</source>
-        <translation type="vanished">Масштабувати зображення</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="202"/>
@@ -662,124 +560,6 @@
     </message>
 </context>
 <context>
-    <name>QCoreApplication</name>
-    <message>
-        <source>Successfully completed</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Завершено успішно</translation>
-    </message>
-    <message>
-        <source>Invalid request</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Невірний запит</translation>
-    </message>
-    <message>
-        <source>Invalid directory or file name</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Невірний каталог або ім&apos;я файлу</translation>
-    </message>
-    <message>
-        <source>Path not found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Шлях не знайдено</translation>
-    </message>
-    <message>
-        <source>Path already exists</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Шлях вже існує</translation>
-    </message>
-    <message>
-        <source>No drives found</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Дисків не знайдено</translation>
-    </message>
-    <message>
-        <source>Disk full</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Диск заповнено</translation>
-    </message>
-    <message>
-        <source>Access denied</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Доступ заборонено</translation>
-    </message>
-    <message>
-        <source>Could not open file for reading</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Неможливо відкрити файл для читання</translation>
-    </message>
-    <message>
-        <source>Could not create or replace file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Неможливо відкрити або замінити файл</translation>
-    </message>
-    <message>
-        <source>Could not write to file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Неможливо записати до файлу</translation>
-    </message>
-    <message>
-        <source>Could not read file</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Неможливо прочитати файл</translation>
-    </message>
-    <message>
-        <source>Drive not ready</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Диск не готовий</translation>
-    </message>
-    <message>
-        <source>Unknown status code</source>
-        <comment>FileStatus</comment>
-        <translation type="vanished">Невідомий код статусу</translation>
-    </message>
-</context>
-<context>
-    <name>QtFileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="obsolete">Локальний комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="obsolete">Віддалений комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Передача файлів</translation>
-    </message>
-</context>
-<context>
-    <name>RouterDialog</name>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Ім&apos;я:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="obsolete">Ім&apos;я користувача:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Пароль:</translation>
-    </message>
-</context>
-<context>
-    <name>RouterListDialog</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Адреса</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="obsolete">Порт</translation>
-    </message>
-</context>
-<context>
     <name>RouterManagerWindow</name>
     <message>
         <location filename="../ui/router_manager_window.ui" line="20"/>
@@ -918,17 +698,6 @@
     </message>
 </context>
 <context>
-    <name>StatisticDialog</name>
-    <message>
-        <source>Parameter</source>
-        <translation type="obsolete">Параметр</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="obsolete">Значення</translation>
-    </message>
-</context>
-<context>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../ui/statistics_dialog.ui" line="14"/>
@@ -944,17 +713,6 @@
         <location filename="../ui/statistics_dialog.ui" line="41"/>
         <source>Value</source>
         <translation>Значення</translation>
-    </message>
-</context>
-<context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Статус підключення</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Закрити</translation>
     </message>
 </context>
 <context>
@@ -1021,29 +779,6 @@
     </message>
 </context>
 <context>
-    <name>client</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Підтвердження</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="obsolete">Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="obsolete">Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="obsolete">Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="obsolete">Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
-    </message>
-</context>
-<context>
     <name>client::AddressBar</name>
     <message>
         <location filename="../ui/address_bar.cc" line="57"/>
@@ -1054,10 +789,6 @@
         <location filename="../ui/address_bar.cc" line="58"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>Введено невірний шлях до папки.</translation>
-    </message>
-    <message>
-        <source>The path can not contain characters %1.</source>
-        <translation type="vanished">Шлях не може містити символи %1.</translation>
     </message>
 </context>
 <context>
@@ -1184,181 +915,6 @@
     </message>
 </context>
 <context>
-    <name>client::Channel</name>
-    <message>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="obsolete">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
-    </message>
-    <message>
-        <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="obsolete">З&apos;єднання відхилено піром (або час вийшов).</translation>
-    </message>
-    <message>
-        <source>Remote host closed the connection.</source>
-        <translation type="obsolete">Віддалений хост закрив з&apos;єднання.</translation>
-    </message>
-    <message>
-        <source>Host address was not found.</source>
-        <translation type="obsolete">Адресу хоста не знайдено.</translation>
-    </message>
-    <message>
-        <source>Socket operation timed out.</source>
-        <translation type="obsolete">Вийшов час операції сокета.</translation>
-    </message>
-    <message>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="obsolete">Введена адреса вже використовується і встановлена як унікальна.</translation>
-    </message>
-    <message>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="obsolete">Введена адреса не належить хосту.</translation>
-    </message>
-    <message>
-        <source>An unknown error occurred.</source>
-        <translation type="obsolete">Виникла невідома помилка.</translation>
-    </message>
-    <message>
-        <source>Violation of the data exchange protocol.</source>
-        <translation type="obsolete">Порушення в протоколі передачі даних.</translation>
-    </message>
-    <message>
-        <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="obsolete">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
-    </message>
-    <message>
-        <source>Specified session type is not allowed for the user.</source>
-        <translation type="obsolete">Обраний тип сесії не дозволений для користувача.</translation>
-    </message>
-</context>
-<context>
-    <name>client::Client</name>
-    <message>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="vanished">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
-    </message>
-    <message>
-        <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="vanished">З&apos;єднання відхилено піром (або час вийшов).</translation>
-    </message>
-    <message>
-        <source>Remote host closed the connection.</source>
-        <translation type="vanished">Віддалений хост закрив з&apos;єднання.</translation>
-    </message>
-    <message>
-        <source>Host address was not found.</source>
-        <translation type="vanished">Адресу хоста не знайдено.</translation>
-    </message>
-    <message>
-        <source>Socket operation timed out.</source>
-        <translation type="vanished">Вийшов час операції сокета.</translation>
-    </message>
-    <message>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="vanished">Введена адреса вже використовується і встановлена як унікальна.</translation>
-    </message>
-    <message>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="vanished">Введена адреса не належить хосту.</translation>
-    </message>
-    <message>
-        <source>Violation of the data exchange protocol.</source>
-        <translation type="vanished">Порушення в протоколі передачі даних.</translation>
-    </message>
-    <message>
-        <source>An error occurred while encrypting the message.</source>
-        <translation type="vanished">Виникла помилка під час шифрування повідомлення.</translation>
-    </message>
-    <message>
-        <source>An error occurred while decrypting the message.</source>
-        <translation type="vanished">Виникла помилка під час розшифрування повідомлення.</translation>
-    </message>
-    <message>
-        <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="vanished">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
-    </message>
-    <message>
-        <source>Specified session type is not allowed for the user.</source>
-        <translation type="vanished">Обраний тип сесії не дозволений для користувача.</translation>
-    </message>
-    <message>
-        <source>An unknown error occurred.</source>
-        <translation type="vanished">Виникла невідома помилка.</translation>
-    </message>
-</context>
-<context>
-    <name>client::ClientDesktop</name>
-    <message>
-        <source>Invalid message from host</source>
-        <translation type="vanished">Невірне повідомлення від хоста</translation>
-    </message>
-    <message>
-        <source>There are no supported video encodings</source>
-        <translation type="vanished">Немає підтримуваного кодування відео</translation>
-    </message>
-    <message>
-        <source>Video decoder not initialized</source>
-        <translation type="vanished">Відео декодер не ініціалізовано</translation>
-    </message>
-    <message>
-        <source>Wrong video frame size</source>
-        <translation type="vanished">Невірний розмір відеокадра</translation>
-    </message>
-    <message>
-        <source>Wrong video frame position</source>
-        <translation type="vanished">Невірна позиція відеокадра</translation>
-    </message>
-    <message>
-        <source>The desktop frame is not initialized</source>
-        <translation type="vanished">Відеокадр робочого стола не ініціалізований</translation>
-    </message>
-    <message>
-        <source>The video packet could not be decoded</source>
-        <translation type="vanished">Відеопакет не може бути декодовано</translation>
-    </message>
-    <message>
-        <source>Session error</source>
-        <translation type="vanished">Помилка сесії</translation>
-    </message>
-</context>
-<context>
-    <name>client::ClientDialog</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Керування робочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Перегляд робочого столу</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлів</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Підтвердження</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
-</context>
-<context>
-    <name>client::ClientFileTransfer</name>
-    <message>
-        <source>Invalid message from host</source>
-        <translation type="vanished">Невірне повідомлення від хоста</translation>
-    </message>
-    <message>
-        <source>There are no logged in users. File transfer is not available</source>
-        <translation type="vanished">Немає підключених користувачів. Передача файлів недоступна</translation>
-    </message>
-    <message>
-        <source>Session error</source>
-        <translation type="vanished">Помилка сесії</translation>
-    </message>
-</context>
-<context>
     <name>client::ClientSettingsDialog</name>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="94"/>
@@ -1384,78 +940,6 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <source>Attempt to connect to %1:%2.</source>
-        <translation type="vanished">Спроба підключення до %1:%2.</translation>
-    </message>
-    <message>
-        <source>Attempt to connect to %1.</source>
-        <translation type="obsolete">Спроба підключення до %1:%2. {1.?}</translation>
-    </message>
-    <message>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="obsolete">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
-    </message>
-    <message>
-        <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="obsolete">З&apos;єднання відхилено піром (або час вийшов).</translation>
-    </message>
-    <message>
-        <source>Remote host closed the connection.</source>
-        <translation type="obsolete">Віддалений хост закрив з&apos;єднання.</translation>
-    </message>
-    <message>
-        <source>Host address was not found.</source>
-        <translation type="obsolete">Адресу хоста не знайдено.</translation>
-    </message>
-    <message>
-        <source>Socket operation timed out.</source>
-        <translation type="obsolete">Вийшов час операції сокета.</translation>
-    </message>
-    <message>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="obsolete">Введена адреса вже використовується і встановлена як унікальна.</translation>
-    </message>
-    <message>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="obsolete">Введена адреса не належить хосту.</translation>
-    </message>
-    <message>
-        <source>An unknown error occurred.</source>
-        <translation type="obsolete">Виникла невідома помилка.</translation>
-    </message>
-    <message>
-        <source>Violation of the data exchange protocol.</source>
-        <translation type="obsolete">Порушення в протоколі передачі даних.</translation>
-    </message>
-    <message>
-        <source>An error occured while authenticating: wrong user name or password.</source>
-        <translation type="obsolete">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
-    </message>
-    <message>
-        <source>Specified session type is not allowed for the user.</source>
-        <translation type="obsolete">Обраний тип сесії не дозволений для користувача.</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Керування робочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Перегляд робочого столу</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Передача файлів</translation>
-    </message>
-    <message>
-        <source>Session started.</source>
-        <translation type="vanished">Сесію розпочато.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Підтвердження</translation>
-    </message>
-    <message>
         <location filename="../ui/client_window.cc" line="109"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Клієнт Aspia</translation>
@@ -1475,33 +959,6 @@
         <location filename="../ui/client_window.cc" line="219"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
-    </message>
-</context>
-<context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <source>True color (32 bit)</source>
-        <translation type="vanished">True color (32 біти)</translation>
-    </message>
-    <message>
-        <source>High color (16 bit)</source>
-        <translation type="vanished">High color (16 біт)</translation>
-    </message>
-    <message>
-        <source>256 colors (8 bit)</source>
-        <translation type="vanished">256 кольорів (8 біт)</translation>
-    </message>
-    <message>
-        <source>64 colors (6 bit)</source>
-        <translation type="vanished">64 кольори (6 біт)</translation>
-    </message>
-    <message>
-        <source>8 colors (3 bit)</source>
-        <translation type="vanished">8 кольорів (3 біти)</translation>
-    </message>
-    <message>
-        <source>Compression ratio: %1</source>
-        <translation type="vanished">Стиснення: %1</translation>
     </message>
 </context>
 <context>
@@ -1557,41 +1014,6 @@
     </message>
 </context>
 <context>
-    <name>client::DesktopWindow</name>
-    <message>
-        <source>Save File</source>
-        <translation type="vanished">Зберегти файл</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="vanished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Попередження</translation>
-    </message>
-    <message>
-        <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="vanished">Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
-    </message>
-    <message>
-        <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation type="vanished">Вибір підтримуваного кодування відео відмінено користувачем.</translation>
-    </message>
-    <message>
-        <source>Could not save image</source>
-        <translation type="vanished">Неможливо зберегти зображення</translation>
-    </message>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Керування робочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Перегляд робочого столу</translation>
-    </message>
-</context>
-<context>
     <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="99"/>
@@ -1642,21 +1064,6 @@
         <location filename="../ui/file_list_model.cc" line="547"/>
         <source>B</source>
         <translation>Б</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileManagerWindow</name>
-    <message>
-        <source>Local Computer</source>
-        <translation type="vanished">Локальний комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Remote Computer</source>
-        <translation type="vanished">Віддалений комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлів</translation>
     </message>
 </context>
 <context>
@@ -1768,55 +1175,6 @@
     </message>
 </context>
 <context>
-    <name>client::FileRemoveQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="vanished">Отримано неочікувану відповідь.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="vanished">Трапилася помилка під час отримання списку файлів: %1</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileRemover</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="vanished">Отримано неочікувану відповідь.</translation>
-    </message>
-    <message>
-        <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="vanished">Не вдалося видалити &quot;%1&quot;:%2.</translation>
-    </message>
-</context>
-<context>
-    <name>client::FileTransfer</name>
-    <message>
-        <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>An unexpected response to the request was received</source>
-        <translation type="vanished">Отримано неочікувану відповідь на запит</translation>
-    </message>
-    <message>
-        <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
-    </message>
-    <message>
-        <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
-    </message>
-</context>
-<context>
     <name>client::FileTransferDialog</name>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="98"/>
@@ -1905,26 +1263,7 @@
     </message>
 </context>
 <context>
-    <name>client::FileTransferQueueBuilder</name>
-    <message>
-        <source>An unexpected answer was received.</source>
-        <translation type="vanished">Отримано неочікувану відповідь.</translation>
-    </message>
-    <message>
-        <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="vanished">Трапилася помилка під час отримання списку файлів: %1</translation>
-    </message>
-</context>
-<context>
     <name>client::QtDesktopWindow</name>
-    <message>
-        <source>Desktop Manage</source>
-        <translation type="obsolete">Керування робочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="obsolete">Перегляд робочого столу</translation>
-    </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="224"/>
         <location filename="../ui/qt_desktop_window.cc" line="232"/>
@@ -1941,10 +1280,6 @@
         <location filename="../ui/qt_desktop_window.cc" line="233"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
-    </message>
-    <message>
-        <source>Selecting a supported video encoding is canceled by the user.</source>
-        <translation type="obsolete">Вибір підтримуваного кодування відео відмінено користувачем.</translation>
     </message>
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="560"/>
@@ -1983,20 +1318,6 @@
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
         <translation>Помилка сесії: %1</translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Попередження</translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterListDialog</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Підтвердження</translation>
     </message>
 </context>
 <context>
@@ -2416,29 +1737,6 @@
         <location filename="../ui/session_window.cc" line="359"/>
         <source>Unknown error.</source>
         <translation>Невідома помилка.</translation>
-    </message>
-</context>
-<context>
-    <name>client::StatisticDialog</name>
-    <message>
-        <source>TB</source>
-        <translation type="obsolete">ТБ</translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="obsolete">ГБ</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="obsolete">МБ</translation>
-    </message>
-    <message>
-        <source>kB</source>
-        <translation type="obsolete">кБ</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">Б</translation>
     </message>
 </context>
 <context>

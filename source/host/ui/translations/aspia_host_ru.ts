@@ -4,10 +4,6 @@
 <context>
     <name>ChangePasswordDialog</name>
     <message>
-        <source>User Properties</source>
-        <translation type="obsolete">Свойства пользователя</translation>
-    </message>
-    <message>
         <location filename="../change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
         <translation>Изменение пароля</translation>
@@ -75,22 +71,6 @@
         <translation>Порт:</translation>
     </message>
     <message>
-        <source>Import...</source>
-        <translation type="vanished">Импорт...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">Экспорт...</translation>
-    </message>
-    <message>
-        <source>Password Protection</source>
-        <translation type="vanished">Защита паролем</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">Установить</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.ui" line="242"/>
         <source>Change password</source>
         <translation>Изменить пароль</translation>
@@ -124,10 +104,6 @@
         <location filename="../config_dialog.ui" line="265"/>
         <source>Enable one-time password</source>
         <translation>Включить одноразовый пароль</translation>
-    </message>
-    <message>
-        <source>Change password via:</source>
-        <translation type="vanished">Менять пароль через:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="274"/>
@@ -211,10 +187,6 @@
         <translation>Удалить пользователя</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation type="vanished">Обновление</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.ui" line="106"/>
         <source>Update Server</source>
         <translation>Сервер обновлений</translation>
@@ -263,10 +235,6 @@
 <context>
     <name>ConnectConfirmDialog</name>
     <message>
-        <source>Password Protection</source>
-        <translation type="obsolete">Защита паролем</translation>
-    </message>
-    <message>
         <location filename="../connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
         <translation>Подтверждение подключения</translation>
@@ -274,26 +242,6 @@
 </context>
 <context>
     <name>Host</name>
-    <message>
-        <source>Launches the application as hidden.</source>
-        <translation type="vanished">Запускает приложение спрятанным.</translation>
-    </message>
-    <message>
-        <source>The path to the file to import.</source>
-        <translation type="vanished">Путь к файлу для импорта.</translation>
-    </message>
-    <message>
-        <source>The path to the file to export.</source>
-        <translation type="vanished">Путь к файлу для экспорта.</translation>
-    </message>
-    <message>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="vanished">Включает тихий режим при экспортировании и импортировании.</translation>
-    </message>
-    <message>
-        <source>Run application update.</source>
-        <translation type="vanished">Запускает обновление приложения.</translation>
-    </message>
     <message>
         <location filename="../host_main.cc" line="120"/>
         <location filename="../host_main.cc" line="139"/>
@@ -312,269 +260,6 @@
     </message>
 </context>
 <context>
-    <name>HostConfig</name>
-    <message>
-        <source>The path to the file to import.</source>
-        <translation type="vanished">Путь к файлу для импорта.</translation>
-    </message>
-    <message>
-        <source>The path to the file to export.</source>
-        <translation type="vanished">Путь к файлу для экспорта.</translation>
-    </message>
-    <message>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="vanished">Включает тихий режим при экспортировании и импортировании.</translation>
-    </message>
-    <message>
-        <source>Run application update.</source>
-        <translation type="vanished">Запускает обновление приложения.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
-    </message>
-</context>
-<context>
-    <name>HostConfigDialog</name>
-    <message>
-        <source>Host Configuration</source>
-        <translation type="vanished">Конфигурация хоста</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="vanished">Основные</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="vanished">Интерфейс пользователя</translation>
-    </message>
-    <message>
-        <source>Language:</source>
-        <translation type="vanished">Язык:</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Параметры</translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation type="vanished">Служба</translation>
-    </message>
-    <message>
-        <source>Incoming Connections</source>
-        <translation type="vanished">Входящие подключения</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation type="vanished">Порт:</translation>
-    </message>
-    <message>
-        <source>Add a rule to the firewall when the service starts</source>
-        <translation type="vanished">Добавлять правило в фаервол при запуске службы</translation>
-    </message>
-    <message>
-        <source>Import / Export Configuration</source>
-        <translation type="vanished">Импорт / экспорт конфигурации</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="vanished">Импорт...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">Экспорт...</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Пользователи</translation>
-    </message>
-    <message>
-        <source>Add new user</source>
-        <translation type="vanished">Добавить нового пользователя</translation>
-    </message>
-    <message>
-        <source>Edit user</source>
-        <translation type="vanished">Редактировать пользователя</translation>
-    </message>
-    <message>
-        <source>Delete user</source>
-        <translation type="vanished">Удалить пользователя</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="vanished">Обновление</translation>
-    </message>
-    <message>
-        <source>Update Server</source>
-        <translation type="vanished">Сервер обновлений</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="vanished">Использовать свой сервер обновлений</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="vanished">Сервер:</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation type="vanished">Проверить обновления</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="vanished">Добавить</translation>
-    </message>
-    <message>
-        <source>Modify</source>
-        <translation type="vanished">Изменить</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="vanished">Удалить</translation>
-    </message>
-</context>
-<context>
-    <name>HostMainWindow</name>
-    <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Хост Aspia</translation>
-    </message>
-    <message>
-        <source>Your ID:</source>
-        <translation type="vanished">Ваш ID:</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Недоступен</translation>
-    </message>
-    <message>
-        <source>Your IP:</source>
-        <translation type="vanished">Ваш IP:</translation>
-    </message>
-    <message>
-        <source>User:</source>
-        <translation type="vanished">Пользователь:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Запустить</translation>
-    </message>
-    <message>
-        <source>Your ID</source>
-        <translation type="vanished">Ваш ID</translation>
-    </message>
-    <message>
-        <source>Your IP</source>
-        <translation type="vanished">Ваш IP</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="vanished">Пользователь</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">Пароль</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Помощь</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">Язык</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Выход</translation>
-    </message>
-    <message>
-        <source>Online Help...</source>
-        <translation type="vanished">Онлайн справка...</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">О программе</translation>
-    </message>
-    <message>
-        <source>Settings...</source>
-        <translation type="vanished">Параметры...</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Спрятать</translation>
-    </message>
-</context>
-<context>
-    <name>HostNotifierWindow</name>
-    <message>
-        <source>Connections</source>
-        <translation type="vanished">Подключения</translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">Отключить всех</translation>
-    </message>
-</context>
-<context>
-    <name>HostWindow</name>
-    <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Хост Aspia</translation>
-    </message>
-    <message>
-        <source>Your ID:</source>
-        <translation type="vanished">Ваш ID:</translation>
-    </message>
-    <message>
-        <source>Your IP:</source>
-        <translation type="vanished">Ваш IP:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Запустить</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Помощь</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">Язык</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Выход</translation>
-    </message>
-    <message>
-        <source>Online Help...</source>
-        <translation type="vanished">Онлайн справка...</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="vanished">О программе</translation>
-    </message>
-    <message>
-        <source>Settings...</source>
-        <translation type="vanished">Параметры...</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Спрятать</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="../main_window.ui" line="26"/>
@@ -585,18 +270,6 @@
         <location filename="../main_window.ui" line="96"/>
         <source>Your ID</source>
         <translation>Ваш ID</translation>
-    </message>
-    <message>
-        <source>Your IP</source>
-        <translation type="vanished">Ваш IP</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="vanished">Пользователь</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Недоступен</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="160"/>
@@ -680,45 +353,6 @@
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
         <translation>Отключить всех</translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">Отключить всех</translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфигурация успешно импортирована.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Конфигурация успешно экспортирована.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Could not open source file: %1</source>
-        <translation type="vanished">Не удалось открыть исходный файл: %1</translation>
-    </message>
-    <message>
-        <source>Could not open target file: %1</source>
-        <translation type="vanished">Не удалось открыть файл назначения: %1</translation>
-    </message>
-    <message>
-        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="vanished">Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
-    </message>
-    <message>
-        <source>Unable to write the target file.</source>
-        <translation type="vanished">Не удалось записать файл назначения.</translation>
     </message>
 </context>
 <context>
@@ -873,10 +507,6 @@
         <translation>Импорт</translation>
     </message>
     <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-файлы (*.xml)</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.cc" line="209"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
@@ -943,14 +573,6 @@
         <location filename="../config_dialog.cc" line="578"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введен некорректный публичный ключ маршрутизатора.</translation>
-    </message>
-    <message>
-        <source>Current state: Not installed</source>
-        <translation type="vanished">Текущее состояние: не установлена</translation>
-    </message>
-    <message>
-        <source>Current state: Installed</source>
-        <translation type="vanished">Текущее состояние: установлена</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="740"/>
@@ -1032,17 +654,9 @@
         <translation>Каждые 24 часа</translation>
     </message>
     <message>
-        <source>Letters and numbers</source>
-        <translation type="vanished">Буквы и числа</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.cc" line="102"/>
         <source>Letters</source>
         <translation>Буквы</translation>
-    </message>
-    <message>
-        <source>Numbers</source>
-        <translation type="vanished">Числа</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="121"/>
@@ -1143,155 +757,6 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Предупреждение</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфигурация успешно импортирована.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Конфигурация успешно экспортирована.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="vanished">Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">Импорт</translation>
-    </message>
-    <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-файлы (*.xml)</translation>
-    </message>
-    <message>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="vanished">Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Экспорт</translation>
-    </message>
-    <message>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="vanished">Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Удалить</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="vanished">Запущена</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Остановить</translation>
-    </message>
-    <message>
-        <source>Not started</source>
-        <translation type="vanished">Не запущена</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Запустить</translation>
-    </message>
-    <message>
-        <source>Installed</source>
-        <translation type="vanished">Установлена</translation>
-    </message>
-    <message>
-        <source>Not installed</source>
-        <translation type="vanished">Не установлена</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="vanished">Установить</translation>
-    </message>
-    <message>
-        <source>Current state: %1</source>
-        <translation type="vanished">Текущее состояние: %1</translation>
-    </message>
-    <message>
-        <source>The service could not be installed.</source>
-        <translation type="vanished">Не удалось установить службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be removed.</source>
-        <translation type="vanished">Не удалось удалить службу.</translation>
-    </message>
-    <message>
-        <source>Could not access the service.</source>
-        <translation type="vanished">Не удалось получить доступ к службе.</translation>
-    </message>
-    <message>
-        <source>The service could not be started.</source>
-        <translation type="vanished">Не удалось запустить службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be stopped.</source>
-        <translation type="vanished">Не удалось остановить службу.</translation>
-    </message>
-    <message>
-        <source>Could not open source file: %1</source>
-        <translation type="vanished">Не удалось открыть исходный файл: %1</translation>
-    </message>
-    <message>
-        <source>Could not open target file: %1</source>
-        <translation type="vanished">Не удалось открыть файл назначения: %1</translation>
-    </message>
-    <message>
-        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="vanished">Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
-    </message>
-    <message>
-        <source>Unable to write the target file.</source>
-        <translation type="vanished">Не удалось записать файл назначения.</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostNotifierWindow</name>
-    <message>
-        <source>Disconnect</source>
-        <translation type="vanished">Отключить</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostWindow</name>
-    <message>
-        <source>Aspia Host</source>
-        <translation type="vanished">Хост Aspia</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">Показать</translation>
-    </message>
-    <message>
-        <source>Hide</source>
-        <translation type="vanished">Спрятать</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="vanished">Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
-    </message>
-</context>
-<context>
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="73"/>
@@ -1321,30 +786,10 @@
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <source>Connecting to router %1:%2...</source>
-        <translation type="vanished">Подключение к маршрутизатору %1:%2...</translation>
-    </message>
-    <message>
         <location filename="../main_window.cc" line="312"/>
         <location filename="../main_window.cc" line="583"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
-    </message>
-    <message>
-        <source>Connected to router %1:%2</source>
-        <translation type="vanished">Подключено к маршрутизатору %1:%2</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1:%2</source>
-        <translation type="vanished">Не удалось подключиться к маршрутизатору %1:%2</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Подключение к маршрутизатору %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Подключено к маршрутизатору %1</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="324"/>
@@ -1365,10 +810,6 @@
         <location filename="../main_window.cc" line="593"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
-    </message>
-    <message>
-        <source>Error occurred</source>
-        <translation type="vanished">Произошла ошибка</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="496"/>
@@ -1427,18 +868,6 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Просмотр рабочего стола</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлов</translation>
-    </message>
-    <message>
         <location filename="../user_dialog.cc" line="133"/>
         <location filename="../user_dialog.cc" line="145"/>
         <location filename="../user_dialog.cc" line="156"/>
@@ -1447,10 +876,6 @@
         <location filename="../user_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="134"/>

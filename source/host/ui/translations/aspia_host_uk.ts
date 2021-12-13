@@ -4,10 +4,6 @@
 <context>
     <name>ChangePasswordDialog</name>
     <message>
-        <source>User Properties</source>
-        <translation type="obsolete">Налаштування користувача</translation>
-    </message>
-    <message>
         <location filename="../change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
         <translation type="unfinished"></translation>
@@ -73,18 +69,6 @@
         <location filename="../config_dialog.ui" line="83"/>
         <source>Port:</source>
         <translation>Порт:</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="vanished">Імпорт...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">Експорт...</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="obsolete">Встановити</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="242"/>
@@ -203,10 +187,6 @@
         <translation>Видалити користувача</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation type="vanished">Оновити</translation>
-    </message>
-    <message>
         <location filename="../config_dialog.ui" line="106"/>
         <source>Update Server</source>
         <translation>Сервер оновлень</translation>
@@ -263,22 +243,6 @@
 <context>
     <name>Host</name>
     <message>
-        <source>The path to the file to import.</source>
-        <translation type="vanished">Шлях до файла для імпорту.</translation>
-    </message>
-    <message>
-        <source>The path to the file to export.</source>
-        <translation type="vanished">Глях до файла для експорту.</translation>
-    </message>
-    <message>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="vanished">Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
-    </message>
-    <message>
-        <source>Run application update.</source>
-        <translation type="vanished">Запустити оновлення програми.</translation>
-    </message>
-    <message>
         <location filename="../host_main.cc" line="120"/>
         <location filename="../host_main.cc" line="139"/>
         <source>Warning</source>
@@ -293,161 +257,6 @@
         <location filename="../host_main.cc" line="140"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
-    </message>
-</context>
-<context>
-    <name>HostConfig</name>
-    <message>
-        <source>The path to the file to import.</source>
-        <translation type="vanished">Шлях до файла для імпорту.</translation>
-    </message>
-    <message>
-        <source>The path to the file to export.</source>
-        <translation type="vanished">Глях до файла для експорту.</translation>
-    </message>
-    <message>
-        <source>Enables silent mode when exporting and importing.</source>
-        <translation type="vanished">Включає &quot;тихий режим&quot; під час експорту та імпорту.</translation>
-    </message>
-    <message>
-        <source>Run application update.</source>
-        <translation type="vanished">Запустити оновлення програми.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Попередження</translation>
-    </message>
-    <message>
-        <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
-    </message>
-</context>
-<context>
-    <name>HostConfigDialog</name>
-    <message>
-        <source>Host Configuration</source>
-        <translation type="vanished">Налаштування хоста</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="vanished">Основні</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="vanished">Інтерфейс користувача</translation>
-    </message>
-    <message>
-        <source>Language:</source>
-        <translation type="vanished">Мова:</translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation type="vanished">Служба</translation>
-    </message>
-    <message>
-        <source>Incoming Connections</source>
-        <translation type="vanished">Вхідні підключення</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation type="vanished">Порт:</translation>
-    </message>
-    <message>
-        <source>Add a rule to the firewall when the service starts</source>
-        <translation type="vanished">Додати правило файрвола при запуску служби</translation>
-    </message>
-    <message>
-        <source>Import / Export Configuration</source>
-        <translation type="vanished">Налаштування імпорта/експорта</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="vanished">Імпорт...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="vanished">Експорт...</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Користувачі</translation>
-    </message>
-    <message>
-        <source>Add new user</source>
-        <translation type="vanished">Додати нового окристувача</translation>
-    </message>
-    <message>
-        <source>Edit user</source>
-        <translation type="vanished">Редагувати окристувача</translation>
-    </message>
-    <message>
-        <source>Delete user</source>
-        <translation type="vanished">Видалити користувача</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="vanished">Оновити</translation>
-    </message>
-    <message>
-        <source>Update Server</source>
-        <translation type="vanished">Сервер оновлень</translation>
-    </message>
-    <message>
-        <source>Use custom update server</source>
-        <translation type="vanished">Використовувати інший сервер оновлень</translation>
-    </message>
-    <message>
-        <source>Server:</source>
-        <translation type="vanished">Сервер:</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation type="vanished">Перевірити наявність оновлень</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="vanished">Додати</translation>
-    </message>
-    <message>
-        <source>Modify</source>
-        <translation type="vanished">Змінити</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="vanished">Видалити</translation>
-    </message>
-</context>
-<context>
-    <name>HostMainWindow</name>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Почати</translation>
-    </message>
-</context>
-<context>
-    <name>HostNotifierWindow</name>
-    <message>
-        <source>Connections</source>
-        <translation type="vanished">Підключення</translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">Відключити все</translation>
-    </message>
-</context>
-<context>
-    <name>HostWindow</name>
-    <message>
-        <source>Password:</source>
-        <translation type="vanished">Пароль:</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Почати</translation>
     </message>
 </context>
 <context>
@@ -544,45 +353,6 @@
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disconnect All</source>
-        <translation type="vanished">Відключити всі</translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Інформація</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфігурацію імпортовано успішно.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Кофігурацію експортовано успішно.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Попередження</translation>
-    </message>
-    <message>
-        <source>Could not open source file: %1</source>
-        <translation type="vanished">Неможливо відкрити вихідний файл: %1</translation>
-    </message>
-    <message>
-        <source>Could not open target file: %1</source>
-        <translation type="vanished">Неможливо відкрити цільовий файл: %1</translation>
-    </message>
-    <message>
-        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="vanished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
-    </message>
-    <message>
-        <source>Unable to write the target file.</source>
-        <translation type="vanished">Неможливо записати цільовий файл.</translation>
     </message>
 </context>
 <context>
@@ -735,10 +505,6 @@
         <location filename="../config_dialog.cc" line="480"/>
         <source>Import</source>
         <translation>Імпорт</translation>
-    </message>
-    <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-файли (*.xml)</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="209"/>
@@ -991,139 +757,6 @@
     </message>
 </context>
 <context>
-    <name>host::HostConfigDialog</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Попередження</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Інформація</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully imported.</source>
-        <translation type="vanished">Конфігурацію імпортовано успішно.</translation>
-    </message>
-    <message>
-        <source>The configuration was successfully exported.</source>
-        <translation type="vanished">Кофігурацію експортовано успішно.</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Підтвердження</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="vanished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">Імпорт</translation>
-    </message>
-    <message>
-        <source>XML-files (*.xml)</source>
-        <translation type="vanished">XML-файли (*.xml)</translation>
-    </message>
-    <message>
-        <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="vanished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Експорт</translation>
-    </message>
-    <message>
-        <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="vanished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Видалити</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="vanished">Розпочато</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Зупинити</translation>
-    </message>
-    <message>
-        <source>Not started</source>
-        <translation type="vanished">Не розпочато</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Почати</translation>
-    </message>
-    <message>
-        <source>Installed</source>
-        <translation type="vanished">Встановлено</translation>
-    </message>
-    <message>
-        <source>Not installed</source>
-        <translation type="vanished">Не встановлено</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="vanished">Встановити</translation>
-    </message>
-    <message>
-        <source>Current state: %1</source>
-        <translation type="vanished">Поточний стан: %1</translation>
-    </message>
-    <message>
-        <source>The service could not be installed.</source>
-        <translation type="vanished">Неможливо встановити службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be removed.</source>
-        <translation type="vanished">Неможливо видалити службу.</translation>
-    </message>
-    <message>
-        <source>Could not access the service.</source>
-        <translation type="vanished">Немає доступу до служби.</translation>
-    </message>
-    <message>
-        <source>The service could not be started.</source>
-        <translation type="vanished">Неможливо запустити службу.</translation>
-    </message>
-    <message>
-        <source>The service could not be stopped.</source>
-        <translation type="vanished">Неможливо зупинити службу.</translation>
-    </message>
-    <message>
-        <source>Could not open source file: %1</source>
-        <translation type="vanished">Неможливо відкрити вихідний файл: %1</translation>
-    </message>
-    <message>
-        <source>Could not open target file: %1</source>
-        <translation type="vanished">Неможливо відкрити цільовий файл: %1</translation>
-    </message>
-    <message>
-        <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="vanished">Неможливо прочитати вихідний файл: файл пошкоджено або формат файлу невідомний.</translation>
-    </message>
-    <message>
-        <source>Unable to write the target file.</source>
-        <translation type="vanished">Неможливо записати цільовий файл.</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostNotifierWindow</name>
-    <message>
-        <source>Disconnect</source>
-        <translation type="vanished">Відключитися</translation>
-    </message>
-</context>
-<context>
-    <name>host::HostWindow</name>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Підтвердження</translation>
-    </message>
-</context>
-<context>
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="73"/>
@@ -1235,18 +868,6 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <source>Desktop Manage</source>
-        <translation type="vanished">Керування робоим столом</translation>
-    </message>
-    <message>
-        <source>Desktop View</source>
-        <translation type="vanished">Перегляд робочого столу</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлів</translation>
-    </message>
-    <message>
         <location filename="../user_dialog.cc" line="133"/>
         <location filename="../user_dialog.cc" line="145"/>
         <location filename="../user_dialog.cc" line="156"/>
@@ -1255,10 +876,6 @@
         <location filename="../user_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>Попередження</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="134"/>
