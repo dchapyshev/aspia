@@ -38,7 +38,7 @@ public:
     FastConnectDialog(QWidget* parent,
                       const QString& address_book_guid,
                       const std::optional<client::RouterConfig>& router_config);
-    ~FastConnectDialog();
+    ~FastConnectDialog() override;
 
 private slots:
     void sessionTypeChanged(int item_index);

@@ -350,7 +350,7 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
     router_config.username = base::utf16FromUtf8(router.username());
     router_config.password = base::utf16FromUtf8(router.password());
 
-    return router_config;
+    return std::move(router_config);
 }
 
 void AddressBookTab::addComputerGroup()
@@ -841,7 +841,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     base::ByteArray buffer = base::serialize(file_);
 
     int64_t bytes_written = file.write(
-        reinterpret_cast<const char*>(buffer.data()), buffer.size());
+        reinterpret_cast<const char*>(buffer.data()), static_cast<qint64>(buffer.size()));
 
     base::memZero(buffer.data(), buffer.size());
 
