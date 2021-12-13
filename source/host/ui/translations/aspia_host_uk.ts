@@ -1126,70 +1126,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="72"/>
-        <location filename="../main_window.cc" line="494"/>
+        <location filename="../main_window.cc" line="73"/>
+        <location filename="../main_window.cc" line="511"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="137"/>
-        <location filename="../main_window.cc" line="474"/>
+        <location filename="../main_window.cc" line="138"/>
+        <location filename="../main_window.cc" line="491"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="261"/>
+        <location filename="../main_window.cc" line="262"/>
         <source>Not available</source>
         <translation>Не доступно</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="315"/>
+        <location filename="../main_window.cc" line="316"/>
         <source>Connecting to a router %1...</source>
         <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="581"/>
+        <location filename="../main_window.cc" line="598"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="311"/>
-        <location filename="../main_window.cc" line="566"/>
+        <location filename="../main_window.cc" line="312"/>
+        <location filename="../main_window.cc" line="583"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="571"/>
+        <location filename="../main_window.cc" line="588"/>
         <source>Connecting to a router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="319"/>
+        <location filename="../main_window.cc" line="320"/>
         <source>Connected to a router %1</source>
         <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="576"/>
+        <location filename="../main_window.cc" line="593"/>
         <source>Connected to a router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="323"/>
+        <location filename="../main_window.cc" line="324"/>
         <source>Failed to connect to router %1</source>
         <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="479"/>
+        <location filename="../main_window.cc" line="496"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="514"/>
+        <location filename="../main_window.cc" line="531"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="515"/>
+        <location filename="../main_window.cc" line="532"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>
@@ -1197,37 +1197,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="169"/>
+        <location filename="../notifier_window.cc" line="170"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="213"/>
+        <location filename="../notifier_window.cc" line="214"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="218"/>
+        <location filename="../notifier_window.cc" line="219"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="237"/>
+        <location filename="../notifier_window.cc" line="238"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="242"/>
+        <location filename="../notifier_window.cc" line="243"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="261"/>
+        <location filename="../notifier_window.cc" line="262"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="266"/>
+        <location filename="../notifier_window.cc" line="267"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>

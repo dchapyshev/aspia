@@ -119,6 +119,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 
 #if 1
     ui.button_voice_chat->setVisible(false);
+    ui.button_text_chat->setVisible(false);
 #endif
 
     setAttribute(Qt::WA_TranslucentBackground);
