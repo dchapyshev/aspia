@@ -138,6 +138,7 @@ void DesktopPanel::enablePowerControl(bool enable)
         power_menu_->addAction(ui.action_shutdown);
         power_menu_->addAction(ui.action_reboot);
         power_menu_->addAction(ui.action_reboot_safe_mode);
+        power_menu_->addSeparator();
         power_menu_->addAction(ui.action_logoff);
         power_menu_->addAction(ui.action_lock);
 
@@ -547,7 +548,7 @@ void DesktopPanel::startAnimation()
     int start_x = (parent_size.width() / 2) - (start_panel_size.width() / 2);
     int end_x = (parent_size.width() / 2) - (end_panel_size.width() / 2);
 
-    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    QPropertyAnimation* animation = new QPropertyAnimation(this, QByteArrayLiteral("geometry"));
     animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
     animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
     animation->setDuration(150);

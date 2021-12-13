@@ -21,6 +21,8 @@
 #include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
 
+#include <QTimer>
+
 namespace client {
 
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
@@ -85,7 +87,11 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
 
-    setFixedHeight(sizeHint().height());
+    QTimer::singleShot(0, this, [=]()
+    {
+        adjustSize();
+        setFixedHeight(sizeHint().height());
+    });
 }
 
 DesktopConfigDialog::~DesktopConfigDialog() = default;
