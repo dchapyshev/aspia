@@ -24,13 +24,15 @@ namespace base {
 
 namespace {
 
-std::unique_ptr<Frame> createTestFrame(Rect rect, int pixels_value)
+std::unique_ptr<Frame> createTestFrame(const Rect& rect, int pixels_value)
 {
     Size size = rect.size();
     auto frame = FrameSimple::create(size);
     frame->setTopLeft(rect.topLeft());
-    memset(frame->frameData(), pixels_value, frame->stride() * size.height());
-    return frame;
+    memset(frame->frameData(),
+           pixels_value,
+           static_cast<size_t>(frame->stride()) * static_cast<size_t>(size.height()));
+    return std::move(frame);
 }
 
 } // namespace

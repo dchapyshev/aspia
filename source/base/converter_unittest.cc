@@ -67,7 +67,7 @@ TEST(converter_test, for_bool)
         {
             EXPECT_EQ(*result, kTable[i].expected_value);
 
-            std::string string = Converter<bool>::set_value(result.value());
+            std::string string = Converter<bool>::set_value(*result);
 
             EXPECT_EQ(string, *result ? "true" : "false");
         }

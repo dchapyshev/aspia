@@ -140,7 +140,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     int height = bitmap_info.bmHeight;
 
     std::unique_ptr<uint32_t[]> mask_data =
-        std::make_unique<uint32_t[]>(static_cast<size_t>(width * height));
+        std::make_unique<uint32_t[]>(static_cast<size_t>(width) * static_cast<size_t>(height));
 
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.
@@ -177,7 +177,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 
     if (is_color)
     {
-        image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
+        image.resize(static_cast<size_t>(width) * static_cast<size_t>(height) *
+                     static_cast<size_t>(kBytesPerPixel));
 
         // Get the pixels from the color bitmap.
         if (!GetDIBits(dc,
@@ -203,7 +204,8 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         // need to divide by 2 to get the correct mask height.
         height /= 2;
 
-        image.resize(static_cast<size_t>(width * height * kBytesPerPixel));
+        image.resize(static_cast<size_t>(width) * static_cast<size_t>(height) *
+                     static_cast<size_t>(kBytesPerPixel));
 
         // The XOR mask becomes the color bitmap.
         memcpy(image.data(), mask_plane + (width * height), image.size());

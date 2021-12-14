@@ -144,7 +144,7 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
         return;
 
     outgoing_message_->Clear();
-    outgoing_message_->mutable_clipboard_event()->CopyFrom(out_event.value());
+    outgoing_message_->mutable_clipboard_event()->CopyFrom(*out_event);
     sendMessage(*outgoing_message_);
 }
 

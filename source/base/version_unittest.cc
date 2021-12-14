@@ -50,7 +50,7 @@ TEST(VersionTest, ValueSemantics)
 TEST(VersionTest, MoveSemantics)
 {
     const std::vector<uint32_t> components = { 1, 2, 3, 4 };
-    base::Version v1(std::move(components));
+    base::Version v1(components);
     EXPECT_TRUE(v1.isValid());
     base::Version v2("1.2.3.4");
     EXPECT_EQ(v1, v2);

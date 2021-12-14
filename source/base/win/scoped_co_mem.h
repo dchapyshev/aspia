@@ -65,8 +65,7 @@ public:
 
     void reset(T* ptr)
     {
-        if (mem_ptr_)
-            CoTaskMemFree(mem_ptr_);
+        CoTaskMemFree(mem_ptr_);
         mem_ptr_ = ptr;
     }
 

@@ -168,7 +168,7 @@ Version::Version(std::string_view version_str)
 }
 
 Version::Version(const std::vector<uint32_t>& components)
-    : components_(std::move(components))
+    : components_(components)
 {
     // Nothing
 }
