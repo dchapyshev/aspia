@@ -263,7 +263,7 @@ bool XmlSettings::writeFile(const std::filesystem::path& file, const Map& map)
             splitStringView(map_item.first, "/", TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
         size_t count = 0;
 
-        while (count < prev.size() && segments.at(count) == prev.at(count))
+        while (count < prev.size() && segments[count] == prev[count])
             ++count;
 
         for (size_t i = prev.size(); i > count; --i)

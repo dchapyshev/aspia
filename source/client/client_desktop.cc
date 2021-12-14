@@ -258,7 +258,7 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
         return;
 
     outgoing_message_->Clear();
-    outgoing_message_->mutable_key_event()->CopyFrom(out_event.value());
+    outgoing_message_->mutable_key_event()->CopyFrom(*out_event);
 
     sendMessage(*outgoing_message_);
 }
@@ -270,7 +270,7 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
         return;
 
     outgoing_message_->Clear();
-    outgoing_message_->mutable_mouse_event()->CopyFrom(out_event.value());
+    outgoing_message_->mutable_mouse_event()->CopyFrom(*out_event);
 
     sendMessage(*outgoing_message_);
 }
@@ -340,8 +340,6 @@ void ClientDesktop::onMetricsRequest()
 
     if (min_video_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_video_packet = min_video_packet_;
-    else
-        metrics.min_video_packet = 0;
 
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
@@ -349,8 +347,6 @@ void ClientDesktop::onMetricsRequest()
 
     if (min_audio_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_audio_packet = min_audio_packet_;
-    else
-        metrics.min_audio_packet = 0;
 
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
@@ -539,7 +535,7 @@ void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
     if (!out_event.has_value())
         return;
 
-    clipboard_monitor_->injectClipboardEvent(out_event.value());
+    clipboard_monitor_->injectClipboardEvent(*out_event);
 }
 
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)

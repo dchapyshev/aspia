@@ -569,26 +569,27 @@ void RouterManagerWindow::onCurrentUserChanged(
 void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
                                                QTreeWidgetItem* /* previous */)
 {
-    ui->tree_host_info->clear();
+    QTreeWidget* tree_host_info = ui->tree_host_info;
+    tree_host_info->clear();
 
     HostTreeItem* host_item = reinterpret_cast<HostTreeItem*>(current);
     if (!host_item)
     {
-        ui->tree_host_info->setEnabled(false);
+        tree_host_info->setEnabled(false);
     }
     else
     {
-        ui->tree_host_info->setEnabled(true);
+        tree_host_info->setEnabled(true);
 
         const proto::Session& session = host_item->session;
 
-        auto add_item = [this](const QString& name, const QString& value)
+        auto add_item = [=](const QString& name, const QString& value)
         {
             QTreeWidgetItem* item = new QTreeWidgetItem();
             item->setText(0, name);
             item->setText(1, value);
 
-            ui->tree_host_info->addTopLevelItem(item);
+            tree_host_info->addTopLevelItem(item);
         };
 
         QString time = QLocale::system().toString(
@@ -608,7 +609,7 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
             QTreeWidgetItem* title_item = new QTreeWidgetItem();
             title_item->setText(0, tr("Host IDs"));
 
-            ui->tree_host_info->addTopLevelItem(title_item);
+            tree_host_info->addTopLevelItem(title_item);
 
             for (int i = 0; i < session_data.host_id_size(); ++i)
             {
@@ -622,8 +623,8 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
             title_item->setExpanded(true);
         }
 
-        for (int i = 0; i < ui->tree_host_info->columnCount(); ++i)
-            ui->tree_host_info->resizeColumnToContents(i);
+        for (int i = 0; i < tree_host_info->columnCount(); ++i)
+            tree_host_info->resizeColumnToContents(i);
     }
 }
 

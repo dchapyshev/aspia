@@ -180,7 +180,7 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
     if (!str.has_value())
         return std::nullopt;
 
-    return base::utf16FromUtf8(str.value());
+    return base::utf16FromUtf8(*str);
 }
 
 std::optional<base::User> readUser(sqlite3_stmt* statement)
@@ -236,15 +236,15 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
 
     base::User user;
 
-    user.entry_id  = entry_id.value();
-    user.name      = std::move(name.value());
-    user.group     = std::move(group.value());
-    user.salt      = std::move(salt.value());
-    user.verifier  = std::move(verifier.value());
-    user.sessions  = sessions.value();
-    user.flags     = flags.value();
+    user.entry_id  = *entry_id;
+    user.name      = std::move(*name);
+    user.group     = std::move(*group);
+    user.salt      = std::move(*salt);
+    user.verifier  = std::move(*verifier);
+    user.sessions  = *sessions;
+    user.flags     = *flags;
 
-    return user;
+    return std::move(user);
 }
 
 } // namespace
@@ -394,7 +394,7 @@ std::vector<base::User> DatabaseSqlite::userList() const
 
         std::optional<base::User> user = readUser(statement);
         if (user.has_value())
-            users.emplace_back(std::move(user.value()));
+            users.emplace_back(std::move(*user));
     }
 
     sqlite3_finalize(statement);
@@ -642,7 +642,7 @@ Database::ErrorCode DatabaseSqlite::hostId(
             break;
         }
 
-        *host_id = static_cast<base::HostId>(entry_id.value());
+        *host_id = static_cast<base::HostId>(*entry_id);
         result = ErrorCode::SUCCESS;
     }
     while (false);

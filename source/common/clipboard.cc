@@ -151,7 +151,7 @@ void Clipboard::onData(const std::string& data)
     else
     {
         event.set_mime_type(kMimeTypeTextUtf8);
-        event.set_data(std::move(data));
+        event.set_data(data);
     }
 
     if (delegate_)

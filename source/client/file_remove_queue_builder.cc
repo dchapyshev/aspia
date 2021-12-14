@@ -46,8 +46,8 @@ void FileRemoveQueueBuilder::start(
     const FileRemover::TaskList& items, const FinishCallback& callback)
 {
     pending_tasks_ = items;
+    callback_ = callback;
 
-    callback_ = std::move(callback);
     DCHECK(callback_);
 
     doPendingTasks();

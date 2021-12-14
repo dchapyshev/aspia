@@ -303,7 +303,7 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
             splitStringView(map_item.first, "/", TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
         size_t count = 0;
 
-        while (count < prev.size() && segments.at(count) == prev.at(count))
+        while (count < prev.size() && segments[count] == prev[count])
             ++count;
 
         for (int i = static_cast<int>(prev.size()) - 1; i > static_cast<int>(count); --i)

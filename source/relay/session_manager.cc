@@ -142,7 +142,7 @@ void SessionManager::onPendingSessionReady(
     if (key.has_value())
     {
         // Decrypt the identifiers of peers.
-        base::ByteArray secret = decryptSecret(message, key.value());
+        base::ByteArray secret = decryptSecret(message, *key);
         if (!secret.empty())
         {
             // Save the identifiers of peers and the identifier of their shared key.

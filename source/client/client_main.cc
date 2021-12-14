@@ -90,7 +90,6 @@ int clientMain(int argc, char* argv[])
 
     if (parser.isSet(address_option))
     {
-        client::RouterConfig router_config = client::RouterConfigStorage().routerConfig();
         client::Config config;
 
         config.address_or_id = parser.value(address_option).toStdU16String();
@@ -125,6 +124,7 @@ int clientMain(int argc, char* argv[])
         {
             LOG(LS_INFO) << "Relay connection selected";
 
+            client::RouterConfig router_config = client::RouterConfigStorage().routerConfig();
             if (!router_config.isValid())
             {
                 QString title = QApplication::translate("Client", "Warning");

@@ -117,9 +117,6 @@ void ClientWindow::sessionTypeChanged(int item_index)
     switch (session_type)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            ui.button_session_config->setEnabled(true);
-            break;
-
         case proto::SESSION_TYPE_DESKTOP_VIEW:
             ui.button_session_config->setEnabled(true);
             break;

@@ -70,7 +70,7 @@ void SharedKeyPool::Impl::addKey(Session::SessionId session_id, const proto::Rel
     }
 
     LOG(LS_INFO) << "Added key with id " << key.key_id() << " for host '" << session_id << "'";
-    relay->second.emplace_back(std::move(key));
+    relay->second.emplace_back(key);
 }
 
 std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()

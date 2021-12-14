@@ -65,11 +65,11 @@ TEST(converter_test, for_bool)
 
         if (result.has_value())
         {
-            EXPECT_EQ(result.value(), kTable[i].expected_value);
+            EXPECT_EQ(*result, kTable[i].expected_value);
 
             std::string string = Converter<bool>::set_value(result.value());
 
-            EXPECT_EQ(string, result.value() ? "true" : "false");
+            EXPECT_EQ(string, *result ? "true" : "false");
         }
     }
 }
@@ -100,7 +100,7 @@ TEST(converter_test, for_string)
         EXPECT_EQ(result.has_value(), kTableForGet[i].expected_has_value);
 
         if (result.has_value())
-            EXPECT_EQ(result.value(), kTableForGet[i].expected_value);
+            EXPECT_EQ(*result, kTableForGet[i].expected_value);
     }
 
     const TestTable kTableForSet[] =
@@ -142,7 +142,7 @@ TEST(converter_test, for_double)
 
         if (result.has_value())
         {
-            EXPECT_EQ(result.value(), kTable[i].expected_value);
+            EXPECT_EQ(*result, kTable[i].expected_value);
         }
     }
 }
@@ -174,7 +174,7 @@ TEST(converter_test, for_uint16_t)
 
         if (result.has_value())
         {
-            EXPECT_EQ(result.value(), kTable[i].expected_value);
+            EXPECT_EQ(*result, kTable[i].expected_value);
         }
     }
 }

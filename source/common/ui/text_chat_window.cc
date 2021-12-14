@@ -82,16 +82,17 @@ TextChatWindow::~TextChatWindow() = default;
 
 void TextChatWindow::readMessage(const proto::TextChatMessage& message)
 {
-    TextChatIncomingMessage* message_widget = new TextChatIncomingMessage(ui->list_messages);
+    QListWidget* list_messages = ui->list_messages;
+    TextChatIncomingMessage* message_widget = new TextChatIncomingMessage(list_messages);
 
     message_widget->setTimestamp(message.timestamp());
     message_widget->setSource(QString::fromStdString(message.source()));
     message_widget->setMessageText(QString::fromStdString(message.text()));
 
-    QListWidgetItem* item = new QListWidgetItem(ui->list_messages);
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
 
-    ui->list_messages->addItem(item);
-    ui->list_messages->setItemWidget(item, message_widget);
+    list_messages->addItem(item);
+    list_messages->setItemWidget(item, message_widget);
 
     onUpdateSize();
 }
@@ -158,15 +159,16 @@ void TextChatWindow::resizeEvent(QResizeEvent* /* event */)
 
 void TextChatWindow::addOutgoingMessage(time_t timestamp, const QString& message)
 {
-    TextChatOutgoingMessage* message_widget = new TextChatOutgoingMessage(ui->list_messages);
+    QListWidget* list_messages = ui->list_messages;
+    TextChatOutgoingMessage* message_widget = new TextChatOutgoingMessage(list_messages);
 
     message_widget->setTimestamp(timestamp);
     message_widget->setMessageText(message);
 
-    QListWidgetItem* item = new QListWidgetItem(ui->list_messages);
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
 
-    ui->list_messages->addItem(item);
-    ui->list_messages->setItemWidget(item, message_widget);
+    list_messages->addItem(item);
+    list_messages->setItemWidget(item, message_widget);
 
     onUpdateSize();
 }
@@ -213,8 +215,9 @@ void TextChatWindow::onSendStatus(proto::TextChatStatus::Status status)
 
 void TextChatWindow::onClearHistory()
 {
-    for (int i = ui->list_messages->count() - 1; i >= 0; --i)
-        delete ui->list_messages->item(i);
+    QListWidget* list_messages = ui->list_messages;
+    for (int i = list_messages->count() - 1; i >= 0; --i)
+        delete list_messages->item(i);
 }
 
 void TextChatWindow::onSaveChat()
@@ -238,13 +241,14 @@ void TextChatWindow::onSaveChat()
         return;
     }
 
+    QListWidget* list_messages = ui->list_messages;
     QTextStream stream(&file);
 
-    for (int i = 0; i < ui->list_messages->count(); ++i)
+    for (int i = 0; i < list_messages->count(); ++i)
     {
-        QListWidgetItem* item = ui->list_messages->item(i);
+        QListWidgetItem* item = list_messages->item(i);
         TextChatMessage* message_widget =
-            static_cast<TextChatMessage*>(ui->list_messages->itemWidget(item));
+            static_cast<TextChatMessage*>(list_messages->itemWidget(item));
 
         if (message_widget->direction() == TextChatMessage::Direction::INCOMING)
         {
@@ -272,15 +276,16 @@ void TextChatWindow::onSaveChat()
 
 void TextChatWindow::onUpdateSize()
 {
-    int count = ui->list_messages->count();
+    QListWidget* list_messages = ui->list_messages;
+    int count = list_messages->count();
 
     for (int i = 0; i < count; ++i)
     {
-        QListWidgetItem* item = ui->list_messages->item(i);
+        QListWidgetItem* item = list_messages->item(i);
 
         TextChatMessage* message_widget =
-            static_cast<TextChatMessage*>(ui->list_messages->itemWidget(item));
-        int viewport_width = ui->list_messages->viewport()->width();
+            static_cast<TextChatMessage*>(list_messages->itemWidget(item));
+        int viewport_width = list_messages->viewport()->width();
 
         message_widget->setFixedWidth(viewport_width);
         message_widget->setFixedHeight(message_widget->heightForWidth(viewport_width));
@@ -288,7 +293,7 @@ void TextChatWindow::onUpdateSize()
         item->setSizeHint(message_widget->size());
     }
 
-    ui->list_messages->scrollToBottom();
+    list_messages->scrollToBottom();
 }
 
 } // namespace common

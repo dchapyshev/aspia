@@ -104,7 +104,7 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
 
     if (video_start_time_.has_value())
     {
-        timestamp = std::chrono::duration_cast<NanoSeconds>(current - video_start_time_.value());
+        timestamp = std::chrono::duration_cast<NanoSeconds>(current - *video_start_time_);
     }
     else
     {
@@ -136,7 +136,7 @@ void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
         if (video_start_time_.has_value())
         {
             timestamp = std::chrono::duration_cast<NanoSeconds>(
-                current - video_start_time_.value());
+                current - *video_start_time_);
         }
         else
         {

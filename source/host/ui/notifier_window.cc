@@ -68,7 +68,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
-QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QString tooltip)
+QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QString& tooltip)
 {
     static const QString kStyle = QStringLiteral("\
         QToolButton {\

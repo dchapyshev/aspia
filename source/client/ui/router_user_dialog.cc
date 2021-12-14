@@ -57,7 +57,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
 
         if (user_.isValid())
         {
-            if (user_.sessions & session_type)
+            if (user_.sessions & static_cast<uint32_t>(session_type))
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -136,7 +136,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         for (size_t i = 0; i < users_.size(); ++i)
         {
-            if (base::compareCaseInsensitive(username, users_.at(i)) == 0)
+            if (base::compareCaseInsensitive(username, users_[i]) == 0)
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -225,7 +225,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
         if (item->checkState(0) == Qt::Checked)
-            sessions |= item->data(0, Qt::UserRole).toInt();
+            sessions |= item->data(0, Qt::UserRole).toUInt();
     }
 
     uint32_t flags = 0;

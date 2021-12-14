@@ -427,13 +427,9 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
-    std::optional<client::RouterConfig> router;
-
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
-        router = tab->routerConfig();
-
-    FastConnectDialog(this, tab->addressBookGuid(), router).exec();
+        FastConnectDialog(this, tab->addressBookGuid(), tab->routerConfig()).exec();
 }
 
 void MainWindow::onDesktopManageConnect()
@@ -1217,7 +1213,7 @@ void MainWindow::connectToRouter()
 
     client::RouterManagerWindow* client_window = new client::RouterManagerWindow();
     client_window->setAttribute(Qt::WA_DeleteOnClose);
-    client_window->connectToRouter(router_config.value());
+    client_window->connectToRouter(*router_config);
 }
 
 } // namespace console

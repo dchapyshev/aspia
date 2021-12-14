@@ -22,10 +22,7 @@
 
 namespace client {
 
-InputEventFilter::InputEventFilter()
-{
-    // Nothing
-}
+InputEventFilter::InputEventFilter() = default;
 
 InputEventFilter::~InputEventFilter() = default;
 
