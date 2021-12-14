@@ -52,13 +52,13 @@
         <translation>Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="118"/>
+        <location filename="../client_main.cc" line="117"/>
         <location filename="../client_main.cc" line="130"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="119"/>
+        <location filename="../client_main.cc" line="118"/>
         <source>Incorrect session type entered.</source>
         <translation>输入了错误的会话类型。</translation>
     </message>
@@ -945,18 +945,18 @@
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="201"/>
-        <location filename="../ui/client_window.cc" line="218"/>
+        <location filename="../ui/client_window.cc" line="198"/>
+        <location filename="../ui/client_window.cc" line="215"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -1481,37 +1481,37 @@
         <translation>您确定要删除用户 &quot;%1&quot;吗？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>Computer Name</source>
         <translation>计算机名</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="598"/>
+        <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="599"/>
+        <location filename="../ui/router_manager_window.cc" line="600"/>
         <source>Connect Time</source>
         <translation>连接时间</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="601"/>
+        <location filename="../ui/router_manager_window.cc" line="602"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="603"/>
+        <location filename="../ui/router_manager_window.cc" line="604"/>
         <source>Operating System</source>
         <translation>操作系统</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="609"/>
+        <location filename="../ui/router_manager_window.cc" line="610"/>
         <source>Host IDs</source>
         <translation>主机 ID</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="616"/>
+        <location filename="../ui/router_manager_window.cc" line="617"/>
         <source>ID #%1</source>
         <translation> 编号 #%1</translation>
     </message>

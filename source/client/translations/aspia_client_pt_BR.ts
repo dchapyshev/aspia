@@ -52,13 +52,13 @@
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="118"/>
+        <location filename="../client_main.cc" line="117"/>
         <location filename="../client_main.cc" line="130"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="119"/>
+        <location filename="../client_main.cc" line="118"/>
         <source>Incorrect session type entered.</source>
         <translation>Tipo de sessão incorreta.</translation>
     </message>
@@ -945,18 +945,18 @@
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="201"/>
-        <location filename="../ui/client_window.cc" line="218"/>
+        <location filename="../ui/client_window.cc" line="198"/>
+        <location filename="../ui/client_window.cc" line="215"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>An invalid computer address was entered.</source>
         <translation>Um endereço inválido do computador foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -1481,37 +1481,37 @@
         <translation>Tem certeza de que deseja excluir o usuário &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>Computer Name</source>
         <translation>Nome do computador</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="598"/>
+        <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>IP Address</source>
         <translation>Endereço IP</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="599"/>
+        <location filename="../ui/router_manager_window.cc" line="600"/>
         <source>Connect Time</source>
         <translation>Tempo de conexão</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="601"/>
+        <location filename="../ui/router_manager_window.cc" line="602"/>
         <source>Version</source>
         <translation>Versão</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="603"/>
+        <location filename="../ui/router_manager_window.cc" line="604"/>
         <source>Operating System</source>
         <translation>Sistema Operacional</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="609"/>
+        <location filename="../ui/router_manager_window.cc" line="610"/>
         <source>Host IDs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="616"/>
+        <location filename="../ui/router_manager_window.cc" line="617"/>
         <source>ID #%1</source>
         <translation></translation>
     </message>

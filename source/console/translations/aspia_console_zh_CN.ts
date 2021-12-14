@@ -902,7 +902,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1150"/>
+        <location filename="../main_window.cc" line="1146"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -932,57 +932,57 @@
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="528"/>
-        <location filename="../main_window.cc" line="836"/>
-        <location filename="../main_window.cc" line="913"/>
+        <location filename="../main_window.cc" line="524"/>
+        <location filename="../main_window.cc" line="832"/>
+        <location filename="../main_window.cc" line="909"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="529"/>
-        <location filename="../main_window.cc" line="914"/>
+        <location filename="../main_window.cc" line="525"/>
+        <location filename="../main_window.cc" line="910"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="732"/>
+        <location filename="../main_window.cc" line="728"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="739"/>
+        <location filename="../main_window.cc" line="735"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="740"/>
-        <location filename="../main_window.cc" line="745"/>
+        <location filename="../main_window.cc" line="736"/>
+        <location filename="../main_window.cc" line="741"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="837"/>
+        <location filename="../main_window.cc" line="833"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="870"/>
+        <location filename="../main_window.cc" line="866"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="885"/>
+        <location filename="../main_window.cc" line="881"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="425"/>
-        <location filename="../main_window.cc" line="1021"/>
+        <location filename="../main_window.cc" line="1017"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1151"/>
+        <location filename="../main_window.cc" line="1147"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>

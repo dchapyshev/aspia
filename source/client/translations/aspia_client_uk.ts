@@ -52,13 +52,13 @@
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="118"/>
+        <location filename="../client_main.cc" line="117"/>
         <location filename="../client_main.cc" line="130"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="119"/>
+        <location filename="../client_main.cc" line="118"/>
         <source>Incorrect session type entered.</source>
         <translation>Обрано не правильний вид підключення.</translation>
     </message>
@@ -945,18 +945,18 @@
         <translation type="unfinished">Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="201"/>
-        <location filename="../ui/client_window.cc" line="218"/>
+        <location filename="../ui/client_window.cc" line="198"/>
+        <location filename="../ui/client_window.cc" line="215"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="202"/>
+        <location filename="../ui/client_window.cc" line="199"/>
         <source>An invalid computer address was entered.</source>
         <translation>Було введено не коректну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="219"/>
+        <location filename="../ui/client_window.cc" line="216"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
@@ -1481,37 +1481,37 @@
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>Computer Name</source>
         <translation>Ім&apos;я комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="598"/>
+        <location filename="../ui/router_manager_window.cc" line="599"/>
         <source>IP Address</source>
         <translation>IP адреса</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="599"/>
+        <location filename="../ui/router_manager_window.cc" line="600"/>
         <source>Connect Time</source>
         <translation>Час підключення</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="601"/>
+        <location filename="../ui/router_manager_window.cc" line="602"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="603"/>
+        <location filename="../ui/router_manager_window.cc" line="604"/>
         <source>Operating System</source>
         <translation>Операційна система</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="609"/>
+        <location filename="../ui/router_manager_window.cc" line="610"/>
         <source>Host IDs</source>
         <translation>ID хостів</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="616"/>
+        <location filename="../ui/router_manager_window.cc" line="617"/>
         <source>ID #%1</source>
         <translation>ID #%1</translation>
     </message>

@@ -264,28 +264,28 @@
         <translation>Apagar conversa</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="109"/>
+        <location filename="../ui/text_chat_window.cc" line="110"/>
         <source>%1 is typing...</source>
         <translation>%1 está digitando...</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="113"/>
+        <location filename="../ui/text_chat_window.cc" line="114"/>
         <source>User %1 started a chat.</source>
         <translation>Usuário %1 inicou uma conversa.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="117"/>
+        <location filename="../ui/text_chat_window.cc" line="118"/>
         <source>User %1 finished a chat.</source>
         <translation>Usuário %1 encerrou a conversa.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="183"/>
-        <location filename="../ui/text_chat_window.cc" line="235"/>
+        <location filename="../ui/text_chat_window.cc" line="185"/>
+        <location filename="../ui/text_chat_window.cc" line="238"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_window.cc" line="184"/>
+        <location filename="../ui/text_chat_window.cc" line="186"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>A mensagem é muito longa. O mensagem pode ter no máximo %n caracteres.</numerusform>
@@ -293,17 +293,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="224"/>
+        <location filename="../ui/text_chat_window.cc" line="227"/>
         <source>Save File</source>
         <translation>Salvar Arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="226"/>
+        <location filename="../ui/text_chat_window.cc" line="229"/>
         <source>TXT files (*.txt)</source>
         <translation>Arquivos TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="236"/>
+        <location filename="../ui/text_chat_window.cc" line="239"/>
         <source>Could not open file for writing.</source>
         <translation>Não foi possível abrir o arquivo para gravação.</translation>
     </message>

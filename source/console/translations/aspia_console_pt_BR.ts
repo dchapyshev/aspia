@@ -910,7 +910,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1150"/>
+        <location filename="../main_window.cc" line="1146"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -940,57 +940,57 @@
         <translation>Catálogo de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="528"/>
-        <location filename="../main_window.cc" line="836"/>
-        <location filename="../main_window.cc" line="913"/>
+        <location filename="../main_window.cc" line="524"/>
+        <location filename="../main_window.cc" line="832"/>
+        <location filename="../main_window.cc" line="909"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="529"/>
-        <location filename="../main_window.cc" line="914"/>
+        <location filename="../main_window.cc" line="525"/>
+        <location filename="../main_window.cc" line="910"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="732"/>
+        <location filename="../main_window.cc" line="728"/>
         <source>Close other tabs</source>
         <translation>Fechar outras abas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="739"/>
+        <location filename="../main_window.cc" line="735"/>
         <source>Close tab</source>
         <translation>Fechar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="740"/>
-        <location filename="../main_window.cc" line="745"/>
+        <location filename="../main_window.cc" line="736"/>
+        <location filename="../main_window.cc" line="741"/>
         <source>Pin tab</source>
         <translation>Fixar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="837"/>
+        <location filename="../main_window.cc" line="833"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="870"/>
+        <location filename="../main_window.cc" line="866"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="885"/>
+        <location filename="../main_window.cc" line="881"/>
         <source>Show</source>
         <translation>Exibir</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="425"/>
-        <location filename="../main_window.cc" line="1021"/>
+        <location filename="../main_window.cc" line="1017"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1151"/>
+        <location filename="../main_window.cc" line="1147"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

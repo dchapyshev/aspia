@@ -912,7 +912,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="164"/>
-        <location filename="../main_window.cc" line="1150"/>
+        <location filename="../main_window.cc" line="1146"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -932,57 +932,57 @@
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="528"/>
-        <location filename="../main_window.cc" line="836"/>
-        <location filename="../main_window.cc" line="913"/>
+        <location filename="../main_window.cc" line="524"/>
+        <location filename="../main_window.cc" line="832"/>
+        <location filename="../main_window.cc" line="909"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="529"/>
-        <location filename="../main_window.cc" line="914"/>
+        <location filename="../main_window.cc" line="525"/>
+        <location filename="../main_window.cc" line="910"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="732"/>
+        <location filename="../main_window.cc" line="728"/>
         <source>Close other tabs</source>
         <translation>Sluit andere tabs</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="739"/>
+        <location filename="../main_window.cc" line="735"/>
         <source>Close tab</source>
         <translation>Sluit tab</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="740"/>
-        <location filename="../main_window.cc" line="745"/>
+        <location filename="../main_window.cc" line="736"/>
+        <location filename="../main_window.cc" line="741"/>
         <source>Pin tab</source>
         <translation>Pin tab</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="837"/>
+        <location filename="../main_window.cc" line="833"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>De lijst van recent geopende adres boeken zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="870"/>
+        <location filename="../main_window.cc" line="866"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="885"/>
+        <location filename="../main_window.cc" line="881"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1151"/>
+        <location filename="../main_window.cc" line="1147"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="425"/>
-        <location filename="../main_window.cc" line="1021"/>
+        <location filename="../main_window.cc" line="1017"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
