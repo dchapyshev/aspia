@@ -2,9 +2,9 @@ Aspia
 =====
 Remote desktop and file transfer tool.
 
-|Build Status|Coverity Scan Status|
-|:--:|:--:|
-|![Build status](https://github.com/dchapyshev/aspia/workflows/sw/badge.svg)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
+|Build Status|
+|:--:|
+|![Build status](https://github.com/dchapyshev/aspia/workflows/sw/badge.svg)|
 
 Currently supported
 -------------------
