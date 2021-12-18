@@ -862,6 +862,8 @@ void UserSession::onSessionDettached(const base::Location& location)
         client->stop();
 
     state_ = State::DETTACHED;
+    host_id_ = base::kInvalidHostId;
+
     delegate_->onUserSessionDettached();
 
     if (type_ == Type::RDP)
