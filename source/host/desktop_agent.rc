@@ -21,6 +21,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "desktop_agent.manifest"
+IDI_ICON1 ICON "host/ui/resources/main.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_desktop_agent.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Desktop Agent"

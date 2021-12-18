@@ -21,6 +21,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "service.manifest"
+IDI_ICON1 ICON "host/ui/resources/main.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
