@@ -37,12 +37,12 @@ DesktopSessionManager::DesktopSessionManager(
       session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
-    LOG(LS_INFO) << "DesktopSessionManager Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 DesktopSessionManager::~DesktopSessionManager()
 {
-    LOG(LS_INFO) << "DesktopSessionManager Dtor";
+    LOG(LS_INFO) << "Dtor";
 
     state_ = State::STOPPING;
     dettachSession(FROM_HERE);
@@ -52,10 +52,14 @@ void DesktopSessionManager::attachSession(
     const base::Location& location, base::SessionId session_id)
 {
     if (state_ == State::ATTACHED)
+    {
+        LOG(LS_INFO) << "Already attached. Session ID: " << session_id << " (from: "
+                     << location.toString() << ")";
         return;
+    }
 
-    LOG(LS_INFO) << "Attach session with ID: " << session_id
-                 << " (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Attach session with ID: " << session_id << " current state: "
+                 << stateToString(state_) << " (from: " << location.toString() << ")";
 
     if (state_ == State::STOPPED)
     {
@@ -96,11 +100,12 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
     {
-        LOG(LS_INFO) << "Session already stopped or dettached (" << static_cast<int>(state_) << ")";
+        LOG(LS_INFO) << "Session already stopped or dettached (" << stateToString(state_) << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Dettach session. Current state: << " << stateToString(state_)
+                 << " (from: " << location.toString() << ")";
 
     if (state_ != State::STOPPING)
         state_ = State::DETACHED;
@@ -194,6 +199,26 @@ void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     delegate_->onClipboardEvent(event);
+}
+
+// static
+const char* DesktopSessionManager::stateToString(State state)
+{
+    switch (state)
+    {
+        case State::STOPPED:
+            return "STOPPED";
+        case State::STARTING:
+            return "STARTING";
+        case State::STOPPING:
+            return "STOPPING";
+        case State::DETACHED:
+            return "DETACHED";
+        case State::ATTACHED:
+            return "ATTACHED";
+        default:
+            return "Unknown";
+    }
 }
 
 } // namespace host

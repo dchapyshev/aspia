@@ -38,12 +38,12 @@ RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner
       peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner)
 {
-    LOG(LS_INFO) << "RouterController Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 RouterController::~RouterController()
 {
-    LOG(LS_INFO) << "RouterController Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void RouterController::start(const RouterInfo& router_info, Delegate* delegate)

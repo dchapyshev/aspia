@@ -65,6 +65,7 @@ protected:
 
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+    static const char* stateToString(State state);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcServer> server_;

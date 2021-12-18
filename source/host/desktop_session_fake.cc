@@ -57,7 +57,7 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
       frame_(base::FrameSimple::create(base::Size(kFrameWidth, kFrameHeight)))
 
 {
-    LOG(LS_INFO) << "FrameGenerator Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 
     if (!frame_)
@@ -76,7 +76,7 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
 
 DesktopSessionFake::FrameGenerator::~FrameGenerator()
 {
-    LOG(LS_INFO) << "FrameGenerator Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
@@ -127,13 +127,13 @@ DesktopSessionFake::DesktopSessionFake(
     : frame_generator_(std::make_shared<FrameGenerator>(std::move(task_runner))),
       delegate_(delegate)
 {
-    LOG(LS_INFO) << "DesktopSessionFake Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(delegate_);
 }
 
 DesktopSessionFake::~DesktopSessionFake()
 {
-    LOG(LS_INFO) << "DesktopSessionFake Dtor";
+    LOG(LS_INFO) << "Dtor";
     frame_generator_->stop();
 }
 

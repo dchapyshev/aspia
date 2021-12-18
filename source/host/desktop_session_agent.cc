@@ -62,7 +62,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
       outgoing_message_(std::make_unique<proto::internal::DesktopToService>())
 {
-    LOG(LS_INFO) << "DesktopSessionAgent Ctor";
+    LOG(LS_INFO) << "Ctor";
 
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
@@ -83,7 +83,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 
 DesktopSessionAgent::~DesktopSessionAgent()
 {
-    LOG(LS_INFO) << "DesktopSessionAgent Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)

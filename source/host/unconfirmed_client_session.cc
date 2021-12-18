@@ -38,13 +38,18 @@ UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession
       timer_(std::make_unique<base::WaitableTimer>(
           base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)))
 {
+    LOG(LS_INFO) << "Ctor";
+
     DCHECK(delegate_);
     DCHECK(client_session_);
 
     id_ = client_session_->id();
 }
 
-UnconfirmedClientSession::~UnconfirmedClientSession() = default;
+UnconfirmedClientSession::~UnconfirmedClientSession()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeout)
 {

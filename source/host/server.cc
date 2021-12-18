@@ -38,13 +38,13 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
-    LOG(LS_INFO) << "Server Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 }
 
 Server::~Server()
 {
-    LOG(LS_INFO) << "Server Dtor";
+    LOG(LS_INFO) << "Dtor";
     LOG(LS_INFO) << "Stopping the server...";
 
     settings_watcher_.reset();

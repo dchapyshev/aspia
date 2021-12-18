@@ -60,7 +60,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     if (session_id_ != console_session_id)
         type_ = UserSession::Type::RDP;
 
-    LOG(LS_INFO) << "UserSession Ctor (session ID: " << session_id_
+    LOG(LS_INFO) << "Ctor (session ID: " << session_id_
                  << " type: " << typeToString(type_) << ")";
     CHECK(task_runner_);
     CHECK(delegate_);
@@ -81,7 +81,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession()
 {
-    LOG(LS_INFO) << "UserSession Dtor (session ID: " << session_id_
+    LOG(LS_INFO) << "Dtor (session ID: " << session_id_
                  << " type: " << typeToString(type_)
                  << " state: " << stateToString(state_) << ")";
 }

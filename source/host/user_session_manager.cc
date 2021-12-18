@@ -170,7 +170,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
-    LOG(LS_INFO) << "UserSessionManager Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 
     scoped_task_runner_ = std::make_unique<base::ScopedTaskRunner>(task_runner_);
@@ -179,7 +179,7 @@ UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_ru
 
 UserSessionManager::~UserSessionManager()
 {
-    LOG(LS_INFO) << "UserSessionManager Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool UserSessionManager::start(Delegate* delegate)

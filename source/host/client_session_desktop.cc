@@ -43,12 +43,12 @@ ClientSessionDesktop::ClientSessionDesktop(
       incoming_message_(std::make_unique<proto::ClientToHost>()),
       outgoing_message_(std::make_unique<proto::HostToClient>())
 {
-    LOG(LS_INFO) << "ClientSessionDesktop Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ClientSessionDesktop::~ClientSessionDesktop()
 {
-    LOG(LS_INFO) << "ClientSessionDesktop Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ClientSessionDesktop::setDesktopSessionProxy(

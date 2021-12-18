@@ -74,14 +74,14 @@ DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, 
       incoming_message_(std::make_unique<proto::internal::DesktopToService>()),
       delegate_(delegate)
 {
-    LOG(LS_INFO) << "DesktopSessionIpc Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(channel_);
     DCHECK(delegate_);
 }
 
 DesktopSessionIpc::~DesktopSessionIpc()
 {
-    LOG(LS_INFO) << "DesktopSessionIpc Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void DesktopSessionIpc::start()

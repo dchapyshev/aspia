@@ -27,7 +27,7 @@ namespace host {
 UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy)
     : window_proxy_(std::move(window_proxy))
 {
-    LOG(LS_INFO) << "UserSessionAgent Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(window_proxy_);
 
 #if defined(OS_WIN)
@@ -41,7 +41,7 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
 
 UserSessionAgent::~UserSessionAgent()
 {
-    LOG(LS_INFO) << "UserSessionAgent Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void UserSessionAgent::start()

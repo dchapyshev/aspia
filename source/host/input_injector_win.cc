@@ -78,12 +78,12 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 InputInjectorWin::InputInjectorWin()
 {
-    LOG(LS_INFO) << "InputInjectorWin Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 InputInjectorWin::~InputInjectorWin()
 {
-    LOG(LS_INFO) << "InputInjectorWin Dtor";
+    LOG(LS_INFO) << "Dtor";
 
     setBlockInput(false);
     for (const auto& key : pressed_keys_)

@@ -127,12 +127,12 @@ ClientSessionFileTransfer::Worker::Worker(
     : session_id_(session_id),
       channel_proxy_(std::move(channel_proxy))
 {
-    LOG(LS_INFO) << "Worker Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ClientSessionFileTransfer::Worker::~Worker()
 {
-    LOG(LS_INFO) << "Worker Dtor";
+    LOG(LS_INFO) << "Dtor";
     thread_.stop();
 }
 
