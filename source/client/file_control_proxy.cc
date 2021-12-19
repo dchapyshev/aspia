@@ -28,14 +28,14 @@ FileControlProxy::FileControlProxy(
     : io_task_runner_(std::move(io_task_runner)),
       file_control_(file_control)
 {
-    LOG(LS_INFO) << "FileControlProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
     DCHECK(file_control_);
 }
 
 FileControlProxy::~FileControlProxy()
 {
-    LOG(LS_INFO) << "FileControlProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!file_control_);
 }
 

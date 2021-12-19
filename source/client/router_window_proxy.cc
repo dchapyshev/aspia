@@ -30,13 +30,13 @@ RouterWindowProxy::RouterWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     : ui_task_runner_(std::move(ui_task_runner)),
       router_window_(router_window)
 {
-    LOG(LS_INFO) << "RouterWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_ && router_window_);
 }
 
 RouterWindowProxy::~RouterWindowProxy()
 {
-    LOG(LS_INFO) << "RouterWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!router_window_);
 }
 

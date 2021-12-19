@@ -108,7 +108,7 @@ bool isSameApplication(const QLocalSocket* socket)
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
-    LOG(LS_INFO) << "Application Ctor";
+    LOG(LS_INFO) << "Ctor";
 
 #if defined(OS_WIN)
     DWORD id = 0;
@@ -148,7 +148,7 @@ Application::Application(int& argc, char* argv[])
 
 Application::~Application()
 {
-    LOG(LS_INFO) << "Application Dtor";
+    LOG(LS_INFO) << "Dtor";
 
     io_thread_.stop();
 

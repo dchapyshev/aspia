@@ -30,10 +30,14 @@ RouterController::RouterController(const RouterConfig& router_config,
     : task_runner_(std::move(task_runner)),
       router_config_(router_config)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 }
 
-RouterController::~RouterController() = default;
+RouterController::~RouterController()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
 {
@@ -110,7 +114,10 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
                  << base::NetworkChannel::errorToString(error_code) << ")";
 
     if (!delegate_)
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
         return;
+    }
 
     Error error;
     error.type = ErrorType::NETWORK;
@@ -167,6 +174,10 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
                 delegate_->onErrorOccurred(error);
             }
+            else
+            {
+                LOG(LS_WARNING) << "Invalid delegate";
+            }
         }
         else
         {
@@ -188,13 +199,22 @@ void RouterController::onMessageWritten(size_t /* pending */)
 void RouterController::onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel)
 {
     if (delegate_)
+    {
         delegate_->onHostConnected(std::move(channel));
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void RouterController::onRelayConnectionError()
 {
     if (!delegate_)
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
         return;
+    }
 
     Error error;
     error.type = ErrorType::ROUTER;

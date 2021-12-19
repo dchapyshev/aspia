@@ -27,12 +27,12 @@ namespace base {
 
 ScaleReducer::ScaleReducer()
 {
-    LOG(LS_INFO) << "ScaleReducer Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ScaleReducer::~ScaleReducer()
 {
-    LOG(LS_INFO) << "ScaleReducer Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& target_size)

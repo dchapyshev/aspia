@@ -35,7 +35,7 @@ namespace client {
 Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
     : io_task_runner_(std::move(io_task_runner))
 {
-    LOG(LS_INFO) << "Client Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
 
 #if defined(OS_MAC)
@@ -45,7 +45,7 @@ Client::Client(std::shared_ptr<base::TaskRunner> io_task_runner)
 
 Client::~Client()
 {
-    LOG(LS_INFO) << "Client Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(io_task_runner_->belongsToCurrentThread());
     stop();
 

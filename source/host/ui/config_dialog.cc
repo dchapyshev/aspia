@@ -47,7 +47,7 @@ namespace host {
 ConfigDialog::ConfigDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "ConfigDialog Ctor";
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     //---------------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 ConfigDialog::~ConfigDialog()
 {
-    LOG(LS_INFO) << "ConfigDialog Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ConfigDialog::onOneTimeStateChanged(int state)

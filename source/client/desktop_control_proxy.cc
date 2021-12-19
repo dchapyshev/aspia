@@ -29,14 +29,14 @@ DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_ta
     : io_task_runner_(std::move(io_task_runner)),
       desktop_control_(desktop_control)
 {
-    LOG(LS_INFO) << "DesktopControlProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
     DCHECK(desktop_control_);
 }
 
 DesktopControlProxy::~DesktopControlProxy()
 {
-    LOG(LS_INFO) << "DesktopControlProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_control_);
 }
 

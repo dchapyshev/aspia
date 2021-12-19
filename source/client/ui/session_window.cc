@@ -33,12 +33,12 @@ SessionWindow::SessionWindow(QWidget* parent)
       status_window_proxy_(
           std::make_shared<StatusWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
-    LOG(LS_INFO) << "SessionWindow Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 SessionWindow::~SessionWindow()
 {
-    LOG(LS_INFO) << "SessionWindow Dtor";
+    LOG(LS_INFO) << "Dtor";
     status_window_proxy_->dettach();
 }
 

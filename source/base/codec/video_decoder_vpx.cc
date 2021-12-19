@@ -89,7 +89,7 @@ std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
-    LOG(LS_INFO) << "VideoDecoderVPX(" << encoding << ") Ctor";
+    LOG(LS_INFO) << "VPX(" << encoding << ") Ctor";
     codec_.reset(new vpx_codec_ctx_t());
 
     vpx_codec_dec_cfg_t config;
@@ -121,7 +121,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 
 VideoDecoderVPX::~VideoDecoderVPX()
 {
-    LOG(LS_INFO) << "VideoDecoderVPX Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)

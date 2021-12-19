@@ -34,12 +34,12 @@ constexpr size_t kMaxCacheSize = 30;
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
 {
-    LOG(LS_INFO) << "CursorDecoder Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 CursorDecoder::~CursorDecoder()
 {
-    LOG(LS_INFO) << "CursorDecoder Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const

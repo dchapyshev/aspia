@@ -29,7 +29,7 @@ FileManagerWindowProxy::FileManagerWindowProxy(
     : ui_task_runner_(std::move(ui_task_runner)),
       file_manager_window_(file_manager_window)
 {
-    LOG(LS_INFO) << "FileManagerWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_);
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     DCHECK(file_manager_window_);
@@ -37,7 +37,7 @@ FileManagerWindowProxy::FileManagerWindowProxy(
 
 FileManagerWindowProxy::~FileManagerWindowProxy()
 {
-    LOG(LS_INFO) << "FileManagerWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!file_manager_window_);
 }
 

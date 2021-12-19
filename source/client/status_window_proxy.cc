@@ -28,12 +28,12 @@ StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     : ui_task_runner_(std::move(ui_task_runner)),
       status_window_(status_window)
 {
-    LOG(LS_INFO) << "StatusWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 StatusWindowProxy::~StatusWindowProxy()
 {
-    LOG(LS_INFO) << "StatusWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!status_window_);
 }
 

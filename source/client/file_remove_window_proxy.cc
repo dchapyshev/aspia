@@ -29,7 +29,7 @@ FileRemoveWindowProxy::FileRemoveWindowProxy(
     : ui_task_runner_(std::move(ui_task_runner)),
       remove_window_(remove_window)
 {
-    LOG(LS_INFO) << "FileRemoveWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_);
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     DCHECK(remove_window_);
@@ -37,7 +37,7 @@ FileRemoveWindowProxy::FileRemoveWindowProxy(
 
 FileRemoveWindowProxy::~FileRemoveWindowProxy()
 {
-    LOG(LS_INFO) << "FileRemoveWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!remove_window_);
 }
 

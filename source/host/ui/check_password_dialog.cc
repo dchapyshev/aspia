@@ -30,7 +30,7 @@ namespace host {
 CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "CheckPasswordDialog Ctor";
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
@@ -44,7 +44,7 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
 
 CheckPasswordDialog::~CheckPasswordDialog()
 {
-    LOG(LS_INFO) << "CheckPasswordDialog Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)

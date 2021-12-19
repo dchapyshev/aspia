@@ -28,7 +28,7 @@ namespace client {
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
 {
-    LOG(LS_INFO) << "AuthorizationDialog Ctor";
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.button_show_password, &QPushButton::toggled,
@@ -51,7 +51,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
 
 AuthorizationDialog::~AuthorizationDialog()
 {
-    LOG(LS_INFO) << "AuthorizationDialog Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)

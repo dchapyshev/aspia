@@ -103,7 +103,7 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 NotifierWindow::NotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
-    LOG(LS_INFO) << "NotifierWindow Ctor";
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     ui.label_title->installEventFilter(this);
@@ -145,7 +145,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 
 NotifierWindow::~NotifierWindow()
 {
-    LOG(LS_INFO) << "NotifierWindow Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)

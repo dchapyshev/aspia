@@ -29,7 +29,7 @@ FileTransferWindowProxy::FileTransferWindowProxy(
     : ui_task_runner_(std::move(ui_task_runner)),
       file_transfer_window_(file_transfer_window)
 {
-    LOG(LS_INFO) << "FileTransferWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_);
     DCHECK(ui_task_runner_->belongsToCurrentThread());
     DCHECK(file_transfer_window_);
@@ -37,7 +37,7 @@ FileTransferWindowProxy::FileTransferWindowProxy(
 
 FileTransferWindowProxy::~FileTransferWindowProxy()
 {
-    LOG(LS_INFO) << "FileTransferWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!file_transfer_window_);
 }
 

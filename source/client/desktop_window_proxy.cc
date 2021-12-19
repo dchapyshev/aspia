@@ -35,13 +35,13 @@ DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task
     : ui_task_runner_(std::move(ui_task_runner)),
       desktop_window_(desktop_window)
 {
-    LOG(LS_INFO) << "DesktopWindowProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     frame_factory_ = desktop_window_->frameFactory();
 }
 
 DesktopWindowProxy::~DesktopWindowProxy()
 {
-    LOG(LS_INFO) << "DesktopWindowProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_window_);
 }
 

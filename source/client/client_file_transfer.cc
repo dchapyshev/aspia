@@ -36,12 +36,12 @@ ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task
       local_worker_(std::make_unique<common::FileWorker>(io_task_runner)),
       file_control_proxy_(std::make_shared<FileControlProxy>(io_task_runner, this))
 {
-    LOG(LS_INFO) << "ClientFileTransfer Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ClientFileTransfer::~ClientFileTransfer()
 {
-    LOG(LS_INFO) << "ClientFileTransfer Dtor";
+    LOG(LS_INFO) << "Dtor";
 
     task_consumer_proxy_->dettach();
     task_producer_proxy_->dettach();

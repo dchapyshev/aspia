@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget* parent)
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
-    LOG(LS_INFO) << "MainWindow Ctor";
+    LOG(LS_INFO) << "Ctor";
 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-    LOG(LS_INFO) << "MainWindow Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void MainWindow::connectToService()

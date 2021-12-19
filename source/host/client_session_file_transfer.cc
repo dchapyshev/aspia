@@ -207,12 +207,12 @@ void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileT
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
-    LOG(LS_INFO) << "ClientSessionFileTransfer Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
 {
-    LOG(LS_INFO) << "ClientSessionFileTransfer Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)

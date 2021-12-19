@@ -31,11 +31,16 @@ Router::Router(std::shared_ptr<RouterWindowProxy> window_proxy,
       authenticator_(std::make_unique<base::ClientAuthenticator>(io_task_runner)),
       window_proxy_(std::move(window_proxy))
 {
+    LOG(LS_INFO) << "Ctor";
+
     authenticator_->setIdentify(proto::IDENTIFY_SRP);
     authenticator_->setSessionType(proto::ROUTER_SESSION_ADMIN);
 }
 
-Router::~Router() = default;
+Router::~Router()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void Router::setUserName(std::u16string_view user_name)
 {

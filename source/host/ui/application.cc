@@ -71,7 +71,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* me
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    LOG(LS_INFO) << "Application Ctor";
+    LOG(LS_INFO) << "Ctor";
 
     setOrganizationName(QStringLiteral("Aspia"));
     setApplicationName(QStringLiteral("Host"));
@@ -102,7 +102,7 @@ Application::Application(int& argc, char* argv[])
 
 Application::~Application()
 {
-    LOG(LS_INFO) << "Application Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 // static

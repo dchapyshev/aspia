@@ -28,7 +28,7 @@ FileRemoverProxy::FileRemoverProxy(
     : io_task_runner_(std::move(io_task_runner)),
       remover_(remover)
 {
-    LOG(LS_INFO) << "FileRemoverProxy Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(io_task_runner_);
     DCHECK(io_task_runner_->belongsToCurrentThread());
     DCHECK(remover_);
@@ -36,7 +36,7 @@ FileRemoverProxy::FileRemoverProxy(
 
 FileRemoverProxy::~FileRemoverProxy()
 {
-    LOG(LS_INFO) << "FileRemoverProxy Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void FileRemoverProxy::dettach()

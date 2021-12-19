@@ -32,7 +32,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
       exist_names_(exist_names),
       user_(user)
 {
-    LOG(LS_INFO) << "UserDialog Ctor";
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     if (user.isValid())
@@ -87,7 +87,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
 
 UserDialog::~UserDialog()
 {
-    LOG(LS_INFO) << "UserDialog Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool UserDialog::eventFilter(QObject* object, QEvent* event)

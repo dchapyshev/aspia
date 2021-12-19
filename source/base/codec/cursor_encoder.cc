@@ -48,7 +48,7 @@ uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 CursorEncoder::CursorEncoder()
     : stream_(ZSTD_createCStream())
 {
-    LOG(LS_INFO) << "CursorEncoder Ctor";
+    LOG(LS_INFO) << "Ctor";
 
     static_assert(kCacheSize >= 2 && kCacheSize <= 30);
     static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 22);
@@ -59,7 +59,7 @@ CursorEncoder::CursorEncoder()
 
 CursorEncoder::~CursorEncoder()
 {
-    LOG(LS_INFO) << "CursorEncoder Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool CursorEncoder::compressCursor(
