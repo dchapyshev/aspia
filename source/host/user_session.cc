@@ -883,7 +883,6 @@ void UserSession::onSessionDettached(const base::Location& location)
         client->stop();
 
     setState(FROM_HERE, State::DETTACHED);
-    host_id_ = base::kInvalidHostId;
 
     delegate_->onUserSessionDettached();
 
