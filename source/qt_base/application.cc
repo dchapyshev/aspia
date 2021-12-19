@@ -334,7 +334,7 @@ void Application::onNewConnection()
         }
 
         buffer += read_bytes;
-        remaining -= read_bytes;
+        remaining -= static_cast<uint32_t>(read_bytes);
     }
     while (remaining && socket->waitForReadyRead(kReadTimeoutMs));
 
