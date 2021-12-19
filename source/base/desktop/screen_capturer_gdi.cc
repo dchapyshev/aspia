@@ -32,12 +32,12 @@ namespace base {
 ScreenCapturerGdi::ScreenCapturerGdi()
     : ScreenCapturer(Type::WIN_GDI)
 {
-    LOG(LS_INFO) << "ScreenCapturerGdi Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
-    LOG(LS_INFO) << "ScreenCapturerGdi Dtor";
+    LOG(LS_INFO) << "Dtor";
 
     if (composition_changed_)
         DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);

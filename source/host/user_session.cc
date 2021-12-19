@@ -36,6 +36,27 @@
 
 namespace host {
 
+namespace {
+
+const char* routerStateToString(proto::internal::RouterState::State state)
+{
+    switch (state)
+    {
+        case proto::internal::RouterState::DISABLED:
+            return "DISABLED";
+        case proto::internal::RouterState::CONNECTING:
+            return "CONNECTING";
+        case proto::internal::RouterState::CONNECTED:
+            return "CONNECTED";
+        case proto::internal::RouterState::FAILED:
+            return "FAILED";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+} // namespace
+
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
                          std::unique_ptr<base::IpcChannel> channel,
@@ -1020,7 +1041,7 @@ void UserSession::sendRouterState(const base::Location& location)
     }
 
     LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();
-    LOG(LS_INFO) << "New state: " << router_state_.state();
+    LOG(LS_INFO) << "New state: " << routerStateToString(router_state_.state());
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_router_state()->CopyFrom(router_state_);

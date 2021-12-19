@@ -73,7 +73,7 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 
 PowerSaveBlocker::PowerSaveBlocker()
 {
-    LOG(LS_INFO) << "PowerSaveBlocker Ctor";
+    LOG(LS_INFO) << "Ctor";
 
 #if defined(OS_WIN)
     static const wchar_t kDescription[] = L"Aspia session is active";
@@ -87,7 +87,7 @@ PowerSaveBlocker::PowerSaveBlocker()
 
 PowerSaveBlocker::~PowerSaveBlocker()
 {
-    LOG(LS_INFO) << "PowerSaveBlocker Dtor";
+    LOG(LS_INFO) << "Dtor";
 
 #if defined(OS_WIN)
     deletePowerRequest(PowerRequestDisplayRequired, handle_.release());

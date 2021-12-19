@@ -47,7 +47,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
       environment_(std::make_unique<DesktopEnvironment>())
 {
-    LOG(LS_INFO) << "ScreenCapturerWrapper Ctor";
+    LOG(LS_INFO) << "Ctor";
 
 #if defined(OS_WIN)
     // If the monitor is turned off, this call will turn it on.
@@ -60,7 +60,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
 
 ScreenCapturerWrapper::~ScreenCapturerWrapper()
 {
-    LOG(LS_INFO) << "ScreenCapturerWrapper Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)

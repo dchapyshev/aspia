@@ -101,12 +101,12 @@ ScreenCapturerDxgi::ScreenCapturerDxgi()
     : ScreenCapturer(Type::WIN_DXGI),
       controller_(std::make_shared<DxgiDuplicatorController>())
 {
-    LOG(LS_INFO) << "ScreenCapturerDxgi Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ScreenCapturerDxgi::~ScreenCapturerDxgi()
 {
-    LOG(LS_INFO) << "ScreenCapturerDxgi Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool ScreenCapturerDxgi::isSupported()

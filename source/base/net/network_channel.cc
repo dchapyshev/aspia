@@ -71,7 +71,7 @@ NetworkChannel::NetworkChannel()
       encryptor_(std::make_unique<MessageEncryptorFake>()),
       decryptor_(std::make_unique<MessageDecryptorFake>())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 NetworkChannel::NetworkChannel(asio::ip::tcp::socket&& socket)
@@ -82,16 +82,18 @@ NetworkChannel::NetworkChannel(asio::ip::tcp::socket&& socket)
       encryptor_(std::make_unique<MessageEncryptorFake>()),
       decryptor_(std::make_unique<MessageDecryptorFake>())
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(socket_.is_open());
 }
 
 NetworkChannel::~NetworkChannel()
 {
+    LOG(LS_INFO) << "Dtor";
+
     proxy_->willDestroyCurrentChannel();
     proxy_ = nullptr;
 
     listener_ = nullptr;
-
     disconnect();
 }
 

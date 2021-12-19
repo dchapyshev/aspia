@@ -210,7 +210,7 @@ void Server::onHostIdRequest(const std::string& session_name)
         return;
     }
 
-    LOG(LS_INFO) << "New host ID request for session name: " << session_name;
+    LOG(LS_INFO) << "New host ID request for session name: '" << session_name << "'";
     router_controller_->hostIdRequest(session_name);
 }
 

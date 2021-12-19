@@ -29,13 +29,13 @@ ServerAuthenticatorManager::ServerAuthenticatorManager(
     : task_runner_(std::move(task_runner)),
       delegate_(delegate)
 {
-    LOG(LS_INFO) << "ServerAuthenticatorManager Ctor";
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_ && delegate_);
 }
 
 ServerAuthenticatorManager::~ServerAuthenticatorManager()
 {
-    LOG(LS_INFO) << "ServerAuthenticatorManager Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ServerAuthenticatorManager::setUserList(std::unique_ptr<UserListBase> user_list)

@@ -18,15 +18,19 @@
 
 #include "base/desktop/desktop_environment.h"
 
+#include "base/logging.h"
+
 namespace base {
 
 DesktopEnvironment::DesktopEnvironment()
 {
+    LOG(LS_INFO) << "Ctor";
     applyNewSettings();
 }
 
 DesktopEnvironment::~DesktopEnvironment()
 {
+    LOG(LS_INFO) << "Dtor";
     revertAll();
 }
 

@@ -224,7 +224,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         }
 
         LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id()
-                     << " session name: " << pending_id_requests_.front();
+                     << " session name: '" << pending_id_requests_.front() << "'";
 
         delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
         pending_id_requests_.pop();

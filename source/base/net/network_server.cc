@@ -51,11 +51,12 @@ private:
 NetworkServer::Impl::Impl(asio::io_context& io_context)
     : io_context_(io_context)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 NetworkServer::Impl::~Impl()
 {
+    LOG(LS_INFO) << "Dtor";
     DCHECK(!acceptor_);
 }
 
@@ -115,11 +116,12 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
 NetworkServer::NetworkServer()
     : impl_(std::make_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 NetworkServer::~NetworkServer()
 {
+    LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 

@@ -42,12 +42,12 @@ constexpr size_t kIvSize = 12;
 ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
-    LOG(LS_INFO) << "ServerAuthenticator Ctor";
+    LOG(LS_INFO) << "Ctor";
 }
 
 ServerAuthenticator::~ServerAuthenticator()
 {
-    LOG(LS_INFO) << "ServerAuthenticator Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ServerAuthenticator::setUserList(std::shared_ptr<UserListBase> user_list)
