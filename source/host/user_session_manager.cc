@@ -437,20 +437,6 @@ void UserSessionManager::onUserSessionCredentialsChanged()
 
 void UserSessionManager::onUserSessionDettached()
 {
-    for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
-    {
-        if (it->get()->state() == UserSession::State::DETTACHED)
-        {
-            UserSession* session = it->get();
-
-            LOG(LS_INFO) << "Dettached session " << session->sessionId()
-                         << " found in list. Reset host ID " << session->hostId();
-
-            // User session detached, host ID is no longer valid.
-            delegate_->onResetHostId(session->hostId());
-        }
-    }
-
     delegate_->onUserListChanged();
 }
 

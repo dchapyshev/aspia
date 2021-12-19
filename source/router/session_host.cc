@@ -139,10 +139,13 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
                 host_id_response->set_error_code(proto::HostIdResponse::SUCCESS);
                 host_id_response->set_host_id(host_id);
 
-                host_id_list_.emplace_back(host_id);
+                if (!base::contains(host_id_list_, host_id))
+                {
+                    host_id_list_.emplace_back(host_id);
 
-                // Notify the server that the ID has been assigned.
-                server().onHostSessionWithId(this);
+                    // Notify the server that the ID has been assigned.
+                    server().onHostSessionWithId(this);
+                }
             }
             else
             {
