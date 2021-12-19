@@ -71,6 +71,15 @@ void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
         desktop_session_->injectKeyEvent(event);
 }
 
+void DesktopSessionProxy::injectTextEvent(const proto::TextEvent& event)
+{
+    if (is_keyboard_locked_ || is_paused_)
+        return;
+
+    if (desktop_session_)
+        desktop_session_->injectTextEvent(event);
+}
+
 void DesktopSessionProxy::injectMouseEvent(const proto::MouseEvent& event)
 {
     if (is_mouse_locked_ || is_paused_)

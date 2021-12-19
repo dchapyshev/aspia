@@ -95,6 +95,11 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
             desktop_session_proxy_->injectKeyEvent(incoming_message_->key_event());
     }
+    else if (incoming_message_->has_text_event())
+    {
+        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+            desktop_session_proxy_->injectTextEvent(incoming_message_->text_event());
+    }
     else if (incoming_message_->has_clipboard_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)

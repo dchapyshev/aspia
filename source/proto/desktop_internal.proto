@@ -106,8 +106,9 @@ message ServiceToDesktop
     SelectSource select_source            = 3;
     NextScreenCapture next_screen_capture = 4;
     KeyEvent key_event                    = 5;
-    MouseEvent mouse_event                = 6;
-    ClipboardEvent clipboard_event        = 7;
+    TextEvent text_event                  = 6;
+    MouseEvent mouse_event                = 7;
+    ClipboardEvent clipboard_event        = 8;
 }
 
 message DesktopToService

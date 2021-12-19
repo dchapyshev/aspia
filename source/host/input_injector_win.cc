@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/stl_util.h"
+#include "base/strings/unicode.h"
 #include "common/keycode_converter.h"
 #include "host/win/sas_injector.h"
 
@@ -66,6 +67,22 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
     input.ki.wVk     = key_code;
     input.ki.dwFlags = flags;
     input.ki.wScan   = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
+
+    // Do the keyboard event.
+    if (!SendInput(1, &input, sizeof(input)))
+    {
+        PLOG(LS_WARNING) << "SendInput failed";
+    }
+}
+
+void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
+{
+    INPUT input;
+    memset(&input, 0, sizeof(input));
+
+    input.type = INPUT_KEYBOARD;
+    input.ki.dwFlags = KEYEVENTF_UNICODE | flags;
+    input.ki.wScan = unicode_char;
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
@@ -170,6 +187,29 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
         flags |= KEYEVENTF_KEYUP;
 
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
+}
+
+void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
+{
+    std::u16string text = base::utf16FromUtf8(event.text());
+    if (text.empty())
+        return;
+
+    switchToInputDesktop();
+
+    for (auto it = text.begin(); it != text.end(); ++it)
+    {
+        if (*it == '\n')
+        {
+            // The WM_CHAR event generated for carriage return is '\r', not '\n', and some
+            // applications may check for VK_RETURN explicitly, so handle newlines specially.
+            sendKeyboardVirtualKey(VK_RETURN, 0);
+            sendKeyboardVirtualKey(VK_RETURN, KEYEVENTF_KEYUP);
+        }
+
+        sendKeyboardUnicodeChar(*it, 0);
+        sendKeyboardUnicodeChar(*it, KEYEVENTF_KEYUP);
+    }
 }
 
 void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)

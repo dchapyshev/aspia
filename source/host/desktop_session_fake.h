@@ -42,6 +42,7 @@ public:
     void selectScreen(const proto::Screen& screen) override;
     void captureScreen() override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
+    void injectTextEvent(const proto::TextEvent& event) override;
     void injectMouseEvent(const proto::MouseEvent& event) override;
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 

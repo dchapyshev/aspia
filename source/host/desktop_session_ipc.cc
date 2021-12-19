@@ -180,6 +180,13 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
+{
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_text_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message_));
+}
+
 void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_->Clear();

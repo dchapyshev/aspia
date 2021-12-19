@@ -37,6 +37,11 @@ message KeyEvent
     uint32 flags = 2;
 }
 
+message TextEvent
+{
+    string text = 1;
+}
+
 message MouseEvent
 {
     enum ButtonMask
@@ -232,7 +237,7 @@ message ClientToHost
     MouseEvent mouse_event         = 1;
     KeyEvent key_event             = 2;
     // Field 3 reserved for TouchEvent.
-    // Field 4 reserved for TextEvent.
+    TextEvent text_event           = 4;
     ClipboardEvent clipboard_event = 5;
     DesktopExtension extension     = 6;
     DesktopConfig config           = 7;

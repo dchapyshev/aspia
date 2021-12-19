@@ -135,6 +135,11 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         if (input_injector_)
             input_injector_->injectKeyEvent(incoming_message_->key_event());
     }
+    else if (incoming_message_->has_text_event())
+    {
+        if (input_injector_)
+            input_injector_->injectTextEvent(incoming_message_->text_event());
+    }
     else if (incoming_message_->has_clipboard_event())
     {
         if (clipboard_monitor_)

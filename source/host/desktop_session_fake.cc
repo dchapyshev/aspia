@@ -198,6 +198,11 @@ void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
     // Nothing
 }
 
+void DesktopSessionFake::injectTextEvent(const proto::TextEvent& /* event */)
+{
+    // Nothing
+}
+
 void DesktopSessionFake::injectMouseEvent(const proto::MouseEvent& /* event */)
 {
     // Nothing

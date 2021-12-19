@@ -34,6 +34,7 @@ public:
     void setScreenOffset(const base::Point& offset) override;
     void setBlockInput(bool enable) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
+    void injectTextEvent(const proto::TextEvent& event) override;
     void injectMouseEvent(const proto::MouseEvent& event) override;
 
 private:
