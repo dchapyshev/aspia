@@ -120,7 +120,8 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
     int max_frame_bytes = max_frame_samples * channels_ * decoded_packet->bytes_per_sample();
 
     std::string* decoded_data = decoded_packet->add_data();
-    decoded_data->resize(packet.data_size() * max_frame_bytes);
+    decoded_data->resize(
+        static_cast<size_t>(packet.data_size()) * static_cast<size_t>(max_frame_bytes));
     int buffer_pos = 0;
 
     for (int i = 0; i < packet.data_size(); ++i)
@@ -129,7 +130,7 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
         CHECK_LE(buffer_pos + max_frame_bytes, static_cast<int>(decoded_data->size()));
         const std::string& frame = packet.data(i);
         const unsigned char* frame_data = reinterpret_cast<const unsigned char*>(frame.data());
-        int result = opus_decode(decoder_, frame_data, frame.size(),
+        int result = opus_decode(decoder_, frame_data, static_cast<opus_int32>(frame.size()),
                                  pcm_buffer, max_frame_samples, 0);
         if (result < 0)
         {
@@ -144,7 +145,7 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
     if (!buffer_pos)
         return nullptr;
 
-    decoded_data->resize(buffer_pos);
+    decoded_data->resize(static_cast<size_t>(buffer_pos));
     return decoded_packet;
 }
 
