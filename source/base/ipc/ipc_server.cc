@@ -186,7 +186,7 @@ void IpcServer::Listener::onNewConnetion(
 IpcServer::IpcServer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
 {
-    LOG(LS_INFO) << "IpcServer Ctor";
+    LOG(LS_INFO) << "Ctor";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
@@ -194,7 +194,7 @@ IpcServer::IpcServer()
 
 IpcServer::~IpcServer()
 {
-    LOG(LS_INFO) << "IpcServer Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     stop();
 }

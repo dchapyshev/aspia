@@ -44,7 +44,7 @@ DesktopSessionManager::~DesktopSessionManager()
 {
     LOG(LS_INFO) << "Dtor";
 
-    state_ = State::STOPPING;
+    setState(FROM_HERE, State::STOPPING);
     dettachSession(FROM_HERE);
 }
 
@@ -70,7 +70,7 @@ void DesktopSessionManager::attachSession(
         });
     }
 
-    state_ = State::STARTING;
+    setState(FROM_HERE, State::STARTING);
 
     std::u16string channel_id = base::IpcServer::createUniqueId();
 
@@ -108,7 +108,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
                  << " (from: " << location.toString() << ")";
 
     if (state_ != State::STOPPING)
-        state_ = State::DETACHED;
+        setState(FROM_HERE, State::DETACHED);
 
     session_attach_timer_.stop();
     session_proxy_->stopAndDettach();
@@ -156,7 +156,7 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
 
     session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
 
-    state_ = State::ATTACHED;
+    setState(FROM_HERE, State::ATTACHED);
     session_proxy_->attachAndStart(session_.get());
 }
 
@@ -165,9 +165,9 @@ void DesktopSessionManager::onErrorOccurred()
     if (state_ == State::STOPPED || state_ == State::STOPPING)
         return;
 
-    state_ = State::STOPPING;
+    setState(FROM_HERE, State::STOPPING);
     dettachSession(FROM_HERE);
-    state_ = State::STOPPED;
+    setState(FROM_HERE, State::STOPPED);
 }
 
 void DesktopSessionManager::onDesktopSessionStarted()
@@ -199,6 +199,13 @@ void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     delegate_->onClipboardEvent(event);
+}
+
+void DesktopSessionManager::setState(const base::Location& location, State state)
+{
+    LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
+                 << " (from: " << location.toString() << ")";
+    state_ = state;
 }
 
 // static

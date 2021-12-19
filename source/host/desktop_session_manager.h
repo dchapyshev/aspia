@@ -65,6 +65,7 @@ protected:
 
 private:
     enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+    void setState(const base::Location& location, State state);
     static const char* stateToString(State state);
 
     std::shared_ptr<base::TaskRunner> task_runner_;

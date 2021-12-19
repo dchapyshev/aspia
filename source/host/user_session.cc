@@ -150,7 +150,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
         LOG(LS_INFO) << "IPC channel does NOT exist";
     }
 
-    state_ = State::STARTED;
+    setState(FROM_HERE, State::STARTED);
     sendHostIdRequest(FROM_HERE);
 }
 
@@ -192,7 +192,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         LOG(LS_INFO) << "IPC channel does NOT exist";
     }
 
-    state_ = State::STARTED;
+    setState(FROM_HERE, State::STARTED);
 }
 
 std::optional<std::string> UserSession::sessionName() const
@@ -429,7 +429,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
                 LOG(LS_WARNING) << "REMOTE_DISCONNECT not for RDP session";
             }
 
-            state_ = State::FINISHED;
+            setState(FROM_HERE, State::FINISHED);
             delegate_->onUserSessionFinished();
         }
         break;
@@ -861,7 +861,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     for (const auto& client : file_transfer_clients_)
         client->stop();
 
-    state_ = State::DETTACHED;
+    setState(FROM_HERE, State::DETTACHED);
     host_id_ = base::kInvalidHostId;
 
     delegate_->onUserSessionDettached();
@@ -870,7 +870,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     {
         LOG(LS_INFO) << "RDP session finished";
 
-        state_ = State::FINISHED;
+        setState(FROM_HERE, State::FINISHED);
         delegate_->onUserSessionFinished();
     }
     else
@@ -886,7 +886,7 @@ void UserSession::onSessionDettached(const base::Location& location)
         {
             LOG(LS_INFO) << "Session attach timeout";
 
-            state_ = State::FINISHED;
+            setState(FROM_HERE, State::FINISHED);
             delegate_->onUserSessionFinished();
         });
     }
@@ -1089,6 +1089,13 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
     // Notify the UI of a new connection.
     sendConnectEvent(*client_session_ptr);
+}
+
+void UserSession::setState(const base::Location& location, State state)
+{
+    LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
+                 << " (from: " << location.toString() << ")";
+    state_ = state;
 }
 
 } // namespace host

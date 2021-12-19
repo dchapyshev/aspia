@@ -126,6 +126,7 @@ private:
     void sendRouterState(const base::Location& location);
     void sendHostIdRequest(const base::Location& location);
     void addNewClientSession(std::unique_ptr<ClientSession> client_session);
+    void setState(const base::Location& location, State state);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;

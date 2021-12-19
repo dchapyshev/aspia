@@ -115,7 +115,7 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this)),
       is_connected_(true)
 {
-    LOG(LS_INFO) << "IpcChannel Ctor";
+    LOG(LS_INFO) << "Ctor";
 
 #if defined(OS_WIN)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
@@ -125,7 +125,7 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
 
 IpcChannel::~IpcChannel()
 {
-    LOG(LS_INFO) << "IpcChannel Dtor";
+    LOG(LS_INFO) << "Dtor";
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     proxy_->willDestroyCurrentChannel();
