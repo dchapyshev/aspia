@@ -18,8 +18,6 @@
 
 include(translations)
 
-set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM 1)
-
 list(APPEND SOURCE_HOST_CORE
     client_session.cc
     client_session.h
@@ -197,7 +195,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/source/host/ui/*.h
         ${PROJECT_SOURCE_DIR}/source/host/ui/*.ui)
 
-    create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES} OPTIONS "-no-obsolete")
+    create_translation(TS_HOST_UPDATE ${HOST_TR_SOURCES} ${HOST_TS_FILES})
     add_custom_target(aspia_host_ts_update DEPENDS ${TS_HOST_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")

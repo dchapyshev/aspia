@@ -18,8 +18,6 @@
 
 include(translations)
 
-set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM 1)
-
 list(APPEND SOURCE_COMMON
     clipboard.cc
     clipboard.h
@@ -146,7 +144,7 @@ if(Qt5LinguistTools_FOUND)
         ${PROJECT_SOURCE_DIR}/source/common/*.h
         ${PROJECT_SOURCE_DIR}/source/common/*.ui)
 
-    create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES} OPTIONS "-no-obsolete")
+    create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES})
     add_custom_target(aspia_common_ts_update DEPENDS ${TS_COMMON_UPDATE})
 else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
