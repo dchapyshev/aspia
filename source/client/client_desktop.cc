@@ -369,6 +369,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.send_mouse = input_event_filter_.sendMouseCount();
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
     metrics.send_key   = input_event_filter_.sendKeyCount();
+    metrics.send_text  = input_event_filter_.sendTextCount();
     metrics.read_clipboard = input_event_filter_.readClipboardCount();
     metrics.send_clipboard = input_event_filter_.sendClipboardCount();
 

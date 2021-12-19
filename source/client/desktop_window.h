@@ -66,6 +66,7 @@ public:
         int send_mouse = 0;
         int drop_mouse = 0;
         int send_key = 0;
+        int send_text = 0;
         int read_clipboard = 0;
         int send_clipboard = 0;
     };

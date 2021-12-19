@@ -133,6 +133,11 @@
      </item>
      <item>
       <property name="text">
+       <string notr="true">Send Text Event</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string notr="true">Read Clipboard Event</string>
       </property>
      </item>
