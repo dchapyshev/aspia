@@ -37,6 +37,7 @@ public:
 
     std::optional<proto::MouseEvent> mouseEvent(const proto::MouseEvent& event);
     std::optional<proto::KeyEvent> keyEvent(const proto::KeyEvent& event);
+    std::optional<proto::TextEvent> textEvent(const proto::TextEvent& event);
 
     std::optional<proto::ClipboardEvent> readClipboardEvent(const proto::ClipboardEvent& event);
     std::optional<proto::ClipboardEvent> sendClipboardEvent(const proto::ClipboardEvent& event);
@@ -44,6 +45,7 @@ public:
     int sendMouseCount() const { return send_mouse_count_; }
     int dropMouseCount() const { return drop_mouse_count_; }
     int sendKeyCount() const { return send_key_count_; }
+    int sendTextCount() const { return send_text_count_; }
     int readClipboardCount() const { return read_clipboard_count_; }
     int sendClipboardCount() const { return send_clipboard_count_; }
 
@@ -58,6 +60,7 @@ private:
     int send_mouse_count_ = 0;
     int drop_mouse_count_ = 0;
     int send_key_count_ = 0;
+    int send_text_count_ = 0;
     int read_clipboard_count_ = 0;
     int send_clipboard_count_ = 0;
 };

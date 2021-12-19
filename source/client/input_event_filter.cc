@@ -75,6 +75,15 @@ std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent&
     return event;
 }
 
+std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEvent& event)
+{
+    if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return std::nullopt;
+
+    ++send_text_count_;
+    return event;
+}
+
 std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(
     const proto::ClipboardEvent& event)
 {

@@ -263,6 +263,18 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     sendMessage(*outgoing_message_);
 }
 
+void ClientDesktop::onTextEvent(const proto::TextEvent& event)
+{
+    std::optional<proto::TextEvent> out_event = input_event_filter_.textEvent(event);
+    if (!out_event.has_value())
+        return;
+
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_text_event()->CopyFrom(*out_event);
+
+    sendMessage(*outgoing_message_);
+}
+
 void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
 {
     std::optional<proto::MouseEvent> out_event = input_event_filter_.mouseEvent(event);

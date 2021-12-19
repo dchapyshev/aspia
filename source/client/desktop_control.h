@@ -37,6 +37,7 @@ public:
     virtual void setVideoRecording(bool enable, const std::filesystem::path& file_path) = 0;
 
     virtual void onKeyEvent(const proto::KeyEvent& event) = 0;
+    virtual void onTextEvent(const proto::TextEvent& event) = 0;
     virtual void onMouseEvent(const proto::MouseEvent& event) = 0;
     virtual void onPowerControl(proto::PowerControl::Action action) = 0;
     virtual void onRemoteUpdate() = 0;

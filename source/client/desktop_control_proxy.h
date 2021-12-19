@@ -44,6 +44,7 @@ public:
     void setCurrentScreen(const proto::Screen& screen);
     void setPreferredSize(int width, int height);
     void onKeyEvent(const proto::KeyEvent& event);
+    void onTextEvent(const proto::TextEvent& event);
     void onMouseEvent(const proto::MouseEvent& event);
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();

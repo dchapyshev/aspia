@@ -99,6 +99,19 @@ void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
         desktop_control_->onKeyEvent(event);
 }
 
+void DesktopControlProxy::onTextEvent(const proto::TextEvent& event)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::onTextEvent, shared_from_this(), event));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->onTextEvent(event);
+}
+
 void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())

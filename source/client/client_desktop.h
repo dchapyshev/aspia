@@ -60,6 +60,7 @@ public:
     void setPreferredSize(int width, int height) override;
     void setVideoRecording(bool enable, const std::filesystem::path& file_path) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
+    void onTextEvent(const proto::TextEvent& event) override;
     void onMouseEvent(const proto::MouseEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
