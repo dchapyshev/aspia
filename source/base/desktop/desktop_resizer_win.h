@@ -35,7 +35,7 @@ public:
     std::vector<Size> supportedResolutions(ScreenId screen_id) override;
     void setResolution(ScreenId screen_id, const Size& resolution) override;
     void restoreResolution(ScreenId screen_id) override;
-    void restureResulution() override;
+    void restoreResulution() override;
 
 private:
     class Screen;

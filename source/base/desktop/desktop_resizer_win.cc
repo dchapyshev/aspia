@@ -206,7 +206,7 @@ DesktopResizerWin::DesktopResizerWin()
 
 DesktopResizerWin::~DesktopResizerWin()
 {
-    restureResulution();
+    restoreResulution();
 }
 
 std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
@@ -269,7 +269,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
     }
 }
 
-void DesktopResizerWin::restureResulution()
+void DesktopResizerWin::restoreResulution()
 {
     for (const auto& screen : screens_)
         restoreResolution(screen.first);
