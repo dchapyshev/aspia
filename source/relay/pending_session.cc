@@ -168,7 +168,7 @@ void PendingSession::onErrorOccurred(
 void PendingSession::onMessage()
 {
     proto::PeerToRelay message;
-    if (!message.ParseFromArray(buffer_.data(), buffer_.size()))
+    if (!message.ParseFromArray(buffer_.data(), static_cast<int>(buffer_.size())))
     {
         onErrorOccurred(FROM_HERE, std::error_code());
         return;

@@ -108,7 +108,7 @@ void Session::doReadSome(Session* session, int source)
             asio::async_write(
                 session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
                 asio::const_buffer(session->buffer_[source].data(), bytes_transferred),
-                [session, source](const std::error_code& error_code, size_t bytes_transferred)
+                [session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
             {
                 if (error_code)
                 {

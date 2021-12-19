@@ -133,10 +133,10 @@ void LocaleLoader::removeTranslators()
 {
     LOG(LS_INFO) << "Cleanup translators";
 
-    for (const auto& translator : translator_list_)
+    for (auto it = translator_list_.begin(); it != translator_list_.end(); ++it)
     {
-        QCoreApplication::removeTranslator(translator);
-        delete translator;
+        QCoreApplication::removeTranslator(*it);
+        delete *it;
     }
 
     translator_list_.clear();

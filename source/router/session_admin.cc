@@ -240,7 +240,7 @@ proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
         return proto::UserResult::INTERNAL_ERROR;
     }
 
-    uint64_t entry_id = user.entry_id();
+    int64_t entry_id = user.entry_id();
 
     LOG(LS_INFO) << "User remove request: " << entry_id;
 

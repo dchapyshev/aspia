@@ -179,7 +179,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
 
         item->set_session_id(session->sessionId());
         item->set_session_type(session->sessionType());
-        item->set_timepoint(session->startTime());
+        item->set_timepoint(static_cast<uint64_t>(session->startTime()));
         item->set_ip_address(session->address());
         item->mutable_version()->CopyFrom(session->version().toProto());
         item->set_os_name(session->osName());

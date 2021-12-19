@@ -124,7 +124,7 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
     if (delegate_)
         delegate_->onPoolKeyUsed(credentials.session_id, credentials.key.key_id());
 
-    return credentials;
+    return std::move(credentials);
 }
 
 void SharedKeyPool::Impl::removeKeysForRelay(Session::SessionId session_id)
