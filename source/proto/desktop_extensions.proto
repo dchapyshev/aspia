@@ -24,22 +24,29 @@ import "system_info.proto";
 
 package proto;
 
+message Resolution
+{
+    int32 width  = 2;
+    int32 height = 3;
+}
+
 // Extension name: "select_screen"
-// Sent by client to host for screen selection.
+// Sent by client to host for screen or screen resolution selection.
 message Screen
 {
-    int64 id     = 1;
-    string title = 2;
+    int64 id              = 1;
+    string title          = 2;
+    Resolution resolution = 3;
 }
 
 // Extension name: "select_screen"
 // Sent by host to client. Contains a list of screens on the host.
 message ScreenList
 {
-    // List of screens (monitors) on the remote computer.
-    repeated Screen screen = 1;
-    int64 current_screen   = 2;
-    int64 primary_screen   = 3;
+    repeated Screen screen         = 1; // List of screens on the remote computer.
+    int64 current_screen           = 2; // ID of current screen.
+    int64 primary_screen           = 3; // ID of primary screen.
+    repeated Resolution resolution = 4; // List of resolutions for current screen.
 }
 
 // Extension name: "preferred_size"
