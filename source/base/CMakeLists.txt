@@ -268,6 +268,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/cursor_capturer.h
     desktop/desktop_environment.cc
     desktop/desktop_environment.h
+    desktop/desktop_resizer.cc
+    desktop/desktop_resizer.h
     desktop/diff_block_32bpp_c.cc
     desktop/diff_block_32bpp_c.h
     desktop/diff_block_32bpp_sse2.cc
@@ -304,6 +306,8 @@ if (WIN32)
         desktop/cursor_capturer_win.cc
         desktop/cursor_capturer_win.h
         desktop/desktop_environment_win.cc
+        desktop/desktop_resizer_win.cc
+        desktop/desktop_resizer_win.h
         desktop/frame_dib.cc
         desktop/frame_dib.h
         desktop/screen_capturer_dxgi.cc
