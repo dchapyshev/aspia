@@ -140,13 +140,13 @@ std::basic_string<CharType> collapseWhitespaceT(
     for (typename std::basic_string_view<CharType>::const_iterator i(text.begin());
          i != text.end(); ++i)
     {
-        if (isUnicodeWhitespace(*i))
+        if (isUnicodeWhitespace(static_cast<char16_t>(*i)))
         {
             if (!in_whitespace)
             {
                 // Reduce all whitespace sequences to a single space.
                 in_whitespace = true;
-                result[chars_written++] = u' ';
+                result[static_cast<size_t>(chars_written++)] = u' ';
             }
             if (trim_sequences_with_line_breaks && !already_trimmed &&
                 ((*i == '\n') || (*i == '\r')))
@@ -161,7 +161,7 @@ std::basic_string<CharType> collapseWhitespaceT(
             // Non-whitespace chracters are copied straight across.
             in_whitespace = false;
             already_trimmed = false;
-            result[chars_written++] = *i;
+            result[static_cast<size_t>(chars_written++)] = *i;
         }
     }
 
@@ -171,7 +171,7 @@ std::basic_string<CharType> collapseWhitespaceT(
         --chars_written;
     }
 
-    result.resize(chars_written);
+    result.resize(static_cast<size_t>(chars_written));
     return result;
 }
 
@@ -209,7 +209,7 @@ std::string replaceLfByCrLf(const std::string& in)
         *out_p++ = c;
     }
 
-    out.resize(out_p - out_p_begin);
+    out.resize(static_cast<size_t>(out_p - out_p_begin));
     return out;
 }
 
@@ -241,7 +241,7 @@ std::string replaceCrLfByLf(const std::string& in)
         }
     }
 
-    out.resize(out_p - out_p_begin);
+    out.resize(static_cast<size_t>(out_p - out_p_begin));
     return out;
 }
 
@@ -296,22 +296,19 @@ bool isStringASCII(std::u16string_view string)
     return doIsStringASCII(string.data(), string.length());
 }
 
-std::u16string collapseWhitespace(std::u16string_view text,
-                                  bool trim_sequences_with_line_breaks)
+std::u16string collapseWhitespace(std::u16string_view text, bool trim_sequences_with_line_breaks)
 {
     return collapseWhitespaceT<char16_t>(text, trim_sequences_with_line_breaks);
 }
 
 #if defined(OS_WIN)
-std::wstring collapseWhitespace(std::wstring_view text,
-                                bool trim_sequences_with_line_breaks)
+std::wstring collapseWhitespace(std::wstring_view text, bool trim_sequences_with_line_breaks)
 {
     return collapseWhitespaceT<wchar_t>(text, trim_sequences_with_line_breaks);
 }
 #endif // defined(OS_WIN)
 
-std::string collapseWhitespaceASCII(std::string_view text,
-                                    bool trim_sequences_with_line_breaks)
+std::string collapseWhitespaceASCII(std::string_view text, bool trim_sequences_with_line_breaks)
 {
     return collapseWhitespaceT<char>(text, trim_sequences_with_line_breaks);
 }
