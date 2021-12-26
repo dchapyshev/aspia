@@ -336,13 +336,25 @@ text-decoration: underline;
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menu_language">
+   <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>Language</string>
+     <string>View</string>
     </property>
+    <widget class="QMenu" name="menu_language">
+     <property name="title">
+      <string>Language</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resources.qrc">
+       <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
+     </property>
+    </widget>
+    <addaction name="menu_language"/>
+    <addaction name="separator"/>
+    <addaction name="action_show_icons_in_menus"/>
    </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menu_language"/>
+   <addaction name="menuView"/>
    <addaction name="menu_help"/>
   </widget>
   <action name="action_exit">
@@ -387,6 +399,14 @@ text-decoration: underline;
   <action name="action_show_hide">
    <property name="text">
     <string>Hide</string>
+   </property>
+  </action>
+  <action name="action_show_icons_in_menus">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show icons in menus</string>
    </property>
   </action>
  </widget>

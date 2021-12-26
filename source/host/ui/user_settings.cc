@@ -25,6 +25,7 @@ namespace host {
 namespace {
 
 const QString kLocaleParam = QStringLiteral("Locale");
+const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 
 } // namespace
 
@@ -62,6 +63,24 @@ QString UserSettings::locale() const
 void UserSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
+}
+
+bool UserSettings::showIconsInMenus() const
+{
+    bool defaultValue;
+
+#if defined(Q_OS_MACOS)
+    defaultValue = false;
+#else
+    defaultValue = true;
+#endif
+
+    return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
+}
+
+void UserSettings::setShowIconsInMenus(bool enable)
+{
+    settings_.setValue(kShowIconsInMenusParam, enable);
 }
 
 } // namespace host

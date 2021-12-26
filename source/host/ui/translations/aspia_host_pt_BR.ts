@@ -254,6 +254,14 @@
         <source>Router is disabled</source>
         <translation>Roteador desabilitado</translation>
     </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show icons in menus</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NotifierWindow</name>

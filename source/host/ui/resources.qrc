@@ -34,5 +34,6 @@
     <file alias="text-chat.png">resources/text-chat.png</file>
     <file alias="headphone.png">resources/headphone.png</file>
     <file alias="keyboard-lock.png">resources/keyboard-lock.png</file>
+    <file alias="locale.png">resources/locale.png</file>
   </qresource>
 </RCC>

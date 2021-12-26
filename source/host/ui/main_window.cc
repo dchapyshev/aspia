@@ -58,6 +58,10 @@ MainWindow::MainWindow(QWidget* parent)
 {
     LOG(LS_INFO) << "Ctor";
 
+    UserSettings& user_settings = Application::instance()->settings();
+    Application::instance()->setAttribute(
+        Qt::AA_DontShowIconsInMenus, !user_settings.showIconsInMenus());
+
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
@@ -74,7 +78,15 @@ MainWindow::MainWindow(QWidget* parent)
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
 
-    createLanguageMenu(Application::instance()->settings().locale());
+    createLanguageMenu(user_settings.locale());
+
+    ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
+    connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
+    {
+        Application* instance = Application::instance();
+        instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
+        instance->settings().setShowIconsInMenus(enable);
+    });
 
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
     {

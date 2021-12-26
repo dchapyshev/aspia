@@ -38,6 +38,9 @@ public:
     QString locale() const;
     void setLocale(const QString& locale);
 
+    bool showIconsInMenus() const;
+    void setShowIconsInMenus(bool enable);
+
 private:
     QSettings settings_;
 
