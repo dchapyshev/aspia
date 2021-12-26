@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,28 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__FRAME_SIMPLE_H
-#define BASE__DESKTOP__FRAME_SIMPLE_H
+#ifndef BASE__CODEC__PIXEL_TRANSLATOR_H
+#define CODEC__PIXEL_TRANSLATOR_H
 
-#include "base/desktop/frame.h"
+#include "base/desktop/pixel_format.h"
 
 #include <memory>
 
 namespace base {
 
-class FrameSimple : public Frame
+class PixelTranslator
 {
 public:
-    ~FrameSimple();
+    virtual ~PixelTranslator() = default;
 
-    static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
+    static std::unique_ptr<PixelTranslator> create(const PixelFormat& source_format,
+                                                   const PixelFormat& target_format);
 
-private:
-    FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data);
-
-    DISALLOW_COPY_AND_ASSIGN(FrameSimple);
+    virtual void translate(const uint8_t* src,
+                           int src_stride,
+                           uint8_t* dst,
+                           int dst_stride,
+                           int width,
+                           int height) = 0;
 };
 
 } // namespace base
 
-#endif // BASE__DESKTOP__FRAME_SIMPLE_H
+#endif // BASE__CODEC__PIXEL_TRANSLATOR_H

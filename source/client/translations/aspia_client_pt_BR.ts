@@ -182,57 +182,72 @@
         <translation>Codec</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>Appearance</source>
         <translation>Aparência</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="135"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Block remote input</source>
         <translation>Bloquear entrada remota</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="63"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable cursor shape</source>
         <translation>Exibir cursor remoto</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="43"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
+        <source>Fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="84"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="102"/>
         <source>Features</source>
         <translation>Funcionalidades</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="108"/>
         <source>Enable audio</source>
         <translation>Habilitar áudio</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="70"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
         <source>Enable clipboard</source>
         <translation>Habilitar área de transferência</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="144"/>
         <source>Disable desktop effects</source>
         <translation>Desabilitar efeitos da área de trabalho</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="99"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop wallpaper</source>
         <translation>Desabilitar papel de parede</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="106"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
         <source>Disable font smoothing</source>
         <translation>Desabilitar suavização de fonte</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="174"/>
         <source>Other</source>
         <translation>Outro</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
         <source>Lock computer at disconnect</source>
         <translation>BLoquear computador ao desconectar</translation>
     </message>
@@ -969,6 +984,39 @@
         <location filename="../ui/client_window.cc" line="226"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopConfigDialog</name>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="99"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="100"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="101"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="102"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="103"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="192"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

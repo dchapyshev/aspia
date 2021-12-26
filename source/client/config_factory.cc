@@ -19,6 +19,7 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
+#include "base/desktop/pixel_format.h"
 
 namespace client {
 
@@ -26,6 +27,23 @@ namespace {
 
 const proto::VideoEncoding kDefaultVideoEncoding = proto::VIDEO_ENCODING_VP8;
 const proto::AudioEncoding kDefaultAudioEncoding = proto::AUDIO_ENCODING_OPUS;
+
+const int kDefCompressRatio = 8;
+const int kMinCompressRatio = 1;
+const int kMaxCompressRatio = 22;
+
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
+{
+    to->set_bits_per_pixel(from.bitsPerPixel());
+
+    to->set_red_max(from.redMax());
+    to->set_green_max(from.greenMax());
+    to->set_blue_max(from.blueMax());
+
+    to->set_red_shift(from.redShift());
+    to->set_green_shift(from.greenShift());
+    to->set_blue_shift(from.blueShift());
+}
 
 } // namespace
 
@@ -57,7 +75,9 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_compress_ratio(kDefCompressRatio);
 
+    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
@@ -72,7 +92,9 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_compress_ratio(kDefCompressRatio);
 
+    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
     fixupDesktopConfig(config);
 }
 
@@ -84,8 +106,8 @@ void ConfigFactory::fixupDesktopConfig(proto::DesktopConfig* config)
     config->set_scale_factor(100);
     config->set_update_interval(30);
 
-    if (config->video_encoding() == proto::VIDEO_ENCODING_DEFAULT)
-        config->set_video_encoding(kDefaultVideoEncoding);
+    if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
+        config->set_compress_ratio(kDefCompressRatio);
 
     if (config->audio_encoding() == proto::AUDIO_ENCODING_DEFAULT)
         config->set_audio_encoding(kDefaultAudioEncoding);

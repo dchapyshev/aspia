@@ -172,6 +172,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/cursor_encoder.h
     codec/multi_channel_resampler.cc
     codec/multi_channel_resampler.h
+    codec/pixel_translator.cc
+    codec/pixel_translator.h
     codec/scale_reducer.cc
     codec/scale_reducer.h
     codec/scoped_vpx_codec.cc
@@ -186,10 +188,14 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_decoder.h
     codec/video_decoder_vpx.cc
     codec/video_decoder_vpx.h
+    codec/video_decoder_zstd.cc
+    codec/video_decoder_zstd.h
     codec/video_encoder.cc
     codec/video_encoder.h
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
+    codec/video_encoder_zstd.cc
+    codec/video_encoder_zstd.h
     codec/webm_file_muxer.cc
     codec/webm_file_muxer.h
     codec/webm_file_writer.cc

@@ -186,11 +186,11 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
         SharedMemoryFactory* factory = sharedMemoryFactory();
         if (factory)
         {
-            frame_ = SharedMemoryFrame::create(screen_rect.size(), factory);
+            frame_ = SharedMemoryFrame::create(screen_rect.size(), PixelFormat::ARGB(), factory);
         }
         else
         {
-            frame_ = FrameAligned::create(screen_rect.size(), 32);
+            frame_ = FrameAligned::create(screen_rect.size(), PixelFormat::ARGB(), 32);
         }
 
         if (!frame_)

@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,28 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__FRAME_SIMPLE_H
-#define BASE__DESKTOP__FRAME_SIMPLE_H
+#ifndef BASE__CODEC__VIDEO_DECODER_ZSTD_H
+#define BASE__CODEC__VIDEO_DECODER_ZSTD_H
 
-#include "base/desktop/frame.h"
-
-#include <memory>
+#include "base/macros_magic.h"
+#include "base/codec/scoped_zstd_stream.h"
+#include "base/codec/video_decoder.h"
 
 namespace base {
 
-class FrameSimple : public Frame
+class PixelTranslator;
+
+class VideoDecoderZstd : public VideoDecoder
 {
 public:
-    ~FrameSimple();
+    ~VideoDecoderZstd() = default;
 
-    static std::unique_ptr<FrameSimple> create(const Size& size, const PixelFormat& format);
+    static std::unique_ptr<VideoDecoderZstd> create();
+
+    bool decode(const proto::VideoPacket& packet, Frame* target_frame) override;
 
 private:
-    FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data);
+    VideoDecoderZstd();
 
-    DISALLOW_COPY_AND_ASSIGN(FrameSimple);
+    ScopedZstdDStream stream_;
+    std::unique_ptr<PixelTranslator> translator_;
+    std::unique_ptr<Frame> source_frame_;
+
+    DISALLOW_COPY_AND_ASSIGN(VideoDecoderZstd);
 };
 
 } // namespace base
 
-#endif // BASE__DESKTOP__FRAME_SIMPLE_H
+#endif // BASE__CODEC__VIDEO_DECODER_ZSTD_H

@@ -108,21 +108,34 @@ message Rect
     int32 height = 4;
 }
 
+message PixelFormat
+{
+    uint32 bits_per_pixel = 1;
+
+    uint32 red_max   = 2;
+    uint32 green_max = 3;
+    uint32 blue_max  = 4;
+
+    uint32 red_shift   = 5;
+    uint32 green_shift = 6;
+    uint32 blue_shift  = 7;
+}
+
 // Identifies how the image was encoded.
 enum VideoEncoding
 {
     VIDEO_ENCODING_UNKNOWN = 0;
-    VIDEO_ENCODING_DEFAULT = 1;
+    VIDEO_ENCODING_ZSTD    = 1;
     VIDEO_ENCODING_VP8     = 2;
     VIDEO_ENCODING_VP9     = 4;
 }
 
 message VideoPacketFormat
 {
-    Rect video_rect = 1;
-    // Field 2: deprecated.
-    Size screen_size = 3;
-    uint32 capturer_type = 4;
+    Rect video_rect          = 1;
+    PixelFormat pixel_format = 2;
+    Size screen_size         = 3;
+    uint32 capturer_type     = 4;
 }
 
 message VideoPacket
@@ -215,9 +228,9 @@ message DesktopConfig
 {
     uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
-    // Field 3: deprecated.
+    PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4; // Deprecated. Must be equal to 30.
-    // Field 5: deprecated.
+    uint32 compress_ratio        = 5;
     uint32 scale_factor          = 6; // Deprecated. Must be equal to 100.
     AudioEncoding audio_encoding = 7;
 }

@@ -38,6 +38,10 @@ public:
     void restoreSettings(proto::SessionType session_type, const proto::DesktopConfig& config);
     void saveSettings(proto::DesktopConfig* config);
 
+private slots:
+    void onCodecChanged(int item_index);
+    void onCompressionRatioChanged(int value);
+
 private:
     Ui::ComputerDialogDesktop ui;
 

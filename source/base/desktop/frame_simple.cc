@@ -20,8 +20,8 @@
 
 namespace base {
 
-FrameSimple::FrameSimple(const Size& size, uint8_t* data)
-    : Frame(size, size.width() * kBytesPerPixel, data, nullptr)
+FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data)
+    : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
 }
@@ -32,13 +32,13 @@ FrameSimple::~FrameSimple()
 }
 
 // static
-std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size)
+std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
 {
-    uint8_t* data = reinterpret_cast<uint8_t*>(malloc(calcMemorySize(size, kBytesPerPixel)));
+    uint8_t* data = reinterpret_cast<uint8_t*>(malloc(calcMemorySize(size, format.bytesPerPixel())));
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<FrameSimple>(new FrameSimple(size, data));
+    return std::unique_ptr<FrameSimple>(new FrameSimple(size, format, data));
 }
 
 } // namespace base

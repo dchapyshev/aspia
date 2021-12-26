@@ -19,6 +19,7 @@
 #include "base/codec/video_decoder.h"
 
 #include "base/codec/video_decoder_vpx.h"
+#include "base/codec/video_decoder_zstd.h"
 
 namespace base {
 
@@ -32,6 +33,9 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::VideoEncoding encoding
 
         case proto::VIDEO_ENCODING_VP9:
             return VideoDecoderVPX::createVP9();
+
+        case proto::VIDEO_ENCODING_ZSTD:
+            return VideoDecoderZstd::create();
 
         default:
             return nullptr;

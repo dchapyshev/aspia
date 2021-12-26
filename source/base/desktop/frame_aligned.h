@@ -30,10 +30,11 @@ class FrameAligned : public Frame
 public:
     ~FrameAligned();
 
-    static std::unique_ptr<FrameAligned> create(const Size& size, size_t alignment);
+    static std::unique_ptr<FrameAligned> create(
+        const Size& size, const PixelFormat& format, size_t alignment);
 
 private:
-    FrameAligned(const Size& size, uint8_t* data);
+    FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data);
 
     DISALLOW_COPY_AND_ASSIGN(FrameAligned);
 };

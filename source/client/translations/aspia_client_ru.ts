@@ -182,57 +182,72 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="106"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="135"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="63"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="50"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="43"/>
+        <source>Color depth:</source>
+        <translation>Глубина цвета:</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="64"/>
+        <source>Fast</source>
+        <translation>Быстрее</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="84"/>
+        <source>Best</source>
+        <translation>Сильнее</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="102"/>
         <source>Features</source>
         <translation>Возможности</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="56"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="108"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="70"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="86"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="92"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="144"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="99"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="174"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="128"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
@@ -969,6 +984,39 @@
         <location filename="../ui/client_window.cc" line="226"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopConfigDialog</name>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="99"/>
+        <source>True color (32 bit)</source>
+        <translation>True color (32 бита)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="100"/>
+        <source>High color (16 bit)</source>
+        <translation>High color (16 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="101"/>
+        <source>256 colors (8 bit)</source>
+        <translation>256 цветов (8 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="102"/>
+        <source>64 colors (6 bit)</source>
+        <translation>64 цвета (6 бит)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="103"/>
+        <source>8 colors (3 bit)</source>
+        <translation>8 цветов (3 бита)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="192"/>
+        <source>Compression ratio: %1</source>
+        <translation>Уровень сжатия: %1</translation>
     </message>
 </context>
 <context>

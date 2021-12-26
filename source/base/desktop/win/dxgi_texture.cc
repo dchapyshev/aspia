@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-#include <D3D11.h>
+#include <d3d11.h>
 #include <comdef.h>
 #include <wrl/client.h>
 
@@ -35,6 +35,7 @@ class DxgiDesktopFrame : public Frame
 public:
     explicit DxgiDesktopFrame(const DxgiTexture& texture)
         : Frame(texture.desktopSize(),
+                PixelFormat::ARGB(),
                 texture.pitch(),
                 texture.bits(),
                 nullptr)
@@ -69,7 +70,7 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
     D3D11_TEXTURE2D_DESC desc = { 0 };
     texture->GetDesc(&desc);
 
-    desktop_size_.set(desc.Width, desc.Height);
+    desktop_size_.set(static_cast<int32_t>(desc.Width), static_cast<int32_t>(desc.Height));
 
     return copyFromTexture(frame_info, texture.Get());
 }
