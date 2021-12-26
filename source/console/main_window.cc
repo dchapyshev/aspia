@@ -65,6 +65,7 @@ MainWindow::MainWindow(const QString& file_path)
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
     ui.action_toolbar->setChecked(settings.isToolBarEnabled());
     ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
+    ui.action_show_icons_in_menus->setChecked(settings.showIconsInMenus());
 
     ui.status_bar->setVisible(ui.action_statusbar->isChecked());
     showTrayIcon(ui.action_show_tray_icon->isChecked());
@@ -119,6 +120,14 @@ MainWindow::MainWindow(const QString& file_path)
 
     connect(ui.action_file_transfer_connect, &QAction::triggered,
             this, &MainWindow::onFileTransferConnect);
+
+    QApplication::instance()->setAttribute(Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
+    connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
+    {
+        Application* instance = Application::instance();
+        instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
+        instance->settings().setShowIconsInMenus(enable);
+    });
 
     connect(ui.tool_bar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
     connect(ui.action_toolbar, &QAction::toggled, ui.tool_bar, &QToolBar::setVisible);

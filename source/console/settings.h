@@ -89,6 +89,9 @@ public:
     QByteArray fastConnectConfig(const QString& guid);
     void setFastConnectConfig(const QString& guid, const QByteArray& config);
 
+    bool showIconsInMenus() const;
+    void setShowIconsInMenus(bool enable);
+
 private:
     QSettings settings_;
 

@@ -45,6 +45,7 @@ const QString kUpdateServerParam = QStringLiteral("UpdateServer");
 const QString kComputerDialogGeometryParam = QStringLiteral("ComputerDialogGeometry");
 const QString kComputerDialogStateParam = QStringLiteral("ComputerDialogState");
 const QString kComputerGroupDialogGeometryParam = QStringLiteral("ComputerGroupDialogGeometry");
+const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 
 } // namespace
 
@@ -247,6 +248,24 @@ QByteArray Settings::fastConnectConfig(const QString& guid)
 void Settings::setFastConnectConfig(const QString& guid, const QByteArray& config)
 {
     settings_.setValue(QStringLiteral("FastConnect/") + guid, config);
+}
+
+bool Settings::showIconsInMenus() const
+{
+    bool defaultValue;
+
+#if defined(Q_OS_MACOS)
+    defaultValue = false;
+#else
+    defaultValue = true;
+#endif
+
+    return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
+}
+
+void Settings::setShowIconsInMenus(bool enable)
+{
+    settings_.setValue(kShowIconsInMenusParam, enable);
 }
 
 } // namespace console

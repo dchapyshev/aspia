@@ -133,6 +133,8 @@
     <addaction name="separator"/>
     <addaction name="action_show_tray_icon"/>
     <addaction name="action_minimize_to_tray"/>
+    <addaction name="separator"/>
+    <addaction name="action_show_icons_in_menus"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -568,6 +570,14 @@
    </property>
    <property name="text">
     <string>Router Manage</string>
+   </property>
+  </action>
+  <action name="action_show_icons_in_menus">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show icons in menus</string>
    </property>
   </action>
  </widget>
