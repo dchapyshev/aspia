@@ -114,57 +114,72 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="112"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Disable font smoothing</source>
         <translation>Відключити згладжування шрифтів</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="69"/>
+        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable cursor shape</source>
         <translation>Включити форму курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="56"/>
+        <location filename="../computer_dialog_desktop.ui" line="49"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="70"/>
+        <source>Fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="96"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="114"/>
         <source>Features</source>
         <translation>Додатково</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="62"/>
+        <location filename="../computer_dialog_desktop.ui" line="120"/>
         <source>Enable audio</source>
         <translation>Увімкнути аудіо</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="76"/>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Enable clipboard</source>
         <translation>Включити буфер обміну</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Appearance</source>
         <translation>Вигляд</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="98"/>
+        <location filename="../computer_dialog_desktop.ui" line="156"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="105"/>
+        <location filename="../computer_dialog_desktop.ui" line="163"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="128"/>
+        <location filename="../computer_dialog_desktop.ui" line="186"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="192"/>
         <source>Lock computer at disconnect</source>
         <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
@@ -816,6 +831,39 @@
         <location filename="../computer_dialog.cc" line="88"/>
         <source>View</source>
         <translation>Перегляд</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerDialogDesktop</name>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="85"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="86"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="87"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="88"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="89"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="244"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

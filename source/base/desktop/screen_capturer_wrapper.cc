@@ -29,6 +29,7 @@
 #include "base/desktop/cursor_capturer_win.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
+#include "base/desktop/screen_capturer_mirror.h"
 #include "base/win/windows_version.h"
 #elif defined(OS_LINUX)
 // TODO
@@ -180,6 +181,22 @@ void ScreenCapturerWrapper::selectCapturer()
 #if defined(OS_WIN)
     cursor_capturer_ = std::make_unique<CursorCapturerWin>();
 
+    auto try_mirror_capturer = [=]()
+    {
+        // Mirror screen capture is available only in Windows 7/2008 R2.
+        if (win::windowsVersion() == base::win::VERSION_WIN7)
+        {
+            std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
+                std::make_unique<ScreenCapturerMirror>();
+
+            if (capturer_mirror->isSupported())
+            {
+                LOG(LS_INFO) << "Using MIRROR capturer";
+                screen_capturer_ = std::move(capturer_mirror);
+            }
+        }
+    };
+
     if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
         preferred_type_ == ScreenCapturer::Type::DEFAULT)
     {
@@ -194,6 +211,14 @@ void ScreenCapturerWrapper::selectCapturer()
                 screen_capturer_ = std::move(capturer_dxgi);
             }
         }
+        else
+        {
+            try_mirror_capturer();
+        }
+    }
+    else if (preferred_type_ == ScreenCapturer::Type::WIN_MIRROR)
+    {
+        try_mirror_capturer();
     }
 
     if (!screen_capturer_)

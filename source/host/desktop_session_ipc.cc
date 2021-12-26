@@ -287,6 +287,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         {
             last_frame_ = base::SharedMemoryFrame::attach(
                 base::Size(serialized_frame.width(), serialized_frame.height()),
+                base::PixelFormat::ARGB(),
                 std::move(shared_buffer));
 
             last_frame_->setCapturerType(serialized_frame.capturer_type());

@@ -21,7 +21,7 @@
 namespace base {
 
 SharedFrame::SharedFrame(std::shared_ptr<Frame>& frame)
-    : Frame(frame->size(), frame->stride(),
+    : Frame(frame->size(), frame->format(), frame->stride(),
             frame->frameData(), frame->sharedMemory()),
       frame_(frame)
 {

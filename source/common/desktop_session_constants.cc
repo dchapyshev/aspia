@@ -36,7 +36,8 @@ const char kSupportedExtensionsForManage[] =
 const char kSupportedExtensionsForView[] =
     "select_screen;preferred_size;system_info;video_recording;text_chat";
 
-const uint32_t kSupportedVideoEncodings = proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9;
+const uint32_t kSupportedVideoEncodings =
+    proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
 const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
 
 } // namespace common

@@ -172,6 +172,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/cursor_encoder.h
     codec/multi_channel_resampler.cc
     codec/multi_channel_resampler.h
+    codec/pixel_translator.cc
+    codec/pixel_translator.h
     codec/scale_reducer.cc
     codec/scale_reducer.h
     codec/scoped_vpx_codec.cc
@@ -186,10 +188,14 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_decoder.h
     codec/video_decoder_vpx.cc
     codec/video_decoder_vpx.h
+    codec/video_decoder_zstd.cc
+    codec/video_decoder_zstd.h
     codec/video_encoder.cc
     codec/video_encoder.h
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
+    codec/video_encoder_zstd.cc
+    codec/video_encoder_zstd.h
     codec/webm_file_muxer.cc
     codec/webm_file_muxer.h
     codec/webm_file_writer.cc
@@ -288,6 +294,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/geometry.h
     desktop/mouse_cursor.cc
     desktop/mouse_cursor.h
+    desktop/pixel_format.cc
+    desktop/pixel_format.h
     desktop/power_save_blocker.cc
     desktop/power_save_blocker.h
     desktop/region.cc
@@ -313,7 +321,9 @@ if (WIN32)
         desktop/screen_capturer_dxgi.cc
         desktop/screen_capturer_dxgi.h
         desktop/screen_capturer_gdi.cc
-        desktop/screen_capturer_gdi.h)
+        desktop/screen_capturer_gdi.h
+        desktop/screen_capturer_mirror.cc
+        desktop/screen_capturer_mirror.h)
 endif()
 
 if (LINUX)
@@ -348,6 +358,9 @@ if (WIN32)
         desktop/win/cursor.h
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
+        desktop/win/dfmirage.h
+        desktop/win/dfmirage_helper.cc
+        desktop/win/dfmirage_helper.h
         desktop/win/display_configuration_monitor.cc
         desktop/win/display_configuration_monitor.h
         desktop/win/dxgi_adapter_duplicator.cc
@@ -366,6 +379,11 @@ if (WIN32)
         desktop/win/dxgi_texture_mapping.h
         desktop/win/dxgi_texture_staging.cc
         desktop/win/dxgi_texture_staging.h
+        desktop/win/mirror_helper.cc
+        desktop/win/mirror_helper.h
+        desktop/win/mv2.h
+        desktop/win/mv2_helper.cc
+        desktop/win/mv2_helper.h
         desktop/win/screen_capture_utils.cc
         desktop/win/screen_capture_utils.h)
 

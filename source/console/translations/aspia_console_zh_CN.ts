@@ -114,57 +114,72 @@
         <translation>编码</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="69"/>
+        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable cursor shape</source>
         <translation>启用光标形状</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="56"/>
+        <location filename="../computer_dialog_desktop.ui" line="49"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="70"/>
+        <source>Fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="96"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="114"/>
         <source>Features</source>
         <translation>特性</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="62"/>
+        <location filename="../computer_dialog_desktop.ui" line="120"/>
         <source>Enable audio</source>
         <translation>启用声音</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="76"/>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="92"/>
+        <location filename="../computer_dialog_desktop.ui" line="150"/>
         <source>Appearance</source>
         <translation>视觉效果</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="98"/>
+        <location filename="../computer_dialog_desktop.ui" line="156"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="105"/>
+        <location filename="../computer_dialog_desktop.ui" line="163"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="112"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Disable font smoothing</source>
         <translation>禁用字体平滑</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="128"/>
+        <location filename="../computer_dialog_desktop.ui" line="186"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="192"/>
         <source>Lock computer at disconnect</source>
         <translation>锁定计算机以断开连接</translation>
     </message>
@@ -808,6 +823,39 @@
         <location filename="../computer_dialog.cc" line="88"/>
         <source>View</source>
         <translation>查看</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerDialogDesktop</name>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="85"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="86"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="87"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="88"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="89"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.cc" line="244"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

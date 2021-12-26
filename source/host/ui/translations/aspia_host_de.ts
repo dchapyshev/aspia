@@ -500,237 +500,237 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="209"/>
+        <location filename="../config_dialog.cc" line="210"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="347"/>
-        <location filename="../config_dialog.cc" line="494"/>
-        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="356"/>
+        <location filename="../config_dialog.cc" line="503"/>
+        <location filename="../config_dialog.cc" line="556"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="348"/>
+        <location filename="../config_dialog.cc" line="357"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="480"/>
+        <location filename="../config_dialog.cc" line="489"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="480"/>
-        <location filename="../config_dialog.cc" line="510"/>
+        <location filename="../config_dialog.cc" line="489"/>
+        <location filename="../config_dialog.cc" line="519"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="489"/>
-        <location filename="../config_dialog.cc" line="542"/>
+        <location filename="../config_dialog.cc" line="498"/>
+        <location filename="../config_dialog.cc" line="551"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="510"/>
+        <location filename="../config_dialog.cc" line="519"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="529"/>
+        <location filename="../config_dialog.cc" line="538"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="426"/>
-        <location filename="../config_dialog.cc" line="462"/>
-        <location filename="../config_dialog.cc" line="532"/>
-        <location filename="../config_dialog.cc" line="564"/>
-        <location filename="../config_dialog.cc" line="577"/>
-        <location filename="../config_dialog.cc" line="836"/>
-        <location filename="../config_dialog.cc" line="855"/>
-        <location filename="../config_dialog.cc" line="870"/>
-        <location filename="../config_dialog.cc" line="880"/>
-        <location filename="../config_dialog.cc" line="896"/>
-        <location filename="../config_dialog.cc" line="906"/>
+        <location filename="../config_dialog.cc" line="435"/>
+        <location filename="../config_dialog.cc" line="471"/>
+        <location filename="../config_dialog.cc" line="541"/>
+        <location filename="../config_dialog.cc" line="573"/>
+        <location filename="../config_dialog.cc" line="586"/>
+        <location filename="../config_dialog.cc" line="845"/>
+        <location filename="../config_dialog.cc" line="864"/>
+        <location filename="../config_dialog.cc" line="879"/>
+        <location filename="../config_dialog.cc" line="889"/>
+        <location filename="../config_dialog.cc" line="905"/>
+        <location filename="../config_dialog.cc" line="915"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="85"/>
+        <location filename="../config_dialog.cc" line="86"/>
         <source>On reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="86"/>
+        <location filename="../config_dialog.cc" line="87"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="87"/>
+        <location filename="../config_dialog.cc" line="88"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="88"/>
+        <location filename="../config_dialog.cc" line="89"/>
         <source>Every 1 hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="89"/>
+        <location filename="../config_dialog.cc" line="90"/>
         <source>Every 6 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="90"/>
+        <location filename="../config_dialog.cc" line="91"/>
         <source>Every 12 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="91"/>
+        <location filename="../config_dialog.cc" line="92"/>
         <source>Every 24 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="102"/>
+        <location filename="../config_dialog.cc" line="103"/>
         <source>Letters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="121"/>
+        <location filename="../config_dialog.cc" line="122"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="122"/>
+        <location filename="../config_dialog.cc" line="123"/>
         <source>15 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="123"/>
+        <location filename="../config_dialog.cc" line="124"/>
         <source>30 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="124"/>
+        <location filename="../config_dialog.cc" line="125"/>
         <source>45 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="125"/>
+        <location filename="../config_dialog.cc" line="126"/>
         <source>60 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="133"/>
+        <location filename="../config_dialog.cc" line="134"/>
         <source>Accept connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="135"/>
+        <location filename="../config_dialog.cc" line="136"/>
         <source>Reject connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="427"/>
-        <location filename="../config_dialog.cc" line="463"/>
+        <location filename="../config_dialog.cc" line="436"/>
+        <location filename="../config_dialog.cc" line="472"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="565"/>
+        <location filename="../config_dialog.cc" line="574"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="578"/>
+        <location filename="../config_dialog.cc" line="587"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="740"/>
-        <location filename="../config_dialog.cc" line="770"/>
+        <location filename="../config_dialog.cc" line="749"/>
+        <location filename="../config_dialog.cc" line="779"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="779"/>
+        <location filename="../config_dialog.cc" line="788"/>
         <source>Started</source>
         <translation>Gestartet</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="780"/>
+        <location filename="../config_dialog.cc" line="789"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="785"/>
+        <location filename="../config_dialog.cc" line="794"/>
         <source>Not started</source>
         <translation>Nicht gestartet</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="786"/>
-        <location filename="../config_dialog.cc" line="793"/>
-        <location filename="../config_dialog.cc" line="806"/>
+        <location filename="../config_dialog.cc" line="795"/>
+        <location filename="../config_dialog.cc" line="802"/>
+        <location filename="../config_dialog.cc" line="815"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="792"/>
+        <location filename="../config_dialog.cc" line="801"/>
         <source>Installed</source>
         <translation>Installiert</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="803"/>
+        <location filename="../config_dialog.cc" line="812"/>
         <source>Not installed</source>
         <translation>Nicht installiert</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="735"/>
-        <location filename="../config_dialog.cc" line="805"/>
+        <location filename="../config_dialog.cc" line="744"/>
+        <location filename="../config_dialog.cc" line="814"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="99"/>
+        <location filename="../config_dialog.cc" line="100"/>
         <source>Letters and digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="104"/>
+        <location filename="../config_dialog.cc" line="105"/>
         <source>Digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="810"/>
+        <location filename="../config_dialog.cc" line="819"/>
         <source>Current state: %1</source>
         <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="837"/>
+        <location filename="../config_dialog.cc" line="846"/>
         <source>The service could not be installed.</source>
         <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="856"/>
+        <location filename="../config_dialog.cc" line="865"/>
         <source>The service could not be removed.</source>
         <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="871"/>
-        <location filename="../config_dialog.cc" line="897"/>
+        <location filename="../config_dialog.cc" line="880"/>
+        <location filename="../config_dialog.cc" line="906"/>
         <source>Could not access the service.</source>
         <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="881"/>
+        <location filename="../config_dialog.cc" line="890"/>
         <source>The service could not be started.</source>
         <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="907"/>
+        <location filename="../config_dialog.cc" line="916"/>
         <source>The service could not be stopped.</source>
         <translation>Dienst konnte nicht angehalten werden.</translation>
     </message>

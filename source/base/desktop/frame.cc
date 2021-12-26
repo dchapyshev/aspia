@@ -27,12 +27,14 @@
 namespace base {
 
 Frame::Frame(const Size& size,
+             const PixelFormat& format,
              int stride,
              uint8_t* data,
              SharedMemoryBase* shared_memory)
     : data_(data),
       shared_memory_(shared_memory),
       size_(size),
+      format_(format),
       stride_(stride)
 {
     DCHECK(size_.width() >= 0);
@@ -63,7 +65,7 @@ uint8_t* Frame::frameDataAtPos(const Point& pos) const
 
 uint8_t* Frame::frameDataAtPos(int x, int y) const
 {
-    return frameData() + stride() * y + kBytesPerPixel * x;
+    return frameData() + stride() * y + format_.bytesPerPixel() * x;
 }
 
 void Frame::copyFrameInfoFrom(const Frame& other)

@@ -33,16 +33,16 @@ public:
     ~SharedMemoryFrame();
 
     static std::unique_ptr<Frame> create(
-        const Size& size, SharedMemoryFactory* shared_memory_factory);
+        const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> open(
-        const Size& size, int id, SharedMemoryFactory* shared_memory_factory);
+        const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory);
 
     static std::unique_ptr<Frame> attach(
-        const Size& size, std::unique_ptr<SharedMemoryBase> shared_memory);
+        const Size& size, const PixelFormat& format, std::unique_ptr<SharedMemoryBase> shared_memory);
 
 private:
-    SharedMemoryFrame(const Size& size, SharedMemoryBase* shared_memory);
+    SharedMemoryFrame(const Size& size, const PixelFormat& format, SharedMemoryBase* shared_memory);
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFrame);
 };

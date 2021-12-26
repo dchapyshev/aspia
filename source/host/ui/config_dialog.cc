@@ -24,6 +24,7 @@
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
 #include "base/win/service_controller.h"
+#include "base/win/windows_version.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/change_password_dialog.h"
@@ -214,6 +215,14 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     ui.combo_video_capturer->addItem(
         QStringLiteral("GDI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
+
+    // Mirror screen capture is available only in Windows 7/2008 R2.
+    if (base::win::windowsVersion() == base::win::VERSION_WIN7)
+    {
+        ui.combo_video_capturer->addItem(
+            QStringLiteral("MIRROR"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
+    }
+
 #elif defined(OS_LINUX)
     ui.combo_video_capturer->addItem(
         QStringLiteral("X11"), static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));

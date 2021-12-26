@@ -59,11 +59,11 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 
         if (shared_memory_factory_)
         {
-            frame = SharedMemoryFrame::create(size, shared_memory_factory_);
+            frame = SharedMemoryFrame::create(size, PixelFormat::ARGB(), shared_memory_factory_);
         }
         else
         {
-            frame = FrameAligned::create(size, 32);
+            frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
         }
 
         if (!frame)
@@ -80,8 +80,8 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
         // capturer per monitor design. So once the new frame is created, we should
         // clear it to avoid the legacy image to be remained on it. See
         // http://crbug.com/708766.
-        DCHECK_EQ(frame->stride(), frame_size.width() * Frame::kBytesPerPixel);
-        memset(frame->frameData(), 0, frame->stride() * frame_size.height());
+        DCHECK_EQ(frame->stride(), frame_size.width() * frame->format().bytesPerPixel());
+        memset(frame->frameData(), 0, static_cast<size_t>(frame->stride() * frame_size.height()));
 
         frame_ = SharedFrame::wrap(std::move(frame));
     }

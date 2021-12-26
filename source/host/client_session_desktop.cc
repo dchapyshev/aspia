@@ -24,6 +24,7 @@
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
+#include "base/codec/video_encoder_zstd.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/win/safe_mode_util.h"
@@ -36,6 +37,22 @@
 #include "proto/text_chat.pb.h"
 
 namespace host {
+
+namespace {
+
+base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
+{
+    return base::PixelFormat(
+        static_cast<uint8_t>(format.bits_per_pixel()),
+        static_cast<uint16_t>(format.red_max()),
+        static_cast<uint16_t>(format.green_max()),
+        static_cast<uint16_t>(format.blue_max()),
+        static_cast<uint8_t>(format.red_shift()),
+        static_cast<uint8_t>(format.green_shift()),
+        static_cast<uint8_t>(format.blue_shift()));
+}
+
+} // namespace
 
 ClientSessionDesktop::ClientSessionDesktop(
     proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
@@ -451,6 +468,11 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
         case proto::VIDEO_ENCODING_VP9:
             video_encoder_ = base::VideoEncoderVPX::createVP9();
+            break;
+
+        case proto::VIDEO_ENCODING_ZSTD:
+            video_encoder_ = base::VideoEncoderZstd::create(
+                parsePixelFormat(config.pixel_format()), static_cast<int>(config.compress_ratio()));
             break;
 
         default:

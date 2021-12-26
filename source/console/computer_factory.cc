@@ -19,11 +19,27 @@
 #include "console/computer_factory.h"
 
 #include "base/logging.h"
+#include "base/desktop/pixel_format.h"
 #include "build/build_config.h"
 
 namespace console {
 
 namespace {
+
+const int kDefCompressRatio = 8;
+
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
+{
+    to->set_bits_per_pixel(from.bitsPerPixel());
+
+    to->set_red_max(from.redMax());
+    to->set_green_max(from.greenMax());
+    to->set_blue_max(from.blueMax());
+
+    to->set_red_shift(from.redShift());
+    to->set_green_shift(from.greenShift());
+    to->set_blue_shift(from.blueShift());
+}
 
 void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
@@ -38,6 +54,9 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
+    config->set_compress_ratio(kDefCompressRatio);
+
+    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
@@ -52,6 +71,9 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
     config->set_update_interval(30);
     config->set_scale_factor(100);
+    config->set_compress_ratio(kDefCompressRatio);
+
+    serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
 } // namespace
