@@ -37,12 +37,13 @@ public:
 
     enum class Type
     {
-        DEFAULT   = 0,
-        FAKE      = 1,
-        WIN_GDI   = 2,
-        WIN_DXGI  = 3,
-        LINUX_X11 = 4,
-        MACOSX    = 5
+        DEFAULT    = 0,
+        FAKE       = 1,
+        WIN_GDI    = 2,
+        WIN_DXGI   = 3,
+        LINUX_X11  = 4,
+        MACOSX     = 5,
+        WIN_MIRROR = 6
     };
 
     enum class Error

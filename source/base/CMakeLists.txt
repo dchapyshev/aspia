@@ -288,6 +288,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/geometry.h
     desktop/mouse_cursor.cc
     desktop/mouse_cursor.h
+    desktop/pixel_format.cc
+    desktop/pixel_format.h
     desktop/power_save_blocker.cc
     desktop/power_save_blocker.h
     desktop/region.cc
@@ -313,7 +315,9 @@ if (WIN32)
         desktop/screen_capturer_dxgi.cc
         desktop/screen_capturer_dxgi.h
         desktop/screen_capturer_gdi.cc
-        desktop/screen_capturer_gdi.h)
+        desktop/screen_capturer_gdi.h
+        desktop/screen_capturer_mirror.cc
+        desktop/screen_capturer_mirror.h)
 endif()
 
 if (LINUX)
@@ -348,6 +352,9 @@ if (WIN32)
         desktop/win/cursor.h
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
+        desktop/win/dfmirage.h
+        desktop/win/dfmirage_helper.cc
+        desktop/win/dfmirage_helper.h
         desktop/win/display_configuration_monitor.cc
         desktop/win/display_configuration_monitor.h
         desktop/win/dxgi_adapter_duplicator.cc
@@ -366,6 +373,11 @@ if (WIN32)
         desktop/win/dxgi_texture_mapping.h
         desktop/win/dxgi_texture_staging.cc
         desktop/win/dxgi_texture_staging.h
+        desktop/win/mirror_helper.cc
+        desktop/win/mirror_helper.h
+        desktop/win/mv2.h
+        desktop/win/mv2_helper.cc
+        desktop/win/mv2_helper.h
         desktop/win/screen_capture_utils.cc
         desktop/win/screen_capture_utils.h)
 
