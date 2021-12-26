@@ -129,32 +129,42 @@
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="297"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="357"/>
+        <source>Show icons in menus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="301"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="294"/>
+        <location filename="../ui/client_window.ui" line="289"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="310"/>
+        <location filename="../ui/client_window.ui" line="322"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="319"/>
+        <location filename="../ui/client_window.ui" line="331"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="328"/>
+        <location filename="../ui/client_window.ui" line="340"/>
         <source>Settings...</source>
         <translation>设置...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="337"/>
+        <location filename="../ui/client_window.ui" line="349"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -940,23 +950,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="109"/>
+        <location filename="../ui/client_window.cc" line="119"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="198"/>
-        <location filename="../ui/client_window.cc" line="215"/>
+        <location filename="../ui/client_window.cc" line="208"/>
+        <location filename="../ui/client_window.cc" line="225"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="209"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="216"/>
+        <location filename="../ui/client_window.cc" line="226"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>

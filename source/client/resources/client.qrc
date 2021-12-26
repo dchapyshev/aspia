@@ -44,6 +44,7 @@
         <file>folder-plus.png</file>
         <file>disk.png</file>
         <file>folder.png</file>
+        <file>locale.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

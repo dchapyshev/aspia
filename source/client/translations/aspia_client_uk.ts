@@ -129,32 +129,42 @@
         <translation>Підключити</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="297"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="357"/>
+        <source>Show icons in menus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="301"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="294"/>
+        <location filename="../ui/client_window.ui" line="289"/>
         <source>Help</source>
         <translation>Допомога</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="310"/>
+        <location filename="../ui/client_window.ui" line="322"/>
         <source>Online Help...</source>
         <translation>Допомога онлайн...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="319"/>
+        <location filename="../ui/client_window.ui" line="331"/>
         <source>About</source>
         <translation>Про програму</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="328"/>
+        <location filename="../ui/client_window.ui" line="340"/>
         <source>Settings...</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="337"/>
+        <location filename="../ui/client_window.ui" line="349"/>
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
@@ -940,23 +950,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="109"/>
+        <location filename="../ui/client_window.cc" line="119"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="198"/>
-        <location filename="../ui/client_window.cc" line="215"/>
+        <location filename="../ui/client_window.cc" line="208"/>
+        <location filename="../ui/client_window.cc" line="225"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="199"/>
+        <location filename="../ui/client_window.cc" line="209"/>
         <source>An invalid computer address was entered.</source>
         <translation>Було введено не коректну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="216"/>
+        <location filename="../ui/client_window.cc" line="226"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>

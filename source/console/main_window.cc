@@ -45,9 +45,10 @@ namespace console {
 MainWindow::MainWindow(const QString& file_path)
 {
     Settings& settings = Application::instance()->settings();
+    Application::instance()->setAttribute(
+        Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
 
     ui.setupUi(this);
-
     createLanguageMenu(settings.locale());
 
     bool enable_recent_open = settings.isRecentOpenEnabled();
@@ -121,7 +122,6 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_file_transfer_connect, &QAction::triggered,
             this, &MainWindow::onFileTransferConnect);
 
-    QApplication::instance()->setAttribute(Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
         Application* instance = Application::instance();

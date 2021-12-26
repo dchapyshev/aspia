@@ -48,6 +48,9 @@ public:
     proto::DesktopConfig desktopViewConfig() const;
     void setDesktopViewConfig(const proto::DesktopConfig& config);
 
+    bool showIconsInMenus() const;
+    void setShowIconsInMenus(bool enable);
+
 private:
     QSettings settings_;
 

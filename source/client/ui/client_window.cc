@@ -44,6 +44,8 @@ ClientWindow::ClientWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     ClientSettings& settings = Application::instance()->settings();
+    Application::instance()->setAttribute(
+        Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
 
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
@@ -55,6 +57,14 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     combo_address->addItems(settings.addressList());
     combo_address->setCurrentIndex(0);
+
+    ui.action_show_icons_in_menus->setChecked(settings.showIconsInMenus());
+    connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
+    {
+        Application* instance = Application::instance();
+        instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
+        instance->settings().setShowIconsInMenus(enable);
+    });
 
     connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
 
