@@ -101,6 +101,11 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     // Copy the image of the modified areas into the frame.
     helper_->copyRegion(frame_.get(), *updated_region);
 
+    const Rect& screen_rect = helper_->screenRect();
+
+    frame_->setTopLeft(screen_rect.topLeft().subtract(desktop_rect_.topLeft()));
+    frame_->setDpi(Point(96, 96));
+
     return frame_.get();
 }
 
@@ -198,6 +203,8 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
             LOG(LS_WARNING) << "Failed to create frame";
             return Error::PERMANENT;
         }
+
+        frame_->setCapturerType(static_cast<uint32_t>(type()));
     }
 
     return Error::SUCCEEDED;
