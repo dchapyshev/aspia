@@ -89,7 +89,6 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
             if (attached != 0)
             {
                 LOG(LS_WARNING) << "Mirror driver is already attached by another application";
-                return false;
             }
         }
     }
