@@ -52,6 +52,20 @@ ScreenCapturerMirror::~ScreenCapturerMirror() = default;
 
 bool ScreenCapturerMirror::isSupported()
 {
+    DWORD session_id;
+
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        return false;
+    }
+
+    if (session_id != WTSGetActiveConsoleSessionId())
+    {
+        LOG(LS_INFO) << "Mirror driver not supported for RDP sessions";
+        return false;
+    }
+
     if (!helper_)
         helper_ = createHelper(ScreenCaptureUtils::fullScreenRect());
 
