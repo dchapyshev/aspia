@@ -51,6 +51,9 @@ const char* ScreenCapturer::typeToString(Type type)
         case Type::WIN_DXGI:
             return "WIN_DXGI";
 
+        case Type::WIN_MIRROR:
+            return "WIN_MIRROR";
+
         case Type::LINUX_X11:
             return "LINUX_X11";
 
