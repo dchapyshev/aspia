@@ -17,7 +17,7 @@
 //
 
 #ifndef BASE__CODEC__PIXEL_TRANSLATOR_H
-#define CODEC__PIXEL_TRANSLATOR_H
+#define BASE__CODEC__PIXEL_TRANSLATOR_H
 
 #include "base/desktop/pixel_format.h"
 
