@@ -66,6 +66,8 @@ VideoEncoderZstd::VideoEncoderZstd(const PixelFormat& target_format, int compres
     // Nothing
 }
 
+VideoEncoderZstd::~VideoEncoderZstd() = default;
+
 // static
 std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
     const PixelFormat& target_format, int compression_ratio)
