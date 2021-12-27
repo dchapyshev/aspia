@@ -27,7 +27,7 @@ namespace {
 std::unique_ptr<Frame> createTestFrame(const Rect& rect, int pixels_value)
 {
     Size size = rect.size();
-    auto frame = FrameSimple::create(size);
+    auto frame = FrameSimple::create(size, PixelFormat::ARGB());
     frame->setTopLeft(rect.topLeft());
     memset(frame->frameData(),
            pixels_value,
