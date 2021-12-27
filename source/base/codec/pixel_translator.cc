@@ -70,7 +70,7 @@ public:
         const uint32_t blue = blue_table_[
             *src_ptr >> source_format_.blueShift() & source_format_.blueMax()];
 
-        *dst_ptr = static_cast<TargetT>(red | green | blue);
+        *dst_ptr = static_cast<TargetT>(red | green | blue | 0xFF000000);
     }
 
     void translate(const uint8_t* src, int src_stride,
@@ -155,7 +155,7 @@ public:
             uint32_t target_blue =
                 (source_blue * target_format.blueMax() / source_format.blueMax()) << target_format.blueShift();
 
-            table_[i] = target_red | target_green | target_blue;
+            table_[i] = target_red | target_green | target_blue | 0xFF000000;
         }
     }
 
