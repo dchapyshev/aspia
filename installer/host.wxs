@@ -121,8 +121,8 @@
             </Control>
         </Dialog>
 
-        <Property Id="STARTMENU_SHORTCUT">1</Property>
-        <Property Id="DESKTOP_SHORTCUT">1</Property>
+        <Property Id="STARTMENU_SHORTCUT" Value="1"></Property>
+        <Property Id="DESKTOP_SHORTCUT" Value="1"></Property>
 
         <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
         <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
