@@ -30,7 +30,7 @@ class PixelTranslator;
 class VideoDecoderZstd : public VideoDecoder
 {
 public:
-    ~VideoDecoderZstd() = default;
+    ~VideoDecoderZstd();
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
