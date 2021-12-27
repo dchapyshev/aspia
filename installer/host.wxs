@@ -93,7 +93,7 @@
     <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
 
-    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import=[SourceDir]aspia-host-config.json --silent" />
+    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import=&quot;[SourceDir]aspia-host-config.json&quot; --silent" />
     <InstallExecuteSequence>
         <Custom Action="ImportSettings" After="InstallFiles">1</Custom>
     </InstallExecuteSequence>
@@ -121,8 +121,8 @@
             </Control>
         </Dialog>
 
-        <Property Id="STARTMENU_SHORTCUT">1</Property>
-        <Property Id="DESKTOP_SHORTCUT">1</Property>
+        <Property Id="STARTMENU_SHORTCUT" Value="1"></Property>
+        <Property Id="DESKTOP_SHORTCUT" Value="1"></Property>
 
         <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
         <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ShortcutsDlg" Order="10">NOT Installed</Publish>
