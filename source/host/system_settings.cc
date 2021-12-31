@@ -32,91 +32,12 @@ namespace {
 
 const size_t kPasswordHashSaltSize = 256;
 
-// This should be removed in the next release.
-void settingsMigration(base::JsonSettings* json_settings)
-{
-    std::filesystem::path old_file = base::XmlSettings::filePath(
-        base::XmlSettings::Scope::SYSTEM, "aspia", "host");
-
-    std::error_code ignored_error;
-    if (!std::filesystem::exists(old_file, ignored_error))
-    {
-        // There is no old parameter file, exit.
-        return;
-    }
-
-    LOG(LS_INFO) << "Start settings migration";
-
-    base::XmlSettings xml_settings(base::XmlSettings::Scope::SYSTEM, "aspia", "host");
-
-    LOG(LS_INFO) << "Old file path: " << xml_settings.filePath();
-
-    // TcpPort
-    json_settings->set<uint16_t>(
-        "TcpPort", xml_settings.get<uint16_t>("TcpPort", DEFAULT_HOST_TCP_PORT));
-
-    // AddFirewallRules
-    json_settings->set<bool>(
-        "AddFirewallRules", xml_settings.get<bool>("AddFirewallRules", true));
-
-    // UpdateServer
-    json_settings->set<std::u16string>(
-        "UpdateServer", xml_settings.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER));
-
-    // Users
-    base::Settings::Array users_array;
-    for (const auto& old_item : xml_settings.getArray("Users"))
-    {
-        base::Settings new_item;
-        new_item.set<std::string>("Name", old_item.get<std::string>("Name"));
-        new_item.set<std::string>("Group", "8192");
-
-        new_item.set<base::ByteArray>("Salt",
-            base::Base64::decodeT<std::string, base::ByteArray>(
-                old_item.get<std::string>("Salt")));
-
-        new_item.set<base::ByteArray>("Verifier",
-            base::Base64::decodeT<std::string, base::ByteArray>(
-                old_item.get<std::string>("Verifier")));
-
-        new_item.set<uint32_t>("Sessions", old_item.get<uint32_t>("Sessions"));
-        new_item.set<uint32_t>("Flags", old_item.get<uint32_t>("Flags"));
-        users_array.emplace_back(std::move(new_item));
-    }
-
-    json_settings->remove("Users");
-    json_settings->setArray("Users", users_array);
-    json_settings->set("SeedKey",
-        base::Base64::decodeT<std::string, base::ByteArray>(
-            xml_settings.get<std::string>("SeedKey")));
-
-    // Save settings to disk.
-    if (!json_settings->flush())
-    {
-        LOG(LS_WARNING) << "Failed to write settings file";
-    }
-    else
-    {
-        LOG(LS_INFO) << "New file has been successfully written to disk";
-        LOG(LS_INFO) << "New file path: " << json_settings->filePath();
-    }
-
-    if (!std::filesystem::remove(old_file, ignored_error))
-    {
-        LOG(LS_WARNING) << "Failed to delete old settings file";
-    }
-    else
-    {
-        LOG(LS_INFO) << "Old file removed";
-    }
-}
-
 } // namespace
 
 SystemSettings::SystemSettings()
     : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
 {
-    settingsMigration(&settings_);
+    // Nothing
 }
 
 SystemSettings::~SystemSettings() = default;
