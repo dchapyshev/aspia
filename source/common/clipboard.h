@@ -42,6 +42,7 @@ public:
 
     // Receiving the incoming clipboard.
     void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void clearClipboard();
 
 protected:
     virtual void init() = 0;

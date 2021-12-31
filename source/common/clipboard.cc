@@ -132,6 +132,11 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     setData(last_data_);
 }
 
+void Clipboard::clearClipboard()
+{
+    setData(std::string());
+}
+
 void Clipboard::onData(const std::string& data)
 {
     if (last_data_ == data)

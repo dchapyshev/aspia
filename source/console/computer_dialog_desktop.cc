@@ -134,12 +134,16 @@ void ComputerDialogDesktop::restoreSettings(
 
         if (config.flags() & proto::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
+
+        if (config.flags() & proto::CLEAR_CLIPBOARD)
+            ui.checkbox_clear_clipboard->setChecked(true);
     }
     else
     {
         ui.groupbox_other->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
+        ui.checkbox_clear_clipboard->hide();
     }
 
     if (config.flags() & proto::DISABLE_DESKTOP_EFFECTS)
@@ -222,6 +226,9 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (ui.checkbox_lock_at_disconnect->isChecked())
         flags |= proto::LOCK_AT_DISCONNECT;
+
+    if (ui.checkbox_clear_clipboard->isChecked())
+        flags |= proto::CLEAR_CLIPBOARD;
 
     config->set_flags(flags);
 }

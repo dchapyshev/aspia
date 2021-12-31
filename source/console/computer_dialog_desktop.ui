@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>262</width>
-    <height>469</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -186,6 +186,13 @@
       <string>Other</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="checkbox_clear_clipboard">
+        <property name="text">
+         <string>Clear clipboard at disconnect</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QCheckBox" name="checkbox_lock_at_disconnect">
         <property name="text">

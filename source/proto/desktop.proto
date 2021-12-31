@@ -222,6 +222,7 @@ enum DesktopFlags
     BLOCK_REMOTE_INPUT        = 32;
     LOCK_AT_DISCONNECT        = 64;
     CURSOR_POSITION           = 128;
+    CLEAR_CLIPBOARD           = 256;
 }
 
 message DesktopConfig

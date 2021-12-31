@@ -169,6 +169,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         LOG(LS_INFO) << "Disable font smoothing: " << config.disable_font_smoothing();
         LOG(LS_INFO) << "Block input: " << config.block_input();
         LOG(LS_INFO) << "Lock at disconnect: " << config.lock_at_disconnect();
+        LOG(LS_INFO) << "Clear clipboard: " << config.clear_clipboard();
 
         if (screen_capturer_)
         {
@@ -191,6 +192,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
         }
 
         lock_at_disconnect_ = config.lock_at_disconnect();
+        clear_clipboard_ = config.clear_clipboard();
     }
     else if (incoming_message_->has_control())
     {
@@ -376,6 +378,21 @@ void DesktopSessionAgent::setEnabled(bool enable)
     }
     else
     {
+        if (clear_clipboard_)
+        {
+            if (clipboard_monitor_)
+            {
+                LOG(LS_INFO) << "Clearing clipboard";
+                clipboard_monitor_->clearClipboard();
+            }
+            else
+            {
+                LOG(LS_WARNING) << "Clipboard monitor not present";
+            }
+
+            clear_clipboard_ = false;
+        }
+
         input_injector_.reset();
         capture_scheduler_.reset();
         screen_capturer_.reset();

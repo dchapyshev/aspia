@@ -36,6 +36,7 @@ public:
                common::Clipboard::Delegate* delegate);
 
     void injectClipboardEvent(const proto::ClipboardEvent& event);
+    void clearClipboard();
 
 protected:
     // base::Thread::Delegate implementation.

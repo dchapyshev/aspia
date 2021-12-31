@@ -84,6 +84,21 @@ void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
         clipboard_->injectClipboardEvent(event);
 }
 
+void ClipboardMonitor::clearClipboard()
+{
+    if (!self_task_runner_)
+        return;
+
+    if (!self_task_runner_->belongsToCurrentThread())
+    {
+        self_task_runner_->postTask(std::bind(&ClipboardMonitor::clearClipboard, this));
+        return;
+    }
+
+    if (clipboard_)
+        clipboard_->clearClipboard();
+}
+
 void ClipboardMonitor::onBeforeThreadRunning()
 {
     self_task_runner_ = thread_->taskRunner();

@@ -795,6 +795,9 @@ void UserSession::onClientSessionConfigured()
 
         system_config.lock_at_disconnect =
             system_config.lock_at_disconnect || client_config.lock_at_disconnect;
+
+        system_config.clear_clipboard =
+            system_config.clear_clipboard || client_config.clear_clipboard;
     }
 
     desktop_session_proxy_->configure(system_config);

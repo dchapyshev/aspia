@@ -119,7 +119,7 @@
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="206"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
@@ -180,6 +180,11 @@
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="192"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation>Очищать буфер обмена при отключении</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
@@ -861,7 +866,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="244"/>
+        <location filename="../computer_dialog_desktop.cc" line="251"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>

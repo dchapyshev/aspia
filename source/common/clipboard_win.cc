@@ -82,6 +82,9 @@ void ClipboardWin::setData(const std::string& data)
 
     clipboard.empty();
 
+    if (data.empty())
+        return;
+
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
     if (!text_global)
     {

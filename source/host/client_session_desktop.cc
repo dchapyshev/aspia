@@ -519,6 +519,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         (config.flags() & proto::BLOCK_REMOTE_INPUT);
     desktop_session_config_.lock_at_disconnect =
         (config.flags() & proto::LOCK_AT_DISCONNECT);
+    desktop_session_config_.clear_clipboard =
+        (config.flags() & proto::CLEAR_CLIPBOARD);
 
     LOG(LS_INFO) << "Client configuration changed";
     LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
@@ -528,6 +530,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     LOG(LS_INFO) << "Disable desktop wallpaper: " << desktop_session_config_.disable_wallpaper;
     LOG(LS_INFO) << "Block input: " << desktop_session_config_.block_input;
     LOG(LS_INFO) << "Lock at disconnect: " << desktop_session_config_.lock_at_disconnect;
+    LOG(LS_INFO) << "Clear clipboard: " << desktop_session_config_.clear_clipboard;
 
     delegate_->onClientSessionConfigured();
 }

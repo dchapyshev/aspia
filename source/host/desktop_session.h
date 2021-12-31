@@ -53,6 +53,7 @@ public:
         bool disable_effects = true;
         bool block_input = false;
         bool lock_at_disconnect = false;
+        bool clear_clipboard = true;
 
         bool equals(const Config& other) const
         {
@@ -60,7 +61,8 @@ public:
                    (disable_wallpaper == other.disable_wallpaper) &&
                    (disable_effects == other.disable_effects) &&
                    (block_input == other.block_input) &&
-                   (lock_at_disconnect == other.lock_at_disconnect);
+                   (lock_at_disconnect == other.lock_at_disconnect) &&
+                   (clear_clipboard == other.clear_clipboard);
         }
     };
 

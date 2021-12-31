@@ -187,7 +187,7 @@
         <translation>Aparência</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
         <source>Block remote input</source>
         <translation>Bloquear entrada remota</translation>
     </message>
@@ -248,6 +248,11 @@
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Lock computer at disconnect</source>
         <translation>BLoquear computador ao desconectar</translation>
     </message>
@@ -1014,7 +1019,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="192"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="196"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

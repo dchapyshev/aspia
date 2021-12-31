@@ -83,6 +83,7 @@ message Configure
     bool disable_effects        = 3;
     bool block_input            = 4;
     bool lock_at_disconnect     = 5;
+    bool clear_clipboard        = 6;
 }
 
 message DesktopControl

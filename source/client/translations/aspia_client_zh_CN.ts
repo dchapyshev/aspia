@@ -182,7 +182,7 @@
         <translation>编码</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
@@ -248,6 +248,11 @@
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Lock computer at disconnect</source>
         <translation>锁定计算机以断开连接</translation>
     </message>
@@ -1014,7 +1019,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="192"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="196"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

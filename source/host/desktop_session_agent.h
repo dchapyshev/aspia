@@ -89,6 +89,7 @@ private:
 
     base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;
+    bool clear_clipboard_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };

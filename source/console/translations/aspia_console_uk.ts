@@ -119,7 +119,7 @@
         <translation>Відключити згладжування шрифтів</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="206"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
@@ -180,6 +180,11 @@
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="192"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Lock computer at disconnect</source>
         <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
@@ -861,7 +866,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="244"/>
+        <location filename="../computer_dialog_desktop.cc" line="251"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
