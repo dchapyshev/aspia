@@ -531,13 +531,10 @@ list(APPEND SOURCE_BASE_SETTINGS
     settings/json_settings.cc
     settings/json_settings.h
     settings/settings.cc
-    settings/settings.h
-    settings/xml_settings.cc
-    settings/xml_settings.h)
+    settings/settings.h)
 
 list(APPEND SOURCE_BASE_SETTINGS_TESTS
-    settings/json_settings_unittest.cc
-    settings/xml_settings_unittest.cc)
+    settings/json_settings_unittest.cc)
 
 list(APPEND SOURCE_BASE_STRINGS
     strings/strcat.cc

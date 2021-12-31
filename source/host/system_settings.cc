@@ -24,7 +24,6 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/peer/user_list.h"
-#include "base/settings/xml_settings.h"
 
 namespace host {
 
