@@ -71,6 +71,7 @@ private slots:
     void onHelp();
     void onAbout();
     void onExit();
+    void onSettingsChanged();
 
 private:
     void createLanguageMenu(const QString& current_locale);

@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget* parent)
     tray_icon_.show();
 
     createLanguageMenu(user_settings.locale());
+    onSettingsChanged();
 
     ui.action_show_icons_in_menus->setChecked(user_settings.showIconsInMenus());
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
@@ -452,6 +453,7 @@ void MainWindow::onSettings()
                 {
                     process_watcher->deleteLater();
                     ui.action_settings->setEnabled(true);
+                    onSettingsChanged();
                 });
 
                 ui.action_settings->setEnabled(false);
@@ -484,11 +486,13 @@ void MainWindow::onSettings()
         if (dialog.exec() == CheckPasswordDialog::Accepted)
         {
             ConfigDialog(this).exec();
+            onSettingsChanged();
         }
     }
     else
     {
         ConfigDialog(this).exec();
+        onSettingsChanged();
     }
 
     QApplication::setQuitOnLastWindowClosed(true);
@@ -563,6 +567,12 @@ void MainWindow::onExit()
             notifier_->onStop();
         }
     }
+}
+
+void MainWindow::onSettingsChanged()
+{
+    SystemSettings settings;
+    ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
 
 void MainWindow::createLanguageMenu(const QString& current_locale)

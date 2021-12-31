@@ -105,6 +105,9 @@ public:
     std::chrono::milliseconds autoConnConfirmInterval() const;
     void setAutoConnConfirmInterval(const std::chrono::milliseconds& interval);
 
+    bool isApplicationShutdownDisabled() const;
+    void setApplicationShutdownDisabled(bool value);
+
 private:
     base::JsonSettings settings_;
 

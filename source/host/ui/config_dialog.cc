@@ -66,6 +66,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 
+    connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, [=]()
+    {
+        setConfigChanged(true);
+    });
+
     //---------------------------------------------------------------------------------------------
     // Security Tab
     //---------------------------------------------------------------------------------------------
@@ -607,6 +612,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         // Update the parameters.
+        settings.setApplicationShutdownDisabled(ui.checkbox_disable_shutdown->isChecked());
         settings.setTcpPort(static_cast<uint16_t>(ui.spinbox_port->value()));
         settings.setUserList(*user_list);
         settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
@@ -750,6 +756,8 @@ void ConfigDialog::reloadAll()
         ui.button_change_password->setVisible(true);
     }
 
+    ui.checkbox_disable_shutdown->setChecked(settings.isApplicationShutdownDisabled());
+
     setConfigChanged(false);
 }
 
@@ -816,7 +824,7 @@ void ConfigDialog::reloadServiceStatus()
         ui.button_service_start_stop->setEnabled(false);
     }
 
-    ui.label_service_status->setText(tr("Current state: %1").arg(state));
+    ui.label_service_status->setText(tr("Current service state: %1").arg(state));
 }
 
 bool ConfigDialog::isServiceStarted()

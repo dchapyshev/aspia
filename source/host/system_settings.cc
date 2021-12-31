@@ -452,4 +452,14 @@ void SystemSettings::setAutoConnConfirmInterval(const std::chrono::milliseconds&
     settings_.set("AutoConnConfirmInterval", interval.count());
 }
 
+bool SystemSettings::isApplicationShutdownDisabled() const
+{
+    return settings_.get<bool>("ApplicationShutdownDisabled", false);
+}
+
+void SystemSettings::setApplicationShutdownDisabled(bool value)
+{
+    settings_.set("ApplicationShutdownDisabled", value);
+}
+
 } // namespace host

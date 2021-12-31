@@ -47,15 +47,15 @@
     </message>
     <message>
         <source>Service</source>
-        <translation>Serviço</translation>
+        <translation type="vanished">Serviço</translation>
     </message>
     <message>
         <source>Incoming Connections</source>
-        <translation>Conexões de entrada</translation>
+        <translation type="vanished">Conexões de entrada</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Porta:</translation>
+        <translation type="vanished">Porta:</translation>
     </message>
     <message>
         <source>Users</source>
@@ -127,11 +127,11 @@
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importar</translation>
+        <translation type="obsolete">Importar</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportar</translation>
+        <translation type="obsolete">Exportar</translation>
     </message>
     <message>
         <source>Change password</source>
@@ -183,6 +183,30 @@
     </message>
     <message>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Common</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incoming port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Aspia shutdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -458,7 +482,7 @@
     </message>
     <message>
         <source>Current state: %1</source>
-        <translation>Estado: %1</translation>
+        <translation type="vanished">Estado: %1</translation>
     </message>
     <message>
         <source>The service could not be installed.</source>
@@ -566,6 +590,10 @@
     </message>
     <message>
         <source>Reject connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current service state: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
