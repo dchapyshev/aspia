@@ -4,7 +4,7 @@
 <!-- Variables -->
 <?define ProductName="Aspia Client"?>
 <?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.2.0"?>
+<?define Version="2.3.0"?>
 <?define InstallLocation="Aspia Client"?>
 <?define SourceFiles="..\..\build\Release"?>
 <?define Executable="aspia_client.exe"?>
