@@ -54,8 +54,6 @@ find_package(zstd CONFIG REQUIRED)
 find_library(WEBM_RELEASE_LIB NAMES libwebm webm)
 find_library(WEBM_DEBUG_LIB NAMES libwebm libwebmd webm)
 
-find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
-
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
 endif()

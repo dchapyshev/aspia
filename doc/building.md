@@ -21,7 +21,6 @@ Instructions for building the project
 * qt5-translations
 * qt5-winextras (only for Windows)
 * rapidjson
-* rapidxml
 * sqlite3
 * libwebm
 * zstd
