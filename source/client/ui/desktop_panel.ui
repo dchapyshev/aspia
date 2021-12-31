@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>40</height>
+    <width>287</width>
+    <height>45</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -412,6 +412,11 @@
    </property>
    <property name="toolTip">
     <string>Reboot in safe mode</string>
+   </property>
+  </action>
+  <action name="action_paste_clipboard_as_keystrokes">
+   <property name="text">
+    <string>Paste clipboard as keystrokes</string>
    </property>
   </action>
  </widget>

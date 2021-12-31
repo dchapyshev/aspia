@@ -378,6 +378,9 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
 
+    additional_menu_->addAction(ui.action_paste_clipboard_as_keystrokes);
+    additional_menu_->addSeparator();
+
     scale_group_ = new QActionGroup(additional_menu_);
     scale_group_->addAction(ui.action_scale100);
     scale_group_->addAction(ui.action_scale90);
@@ -414,6 +417,9 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
         connect(ui.action_send_key_combinations, &QAction::triggered,
                 this, &DesktopPanel::keyCombinationsChanged);
     }
+
+    connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
+            this, &DesktopPanel::pasteAsKeystrokes);
 
     connect(scale_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {

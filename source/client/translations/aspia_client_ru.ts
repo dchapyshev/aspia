@@ -382,6 +382,11 @@
         <translation>Перезагрузка в безопасном режиме</translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="419"/>
+        <source>Paste clipboard as keystrokes</source>
+        <translation>Вставить буфер обмена как нажатия клавиш</translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="219"/>
         <location filename="../ui/desktop_panel.ui" line="222"/>
         <location filename="../ui/desktop_panel.ui" line="225"/>
@@ -1071,7 +1076,7 @@
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="389"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -1328,34 +1333,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="224"/>
-        <location filename="../ui/qt_desktop_window.cc" line="232"/>
-        <location filename="../ui/qt_desktop_window.cc" line="582"/>
+        <location filename="../ui/qt_desktop_window.cc" line="226"/>
+        <location filename="../ui/qt_desktop_window.cc" line="234"/>
+        <location filename="../ui/qt_desktop_window.cc" line="584"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="225"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="233"/>
+        <location filename="../ui/qt_desktop_window.cc" line="235"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="560"/>
+        <location filename="../ui/qt_desktop_window.cc" line="562"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="562"/>
+        <location filename="../ui/qt_desktop_window.cc" line="564"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="582"/>
+        <location filename="../ui/qt_desktop_window.cc" line="584"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

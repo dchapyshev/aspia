@@ -88,6 +88,7 @@ private slots:
     void scaleDesktop();
     void onResizeTimer();
     void onScrollTimer();
+    void onPasteKeystrokes();
 
 private:
     const proto::SessionType session_type_;

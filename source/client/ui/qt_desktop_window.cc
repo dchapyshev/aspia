@@ -37,6 +37,7 @@
 
 #include <QApplication>
 #include <QBrush>
+#include <QClipboard>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QHBoxLayout>
@@ -136,6 +137,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         desktop_control_proxy_->onMetricsRequest();
     });
 
+    connect(panel_, &DesktopPanel::pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
     connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
     {
         if (fullscreen)
@@ -203,7 +205,7 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
     client->setDesktopConfig(desktop_config_);
     client->setDesktopWindow(desktop_window_proxy_);
 
-    return client;
+    return std::move(client);
 }
 
 void QtDesktopWindow::showWindow(
@@ -644,6 +646,29 @@ void QtDesktopWindow::onScrollTimer()
         pos = std::min(pos, scrollbar->maximum());
 
         scrollbar->setSliderPosition(pos);
+    }
+}
+
+void QtDesktopWindow::onPasteKeystrokes()
+{
+    QClipboard* clipboard = QApplication::clipboard();
+    if (clipboard)
+    {
+        QString text = clipboard->text();
+        if (text.isEmpty())
+        {
+            LOG(LS_INFO) << "Empty clipboard";
+            return;
+        }
+
+        proto::TextEvent event;
+        event.set_text(text.toStdString());
+
+        desktop_control_proxy_->onTextEvent(event);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "QApplication::clipboard failed";
     }
 }
 

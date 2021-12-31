@@ -49,6 +49,7 @@ public:
     bool isPanelPinned() const;
 
 signals:
+    void pasteAsKeystrokes();
     void keyCombination(int key_secuence);
     void switchToFullscreen(bool fullscreen);
     void switchToAutosize();

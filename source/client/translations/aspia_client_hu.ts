@@ -398,6 +398,11 @@
         <source>Reboot in safe mode</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="419"/>
+        <source>Paste clipboard as keystrokes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
@@ -1071,7 +1076,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="389"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1328,34 +1333,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="224"/>
-        <location filename="../ui/qt_desktop_window.cc" line="232"/>
-        <location filename="../ui/qt_desktop_window.cc" line="582"/>
+        <location filename="../ui/qt_desktop_window.cc" line="226"/>
+        <location filename="../ui/qt_desktop_window.cc" line="234"/>
+        <location filename="../ui/qt_desktop_window.cc" line="584"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="225"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="233"/>
+        <location filename="../ui/qt_desktop_window.cc" line="235"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="560"/>
+        <location filename="../ui/qt_desktop_window.cc" line="562"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="562"/>
+        <location filename="../ui/qt_desktop_window.cc" line="564"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="582"/>
+        <location filename="../ui/qt_desktop_window.cc" line="584"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
