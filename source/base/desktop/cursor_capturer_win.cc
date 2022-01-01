@@ -98,6 +98,11 @@ const MouseCursor* CursorCapturerWin::captureCursor()
     return nullptr;
 }
 
+Point CursorCapturerWin::cursorPosition()
+{
+    return Point(prev_cursor_info_.ptScreenPos.x, prev_cursor_info_.ptScreenPos.y);
+}
+
 void CursorCapturerWin::reset()
 {
     desktop_dc_.close();

@@ -19,6 +19,8 @@
 #ifndef BASE__DESKTOP__CURSOR_CAPTURER_H
 #define BASE__DESKTOP__CURSOR_CAPTURER_H
 
+#include "base/desktop/geometry.h"
+
 namespace base {
 
 class MouseCursor;
@@ -29,6 +31,7 @@ public:
     virtual ~CursorCapturer() = default;
 
     virtual const MouseCursor* captureCursor() = 0;
+    virtual Point cursorPosition() = 0;
     virtual void reset() = 0;
 };
 

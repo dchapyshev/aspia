@@ -33,6 +33,7 @@ public:
     ~CursorCapturerWin();
 
     const MouseCursor* captureCursor() override;
+    Point cursorPosition() override;
     void reset() override;
 
 private:
