@@ -35,6 +35,305 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
+void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
+{
+    to->set_bits_per_pixel(from.bitsPerPixel());
+
+    to->set_red_max(from.redMax());
+    to->set_green_max(from.greenMax());
+    to->set_blue_max(from.blueMax());
+
+    to->set_red_shift(from.redShift());
+    to->set_green_shift(from.greenShift());
+    to->set_blue_shift(from.blueShift());
+}
+
+void onInvalidValue(const QString& arg, const QString& values)
+{
+    QMessageBox::warning(
+        nullptr,
+        QApplication::translate("Client", "Warning"),
+        QApplication::translate("Client", "Incorrect value for \"%1\". Possible values: %2.").arg(arg, values),
+        QMessageBox::Ok);
+}
+
+bool parseCodecValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("vp8"))
+        {
+            config.set_video_encoding(proto::VIDEO_ENCODING_VP8);
+        }
+        else if (value == QLatin1String("vp9"))
+        {
+            config.set_video_encoding(proto::VIDEO_ENCODING_VP9);
+        }
+        else if (value == QLatin1String("zstd"))
+        {
+            config.set_video_encoding(proto::VIDEO_ENCODING_ZSTD);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("codec"), QStringLiteral("vp8, vp9, zstd"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("32"))
+        {
+            serializePixelFormat(base::PixelFormat::ARGB(), config.mutable_pixel_format());
+        }
+        else if (value == QLatin1String("16"))
+        {
+            serializePixelFormat(base::PixelFormat::RGB565(), config.mutable_pixel_format());
+        }
+        else if (value == QLatin1String("8"))
+        {
+            serializePixelFormat(base::PixelFormat::RGB332(), config.mutable_pixel_format());
+        }
+        else if (value == QLatin1String("6"))
+        {
+            serializePixelFormat(base::PixelFormat::RGB222(), config.mutable_pixel_format());
+        }
+        else if (value == QLatin1String("3"))
+        {
+            serializePixelFormat(base::PixelFormat::RGB111(), config.mutable_pixel_format());
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("color-depth"), QStringLiteral("3, 6, 8, 16, 32"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        uint32_t compress_ratio = value.toUInt();
+        if (compress_ratio >= 1 && compress_ratio <= 22)
+        {
+            config.set_compress_ratio(compress_ratio);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("compress-ratio"), QStringLiteral("1-22"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseAudioValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("audio"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CURSOR_SHAPE));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::ENABLE_CURSOR_SHAPE);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("cursor-shape"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CLIPBOARD));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::ENABLE_CLIPBOARD);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("clipboard"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() | proto::DISABLE_DESKTOP_EFFECTS);
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_EFFECTS));
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("desktop-effects"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() | proto::DISABLE_DESKTOP_WALLPAPER);
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_WALLPAPER));
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("desktop-wallpaper"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() | proto::DISABLE_FONT_SMOOTHING);
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_FONT_SMOOTHING));
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("font-smoothing"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CLEAR_CLIPBOARD));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::CLEAR_CLIPBOARD);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("clear-clipboard"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::LOCK_AT_DISCONNECT));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::LOCK_AT_DISCONNECT);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("lock-at-disconnect"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::BLOCK_REMOTE_INPUT));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::BLOCK_REMOTE_INPUT);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("block-remote-input"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int clientMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(qt_translations);
@@ -61,20 +360,75 @@ int clientMain(int argc, char* argv[])
 #endif
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
-    QCommandLineOption address_option("address",
-        QApplication::translate("Client", "Remote computer address."), "address");
+    QCommandLineOption address_option(QStringLiteral("address"),
+        QApplication::translate("Client", "Remote computer address."),
+        QStringLiteral("address"));
 
-    QCommandLineOption port_option("port",
-        QApplication::translate("Client", "Remote computer port."), "port",
+    QCommandLineOption port_option(QStringLiteral("port"),
+        QApplication::translate("Client", "Remote computer port."),
+        QStringLiteral("port"),
         QString::number(DEFAULT_HOST_TCP_PORT));
 
-    QCommandLineOption username_option("username",
-        QApplication::translate("Client", "Name of user."), "username");
+    QCommandLineOption username_option(QStringLiteral("username"),
+        QApplication::translate("Client", "Name of user."),
+        QStringLiteral("username"));
 
-    QCommandLineOption session_type_option("session-type",
+    QCommandLineOption password_option(QStringLiteral("password"),
+        QApplication::translate("Client", "Password of user."),
+        QStringLiteral("password"));
+
+    QCommandLineOption session_type_option(QStringLiteral("session-type"),
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
                                 "desktop-view, file-transfer."),
-        "desktop-manage");
+        QStringLiteral("desktop-manage"));
+
+    QCommandLineOption codec_option(QStringLiteral("codec"),
+        QApplication::translate("Client", "Type of codec. Possible values: vp8, vp9, zstd."),
+        QStringLiteral("codec"));
+
+    QCommandLineOption color_depth_option(QStringLiteral("color-depth"),
+        QApplication::translate("Client", "Color depth. Possible values: 3, 6, 8, 16, 32."),
+        QStringLiteral("color-depth"));
+
+    QCommandLineOption compress_ratio_option(QStringLiteral("compress-ratio"),
+        QApplication::translate("Client", "Compression ratio. Possible values: 1-22."),
+        QStringLiteral("compress-ratio"));
+
+    QCommandLineOption audio_option(QStringLiteral("audio"),
+        QApplication::translate("Client", "Enable or disable audio. Possible values: 0 or 1."),
+        QStringLiteral("audio"));
+
+    QCommandLineOption cursor_shape_option(QStringLiteral("cursor-shape"),
+        QApplication::translate("Client", "Enable or disable cursor shape. Possible values: 0 or 1."),
+        QStringLiteral("cursor-shape"));
+
+    QCommandLineOption clipboard_option(QStringLiteral("clipboard"),
+        QApplication::translate("Client", "Enable or disable clipboard. Possible values: 0 or 1."),
+        QStringLiteral("clipboard"));
+
+    QCommandLineOption desktop_effects_option(QStringLiteral("desktop-effects"),
+        QApplication::translate("Client", "Enable or disable desktop effects. Possible values: 0 or 1."),
+        QStringLiteral("desktop-effects"));
+
+    QCommandLineOption desktop_wallpaper_option(QStringLiteral("desktop-wallpaper"),
+        QApplication::translate("Client", "Enable or disable desktop wallpaper. Possible values: 0 or 1."),
+        QStringLiteral("desktop-wallpaper"));
+
+    QCommandLineOption font_smoothing_option(QStringLiteral("font-smoothing"),
+        QApplication::translate("Client", "Enable or disable font smoothing. Possible values: 0 or 1."),
+        QStringLiteral("font-smoothing"));
+
+    QCommandLineOption clear_clipboard_option(QStringLiteral("clear-clipboard"),
+        QApplication::translate("Client", "Clear clipboard at disconnect. Possible values: 0 or 1."),
+        QStringLiteral("clear-clipboard"));
+
+    QCommandLineOption lock_at_disconnect_option(QStringLiteral("lock-at-disconnect"),
+        QApplication::translate("Client", "Lock computer at disconnect. Possible values: 0 or 1."),
+        QStringLiteral("lock-at-disconnect"));
+
+    QCommandLineOption block_remote_input_option(QStringLiteral("block-remote-input"),
+        QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
+        QStringLiteral("block-remote-input"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
@@ -83,41 +437,97 @@ int clientMain(int argc, char* argv[])
     parser.addOption(address_option);
     parser.addOption(port_option);
     parser.addOption(username_option);
+    parser.addOption(password_option);
     parser.addOption(session_type_option);
+    parser.addOption(codec_option);
+    parser.addOption(color_depth_option);
+    parser.addOption(compress_ratio_option);
+    parser.addOption(audio_option);
+    parser.addOption(cursor_shape_option);
+    parser.addOption(clipboard_option);
+    parser.addOption(desktop_effects_option);
+    parser.addOption(desktop_wallpaper_option);
+    parser.addOption(font_smoothing_option);
+    parser.addOption(clear_clipboard_option);
+    parser.addOption(lock_at_disconnect_option);
+    parser.addOption(block_remote_input_option);
     parser.process(application);
 
     QScopedPointer<client::ClientWindow> client_window;
 
     if (parser.isSet(address_option))
     {
+        std::optional<proto::DesktopConfig> desktop_config;
         client::Config config;
 
         config.address_or_id = parser.value(address_option).toStdU16String();
         config.port = parser.value(port_option).toUShort();
         config.username = parser.value(username_option).toStdU16String();
+        config.password = parser.value(password_option).toStdU16String();
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == "desktop-manage")
+        if (session_type == QLatin1String("desktop-manage"))
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
+            desktop_config = client::ConfigFactory::defaultDesktopManageConfig();
         }
-        else if (session_type == "desktop-view")
+        else if (session_type == QLatin1String("desktop-view"))
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
+            desktop_config = client::ConfigFactory::defaultDesktopViewConfig();
         }
-        else if (session_type == "file-transfer")
+        else if (session_type == QLatin1String("file-transfer"))
         {
             config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
         }
         else
         {
-            QMessageBox::warning(
-                nullptr,
-                QApplication::translate("Client", "Warning"),
-                QApplication::translate("Client", "Incorrect session type entered."),
-                QMessageBox::Ok);
+            onInvalidValue(QStringLiteral("session-type"),
+                           QStringLiteral("desktop-manage, desktop-view, file-transfer"));
             return 1;
+        }
+
+        if (desktop_config.has_value())
+        {
+            if (!parseCodecValue(parser.value(codec_option), *desktop_config))
+                return 1;
+
+            if (desktop_config->video_encoding() == proto::VIDEO_ENCODING_ZSTD)
+            {
+                if (!parseColorDepthValue(parser.value(color_depth_option), *desktop_config))
+                    return 1;
+
+                if (!parseCompressRatioValue(parser.value(compress_ratio_option), *desktop_config))
+                    return 1;
+            }
+
+            if (!parseAudioValue(parser.value(audio_option), *desktop_config))
+                return 1;
+
+            if (!parseCursorShapeValue(parser.value(cursor_shape_option), *desktop_config))
+                return 1;
+
+            if (!parseClipboardValue(parser.value(clipboard_option), *desktop_config))
+                return 1;
+
+            if (!parseDesktopEffectsValue(parser.value(desktop_effects_option), *desktop_config))
+                return 1;
+
+            if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), *desktop_config))
+                return 1;
+
+            if (!parseFontSmoothingValue(parser.value(font_smoothing_option), *desktop_config))
+                return 1;
+
+            if (!parseClearClipboardValue(parser.value(clear_clipboard_option), *desktop_config))
+                return 1;
+
+            if (!parseLockAtDisconnectValue(parser.value(lock_at_disconnect_option), *desktop_config))
+                return 1;
+
+            if (!parseBlockRemoteInputValue(parser.value(block_remote_input_option), *desktop_config))
+                return 1;
         }
 
         if (base::isHostId(config.address_or_id))
@@ -147,18 +557,12 @@ int clientMain(int argc, char* argv[])
         switch (config.session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            {
-                session_window = new client::QtDesktopWindow(
-                    config.session_type, client::ConfigFactory::defaultDesktopManageConfig());
-            }
-            break;
+                session_window = new client::QtDesktopWindow(config.session_type, *desktop_config);
+                break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
-            {
-                session_window = new client::QtDesktopWindow(
-                    config.session_type, client::ConfigFactory::defaultDesktopViewConfig());
-            }
-            break;
+                session_window = new client::QtDesktopWindow(config.session_type, *desktop_config);
+                break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new client::QtFileManagerWindow();
@@ -170,7 +574,7 @@ int clientMain(int argc, char* argv[])
         }
 
         if (!session_window)
-            return 0;
+            return 1;
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
         if (!session_window->connectToHost(config))

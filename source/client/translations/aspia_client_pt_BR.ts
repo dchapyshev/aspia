@@ -27,43 +27,112 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="65"/>
+        <location filename="../client_main.cc" line="56"/>
+        <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="364"/>
         <source>Remote computer address.</source>
         <translation>Endereço do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="68"/>
+        <location filename="../client_main.cc" line="368"/>
         <source>Remote computer port.</source>
         <translation>Porta do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="72"/>
+        <location filename="../client_main.cc" line="373"/>
         <source>Name of user.</source>
         <translation>Usuário.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="75"/>
+        <location filename="../client_main.cc" line="377"/>
+        <source>Password of user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="381"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="80"/>
+        <location filename="../client_main.cc" line="386"/>
+        <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="390"/>
+        <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="394"/>
+        <source>Compression ratio. Possible values: 1-22.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="398"/>
+        <source>Enable or disable audio. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="402"/>
+        <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="406"/>
+        <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="410"/>
+        <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="414"/>
+        <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="418"/>
+        <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="422"/>
+        <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="426"/>
+        <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="430"/>
+        <source>Block remote input. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="434"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="117"/>
-        <location filename="../client_main.cc" line="130"/>
+        <location filename="../client_main.cc" line="55"/>
+        <location filename="../client_main.cc" line="540"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="118"/>
         <source>Incorrect session type entered.</source>
-        <translation>Tipo de sessão incorreta.</translation>
+        <translation type="vanished">Tipo de sessão incorreta.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="131"/>
+        <location filename="../client_main.cc" line="541"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
