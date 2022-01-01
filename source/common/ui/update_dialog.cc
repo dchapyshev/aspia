@@ -72,7 +72,7 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
 {
     initialize();
 
-    ui->label_available->setText(QString::fromStdString(update_info_.version().toString()));
+    ui->label_available->setText(QString::fromStdString(update_info_.version().toString(3)));
     ui->label_url->setText(makeUrl(update_info_.url()));
     ui->edit_description->setText(update_info_.description());
     ui->button_update->setEnabled(true);
@@ -133,7 +133,7 @@ void UpdateDialog::onUpdateChecked(const QByteArray& result)
 
         if (new_version > current_version)
         {
-            ui->label_available->setText(QString::fromStdString(new_version.toString()));
+            ui->label_available->setText(QString::fromStdString(new_version.toString(3)));
             ui->edit_description->setText(update_info.description());
             ui->label_url->setText(makeUrl(update_info.url()));
 
@@ -143,7 +143,7 @@ void UpdateDialog::onUpdateChecked(const QByteArray& result)
         }
         else
         {
-            ui->label_available->setText(QString::fromStdString(current_version.toString()));
+            ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
             ui->edit_description->setText(tr("No updates available."));
         }
     }
@@ -230,7 +230,7 @@ void UpdateDialog::initialize()
 
     base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 
-    ui->label_current->setText(QString::fromStdString(current_version.toString()));
+    ui->label_current->setText(QString::fromStdString(current_version.toString(3)));
 }
 
 } // namespace common
