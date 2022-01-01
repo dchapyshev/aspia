@@ -98,7 +98,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 10.3. If you have
 * zstd
 3. Open **QtCreator -> Tools -> Options -> Kits -> Qt Versions**. Click the Add button and specify the path to **<vcpkg_path>/installed/x64-linux/tools/qt5/bin/qmake**.
 4. Open **QtCreator -> Tools -> Options -> Kits -> Kits**. Click the Add button. Enter a display name for the profile, specify the compilers (gcc/g++), and the Qt profile you added earlier.
-5. Open CMakeLists.txt from the Aspia root directory in QtCreator and configure the build using the previously added profile.
+5. Open **CMakeLists.txt** from the Aspia root directory in QtCreator and configure the build using the previously added profile.
 
 Alternative instructions (SW build system)
 ------------------------------------------
