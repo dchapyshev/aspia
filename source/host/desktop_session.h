@@ -42,6 +42,7 @@ public:
         virtual void onDesktopSessionStopped() = 0;
         virtual void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) = 0;
         virtual void onAudioCaptured(const proto::AudioPacket& audio_packet) = 0;
+        virtual void onCursorPositionChanged(const proto::CursorPosition& cursor_position) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;
         virtual void onClipboardEvent(const proto::ClipboardEvent& event) = 0;
     };
@@ -54,6 +55,7 @@ public:
         bool block_input = false;
         bool lock_at_disconnect = false;
         bool clear_clipboard = true;
+        bool cursor_position = false;
 
         bool equals(const Config& other) const
         {
@@ -62,7 +64,8 @@ public:
                    (disable_effects == other.disable_effects) &&
                    (block_input == other.block_input) &&
                    (lock_at_disconnect == other.lock_at_disconnect) &&
-                   (clear_clipboard == other.clear_clipboard);
+                   (clear_clipboard == other.clear_clipboard) &&
+                   (cursor_position == other.cursor_position);
         }
     };
 

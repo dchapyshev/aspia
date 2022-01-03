@@ -48,6 +48,7 @@ public:
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
     void encodeAudio(const proto::AudioPacket& audio_packet);
+    void setCursorPosition(const proto::CursorPosition& cursor_position);
     void setScreenList(const proto::ScreenList& list);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 

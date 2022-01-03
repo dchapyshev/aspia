@@ -41,12 +41,16 @@ public:
 
     std::shared_ptr<MouseCursor> decode(const proto::CursorShape& cursor_shape);
 
+    int cachedCursors() const;
+    int takenCursorsFromCache() const;
+
 private:
     ByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
 
     std::vector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;
     ScopedZstdDStream stream_;
+    int taken_from_cache_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
 };

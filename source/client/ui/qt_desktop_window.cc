@@ -103,6 +103,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(scroll_timer_, &QTimer::timeout, this, &QtDesktopWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
 
     connect(panel_, &DesktopPanel::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(panel_, &DesktopPanel::settingsButton, this, &QtDesktopWindow::changeSettings);
@@ -275,6 +276,25 @@ void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
     panel_->setScreenList(screen_list);
 }
 
+void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_position)
+{
+    base::Frame* frame = desktop_->desktopFrame();
+    if (!frame)
+        return;
+
+    const base::Size& frame_size = frame->size();
+
+    int pos_x = static_cast<int>(
+        static_cast<double>(desktop_->width() * cursor_position.x()) /
+        static_cast<double>(frame_size.width()));
+    int pos_y = static_cast<int>(
+        static_cast<double>(desktop_->height() * cursor_position.y()) /
+        static_cast<double>(frame_size.height()));
+
+    desktop_->setCursorPosition(QPoint(pos_x, pos_y));
+    desktop_->update();
+}
+
 void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
 {
     if (!system_info_)
@@ -348,8 +368,8 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
                  mouse_cursor->stride(),
                  QImage::Format::Format_ARGB32);
 
-    desktop_->setCursor(QCursor(
-        QPixmap::fromImage(std::move(image)), mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
+    desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
+                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
@@ -528,6 +548,10 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
 {
     desktop_config_ = desktop_config;
     desktop_control_proxy_->setDesktopConfig(desktop_config);
+
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
+    if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
+        desktop_->setCursorShape(QPixmap(), QPoint());
 }
 
 void QtDesktopWindow::autosizeWindow()

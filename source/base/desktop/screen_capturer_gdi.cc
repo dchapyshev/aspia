@@ -19,6 +19,8 @@
 #include "base/desktop/screen_capturer_gdi.h"
 
 #include "base/logging.h"
+#include "base/desktop/mouse_cursor.h"
+#include "base/desktop/win/cursor.h"
 #include "base/desktop/win/bitmap_info.h"
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/desktop/frame_dib.h"
@@ -29,10 +31,24 @@
 
 namespace base {
 
+namespace {
+
+bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
+{
+    // If the cursors are not showing, we do not care the hCursor handle.
+    return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
+                                         left.hCursor == right.hCursor);
+}
+
+} // namespace
+
 ScreenCapturerGdi::ScreenCapturerGdi()
     : ScreenCapturer(Type::WIN_GDI)
 {
     LOG(LS_INFO) << "Ctor";
+
+    memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
+    memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
 ScreenCapturerGdi::~ScreenCapturerGdi()
@@ -85,6 +101,62 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
     return frame;
 }
 
+const MouseCursor* ScreenCapturerGdi::captureCursor()
+{
+    if (!desktop_dc_.isValid())
+        return nullptr;
+
+    memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
+
+    // Note: cursor_info.hCursor does not need to be freed.
+    curr_cursor_info_.cbSize = sizeof(curr_cursor_info_);
+    if (GetCursorInfo(&curr_cursor_info_))
+    {
+        if (!isSameCursorShape(curr_cursor_info_, prev_cursor_info_))
+        {
+            if (curr_cursor_info_.flags == 0)
+            {
+                LOG(LS_INFO) << "No hardware cursor attached. Using default mouse cursor";
+
+                // Host machine does not have a hardware mouse attached, we will send a default one
+                // instead. Note, Windows automatically caches cursor resource, so we do not need
+                // to cache the result of LoadCursor.
+                curr_cursor_info_.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+                if (!curr_cursor_info_.hCursor)
+                {
+                    PLOG(LS_WARNING) << "LoadCursorW failed";
+                    return nullptr;
+                }
+            }
+
+            mouse_cursor_.reset(mouseCursorFromHCursor(desktop_dc_, curr_cursor_info_.hCursor));
+            if (mouse_cursor_)
+            {
+                prev_cursor_info_ = curr_cursor_info_;
+                return mouse_cursor_.get();
+            }
+        }
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "GetCursorInfo failed";
+    }
+
+    return nullptr;
+}
+
+Point ScreenCapturerGdi::cursorPosition()
+{
+    Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
+
+    if (current_screen_id_ == kFullDesktopScreenId)
+        cursor_pos = cursor_pos.subtract(desktop_dc_rect_.topLeft());
+    else
+        cursor_pos = cursor_pos.subtract(screen_rect_.topLeft());
+
+    return cursor_pos;
+}
+
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.
@@ -99,20 +171,20 @@ const Frame* ScreenCapturerGdi::captureImage()
     if (!prepareCaptureResources())
         return nullptr;
 
-    Rect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
-    if (screen_rect.isEmpty())
+    screen_rect_ = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
+    if (screen_rect_.isEmpty())
     {
         LOG(LS_WARNING) << "Failed to get screen rect";
         return nullptr;
     }
 
-    if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect.size())
+    if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect_.size())
     {
         DCHECK(desktop_dc_);
         DCHECK(memory_dc_);
 
         std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
+            screen_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
         if (!frame)
         {
             LOG(LS_WARNING) << "Failed to create frame buffer";
@@ -132,9 +204,9 @@ const Frame* ScreenCapturerGdi::captureImage()
 
         if (!BitBlt(memory_dc_,
                     0, 0,
-                    screen_rect.width(), screen_rect.height(),
+                    screen_rect_.width(), screen_rect_.height(),
                     desktop_dc_,
-                    screen_rect.left(), screen_rect.top(),
+                    screen_rect_.left(), screen_rect_.top(),
                     CAPTUREBLT | SRCCOPY))
         {
             static thread_local int count = 0;
@@ -149,14 +221,14 @@ const Frame* ScreenCapturerGdi::captureImage()
         }
     }
 
-    current->setTopLeft(screen_rect.topLeft().subtract(desktop_dc_rect_.topLeft()));
+    current->setTopLeft(screen_rect_.topLeft().subtract(desktop_dc_rect_.topLeft()));
     current->setDpi(Point(GetDeviceCaps(desktop_dc_, LOGPIXELSX),
                           GetDeviceCaps(desktop_dc_, LOGPIXELSY)));
 
     if (!previous || previous->size() != current->size())
     {
-        differ_ = std::make_unique<Differ>(screen_rect.size());
-        current->updatedRegion()->addRect(Rect::makeSize(screen_rect.size()));
+        differ_ = std::make_unique<Differ>(screen_rect_.size());
+        current->updatedRegion()->addRect(Rect::makeSize(screen_rect_.size()));
     }
     else
     {

@@ -19,8 +19,11 @@
 #include "base/desktop/win/dxgi_output_duplicator.h"
 
 #include "base/logging.h"
+#include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/dxgi_texture_mapping.h"
 #include "base/desktop/win/dxgi_texture_staging.h"
+
+#include <libyuv/convert_argb.h>
 
 #include <algorithm>
 #include <cstring>
@@ -190,11 +193,13 @@ bool DxgiOutputDuplicator::releaseFrame()
     return true;
 }
 
-bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, SharedFrame* target)
+bool DxgiOutputDuplicator::duplicate(
+    Context* context, const Point& offset, SharedFrame* target, DxgiCursor* cursor)
 {
     DCHECK(duplication_);
     DCHECK(texture_);
     DCHECK(target);
+    DCHECK(cursor);
 
     if (!Rect::makeSize(target->size()).containsRect(translatedDesktopRect(offset)))
     {
@@ -217,9 +222,42 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
         return false;
     }
 
-    // We need to merge updated region with the one from context, but only spread
-    // updated region from current frame. So keeps a copy of updated region from
-    // context here. The |updated_region| always starts from (0, 0).
+    if (frame_info.PointerShapeBufferSize != 0)
+    {
+        DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
+        ByteArray* buffer = cursor->pointerShapeBuffer();
+
+        if (buffer->capacity() < frame_info.PointerShapeBufferSize)
+            buffer->reserve(frame_info.PointerShapeBufferSize);
+
+        buffer->resize(frame_info.PointerShapeBufferSize);
+
+        UINT buffer_required;
+        _com_error hr = duplication_->GetFramePointerShape(frame_info.PointerShapeBufferSize,
+                                                           buffer->data(),
+                                                           &buffer_required,
+                                                           shape_info);
+        if (FAILED(hr.Error()))
+        {
+            LOG(LS_WARNING) << "Failed to capture cursor, error "
+                            << error.ErrorMessage() << ", code " << error.Error();
+            buffer->clear();
+        }
+    }
+
+    if (frame_info.LastMouseUpdateTime.QuadPart != 0)
+    {
+        DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
+
+        int x = frame_info.PointerPosition.Position.x + offset.x() + shape_info->HotSpot.x;
+        int y = frame_info.PointerPosition.Position.y + offset.y() + shape_info->HotSpot.y;
+
+        cursor->setPosition(Point(x, y));
+    }
+
+    // We need to merge updated region with the one from context, but only spread updated region
+    // from current frame. So keeps a copy of updated region from context here. The |updated_region|
+    // always starts from (0, 0).
     Region updated_region;
     updated_region.swap(&context->updated_region);
 
@@ -233,8 +271,8 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
 
         updated_region.addRegion(context->updated_region);
 
-        // TODO(zijiehe): Figure out why clearing context->updated_region() here
-        // triggers screen flickering?
+        // TODO(zijiehe): Figure out why clearing context->updated_region() here triggers screen
+        // flickering?
 
         const Frame& source = texture_->asDesktopFrame();
 
@@ -242,8 +280,8 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
         {
             for (Region::Iterator it(updated_region); !it.isAtEnd(); it.advance())
             {
-                // The |updated_region| returned by Windows is rotated, but the |source|
-                // frame is not. So we need to rotate it reversely.
+                // The |updated_region| returned by Windows is rotated, but the |source| frame is
+                // not. So we need to rotate it reversely.
                 const Rect source_rect =
                     rotateRect(it.rect(), desktopSize(), reverseRotation(rotation_));
                 rotateDesktopFrame(source, source_rect, rotation_, offset, target);
@@ -256,7 +294,10 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
                 // The Rect in |target|, starts from offset.
                 Rect dest_rect = it.rect();
                 dest_rect.translate(offset);
-                target->copyPixelsFrom(source, it.rect().topLeft(), dest_rect);
+
+                libyuv::ARGBCopy(source.frameDataAtPos(it.rect().topLeft()), source.stride(),
+                                 target->frameDataAtPos(dest_rect.topLeft()), target->stride(),
+                                 dest_rect.width(), dest_rect.height());
             }
         }
 
@@ -285,7 +326,9 @@ bool DxgiOutputDuplicator::duplicate(Context* context, const Point& offset, Shar
             source_rect.translate(last_frame_offset_);
             target_rect.translate(offset);
 
-            target->copyPixelsFrom(*last_frame_, source_rect.topLeft(), target_rect);
+            libyuv::ARGBCopy(last_frame_->frameDataAtPos(source_rect.topLeft()), last_frame_->stride(),
+                             target->frameDataAtPos(target_rect.topLeft()), target->stride(),
+                             target_rect.width(), target_rect.height());
         }
 
         updated_region.translate(offset.x(), offset.y());

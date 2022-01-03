@@ -46,6 +46,8 @@ public:
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
     const Frame* captureFrame(Error* error) override;
+    const MouseCursor* captureCursor() override;
+    Point cursorPosition() override;
 
 protected:
     // ScreenCapturer implementation.
@@ -56,6 +58,7 @@ private:
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     FrameQueue<DxgiFrame> queue_;
+    std::unique_ptr<DxgiCursor> cursor_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDxgi);
 };

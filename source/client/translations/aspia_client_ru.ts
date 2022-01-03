@@ -255,19 +255,18 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="165"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="201"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable cursor shape</source>
-        <translation>Включить изображение курсора</translation>
+        <translation type="vanished">Включить изображение курсора</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="43"/>
@@ -295,37 +294,47 @@
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <source>Show shape of remote cursor</source>
+        <translation>Показывать форму удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <source>Show position of remote cursor</source>
+        <translation>Показывать положение удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="145"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="144"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="174"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="181"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Clear clipboard at disconnect</source>
         <translation>Очищать буфер обмена при отключении</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
@@ -1097,7 +1106,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="196"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="199"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1406,34 +1415,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="226"/>
-        <location filename="../ui/qt_desktop_window.cc" line="234"/>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="236"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="562"/>
+        <location filename="../ui/qt_desktop_window.cc" line="586"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="564"/>
+        <location filename="../ui/qt_desktop_window.cc" line="588"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>

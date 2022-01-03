@@ -19,6 +19,7 @@
 #include "base/desktop/screen_capturer_dxgi.h"
 
 #include "base/logging.h"
+#include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/screen_capture_utils.h"
 #include "base/ipc/shared_memory_factory.h"
 #include "base/strings/unicode.h"
@@ -99,7 +100,8 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 
 ScreenCapturerDxgi::ScreenCapturerDxgi()
     : ScreenCapturer(Type::WIN_DXGI),
-      controller_(std::make_shared<DxgiDuplicatorController>())
+      controller_(std::make_shared<DxgiDuplicatorController>()),
+      cursor_(std::make_unique<DxgiCursor>())
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -183,9 +185,14 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     DxgiDuplicatorController::Result result;
 
     if (current_screen_id_ == kFullDesktopScreenId)
-        result = controller_->duplicate(queue_.currentFrame());
+    {
+        result = controller_->duplicate(queue_.currentFrame(), cursor_.get());
+    }
     else
-        result = controller_->duplicateMonitor(queue_.currentFrame(), current_screen_id_);
+    {
+        result = controller_->duplicateMonitor(
+            queue_.currentFrame(), cursor_.get(), current_screen_id_);
+    }
 
     using DuplicateResult = DxgiDuplicatorController::Result;
 
@@ -235,6 +242,16 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
             return nullptr;
         }
     }
+}
+
+const MouseCursor* ScreenCapturerDxgi::captureCursor()
+{
+    return cursor_->mouseCursor();
+}
+
+Point ScreenCapturerDxgi::cursorPosition()
+{
+    return cursor_->position();
 }
 
 void ScreenCapturerDxgi::reset()

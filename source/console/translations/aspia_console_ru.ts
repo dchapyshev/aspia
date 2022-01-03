@@ -114,19 +114,18 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="177"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="206"/>
+        <location filename="../computer_dialog_desktop.ui" line="213"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable cursor shape</source>
-        <translation>Включить изображение курсора</translation>
+        <translation type="vanished">Включить изображение курсора</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="49"/>
@@ -154,37 +153,47 @@
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <source>Show shape of remote cursor</source>
+        <translation>Показывать форму удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <source>Show position of remote cursor</source>
+        <translation>Показывать положение удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="156"/>
+        <location filename="../computer_dialog_desktop.ui" line="163"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="163"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="186"/>
+        <location filename="../computer_dialog_desktop.ui" line="193"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="192"/>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Clear clipboard at disconnect</source>
         <translation>Очищать буфер обмена при отключении</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="206"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
@@ -866,7 +875,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="251"/>
+        <location filename="../computer_dialog_desktop.cc" line="257"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>

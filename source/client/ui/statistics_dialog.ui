@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>315</width>
-    <height>401</height>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -144,6 +144,26 @@
      <item>
       <property name="text">
        <string notr="true">Send Clipboard Event</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Cursor Shape Count</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Cursor Shape From Cache</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Cursor Shape Cache Size</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Cursor Pos Count</string>
       </property>
      </item>
     </widget>

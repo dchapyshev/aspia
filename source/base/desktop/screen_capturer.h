@@ -27,6 +27,7 @@
 
 namespace base {
 
+class MouseCursor;
 class SharedFrame;
 class SharedMemoryFactory;
 
@@ -71,6 +72,8 @@ public:
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
     virtual const Frame* captureFrame(Error* error) = 0;
+    virtual const MouseCursor* captureCursor() = 0;
+    virtual Point cursorPosition() = 0;
 
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;

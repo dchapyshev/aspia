@@ -102,6 +102,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
 
         // Bits 0-4 contain the cursor position in the cache.
         cache_index = cursor_shape.flags() & 0x1F;
+        ++taken_from_cache_;
     }
     else
     {
@@ -167,6 +168,16 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
     }
 
     return cache_[cache_index];
+}
+
+int CursorDecoder::cachedCursors() const
+{
+    return static_cast<int>(cache_.size());
+}
+
+int CursorDecoder::takenCursorsFromCache() const
+{
+    return taken_from_cache_;
 }
 
 } // namespace base

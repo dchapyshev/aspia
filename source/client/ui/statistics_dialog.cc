@@ -139,6 +139,22 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
             case 20:
                 item->setText(1, QString::number(metrics.send_clipboard));
                 break;
+
+            case 21:
+                item->setText(1, QString::number(metrics.cursor_shape_count));
+                break;
+
+            case 22:
+                item->setText(1, QString::number(metrics.cursor_taken_from_cache));
+                break;
+
+            case 23:
+                item->setText(1, QString::number(metrics.cursor_cached));
+                break;
+
+            case 24:
+                item->setText(1, QString::number(metrics.cursor_pos_count));
+                break;
         }
     }
 }

@@ -332,6 +332,17 @@ void DesktopSessionAgent::onScreenCaptured(
     }
 }
 
+void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
+{
+    outgoing_message_->Clear();
+
+    proto::CursorPosition* cursor_position = outgoing_message_->mutable_cursor_position();
+    cursor_position->set_x(position.x());
+    cursor_position->set_y(position.y());
+
+    channel_->send(base::serialize(*outgoing_message_));
+}
+
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_->Clear();

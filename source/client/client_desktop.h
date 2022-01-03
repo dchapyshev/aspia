@@ -83,6 +83,7 @@ private:
     void readVideoPacket(const proto::VideoPacket& packet);
     void readAudioPacket(const proto::AudioPacket& packet);
     void readCursorShape(const proto::CursorShape& cursor_shape);
+    void readCursorPosition(const proto::CursorPosition& cursor_position);
     void readClipboardEvent(const proto::ClipboardEvent& event);
     void readExtension(const proto::DesktopExtension& extension);
 
@@ -127,6 +128,8 @@ private:
     size_t max_audio_packet_ = 0;
     size_t avg_audio_packet_ = 0;
     int fps_ = 0;
+    int cursor_shape_count_ = 0;
+    int cursor_pos_count_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ClientDesktop);
 };

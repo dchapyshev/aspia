@@ -122,6 +122,38 @@ void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
     frame_ = std::move(frame);
 }
 
+void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot)
+{
+    remote_cursor_shape_ = std::move(cursor_shape);
+    remote_cursor_hotspot_ = hotspot;
+
+    if (remote_cursor_shape_.isNull())
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
+    else
+    {
+        setCursor(QCursor(remote_cursor_shape_, hotspot.x(), hotspot.y()));
+    }
+}
+
+void DesktopWidget::setCursorPosition(const QPoint& cursor_position)
+{
+    remote_cursor_pos_ = cursor_position;
+
+    QSize widget_size = size();
+
+    if (remote_cursor_pos_.x() < 0)
+        remote_cursor_pos_.setX(0);
+    else if (remote_cursor_pos_.x() > widget_size.width())
+        remote_cursor_pos_.setX(widget_size.width());
+
+    if (remote_cursor_pos_.y() < 0)
+        remote_cursor_pos_.setY(0);
+    else if (remote_cursor_pos_.y() > widget_size.height())
+        remote_cursor_pos_.setY(widget_size.height());
+}
+
 void DesktopWidget::doMouseEvent(QEvent::Type event_type,
                                  const Qt::MouseButtons& buttons,
                                  const QPoint& pos,
@@ -306,6 +338,12 @@ void DesktopWidget::enableKeyCombinations(bool enable)
     enableKeyHooks(enable);
 }
 
+void DesktopWidget::enableRemoteCursorPosition(bool enable)
+{
+    enable_remote_cursor_pos_ = enable;
+    update();
+}
+
 void DesktopWidget::userLeftFromWindow()
 {
     enableKeyHooks(false);
@@ -326,6 +364,24 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 #endif
 
         painter_.drawImage(rect(), frame->constImage());
+
+        if (enable_remote_cursor_pos_)
+        {
+            if (!remote_cursor_shape_.isNull())
+            {
+                painter_.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
+                                          remote_cursor_shape_.size()),
+                                    remote_cursor_shape_,
+                                    remote_cursor_shape_.rect());
+            }
+            else
+            {
+                painter_.setBrush(QBrush(Qt::black));
+                painter_.setPen(QPen(Qt::white));
+                painter_.drawEllipse(remote_cursor_pos_, 3, 3);
+            }
+        }
+
         painter_.end();
     }
 }

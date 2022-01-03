@@ -114,19 +114,18 @@
         <translation>Codec</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="177"/>
         <source>Disable font smoothing</source>
         <translation>Font smoothing uitschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="206"/>
+        <location filename="../computer_dialog_desktop.ui" line="213"/>
         <source>Block remote input</source>
         <translation>Blokkeer input op afstand</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable cursor shape</source>
-        <translation>Cursor vorm inschakelen</translation>
+        <translation type="vanished">Cursor vorm inschakelen</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="49"/>
@@ -154,37 +153,47 @@
         <translation>Geluid inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="127"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="150"/>
+        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="157"/>
         <source>Appearance</source>
         <translation>Uiterlijk</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="156"/>
+        <location filename="../computer_dialog_desktop.ui" line="163"/>
         <source>Disable desktop effects</source>
         <translation>Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="163"/>
+        <location filename="../computer_dialog_desktop.ui" line="170"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaublad achtergrond verbergen</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="186"/>
+        <location filename="../computer_dialog_desktop.ui" line="193"/>
         <source>Other</source>
         <translation>Overige</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="192"/>
+        <location filename="../computer_dialog_desktop.ui" line="199"/>
         <source>Clear clipboard at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="206"/>
         <source>Lock computer at disconnect</source>
         <translation>Computer vergrendelen bij verbroken verbinding</translation>
     </message>
@@ -864,7 +873,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="251"/>
+        <location filename="../computer_dialog_desktop.cc" line="257"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>

@@ -94,11 +94,11 @@ public:
     // TODO(zijiehe): Windows cannot guarantee the frames returned by each IDXGIOutputDuplication
     // are synchronized. But we are using a totally different threading model than the way Windows
     // suggested, it's hard to synchronize them manually. We should find a way to do it.
-    Result duplicate(DxgiFrame* frame);
+    Result duplicate(DxgiFrame* frame, DxgiCursor* cursor);
 
     // Captures one monitor and writes into target. |monitor_id| should >= 0. If |monitor_id| is
     // greater than the total screen count of all the Duplicators, this function returns false.
-    Result duplicateMonitor(DxgiFrame* frame, int monitor_id);
+    Result duplicateMonitor(DxgiFrame* frame, DxgiCursor* cursor, int monitor_id);
 
     // Returns dpi of current system. Returns an empty DesktopVector if system
     // does not support DXGI based capturer.
@@ -121,7 +121,7 @@ private:
     // Does the real duplication work. Setting |monitor_id| < 0 to capture entire screen. This
     // function calls initialize(). And if the duplication failed, this function calls
     // deinitialize() to ensure the Dxgi components can be reinitialized next time.
-    Result doDuplicate(DxgiFrame* frame, int monitor_id);
+    Result doDuplicate(DxgiFrame* frame, DxgiCursor* cursor, int monitor_id);
 
     // Unregisters Context from this instance and all DxgiAdapterDuplicator(s) it owns.
     void unregister(const Context* const context);
@@ -147,15 +147,15 @@ private:
     void setup(Context* context);
 
     // Captures all monitors.
-    bool doDuplicateAll(Context* context, SharedFrame* target);
+    bool doDuplicateAll(Context* context, SharedFrame* target, DxgiCursor* cursor);
 
     // Captures one monitor.
-    bool doDuplicateOne(Context* context, int monitor_id, SharedFrame* target);
+    bool doDuplicateOne(Context* context, int monitor_id, SharedFrame* target, DxgiCursor* cursor);
 
     // The minimum numFramesCaptured() returned by |duplicators_|.
     int64_t numFramesCaptured() const;
 
-    // Returns a DesktopSize to cover entire |desktop_rect_|.
+    // Returns a Size to cover entire |desktop_rect_|.
     Size desktopSize() const;
 
     // Returns the size of one screen. |id| should be >= 0. If system does not support DXGI based
@@ -174,7 +174,7 @@ private:
     // the requirement.
     // According to http://crbug.com/682112, dxgi capturer returns a black frame during first
     // several capture attempts.
-    bool ensureFrameCaptured(Context* context, SharedFrame* target);
+    bool ensureFrameCaptured(Context* context, SharedFrame* target, DxgiCursor* cursor);
 
     // Moves |desktop_rect_| and all underlying |duplicators_|, putting top left corner of the
     // desktop at (0, 0). This is necessary because DXGI_OUTPUT_DESC may return negative

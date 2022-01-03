@@ -30,7 +30,6 @@
 
 namespace base {
 
-class CursorCapturer;
 class DesktopEnvironment;
 class MouseCursor;
 class PowerSaveBlocker;
@@ -46,6 +45,7 @@ public:
         virtual void onScreenListChanged(
             const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
         virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
+        virtual void onCursorPositionChanged(const Point& position) = 0;
     };
 
     ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate);
@@ -71,11 +71,11 @@ private:
 #endif // defined(OS_WIN)
 
     int screen_count_ = 0;
+    Point last_cursor_pos_;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
-    std::unique_ptr<CursorCapturer> cursor_capturer_;
 
     THREAD_CHECKER(thread_checker_);
 

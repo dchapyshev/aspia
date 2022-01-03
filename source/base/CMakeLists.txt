@@ -271,7 +271,6 @@ list(APPEND SOURCE_BASE_CRYPTO_TESTS
 list(APPEND SOURCE_BASE_DESKTOP
     desktop/capture_scheduler.cc
     desktop/capture_scheduler.h
-    desktop/cursor_capturer.h
     desktop/desktop_environment.cc
     desktop/desktop_environment.h
     desktop/desktop_resizer.cc
@@ -311,8 +310,6 @@ list(APPEND SOURCE_BASE_DESKTOP
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP
-        desktop/cursor_capturer_win.cc
-        desktop/cursor_capturer_win.h
         desktop/desktop_environment_win.cc
         desktop/desktop_resizer_win.cc
         desktop/desktop_resizer_win.h
@@ -328,8 +325,6 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
-        desktop/cursor_capturer_x11.cc
-        desktop/cursor_capturer_x11.h
         desktop/desktop_environment_linux.cc
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
@@ -337,8 +332,6 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP
-        desktop/cursor_capturer_mac.mm
-        desktop/cursor_capturer_mac.h
         desktop/desktop_environment_mac.mm
         desktop/screen_capturer_mac.mm
         desktop/screen_capturer_mac.h)
@@ -367,6 +360,8 @@ if (WIN32)
         desktop/win/dxgi_adapter_duplicator.h
         desktop/win/dxgi_context.cc
         desktop/win/dxgi_context.h
+        desktop/win/dxgi_cursor.cc
+        desktop/win/dxgi_cursor.h
         desktop/win/dxgi_duplicator_controller.cc
         desktop/win/dxgi_duplicator_controller.h
         desktop/win/dxgi_frame.cc

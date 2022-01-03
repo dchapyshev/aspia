@@ -251,19 +251,18 @@
         <translation>Codec</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="165"/>
         <source>Disable font smoothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="201"/>
         <source>Block remote input</source>
         <translation>Blokkeer invoer op afstand</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable cursor shape</source>
-        <translation>Muis vorm inschakelen</translation>
+        <translation type="vanished">Muis vorm inschakelen</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="43"/>
@@ -291,37 +290,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="145"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="144"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop effects</source>
         <translation>Schakel bureaublad effecten uit</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
         <source>Disable desktop wallpaper</source>
         <translation>Geen bureaublad achtergrond</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="174"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="181"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Clear clipboard at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1093,7 +1102,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="196"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="199"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1402,34 +1411,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="226"/>
-        <location filename="../ui/qt_desktop_window.cc" line="234"/>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="236"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="562"/>
+        <location filename="../ui/qt_desktop_window.cc" line="586"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="564"/>
+        <location filename="../ui/qt_desktop_window.cc" line="588"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>

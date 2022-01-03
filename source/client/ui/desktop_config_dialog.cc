@@ -151,6 +151,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
         ui->checkbox_clear_clipboard->hide();
     }
 
+    if (config_.flags() & proto::CURSOR_POSITION)
+        ui->checkbox_enable_cursor_pos->setChecked(true);
+
     if (config_.flags() & proto::DISABLE_DESKTOP_EFFECTS)
         ui->checkbox_desktop_effects->setChecked(true);
 
@@ -250,6 +253,9 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
             flags |= proto::ENABLE_CURSOR_SHAPE;
+
+        if (ui->checkbox_enable_cursor_pos->isChecked())
+            flags |= proto::CURSOR_POSITION;
 
         if (ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled())
             flags |= proto::ENABLE_CLIPBOARD;

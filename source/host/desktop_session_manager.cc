@@ -191,6 +191,11 @@ void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_pack
     delegate_->onAudioCaptured(audio_packet);
 }
 
+void DesktopSessionManager::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+{
+    delegate_->onCursorPositionChanged(cursor_position);
+}
+
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 {
     delegate_->onScreenListChanged(list);

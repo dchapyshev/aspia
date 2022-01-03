@@ -19,14 +19,12 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
-#include "base/desktop/cursor_capturer.h"
 #include "base/desktop/desktop_environment.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
 
 #if defined(OS_WIN)
-#include "base/desktop/cursor_capturer_win.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/screen_capturer_mirror.h"
@@ -107,7 +105,7 @@ void ScreenCapturerWrapper::captureFrame()
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
-        LOG(LS_INFO) << "Screen count changed: " << count;
+        LOG(LS_INFO) << "Screen count changed: " << count << " (old: " << screen_count_ << ")";
 
         screen_count_ = count;
         selectScreen(defaultScreen());
@@ -132,7 +130,18 @@ void ScreenCapturerWrapper::captureFrame()
         }
     }
 
-    delegate_->onScreenCaptured(frame, cursor_capturer_->captureCursor());
+    delegate_->onScreenCaptured(frame, screen_capturer_->captureCursor());
+
+    Point cursor_pos = screen_capturer_->cursorPosition();
+
+    int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+    int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+
+    if (delta_x > 1 || delta_y > 1)
+    {
+        delegate_->onCursorPositionChanged(cursor_pos);
+        last_cursor_pos_ = cursor_pos;
+    }
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
@@ -179,8 +188,6 @@ void ScreenCapturerWrapper::selectCapturer()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
 #if defined(OS_WIN)
-    cursor_capturer_ = std::make_unique<CursorCapturerWin>();
-
     auto try_mirror_capturer = [=]()
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
@@ -252,9 +259,6 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 
         if (screen_capturer_)
             screen_capturer_->reset();
-
-        if (cursor_capturer_)
-            cursor_capturer_->reset();
 
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.

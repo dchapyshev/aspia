@@ -48,6 +48,7 @@ public:
 
     void setCapabilities(const std::string& extensions, uint32_t video_encodings);
     void setScreenList(const proto::ScreenList& screen_list);
+    void setCursorPosition(const proto::CursorPosition& cursor_position);
     void setSystemInfo(const proto::SystemInfo& system_info);
     void setMetrics(const DesktopWindow::Metrics& metrics);
 

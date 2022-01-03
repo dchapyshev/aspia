@@ -119,4 +119,5 @@ message DesktopToService
     ScreenCaptured screen_captured = 3;
     AudioPacket audio_packet       = 4;
     ClipboardEvent clipboard_event = 5;
+    CursorPosition cursor_position = 6;
 }

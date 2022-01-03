@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>284</width>
-    <height>541</height>
+    <height>567</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,16 +110,23 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkbox_cursor_shape">
+       <widget class="QCheckBox" name="checkbox_clipboard">
         <property name="text">
-         <string>Enable cursor shape</string>
+         <string>Enable clipboard</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkbox_clipboard">
+       <widget class="QCheckBox" name="checkbox_cursor_shape">
         <property name="text">
-         <string>Enable clipboard</string>
+         <string>Show shape of remote cursor</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_enable_cursor_pos">
+        <property name="text">
+         <string>Show position of remote cursor</string>
         </property>
        </widget>
       </item>

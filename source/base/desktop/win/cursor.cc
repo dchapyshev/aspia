@@ -170,9 +170,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     }
 
     uint32_t* mask_plane = mask_data.get();
-
     ByteArray image;
-
     bool has_alpha = false;
 
     if (is_color)
@@ -194,7 +192,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         }
 
         // GetDIBits() does not provide any indication whether the bitmap has
-        // alpha channel, so we use HasAlphaChannel() below to find it out.
+        // alpha channel, so we use hasAlphaChannel() below to find it out.
         has_alpha = hasAlphaChannel(reinterpret_cast<const uint32_t*>(image.data()), width, height);
     }
     else
@@ -211,10 +209,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         memcpy(image.data(), mask_plane + (width * height), image.size());
     }
 
-    //
-    // Reconstruct transparency from the mask if the color image does not has
-    // alpha channel.
-    //
+    // Reconstruct transparency from the mask if the color image does not has alpha channel.
     if (!has_alpha)
     {
         bool add_outline = false;

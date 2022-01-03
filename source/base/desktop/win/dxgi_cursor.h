@@ -16,34 +16,41 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__CURSOR_CAPTURER_WIN_H
-#define BASE__DESKTOP__CURSOR_CAPTURER_WIN_H
+#ifndef BASE__DESKTOP__WIN__DXGI_CURSOR_H
+#define BASE__DESKTOP__WIN__DXGI_CURSOR_H
 
-#include "base/win/scoped_hdc.h"
-#include "desktop/cursor_capturer.h"
+#include "base/macros_magic.h"
+#include "base/desktop/mouse_cursor.h"
 
-#include <memory>
+#include <DXGI.h>
+#include <DXGI1_2.h>
 
 namespace base {
 
-class CursorCapturerWin : public CursorCapturer
+class DxgiCursor
 {
 public:
-    CursorCapturerWin();
-    ~CursorCapturerWin();
+    DxgiCursor();
+    ~DxgiCursor();
 
-    const MouseCursor* captureCursor() override;
-    Point cursorPosition() override;
-    void reset() override;
+    const MouseCursor* mouseCursor();
+
+    Point position() const;
+    void setPosition(const Point& pointer_position);
+
+    DXGI_OUTDUPL_POINTER_SHAPE_INFO* pointerShapeInfo();
+    ByteArray* pointerShapeBuffer();
 
 private:
-    win::ScopedGetDC desktop_dc_;
-    std::unique_ptr<MouseCursor> mouse_cursor_;
-    CURSORINFO prev_cursor_info_;
+    DXGI_OUTDUPL_POINTER_SHAPE_INFO pointer_shape_info_;
+    ByteArray pointer_shape_;
+    Point pointer_position_;
 
-    DISALLOW_COPY_AND_ASSIGN(CursorCapturerWin);
+    std::unique_ptr<MouseCursor> mouse_cursor_;
+
+    DISALLOW_COPY_AND_ASSIGN(DxgiCursor);
 };
 
 } // namespace base
 
-#endif // BASE__DESKTOP__CURSOR_CAPTURER_WIN_H
+#endif // BASE__DESKTOP__WIN__DXGI_CURSOR_H

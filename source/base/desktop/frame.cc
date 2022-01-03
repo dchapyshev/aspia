@@ -22,8 +22,6 @@
 
 #include <cstring>
 
-#include <libyuv/convert_argb.h>
-
 namespace base {
 
 Frame::Frame(const Size& size,
@@ -48,9 +46,17 @@ bool Frame::contains(int x, int y) const
 
 void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect)
 {
-    libyuv::ARGBCopy(src_buffer, src_stride,
-                     frameDataAtPos(dest_rect.topLeft()), stride(),
-                     dest_rect.width(), dest_rect.height());
+    DCHECK(Rect::makeSize(size()).containsRect(dest_rect));
+
+    uint8_t* dest = frameDataAtPos(dest_rect.topLeft());
+    size_t bytes_per_row = static_cast<size_t>(format_.bytesPerPixel() * dest_rect.width());
+
+    for (int y = 0; y < dest_rect.height(); ++y)
+    {
+        memcpy(dest, src_buffer, bytes_per_row);
+        src_buffer += src_stride;
+        dest += stride();
+    }
 }
 
 void Frame::copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect)
@@ -79,7 +85,8 @@ void Frame::copyFrameInfoFrom(const Frame& other)
 // static
 size_t Frame::calcMemorySize(const Size& size, int bytes_per_pixel)
 {
-    return ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * bytes_per_pixel;
+    return static_cast<size_t>(
+        ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * bytes_per_pixel);
 }
 
 } // namespace base

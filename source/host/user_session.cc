@@ -697,6 +697,12 @@ void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
         static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
 }
 
+void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setCursorPosition(cursor_position);
+}
+
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
     LOG(LS_INFO) << "Screen list changed";

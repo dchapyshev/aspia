@@ -94,6 +94,19 @@ void DesktopWindowProxy::setScreenList(const proto::ScreenList& screen_list)
         desktop_window_->setScreenList(screen_list);
 }
 
+void DesktopWindowProxy::setCursorPosition(const proto::CursorPosition& cursor_position)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&DesktopWindowProxy::setCursorPosition, shared_from_this(), cursor_position));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setCursorPosition(cursor_position);
+}
+
 void DesktopWindowProxy::setSystemInfo(const proto::SystemInfo& system_info)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

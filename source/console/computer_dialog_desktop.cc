@@ -146,6 +146,9 @@ void ComputerDialogDesktop::restoreSettings(
         ui.checkbox_clear_clipboard->hide();
     }
 
+    if (config.flags() & proto::CURSOR_POSITION)
+        ui.checkbox_cursor_position->setChecked(true);
+
     if (config.flags() & proto::DISABLE_DESKTOP_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
@@ -208,6 +211,9 @@ void ComputerDialogDesktop::saveSettings(proto::DesktopConfig* config)
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
         flags |= proto::ENABLE_CURSOR_SHAPE;
+
+    if (ui.checkbox_cursor_position->isChecked())
+        flags |= proto::CURSOR_POSITION;
 
     if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
         flags |= proto::ENABLE_CLIPBOARD;

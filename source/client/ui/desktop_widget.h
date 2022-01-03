@@ -46,6 +46,8 @@ public:
 
     base::Frame* desktopFrame();
     void setDesktopFrame(std::shared_ptr<base::Frame>& frame);
+    void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
+    void setCursorPosition(const QPoint& cursor_position);
 
     void doMouseEvent(QEvent::Type event_type,
                       const Qt::MouseButtons& buttons,
@@ -59,6 +61,7 @@ public slots:
     // Enables or disables the sending of key combinations. It only affects the input received
     // from the user. Slot |executeKeySequense| can send key combinations.
     void enableKeyCombinations(bool enable);
+    void enableRemoteCursorPosition(bool enable);
     void userLeftFromWindow();
 
 signals:
@@ -93,6 +96,11 @@ private:
 
     std::shared_ptr<base::Frame> frame_;
     bool enable_key_sequenses_ = true;
+    bool enable_remote_cursor_pos_ = false;
+
+    QPixmap remote_cursor_shape_;
+    QPoint remote_cursor_pos_;
+    QPoint remote_cursor_hotspot_;
 
     QPoint prev_pos_;
     uint32_t prev_mask_ = 0;

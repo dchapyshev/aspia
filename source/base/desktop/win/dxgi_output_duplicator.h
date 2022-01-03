@@ -19,12 +19,14 @@
 #ifndef BASE__DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 #define BASE__DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
 
-#include "base/win/desktop.h"
 #include "base/desktop/frame_rotation.h"
 #include "base/desktop/shared_frame.h"
 #include "base/desktop/win/d3d_device.h"
 #include "base/desktop/win/dxgi_context.h"
+#include "base/desktop/win/dxgi_cursor.h"
 #include "base/desktop/win/dxgi_texture.h"
+#include "base/memory/byte_array.h"
+#include "base/win/desktop.h"
 
 #include <DXGI.h>
 #include <DXGI1_2.h>
@@ -64,7 +66,8 @@ public:
     // this function copies the content to the rectangle of (offset.x(), offset.y()) to
     // (offset.x() + desktop_rect_.width(), offset.y() + desktop_rect_.height()).
     // Returns false in case of a failure.
-    bool duplicate(Context* context, const Point& offset, SharedFrame* target);
+    bool duplicate(
+        Context* context, const Point& offset, SharedFrame* target_frame, DxgiCursor* cursor);
 
     // Returns the desktop rect covered by this DxgiOutputDuplicator.
     const Rect& desktopRect() const { return desktop_rect_; }

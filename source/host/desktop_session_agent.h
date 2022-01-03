@@ -64,6 +64,7 @@ protected:
                              base::ScreenCapturer::ScreenId current) override;
     void onScreenCaptured(const base::Frame* frame,
                           const base::MouseCursor* mouse_cursor) override;
+    void onCursorPositionChanged(const base::Point& position) override;
 
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;

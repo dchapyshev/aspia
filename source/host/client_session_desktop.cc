@@ -257,6 +257,25 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     sendMessage(base::serialize(*outgoing_message_));
 }
 
+void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
+{
+    if (!desktop_session_config_.cursor_position)
+        return;
+
+    outgoing_message_->Clear();
+
+    int pos_x = static_cast<int>(
+        static_cast<double>(cursor_position.x()) * scale_reducer_->scaleFactorX() / 100.0);
+    int pos_y = static_cast<int>(
+        static_cast<double>(cursor_position.y()) * scale_reducer_->scaleFactorY() / 100.0);
+
+    proto::CursorPosition* position = outgoing_message_->mutable_cursor_position();
+    position->set_x(pos_x);
+    position->set_y(pos_y);
+
+    sendMessage(base::serialize(*outgoing_message_));
+}
+
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
     outgoing_message_->Clear();
@@ -521,6 +540,8 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         (config.flags() & proto::LOCK_AT_DISCONNECT);
     desktop_session_config_.clear_clipboard =
         (config.flags() & proto::CLEAR_CLIPBOARD);
+    desktop_session_config_.cursor_position =
+        (config.flags() & proto::CURSOR_POSITION);
 
     LOG(LS_INFO) << "Client configuration changed";
     LOG(LS_INFO) << "Video encoding: " << config.video_encoding();
@@ -531,6 +552,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     LOG(LS_INFO) << "Block input: " << desktop_session_config_.block_input;
     LOG(LS_INFO) << "Lock at disconnect: " << desktop_session_config_.lock_at_disconnect;
     LOG(LS_INFO) << "Clear clipboard: " << desktop_session_config_.clear_clipboard;
+    LOG(LS_INFO) << "Cursor position: " << desktop_session_config_.cursor_position;
 
     delegate_->onClientSessionConfigured();
 }

@@ -94,6 +94,12 @@ message CursorShape
     bytes data = 6;
 }
 
+message CursorPosition
+{
+    int32 x = 1;
+    int32 y = 2;
+}
+
 message Size
 {
     int32 width  = 1;
@@ -244,6 +250,7 @@ message HostToClient
     ClipboardEvent clipboard_event      = 4;
     DesktopExtension extension          = 5;
     DesktopConfigRequest config_request = 6;
+    CursorPosition cursor_position      = 7;
 }
 
 message ClientToHost

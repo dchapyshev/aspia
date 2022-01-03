@@ -240,6 +240,10 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     {
         onAudioCaptured(incoming_message_->audio_packet());
     }
+    else if (incoming_message_->has_cursor_position())
+    {
+        onCursorPositionChanged(incoming_message_->cursor_position());
+    }
     else if (incoming_message_->has_screen_list())
     {
         last_screen_list_.reset(incoming_message_->release_screen_list());
@@ -336,6 +340,18 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     outgoing_message_->Clear();
     outgoing_message_->mutable_next_screen_capture()->set_update_interval(40);
     channel_->send(base::serialize(*outgoing_message_));
+}
+
+void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
+{
+    if (delegate_)
+    {
+        delegate_->onCursorPositionChanged(cursor_position);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)

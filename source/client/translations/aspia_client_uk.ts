@@ -251,19 +251,18 @@
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="165"/>
         <source>Disable font smoothing</source>
         <translation>Відключити згладжування шрифтів</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="201"/>
         <source>Block remote input</source>
         <translation>Блокувати віддалений ввід</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable cursor shape</source>
-        <translation>Показати курсор</translation>
+        <translation type="vanished">Показати курсор</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="43"/>
@@ -291,37 +290,47 @@
         <translation>Увімкнути аудіо</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="115"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="138"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="122"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="129"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.ui" line="145"/>
         <source>Appearance</source>
         <translation>Вигляд</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="144"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
         <source>Disable desktop effects</source>
         <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="151"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="158"/>
         <source>Disable desktop wallpaper</source>
         <translation>Відключити шпалери робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="174"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="181"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="180"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Clear clipboard at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.ui" line="187"/>
+        <location filename="../ui/desktop_config_dialog.ui" line="194"/>
         <source>Lock computer at disconnect</source>
         <translation>Заблокувати комп&apos;ютер після від&apos;єдннання</translation>
     </message>
@@ -1093,7 +1102,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="196"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="199"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1402,34 +1411,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="226"/>
-        <location filename="../ui/qt_desktop_window.cc" line="234"/>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="227"/>
+        <location filename="../ui/qt_desktop_window.cc" line="228"/>
         <source>There are no supported video encodings.</source>
         <translation>Немає підтримуваних типів кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="236"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="562"/>
+        <location filename="../ui/qt_desktop_window.cc" line="586"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="564"/>
+        <location filename="../ui/qt_desktop_window.cc" line="588"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="584"/>
+        <location filename="../ui/qt_desktop_window.cc" line="608"/>
         <source>Could not save image</source>
         <translation>Неможливо зберегти зображення</translation>
     </message>

@@ -20,6 +20,7 @@
 #define BASE__DESKTOP__SCREEN_CAPTURER_MIRROR_H
 
 #include "base/desktop/screen_capturer.h"
+#include "base/win/scoped_hdc.h"
 
 namespace base {
 
@@ -39,6 +40,8 @@ public:
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
     const Frame* captureFrame(Error* error) override;
+    const MouseCursor* captureCursor() override;
+    Point cursorPosition() override;
 
 protected:
     // ScreenCapturer implementation.
@@ -56,6 +59,11 @@ private:
 
     Rect desktop_rect_;
     Region exclude_region_;
+
+    win::ScopedGetDC desktop_dc_;
+    std::unique_ptr<MouseCursor> mouse_cursor_;
+    CURSORINFO curr_cursor_info_;
+    CURSORINFO prev_cursor_info_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerMirror);
 };

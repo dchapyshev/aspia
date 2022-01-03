@@ -27,6 +27,9 @@ namespace base {
 class MouseCursor
 {
 public:
+    static const int kBytesPerPixel = 4;
+    static const int kBitsPerPixel = 32;
+
     MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot);
 
     MouseCursor(MouseCursor&& other) noexcept;

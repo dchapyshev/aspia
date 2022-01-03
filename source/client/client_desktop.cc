@@ -113,6 +113,10 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
     {
         readAudioPacket(incoming_message_->audio_packet());
     }
+    else if (incoming_message_->has_cursor_position())
+    {
+        readCursorPosition(incoming_message_->cursor_position());
+    }
     else if (incoming_message_->has_clipboard_event())
     {
         readClipboardEvent(incoming_message_->clipboard_event());
@@ -372,6 +376,14 @@ void ClientDesktop::onMetricsRequest()
     metrics.send_text  = input_event_filter_.sendTextCount();
     metrics.read_clipboard = input_event_filter_.readClipboardCount();
     metrics.send_clipboard = input_event_filter_.sendClipboardCount();
+    metrics.cursor_shape_count = cursor_shape_count_;
+    metrics.cursor_pos_count   = cursor_pos_count_;
+
+    if (cursor_decoder_)
+    {
+        metrics.cursor_cached = cursor_decoder_->cachedCursors();
+        metrics.cursor_taken_from_cache = cursor_decoder_->takenCursorsFromCache();
+    }
 
     desktop_window_proxy_->setMetrics(metrics);
 }
@@ -523,6 +535,8 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
         return;
     }
 
+    ++cursor_shape_count_;
+
     if (!cursor_decoder_)
     {
         LOG(LS_INFO) << "Cursor decoder initialization";
@@ -534,6 +548,19 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
         return;
 
     desktop_window_proxy_->setMouseCursor(mouse_cursor);
+}
+
+void ClientDesktop::readCursorPosition(const proto::CursorPosition& cursor_position)
+{
+    if (!(desktop_config_.flags() & proto::CURSOR_POSITION))
+    {
+        LOG(LS_WARNING) << "Cursor position received not disabled in client";
+        return;
+    }
+
+    ++cursor_pos_count_;
+
+    desktop_window_proxy_->setCursorPosition(cursor_position);
 }
 
 void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)

@@ -39,6 +39,8 @@ public:
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
     const Frame* captureFrame(Error* error) override;
+    const MouseCursor* captureCursor() override;
+    Point cursorPosition() override;
 
 protected:
     // ScreenCapturer implementation.
@@ -54,12 +56,17 @@ private:
     std::wstring current_device_key_;
 
     Rect desktop_dc_rect_;
+    Rect screen_rect_;
 
     std::unique_ptr<Differ> differ_;
     win::ScopedGetDC desktop_dc_;
     win::ScopedCreateDC memory_dc_;
 
     FrameQueue<Frame> queue_;
+
+    std::unique_ptr<MouseCursor> mouse_cursor_;
+    CURSORINFO curr_cursor_info_;
+    CURSORINFO prev_cursor_info_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };
