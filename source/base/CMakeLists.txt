@@ -69,9 +69,7 @@ list(APPEND SOURCE_BASE
     waitable_event.cc
     waitable_event.h
     waitable_timer.cc
-    waitable_timer.h
-    xml_sax_writer.cc
-    xml_sax_writer.h)
+    waitable_timer.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE
