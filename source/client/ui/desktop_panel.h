@@ -78,6 +78,8 @@ private slots:
     void onAutosizeButton();
     void onCtrlAltDel();
     void onPowerControl(QAction* action);
+    void onChangeResolutionAction(QAction* action);
+    void onChangeScreenAction(QAction* action);
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
@@ -93,6 +95,7 @@ private:
 
     QSize current_resolution_;
     int64_t current_screen_id_ = -1;
+    int screen_count_ = 0;
 
     DesktopSettings settings_;
 

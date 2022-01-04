@@ -1114,56 +1114,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="222"/>
+        <location filename="../ui/desktop_panel.cc" line="229"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="231"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="242"/>
+        <location filename="../ui/desktop_panel.cc" line="250"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="375"/>
-        <location filename="../ui/desktop_panel.cc" line="386"/>
-        <location filename="../ui/desktop_panel.cc" line="397"/>
-        <location filename="../ui/desktop_panel.cc" line="408"/>
-        <location filename="../ui/desktop_panel.cc" line="419"/>
+        <location filename="../ui/desktop_panel.cc" line="378"/>
+        <location filename="../ui/desktop_panel.cc" line="389"/>
+        <location filename="../ui/desktop_panel.cc" line="400"/>
+        <location filename="../ui/desktop_panel.cc" line="411"/>
+        <location filename="../ui/desktop_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="376"/>
+        <location filename="../ui/desktop_panel.cc" line="379"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="387"/>
+        <location filename="../ui/desktop_panel.cc" line="390"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="398"/>
+        <location filename="../ui/desktop_panel.cc" line="401"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="409"/>
+        <location filename="../ui/desktop_panel.cc" line="412"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="420"/>
+        <location filename="../ui/desktop_panel.cc" line="423"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="445"/>
+        <location filename="../ui/desktop_panel.cc" line="474"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>

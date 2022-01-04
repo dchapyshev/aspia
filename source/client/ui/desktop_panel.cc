@@ -57,13 +57,10 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 
     connect(screens_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
-        const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
-
-        proto::Screen out_screen;
-        out_screen.set_id(screen.id());
-        out_screen.set_title(screen.title());
-
-        emit screenSelected(screen);
+        if (screen_count_ > 1)
+            onChangeScreenAction(action);
+        else
+            onChangeResolutionAction(action);
     });
 
     ui.action_autoscroll->setChecked(settings_.autoScrolling());
@@ -184,63 +181,75 @@ void DesktopPanel::enableRemoteUpdate(bool enable)
 
 void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 {
-    LOG(LS_INFO) << "Setting up a new list of screens";
+    LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()
+                 << " resolutions: " << screen_list.resolution_size() << ")";
 
     screens_menu_->clear();
 
-    // If it has only one screen or an empty list is received.
-    if (screen_list.screen_size() <= 1)
-    {
-        LOG(LS_INFO) << "List of screens less than or equal to 1";
-
-        // Monitor selection not available.
-        ui.action_monitors->setVisible(false);
-        return;
-    }
-
-    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
-    if (screen_list.current_screen() == -1)
-        full_screen_action->setChecked(true);
-
-    screens_group_->addAction(full_screen_action);
-    screens_menu_->addAction(full_screen_action);
-
-    QToolButton* button = qobject_cast<QToolButton*>(
-        ui.toolbar->widgetForAction(ui.action_monitors));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    current_resolution_ = QSize(0, 0);
     current_screen_id_ = screen_list.current_screen();
+    current_resolution_ = QSize(0, 0);
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
         const proto::Screen& screen = screen_list.screen(i);
 
-        QString title;
-
-        if (screen.id() == screen_list.primary_screen())
-            title = tr("Monitor %1 (primary)").arg(i + 1);
-        else
-            title = tr("Monitor %1").arg(i + 1);
-
-        SelectScreenAction* action = new SelectScreenAction(screen, title, screens_group_);
         if (screen_list.current_screen() == screen.id())
         {
             current_resolution_.setWidth(screen.resolution().width());
             current_resolution_.setHeight(screen.resolution().height());
-            action->setChecked(true);
         }
-
-        screens_group_->addAction(action);
-        screens_menu_->addAction(action);
     }
 
-    if (screen_list.resolution_size() > 0 && !full_screen_action->isChecked())
-    {
-        screens_menu_->addSeparator();
+    QToolButton* button = qobject_cast<QToolButton*>(
+        ui.toolbar->widgetForAction(ui.action_monitors));
+    button->setPopupMode(QToolButton::InstantPopup);
 
-        QMenu* resolutions_menu = screens_menu_->addMenu(tr("Resolution"));
-        QActionGroup* resolutions_group = new QActionGroup(resolutions_menu);
+    bool is_full_screen = false;
+
+    // If it has only one screen or an empty list is received.
+    if (screen_list.screen_size() > 1)
+    {
+        SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
+        if (screen_list.current_screen() == -1)
+        {
+            full_screen_action->setChecked(true);
+            is_full_screen = true;
+        }
+
+        screens_group_->addAction(full_screen_action);
+        screens_menu_->addAction(full_screen_action);
+
+        for (int i = 0; i < screen_list.screen_size(); ++i)
+        {
+            const proto::Screen& screen = screen_list.screen(i);
+
+            QString title;
+
+            if (screen.id() == screen_list.primary_screen())
+                title = tr("Monitor %1 (primary)").arg(i + 1);
+            else
+                title = tr("Monitor %1").arg(i + 1);
+
+            SelectScreenAction* action = new SelectScreenAction(screen, title, screens_group_);
+            if (screen_list.current_screen() == screen.id())
+                action->setChecked(true);
+
+            screens_group_->addAction(action);
+            screens_menu_->addAction(action);
+        }
+    }
+
+    if (screen_list.resolution_size() > 0 && !is_full_screen)
+    {
+        QMenu* resolutions_menu = screens_menu_;
+        QActionGroup* resolutions_group = screens_group_;
+
+        if (screen_list.screen_size() > 1)
+        {
+            screens_menu_->addSeparator();
+            resolutions_menu = screens_menu_->addMenu(tr("Resolution"));
+            resolutions_group = new QActionGroup(resolutions_menu);
+        }
 
         for (int i = 0; i < screen_list.resolution_size(); ++i)
         {
@@ -259,24 +268,18 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
             resolutions_menu->addAction(resolution_action);
         }
 
-        connect(resolutions_group, &QActionGroup::triggered, this, [=](QAction* action)
+        if (screen_list.screen_size() > 1)
         {
-            QSize resolution = action->data().toSize();
-
-            if (resolution == current_resolution_)
-                return;
-
-            proto::Screen screen;
-            screen.set_id(current_screen_id_);
-            screen.mutable_resolution()->set_width(resolution.width());
-            screen.mutable_resolution()->set_height(resolution.height());
-
-            emit screenSelected(screen);
-        });
+            connect(resolutions_group, &QActionGroup::triggered,
+                    this, &DesktopPanel::onChangeResolutionAction);
+        }
     }
 
-    ui.action_monitors->setVisible(true);
-    ui.action_monitors->setEnabled(true);
+    bool is_monitos_action_available =
+        (screen_list.resolution_size() > 0) || (screen_list.screen_size() > 1);
+
+    ui.action_monitors->setVisible(is_monitos_action_available);
+    ui.action_monitors->setEnabled(is_monitos_action_available);
 
     updateSize();
 }
@@ -424,6 +427,32 @@ void DesktopPanel::onPowerControl(QAction* action)
             emit powerControl(proto::PowerControl::ACTION_LOCK);
         }
     }
+}
+
+void DesktopPanel::onChangeResolutionAction(QAction* action)
+{
+    QSize resolution = action->data().toSize();
+
+    if (resolution == current_resolution_)
+        return;
+
+    proto::Screen screen;
+    screen.set_id(current_screen_id_);
+    screen.mutable_resolution()->set_width(resolution.width());
+    screen.mutable_resolution()->set_height(resolution.height());
+
+    emit screenSelected(screen);
+}
+
+void DesktopPanel::onChangeScreenAction(QAction* action)
+{
+    const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
+
+    proto::Screen out_screen;
+    out_screen.set_id(screen.id());
+    out_screen.set_title(screen.title());
+
+    emit screenSelected(screen);
 }
 
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
