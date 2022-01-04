@@ -69,11 +69,22 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 
     if (screen_id == screen_capturer_->currentScreen())
     {
-        if (resolution.isEmpty() || !resizer_)
-            return;
-
-        LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
-        resizer_->setResolution(screen_id, resolution);
+        if (resolution.isEmpty())
+        {
+            LOG(LS_WARNING) << "Empty resolution";
+        }
+        else
+        {
+            if (!resizer_)
+            {
+                LOG(LS_WARNING) << "No desktop resizer";
+            }
+            else
+            {
+                LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
+                resizer_->setResolution(screen_id, resolution);
+            }
+        }
     }
     else
     {
@@ -98,9 +109,19 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
         if (resizer_)
         {
             screen_list.resolutions = resizer_->supportedResolutions(screen_id);
+            if (screen_list.resolutions.empty())
+            {
+                LOG(LS_INFO) << "No supported resolutions";
+            }
 
             for (const auto& resolition : screen_list.resolutions)
+            {
                 LOG(LS_INFO) << "Supported resolution: " << resolition;
+            }
+        }
+        else
+        {
+            LOG(LS_INFO) << "No desktop resizer";
         }
 
         delegate_->onScreenListChanged(screen_list, screen_id);
