@@ -165,7 +165,7 @@ uint64_t SysInfo::uptime()
         return 0;
     }
 
-    return counter.QuadPart / frequency.QuadPart;
+    return static_cast<uint64_t>(counter.QuadPart / frequency.QuadPart);
 }
 
 // static

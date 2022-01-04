@@ -215,7 +215,7 @@ void ScreenCapturerWrapper::selectCapturer()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
 #if defined(OS_WIN)
-    auto try_mirror_capturer = [=]()
+    auto try_mirror_capturer = [this]()
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
         if (win::windowsVersion() == base::win::VERSION_WIN7)
