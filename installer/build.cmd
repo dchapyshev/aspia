@@ -1,6 +1,6 @@
 @echo off
 
-set SDK_VERSION=8.1
+set SDK_VERSION=10.0.18362.0
 
 if "%1" == "" ( goto :USAGE )
 
@@ -35,12 +35,12 @@ echo "Creating MSI transforms for Aspia Console"
 "%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-zh-cn.msi" -out "%1\console-zh-cn.mst"
 
 echo "Integration of transforms for Aspia Console"
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-de-de.mst" 1031
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-nl-nl.mst" 1043
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-pt-br.mst" 1046
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-ru-ru.mst" 1049
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-uk-ua.mst" 1058
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-de-de.mst" 1031
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-nl-nl.mst" 1043
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-pt-br.mst" 1046
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-ru-ru.mst" 1049
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-uk-ua.mst" 1058
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-cn.mst" 2052
 
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wilangid.vbs" "%1\aspia-console-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
 
@@ -63,12 +63,12 @@ echo "Creating MSI transforms for Aspia Client"
 "%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-zh-cn.msi" -out "%1\client-zh-cn.mst"
 
 echo "Integration of transforms for Aspia Client"
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-de-de.mst" 1031
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-nl-nl.mst" 1043
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-pt-br.mst" 1046
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-ru-ru.mst" 1049
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-uk-ua.mst" 1058
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-de-de.mst" 1031
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-nl-nl.mst" 1043
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-pt-br.mst" 1046
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-ru-ru.mst" 1049
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-uk-ua.mst" 1058
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-cn.mst" 2052
 
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wilangid.vbs" "%1\aspia-client-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
 
@@ -91,12 +91,12 @@ echo "Creating MSI transforms for Aspia Host"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-zh-cn.msi" -out "%1\host-zh-cn.mst"
 
 echo "Integration of transforms for Aspia Host"
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-de-de.mst" 1031
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-nl-nl.mst" 1043
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-pt-br.mst" 1046
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-ru-ru.mst" 1049
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-uk-ua.mst" 1058
-cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-de-de.mst" 1031
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-nl-nl.mst" 1043
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-pt-br.mst" 1046
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-ru-ru.mst" 1049
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-uk-ua.mst" 1058
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-cn.mst" 2052
 
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wilangid.vbs" "%1\aspia-host-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
 
