@@ -122,7 +122,7 @@ bool DxgiOutputDuplicator::duplicateOutput()
 {
     DCHECK(!duplication_);
 
-    static const int kRetryCount = 3;
+    static const int kRetryCount = 10;
 
     for (int i = 0;; ++i)
     {
@@ -137,6 +137,8 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 desktop_ = Desktop::inputDesktop();
                 if (desktop_.isValid())
                     desktop_.setThreadDesktop();
+
+                Sleep(100);
                 continue;
             }
 

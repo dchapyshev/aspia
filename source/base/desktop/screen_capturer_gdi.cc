@@ -86,6 +86,11 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     return true;
 }
 
+ScreenCapturer::ScreenId ScreenCapturerGdi::currentScreen() const
+{
+    return current_screen_id_;
+}
+
 const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 {
     DCHECK(error);

@@ -108,6 +108,11 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
     return true;
 }
 
+ScreenCapturer::ScreenId ScreenCapturerMirror::currentScreen() const
+{
+    return current_screen_id_;
+}
+
 const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -216,7 +221,7 @@ void ScreenCapturerMirror::updateExcludeRegion()
     if (!ScreenCaptureUtils::screenList(&screen_list))
         return;
 
-    for (const auto& screen : screen_list)
+    for (const auto& screen : screen_list.screens)
     {
         std::wstring device_key;
 

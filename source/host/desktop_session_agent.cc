@@ -151,8 +151,11 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         if (screen_capturer_)
         {
+            const proto::Screen& screen = incoming_message_->select_source().screen();
+            const proto::Resolution& resolution = screen.resolution();
+
             screen_capturer_->selectScreen(static_cast<base::ScreenCapturer::ScreenId>(
-                incoming_message_->select_source().screen().id()));
+                screen.id()), base::Size(resolution.width(), resolution.height()));
         }
         else
         {
@@ -263,14 +266,25 @@ void DesktopSessionAgent::onScreenListChanged(
     proto::ScreenList* screen_list = outgoing_message_->mutable_screen_list();
     screen_list->set_current_screen(current);
 
-    for (const auto& list_item : list)
+    for (const auto& resolition_item : list.resolutions)
+    {
+        proto::Resolution* resolution = screen_list->add_resolution();
+        resolution->set_width(resolition_item.width());
+        resolution->set_height(resolition_item.height());
+    }
+
+    for (const auto& screen_item : list.screens)
     {
         proto::Screen* screen = screen_list->add_screen();
-        screen->set_id(list_item.id);
-        screen->set_title(list_item.title);
+        screen->set_id(screen_item.id);
+        screen->set_title(screen_item.title);
 
-        if (list_item.is_primary)
-            screen_list->set_primary_screen(list_item.id);
+        proto::Resolution* resolution = screen->mutable_resolution();
+        resolution->set_width(screen_item.resolution.width());
+        resolution->set_height(screen_item.resolution.height());
+
+        if (screen_item.is_primary)
+            screen_list->set_primary_screen(screen_item.id);
     }
 
     LOG(LS_INFO) << "Sending screen list to service";
@@ -286,13 +300,20 @@ void DesktopSessionAgent::onScreenCaptured(
 
     if (frame && !frame->constUpdatedRegion().isEmpty())
     {
+        base::SharedMemoryBase* shared_memory = frame->sharedMemory();
+        if (!shared_memory)
+        {
+            LOG(LS_ERROR) << "Unable to get shared memory";
+            return;
+        }
+
         if (input_injector_)
             input_injector_->setScreenOffset(frame->topLeft());
 
         proto::internal::DesktopFrame* serialized_frame = screen_captured->mutable_frame();
 
         serialized_frame->set_capturer_type(frame->capturerType());
-        serialized_frame->set_shared_buffer_id(frame->sharedMemory()->id());
+        serialized_frame->set_shared_buffer_id(shared_memory->id());
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
         serialized_frame->set_dpi_x(frame->dpi().x());

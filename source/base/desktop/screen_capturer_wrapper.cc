@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/desktop_environment.h"
+#include "base/desktop/desktop_resizer.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
@@ -62,31 +63,51 @@ ScreenCapturerWrapper::~ScreenCapturerWrapper()
     LOG(LS_INFO) << "Dtor";
 }
 
-void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id)
+void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
-    LOG(LS_INFO) << "Try to select screen: " << screen_id;
-
-    if (screen_capturer_->selectScreen(screen_id))
+    if (screen_id == screen_capturer_->currentScreen())
     {
-        LOG(LS_INFO) << "Screen " << screen_id << " selected";
+        if (resolution.isEmpty() || !resizer_)
+            return;
 
-        ScreenCapturer::ScreenList screens;
-
-        if (screen_capturer_->screenList(&screens))
-        {
-            LOG(LS_INFO) << "Received an updated list of screens";
-            delegate_->onScreenListChanged(screens, screen_id);
-        }
-        else
-        {
-            LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
-        }
+        LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
+        resizer_->setResolution(screen_id, resolution);
     }
     else
     {
-        LOG(LS_ERROR) << "ScreenCapturer::selectScreen failed";
+        LOG(LS_INFO) << "Try to select screen: " << screen_id;
+
+        if (!screen_capturer_->selectScreen(screen_id))
+        {
+            LOG(LS_ERROR) << "ScreenCapturer::selectScreen failed";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Screen " << screen_id << " selected";
+            last_screen_id_ = screen_id;
+        }
+    }
+
+    ScreenCapturer::ScreenList screen_list;
+    if (screen_capturer_->screenList(&screen_list))
+    {
+        LOG(LS_INFO) << "Received an updated list of screens";
+
+        if (resizer_)
+        {
+            screen_list.resolutions = resizer_->supportedResolutions(screen_id);
+
+            for (const auto& resolition : screen_list.resolutions)
+                LOG(LS_INFO) << "Supported resolution: " << resolition;
+        }
+
+        delegate_->onScreenListChanged(screen_list, screen_id);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
     }
 }
 
@@ -107,8 +128,11 @@ void ScreenCapturerWrapper::captureFrame()
     {
         LOG(LS_INFO) << "Screen count changed: " << count << " (old: " << screen_count_ << ")";
 
+        resizer_.reset();
+        resizer_ = DesktopResizer::create();
+
         screen_count_ = count;
-        selectScreen(defaultScreen());
+        selectScreen(defaultScreen(), Size());
     }
 
     ScreenCapturer::Error error;
@@ -146,7 +170,10 @@ void ScreenCapturerWrapper::captureFrame()
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
-    screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
+    shared_memory_factory_ = shared_memory_factory;
+
+    if (screen_capturer_)
+        screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
 }
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
@@ -166,10 +193,10 @@ void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 
 ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
-    ScreenCapturer::ScreenList screens;
-    if (screen_capturer_->screenList(&screens))
+    ScreenCapturer::ScreenList screen_list;
+    if (screen_capturer_->screenList(&screen_list))
     {
-        for (const auto& screen : screens)
+        for (const auto& screen : screen_list.screens)
         {
             if (screen.is_primary)
             {
@@ -241,6 +268,13 @@ void ScreenCapturerWrapper::selectCapturer()
 #else
     NOTIMPLEMENTED();
 #endif
+
+    screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
+    if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
+    {
+        LOG(LS_INFO) << "Restore selected screen: " << last_screen_id_;
+        selectScreen(last_screen_id_, Size());
+    }
 }
 
 void ScreenCapturerWrapper::switchToInputDesktop()

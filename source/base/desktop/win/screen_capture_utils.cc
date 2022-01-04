@@ -26,13 +26,14 @@
 namespace base {
 
 // static
-bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
+bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 {
-    DCHECK_EQ(screens->size(), 0U);
+    DCHECK_EQ(screen_list->screens.size(), 0U);
 
     for (int device_index = 0;; ++device_index)
     {
         DISPLAY_DEVICEW device;
+        memset(&device, 0, sizeof(device));
         device.cb = sizeof(device);
 
         // |enum_result| is 0 if we have enumerated all devices.
@@ -46,9 +47,22 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
             continue;
         }
 
-        bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
+        DEVMODEW device_mode;
+        memset(&device_mode, 0, sizeof(device_mode));
+        device_mode.dmSize = sizeof(device_mode);
 
-        screens->push_back({device_index, utf8FromWide(device.DeviceName), is_primary });
+        if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &device_mode, 0))
+        {
+            PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
+            return false;
+        }
+
+        bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
+        Size resolution = Size(static_cast<int32_t>(device_mode.dmPelsWidth),
+                               static_cast<int32_t>(device_mode.dmPelsHeight));
+
+        screen_list->screens.push_back(
+            {device_index, utf8FromWide(device.DeviceName), resolution, is_primary });
     }
 
     return true;

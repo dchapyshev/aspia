@@ -126,7 +126,6 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
 std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
     std::vector<Size> result;
-    result.resize(best_mode_.size());
 
     for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
         result.push_back(it->first);
@@ -156,6 +155,8 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     }
 
     Size candidate_resolution = resolutionFromMode(candidate_mode);
+    if (!candidate_mode.dmPelsWidth || !candidate_mode.dmPelsHeight)
+        return;
 
     if (best_mode_.count(candidate_resolution) != 0)
     {
@@ -193,14 +194,14 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
 
 DesktopResizerWin::DesktopResizerWin()
 {
-    ScreenCapturer::ScreenList screens;
-    if (!ScreenCaptureUtils::screenList(&screens))
+    ScreenCapturer::ScreenList screen_list;
+    if (!ScreenCaptureUtils::screenList(&screen_list))
     {
         LOG(LS_WARNING) << "ScreenCaptureUtils::screenList failed";
         return;
     }
 
-    for (const auto& screen : screens)
+    for (const auto& screen : screen_list.screens)
         screens_.emplace(screen.id, std::make_unique<Screen>(screen.id));
 }
 

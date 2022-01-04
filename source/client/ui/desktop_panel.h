@@ -91,6 +91,9 @@ private:
 
     const proto::SessionType session_type_;
 
+    QSize current_resolution_;
+    int64_t current_screen_id_ = -1;
+
     DesktopSettings settings_;
 
     QScopedPointer<QMenu> power_menu_;

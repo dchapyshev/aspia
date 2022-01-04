@@ -63,14 +63,20 @@ public:
     {
         ScreenId id = kInvalidScreenId;
         std::string title;
+        Size resolution;
         bool is_primary = false;
     };
 
-    using ScreenList = std::vector<Screen>;
+    struct ScreenList
+    {
+        std::vector<Screen> screens;
+        std::vector<Size> resolutions;
+    };
 
     virtual int screenCount() = 0;
     virtual bool screenList(ScreenList* screens) = 0;
     virtual bool selectScreen(ScreenId screen_id) = 0;
+    virtual ScreenId currentScreen() const = 0;
     virtual const Frame* captureFrame(Error* error) = 0;
     virtual const MouseCursor* captureCursor() = 0;
     virtual Point cursorPosition() = 0;

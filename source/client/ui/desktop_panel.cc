@@ -57,7 +57,13 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 
     connect(screens_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
-        emit screenSelected(static_cast<SelectScreenAction*>(action)->screen());
+        const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
+
+        proto::Screen out_screen;
+        out_screen.set_id(screen.id());
+        out_screen.set_title(screen.title());
+
+        emit screenSelected(screen);
     });
 
     ui.action_autoscroll->setChecked(settings_.autoScrolling());
@@ -203,6 +209,9 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
         ui.toolbar->widgetForAction(ui.action_monitors));
     button->setPopupMode(QToolButton::InstantPopup);
 
+    current_resolution_ = QSize(0, 0);
+    current_screen_id_ = screen_list.current_screen();
+
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
         const proto::Screen& screen = screen_list.screen(i);
@@ -216,10 +225,54 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 
         SelectScreenAction* action = new SelectScreenAction(screen, title, screens_group_);
         if (screen_list.current_screen() == screen.id())
+        {
+            current_resolution_.setWidth(screen.resolution().width());
+            current_resolution_.setHeight(screen.resolution().height());
             action->setChecked(true);
+        }
 
         screens_group_->addAction(action);
         screens_menu_->addAction(action);
+    }
+
+    if (screen_list.resolution_size() > 0 && !full_screen_action->isChecked())
+    {
+        screens_menu_->addSeparator();
+
+        QMenu* resolutions_menu = screens_menu_->addMenu(tr("Resolution"));
+        QActionGroup* resolutions_group = new QActionGroup(resolutions_menu);
+
+        for (int i = 0; i < screen_list.resolution_size(); ++i)
+        {
+            QSize resolution =
+                QSize(screen_list.resolution(i).width(), screen_list.resolution(i).height());
+
+            QAction* resolution_action = new QAction();
+            resolution_action->setText(
+                QString("%1x%2").arg(resolution.width()).arg(resolution.height()));
+            resolution_action->setData(resolution);
+            resolution_action->setCheckable(true);
+            if (resolution == current_resolution_)
+                resolution_action->setChecked(true);
+
+            resolutions_group->addAction(resolution_action);
+            resolutions_menu->addAction(resolution_action);
+        }
+
+        connect(resolutions_group, &QActionGroup::triggered, this, [=](QAction* action)
+        {
+            QSize resolution = action->data().toSize();
+
+            if (resolution == current_resolution_)
+                return;
+
+            proto::Screen screen;
+            screen.set_id(current_screen_id_);
+            screen.mutable_resolution()->set_width(resolution.width());
+            screen.mutable_resolution()->set_height(resolution.height());
+
+            emit screenSelected(screen);
+        });
     }
 
     ui.action_monitors->setVisible(true);

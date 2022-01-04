@@ -1110,51 +1110,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="213"/>
+        <location filename="../ui/desktop_panel.cc" line="222"/>
         <source>Monitor %1 (primary)</source>
         <translation>Beeldscherm %1 (primair)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="215"/>
+        <location filename="../ui/desktop_panel.cc" line="224"/>
         <source>Monitor %1</source>
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="322"/>
-        <location filename="../ui/desktop_panel.cc" line="333"/>
-        <location filename="../ui/desktop_panel.cc" line="344"/>
-        <location filename="../ui/desktop_panel.cc" line="355"/>
-        <location filename="../ui/desktop_panel.cc" line="366"/>
+        <location filename="../ui/desktop_panel.cc" line="242"/>
+        <source>Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="375"/>
+        <location filename="../ui/desktop_panel.cc" line="386"/>
+        <location filename="../ui/desktop_panel.cc" line="397"/>
+        <location filename="../ui/desktop_panel.cc" line="408"/>
+        <location filename="../ui/desktop_panel.cc" line="419"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="323"/>
+        <location filename="../ui/desktop_panel.cc" line="376"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="334"/>
+        <location filename="../ui/desktop_panel.cc" line="387"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="345"/>
+        <location filename="../ui/desktop_panel.cc" line="398"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="356"/>
+        <location filename="../ui/desktop_panel.cc" line="409"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="367"/>
+        <location filename="../ui/desktop_panel.cc" line="420"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="392"/>
+        <location filename="../ui/desktop_panel.cc" line="445"/>
         <source>Scale</source>
         <translation>Schaal</translation>
     </message>

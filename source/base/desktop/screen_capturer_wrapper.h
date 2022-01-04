@@ -31,6 +31,7 @@
 namespace base {
 
 class DesktopEnvironment;
+class DesktopResizer;
 class MouseCursor;
 class PowerSaveBlocker;
 
@@ -51,7 +52,7 @@ public:
     ScreenCapturerWrapper(ScreenCapturer::Type preferred_type, Delegate* delegate);
     ~ScreenCapturerWrapper();
 
-    void selectScreen(ScreenCapturer::ScreenId screen_id);
+    void selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution);
     void captureFrame();
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
@@ -63,6 +64,7 @@ private:
     void selectCapturer();
     void switchToInputDesktop();
 
+    SharedMemoryFactory* shared_memory_factory_ = nullptr;
     ScreenCapturer::Type preferred_type_;
     Delegate* delegate_;
 
@@ -71,10 +73,13 @@ private:
 #endif // defined(OS_WIN)
 
     int screen_count_ = 0;
+    int dxgi_error_count_ = 0;
+    ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
     Point last_cursor_pos_;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;
+    std::unique_ptr<DesktopResizer> resizer_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
 
     THREAD_CHECKER(thread_checker_);

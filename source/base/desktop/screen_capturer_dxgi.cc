@@ -29,9 +29,9 @@ namespace base {
 namespace {
 
 bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
-                               ScreenCapturer::ScreenList* screens)
+                               ScreenCapturer::ScreenList* screen_list)
 {
-    DCHECK(screens->empty());
+    DCHECK(screen_list->screens.empty());
 
     ScreenCapturer::ScreenList gdi_screens;
 
@@ -43,20 +43,20 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 
     ScreenCapturer::ScreenId max_screen_id = -1;
 
-    for (const auto& screen : gdi_screens)
+    for (const auto& screen : gdi_screens.screens)
         max_screen_id = std::max(max_screen_id, screen.id);
 
     for (const auto& device_name : device_names)
     {
         bool device_found = false;
 
-        for (const auto& gdi_screen : gdi_screens)
+        for (const auto& gdi_screen : gdi_screens.screens)
         {
             std::string device_name_utf8 = utf8FromWide(device_name);
 
             if (gdi_screen.title == device_name_utf8)
             {
-                screens->push_back(gdi_screen);
+                screen_list->screens.push_back(gdi_screen);
                 device_found = true;
 
                 break;
@@ -67,7 +67,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
         {
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
-            screens->push_back({ max_screen_id, std::string() });
+            screen_list->screens.push_back({ max_screen_id, std::string(), Size(), false });
         }
     }
 
@@ -76,19 +76,19 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 
 int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
 {
-    ScreenCapturer::ScreenList screens;
+    ScreenCapturer::ScreenList screen_list;
 
-    if (!screenListFromDeviceNames(device_names, &screens))
+    if (!screenListFromDeviceNames(device_names, &screen_list))
     {
         LOG(LS_WARNING) << "screenListFromDeviceNames failed";
         return -1;
     }
 
-    DCHECK_EQ(device_names.size(), screens.size());
+    DCHECK_EQ(device_names.size(), screen_list.screens.size());
 
-    for (size_t i = 0; i < screens.size(); ++i)
+    for (size_t i = 0; i < screen_list.screens.size(); ++i)
     {
-        if (screens[i].id == id)
+        if (screen_list.screens[i].id == id)
             return static_cast<int>(i);
     }
 
@@ -168,6 +168,11 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 
     current_screen_id_ = index;
     return true;
+}
+
+ScreenCapturer::ScreenId ScreenCapturerDxgi::currentScreen() const
+{
+    return current_screen_id_;
 }
 
 const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
