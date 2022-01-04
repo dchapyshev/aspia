@@ -27,7 +27,7 @@ SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                                      const PixelFormat& format,
                                      SharedMemoryBase* shared_memory)
     : Frame(size, format, size.width() * format.bytesPerPixel(),
-            reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
+      reinterpret_cast<uint8_t*>(shared_memory->data()), shared_memory)
 {
     // Nothing
 }
@@ -45,7 +45,10 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
 
     std::unique_ptr<SharedMemory> shared_memory = shared_memory_factory->create(buffer_size);
     if (!shared_memory)
+    {
+        LOG(LS_ERROR) << "SharedMemoryFactory::create failed for size: " << buffer_size;
         return nullptr;
+    }
 
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }
@@ -56,7 +59,10 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
 {
     std::unique_ptr<SharedMemory> shared_memory = shared_memory_factory->open(id);
     if (!shared_memory)
+    {
+        LOG(LS_ERROR) << "SharedMemoryFactory::open failed for id: " << id;
         return nullptr;
+    }
 
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }

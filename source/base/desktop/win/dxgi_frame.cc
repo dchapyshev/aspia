@@ -29,10 +29,15 @@ DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
     : context_(std::move(controller)),
       shared_memory_factory_(shared_memory_factory)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor "
+                 << (shared_memory_factory_ ? "WITH" : "WITHOUT")
+                 << " shared memory factory";
 }
 
-DxgiFrame::~DxgiFrame() = default;
+DxgiFrame::~DxgiFrame()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 {
@@ -60,15 +65,17 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
         if (shared_memory_factory_)
         {
             frame = SharedMemoryFrame::create(size, PixelFormat::ARGB(), shared_memory_factory_);
+            LOG(LS_INFO) << "SharedMemoryFrame created";
         }
         else
         {
             frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
+            LOG(LS_INFO) << "FrameAligned created";
         }
 
         if (!frame)
         {
-            LOG(LS_WARNING) << "DxgiFrame cannot create a new DesktopFrame";
+            LOG(LS_WARNING) << "DxgiFrame cannot create a new Frame";
             return false;
         }
 
