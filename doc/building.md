@@ -3,15 +3,17 @@ Instructions for building the project
 
 Windows
 -------
-1. You must use Windows 10 x64 to build the project. Build in other versions of Windows is not guaranteed.
-2. Download and install [Visual Studio Community 2017](https://www.visualstudio.com/downloads).
+1. You must use Windows 10/11 x64 to build the project. Build in other versions of Windows is not guaranteed.
+2. Download and install [Visual Studio Community 2019](https://www.visualstudio.com/downloads).
 
    2.1. **Desktop development with C++** workload should be selected when installing.
 
-   2.2. **SDK 10.0.17763.0 and 8.1** should be selected when installing.
+   2.2. **SDK 10.0.18362.0** should be selected when installing.
+
+   2.3. **ATL/MFC** libraries shuld be selected when installing.
 
 3. Download and install [CMake](https://cmake.org/download).
-4. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg).
+4. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg) (forked from Microsoft repository).
 5. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
 * asio
 * gtest
@@ -30,7 +32,7 @@ Windows
 6. Go to the source directory and run the following commands:
    **<br/>mkdir build
    <br/>cd build
-   <br/>cmake ..\ -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
+   <br/>cmake ..\ -G "Visual Studio 16 2019" -A Win32 -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
    <br/>(replace <vcpkg_path> with real path to vcpkg)
 
    You can also use CMake GUI for these purposes.
