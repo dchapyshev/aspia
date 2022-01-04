@@ -188,6 +188,7 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 
     current_screen_id_ = screen_list.current_screen();
     current_resolution_ = QSize(0, 0);
+    screen_count_ = screen_list.screen_size();
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
