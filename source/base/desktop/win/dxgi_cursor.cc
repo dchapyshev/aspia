@@ -117,6 +117,16 @@ void DxgiCursor::setPosition(const Point& pointer_position)
     pointer_position_ = pointer_position;
 }
 
+bool DxgiCursor::isVisible() const
+{
+    return is_visible_;
+}
+
+void DxgiCursor::setVisible(bool visible)
+{
+    is_visible_ = visible;
+}
+
 DXGI_OUTDUPL_POINTER_SHAPE_INFO* DxgiCursor::pointerShapeInfo()
 {
     return &pointer_shape_info_;

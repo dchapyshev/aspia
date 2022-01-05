@@ -249,12 +249,17 @@ bool DxgiOutputDuplicator::duplicate(
 
     if (frame_info.LastMouseUpdateTime.QuadPart != 0)
     {
-        DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
+        cursor->setVisible(frame_info.PointerPosition.Visible != FALSE);
 
-        int x = frame_info.PointerPosition.Position.x + offset.x() + shape_info->HotSpot.x;
-        int y = frame_info.PointerPosition.Position.y + offset.y() + shape_info->HotSpot.y;
+        if (frame_info.PointerPosition.Visible)
+        {
+            DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
 
-        cursor->setPosition(Point(x, y));
+            int x = frame_info.PointerPosition.Position.x + offset.x() + shape_info->HotSpot.x;
+            int y = frame_info.PointerPosition.Position.y + offset.y() + shape_info->HotSpot.y;
+
+            cursor->setPosition(Point(x, y));
+        }
     }
 
     // We need to merge updated region with the one from context, but only spread updated region
