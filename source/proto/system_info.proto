@@ -32,9 +32,11 @@ message Computer
 
 message OperatingSystem
 {
-    string name    = 1;
-    string version = 2;
-    string arch    = 3;
+    string name        = 1;
+    string version     = 2;
+    string arch        = 3;
+    string key         = 4;
+    int64 install_date = 5;
 }
 
 message Motherboard

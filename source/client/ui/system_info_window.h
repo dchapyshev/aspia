@@ -48,6 +48,7 @@ private:
     static QString sizeToString(int64_t size);
     static QString delayToString(uint64_t delay);
     static QString speedToString(uint64_t speed);
+    static QString timeToString(time_t time);
 
     Ui::SystemInfoWindow ui;
 

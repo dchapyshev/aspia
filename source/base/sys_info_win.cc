@@ -73,6 +73,57 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
     return count;
 }
 
+std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
+{
+    constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
+    constexpr int kKeyMapSize = 24;
+    constexpr int kStartIndex = 52;
+    constexpr int kDecodeLength = 25;
+    constexpr int kDecodeStringLength = 15;
+    constexpr int kGroupLength = 5;
+
+    if (product_id_size < kStartIndex + kDecodeLength)
+        return std::string();
+
+    // The keys starting with Windows 8 / Office 2013 can contain the symbol N.
+    int containsN = (product_id[kStartIndex + 14] >> 3) & 1;
+    product_id[kStartIndex + 14] =
+        static_cast<uint8_t>((product_id[kStartIndex + 14] & 0xF7) | ((containsN & 2) << 2));
+
+    std::string key;
+
+    for (int i = kDecodeLength - 1; i >= 0; --i)
+    {
+        int key_map_index = 0;
+
+        for (int j = kDecodeStringLength - 1; j >= 0; --j)
+        {
+            key_map_index = (key_map_index << 8) | product_id[kStartIndex + j];
+            product_id[kStartIndex + j] = static_cast<uint8_t>(key_map_index / kKeyMapSize);
+            key_map_index %= kKeyMapSize;
+        }
+
+        key.insert(key.begin(), kKeyMap[key_map_index]);
+    }
+
+    if (containsN)
+    {
+        // Skip the first character.
+        key.erase(key.begin());
+
+        // Insert the symbol N after the first group.
+        key.insert(kGroupLength, 1, 'N');
+    }
+
+    for (size_t i = kGroupLength; i < key.length(); i += kGroupLength + 1)
+    {
+        // Insert group separators.
+        key.insert(i, 1, '-');
+    }
+
+    return key;
+}
+
 } // namespace
 
 //static
@@ -145,6 +196,76 @@ std::string SysInfo::operatingSystemDir()
         return std::string();
 
     return dir.u8string();
+}
+
+// static
+std::string SysInfo::operatingSystemKey()
+{
+    win::RegistryKey key;
+
+    REGSAM access = KEY_READ;
+
+#if (ARCH_CPU_X86 == 1)
+    if (isWow64Process())
+        access |= KEY_WOW64_64KEY;
+#endif
+
+    // Read MS Windows Key.
+    LONG status = key.open(HKEY_LOCAL_MACHINE,
+                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           access | KEY_READ);
+    if (status != ERROR_SUCCESS)
+        return std::string();
+
+    DWORD product_id_size = 0;
+
+    status = key.readValue(L"DigitalProductId", nullptr, &product_id_size, nullptr);
+    if (status != ERROR_SUCCESS)
+    {
+        status = key.readValue(L"DPID", nullptr, &product_id_size, nullptr);
+        if (status != ERROR_SUCCESS)
+            return std::string();
+    }
+
+    std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
+
+    status = key.readValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
+    if (status != ERROR_SUCCESS)
+    {
+        status = key.readValue(L"DPID", product_id.get(), &product_id_size, nullptr);
+        if (status != ERROR_SUCCESS)
+            return std::string();
+    }
+
+    return digitalProductIdToString(product_id.get(), product_id_size);
+}
+
+// static
+int64_t SysInfo::operatingSystemInstallDate()
+{
+    win::RegistryKey key;
+
+    REGSAM access = KEY_READ;
+
+#if (ARCH_CPU_X86 == 1)
+    if (isWow64Process())
+        access |= KEY_WOW64_64KEY;
+#endif
+
+    LONG status = key.open(HKEY_LOCAL_MACHINE,
+                           L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                           access);
+    if (status == ERROR_SUCCESS)
+    {
+        std::wstring value;
+        DWORD install_date;
+
+        status = key.readValueDW(L"InstallDate", &install_date);
+        if (status == ERROR_SUCCESS)
+            return static_cast<int64_t>(install_date);
+    }
+
+    return 0;
 }
 
 // static

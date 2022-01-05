@@ -39,6 +39,8 @@ void createSystemInfo(proto::SystemInfo* system_info)
     operating_system->set_name(base::SysInfo::operatingSystemName());
     operating_system->set_version(base::SysInfo::operatingSystemVersion());
     operating_system->set_arch(base::SysInfo::operatingSystemArchitecture());
+    operating_system->set_key(base::SysInfo::operatingSystemKey());
+    operating_system->set_install_date(base::SysInfo::operatingSystemInstallDate());
 
     proto::system_info::Processor* processor = system_info->mutable_processor();
     processor->set_vendor(base::SysInfo::processorVendor());

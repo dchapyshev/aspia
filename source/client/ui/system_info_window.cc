@@ -21,6 +21,7 @@
 #include "client/ui/tree_to_html.h"
 
 #include <QClipboard>
+#include <QDateTime>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPrinter>
@@ -206,6 +207,12 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
 
         if (!os.arch().empty())
             items << mk(tr("Architecture"), os.arch());
+
+        if (!os.key().empty())
+            items << mk(tr("License Key"), os.key());
+
+        if (os.install_date() != 0)
+            items << mk(tr("Install Date"), timeToString(os.install_date()));
 
         if (!items.isEmpty())
         {
@@ -632,6 +639,12 @@ QString SystemInfoWindow::speedToString(uint64_t speed)
     return QString("%1 %2")
         .arg(static_cast<double>(speed) / static_cast<double>(divider), 0, 'g', 4)
         .arg(units);
+}
+
+// static
+QString SystemInfoWindow::timeToString(time_t time)
+{
+    return QLocale::system().toString(QDateTime::fromSecsSinceEpoch(time), QLocale::ShortFormat);
 }
 
 } // namespace client

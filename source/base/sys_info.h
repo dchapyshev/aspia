@@ -32,6 +32,8 @@ public:
     static std::string operatingSystemVersion();
     static std::string operatingSystemArchitecture();
     static std::string operatingSystemDir();
+    static std::string operatingSystemKey();
+    static int64_t operatingSystemInstallDate();
 
     static uint64_t uptime();
 
