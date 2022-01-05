@@ -477,6 +477,41 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
         }
     }
 
+    if (system_info.has_network_shares())
+    {
+        const proto::system_info::NetworkShares& network_shares = system_info.network_shares();
+        QList<QTreeWidgetItem*> items;
+
+        for (int i = 0; i < network_shares.share_size(); ++i)
+        {
+            const proto::system_info::NetworkShares::Share& share = network_shares.share(i);
+            QList<QTreeWidgetItem*> group;
+
+            if (!share.description().empty())
+                group << mk(tr("Description"), QString::fromStdString(share.description()));
+
+            if (!share.type().empty())
+                group << mk(tr("Type"), QString::fromStdString(share.type()));
+
+            if (!share.local_path().empty())
+                group << mk(tr("Local Path"), QString::fromStdString(share.local_path()));
+
+            group << mk(tr("Current Uses"), QString::number(share.current_uses()));
+
+            QString max_uses = (share.max_uses() == 0xFFFFFFFF) ?
+                tr("Not limited") : QString::number(share.max_uses());
+            group << mk(tr("Maximum Uses"), max_uses);
+
+            if (!group.isEmpty())
+                items << new Item(QString::fromStdString(share.name()), group);
+        }
+
+        if (!items.isEmpty())
+        {
+            ui.tree->addTopLevelItem(new Item(":/img/folder-share.png", tr("Network Shares"), items));
+        }
+    }
+
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
         ui.tree->topLevelItem(i)->setExpanded(true);
 

@@ -2025,6 +2025,7 @@
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="311"/>
+        <location filename="../ui/system_info_window.cc" line="494"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
@@ -2169,75 +2170,105 @@
         <translation>打印机</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="537"/>
+        <location filename="../ui/system_info_window.cc" line="491"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="497"/>
+        <source>Local Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="499"/>
+        <source>Current Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="502"/>
+        <source>Not limited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="503"/>
+        <source>Maximum Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="511"/>
+        <source>Network Shares</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="572"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="542"/>
+        <location filename="../ui/system_info_window.cc" line="577"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="547"/>
+        <location filename="../ui/system_info_window.cc" line="582"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="552"/>
+        <location filename="../ui/system_info_window.cc" line="587"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="557"/>
+        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="573"/>
+        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n 秒</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="574"/>
+        <location filename="../ui/system_info_window.cc" line="609"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n 分钟</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="575"/>
+        <location filename="../ui/system_info_window.cc" line="610"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n 小时</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="599"/>
+        <location filename="../ui/system_info_window.cc" line="634"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n 天</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="620"/>
+        <location filename="../ui/system_info_window.cc" line="655"/>
         <source>Gbps</source>
         <translation>Gbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="625"/>
+        <location filename="../ui/system_info_window.cc" line="660"/>
         <source>Mbps</source>
         <translation>Mbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="630"/>
+        <location filename="../ui/system_info_window.cc" line="665"/>
         <source>Kbps</source>
         <translation>Kbps</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="635"/>
+        <location filename="../ui/system_info_window.cc" line="670"/>
         <source>bps</source>
         <translation>bps</translation>
     </message>

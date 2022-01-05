@@ -581,6 +581,8 @@ if (WIN32)
         win/message_window.h
         win/mini_dump_writer.cc
         win/mini_dump_writer.h
+        win/net_share_enumerator.cc
+        win/net_share_enumerator.h
         win/object_watcher.cc
         win/object_watcher.h
         win/printer_enumerator.cc

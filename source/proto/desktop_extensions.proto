@@ -87,6 +87,7 @@ message SystemInfo
     system_info.LogicalDrives logical_drives     = 7;
     system_info.Printers printers                = 8;
     system_info.NetworkAdapters network_adapters = 9;
+    system_info.NetworkShares network_shares     = 10;
 }
 
 // Extension name: "video_recording"

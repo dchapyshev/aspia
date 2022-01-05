@@ -131,3 +131,18 @@ message NetworkAdapters
 
     repeated Adapter adapter = 1;
 }
+
+message NetworkShares
+{
+    message Share
+    {
+        string name         = 1;
+        string description  = 2;
+        string type         = 3;
+        string local_path   = 4;
+        uint32 current_uses = 5;
+        uint32 max_uses     = 6;
+    }
+
+    repeated Share share = 1;
+}

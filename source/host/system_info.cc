@@ -24,6 +24,7 @@
 #include "base/net/adapter_enumerator.h"
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
+#include "base/win/net_share_enumerator.h"
 
 namespace host {
 
@@ -173,6 +174,50 @@ void createSystemInfo(proto::SystemInfo* system_info)
              !dns.isAtEnd(); dns.advance())
         {
             adapter->add_dns()->assign(dns.address());
+        }
+    }
+
+    for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::NetworkShares::Share* share =
+            system_info->mutable_network_shares()->add_share();
+
+        share->set_name(enumerator.name());
+        share->set_description(enumerator.description());
+        share->set_local_path(enumerator.localPath());
+        share->set_current_uses(enumerator.currentUses());
+        share->set_max_uses(enumerator.maxUses());
+
+        using ShareType = base::win::NetShareEnumerator::Type;
+
+        switch (enumerator.type())
+        {
+            case ShareType::DISK:
+                share->set_type("Disk");
+                break;
+
+            case ShareType::PRINTER:
+                share->set_type("Printer");
+                break;
+
+            case ShareType::DEVICE:
+                share->set_type("Device");
+                break;
+
+            case ShareType::IPC:
+                share->set_type("IPC");
+                break;
+
+            case ShareType::SPECIAL:
+                share->set_type("Special");
+                break;
+
+            case ShareType::TEMPORARY:
+                share->set_type("Temporary");
+                break;
+
+            default:
+                break;
         }
     }
 }
