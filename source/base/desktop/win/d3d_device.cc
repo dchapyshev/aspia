@@ -82,7 +82,7 @@ bool D3dDevice::initialize(const ComPtr<IDXGIAdapter>& adapter)
 }
 
 // static
-std::vector<D3dDevice> D3dDevice::enumDevices()
+ScalableVector<D3dDevice> D3dDevice::enumDevices()
 {
     ComPtr<IDXGIFactory1> factory;
 
@@ -91,10 +91,10 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
     if (error.Error() != S_OK || !factory)
     {
         LOG(LS_WARNING) << "Cannot create IDXGIFactory1";
-        return std::vector<D3dDevice>();
+        return ScalableVector<D3dDevice>();
     }
 
-    std::vector<D3dDevice> result;
+    ScalableVector<D3dDevice> result;
 
     for (int i = 0;; ++i)
     {

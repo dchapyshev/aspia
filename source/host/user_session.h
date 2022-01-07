@@ -154,9 +154,9 @@ private:
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
     using ClientSessionPtr = std::unique_ptr<ClientSession>;
-    using ClientSessionList = std::vector<ClientSessionPtr>;
+    using ClientSessionList = base::ScalableVector<ClientSessionPtr>;
     using UnconfirmedClientSessionPtr = std::unique_ptr<UnconfirmedClientSession>;
-    using UnconfirmedClientSessionList = std::vector<UnconfirmedClientSessionPtr>;
+    using UnconfirmedClientSessionList = base::ScalableVector<UnconfirmedClientSessionPtr>;
 
     UnconfirmedClientSessionList pending_clients_;
     ClientSessionList desktop_clients_;

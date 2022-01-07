@@ -100,7 +100,7 @@ AudioBus::AudioBus(int channels, int frames, float* data)
     BuildChannelData(channels, aligned_frames, data);
 }
 
-AudioBus::AudioBus(int frames, const std::vector<float*>& channel_data)
+AudioBus::AudioBus(int frames, const ScalableVector<float*>& channel_data)
     : channel_data_(channel_data),
       frames_(frames),
       can_set_channel_data_(false)
@@ -134,7 +134,7 @@ std::unique_ptr<AudioBus> AudioBus::CreateWrapper(int channels)
     return std::unique_ptr<AudioBus>(new AudioBus(channels));
 }
 
-std::unique_ptr<AudioBus> AudioBus::WrapVector(int frames, const std::vector<float*>& channel_data)
+std::unique_ptr<AudioBus> AudioBus::WrapVector(int frames, const ScalableVector<float*>& channel_data)
 {
     return std::unique_ptr<AudioBus>(new AudioBus(frames, channel_data));
 }

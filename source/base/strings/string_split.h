@@ -22,7 +22,6 @@
 #include "base/memory/scalable_vector.h"
 
 #include <string>
-#include <vector>
 
 namespace base {
 
@@ -53,7 +52,7 @@ enum SplitResult
 //
 // To split on either commas or semicolons, keeping all whitespace:
 //
-//   std::vector<std::string> tokens = base::splitString(
+//   ScalableVector<std::string> tokens = base::splitString(
 //       input, ",;", base::KEEP_WHITESPACE, base::SPLIT_WANT_ALL);
 ScalableVector<std::string> splitString(std::string_view input,
                                         std::string_view separators,

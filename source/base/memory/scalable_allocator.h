@@ -16,18 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MEMORY__SCALABLE_VECTOR_H
-#define BASE__MEMORY__SCALABLE_VECTOR_H
+#ifndef BASE__MEMORY__SCALABLE_ALLOCATOR_H
+#define BASE__MEMORY__SCALABLE_ALLOCATOR_H
 
-#include "base/memory/scalable_allocator.h"
+#include <memory>
 
-#include <vector>
+#if defined(USE_TBB_ALLOCATOR)
+#include <tbb/scalable_allocator.h>
+#endif // defined(USE_TBB_ALLOCATOR)
 
 namespace base {
 
 template <class T>
-using ScalableVector = std::vector<T, ScalableAllocator<T>>;
+#if defined(USE_TBB_ALLOCATOR)
+using ScalableAllocator = tbb::scalable_allocator<T>;
+#else // defined(USE_TBB_ALLOCATOR)
+using ScalableAllocator = std::allocator<T>;
+#endif // defined(USE_*)
 
 } // namespace base
 
-#endif // BASE__MEMORY__SCALABLE_VECTOR_H
+#endif // BASE__MEMORY__SCALABLE_ALLOCATOR_H

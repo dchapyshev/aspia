@@ -17,6 +17,7 @@
 #
 
 add_subdirectory(modp_b64)
+add_subdirectory(tbb_c_allocator)
 add_subdirectory(x11region)
 
 if (APPLE)

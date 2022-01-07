@@ -47,7 +47,7 @@ public:
 private:
     ByteArray decompressCursor(const proto::CursorShape& cursor_shape) const;
 
-    std::vector<std::shared_ptr<MouseCursor>> cache_;
+    ScalableVector<std::shared_ptr<MouseCursor>> cache_;
     std::optional<size_t> cache_size_;
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;

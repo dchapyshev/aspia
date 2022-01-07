@@ -19,8 +19,7 @@
 #include "router/shared_key_pool.h"
 
 #include "base/logging.h"
-
-#include <map>
+#include "base/memory/scalable_map.h"
 
 namespace router {
 
@@ -41,9 +40,9 @@ public:
     bool isEmpty() const;
 
 private:
-    using Keys = std::vector<proto::RelayKey>;
+    using Keys = base::ScalableVector<proto::RelayKey>;
 
-    std::map<Session::SessionId, Keys> pool_;
+    base::ScalableMap<Session::SessionId, Keys> pool_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);

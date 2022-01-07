@@ -24,6 +24,7 @@
 #include "base/desktop/win/dxgi_adapter_duplicator.h"
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_frame.h"
+#include "base/memory/scalable_vector.h"
 
 #include <D3DCommon.h>
 
@@ -112,7 +113,7 @@ public:
     // Returns the device names of all screens on the system. These screens can be retrieved by an
     // integer in the range of [0, output->size()). If system does not support DXGI based capturer,
     // this function returns false.
-    bool deviceNames(std::vector<std::wstring>* output);
+    bool deviceNames(ScalableVector<std::wstring>* output);
 
 private:
     // DxgiFrameContext calls private unregister(Context*) function in reset().
@@ -187,7 +188,7 @@ private:
     int identity_ = 0;
     Rect desktop_rect_;
     Point dpi_;
-    std::vector<DxgiAdapterDuplicator> duplicators_;
+    ScalableVector<DxgiAdapterDuplicator> duplicators_;
     D3dInfo d3d_info_;
     DisplayConfigurationMonitor display_configuration_monitor_;
     // A number to indicate how many succeeded duplications have been performed.

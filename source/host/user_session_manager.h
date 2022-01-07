@@ -21,6 +21,7 @@
 
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
+#include "base/memory/scalable_vector.h"
 #include "base/win/session_status.h"
 #include "host/user_session.h"
 
@@ -76,7 +77,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;
     std::unique_ptr<base::IpcServer> ipc_server_;
-    std::vector<std::unique_ptr<UserSession>> sessions_;
+    base::ScalableVector<std::unique_ptr<UserSession>> sessions_;
     Delegate* delegate_ = nullptr;
 
     proto::internal::RouterState router_state_;

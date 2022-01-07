@@ -445,7 +445,10 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.h
     memory/byte_array.cc
     memory/byte_array.h
+    memory/scalable_allocator.h
+    memory/scalable_map.h
     memory/scalable_queue.h
+    memory/scalable_set.h
     memory/scalable_vector.h
     memory/typed_buffer.h)
 

@@ -22,10 +22,9 @@
 #include "base/macros_magic.h"
 #include "base/codec/audio_sample_types.h"
 #include "base/memory/aligned_memory.h"
+#include "base/memory/scalable_vector.h"
 
 #include <cstdint>
-#include <memory>
-#include <vector>
 
 namespace base {
 
@@ -57,7 +56,7 @@ public:
     // the returned AudioBus.  Each channel must be aligned by kChannelAlignment.
     static std::unique_ptr<AudioBus> WrapVector(
         int frames,
-        const std::vector<float*>& channel_data);
+        const ScalableVector<float*>& channel_data);
 
     // Creates a new AudioBus by wrapping an existing block of memory.  Block must
     // be at least CalculateMemorySize() bytes in size.  |data| must outlive the
@@ -175,7 +174,7 @@ public:
 protected:
     AudioBus(int channels, int frames);
     AudioBus(int channels, int frames, float* data);
-    AudioBus(int frames, const std::vector<float*>& channel_data);
+    AudioBus(int frames, const ScalableVector<float*>& channel_data);
     explicit AudioBus(int channels);
 
 private:
@@ -213,7 +212,7 @@ private:
     // that channel. If the memory is owned by this instance, this will
     // point to the memory in |data_|. Otherwise, it may point to memory provided
     // by the client.
-    std::vector<float*> channel_data_;
+    ScalableVector<float*> channel_data_;
     int frames_;
 
     // Protect SetChannelData() and set_frames() for use by CreateWrapper().

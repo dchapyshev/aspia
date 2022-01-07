@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/desktop/desktop_resizer.h"
-
-#include <map>
+#include "base/memory/scalable_map.h"
 
 namespace base {
 
@@ -32,14 +31,14 @@ public:
     DesktopResizerWin();
     ~DesktopResizerWin();
 
-    std::vector<Size> supportedResolutions(ScreenId screen_id) override;
+    ScalableVector<Size> supportedResolutions(ScreenId screen_id) override;
     void setResolution(ScreenId screen_id, const Size& resolution) override;
     void restoreResolution(ScreenId screen_id) override;
     void restoreResulution() override;
 
 private:
     class Screen;
-    std::map<ScreenId, std::unique_ptr<Screen>> screens_;
+    ScalableMap<ScreenId, std::unique_ptr<Screen>> screens_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopResizerWin);
 };

@@ -19,6 +19,7 @@
 #ifndef CLIENT__CLIENT_FILE_TRANSFER_H
 #define CLIENT__CLIENT_FILE_TRANSFER_H
 
+#include "base/memory/scalable_queue.h"
 #include "client/client.h"
 #include "client/file_control.h"
 #include "common/file_task_consumer.h"
@@ -93,7 +94,7 @@ private:
     std::unique_ptr<common::FileTaskFactory> local_task_factory_;
     std::unique_ptr<common::FileTaskFactory> remote_task_factory_;
 
-    std::queue<std::shared_ptr<common::FileTask>> remote_task_queue_;
+    base::ScalableQueue<std::shared_ptr<common::FileTask>> remote_task_queue_;
     std::unique_ptr<common::FileWorker> local_worker_;
 
     std::shared_ptr<FileControlProxy> file_control_proxy_;

@@ -174,9 +174,9 @@ SOFTWARE.
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-#define xallocData(n)    (RegDataPtr)malloc(REGION_SZOF(n))
+#define xallocData(n)    (RegDataPtr)xalloc(REGION_SZOF(n))
 #define xfreeData(reg)   if ((reg)->data && (reg)->data->size) \
-                           free((reg)->data)
+                           xfree((reg)->data)
 
 #define RECTALLOC_BAIL(pReg,n,bail) \
 if (!(pReg)->data || (((pReg)->data->numRects + (n)) > (pReg)->data->size)) \

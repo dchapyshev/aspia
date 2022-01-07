@@ -20,6 +20,7 @@
 #define HOST__USER_SESSION_AGENT_H
 
 #include "base/ipc/ipc_channel.h"
+#include "base/memory/scalable_vector.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
@@ -52,7 +53,7 @@ public:
         proto::SessionType session_type;
     };
 
-    using ClientList = std::vector<Client>;
+    using ClientList = base::ScalableVector<Client>;
 
     explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
     ~UserSessionAgent();

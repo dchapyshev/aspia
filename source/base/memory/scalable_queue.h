@@ -19,20 +19,11 @@
 #ifndef BASE__MEMORY__SCALABLE_QUEUE_H
 #define BASE__MEMORY__SCALABLE_QUEUE_H
 
+#include "base/memory/scalable_allocator.h"
+
 #include <queue>
 
-#if defined(USE_TBB_ALLOCATOR)
-#include <tbb/scalable_allocator.h>
-#endif // defined(USE_TBB_ALLOCATOR)
-
 namespace base {
-
-template <class T>
-#if defined(USE_TBB_ALLOCATOR)
-using ScalableAllocator = tbb::scalable_allocator<T>;
-#else // defined(USE_TBB_ALLOCATOR)
-using ScalableAllocator = std::allocator<T>;
-#endif // defined(USE_*)
 
 template <class T>
 using ScalableQueue = std::queue<T, std::deque<T, ScalableAllocator<T>>>;

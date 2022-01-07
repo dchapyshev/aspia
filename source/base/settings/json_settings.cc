@@ -34,7 +34,7 @@ namespace base {
 
 namespace {
 
-std::string createKey(const std::vector<std::string_view>& segments)
+std::string createKey(const ScalableVector<std::string_view>& segments)
 {
     std::string key;
 
@@ -49,7 +49,7 @@ std::string createKey(const std::vector<std::string_view>& segments)
 }
 
 template <class T>
-void parseObject(const T& object, std::vector<std::string_view>* segments, Settings::Map* map)
+void parseObject(const T& object, ScalableVector<std::string_view>* segments, Settings::Map* map)
 {
     for (auto it = object.MemberBegin(); it != object.MemberEnd(); ++it)
     {
@@ -270,7 +270,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
         return false;
     }
 
-    std::vector<std::string_view> segments;
+    ScalableVector<std::string_view> segments;
     parseObject(doc, &segments, &map);
     return true;
 }

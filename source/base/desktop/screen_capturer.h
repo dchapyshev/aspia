@@ -20,6 +20,7 @@
 #define BASE__DESKTOP__SCREEN_CAPTURER_H
 
 #include "base/desktop/frame.h"
+#include "base/memory/scalable_vector.h"
 
 #include <memory>
 #include <string>
@@ -69,8 +70,8 @@ public:
 
     struct ScreenList
     {
-        std::vector<Screen> screens;
-        std::vector<Size> resolutions;
+        ScalableVector<Screen> screens;
+        ScalableVector<Size> resolutions;
     };
 
     virtual int screenCount() = 0;

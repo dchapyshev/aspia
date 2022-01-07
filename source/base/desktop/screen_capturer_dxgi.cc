@@ -28,7 +28,7 @@ namespace base {
 
 namespace {
 
-bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
+bool screenListFromDeviceNames(const ScalableVector<std::wstring>& device_names,
                                ScreenCapturer::ScreenList* screen_list)
 {
     DCHECK(screen_list->screens.empty());
@@ -74,7 +74,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     return true;
 }
 
-int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
+int indexFromScreenId(ScreenCapturer::ScreenId id, const ScalableVector<std::wstring>& device_names)
 {
     ScreenCapturer::ScreenList screen_list;
 
@@ -130,7 +130,7 @@ int ScreenCapturerDxgi::screenCount()
 
 bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 {
-    std::vector<std::wstring> device_names;
+    ScalableVector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
     {
@@ -151,7 +151,7 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
         return true;
     }
 
-    std::vector<std::wstring> device_names;
+    ScalableVector<std::wstring> device_names;
 
     if (!controller_->deviceNames(&device_names))
     {

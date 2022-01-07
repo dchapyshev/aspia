@@ -20,9 +20,9 @@
 #define BASE__WIN__REGISTRY_H
 
 #include "base/macros_magic.h"
+#include "base/memory/scalable_vector.h"
 
 #include <string>
-#include <vector>
 
 #include <Windows.h>
 
@@ -162,7 +162,7 @@ private:
 
     // Current values.
     std::wstring name_;
-    std::vector<wchar_t> value_;
+    ScalableVector<wchar_t> value_;
     DWORD value_size_;
     DWORD type_;
 

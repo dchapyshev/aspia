@@ -19,16 +19,17 @@
 #ifndef BASE__MEMORY__BYTE_ARRAY_H
 #define BASE__MEMORY__BYTE_ARRAY_H
 
+#include "base/memory/scalable_vector.h"
+
 #include <cstdint>
 #include <string>
 #include <vector>
 
 #include <google/protobuf/message_lite.h>
-#include <tbb/scalable_allocator.h>
 
 namespace base {
 
-using ByteArray = std::vector<uint8_t, tbb::scalable_allocator<uint8_t>>;
+using ByteArray = ScalableVector<uint8_t>;
 
 ByteArray fromData(const void* data, size_t size);
 

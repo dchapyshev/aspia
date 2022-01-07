@@ -20,11 +20,10 @@
 #define BASE__CODEC__MULTI_CHANNEL_RESAMPLER_H
 
 #include <cstddef>
-#include <memory>
-#include <vector>
 
 #include "base/macros_magic.h"
 #include "base/codec/sinc_resampler.h"
+#include "base/memory/scalable_vector.h"
 
 namespace base {
 
@@ -82,7 +81,7 @@ private:
     ReadCB read_cb_;
 
     // Each channel has its own high quality resampler.
-    std::vector<std::unique_ptr<SincResampler>> resamplers_;
+    ScalableVector<std::unique_ptr<SincResampler>> resamplers_;
 
     // Buffers for audio data going into SincResampler from ReadCB.
     std::unique_ptr<AudioBus> resampler_audio_bus_;

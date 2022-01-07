@@ -20,9 +20,9 @@
 #define BASE__NET__FIREWALL_MANAGER_H
 
 #include "base/macros_magic.h"
+#include "base/memory/scalable_vector.h"
 
 #include <filesystem>
-#include <vector>
 
 #include <wrl/client.h>
 #include <netfw.h>
@@ -58,7 +58,7 @@ public:
 
 private:
     // Returns the list of rules applying to the application.
-    void allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
+    void allRules(ScalableVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
 
     // Deletes rules. Needs elevation.
     void deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule);

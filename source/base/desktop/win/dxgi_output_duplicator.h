@@ -118,7 +118,7 @@ private:
     Rect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;
     DXGI_OUTDUPL_DESC desc_;
-    std::vector<uint8_t> metadata_;
+    ScalableVector<uint8_t> metadata_;
     std::unique_ptr<DxgiTexture> texture_;
     Rotation rotation_ = Rotation::CLOCK_WISE_0;
     Size unrotated_size_;
@@ -126,7 +126,7 @@ private:
     // After each AcquireNextFrame() function call, updated_region_(s) of all active Context(s)
     // need to be updated. Since they have missed the change this time. And during next duplicate()
     // function call, their updated_region_ will be merged and copied.
-    std::vector<Context*> contexts_;
+    ScalableVector<Context*> contexts_;
 
     // The last full frame of this output and its offset. If on AcquireNextFrame() failed because
     // of timeout, i.e. no update, we can copy content from |last_frame_|.

@@ -19,7 +19,7 @@
 #ifndef BASE__DESKTOP__WIN__D3D_DEVICE_H
 #define BASE__DESKTOP__WIN__D3D_DEVICE_H
 
-#include <vector>
+#include "base/memory/scalable_vector.h"
 
 #include <D3D11.h>
 #include <DXGI.h>
@@ -44,7 +44,7 @@ public:
     IDXGIAdapter* dxgiAdapter() const { return dxgi_adapter_.Get(); }
 
     // Returns all D3dDevice instances on the system. Returns an empty vector if anything wrong.
-    static std::vector<D3dDevice> enumDevices();
+    static ScalableVector<D3dDevice> enumDevices();
 
 private:
     // Instances of D3dDevice should only be created by EnumDevices() static function.

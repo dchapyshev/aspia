@@ -247,7 +247,7 @@ std::optional<std::string> UserSession::sessionName() const
     }
 
     using TimeInfo = std::pair<base::SessionId, int64_t>;
-    using TimeInfoList = std::vector<TimeInfo>;
+    using TimeInfoList = base::ScalableVector<TimeInfo>;
 
     // Enumarate all user sessions.
     TimeInfoList times;

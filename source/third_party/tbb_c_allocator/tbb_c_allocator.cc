@@ -16,18 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MEMORY__SCALABLE_VECTOR_H
-#define BASE__MEMORY__SCALABLE_VECTOR_H
+#include "third_party/tbb_c_allocator/tbb_c_allocator.h"
 
-#include "base/memory/scalable_allocator.h"
+#if defined(USE_TBB_ALLOCATOR)
+#include <tbb/scalable_allocator.h>
+#endif
 
-#include <vector>
+void* tbb_c_malloc(size_t size)
+{
+#if defined(USE_TBB_ALLOCATOR)
+    return scalable_malloc(size);
+#else
+    return malloc(size);
+#endif
+}
 
-namespace base {
+void tbb_c_free(void* ptr)
+{
+#if defined(USE_TBB_ALLOCATOR)
+    scalable_free(ptr);
+#else
+    free(ptr);
+#endif
+}
 
-template <class T>
-using ScalableVector = std::vector<T, ScalableAllocator<T>>;
-
-} // namespace base
-
-#endif // BASE__MEMORY__SCALABLE_VECTOR_H
+void* tbb_c_realloc(void* ptr, size_t size)
+{
+#if defined(USE_TBB_ALLOCATOR)
+    return scalable_realloc(ptr, size);
+#else
+    return realloc(ptr, size);
+#endif
+}

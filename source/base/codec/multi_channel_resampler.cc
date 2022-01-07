@@ -36,7 +36,7 @@ MultiChannelResampler::MultiChannelResampler(int channels,
       output_frames_ready_(0)
 {
     // Allocate each channel's resampler.
-    resamplers_.reserve(channels);
+    resamplers_.reserve(static_cast<size_t>(channels));
     for (int i = 0; i < channels; ++i)
     {
         resamplers_.push_back(std::make_unique<SincResampler>(

@@ -16,18 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MEMORY__SCALABLE_VECTOR_H
-#define BASE__MEMORY__SCALABLE_VECTOR_H
+#ifndef BASE__MEMORY__SCALABLE_SET_H
+#define BASE__MEMORY__SCALABLE_SET_H
 
 #include "base/memory/scalable_allocator.h"
 
-#include <vector>
+#include <set>
 
 namespace base {
 
-template <class T>
-using ScalableVector = std::vector<T, ScalableAllocator<T>>;
+template <class Key, class Compare = std::less<Key>>
+using ScalableSet = std::set<Key, Compare, ScalableAllocator<Key>>;
 
 } // namespace base
 
-#endif // BASE__MEMORY__SCALABLE_VECTOR_H
+#endif // BASE__MEMORY__SCALABLE_SET_H

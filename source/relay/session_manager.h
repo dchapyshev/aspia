@@ -19,6 +19,7 @@
 #ifndef RELAY__SESSION_MANAGER_H
 #define RELAY__SESSION_MANAGER_H
 
+#include "base/memory/scalable_vector.h"
 #include "proto/relay_peer.pb.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
@@ -72,8 +73,8 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
 
     asio::ip::tcp::acceptor acceptor_;
-    std::vector<std::unique_ptr<PendingSession>> pending_sessions_;
-    std::vector<std::unique_ptr<Session>> active_sessions_;
+    base::ScalableVector<std::unique_ptr<PendingSession>> pending_sessions_;
+    base::ScalableVector<std::unique_ptr<Session>> active_sessions_;
 
     const std::chrono::minutes idle_timeout_;
     asio::high_resolution_timer idle_timer_;

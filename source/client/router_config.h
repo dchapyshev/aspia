@@ -19,9 +19,10 @@
 #ifndef CLIENT__ROUTER_CONFIG_H
 #define CLIENT__ROUTER_CONFIG_H
 
+#include "base/memory/scalable_vector.h"
+
 #include <cstdint>
 #include <string>
-#include <vector>
 
 namespace client {
 
@@ -44,7 +45,7 @@ struct RouterConfig
     std::u16string password;
 };
 
-using RouterConfigList = std::vector<RouterConfig>;
+using RouterConfigList = base::ScalableVector<RouterConfig>;
 
 } // namespace client
 
