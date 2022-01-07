@@ -76,12 +76,12 @@ size_t findFirstOf(std::u16string_view piece, std::u16string_view one_of, size_t
 // find for both of these cases, and the single-character version is the most
 // common and can be implemented faster, which is why this is a template.
 template<typename InputStringType, typename OutputStringType, typename DelimiterType>
-std::vector<OutputStringType> splitStringT(InputStringType str,
-                                           DelimiterType delimiter,
-                                           WhitespaceHandling whitespace,
-                                           SplitResult result_type)
+ScalableVector<OutputStringType> splitStringT(InputStringType str,
+                                              DelimiterType delimiter,
+                                              WhitespaceHandling whitespace,
+                                              SplitResult result_type)
 {
-    std::vector<OutputStringType> result;
+    ScalableVector<OutputStringType> result;
 
     if (str.empty())
         return result;
@@ -117,10 +117,10 @@ std::vector<OutputStringType> splitStringT(InputStringType str,
 
 } // namespace
 
-std::vector<std::string> splitString(std::string_view input,
-                                     std::string_view separators,
-                                     WhitespaceHandling whitespace,
-                                     SplitResult result_type)
+ScalableVector<std::string> splitString(std::string_view input,
+                                        std::string_view separators,
+                                        WhitespaceHandling whitespace,
+                                        SplitResult result_type)
 {
     if (separators.size() == 1)
     {
@@ -132,10 +132,10 @@ std::vector<std::string> splitString(std::string_view input,
         input, separators, whitespace, result_type);
 }
 
-std::vector<std::u16string> splitString(std::u16string_view input,
-                                        std::u16string_view separators,
-                                        WhitespaceHandling whitespace,
-                                        SplitResult result_type)
+ScalableVector<std::u16string> splitString(std::u16string_view input,
+                                           std::u16string_view separators,
+                                           WhitespaceHandling whitespace,
+                                           SplitResult result_type)
 {
     if (separators.size() == 1)
     {
@@ -147,10 +147,10 @@ std::vector<std::u16string> splitString(std::u16string_view input,
         input, separators, whitespace, result_type);
 }
 
-std::vector<std::string_view> splitStringView(std::string_view input,
-                                              std::string_view separators,
-                                              WhitespaceHandling whitespace,
-                                              SplitResult result_type)
+ScalableVector<std::string_view> splitStringView(std::string_view input,
+                                                 std::string_view separators,
+                                                 WhitespaceHandling whitespace,
+                                                 SplitResult result_type)
 {
     if (separators.size() == 1)
     {
@@ -162,10 +162,10 @@ std::vector<std::string_view> splitStringView(std::string_view input,
         input, separators, whitespace, result_type);
 }
 
-std::vector<std::u16string_view> splitStringView(std::u16string_view input,
-                                                 std::u16string_view separators,
-                                                 WhitespaceHandling whitespace,
-                                                 SplitResult result_type)
+ScalableVector<std::u16string_view> splitStringView(std::u16string_view input,
+                                                    std::u16string_view separators,
+                                                    WhitespaceHandling whitespace,
+                                                    SplitResult result_type)
 {
     if (separators.size() == 1)
     {

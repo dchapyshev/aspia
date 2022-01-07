@@ -20,13 +20,12 @@
 #define BASE__NET__NETWORK_CHANNEL_H
 
 #include "base/memory/byte_array.h"
+#include "base/memory/scalable_queue.h"
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
 
 #include <asio/ip/tcp.hpp>
 #include <asio/high_resolution_timer.hpp>
-
-#include <queue>
 
 namespace base {
 
@@ -252,7 +251,7 @@ private:
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    std::queue<WriteTask> write_queue_;
+    ScalableQueue<WriteTask> write_queue_;
     VariableSizeWriter variable_size_writer_;
     ByteArray write_buffer_;
 

@@ -25,6 +25,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
+if (TBB_FOUND)
+    add_definitions(-DUSE_TBB_ALLOCATOR)
+endif()
+
 if (WIN32)
     # Target version.
     add_definitions(-DNTDDI_VERSION=0x06010000
@@ -92,7 +96,9 @@ set(THIRD_PARTY_LIBS
     optimized ${WEBM_RELEASE_LIB} debug ${WEBM_DEBUG_LIB}
     unofficial::libvpx::libvpx
     x11region
-    yuv)
+    yuv
+    TBB::tbb
+    TBB::tbbmalloc)
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 

@@ -61,7 +61,7 @@ void UserListDb::setSeedKey(const base::ByteArray& seed_key)
     seed_key_ = seed_key;
 }
 
-std::vector<base::User> UserListDb::list() const
+base::ScalableVector<base::User> UserListDb::list() const
 {
     return db_->userList();
 }

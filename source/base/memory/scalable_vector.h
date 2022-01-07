@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2021 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,26 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__USER_LIST_BASE_H
-#define BASE__PEER__USER_LIST_BASE_H
+#ifndef BASE__MEMORY__SCALABLE_VECTOR_H
+#define BASE__MEMORY__SCALABLE_VECTOR_H
 
-#include "base/memory/scalable_vector.h"
-#include "base/peer/user.h"
+#include <vector>
+
+#if defined(USE_TBB_ALLOCATOR)
+#include <tbb/scalable_allocator.h>
+#endif // defined(USE_TBB_ALLOCATOR)
 
 namespace base {
 
-class UserListBase
-{
-public:
-    virtual ~UserListBase() = default;
+template <class T>
+#if defined(USE_TBB_ALLOCATOR)
+using ScalableAllocator = tbb::scalable_allocator<T>;
+#else // defined(USE_TBB_ALLOCATOR)
+using ScalableAllocator = std::allocator<T>;
+#endif // defined(USE_*)
 
-    virtual void add(const User& user) = 0;
-    virtual User find(std::u16string_view username) const = 0;
-    virtual const ByteArray& seedKey() const = 0;
-    virtual void setSeedKey(const ByteArray& seed_key) = 0;
-    virtual ScalableVector<User> list() const = 0;
-};
+template <class T>
+using ScalableVector = std::vector<T, ScalableAllocator<T>>;
 
 } // namespace base
 
-#endif // BASE__PEER__USER_LIST_BASE_H
+#endif // BASE__MEMORY__SCALABLE_VECTOR_H

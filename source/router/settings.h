@@ -19,6 +19,7 @@
 #ifndef ROUTER__SETTINGS_H
 #define ROUTER__SETTINGS_H
 
+#include "base/memory/scalable_vector.h"
 #include "base/settings/json_settings.h"
 
 namespace router {
@@ -43,7 +44,7 @@ public:
     void setMinLogLevel(int level);
     int minLogLevel() const;
 
-    using WhiteList = std::vector<std::u16string>;
+    using WhiteList = base::ScalableVector<std::u16string>;
 
     void setClientWhiteList(const WhiteList& list);
     WhiteList clientWhiteList() const;

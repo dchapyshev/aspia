@@ -19,9 +19,9 @@
 #include "router/session_admin.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 #include "base/net/network_channel.h"
 #include "base/peer/user.h"
+#include "base/strings/unicode.h"
 #include "router/database.h"
 #include "router/server.h"
 
@@ -89,7 +89,7 @@ void SessionAdmin::doUserListRequest()
     std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
     proto::UserList* list = message->mutable_user_list();
 
-    std::vector<base::User> users = database->userList();
+    base::ScalableVector<base::User> users = database->userList();
     for (const auto& user : users)
         list->add_user()->CopyFrom(user.serialize());
 

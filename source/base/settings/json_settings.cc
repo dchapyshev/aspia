@@ -295,11 +295,11 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
     // Start JSON document.
     json.StartObject();
 
-    std::vector<std::string_view> prev;
+    ScalableVector<std::string_view> prev;
 
     for (const auto& map_item : map)
     {
-        std::vector<std::string_view> segments =
+        ScalableVector<std::string_view> segments =
             splitStringView(map_item.first, "/", TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
         size_t count = 0;
 

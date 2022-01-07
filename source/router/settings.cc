@@ -93,7 +93,7 @@ int Settings::minLogLevel() const
     return impl_.get<int>("MinLogLevel", 1);
 }
 
-void Settings::setClientWhiteList(const std::vector<std::u16string>& list)
+void Settings::setClientWhiteList(const WhiteList& list)
 {
     setWhiteList("ClientWhiteList", list);
 }

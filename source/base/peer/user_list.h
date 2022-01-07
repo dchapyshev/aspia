@@ -38,14 +38,14 @@ public:
     User find(std::u16string_view username) const override;
     const ByteArray& seedKey() const override { return seed_key_; }
     void setSeedKey(const ByteArray& seed_key) override;
-    std::vector<User> list() const override { return list_; }
+    ScalableVector<User> list() const override { return list_; }
 
 private:
     UserList();
-    UserList(const std::vector<User>& list, const ByteArray& seed_key);
+    UserList(const ScalableVector<User>& list, const ByteArray& seed_key);
 
     ByteArray seed_key_;
-    std::vector<User> list_;
+    ScalableVector<User> list_;
 
     DISALLOW_COPY_AND_ASSIGN(UserList);
 };

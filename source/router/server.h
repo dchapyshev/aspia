@@ -19,6 +19,7 @@
 #ifndef ROUTER__SERVER_H
 #define ROUTER__SERVER_H
 
+#include "base/memory/scalable_vector.h"
 #include "base/net/network_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
@@ -72,12 +73,12 @@ private:
     std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
-    std::vector<std::unique_ptr<Session>> sessions_;
+    base::ScalableVector<std::unique_ptr<Session>> sessions_;
 
-    std::vector<std::u16string> client_white_list_;
-    std::vector<std::u16string> host_white_list_;
-    std::vector<std::u16string> admin_white_list_;
-    std::vector<std::u16string> relay_white_list_;
+    base::ScalableVector<std::u16string> client_white_list_;
+    base::ScalableVector<std::u16string> host_white_list_;
+    base::ScalableVector<std::u16string> admin_white_list_;
+    base::ScalableVector<std::u16string> relay_white_list_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };
