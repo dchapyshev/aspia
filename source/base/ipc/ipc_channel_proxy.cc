@@ -63,7 +63,7 @@ void IpcChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool IpcChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
+bool IpcChannelProxy::reloadWriteQueue(ScalableQueue<ByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;
