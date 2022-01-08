@@ -101,9 +101,9 @@ void alphaMul(uint32_t* data, int width, int height)
         RGBQUAD* from = reinterpret_cast<RGBQUAD*>(data);
         RGBQUAD* to = reinterpret_cast<RGBQUAD*>(data);
 
-        to->rgbBlue  = (static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF;
-        to->rgbGreen = (static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF;
-        to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
+        to->rgbBlue  = static_cast<BYTE>((static_cast<uint16_t>(from->rgbBlue)  * from->rgbReserved) / 0xFF);
+        to->rgbGreen = static_cast<BYTE>((static_cast<uint16_t>(from->rgbGreen) * from->rgbReserved) / 0xFF);
+        to->rgbRed   = static_cast<BYTE>((static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF);
     }
 }
 
@@ -139,8 +139,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     int width = bitmap_info.bmWidth;
     int height = bitmap_info.bmHeight;
 
-    std::unique_ptr<uint32_t[]> mask_data =
-        std::make_unique<uint32_t[]>(static_cast<size_t>(width) * static_cast<size_t>(height));
+    ScalableVector<uint32_t> mask_data(static_cast<size_t>(width) * static_cast<size_t>(height));
 
     // Get pixel data from |scoped_mask| converting it to 32bpp along the way.
     // GetDIBits() sets the alpha component of every pixel to 0.
@@ -161,7 +160,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
                    scoped_mask,
                    0,
                    static_cast<UINT>(height),
-                   mask_data.get(),
+                   mask_data.data(),
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
@@ -169,7 +168,7 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
         return nullptr;
     }
 
-    uint32_t* mask_plane = mask_data.get();
+    uint32_t* mask_plane = mask_data.data();
     ByteArray image;
     bool has_alpha = false;
 

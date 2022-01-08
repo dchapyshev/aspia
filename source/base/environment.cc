@@ -18,6 +18,7 @@
 
 #include "base/environment.h"
 
+#include "base/memory/scalable_vector.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
@@ -44,10 +45,10 @@ bool getImpl(std::string_view variable_name, std::string* result)
 
     if (result)
     {
-        std::unique_ptr<wchar_t[]> value = std::make_unique<wchar_t[]>(value_length);
+        ScalableVector<wchar_t> value(value_length);
         GetEnvironmentVariableW(
-            wideFromUtf8(variable_name).c_str(), value.get(), value_length);
-        *result = utf8FromWide(value.get());
+            wideFromUtf8(variable_name).c_str(), value.data(), value_length);
+        *result = utf8FromWide(value.data());
     }
     return true;
 #elif defined(OS_POSIX)

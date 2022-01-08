@@ -20,6 +20,7 @@
 #define BASE__NET__ADAPTER_ENUMERATOR_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "build/build_config.h"
 
 #include <memory>
@@ -108,7 +109,7 @@ public:
 
 private:
 #if defined(OS_WIN)
-    std::unique_ptr<uint8_t[]> adapters_buffer_;
+    ByteArray adapters_buffer_;
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
 #endif
 

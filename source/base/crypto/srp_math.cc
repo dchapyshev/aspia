@@ -44,16 +44,16 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
         return BigNum();
 
     const size_t xy_size = static_cast<size_t>(N_bytes) + static_cast<size_t>(N_bytes);
-    std::unique_ptr<uint8_t[]> xy = std::make_unique<uint8_t[]>(xy_size);
+    ByteArray xy(xy_size);
 
-    if (BN_bn2binpad(x, xy.get(), N_bytes) < 0)
+    if (BN_bn2binpad(x, xy.data(), N_bytes) < 0)
         return BigNum();
 
-    if (BN_bn2binpad(y, xy.get() + N_bytes, N_bytes) < 0)
+    if (BN_bn2binpad(y, xy.data() + N_bytes, N_bytes) < 0)
         return BigNum();
 
     return BigNum::fromByteArray(
-        GenericHash::hash(GenericHash::BLAKE2b512, xy.get(), xy_size));
+        GenericHash::hash(GenericHash::BLAKE2b512, xy.data(), xy_size));
 }
 
 // k = BLAKE2b512(N | PAD(g))

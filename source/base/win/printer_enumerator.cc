@@ -38,13 +38,13 @@ PrinterEnumerator::PrinterEnumerator()
         return;
     }
 
-    info_buffer_ = std::make_unique<uint8_t[]>(bytes_needed);
+    info_buffer_.resize(bytes_needed);
 
-    if (!EnumPrintersW(flags, nullptr, 2, info_buffer_.get(), bytes_needed,
+    if (!EnumPrintersW(flags, nullptr, 2, info_buffer_.data(), bytes_needed,
                        &bytes_needed, &count))
     {
         DPLOG(LS_ERROR) << "EnumPrintersW failed";
-        info_buffer_.reset();
+        info_buffer_.clear();
         return;
     }
 
@@ -60,7 +60,7 @@ PrinterEnumerator::PrinterEnumerator()
         default_printer_ = default_printer_name;
     }
 
-    info_ = reinterpret_cast<PPRINTER_INFO_2W>(info_buffer_.get());
+    info_ = reinterpret_cast<PPRINTER_INFO_2W>(info_buffer_.data());
     count_ = static_cast<int>(count);
 }
 

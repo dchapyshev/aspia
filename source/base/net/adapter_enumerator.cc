@@ -81,28 +81,28 @@ AdapterEnumerator::AdapterEnumerator()
 
     ULONG buffer_size = sizeof(IP_ADAPTER_ADDRESSES);
 
-    adapters_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-    adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.get());
+    adapters_buffer_.resize(buffer_size);
+    adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.data());
 
     ULONG error_code = GetAdaptersAddresses(AF_INET, flags, nullptr, adapter_, &buffer_size);
     if (error_code != ERROR_SUCCESS)
     {
         if (error_code == ERROR_BUFFER_OVERFLOW)
         {
-            adapters_buffer_ = std::make_unique<uint8_t[]>(buffer_size);
-            adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.get());
+            adapters_buffer_.resize(buffer_size);
+            adapter_ = reinterpret_cast<PIP_ADAPTER_ADDRESSES>(adapters_buffer_.data());
 
             error_code = GetAdaptersAddresses(AF_INET, flags, nullptr, adapter_, &buffer_size);
             if (error_code != ERROR_SUCCESS)
             {
-                adapters_buffer_.reset();
+                adapters_buffer_.clear();
                 adapter_ = nullptr;
                 return;
             }
         }
         else
         {
-            adapters_buffer_.reset();
+            adapters_buffer_.clear();
             adapter_ = nullptr;
             return;
         }
