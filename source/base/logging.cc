@@ -20,7 +20,9 @@
 
 #include "base/debug.h"
 #include "base/endian_util.h"
+#include "base/environment.h"
 #include "base/system_time.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/unicode.h"
 
 #include <fstream>
@@ -51,7 +53,7 @@ namespace {
 const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 
-LoggingSeverity g_min_log_level = LOG_LS_INFO;
+LoggingSeverity g_min_log_level = LOG_LS_WARNING;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 size_t g_max_log_file_size = kDefaultMaxLogFileSize;
@@ -174,11 +176,22 @@ std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
     : destination(LOG_DEFAULT),
-      min_log_level(LOG_LS_INFO),
+      min_log_level(LOG_LS_WARNING),
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
-    // Nothing
+    std::string log_level_string;
+    if (Environment::get("ASPIA_LOG_LEVEL", &log_level_string))
+    {
+        LoggingSeverity log_level = LOG_LS_WARNING;
+        if (stringToInt(log_level_string, &log_level))
+        {
+            log_level = std::max(log_level, LOG_LS_INFO);
+            log_level = std::min(log_level, LOG_LS_FATAL);
+
+            min_log_level = log_level;
+        }
+    }
 }
 
 std::filesystem::path execFilePath()
@@ -219,6 +232,7 @@ bool initLogging(const LoggingSettings& settings)
         std::scoped_lock lock(g_log_file_lock);
 
         g_logging_destination = settings.destination;
+        g_min_log_level = settings.min_log_level;
         g_log_dir_path = settings.log_dir;
         g_max_log_file_size = settings.max_log_file_size;
         g_max_log_file_age = settings.max_log_file_age;
@@ -233,6 +247,7 @@ bool initLogging(const LoggingSettings& settings)
         // If log output is enabled, then we output information about the file.
         LOG(LS_INFO) << "Logging file: " << g_log_file_path;
     }
+    LOG(LS_INFO) << "Logging level: " << g_min_log_level;
     LOG(LS_INFO) << "Debugger present: " << (isDebuggerPresent() ? "Yes" : "No");
 
 #if defined(NDEBUG)
