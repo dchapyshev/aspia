@@ -68,13 +68,20 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };
 
-DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate)
-    : channel_(std::move(channel)),
+DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
+                                     std::shared_ptr<base::TaskRunner> task_runner,
+                                     Delegate* delegate)
+    : base::ProtobufArena(std::move(task_runner)),
+      channel_(std::move(channel)),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
+
     DCHECK(channel_);
     DCHECK(delegate_);
+
+    setArenaStartSize(1 * 1024 * 1024); // 1 MB
+    setArenaMaxSize(3 * 1024 * 1024); // 3 MB
 }
 
 DesktopSessionIpc::~DesktopSessionIpc()

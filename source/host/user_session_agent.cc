@@ -24,8 +24,10 @@
 
 namespace host {
 
-UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy)
-    : window_proxy_(std::move(window_proxy))
+UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
+                                   std::shared_ptr<base::TaskRunner> task_runner)
+    : base::ProtobufArena(std::move(task_runner)),
+      window_proxy_(std::move(window_proxy))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(window_proxy_);

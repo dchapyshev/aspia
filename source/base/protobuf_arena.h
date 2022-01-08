@@ -16,42 +16,48 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PROTOBUF_ARENA_HELPER_H
-#define BASE__PROTOBUF_ARENA_HELPER_H
+#ifndef BASE__PROTOBUF_ARENA_H
+#define BASE__PROTOBUF_ARENA_H
+
+#include <memory>
 
 #include <google/protobuf/arena.h>
 
 namespace base {
 
-class ProtobufArenaHelper
+class WaitableTimer;
+class TaskRunner;
+
+class ProtobufArena
 {
 public:
-    static const size_t kArenaBufferSize = 32 * 1024; // 32 kb
-    static const size_t kArenaStartBlockSize = 16 * 1024; // 16 kB
-    static const size_t kArenaMaxBlockSize = 16 * 1024; // 16 kB
-    static const size_t kArenaResetBlockSize = 16 * 1024; // 16 kB
+    ~ProtobufArena();
 
-    ~ProtobufArenaHelper();
+    void setArenaStartSize(size_t size);
+    void setArenaMaxSize(size_t size);
+
+protected:
+    static const size_t kArenaStartBlockSize = 16 * 1024; // 16 kB
+    static const size_t kArenaMaxBlockSize = 32 * 1024; // 32 kB
+
+    explicit ProtobufArena(std::shared_ptr<TaskRunner> task_runner);
 
     template<class T>
     T* messageFromArena()
     {
-        if (arena_.SpaceUsed() >= kArenaResetBlockSize)
-            resetArena();
-
         return google::protobuf::Arena::CreateMessage<T>(&arena_);
     }
 
-protected:
-    ProtobufArenaHelper();
-
 private:
-    void resetArena();
+    void reset();
 
-    char* arena_buffer_ = nullptr;
+    std::unique_ptr<WaitableTimer> cleanup_timer_;
     google::protobuf::Arena arena_;
+
+    size_t arena_start_block_size_ = kArenaStartBlockSize;
+    size_t arena_max_block_size_ = kArenaMaxBlockSize;
 };
 
 } // namespace base
 
-#endif // BASE__PROTOBUF_ARENA_HELPER_H
+#endif // BASE__PROTOBUF_ARENA_H

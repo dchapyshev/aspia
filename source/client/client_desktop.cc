@@ -56,10 +56,14 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 } // namespace
 
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
-    : Client(io_task_runner),
+    : base::ProtobufArena(io_task_runner),
+      Client(io_task_runner),
       desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this))
 {
     LOG(LS_INFO) << "Ctor";
+
+    setArenaStartSize(1 * 1024 * 1024); // 1 MB
+    setArenaMaxSize(3 * 1024 * 1024); // 3 MB
 }
 
 ClientDesktop::~ClientDesktop()

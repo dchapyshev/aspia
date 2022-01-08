@@ -20,7 +20,7 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
 #include "client/input_event_filter.h"
@@ -45,7 +45,7 @@ class DesktopWindow;
 class DesktopWindowProxy;
 
 class ClientDesktop
-    : public base::ProtobufArenaHelper,
+    : public base::ProtobufArena,
       public Client,
       public DesktopControl,
       public common::Clipboard::Delegate

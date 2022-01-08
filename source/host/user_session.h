@@ -19,7 +19,7 @@
 #ifndef HOST__USER_SESSION_H
 #define HOST__USER_SESSION_H
 
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
@@ -39,7 +39,7 @@ class ScopedTaskRunner;
 namespace host {
 
 class UserSession
-    : public base::ProtobufArenaHelper,
+    : public base::ProtobufArena,
       public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public UnconfirmedClientSession::Delegate,

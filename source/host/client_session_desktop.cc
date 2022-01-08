@@ -54,11 +54,16 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 
 } // namespace
 
-ClientSessionDesktop::ClientSessionDesktop(
-    proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel)
-    : ClientSession(session_type, std::move(channel))
+ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
+                                           std::unique_ptr<base::NetworkChannel> channel,
+                                           std::shared_ptr<base::TaskRunner> task_runner)
+    : base::ProtobufArena(std::move(task_runner)),
+      ClientSession(session_type, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";
+
+    setArenaStartSize(1 * 1024 * 1024); // 1 MB
+    setArenaMaxSize(3 * 1024 * 1024); // 3 MB
 }
 
 ClientSessionDesktop::~ClientSessionDesktop()

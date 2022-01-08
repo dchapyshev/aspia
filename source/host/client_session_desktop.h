@@ -20,7 +20,7 @@
 #define HOST__CLIENT_SESSION_DESKTOP_H
 
 #include "base/macros_magic.h"
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 #include "base/desktop/geometry.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
@@ -39,12 +39,13 @@ namespace host {
 class DesktopSessionProxy;
 
 class ClientSessionDesktop
-    : public base::ProtobufArenaHelper,
+    : public base::ProtobufArena,
       public ClientSession
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type,
-                         std::unique_ptr<base::NetworkChannel> channel);
+                         std::unique_ptr<base::NetworkChannel> channel,
+                         std::shared_ptr<base::TaskRunner> task_runner);
     ~ClientSessionDesktop() override;
 
     void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);

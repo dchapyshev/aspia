@@ -798,69 +798,69 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="77"/>
-        <location filename="../main_window.cc" line="527"/>
+        <location filename="../main_window.cc" line="529"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="151"/>
-        <location filename="../main_window.cc" line="507"/>
+        <location filename="../main_window.cc" line="153"/>
+        <location filename="../main_window.cc" line="509"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="275"/>
+        <location filename="../main_window.cc" line="277"/>
         <source>Not available</source>
         <translation>Не доступно</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="329"/>
+        <location filename="../main_window.cc" line="331"/>
         <source>Connecting to a router %1...</source>
         <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="620"/>
+        <location filename="../main_window.cc" line="622"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="325"/>
-        <location filename="../main_window.cc" line="605"/>
+        <location filename="../main_window.cc" line="327"/>
+        <location filename="../main_window.cc" line="607"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="610"/>
+        <location filename="../main_window.cc" line="612"/>
         <source>Connecting to a router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="333"/>
+        <location filename="../main_window.cc" line="335"/>
         <source>Connected to a router %1</source>
         <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="615"/>
+        <location filename="../main_window.cc" line="617"/>
         <source>Connected to a router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="337"/>
+        <location filename="../main_window.cc" line="339"/>
         <source>Failed to connect to router %1</source>
         <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="512"/>
+        <location filename="../main_window.cc" line="514"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="547"/>
+        <location filename="../main_window.cc" line="549"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="548"/>
+        <location filename="../main_window.cc" line="550"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>

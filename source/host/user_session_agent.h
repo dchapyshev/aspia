@@ -19,7 +19,7 @@
 #ifndef HOST__USER_SESSION_AGENT_H
 #define HOST__USER_SESSION_AGENT_H
 
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/memory/scalable_vector.h"
 #include "proto/host_internal.pb.h"
@@ -30,7 +30,7 @@ class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
 class UserSessionAgent
-    : public base::ProtobufArenaHelper,
+    : public base::ProtobufArena,
       public base::IpcChannel::Listener
 {
 public:
@@ -58,7 +58,8 @@ public:
 
     using ClientList = base::ScalableVector<Client>;
 
-    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
+    UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
+                     std::shared_ptr<base::TaskRunner> task_runner);
     ~UserSessionAgent();
 
     void start();

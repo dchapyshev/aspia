@@ -16,48 +16,43 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 
 #include "base/logging.h"
+#include "base/waitable_timer.h"
 
 namespace base {
 
-namespace {
-
-void* tbbBlockAlloc(size_t size)
+ProtobufArena::ProtobufArena(std::shared_ptr<TaskRunner> task_runner)
+    : cleanup_timer_(std::make_unique<WaitableTimer>(
+          WaitableTimer::Type::REPEATED, std::move(task_runner)))
 {
-    return malloc(size);
+    cleanup_timer_->start(std::chrono::seconds(60), [this]()
+    {
+        if (arena_.SpaceUsed() >= arena_start_block_size_)
+            reset();
+    });
+
+    reset();
 }
 
-void tbbBlockDealloc(void* ptr, size_t /* unused */)
+ProtobufArena::~ProtobufArena() = default;
+
+void ProtobufArena::setArenaStartSize(size_t size)
 {
-    free(ptr);
+    arena_start_block_size_ = size;
 }
 
-} // namespace
-
-ProtobufArenaHelper::ProtobufArenaHelper()
+void ProtobufArena::setArenaMaxSize(size_t size)
 {
-    arena_buffer_ = reinterpret_cast<char*>(tbbBlockAlloc(kArenaBufferSize));
-    CHECK(arena_buffer_);
-
-    resetArena();
+    arena_max_block_size_ = size;
 }
 
-ProtobufArenaHelper::~ProtobufArenaHelper()
-{
-    tbbBlockDealloc(arena_buffer_, 0);
-}
-
-void ProtobufArenaHelper::resetArena()
+void ProtobufArena::reset()
 {
     google::protobuf::ArenaOptions options;
-    options.block_alloc        = tbbBlockAlloc;
-    options.block_dealloc      = tbbBlockDealloc;
-    options.start_block_size   = kArenaStartBlockSize;
-    options.max_block_size     = kArenaMaxBlockSize;
-    options.initial_block      = arena_buffer_;
-    options.initial_block_size = kArenaStartBlockSize;
+    options.start_block_size = arena_start_block_size_;
+    options.max_block_size = arena_max_block_size_;
 
     arena_.Reset();
     arena_.Init(options);

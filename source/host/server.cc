@@ -178,7 +178,9 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     LOG(LS_INFO) << "New client session";
 
     std::unique_ptr<ClientSession> session = ClientSession::create(
-        static_cast<proto::SessionType>(session_info.session_type), std::move(session_info.channel));
+        static_cast<proto::SessionType>(session_info.session_type),
+        std::move(session_info.channel),
+        task_runner_);
 
     if (session)
     {

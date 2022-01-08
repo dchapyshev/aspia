@@ -58,9 +58,13 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 } // namespace
 
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner))
+    : base::ProtobufArena(task_runner),
+      task_runner_(task_runner)
 {
     LOG(LS_INFO) << "Ctor";
+
+    setArenaStartSize(1 * 1024 * 1024); // 1 MB
+    setArenaMaxSize(3 * 1024 * 1024); // 3 MB
 
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))

@@ -27,6 +27,7 @@
 
 namespace base {
 class NetworkChannelProxy;
+class TaskRunner;
 } // namespace base
 
 namespace host {
@@ -55,8 +56,9 @@ public:
         FINISHED // Session is stopped.
     };
 
-    static std::unique_ptr<ClientSession> create(
-        proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
+    static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
+                                                 std::unique_ptr<base::NetworkChannel> channel,
+                                                 std::shared_ptr<base::TaskRunner> task_runner);
 
     void start(Delegate* delegate);
     void stop();

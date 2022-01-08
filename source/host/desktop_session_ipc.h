@@ -19,7 +19,7 @@
 #ifndef HOST__DESKTOP_SESSION_IPC_H
 #define HOST__DESKTOP_SESSION_IPC_H
 
-#include "base/protobuf_arena_helper.h"
+#include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/memory/scalable_map.h"
 #include "host/desktop_session.h"
@@ -27,12 +27,14 @@
 namespace host {
 
 class DesktopSessionIpc
-    : public base::ProtobufArenaHelper,
+    : public base::ProtobufArena,
       public DesktopSession,
       public base::IpcChannel::Listener
 {
 public:
-    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
+    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
+                      std::shared_ptr<base::TaskRunner> task_runner,
+                      Delegate* delegate);
     ~DesktopSessionIpc() override;
 
     // DesktopSession implementation.
