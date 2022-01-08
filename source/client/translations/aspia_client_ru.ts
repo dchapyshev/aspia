@@ -833,6 +833,426 @@
     </message>
 </context>
 <context>
+    <name>SysInfoConnections</name>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDevices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDrivers</name>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEnvVars</name>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEventLogs</name>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoMonitors</name>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPowerOptions</name>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRas</name>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRoutes</name>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoServices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoVideoAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation>Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation>Копировать имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+</context>
+<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
@@ -840,57 +1260,55 @@
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="54"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="116"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="112"/>
+        <location filename="../ui/system_info_window.ui" line="119"/>
         <source>Save (Ctrl+S)</source>
         <translation>Сохранить (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="131"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="127"/>
+        <location filename="../ui/system_info_window.ui" line="134"/>
         <source>Print (Ctrl+P)</source>
         <translation>Печать (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="135"/>
+        <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="140"/>
+        <location filename="../ui/system_info_window.ui" line="147"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="145"/>
+        <location filename="../ui/system_info_window.ui" line="152"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="161"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="157"/>
+        <location filename="../ui/system_info_window.ui" line="164"/>
         <source>Refresh (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
@@ -1422,7 +1840,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <location filename="../ui/qt_desktop_window.cc" line="235"/>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1437,17 +1855,17 @@
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="586"/>
+        <location filename="../ui/qt_desktop_window.cc" line="587"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="588"/>
+        <location filename="../ui/qt_desktop_window.cc" line="589"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -1895,345 +2313,332 @@
     </message>
 </context>
 <context>
-    <name>client::SystemInfoWindow</name>
+    <name>client::SysInfo</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="108"/>
-        <source>HTML File</source>
-        <translation>HTML-файл</translation>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="110"/>
-        <source>HTML File (*.html)</source>
-        <translation>HTML-файл (*.html)</translation>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="119"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="120"/>
-        <source>Failed to save file: %1</source>
-        <translation>Не удалось сохранить файл: %1</translation>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="180"/>
-        <location filename="../ui/system_info_window.cc" line="203"/>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n seconds</source>
+        <translation type="obsolete">
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунды</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n minutes</source>
+        <translation type="obsolete">
+            <numerusform>%n минута</numerusform>
+            <numerusform>%n минуты</numerusform>
+            <numerusform>%n минут</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n hours</source>
+        <translation type="obsolete">
+            <numerusform>%n час</numerusform>
+            <numerusform>%n часа</numerusform>
+            <numerusform>%n часов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n days</source>
+        <translation type="obsolete">
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дня</numerusform>
+            <numerusform>%n дней</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Gbps</source>
+        <translation type="obsolete">Гбит/c</translation>
+    </message>
+    <message>
+        <source>Mbps</source>
+        <translation type="obsolete">Мбит/c</translation>
+    </message>
+    <message>
+        <source>Kbps</source>
+        <translation type="obsolete">Кбит/с</translation>
+    </message>
+    <message>
+        <source>bps</source>
+        <translation type="obsolete">бит/c</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoSummary</name>
+    <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="obsolete">Имя</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="183"/>
         <source>Domain</source>
-        <translation>Домен</translation>
+        <translation type="obsolete">Домен</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="186"/>
         <source>Workgroup</source>
-        <translation>Рабочая группа</translation>
+        <translation type="obsolete">Рабочая группа</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="189"/>
         <source>Uptime</source>
-        <translation>Время работы</translation>
+        <translation type="obsolete">Время работы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="193"/>
         <source>Computer</source>
-        <translation>Компьютер</translation>
+        <translation type="obsolete">Компьютер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="206"/>
-        <location filename="../ui/system_info_window.cc" line="278"/>
         <source>Version</source>
-        <translation>Версия</translation>
+        <translation type="obsolete">Версия</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="209"/>
         <source>Architecture</source>
-        <translation>Архитектура</translation>
+        <translation type="obsolete">Архитектура</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="212"/>
         <source>License Key</source>
-        <translation>Лицензионный ключ</translation>
+        <translation type="obsolete">Лицензионный ключ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="215"/>
         <source>Install Date</source>
-        <translation>Дата установки</translation>
+        <translation type="obsolete">Дата установки</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="220"/>
         <source>Operating System</source>
-        <translation>Операционная система</translation>
+        <translation type="obsolete">Операционная система</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="230"/>
-        <location filename="../ui/system_info_window.cc" line="302"/>
         <source>Manufacturer</source>
-        <translation>Производитель</translation>
+        <translation type="obsolete">Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="233"/>
-        <location filename="../ui/system_info_window.cc" line="248"/>
         <source>Model</source>
-        <translation>Модель</translation>
+        <translation type="obsolete">Модель</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="238"/>
         <source>Motherboard</source>
-        <translation>Материнская плата</translation>
+        <translation type="obsolete">Материнская плата</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
-        <location filename="../ui/system_info_window.cc" line="275"/>
         <source>Vendor</source>
-        <translation>Поставщик</translation>
+        <translation type="obsolete">Поставщик</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="254"/>
         <source>Packages</source>
-        <translation>Сокетов</translation>
+        <translation type="obsolete">Сокетов</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="257"/>
         <source>Cores</source>
-        <translation>Ядер</translation>
+        <translation type="obsolete">Ядер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="260"/>
         <source>Threads</source>
-        <translation>Потоков</translation>
+        <translation type="obsolete">Потоков</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
         <source>Processor</source>
-        <translation>Процессор</translation>
+        <translation type="obsolete">Процессор</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="281"/>
         <source>Date</source>
-        <translation>Дата</translation>
+        <translation type="obsolete">Дата</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="305"/>
         <source>Size</source>
-        <translation>Размер</translation>
+        <translation type="obsolete">Размер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
         <source>Speed</source>
-        <translation>Частота</translation>
+        <translation type="obsolete">Частота</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
         <source>%1 MHz</source>
-        <translation>%1 МГц</translation>
+        <translation type="obsolete">%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="311"/>
-        <location filename="../ui/system_info_window.cc" line="494"/>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="314"/>
         <source>Form Factor</source>
-        <translation>Форм-фактор</translation>
+        <translation type="obsolete">Форм-фактор</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="317"/>
         <source>Part Number</source>
-        <translation>Номер партии</translation>
+        <translation type="obsolete">Номер партии</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
         <source>Installed</source>
-        <translation>Установлено</translation>
+        <translation type="obsolete">Установлено</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
         <source>No</source>
-        <translation>Нет</translation>
+        <translation type="obsolete">Нет</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="331"/>
         <source>Memory</source>
-        <translation>Память</translation>
+        <translation type="obsolete">Память</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="360"/>
         <source>%1 (%2 free)</source>
-        <translation>%1 (%2 свободно)</translation>
+        <translation type="obsolete">%1 (%2 свободно)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="370"/>
         <source>Logical Drives</source>
-        <translation>Логические диски</translation>
+        <translation type="obsolete">Логические диски</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="385"/>
         <source>Adapter Name</source>
-        <translation>Имя адаптера</translation>
+        <translation type="obsolete">Имя адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="388"/>
         <source>Interface Type</source>
-        <translation>Тип интерфейса</translation>
+        <translation type="obsolete">Тип интерфейса</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="391"/>
         <source>Connection Speed</source>
-        <translation>Скорость соединения</translation>
+        <translation type="obsolete">Скорость соединения</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="394"/>
         <source>MAC Address</source>
-        <translation>MAC адрес</translation>
+        <translation type="obsolete">MAC адрес</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
         <source>DHCP Enabled</source>
-        <translation>DHCP включен</translation>
+        <translation type="obsolete">DHCP включен</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
         <source>Yes</source>
-        <translation>Да</translation>
+        <translation type="obsolete">Да</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
         <source>DHCP Server #%1</source>
-        <translation>DHCP сервер #%1</translation>
+        <translation type="obsolete">DHCP сервер #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
         <source>DHCP Server</source>
-        <translation>DHCP сервер</translation>
+        <translation type="obsolete">DHCP сервер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Address #%1</source>
-        <translation>Адрес #%1</translation>
+        <translation type="obsolete">Адрес #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
         <source>Address</source>
-        <translation>Адрес</translation>
+        <translation type="obsolete">Адрес</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
         <source>Gateway #%1</source>
-        <translation>Шлюз #%1</translation>
+        <translation type="obsolete">Шлюз #%1</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
         <source>Gateway</source>
-        <translation>Шлюз</translation>
+        <translation type="obsolete">Шлюз</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="441"/>
         <source>Network Connections</source>
-        <translation>Сетевые подключения</translation>
+        <translation type="obsolete">Сетевые подключения</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="455"/>
         <source>Default</source>
-        <translation>По умолчанию</translation>
+        <translation type="obsolete">По умолчанию</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="458"/>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation type="obsolete">Порт</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="461"/>
         <source>Driver</source>
-        <translation>Драйвер</translation>
+        <translation type="obsolete">Драйвер</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="463"/>
         <source>Shared</source>
-        <translation>Общий доступ</translation>
+        <translation type="obsolete">Общий доступ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="466"/>
         <source>Share Name</source>
-        <translation>Имя общего ресурса</translation>
+        <translation type="obsolete">Имя общего ресурса</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="468"/>
         <source>Jobs Count</source>
-        <translation>Количество заданий</translation>
+        <translation type="obsolete">Количество заданий</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="476"/>
         <source>Printers</source>
-        <translation>Принтеры</translation>
+        <translation type="obsolete">Принтеры</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="491"/>
         <source>Description</source>
-        <translation>Описание</translation>
+        <translation type="obsolete">Описание</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="497"/>
         <source>Local Path</source>
-        <translation>Локальный путь</translation>
+        <translation type="obsolete">Локальный путь</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="499"/>
         <source>Current Uses</source>
-        <translation>Количество использований</translation>
+        <translation type="obsolete">Количество использований</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="502"/>
         <source>Not limited</source>
-        <translation>Не ограничено</translation>
+        <translation type="obsolete">Не ограничено</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="503"/>
         <source>Maximum Uses</source>
-        <translation>Максимум использований</translation>
+        <translation type="obsolete">Максимум использований</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="511"/>
         <source>Network Shares</source>
-        <translation>Сетевые ресурсы</translation>
+        <translation type="obsolete">Сетевые ресурсы</translation>
     </message>
+</context>
+<context>
+    <name>client::SysInfoWidget</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="572"/>
+        <location filename="../ui/sys_info_widget.cc" line="64"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="577"/>
+        <location filename="../ui/sys_info_widget.cc" line="69"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="582"/>
+        <location filename="../ui/sys_info_widget.cc" line="74"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="587"/>
+        <location filename="../ui/sys_info_widget.cc" line="79"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="592"/>
+        <location filename="../ui/sys_info_widget.cc" line="84"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="608"/>
+        <location filename="../ui/sys_info_widget.cc" line="100"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -2242,7 +2647,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="609"/>
+        <location filename="../ui/sys_info_widget.cc" line="101"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n минута</numerusform>
@@ -2251,7 +2656,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="610"/>
+        <location filename="../ui/sys_info_widget.cc" line="102"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n час</numerusform>
@@ -2260,7 +2665,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="634"/>
+        <location filename="../ui/sys_info_widget.cc" line="126"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -2269,24 +2674,843 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="655"/>
+        <location filename="../ui/sys_info_widget.cc" line="147"/>
         <source>Gbps</source>
         <translation>Гбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="660"/>
+        <location filename="../ui/sys_info_widget.cc" line="152"/>
         <source>Mbps</source>
         <translation>Мбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="665"/>
+        <location filename="../ui/sys_info_widget.cc" line="157"/>
         <source>Kbps</source>
         <translation>Кбит/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="670"/>
+        <location filename="../ui/sys_info_widget.cc" line="162"/>
         <source>bps</source>
         <translation>бит/c</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
+        <source>Adapter Name</source>
+        <translation>Имя адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="136"/>
+        <source>Interface Type</source>
+        <translation>Тип интерфейса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="139"/>
+        <source>Connection Speed</source>
+        <translation>Скорость соединения</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="142"/>
+        <source>MAC Address</source>
+        <translation>MAC адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>DHCP Enabled</source>
+        <translation>DHCP включен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server #%1</source>
+        <translation>DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server</source>
+        <translation>DHCP сервер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address #%1</source>
+        <translation>Адрес #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway #%1</source>
+        <translation>Шлюз #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway</source>
+        <translation>Шлюз</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="128"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="131"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="134"/>
+        <source>Local Path</source>
+        <translation>Локальный путь</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="136"/>
+        <source>Current Uses</source>
+        <translation>Количество использований</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="139"/>
+        <source>Not limited</source>
+        <translation>Не ограничено</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="140"/>
+        <source>Maximum Uses</source>
+        <translation>Максимум использований</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="135"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
+        <source>Driver</source>
+        <translation>Драйвер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Shared</source>
+        <translation>Общий доступ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="143"/>
+        <source>Share Name</source>
+        <translation>Имя общего ресурса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
+        <source>Jobs Count</source>
+        <translation>Количество заданий</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="129"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="152"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="132"/>
+        <source>Domain</source>
+        <translation>Домен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="135"/>
+        <source>Workgroup</source>
+        <translation>Рабочая группа</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="138"/>
+        <source>Uptime</source>
+        <translation>Время работы</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="142"/>
+        <source>Computer</source>
+        <translation>Компьютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="227"/>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="158"/>
+        <source>Architecture</source>
+        <translation>Архитектура</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="161"/>
+        <source>License Key</source>
+        <translation>Лицензионный ключ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="164"/>
+        <source>Install Date</source>
+        <translation>Дата установки</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="169"/>
+        <source>Operating System</source>
+        <translation>Операционная система</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="251"/>
+        <source>Manufacturer</source>
+        <translation>Производитель</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="182"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="197"/>
+        <source>Model</source>
+        <translation>Модель</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="187"/>
+        <source>Motherboard</source>
+        <translation>Материнская плата</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="200"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="224"/>
+        <source>Vendor</source>
+        <translation>Поставщик</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="203"/>
+        <source>Packages</source>
+        <translation>Сокетов</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="206"/>
+        <source>Cores</source>
+        <translation>Ядер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="209"/>
+        <source>Threads</source>
+        <translation>Потоков</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="214"/>
+        <source>Processor</source>
+        <translation>Процессор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="230"/>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="254"/>
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>Speed</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>%1 MHz</source>
+        <translation>%1 МГц</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="260"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
+        <source>Form Factor</source>
+        <translation>Форм-фактор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="266"/>
+        <source>Part Number</source>
+        <translation>Номер партии</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <source>Installed</source>
+        <translation>Установлено</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="280"/>
+        <source>Memory</source>
+        <translation>Память</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="309"/>
+        <source>%1 (%2 free)</source>
+        <translation>%1 (%2 свободно)</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="319"/>
+        <source>Logical Drives</source>
+        <translation>Логические диски</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="334"/>
+        <source>Adapter Name</source>
+        <translation>Имя адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="337"/>
+        <source>Interface Type</source>
+        <translation>Тип интерфейса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="340"/>
+        <source>Connection Speed</source>
+        <translation>Скорость соединения</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="343"/>
+        <source>MAC Address</source>
+        <translation>MAC адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>DHCP Enabled</source>
+        <translation>DHCP включен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server #%1</source>
+        <translation>DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server</source>
+        <translation>DHCP сервер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address #%1</source>
+        <translation>Адрес #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway #%1</source>
+        <translation>Шлюз #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway</source>
+        <translation>Шлюз</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="390"/>
+        <source>Network Connections</source>
+        <translation>Сетевые подключения</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="obsolete">По умолчанию</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="obsolete">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="obsolete">Общий доступ</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="obsolete">Имя общего ресурса</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="obsolete">Количество заданий</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Принтеры</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="obsolete">Описание</translation>
+    </message>
+    <message>
+        <source>Local Path</source>
+        <translation type="obsolete">Локальный путь</translation>
+    </message>
+    <message>
+        <source>Current Uses</source>
+        <translation type="obsolete">Количество использований</translation>
+    </message>
+    <message>
+        <source>Not limited</source>
+        <translation type="obsolete">Не ограничено</translation>
+    </message>
+    <message>
+        <source>Maximum Uses</source>
+        <translation type="obsolete">Максимум использований</translation>
+    </message>
+    <message>
+        <source>Network Shares</source>
+        <translation type="obsolete">Сетевые ресурсы</translation>
+    </message>
+</context>
+<context>
+    <name>client::SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="111"/>
+        <source>Summary</source>
+        <translation>Сводка</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="118"/>
+        <source>Hardware</source>
+        <translation>Оборудование</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="123"/>
+        <source>Devices</source>
+        <translation>Устройства</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="129"/>
+        <source>Video Adapters</source>
+        <translation>Видео адаптеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="135"/>
+        <source>Monitors</source>
+        <translation>Мониторы</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="147"/>
+        <source>Power Options</source>
+        <translation>Параметры питания</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="161"/>
+        <source>Software</source>
+        <translation>Программное обеспечение</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="166"/>
+        <source>Drivers</source>
+        <translation>Драйверы</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="172"/>
+        <source>Services</source>
+        <translation>Службы</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="178"/>
+        <source>Environment Variables</source>
+        <translation>Переменные окружения</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="184"/>
+        <source>Event Logs</source>
+        <translation>Журнал событий</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="197"/>
+        <source>Network</source>
+        <translation>Сеть</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="202"/>
+        <source>Network Adapters</source>
+        <translation>Сетевые адаптеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="208"/>
+        <source>Routes</source>
+        <translation>Маршруты</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="214"/>
+        <source>Connections</source>
+        <translation>Подключения</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="226"/>
+        <source>RAS</source>
+        <translation>RAS</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="251"/>
+        <source>HTML File</source>
+        <translation>HTML-файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="253"/>
+        <source>HTML File (*.html)</source>
+        <translation>HTML-файл (*.html)</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="264"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="265"/>
+        <source>Failed to save file: %1</source>
+        <translation>Не удалось сохранить файл: %1</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Имя</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="vanished">Домен</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="vanished">Рабочая группа</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="vanished">Время работы</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="vanished">Компьютер</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="vanished">Версия</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="vanished">Архитектура</translation>
+    </message>
+    <message>
+        <source>License Key</source>
+        <translation type="vanished">Лицензионный ключ</translation>
+    </message>
+    <message>
+        <source>Install Date</source>
+        <translation type="vanished">Дата установки</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="vanished">Операционная система</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="vanished">Производитель</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="vanished">Модель</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="vanished">Материнская плата</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="vanished">Поставщик</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="vanished">Сокетов</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="vanished">Ядер</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="vanished">Потоков</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="vanished">Процессор</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="vanished">Дата</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Размер</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="vanished">Частота</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="vanished">%1 МГц</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
+    </message>
+    <message>
+        <source>Form Factor</source>
+        <translation type="vanished">Форм-фактор</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="vanished">Номер партии</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Установлено</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="vanished">Нет</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">Память</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="vanished">%1 (%2 свободно)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="vanished">Логические диски</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="vanished">Имя адаптера</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="vanished">Тип интерфейса</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="vanished">Скорость соединения</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="vanished">MAC адрес</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="vanished">DHCP включен</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="vanished">Да</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="vanished">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="vanished">DHCP сервер</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="vanished">Адрес #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="vanished">Адрес</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="vanished">Шлюз #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="vanished">Шлюз</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="vanished">Сетевые подключения</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="vanished">По умолчанию</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="vanished">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="vanished">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="vanished">Общий доступ</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="vanished">Имя общего ресурса</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="vanished">Количество заданий</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="141"/>
+        <source>Printers</source>
+        <translation>Принтеры</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="vanished">Описание</translation>
+    </message>
+    <message>
+        <source>Local Path</source>
+        <translation type="vanished">Локальный путь</translation>
+    </message>
+    <message>
+        <source>Current Uses</source>
+        <translation type="vanished">Количество использований</translation>
+    </message>
+    <message>
+        <source>Not limited</source>
+        <translation type="vanished">Не ограничено</translation>
+    </message>
+    <message>
+        <source>Maximum Uses</source>
+        <translation type="vanished">Максимум использований</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="220"/>
+        <source>Network Shares</source>
+        <translation>Сетевые ресурсы</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">Б</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n seconds</source>
+        <translation type="vanished">
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунды</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n minutes</source>
+        <translation type="vanished">
+            <numerusform>%n минута</numerusform>
+            <numerusform>%n минуты</numerusform>
+            <numerusform>%n минут</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n hours</source>
+        <translation type="vanished">
+            <numerusform>%n час</numerusform>
+            <numerusform>%n часа</numerusform>
+            <numerusform>%n часов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n days</source>
+        <translation type="vanished">
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дня</numerusform>
+            <numerusform>%n дней</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Gbps</source>
+        <translation type="vanished">Гбит/c</translation>
+    </message>
+    <message>
+        <source>Mbps</source>
+        <translation type="vanished">Мбит/c</translation>
+    </message>
+    <message>
+        <source>Kbps</source>
+        <translation type="vanished">Кбит/с</translation>
+    </message>
+    <message>
+        <source>bps</source>
+        <translation type="vanished">бит/c</translation>
     </message>
 </context>
 </TS>

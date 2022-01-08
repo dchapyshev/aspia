@@ -829,6 +829,426 @@
     </message>
 </context>
 <context>
+    <name>SysInfoConnections</name>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDevices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDrivers</name>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEnvVars</name>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEventLogs</name>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoMonitors</name>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPowerOptions</name>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRas</name>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRoutes</name>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoServices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoVideoAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished">Параметр</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+</context>
+<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
@@ -836,57 +1256,55 @@
         <translation>Системна інформація</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="54"/>
         <source>Value</source>
-        <translation>Значення</translation>
+        <translation type="vanished">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="116"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="112"/>
+        <location filename="../ui/system_info_window.ui" line="119"/>
         <source>Save (Ctrl+S)</source>
         <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="131"/>
         <source>Print</source>
         <translation>Друкувати</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="127"/>
+        <location filename="../ui/system_info_window.ui" line="134"/>
         <source>Print (Ctrl+P)</source>
         <translation>Друкувати (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="135"/>
+        <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="140"/>
+        <location filename="../ui/system_info_window.ui" line="147"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="145"/>
+        <location filename="../ui/system_info_window.ui" line="152"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="161"/>
         <source>Refresh</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="157"/>
+        <location filename="../ui/system_info_window.ui" line="164"/>
         <source>Refresh (F5)</source>
         <translation>Оновити (F5)</translation>
     </message>
@@ -1418,7 +1836,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <location filename="../ui/qt_desktop_window.cc" line="235"/>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1433,17 +1851,17 @@
         <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="586"/>
+        <location filename="../ui/qt_desktop_window.cc" line="587"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="588"/>
+        <location filename="../ui/qt_desktop_window.cc" line="589"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Could not save image</source>
         <translation>Неможливо зберегти зображення</translation>
     </message>
@@ -1891,398 +2309,1120 @@
     </message>
 </context>
 <context>
-    <name>client::SystemInfoWindow</name>
+    <name>client::SysInfo</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="108"/>
-        <source>HTML File</source>
-        <translation>Файл HTML</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="110"/>
-        <source>HTML File (*.html)</source>
-        <translation>Файл HTML (*.html)</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="119"/>
-        <source>Warning</source>
-        <translation>Попередження</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="120"/>
-        <source>Failed to save file: %1</source>
-        <translation>Не вдалося зберегти файл: %1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="180"/>
-        <location filename="../ui/system_info_window.cc" line="203"/>
-        <source>Name</source>
-        <translation>Ім&apos;я</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="183"/>
-        <source>Domain</source>
-        <translation>Домен</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="186"/>
-        <source>Workgroup</source>
-        <translation>Робоча група</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="189"/>
-        <source>Uptime</source>
-        <translation>Час роботи</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="193"/>
-        <source>Computer</source>
-        <translation>Комп&apos;ютер</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="206"/>
-        <location filename="../ui/system_info_window.cc" line="278"/>
-        <source>Version</source>
-        <translation>Версія</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="209"/>
-        <source>Architecture</source>
-        <translation>Архітектура</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="212"/>
-        <source>License Key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="215"/>
-        <source>Install Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="220"/>
-        <source>Operating System</source>
-        <translation>Операційна система</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="230"/>
-        <location filename="../ui/system_info_window.cc" line="302"/>
-        <source>Manufacturer</source>
-        <translation>Виробник</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="233"/>
-        <location filename="../ui/system_info_window.cc" line="248"/>
-        <source>Model</source>
-        <translation>Модель</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="238"/>
-        <source>Motherboard</source>
-        <translation>Материнська плата</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
-        <location filename="../ui/system_info_window.cc" line="275"/>
-        <source>Vendor</source>
-        <translation>Вендор</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="254"/>
-        <source>Packages</source>
-        <translation>Пакети</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="257"/>
-        <source>Cores</source>
-        <translation>Ядра</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="260"/>
-        <source>Threads</source>
-        <translation>Потоки</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
-        <source>Processor</source>
-        <translation>Процесор</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="281"/>
-        <source>Date</source>
-        <translation>Дата</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="305"/>
-        <source>Size</source>
-        <translation>Розмір</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
-        <source>Speed</source>
-        <translation>Швидкість</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
-        <source>%1 MHz</source>
-        <translation>%1 МГц</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="311"/>
-        <location filename="../ui/system_info_window.cc" line="494"/>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="314"/>
-        <source>Form Factor</source>
-        <translation>Форм фактор</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="317"/>
-        <source>Part Number</source>
-        <translation>Партномер</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
-        <source>Installed</source>
-        <translation>Встановлено</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>No</source>
-        <translation>Ні</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="331"/>
-        <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="360"/>
-        <source>%1 (%2 free)</source>
-        <translation>%1 (%2 вільно)</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="370"/>
-        <source>Logical Drives</source>
-        <translation>Логічні диски</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="385"/>
-        <source>Adapter Name</source>
-        <translation>Ім&apos;я адаптера</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="388"/>
-        <source>Interface Type</source>
-        <translation>Тип інтерфейса</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="391"/>
-        <source>Connection Speed</source>
-        <translation>Швидкість з&apos;єднання</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="394"/>
-        <source>MAC Address</source>
-        <translation>MAC адреса</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <source>DHCP Enabled</source>
-        <translation>DHCP включено</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>Yes</source>
-        <translation>Так</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
-        <source>DHCP Server #%1</source>
-        <translation>DHCP сервер #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
-        <source>DHCP Server</source>
-        <translation>DHCP сервер</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
-        <source>Address #%1</source>
-        <translation>Адреса #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
-        <source>Address</source>
-        <translation>Адреса</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
-        <source>Gateway #%1</source>
-        <translation>Шлюз #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
-        <source>Gateway</source>
-        <translation>Шлюз</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="441"/>
-        <source>Network Connections</source>
-        <translation>Мережеві з&apos;єднання</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <source>Default</source>
-        <translation>За замовчанням</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="458"/>
-        <source>Port</source>
-        <translation>Порт</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="461"/>
-        <source>Driver</source>
-        <translation>Драйвер</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>Shared</source>
-        <translation>Спільне користування</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="466"/>
-        <source>Share Name</source>
-        <translation>Спільне ім&apos;я</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="468"/>
-        <source>Jobs Count</source>
-        <translation>Лічильник завдань</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="476"/>
-        <source>Printers</source>
-        <translation>Принтери</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="491"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="497"/>
-        <source>Local Path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="499"/>
-        <source>Current Uses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="502"/>
-        <source>Not limited</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="503"/>
-        <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="511"/>
-        <source>Network Shares</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="572"/>
         <source>TB</source>
-        <translation>ТБ</translation>
+        <translation type="obsolete">ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="577"/>
         <source>GB</source>
-        <translation>ГБ</translation>
+        <translation type="obsolete">ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="582"/>
         <source>MB</source>
-        <translation>МБ</translation>
+        <translation type="obsolete">МБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="587"/>
         <source>kB</source>
-        <translation>кБ</translation>
+        <translation type="obsolete">кБ</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>B</source>
-        <translation>Б</translation>
+        <translation type="obsolete">Б</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>%n seconds</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n секунда</numerusform>
             <numerusform>%n секунди</numerusform>
             <numerusform>%n секунд</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="609"/>
         <source>%n minutes</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n хвилина</numerusform>
             <numerusform>%n хвилини</numerusform>
             <numerusform>%n хвилин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="610"/>
         <source>%n hours</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n година</numerusform>
             <numerusform>%n години</numerusform>
             <numerusform>%n годин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="634"/>
         <source>%n days</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n день</numerusform>
             <numerusform>%n дні</numerusform>
             <numerusform>%n днів</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="655"/>
         <source>Gbps</source>
-        <translation>Гб/с</translation>
+        <translation type="obsolete">Гб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="660"/>
         <source>Mbps</source>
-        <translation>Мб/с</translation>
+        <translation type="obsolete">Мб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="665"/>
         <source>Kbps</source>
-        <translation>Кб/с</translation>
+        <translation type="obsolete">Кб/с</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="670"/>
         <source>bps</source>
-        <translation>б/с</translation>
+        <translation type="obsolete">б/с</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoSummary</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="obsolete">Домен</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="obsolete">Робоча група</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="obsolete">Час роботи</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="obsolete">Комп&apos;ютер</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="obsolete">Версія</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="obsolete">Архітектура</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="obsolete">Операційна система</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="obsolete">Виробник</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="obsolete">Модель</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="obsolete">Материнська плата</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="obsolete">Вендор</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="obsolete">Пакети</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="obsolete">Ядра</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="obsolete">Потоки</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="obsolete">Процесор</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Дата</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">Розмір</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="obsolete">Швидкість</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="obsolete">%1 МГц</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Тип</translation>
+    </message>
+    <message>
+        <source>Form Factor</source>
+        <translation type="obsolete">Форм фактор</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="obsolete">Партномер</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="obsolete">Встановлено</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">Ні</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="obsolete">Пам&apos;ять</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="obsolete">%1 (%2 вільно)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="obsolete">Логічні диски</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="obsolete">Ім&apos;я адаптера</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="obsolete">Тип інтерфейса</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="obsolete">Швидкість з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="obsolete">MAC адреса</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="obsolete">DHCP включено</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="obsolete">Так</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="obsolete">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="obsolete">DHCP сервер</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="obsolete">Адреса #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="obsolete">Адреса</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="obsolete">Шлюз #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="obsolete">Шлюз</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="obsolete">Мережеві з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="obsolete">За замовчанням</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="obsolete">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="obsolete">Спільне користування</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="obsolete">Спільне ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="obsolete">Лічильник завдань</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Принтери</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidget</name>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="64"/>
+        <source>TB</source>
+        <translation type="unfinished">ТБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="69"/>
+        <source>GB</source>
+        <translation type="unfinished">ГБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="74"/>
+        <source>MB</source>
+        <translation type="unfinished">МБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="79"/>
+        <source>kB</source>
+        <translation type="unfinished">кБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="84"/>
+        <source>B</source>
+        <translation type="unfinished">Б</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="100"/>
+        <source>%n seconds</source>
+        <translation type="unfinished">
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунди</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="101"/>
+        <source>%n minutes</source>
+        <translation type="unfinished">
+            <numerusform>%n хвилина</numerusform>
+            <numerusform>%n хвилини</numerusform>
+            <numerusform>%n хвилин</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="102"/>
+        <source>%n hours</source>
+        <translation type="unfinished">
+            <numerusform>%n година</numerusform>
+            <numerusform>%n години</numerusform>
+            <numerusform>%n годин</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="126"/>
+        <source>%n days</source>
+        <translation type="unfinished">
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дні</numerusform>
+            <numerusform>%n днів</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="147"/>
+        <source>Gbps</source>
+        <translation type="unfinished">Гб/с</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="152"/>
+        <source>Mbps</source>
+        <translation type="unfinished">Мб/с</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="157"/>
+        <source>Kbps</source>
+        <translation type="unfinished">Кб/с</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="162"/>
+        <source>bps</source>
+        <translation type="unfinished">б/с</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
+        <source>Adapter Name</source>
+        <translation type="unfinished">Ім&apos;я адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="136"/>
+        <source>Interface Type</source>
+        <translation type="unfinished">Тип інтерфейса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="139"/>
+        <source>Connection Speed</source>
+        <translation type="unfinished">Швидкість з&apos;єднання</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="142"/>
+        <source>MAC Address</source>
+        <translation type="unfinished">MAC адреса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>DHCP Enabled</source>
+        <translation type="unfinished">DHCP включено</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>Yes</source>
+        <translation type="unfinished">Так</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>No</source>
+        <translation type="unfinished">Ні</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server #%1</source>
+        <translation type="unfinished">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server</source>
+        <translation type="unfinished">DHCP сервер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address #%1</source>
+        <translation type="unfinished">Адреса #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address</source>
+        <translation type="unfinished">Адреса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway #%1</source>
+        <translation type="unfinished">Шлюз #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway</source>
+        <translation type="unfinished">Шлюз</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="128"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="131"/>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="134"/>
+        <source>Local Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="136"/>
+        <source>Current Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="139"/>
+        <source>Not limited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="140"/>
+        <source>Maximum Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <source>Default</source>
+        <translation type="unfinished">За замовчанням</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Yes</source>
+        <translation type="unfinished">Так</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>No</source>
+        <translation type="unfinished">Ні</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="135"/>
+        <source>Port</source>
+        <translation type="unfinished">Порт</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
+        <source>Driver</source>
+        <translation type="unfinished">Драйвер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Shared</source>
+        <translation type="unfinished">Спільне користування</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="143"/>
+        <source>Share Name</source>
+        <translation type="unfinished">Спільне ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
+        <source>Jobs Count</source>
+        <translation type="unfinished">Лічильник завдань</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="129"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="152"/>
+        <source>Name</source>
+        <translation type="unfinished">Ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="132"/>
+        <source>Domain</source>
+        <translation type="unfinished">Домен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="135"/>
+        <source>Workgroup</source>
+        <translation type="unfinished">Робоча група</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="138"/>
+        <source>Uptime</source>
+        <translation type="unfinished">Час роботи</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="142"/>
+        <source>Computer</source>
+        <translation type="unfinished">Комп&apos;ютер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="227"/>
+        <source>Version</source>
+        <translation type="unfinished">Версія</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="158"/>
+        <source>Architecture</source>
+        <translation type="unfinished">Архітектура</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="161"/>
+        <source>License Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="164"/>
+        <source>Install Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="169"/>
+        <source>Operating System</source>
+        <translation type="unfinished">Операційна система</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="251"/>
+        <source>Manufacturer</source>
+        <translation type="unfinished">Виробник</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="182"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="197"/>
+        <source>Model</source>
+        <translation type="unfinished">Модель</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="187"/>
+        <source>Motherboard</source>
+        <translation type="unfinished">Материнська плата</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="200"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="224"/>
+        <source>Vendor</source>
+        <translation type="unfinished">Вендор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="203"/>
+        <source>Packages</source>
+        <translation type="unfinished">Пакети</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="206"/>
+        <source>Cores</source>
+        <translation type="unfinished">Ядра</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="209"/>
+        <source>Threads</source>
+        <translation type="unfinished">Потоки</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="214"/>
+        <source>Processor</source>
+        <translation type="unfinished">Процесор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="230"/>
+        <source>Date</source>
+        <translation type="unfinished">Дата</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="254"/>
+        <source>Size</source>
+        <translation type="unfinished">Розмір</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>Speed</source>
+        <translation type="unfinished">Швидкість</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished">%1 МГц</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="260"/>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
+        <source>Form Factor</source>
+        <translation type="unfinished">Форм фактор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="266"/>
+        <source>Part Number</source>
+        <translation type="unfinished">Партномер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <source>Installed</source>
+        <translation type="unfinished">Встановлено</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>No</source>
+        <translation type="unfinished">Ні</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="280"/>
+        <source>Memory</source>
+        <translation type="unfinished">Пам&apos;ять</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="309"/>
+        <source>%1 (%2 free)</source>
+        <translation type="unfinished">%1 (%2 вільно)</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="319"/>
+        <source>Logical Drives</source>
+        <translation type="unfinished">Логічні диски</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="334"/>
+        <source>Adapter Name</source>
+        <translation type="unfinished">Ім&apos;я адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="337"/>
+        <source>Interface Type</source>
+        <translation type="unfinished">Тип інтерфейса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="340"/>
+        <source>Connection Speed</source>
+        <translation type="unfinished">Швидкість з&apos;єднання</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="343"/>
+        <source>MAC Address</source>
+        <translation type="unfinished">MAC адреса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>DHCP Enabled</source>
+        <translation type="unfinished">DHCP включено</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>Yes</source>
+        <translation type="unfinished">Так</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server #%1</source>
+        <translation type="unfinished">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server</source>
+        <translation type="unfinished">DHCP сервер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address #%1</source>
+        <translation type="unfinished">Адреса #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address</source>
+        <translation type="unfinished">Адреса</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway #%1</source>
+        <translation type="unfinished">Шлюз #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway</source>
+        <translation type="unfinished">Шлюз</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="390"/>
+        <source>Network Connections</source>
+        <translation type="unfinished">Мережеві з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="obsolete">За замовчанням</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="obsolete">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="obsolete">Спільне користування</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="obsolete">Спільне ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="obsolete">Лічильник завдань</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Принтери</translation>
+    </message>
+</context>
+<context>
+    <name>client::SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="111"/>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="118"/>
+        <source>Hardware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="123"/>
+        <source>Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="129"/>
+        <source>Video Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="135"/>
+        <source>Monitors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="147"/>
+        <source>Power Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="161"/>
+        <source>Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="166"/>
+        <source>Drivers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="172"/>
+        <source>Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="178"/>
+        <source>Environment Variables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="184"/>
+        <source>Event Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="197"/>
+        <source>Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="202"/>
+        <source>Network Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="208"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="214"/>
+        <source>Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="220"/>
+        <source>Network Shares</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="226"/>
+        <source>RAS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="251"/>
+        <source>HTML File</source>
+        <translation>Файл HTML</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="253"/>
+        <source>HTML File (*.html)</source>
+        <translation>Файл HTML (*.html)</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="264"/>
+        <source>Warning</source>
+        <translation>Попередження</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="265"/>
+        <source>Failed to save file: %1</source>
+        <translation>Не вдалося зберегти файл: %1</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="vanished">Домен</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="vanished">Робоча група</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="vanished">Час роботи</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="vanished">Комп&apos;ютер</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="vanished">Версія</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="vanished">Архітектура</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="vanished">Операційна система</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="vanished">Виробник</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="vanished">Модель</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="vanished">Материнська плата</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="vanished">Вендор</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="vanished">Пакети</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="vanished">Ядра</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="vanished">Потоки</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="vanished">Процесор</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="vanished">Дата</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Розмір</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="vanished">Швидкість</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="vanished">%1 МГц</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
+    </message>
+    <message>
+        <source>Form Factor</source>
+        <translation type="vanished">Форм фактор</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="vanished">Партномер</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Встановлено</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="vanished">Ні</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">Пам&apos;ять</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="vanished">%1 (%2 вільно)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="vanished">Логічні диски</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="vanished">Ім&apos;я адаптера</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="vanished">Тип інтерфейса</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="vanished">Швидкість з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="vanished">MAC адреса</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="vanished">DHCP включено</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="vanished">Так</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="vanished">DHCP сервер #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="vanished">DHCP сервер</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="vanished">Адреса #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="vanished">Адреса</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="vanished">Шлюз #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="vanished">Шлюз</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="vanished">Мережеві з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="vanished">За замовчанням</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="vanished">Порт</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="vanished">Драйвер</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="vanished">Спільне користування</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="vanished">Спільне ім&apos;я</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="vanished">Лічильник завдань</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="141"/>
+        <source>Printers</source>
+        <translation>Принтери</translation>
+    </message>
+    <message>
+        <source>TB</source>
+        <translation type="vanished">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="vanished">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="vanished">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="vanished">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="vanished">Б</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n seconds</source>
+        <translation type="vanished">
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунди</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n minutes</source>
+        <translation type="vanished">
+            <numerusform>%n хвилина</numerusform>
+            <numerusform>%n хвилини</numerusform>
+            <numerusform>%n хвилин</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n hours</source>
+        <translation type="vanished">
+            <numerusform>%n година</numerusform>
+            <numerusform>%n години</numerusform>
+            <numerusform>%n годин</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n days</source>
+        <translation type="vanished">
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дні</numerusform>
+            <numerusform>%n днів</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Gbps</source>
+        <translation type="vanished">Гб/с</translation>
+    </message>
+    <message>
+        <source>Mbps</source>
+        <translation type="vanished">Мб/с</translation>
+    </message>
+    <message>
+        <source>Kbps</source>
+        <translation type="vanished">Кб/с</translation>
+    </message>
+    <message>
+        <source>bps</source>
+        <translation type="vanished">б/с</translation>
     </message>
 </context>
 </TS>

@@ -161,6 +161,53 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/statistics_dialog.cc
     ui/statistics_dialog.h
     ui/statistics_dialog.ui
+    ui/sys_info_widget.cc
+    ui/sys_info_widget.h
+    ui/sys_info_widget_connections.cc
+    ui/sys_info_widget_connections.h
+    ui/sys_info_widget_connections.ui
+    ui/sys_info_widget_devices.cc
+    ui/sys_info_widget_devices.h
+    ui/sys_info_widget_devices.ui
+    ui/sys_info_widget_drivers.cc
+    ui/sys_info_widget_drivers.h
+    ui/sys_info_widget_drivers.ui
+    ui/sys_info_widget_env_vars.cc
+    ui/sys_info_widget_env_vars.h
+    ui/sys_info_widget_env_vars.ui
+    ui/sys_info_widget_event_logs.cc
+    ui/sys_info_widget_event_logs.h
+    ui/sys_info_widget_event_logs.ui
+    ui/sys_info_widget_monitors.cc
+    ui/sys_info_widget_monitors.h
+    ui/sys_info_widget_monitors.ui
+    ui/sys_info_widget_net_shares.cc
+    ui/sys_info_widget_net_shares.h
+    ui/sys_info_widget_net_shares.ui
+    ui/sys_info_widget_net_adapters.cc
+    ui/sys_info_widget_net_adapters.h
+    ui/sys_info_widget_net_adapters.ui
+    ui/sys_info_widget_power_options.cc
+    ui/sys_info_widget_power_options.h
+    ui/sys_info_widget_power_options.ui
+    ui/sys_info_widget_printers.cc
+    ui/sys_info_widget_printers.h
+    ui/sys_info_widget_printers.ui
+    ui/sys_info_widget_ras.cc
+    ui/sys_info_widget_ras.h
+    ui/sys_info_widget_ras.ui
+    ui/sys_info_widget_routes.cc
+    ui/sys_info_widget_routes.h
+    ui/sys_info_widget_routes.ui
+    ui/sys_info_widget_services.cc
+    ui/sys_info_widget_services.h
+    ui/sys_info_widget_services.ui
+    ui/sys_info_widget_summary.cc
+    ui/sys_info_widget_summary.h
+    ui/sys_info_widget_summary.ui
+    ui/sys_info_widget_video_adapters.cc
+    ui/sys_info_widget_video_adapters.h
+    ui/sys_info_widget_video_adapters.ui
     ui/system_info_window.cc
     ui/system_info_window.h
     ui/system_info_window.ui

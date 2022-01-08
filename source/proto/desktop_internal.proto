@@ -84,6 +84,7 @@ message Configure
     bool block_input            = 4;
     bool lock_at_disconnect     = 5;
     bool clear_clipboard        = 6;
+    bool cursor_position        = 7;
 }
 
 message DesktopControl

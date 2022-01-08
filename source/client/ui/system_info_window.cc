@@ -18,7 +18,24 @@
 
 #include "client/ui/system_info_window.h"
 
+#include "base/logging.h"
+#include "client/ui/sys_info_widget_connections.h"
+#include "client/ui/sys_info_widget_devices.h"
+#include "client/ui/sys_info_widget_drivers.h"
+#include "client/ui/sys_info_widget_env_vars.h"
+#include "client/ui/sys_info_widget_event_logs.h"
+#include "client/ui/sys_info_widget_monitors.h"
+#include "client/ui/sys_info_widget_net_adapters.h"
+#include "client/ui/sys_info_widget_net_shares.h"
+#include "client/ui/sys_info_widget_power_options.h"
+#include "client/ui/sys_info_widget_printers.h"
+#include "client/ui/sys_info_widget_ras.h"
+#include "client/ui/sys_info_widget_routes.h"
+#include "client/ui/sys_info_widget_services.h"
+#include "client/ui/sys_info_widget_summary.h"
+#include "client/ui/sys_info_widget_video_adapters.h"
 #include "client/ui/tree_to_html.h"
+#include "common/desktop_session_constants.h"
 
 #include <QClipboard>
 #include <QDateTime>
@@ -32,67 +49,32 @@ namespace client {
 
 namespace {
 
-class Item : public QTreeWidgetItem
+class CategoryItem : public QTreeWidgetItem
 {
 public:
-    Item(const char* icon_path, const QString& text, const QList<QTreeWidgetItem*>& childs)
+    enum class Type { ROOT_ITEM, CATEGORY_ITEM };
+
+    CategoryItem(Type type, const QString& icon_path, const QString& text, const char* category = nullptr)
+        : type_(type)
     {
         QIcon icon(icon_path);
 
         setIcon(0, icon);
         setText(0, text);
 
-        for (const auto& child : childs)
-        {
-            child->setIcon(0, icon);
-
-            for (int i = 0; i < child->childCount(); ++i)
-            {
-                QTreeWidgetItem* item = child->child(i);
-                if (item)
-                    item->setIcon(0, icon);
-            }
-        }
-
-        addChildren(childs);
+        if (category)
+            category_ = category;
     }
 
-    Item(const QString& text, const QList<QTreeWidgetItem*>& params)
-    {
-        setText(0, text);
-        addChildren(params);
-    }
+    Type type() const { return type_; }
+    const std::string& category() const { return category_; }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Item);
+    Type type_;
+    std::string category_;
+
+    DISALLOW_COPY_AND_ASSIGN(CategoryItem);
 };
-
-QTreeWidgetItem* mk(const QString& param, const QString& value)
-{
-    QTreeWidgetItem* item = new QTreeWidgetItem();
-
-    item->setText(0, param);
-    item->setText(1, value);
-
-    return item;
-}
-
-QTreeWidgetItem* mk(const QString& param, const std::string& value)
-{
-    return mk(param, QString::fromStdString(value));
-}
-
-void copyTextToClipboard(const QString& text)
-{
-    if (text.isEmpty())
-        return;
-
-    QClipboard* clipboard = QApplication::clipboard();
-    if (!clipboard)
-        return;
-
-    clipboard->setText(text);
-}
 
 } // namespace
 
@@ -100,6 +82,167 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+    QList<int> sizes;
+    sizes.push_back(210);
+    sizes.push_back(width() - 210);
+    ui.splitter->setSizes(sizes);
+
+    sys_info_widgets_.append(new SysInfoWidgetSummary(this));
+    sys_info_widgets_.append(new SysInfoWidgetDevices(this));
+    sys_info_widgets_.append(new SysInfoWidgetVideoAdapters(this));
+    sys_info_widgets_.append(new SysInfoWidgetMonitors(this));
+    sys_info_widgets_.append(new SysInfoWidgetNetAdapters(this));
+    sys_info_widgets_.append(new SysInfoWidgetNetShares(this));
+    sys_info_widgets_.append(new SysInfoWidgetPowerOptions(this));
+    sys_info_widgets_.append(new SysInfoWidgetPrinters(this));
+    sys_info_widgets_.append(new SysInfoWidgetDrivers(this));
+    sys_info_widgets_.append(new SysInfoWidgetServices(this));
+    sys_info_widgets_.append(new SysInfoWidgetEnvVars(this));
+    sys_info_widgets_.append(new SysInfoWidgetEventLogs(this));
+    sys_info_widgets_.append(new SysInfoWidgetRoutes(this));
+    sys_info_widgets_.append(new SysInfoWidgetConnections(this));
+    sys_info_widgets_.append(new SysInfoWidgetRas(this));
+
+    for (int i = 1; i < sys_info_widgets_.count(); ++i)
+        sys_info_widgets_[i]->hide();
+
+    CategoryItem* summary_category = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM, QStringLiteral(":/img/computer.png"), tr("Summary"));
+
+    //----------------------------------------------------------------------------------------------
+    // HARDWARE
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* hardware_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/motherboard.png"), tr("Hardware"));
+
+    CategoryItem* devices = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/graphic-card.png"),
+        tr("Devices"),
+        common::kSystemInfo_Devices);
+
+    CategoryItem* video_adapters = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/graphic-card.png"),
+        tr("Video Adapters"),
+        common::kSystemInfo_VideoAdapters);
+
+    CategoryItem* monitors = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/monitor.png"),
+        tr("Monitors"),
+        common::kSystemInfo_Monitors);
+
+    CategoryItem* printers = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/printer.png"),
+        tr("Printers"),
+        common::kSystemInfo_Printers);
+
+    CategoryItem* power_options = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/power-supply.png"),
+        tr("Power Options"),
+        common::kSystemInfo_PowerOptions);
+
+    hardware_category->addChild(devices);
+    hardware_category->addChild(video_adapters);
+    hardware_category->addChild(monitors);
+    hardware_category->addChild(printers);
+    hardware_category->addChild(power_options);
+
+    //----------------------------------------------------------------------------------------------
+    // SOFTWARE
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* software_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/operating-system.png"), tr("Software"));
+
+    CategoryItem* drivers = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/graphic-card.png"),
+        tr("Drivers"),
+        common::kSystemInfo_Drivers);
+
+    CategoryItem* services = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/gear.png"),
+        tr("Services"),
+        common::kSystemInfo_Services);
+
+    CategoryItem* env_vars = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/block.png"),
+        tr("Environment Variables"),
+        common::kSystemInfo_EnvironmentVariables);
+
+    CategoryItem* event_logs = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/document-list.png"),
+        tr("Event Logs"),
+        common::kSystemInfo_EventLogs);
+
+    software_category->addChild(drivers);
+    software_category->addChild(services);
+    software_category->addChild(env_vars);
+    software_category->addChild(event_logs);
+
+    //----------------------------------------------------------------------------------------------
+    // NETWORK
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* network_category = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM, QStringLiteral(":/img/graphic-card.png"), tr("Network"));
+
+    CategoryItem* network_adapters = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/graphic-card.png"),
+        tr("Network Adapters"),
+        common::kSystemInfo_NetworkAdapters);
+
+    CategoryItem* routes = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/servers-network.png"),
+        tr("Routes"),
+        common::kSystemInfo_Routes);
+
+    CategoryItem* connections = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/servers-network.png"),
+        tr("Connections"),
+        common::kSystemInfo_Connections);
+
+    CategoryItem* network_shares = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/folder-share.png"),
+        tr("Network Shares"),
+        common::kSystemInfo_NetworkShares);
+
+    CategoryItem* ras = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/globe-network-ethernet.png"),
+        tr("RAS"),
+        common::kSystemInfo_Ras);
+
+    network_category->addChild(network_adapters);
+    network_category->addChild(routes);
+    network_category->addChild(connections);
+    network_category->addChild(network_shares);
+    network_category->addChild(ras);
+
+    //----------------------------------------------------------------------------------------------
+    // TOP LEVEL CATEGORIES
+    //----------------------------------------------------------------------------------------------
+
+    ui.tree_category->addTopLevelItem(summary_category);
+    ui.tree_category->addTopLevelItem(hardware_category);
+    ui.tree_category->addTopLevelItem(software_category);
+    ui.tree_category->addTopLevelItem(network_category);
+
+    for (int i = 0; i < ui.tree_category->topLevelItemCount(); ++i)
+        ui.tree_category->expandItem(ui.tree_category->topLevelItem(i));
 
     connect(ui.action_save, &QAction::triggered, this, [this]()
     {
@@ -113,7 +256,9 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
         QString error_string;
 
-        if (!treeToHtmlFile(ui.tree, file_path, &error_string))
+        if (!treeToHtmlFile(sys_info_widgets_[current_widget_]->treeWidget(),
+                            file_path,
+                            &error_string))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
@@ -124,7 +269,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
     connect(ui.action_print, &QAction::triggered, this, [this]()
     {
-        QString html = treeToHtmlString(ui.tree);
+        QString html = treeToHtmlString(sys_info_widgets_[current_widget_]->treeWidget());
 
         QTextDocument document;
         document.setHtml(html);
@@ -138,548 +283,80 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         document.print(&printer);
     });
 
-    connect(ui.action_refresh, &QAction::triggered, this, &SystemInfoWindow::systemInfoRequired);
-
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui.action_refresh, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        ui.tree_category->setEnabled(false);
+        ui.widget->setEnabled(false);
+
+        sendSystemInfoRequest(sys_info_widgets_[current_widget_]->category());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
-    {
-        copyColumn(ui.tree->currentItem(), 0);
-    });
+    connect(ui.tree_category, &QTreeWidget::itemClicked,
+            this, &SystemInfoWindow::onCategoryItemClicked);
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
-    {
-        copyColumn(ui.tree->currentItem(), 1);
-    });
-
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
-            this, &SystemInfoWindow::onContextMenu);
-
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
-    {
-        copyRow(item);
-    });
+    layout_ = new QHBoxLayout(ui.widget);
+    layout_->setContentsMargins(0, 0, 0, 0);
+    layout_->addWidget(sys_info_widgets_[current_widget_]);
 }
 
 SystemInfoWindow::~SystemInfoWindow() = default;
 
 void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui.tree_category->setEnabled(true);
+    ui.widget->setEnabled(true);
 
-    if (system_info.has_computer())
-    {
-        const proto::system_info::Computer& computer = system_info.computer();
-        QList<QTreeWidgetItem*> items;
-
-        if (!computer.name().empty())
-            items << mk(tr("Name"), computer.name());
-
-        if (!computer.domain().empty())
-            items << mk(tr("Domain"), computer.domain());
-
-        if (!computer.workgroup().empty())
-            items << mk(tr("Workgroup"), computer.workgroup());
-
-        if (computer.uptime())
-            items << mk(tr("Uptime"), delayToString(computer.uptime()));
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(new Item(":/img/computer.png", tr("Computer"), items));
-        }
-    }
-
-    if (system_info.has_operating_system())
-    {
-        const proto::system_info::OperatingSystem& os = system_info.operating_system();
-        QList<QTreeWidgetItem*> items;
-
-        if (!os.name().empty())
-            items << mk(tr("Name"), os.name());
-
-        if (!os.version().empty())
-            items << mk(tr("Version"), os.version());
-
-        if (!os.arch().empty())
-            items << mk(tr("Architecture"), os.arch());
-
-        if (!os.key().empty())
-            items << mk(tr("License Key"), os.key());
-
-        if (os.install_date() != 0)
-            items << mk(tr("Install Date"), timeToString(os.install_date()));
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(
-                new Item(":/img/operating-system.png", tr("Operating System"), items));
-        }
-    }
-
-    if (system_info.has_motherboard())
-    {
-        const proto::system_info::Motherboard& motherboard = system_info.motherboard();
-        QList<QTreeWidgetItem*> items;
-
-        if (!motherboard.manufacturer().empty())
-            items << mk(tr("Manufacturer"), motherboard.manufacturer());
-
-        if (!motherboard.model().empty())
-            items << mk(tr("Model"), motherboard.model());
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(
-                new Item(":/img/motherboard.png", tr("Motherboard"), items));
-        }
-    }
-
-    if (system_info.has_processor())
-    {
-        const proto::system_info::Processor& processor = system_info.processor();
-        QList<QTreeWidgetItem*> items;
-
-        if (!processor.model().empty())
-            items << mk(tr("Model"), processor.model());
-
-        if (!processor.vendor().empty())
-            items << mk(tr("Vendor"), processor.vendor());
-
-        if (processor.packages())
-            items << mk(tr("Packages"), QString::number(processor.packages()));
-
-        if (processor.cores())
-            items << mk(tr("Cores"), QString::number(processor.cores()));
-
-        if (processor.threads())
-            items << mk(tr("Threads"), QString::number(processor.threads()));
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(
-                new Item(":/img/processor.png", tr("Processor"), items));
-        }
-    }
-
-    if (system_info.has_bios())
-    {
-        const proto::system_info::Bios& bios = system_info.bios();
-        QList<QTreeWidgetItem*> items;
-
-        if (!bios.vendor().empty())
-            items << mk(tr("Vendor"), bios.vendor());
-
-        if (!bios.version().empty())
-            items << mk(tr("Version"), bios.version());
-
-        if (!bios.date().empty())
-            items << mk(tr("Date"), bios.date());
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(new Item(":/img/bios.png", "BIOS", items));
-        }
-    }
-
-    if (system_info.has_memory())
-    {
-        const proto::system_info::Memory& memory = system_info.memory();
-        QList<QTreeWidgetItem*> items;
-
-        for (int i = 0; i < memory.module_size(); ++i)
-        {
-            const proto::system_info::Memory::Module& module = memory.module(i);
-            QList<QTreeWidgetItem*> group;
-
-            if (module.present())
-            {
-                if (!module.manufacturer().empty())
-                    group << mk(tr("Manufacturer"), module.manufacturer());
-
-                if (module.size())
-                    group << mk(tr("Size"), sizeToString(static_cast<int64_t>(module.size())));
-
-                if (module.speed())
-                    group << mk(tr("Speed"), tr("%1 MHz").arg(module.speed()));
-
-                if (!module.type().empty())
-                    group << mk(tr("Type"), module.type());
-
-                if (!module.form_factor().empty())
-                    group << mk(tr("Form Factor"), module.form_factor());
-
-                if (!module.part_number().empty())
-                    group << mk(tr("Part Number"), module.part_number());
-            }
-            else
-            {
-                group << mk(tr("Installed"), tr("No"));
-            }
-
-            if (!group.isEmpty())
-                items << new Item(QString::fromStdString(module.location()), group);
-        }
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(
-                new Item(":/img/memory.png", tr("Memory"), items));
-        }
-    }
-
-    if (system_info.has_logical_drives())
-    {
-        const proto::system_info::LogicalDrives& drives = system_info.logical_drives();
-        QList<QTreeWidgetItem*> items;
-
-        for (int i = 0; i < drives.drive_size(); ++i)
-        {
-            const proto::system_info::LogicalDrives::Drive& drive = drives.drive(i);
-
-            QString param;
-            QString value;
-
-            if (drive.file_system().empty())
-            {
-                param = QString::fromStdString(drive.path());
-            }
-            else
-            {
-                param = QString("%1 (%2)")
-                    .arg(QString::fromStdString(drive.path()),
-                         QString::fromStdString(drive.file_system()));
-            }
-
-            if (drive.total_size() && drive.total_size() != static_cast<uint64_t>(-1))
-            {
-                value = tr("%1 (%2 free)")
-                    .arg(sizeToString(static_cast<int64_t>(drive.total_size())),
-                         sizeToString(static_cast<int64_t>(drive.free_size())));
-            }
-
-            items << mk(param, value);
-        }
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(new Item(":/img/drive.png", tr("Logical Drives"), items));
-        }
-    }
-
-    if (system_info.has_network_adapters())
-    {
-        const proto::system_info::NetworkAdapters& adapters = system_info.network_adapters();
-        QList<QTreeWidgetItem*> items;
-
-        for (int i = 0; i < adapters.adapter_size(); ++i)
-        {
-            const proto::system_info::NetworkAdapters::Adapter& adapter = adapters.adapter(i);
-            QList<QTreeWidgetItem*> group;
-
-            if (!adapter.adapter_name().empty())
-                group << mk(tr("Adapter Name"), adapter.adapter_name());
-
-            if (!adapter.iface().empty())
-                group << mk(tr("Interface Type"), adapter.iface());
-
-            if (adapter.speed())
-                group << mk(tr("Connection Speed"), speedToString(adapter.speed()));
-
-            if (!adapter.mac().empty())
-                group << mk(tr("MAC Address"), adapter.mac());
-
-            group << mk(tr("DHCP Enabled"), adapter.dhcp_enabled() ? tr("Yes") : tr("No"));
-
-            for (int j = 0; j < adapter.dhcp_size(); ++j)
-            {
-                QString param = (adapter.dhcp_size() > 1) ?
-                    tr("DHCP Server #%1").arg(j + 1) : tr("DHCP Server");
-
-                group << mk(param, adapter.dhcp(j));
-            }
-
-            for (int j = 0; j < adapter.address_size(); ++j)
-            {
-                QString value = QString("%1 / %2")
-                    .arg(QString::fromStdString(adapter.address(j).ip()),
-                         QString::fromStdString(adapter.address(j).mask()));
-
-                QString param = (adapter.address_size() > 1) ?
-                    tr("Address #%1").arg(j + 1) : tr("Address");
-
-                group << mk(param, value);
-            }
-
-            for (int j = 0; j < adapter.gateway_size(); ++j)
-            {
-                QString param = (adapter.gateway_size() > 1) ?
-                    tr("Gateway #%1").arg(j + 1) : tr("Gateway");
-
-                group << mk(param, adapter.gateway(j));
-            }
-
-            for (int j = 0; j < adapter.dns_size(); ++j)
-            {
-                QString param = (adapter.dns_size() > 1) ?
-                    QString("DNS #%1").arg(j + 1) : QString("DNS");
-
-                group << mk(param, adapter.dns(j));
-            }
-
-            if (!group.isEmpty())
-                items << new Item(QString::fromStdString(adapter.connection_name()), group);
-        }
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(
-                new Item(":/img/graphic-card.png", tr("Network Connections"), items));
-        }
-    }
-
-    if (system_info.has_printers())
-    {
-        const proto::system_info::Printers& printers = system_info.printers();
-        QList<QTreeWidgetItem*> items;
-
-        for (int i = 0; i < printers.printer_size(); ++i)
-        {
-            const proto::system_info::Printers::Printer& printer = printers.printer(i);
-            QList<QTreeWidgetItem*> group;
-
-            group << mk(tr("Default"), printer.default_() ? tr("Yes") : tr("No"));
-
-            if (!printer.port().empty())
-                group << mk(tr("Port"), printer.port());
-
-            if (!printer.driver().empty())
-                group << mk(tr("Driver"), printer.driver());
-
-            group << mk(tr("Shared"), printer.shared() ? tr("Yes") : tr("No"));
-
-            if (printer.shared() && !printer.share_name().empty())
-                group << mk(tr("Share Name"), printer.share_name());
-
-            group << mk(tr("Jobs Count"), QString::number(printer.jobs_count()));
-
-            if (!group.isEmpty())
-                items << new Item(QString::fromStdString(printer.name()), group);
-        }
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(new Item(":/img/printer.png", tr("Printers"), items));
-        }
-    }
-
-    if (system_info.has_network_shares())
-    {
-        const proto::system_info::NetworkShares& network_shares = system_info.network_shares();
-        QList<QTreeWidgetItem*> items;
-
-        for (int i = 0; i < network_shares.share_size(); ++i)
-        {
-            const proto::system_info::NetworkShares::Share& share = network_shares.share(i);
-            QList<QTreeWidgetItem*> group;
-
-            if (!share.description().empty())
-                group << mk(tr("Description"), QString::fromStdString(share.description()));
-
-            if (!share.type().empty())
-                group << mk(tr("Type"), QString::fromStdString(share.type()));
-
-            if (!share.local_path().empty())
-                group << mk(tr("Local Path"), QString::fromStdString(share.local_path()));
-
-            group << mk(tr("Current Uses"), QString::number(share.current_uses()));
-
-            QString max_uses = (share.max_uses() == 0xFFFFFFFF) ?
-                tr("Not limited") : QString::number(share.max_uses());
-            group << mk(tr("Maximum Uses"), max_uses);
-
-            if (!group.isEmpty())
-                items << new Item(QString::fromStdString(share.name()), group);
-        }
-
-        if (!items.isEmpty())
-        {
-            ui.tree->addTopLevelItem(new Item(":/img/folder-share.png", tr("Network Shares"), items));
-        }
-    }
-
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-        ui.tree->topLevelItem(i)->setExpanded(true);
-
-    ui.tree->resizeColumnToContents(0);
+    sys_info_widgets_[current_widget_]->setSystemInfo(system_info);
 }
 
-void SystemInfoWindow::onContextMenu(const QPoint& point)
+void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
-    if (!current_item)
+    CategoryItem* category_item = static_cast<CategoryItem*>(item);
+    if (!category_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
-
-    QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
-    menu.addAction(ui.action_copy_value);
-
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
-}
-
-void SystemInfoWindow::copyRow(QTreeWidgetItem* item)
-{
-    if (!item)
+    if (category_item->type() == CategoryItem::Type::ROOT_ITEM)
         return;
 
-    QString name = item->text(0);
-    QString value = item->text(1);
+    const std::string& category = category_item->category();
 
-    if (value.isEmpty())
-        copyTextToClipboard(name);
-    else
-        copyTextToClipboard(name + QLatin1String(": ") + value);
-}
+    layout_->removeWidget(sys_info_widgets_[current_widget_]);
+    sys_info_widgets_[current_widget_]->setVisible(false);
 
-void SystemInfoWindow::copyColumn(QTreeWidgetItem* item, int column)
-{
-    if (!item)
-        return;
-
-    copyTextToClipboard(item->text(column));
-}
-
-// static
-QString SystemInfoWindow::sizeToString(int64_t size)
-{
-    static const int64_t kKB = 1024LL;
-    static const int64_t kMB = kKB * 1024LL;
-    static const int64_t kGB = kMB * 1024LL;
-    static const int64_t kTB = kGB * 1024LL;
-
-    QString units;
-    int64_t divider;
-
-    if (size >= kTB)
+    for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
-        units = tr("TB");
-        divider = kTB;
-    }
-    else if (size >= kGB)
-    {
-        units = tr("GB");
-        divider = kGB;
-    }
-    else if (size >= kMB)
-    {
-        units = tr("MB");
-        divider = kMB;
-    }
-    else if (size >= kKB)
-    {
-        units = tr("kB");
-        divider = kKB;
-    }
-    else
-    {
-        units = tr("B");
-        divider = 1;
-    }
+        SysInfoWidget* widget = sys_info_widgets_[i];
 
-    return QString("%1 %2")
-        .arg(static_cast<double>(size) / static_cast<double>(divider), 0, 'g', 4)
-        .arg(units);
-}
-
-QString SystemInfoWindow::delayToString(uint64_t delay)
-{
-    uint64_t days = (delay / 86400);
-    uint64_t hours = (delay % 86400) / 3600;
-    uint64_t minutes = ((delay % 86400) % 3600) / 60;
-    uint64_t seconds = ((delay % 86400) % 3600) % 60;
-
-    QString seconds_string = tr("%n seconds", "", static_cast<int>(seconds));
-    QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
-    QString hours_string = tr("%n hours", "", static_cast<int>(hours));
-
-    if (!days)
-    {
-        if (!hours)
+        if (widget->category() == category)
         {
-            if (!minutes)
+            current_widget_ = i;
+
+            LOG(LS_INFO) << "Current category changed: " << category << " (" << i << ")";
+
+            layout_->addWidget(widget);
+            widget->setVisible(true);
+
+            if (!widget->treeWidget()->topLevelItemCount())
             {
-                return seconds_string;
+                LOG(LS_INFO) << "Empty information. Sending request";
+
+                ui.tree_category->setEnabled(false);
+                ui.widget->setEnabled(false);
+
+                sendSystemInfoRequest(category);
             }
-            else
-            {
-                return minutes_string + QLatin1Char(' ') + seconds_string;
-            }
-        }
-        else
-        {
-            return hours_string + QLatin1Char(' ') +
-                   minutes_string + QLatin1Char(' ') +
-                   seconds_string;
+
+            break;
         }
     }
-    else
-    {
-        QString days_string = tr("%n days", "", static_cast<int>(days));
-
-        return days_string + QLatin1Char(' ') +
-               hours_string + QLatin1Char(' ') +
-               minutes_string + QLatin1Char(' ') +
-               seconds_string;
-    }
 }
 
-// static
-QString SystemInfoWindow::speedToString(uint64_t speed)
+void SystemInfoWindow::sendSystemInfoRequest(const std::string& category)
 {
-    static const uint64_t kKbps = 1000ULL;
-    static const uint64_t kMbps = kKbps * 1000ULL;
-    static const uint64_t kGbps = kMbps * 1000ULL;
+    proto::SystemInfoRequest request;
+    request.set_category(category);
 
-    QString units;
-    uint64_t divider;
-
-    if (speed >= kGbps)
-    {
-        units = tr("Gbps");
-        divider = kGbps;
-    }
-    else if (speed >= kMbps)
-    {
-        units = tr("Mbps");
-        divider = kMbps;
-    }
-    else if (speed >= kKbps)
-    {
-        units = tr("Kbps");
-        divider = kKbps;
-    }
-    else
-    {
-        units = tr("bps");
-        divider = 1;
-    }
-
-    return QString("%1 %2")
-        .arg(static_cast<double>(speed) / static_cast<double>(divider), 0, 'g', 4)
-        .arg(units);
-}
-
-// static
-QString SystemInfoWindow::timeToString(time_t time)
-{
-    return QLocale::system().toString(QDateTime::fromSecsSinceEpoch(time), QLocale::ShortFormat);
+    emit systemInfoRequired(request.SerializeAsString());
 }
 
 } // namespace client

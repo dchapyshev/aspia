@@ -23,7 +23,11 @@
 #include "proto/desktop_extensions.pb.h"
 #include "ui_system_info_window.h"
 
+#include <QTreeWidget>
+
 namespace client {
+
+class SysInfoWidget;
 
 class SystemInfoWindow : public QMainWindow
 {
@@ -36,21 +40,18 @@ public:
     void setSystemInfo(const proto::SystemInfo& system_info);
 
 signals:
-    void systemInfoRequired();
+    void systemInfoRequired(const std::string& request);
 
 private slots:
-    void onContextMenu(const QPoint& point);
+    void onCategoryItemClicked(QTreeWidgetItem* item, int column);
 
 private:
-    void copyRow(QTreeWidgetItem* item);
-    void copyColumn(QTreeWidgetItem* item, int column);
-
-    static QString sizeToString(int64_t size);
-    static QString delayToString(uint64_t delay);
-    static QString speedToString(uint64_t speed);
-    static QString timeToString(time_t time);
+    void sendSystemInfoRequest(const std::string& category);
 
     Ui::SystemInfoWindow ui;
+    QHBoxLayout* layout_ = nullptr;
+    QList<SysInfoWidget*> sys_info_widgets_;
+    int current_widget_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(SystemInfoWindow);
 };

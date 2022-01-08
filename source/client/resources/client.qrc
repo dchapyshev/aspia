@@ -2,6 +2,7 @@
     <qresource prefix="/img">
         <file>arrow-down.png</file>
         <file>gear-pencil.png</file>
+        <file>globe-network-ethernet.png</file>
         <file>gear.png</file>
         <file>lifebuoy.png</file>
         <file>about.png</file>
@@ -26,6 +27,7 @@
         <file>monitors.png</file>
         <file>operating-system.png</file>
         <file>pin.png</file>
+        <file>power-supply.png</file>
         <file>folder-up.png</file>
         <file>arrow-circle-double.png</file>
         <file>arrow-045.png</file>
@@ -36,6 +38,7 @@
         <file>keyboard.png</file>
         <file>ctrl-alt-del.png</file>
         <file>eye.png</file>
+        <file>servers-network.png</file>
         <file>settings.png</file>
         <file>folder-stand.png</file>
         <file>monitor.png</file>
@@ -46,6 +49,8 @@
         <file>disk.png</file>
         <file>folder.png</file>
         <file>locale.png</file>
+        <file>document-list.png</file>
+        <file>block.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

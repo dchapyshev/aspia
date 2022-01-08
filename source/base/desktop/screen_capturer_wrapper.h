@@ -58,6 +58,7 @@ public:
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
     void enableFontSmoothing(bool enable);
+    void enableCursorPosition(bool enable);
 
 private:
     ScreenCapturer::ScreenId defaultScreen();
@@ -76,6 +77,7 @@ private:
     int dxgi_error_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
     Point last_cursor_pos_;
+    bool enable_cursor_position_ = false;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;

@@ -177,15 +177,18 @@ void ScreenCapturerWrapper::captureFrame()
 
     delegate_->onScreenCaptured(frame, screen_capturer_->captureCursor());
 
-    Point cursor_pos = screen_capturer_->cursorPosition();
-
-    int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
-    int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
-
-    if (delta_x > 1 || delta_y > 1)
+    if (enable_cursor_position_)
     {
-        delegate_->onCursorPositionChanged(cursor_pos);
-        last_cursor_pos_ = cursor_pos;
+        Point cursor_pos = screen_capturer_->cursorPosition();
+
+        int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+        int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+
+        if (delta_x > 1 || delta_y > 1)
+        {
+            delegate_->onCursorPositionChanged(cursor_pos);
+            last_cursor_pos_ = cursor_pos;
+        }
     }
 }
 
@@ -210,6 +213,11 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
     environment_->setFontSmoothing(enable);
+}
+
+void ScreenCapturerWrapper::enableCursorPosition(bool enable)
+{
+    enable_cursor_position_ = enable;
 }
 
 ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()

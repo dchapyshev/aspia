@@ -829,6 +829,426 @@
     </message>
 </context>
 <context>
+    <name>SysInfoConnections</name>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDevices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDrivers</name>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEnvVars</name>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoEventLogs</name>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoMonitors</name>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPowerOptions</name>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRas</name>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_ras.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoRoutes</name>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoServices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoVideoAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="48"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="53"/>
+        <source>Value</source>
+        <translation type="unfinished">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="61"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="66"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="71"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+</context>
+<context>
     <name>SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.ui" line="14"/>
@@ -836,57 +1256,55 @@
         <translation>Informação do Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="49"/>
         <source>Parameter</source>
-        <translation>Parâmetro</translation>
+        <translation type="vanished">Parâmetro</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="54"/>
         <source>Value</source>
-        <translation>Valor</translation>
+        <translation type="vanished">Valor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="109"/>
+        <location filename="../ui/system_info_window.ui" line="116"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="112"/>
+        <location filename="../ui/system_info_window.ui" line="119"/>
         <source>Save (Ctrl+S)</source>
         <translation>Salvar (CTRL+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="124"/>
+        <location filename="../ui/system_info_window.ui" line="131"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="127"/>
+        <location filename="../ui/system_info_window.ui" line="134"/>
         <source>Print (Ctrl+P)</source>
         <translation>Imprimir (CTRL+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="135"/>
+        <location filename="../ui/system_info_window.ui" line="142"/>
         <source>Copy Row</source>
         <translation>Copiar Linha</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="140"/>
+        <location filename="../ui/system_info_window.ui" line="147"/>
         <source>Copy Name</source>
         <translation>Copiar Nome</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="145"/>
+        <location filename="../ui/system_info_window.ui" line="152"/>
         <source>Copy Value</source>
         <translation>Copiar Valor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="154"/>
+        <location filename="../ui/system_info_window.ui" line="161"/>
         <source>Refresh</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="157"/>
+        <location filename="../ui/system_info_window.ui" line="164"/>
         <source>Refresh (F5)</source>
         <translation>Atualizar (F5)</translation>
     </message>
@@ -1418,7 +1836,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="227"/>
         <location filename="../ui/qt_desktop_window.cc" line="235"/>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -1433,17 +1851,17 @@
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="586"/>
+        <location filename="../ui/qt_desktop_window.cc" line="587"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="588"/>
+        <location filename="../ui/qt_desktop_window.cc" line="589"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="608"/>
+        <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
@@ -1889,394 +2307,1048 @@
     </message>
 </context>
 <context>
-    <name>client::SystemInfoWindow</name>
+    <name>client::SysInfo</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="108"/>
-        <source>HTML File</source>
-        <translation>Arquivo HTML</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="110"/>
-        <source>HTML File (*.html)</source>
-        <translation>Arquivo HTML (*.html)</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="119"/>
-        <source>Warning</source>
-        <translation>Atenção</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="120"/>
-        <source>Failed to save file: %1</source>
-        <translation>Falha ao salvar o arquivo:%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="180"/>
-        <location filename="../ui/system_info_window.cc" line="203"/>
-        <source>Name</source>
-        <translation>Nome</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="183"/>
-        <source>Domain</source>
-        <translation>Domínio</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="186"/>
-        <source>Workgroup</source>
-        <translation>Grupo de trabalho</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="189"/>
-        <source>Uptime</source>
-        <translation>Tempo de atividade</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="193"/>
-        <source>Computer</source>
-        <translation>Computador</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="206"/>
-        <location filename="../ui/system_info_window.cc" line="278"/>
-        <source>Version</source>
-        <translation>Versão</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="209"/>
-        <source>Architecture</source>
-        <translation>Arquitetura</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="212"/>
-        <source>License Key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="215"/>
-        <source>Install Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="220"/>
-        <source>Operating System</source>
-        <translation>Sistema Operacional</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="230"/>
-        <location filename="../ui/system_info_window.cc" line="302"/>
-        <source>Manufacturer</source>
-        <translation>Fabricante</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="233"/>
-        <location filename="../ui/system_info_window.cc" line="248"/>
-        <source>Model</source>
-        <translation>Modelo</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="238"/>
-        <source>Motherboard</source>
-        <translation>Placa mãe</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
-        <location filename="../ui/system_info_window.cc" line="275"/>
-        <source>Vendor</source>
-        <translation>Fornecedor</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="254"/>
-        <source>Packages</source>
-        <translation>Pacotes</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="257"/>
-        <source>Cores</source>
-        <translation>Núcleos</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="260"/>
-        <source>Threads</source>
-        <translation>Threads</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
-        <source>Processor</source>
-        <translation>Processador</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="281"/>
-        <source>Date</source>
-        <translation>Data</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="305"/>
-        <source>Size</source>
-        <translation>Tamanho</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
-        <source>Speed</source>
-        <translation>Velocidade</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="308"/>
-        <source>%1 MHz</source>
-        <translation>%1 MHz</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="311"/>
-        <location filename="../ui/system_info_window.cc" line="494"/>
-        <source>Type</source>
-        <translation>Tipo</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="314"/>
-        <source>Form Factor</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="317"/>
-        <source>Part Number</source>
-        <translation>Part Number</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
-        <source>Installed</source>
-        <translation>Instalado</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="321"/>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>No</source>
-        <translation>No</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="331"/>
-        <source>Memory</source>
-        <translation>Memória</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="360"/>
-        <source>%1 (%2 free)</source>
-        <translation>%1 (%2 livre)</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="370"/>
-        <source>Logical Drives</source>
-        <translation>Unidades lógicas</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="385"/>
-        <source>Adapter Name</source>
-        <translation>Nome do adaptador</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="388"/>
-        <source>Interface Type</source>
-        <translation>Tipo de interface</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="391"/>
-        <source>Connection Speed</source>
-        <translation>Velocidade de conexão</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="394"/>
-        <source>MAC Address</source>
-        <translation>Endereço MAC</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <source>DHCP Enabled</source>
-        <translation>DHCP ativo</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="396"/>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>Yes</source>
-        <translation>Sim</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
-        <source>DHCP Server #%1</source>
-        <translation>Servidor DHCP #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="401"/>
-        <source>DHCP Server</source>
-        <translation>Servidor DHCP</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
-        <source>Address #%1</source>
-        <translation>Endereço #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="413"/>
-        <source>Address</source>
-        <translation>Endereço</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
-        <source>Gateway #%1</source>
-        <translation>Gateway #%1</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="421"/>
-        <source>Gateway</source>
-        <translation>Gateway</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="441"/>
-        <source>Network Connections</source>
-        <translation>Conexões de rede</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="455"/>
-        <source>Default</source>
-        <translation>Padrão</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="458"/>
-        <source>Port</source>
-        <translation>Porta</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="461"/>
-        <source>Driver</source>
-        <translation>Driver</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="463"/>
-        <source>Shared</source>
-        <translation>Compartilhado</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="466"/>
-        <source>Share Name</source>
-        <translation>Nome de compartilhamento</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="468"/>
-        <source>Jobs Count</source>
-        <translation>Contador de serviços</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="476"/>
-        <source>Printers</source>
-        <translation>Impressoras</translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="491"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="497"/>
-        <source>Local Path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="499"/>
-        <source>Current Uses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="502"/>
-        <source>Not limited</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="503"/>
-        <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="511"/>
-        <source>Network Shares</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/system_info_window.cc" line="572"/>
         <source>TB</source>
-        <translation></translation>
+        <translation type="obsolete">TB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="577"/>
         <source>GB</source>
-        <translation></translation>
+        <translation type="obsolete">GB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="582"/>
         <source>MB</source>
-        <translation></translation>
+        <translation type="obsolete">MB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="587"/>
         <source>kB</source>
-        <translation></translation>
+        <translation type="obsolete">kB</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="592"/>
         <source>B</source>
-        <translation></translation>
+        <translation type="obsolete">B</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="608"/>
         <source>%n seconds</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n segundo</numerusform>
             <numerusform>%n segundos</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="609"/>
         <source>%n minutes</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n minuto</numerusform>
             <numerusform>%n minutos</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="610"/>
         <source>%n hours</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>%n hora</numerusform>
             <numerusform>%n horas</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/system_info_window.cc" line="634"/>
         <source>%n days</source>
-        <translation>
+        <translation type="obsolete">
+            <numerusform>%n dia</numerusform>
+            <numerusform>%n dias</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoSummary</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Nome</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="obsolete">Domínio</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="obsolete">Grupo de trabalho</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="obsolete">Tempo de atividade</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="obsolete">Computador</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="obsolete">Versão</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="obsolete">Arquitetura</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="obsolete">Sistema Operacional</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="obsolete">Fabricante</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="obsolete">Modelo</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="obsolete">Placa mãe</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="obsolete">Fornecedor</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="obsolete">Pacotes</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="obsolete">Núcleos</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="obsolete">Threads</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="obsolete">Processador</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">Data</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="obsolete">Tamanho</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="obsolete">Velocidade</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="obsolete">%1 MHz</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Tipo</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="obsolete">Part Number</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="obsolete">Instalado</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">No</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="obsolete">Memória</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="obsolete">%1 (%2 livre)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="obsolete">Unidades lógicas</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="obsolete">Nome do adaptador</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="obsolete">Tipo de interface</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="obsolete">Velocidade de conexão</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="obsolete">Endereço MAC</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="obsolete">DHCP ativo</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="obsolete">Sim</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="obsolete">Servidor DHCP #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="obsolete">Servidor DHCP</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="obsolete">Endereço #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="obsolete">Endereço</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="obsolete">Gateway #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="obsolete">Gateway</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="obsolete">Conexões de rede</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="obsolete">Padrão</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Porta</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="obsolete">Driver</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="obsolete">Compartilhado</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="obsolete">Nome de compartilhamento</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="obsolete">Contador de serviços</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Impressoras</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidget</name>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="64"/>
+        <source>TB</source>
+        <translation type="unfinished">TB</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="69"/>
+        <source>GB</source>
+        <translation type="unfinished">GB</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="74"/>
+        <source>MB</source>
+        <translation type="unfinished">MB</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="79"/>
+        <source>kB</source>
+        <translation type="unfinished">kB</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget.cc" line="84"/>
+        <source>B</source>
+        <translation type="unfinished">B</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="100"/>
+        <source>%n seconds</source>
+        <translation type="unfinished">
+            <numerusform>%n segundo</numerusform>
+            <numerusform>%n segundos</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="101"/>
+        <source>%n minutes</source>
+        <translation type="unfinished">
+            <numerusform>%n minuto</numerusform>
+            <numerusform>%n minutos</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="102"/>
+        <source>%n hours</source>
+        <translation type="unfinished">
+            <numerusform>%n hora</numerusform>
+            <numerusform>%n horas</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/sys_info_widget.cc" line="126"/>
+        <source>%n days</source>
+        <translation type="unfinished">
             <numerusform>%n dia</numerusform>
             <numerusform>%n dias</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="655"/>
+        <location filename="../ui/sys_info_widget.cc" line="147"/>
         <source>Gbps</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="660"/>
+        <location filename="../ui/sys_info_widget.cc" line="152"/>
         <source>Mbps</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="665"/>
+        <location filename="../ui/sys_info_widget.cc" line="157"/>
         <source>Kbps</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="670"/>
+        <location filename="../ui/sys_info_widget.cc" line="162"/>
         <source>bps</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
+        <source>Adapter Name</source>
+        <translation type="unfinished">Nome do adaptador</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="136"/>
+        <source>Interface Type</source>
+        <translation type="unfinished">Tipo de interface</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="139"/>
+        <source>Connection Speed</source>
+        <translation type="unfinished">Velocidade de conexão</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="142"/>
+        <source>MAC Address</source>
+        <translation type="unfinished">Endereço MAC</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>DHCP Enabled</source>
+        <translation type="unfinished">DHCP ativo</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server #%1</source>
+        <translation type="unfinished">Servidor DHCP #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
+        <source>DHCP Server</source>
+        <translation type="unfinished">Servidor DHCP</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address #%1</source>
+        <translation type="unfinished">Endereço #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
+        <source>Address</source>
+        <translation type="unfinished">Endereço</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway #%1</source>
+        <translation type="unfinished">Gateway #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
+        <source>Gateway</source>
+        <translation type="unfinished">Gateway</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetNetShares</name>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="128"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="131"/>
+        <source>Type</source>
+        <translation type="unfinished">Tipo</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="134"/>
+        <source>Local Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="136"/>
+        <source>Current Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="139"/>
+        <source>Not limited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_net_shares.cc" line="140"/>
+        <source>Maximum Uses</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetPrinters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <source>Default</source>
+        <translation type="unfinished">Padrão</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="135"/>
+        <source>Port</source>
+        <translation type="unfinished">Porta</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
+        <source>Driver</source>
+        <translation type="unfinished">Driver</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
+        <source>Shared</source>
+        <translation type="unfinished">Compartilhado</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="143"/>
+        <source>Share Name</source>
+        <translation type="unfinished">Nome de compartilhamento</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
+        <source>Jobs Count</source>
+        <translation type="unfinished">Contador de serviços</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetSummary</name>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="129"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="152"/>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="132"/>
+        <source>Domain</source>
+        <translation type="unfinished">Domínio</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="135"/>
+        <source>Workgroup</source>
+        <translation type="unfinished">Grupo de trabalho</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="138"/>
+        <source>Uptime</source>
+        <translation type="unfinished">Tempo de atividade</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="142"/>
+        <source>Computer</source>
+        <translation type="unfinished">Computador</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="155"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="227"/>
+        <source>Version</source>
+        <translation type="unfinished">Versão</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="158"/>
+        <source>Architecture</source>
+        <translation type="unfinished">Arquitetura</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="161"/>
+        <source>License Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="164"/>
+        <source>Install Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="169"/>
+        <source>Operating System</source>
+        <translation type="unfinished">Sistema Operacional</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="179"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="251"/>
+        <source>Manufacturer</source>
+        <translation type="unfinished">Fabricante</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="182"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="197"/>
+        <source>Model</source>
+        <translation type="unfinished">Modelo</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="187"/>
+        <source>Motherboard</source>
+        <translation type="unfinished">Placa mãe</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="200"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="224"/>
+        <source>Vendor</source>
+        <translation type="unfinished">Fornecedor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="203"/>
+        <source>Packages</source>
+        <translation type="unfinished">Pacotes</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="206"/>
+        <source>Cores</source>
+        <translation type="unfinished">Núcleos</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="209"/>
+        <source>Threads</source>
+        <translation type="unfinished">Threads</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="214"/>
+        <source>Processor</source>
+        <translation type="unfinished">Processador</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="230"/>
+        <source>Date</source>
+        <translation type="unfinished">Data</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="254"/>
+        <source>Size</source>
+        <translation type="unfinished">Tamanho</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>Speed</source>
+        <translation type="unfinished">Velocidade</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished">%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="260"/>
+        <source>Type</source>
+        <translation type="unfinished">Tipo</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
+        <source>Form Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="266"/>
+        <source>Part Number</source>
+        <translation type="unfinished">Part Number</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <source>Installed</source>
+        <translation type="unfinished">Instalado</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="280"/>
+        <source>Memory</source>
+        <translation type="unfinished">Memória</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="309"/>
+        <source>%1 (%2 free)</source>
+        <translation type="unfinished">%1 (%2 livre)</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="319"/>
+        <source>Logical Drives</source>
+        <translation type="unfinished">Unidades lógicas</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="334"/>
+        <source>Adapter Name</source>
+        <translation type="unfinished">Nome do adaptador</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="337"/>
+        <source>Interface Type</source>
+        <translation type="unfinished">Tipo de interface</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="340"/>
+        <source>Connection Speed</source>
+        <translation type="unfinished">Velocidade de conexão</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="343"/>
+        <source>MAC Address</source>
+        <translation type="unfinished">Endereço MAC</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>DHCP Enabled</source>
+        <translation type="unfinished">DHCP ativo</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server #%1</source>
+        <translation type="unfinished">Servidor DHCP #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
+        <source>DHCP Server</source>
+        <translation type="unfinished">Servidor DHCP</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address #%1</source>
+        <translation type="unfinished">Endereço #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
+        <source>Address</source>
+        <translation type="unfinished">Endereço</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway #%1</source>
+        <translation type="unfinished">Gateway #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
+        <source>Gateway</source>
+        <translation type="unfinished">Gateway</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_summary.cc" line="390"/>
+        <source>Network Connections</source>
+        <translation type="unfinished">Conexões de rede</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="obsolete">Padrão</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Porta</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="obsolete">Driver</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="obsolete">Compartilhado</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="obsolete">Nome de compartilhamento</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="obsolete">Contador de serviços</translation>
+    </message>
+    <message>
+        <source>Printers</source>
+        <translation type="obsolete">Impressoras</translation>
+    </message>
+</context>
+<context>
+    <name>client::SystemInfoWindow</name>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="111"/>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="118"/>
+        <source>Hardware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="123"/>
+        <source>Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="129"/>
+        <source>Video Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="135"/>
+        <source>Monitors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="147"/>
+        <source>Power Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="161"/>
+        <source>Software</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="166"/>
+        <source>Drivers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="172"/>
+        <source>Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="178"/>
+        <source>Environment Variables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="184"/>
+        <source>Event Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="197"/>
+        <source>Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="202"/>
+        <source>Network Adapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="208"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="214"/>
+        <source>Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="220"/>
+        <source>Network Shares</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="226"/>
+        <source>RAS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="251"/>
+        <source>HTML File</source>
+        <translation>Arquivo HTML</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="253"/>
+        <source>HTML File (*.html)</source>
+        <translation>Arquivo HTML (*.html)</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="264"/>
+        <source>Warning</source>
+        <translation>Atenção</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="265"/>
+        <source>Failed to save file: %1</source>
+        <translation>Falha ao salvar o arquivo:%1</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">Nome</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation type="vanished">Domínio</translation>
+    </message>
+    <message>
+        <source>Workgroup</source>
+        <translation type="vanished">Grupo de trabalho</translation>
+    </message>
+    <message>
+        <source>Uptime</source>
+        <translation type="vanished">Tempo de atividade</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="vanished">Computador</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="vanished">Versão</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation type="vanished">Arquitetura</translation>
+    </message>
+    <message>
+        <source>Operating System</source>
+        <translation type="vanished">Sistema Operacional</translation>
+    </message>
+    <message>
+        <source>Manufacturer</source>
+        <translation type="vanished">Fabricante</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="vanished">Modelo</translation>
+    </message>
+    <message>
+        <source>Motherboard</source>
+        <translation type="vanished">Placa mãe</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="vanished">Fornecedor</translation>
+    </message>
+    <message>
+        <source>Packages</source>
+        <translation type="vanished">Pacotes</translation>
+    </message>
+    <message>
+        <source>Cores</source>
+        <translation type="vanished">Núcleos</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="vanished">Threads</translation>
+    </message>
+    <message>
+        <source>Processor</source>
+        <translation type="vanished">Processador</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="vanished">Data</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="vanished">Tamanho</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="vanished">Velocidade</translation>
+    </message>
+    <message>
+        <source>%1 MHz</source>
+        <translation type="vanished">%1 MHz</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Tipo</translation>
+    </message>
+    <message>
+        <source>Part Number</source>
+        <translation type="vanished">Part Number</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="vanished">Instalado</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="vanished">No</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">Memória</translation>
+    </message>
+    <message>
+        <source>%1 (%2 free)</source>
+        <translation type="vanished">%1 (%2 livre)</translation>
+    </message>
+    <message>
+        <source>Logical Drives</source>
+        <translation type="vanished">Unidades lógicas</translation>
+    </message>
+    <message>
+        <source>Adapter Name</source>
+        <translation type="vanished">Nome do adaptador</translation>
+    </message>
+    <message>
+        <source>Interface Type</source>
+        <translation type="vanished">Tipo de interface</translation>
+    </message>
+    <message>
+        <source>Connection Speed</source>
+        <translation type="vanished">Velocidade de conexão</translation>
+    </message>
+    <message>
+        <source>MAC Address</source>
+        <translation type="vanished">Endereço MAC</translation>
+    </message>
+    <message>
+        <source>DHCP Enabled</source>
+        <translation type="vanished">DHCP ativo</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="vanished">Sim</translation>
+    </message>
+    <message>
+        <source>DHCP Server #%1</source>
+        <translation type="vanished">Servidor DHCP #%1</translation>
+    </message>
+    <message>
+        <source>DHCP Server</source>
+        <translation type="vanished">Servidor DHCP</translation>
+    </message>
+    <message>
+        <source>Address #%1</source>
+        <translation type="vanished">Endereço #%1</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="vanished">Endereço</translation>
+    </message>
+    <message>
+        <source>Gateway #%1</source>
+        <translation type="vanished">Gateway #%1</translation>
+    </message>
+    <message>
+        <source>Gateway</source>
+        <translation type="vanished">Gateway</translation>
+    </message>
+    <message>
+        <source>Network Connections</source>
+        <translation type="vanished">Conexões de rede</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="vanished">Padrão</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="vanished">Porta</translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="vanished">Driver</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation type="vanished">Compartilhado</translation>
+    </message>
+    <message>
+        <source>Share Name</source>
+        <translation type="vanished">Nome de compartilhamento</translation>
+    </message>
+    <message>
+        <source>Jobs Count</source>
+        <translation type="vanished">Contador de serviços</translation>
+    </message>
+    <message>
+        <location filename="../ui/system_info_window.cc" line="141"/>
+        <source>Printers</source>
+        <translation>Impressoras</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n seconds</source>
+        <translation type="vanished">
+            <numerusform>%n segundo</numerusform>
+            <numerusform>%n segundos</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n minutes</source>
+        <translation type="vanished">
+            <numerusform>%n minuto</numerusform>
+            <numerusform>%n minutos</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n hours</source>
+        <translation type="vanished">
+            <numerusform>%n hora</numerusform>
+            <numerusform>%n horas</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n days</source>
+        <translation type="vanished">
+            <numerusform>%n dia</numerusform>
+            <numerusform>%n dias</numerusform>
+        </translation>
     </message>
 </context>
 </TS>

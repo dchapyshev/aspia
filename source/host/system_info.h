@@ -23,7 +23,7 @@
 
 namespace host {
 
-void createSystemInfo(proto::SystemInfo* system_info);
+void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* system_info);
 
 } // namespace host
 

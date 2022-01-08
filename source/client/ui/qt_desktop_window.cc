@@ -130,7 +130,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     connect(panel_, &DesktopPanel::startSystemInfo, this, [this]()
     {
-        desktop_control_proxy_->onSystemInfoRequest();
+        desktop_control_proxy_->onSystemInfoRequest(std::string());
     });
 
     connect(panel_, &DesktopPanel::startStatistics, this, [this]()
@@ -254,7 +254,7 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     video_encodings_ = video_encodings;
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    std::vector<std::string_view> extensions_list = base::splitStringView(
+    base::ScalableVector<std::string_view> extensions_list = base::splitStringView(
         extensions, ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
 
     // By default, remote update is disabled.
@@ -302,9 +302,10 @@ void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
         system_info_ = new SystemInfoWindow(this);
         system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(system_info_, &SystemInfoWindow::systemInfoRequired, this, [this]()
+        connect(system_info_, &SystemInfoWindow::systemInfoRequired,
+                this, [this](const std::string& request)
         {
-            desktop_control_proxy_->onSystemInfoRequest();
+            desktop_control_proxy_->onSystemInfoRequest(request);
         });
     }
 

@@ -18,6 +18,7 @@
 
 #include "host/system_info.h"
 
+#include "base/logging.h"
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
@@ -25,10 +26,13 @@
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
+#include "common/desktop_session_constants.h"
 
 namespace host {
 
-void createSystemInfo(proto::SystemInfo* system_info)
+namespace {
+
+void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
     computer->set_name(base::SysInfo::computerName());
@@ -121,104 +125,186 @@ void createSystemInfo(proto::SystemInfo* system_info)
         drive->set_total_size(drive_info.totalSpace());
         drive->set_free_size(drive_info.freeSpace());
     }
+}
 
-    for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+} // namespace
+
+void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* system_info)
+{
+    if (serialized_request.empty())
     {
-        proto::system_info::Printers::Printer* printer =
-            system_info->mutable_printers()->add_printer();
-
-        printer->set_name(enumerator.name());
-        printer->set_default_(enumerator.isDefault());
-        printer->set_shared(enumerator.isShared());
-        printer->set_port(enumerator.portName());
-        printer->set_driver(enumerator.driverName());
-        printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
-        printer->set_share_name(enumerator.shareName());
+        createSummaryInfo(system_info);
+        return;
     }
 
-    for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    proto::SystemInfoRequest request;
+    if (!request.ParseFromString(serialized_request))
     {
-        proto::system_info::NetworkAdapters::Adapter* adapter =
-            system_info->mutable_network_adapters()->add_adapter();
-
-        adapter->set_adapter_name(enumerator.adapterName());
-        adapter->set_connection_name(enumerator.connectionName());
-        adapter->set_iface(enumerator.interfaceType());
-        adapter->set_speed(enumerator.speed());
-        adapter->set_mac(enumerator.macAddress());
-        adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
-
-        if (enumerator.isDhcp4Enabled())
-        {
-            std::string dhcp4_server = enumerator.dhcp4Server();
-            if (!dhcp4_server.empty())
-                adapter->add_dhcp()->append(dhcp4_server);
-        }
-
-        for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
-             !gateway.isAtEnd(); gateway.advance())
-        {
-            adapter->add_gateway()->assign(gateway.address());
-        }
-
-        for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
-             !ip.isAtEnd(); ip.advance())
-        {
-            proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
-
-            address->set_ip(ip.address());
-            address->set_mask(ip.mask());
-        }
-
-        for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
-             !dns.isAtEnd(); dns.advance())
-        {
-            adapter->add_dns()->assign(dns.address());
-        }
+        LOG(LS_WARNING) << "Unable to parse system info request";
+        return;
     }
 
-    for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    const std::string& category = request.category();
+    if (category.empty())
     {
-        proto::system_info::NetworkShares::Share* share =
-            system_info->mutable_network_shares()->add_share();
+        LOG(LS_WARNING) << "Unable to get system info category";
+        return;
+    }
 
-        share->set_name(enumerator.name());
-        share->set_description(enumerator.description());
-        share->set_local_path(enumerator.localPath());
-        share->set_current_uses(enumerator.currentUses());
-        share->set_max_uses(enumerator.maxUses());
+    LOG(LS_INFO) << "Requested system info category: " << category;
 
-        using ShareType = base::win::NetShareEnumerator::Type;
-
-        switch (enumerator.type())
+    if (category == common::kSystemInfo_Devices)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_VideoAdapters)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_Monitors)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_Printers)
+    {
+        for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
         {
-            case ShareType::DISK:
-                share->set_type("Disk");
-                break;
+            proto::system_info::Printers::Printer* printer =
+                system_info->mutable_printers()->add_printer();
 
-            case ShareType::PRINTER:
-                share->set_type("Printer");
-                break;
-
-            case ShareType::DEVICE:
-                share->set_type("Device");
-                break;
-
-            case ShareType::IPC:
-                share->set_type("IPC");
-                break;
-
-            case ShareType::SPECIAL:
-                share->set_type("Special");
-                break;
-
-            case ShareType::TEMPORARY:
-                share->set_type("Temporary");
-                break;
-
-            default:
-                break;
+            printer->set_name(enumerator.name());
+            printer->set_default_(enumerator.isDefault());
+            printer->set_shared(enumerator.isShared());
+            printer->set_port(enumerator.portName());
+            printer->set_driver(enumerator.driverName());
+            printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
+            printer->set_share_name(enumerator.shareName());
         }
+    }
+    else if (category == common::kSystemInfo_PowerOptions)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_Drivers)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_Services)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_EnvironmentVariables)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_EventLogs)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_NetworkAdapters)
+    {
+        for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+        {
+            proto::system_info::NetworkAdapters::Adapter* adapter =
+                system_info->mutable_network_adapters()->add_adapter();
+
+            adapter->set_adapter_name(enumerator.adapterName());
+            adapter->set_connection_name(enumerator.connectionName());
+            adapter->set_iface(enumerator.interfaceType());
+            adapter->set_speed(enumerator.speed());
+            adapter->set_mac(enumerator.macAddress());
+            adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
+
+            if (enumerator.isDhcp4Enabled())
+            {
+                std::string dhcp4_server = enumerator.dhcp4Server();
+                if (!dhcp4_server.empty())
+                    adapter->add_dhcp()->append(dhcp4_server);
+            }
+
+            for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
+                 !gateway.isAtEnd(); gateway.advance())
+            {
+                adapter->add_gateway()->assign(gateway.address());
+            }
+
+            for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
+                 !ip.isAtEnd(); ip.advance())
+            {
+                proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
+
+                address->set_ip(ip.address());
+                address->set_mask(ip.mask());
+            }
+
+            for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
+                 !dns.isAtEnd(); dns.advance())
+            {
+                adapter->add_dns()->assign(dns.address());
+            }
+        }
+    }
+    else if (category == common::kSystemInfo_Routes)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_Connections)
+    {
+        // TODO
+    }
+    else if (category == common::kSystemInfo_NetworkShares)
+    {
+        for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+        {
+            proto::system_info::NetworkShares::Share* share =
+                system_info->mutable_network_shares()->add_share();
+
+            share->set_name(enumerator.name());
+            share->set_description(enumerator.description());
+            share->set_local_path(enumerator.localPath());
+            share->set_current_uses(enumerator.currentUses());
+            share->set_max_uses(enumerator.maxUses());
+
+            using ShareType = base::win::NetShareEnumerator::Type;
+
+            switch (enumerator.type())
+            {
+                case ShareType::DISK:
+                    share->set_type("Disk");
+                    break;
+
+                case ShareType::PRINTER:
+                    share->set_type("Printer");
+                    break;
+
+                case ShareType::DEVICE:
+                    share->set_type("Device");
+                    break;
+
+                case ShareType::IPC:
+                    share->set_type("IPC");
+                    break;
+
+                case ShareType::SPECIAL:
+                    share->set_type("Special");
+                    break;
+
+                case ShareType::TEMPORARY:
+                    share->set_type("Temporary");
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    else if (category == common::kSystemInfo_Ras)
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unknown system info category: " << category;
     }
 }
 

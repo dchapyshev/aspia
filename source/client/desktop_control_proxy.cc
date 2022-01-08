@@ -151,17 +151,17 @@ void DesktopControlProxy::onRemoteUpdate()
         desktop_control_->onRemoteUpdate();
 }
 
-void DesktopControlProxy::onSystemInfoRequest()
+void DesktopControlProxy::onSystemInfoRequest(const std::string& request)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {
         io_task_runner_->postTask(
-            std::bind(&DesktopControlProxy::onSystemInfoRequest, shared_from_this()));
+            std::bind(&DesktopControlProxy::onSystemInfoRequest, shared_from_this(), request));
         return;
     }
 
     if (desktop_control_)
-        desktop_control_->onSystemInfoRequest();
+        desktop_control_->onSystemInfoRequest(request);
 }
 
 void DesktopControlProxy::onMetricsRequest()

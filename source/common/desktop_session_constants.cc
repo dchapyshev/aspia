@@ -40,4 +40,19 @@ const uint32_t kSupportedVideoEncodings =
     proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
 const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
 
+const char kSystemInfo_Devices[] = "devices";
+const char kSystemInfo_VideoAdapters[] = "video_adapters";
+const char kSystemInfo_Monitors[] = "monitors";
+const char kSystemInfo_Printers[] = "printers";
+const char kSystemInfo_PowerOptions[] = "power_options";
+const char kSystemInfo_Drivers[] = "drivers";
+const char kSystemInfo_Services[] = "services";
+const char kSystemInfo_EnvironmentVariables[] = "environment_variables";
+const char kSystemInfo_EventLogs[] = "event_logs";
+const char kSystemInfo_NetworkAdapters[] = "network_adapters";
+const char kSystemInfo_Routes[] = "routes";
+const char kSystemInfo_Connections[] = "connections";
+const char kSystemInfo_NetworkShares[] = "network_shares";
+const char kSystemInfo_Ras[] = "ras";
+
 } // namespace common
