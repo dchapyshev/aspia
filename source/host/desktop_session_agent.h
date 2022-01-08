@@ -19,6 +19,7 @@
 #ifndef HOST__DESKTOP_SESSION_AGENT_H
 #define HOST__DESKTOP_SESSION_AGENT_H
 
+#include "base/protobuf_arena_helper.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
@@ -38,7 +39,8 @@ namespace host {
 class InputInjector;
 
 class DesktopSessionAgent
-    : public std::enable_shared_from_this<DesktopSessionAgent>,
+    : public base::ProtobufArenaHelper,
+      public std::enable_shared_from_this<DesktopSessionAgent>,
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
@@ -77,9 +79,6 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
 
     std::unique_ptr<base::IpcChannel> channel_;
-    std::unique_ptr<proto::internal::ServiceToDesktop> incoming_message_;
-    std::unique_ptr<proto::internal::DesktopToService> outgoing_message_;
-
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
     std::unique_ptr<InputInjector> input_injector_;
 

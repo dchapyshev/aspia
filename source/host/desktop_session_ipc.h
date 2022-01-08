@@ -19,6 +19,7 @@
 #ifndef HOST__DESKTOP_SESSION_IPC_H
 #define HOST__DESKTOP_SESSION_IPC_H
 
+#include "base/protobuf_arena_helper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/memory/scalable_map.h"
 #include "host/desktop_session.h"
@@ -26,7 +27,8 @@
 namespace host {
 
 class DesktopSessionIpc
-    : public DesktopSession,
+    : public base::ProtobufArenaHelper,
+      public DesktopSession,
       public base::IpcChannel::Listener
 {
 public:
@@ -66,9 +68,6 @@ private:
     std::unique_ptr<base::Frame> last_frame_;
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
-
-    std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
-    std::unique_ptr<proto::internal::DesktopToService> incoming_message_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);

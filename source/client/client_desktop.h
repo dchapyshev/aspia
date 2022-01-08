@@ -20,6 +20,7 @@
 #define CLIENT__CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
+#include "base/protobuf_arena_helper.h"
 #include "client/client.h"
 #include "client/desktop_control.h"
 #include "client/input_event_filter.h"
@@ -44,7 +45,8 @@ class DesktopWindow;
 class DesktopWindowProxy;
 
 class ClientDesktop
-    : public Client,
+    : public base::ProtobufArenaHelper,
+      public Client,
       public DesktopControl,
       public common::Clipboard::Delegate
 {
@@ -64,7 +66,7 @@ public:
     void onMouseEvent(const proto::MouseEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
-    void onSystemInfoRequest() override;
+    void onSystemInfoRequest(const std::string& request) override;
     void onMetricsRequest() override;
 
 protected:
@@ -93,9 +95,6 @@ private:
     std::shared_ptr<DesktopWindowProxy> desktop_window_proxy_;
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::DesktopConfig desktop_config_;
-
-    std::unique_ptr<proto::HostToClient> incoming_message_;
-    std::unique_ptr<proto::ClientToHost> outgoing_message_;
 
     proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
     proto::AudioEncoding audio_encoding_ = proto::AUDIO_ENCODING_UNKNOWN;

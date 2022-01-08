@@ -70,8 +70,6 @@ private:
 
 DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate)
     : channel_(std::move(channel)),
-      outgoing_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
-      incoming_message_(std::make_unique<proto::internal::DesktopToService>()),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
@@ -110,35 +108,39 @@ void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action);
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_control()->set_action(action);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_control()->set_action(action);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::configure(const Config& config)
 {
     LOG(LS_INFO) << "Send CONFIGURE";
 
-    outgoing_message_->Clear();
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
 
-    proto::internal::Configure* configure = outgoing_message_->mutable_configure();
+    proto::internal::Configure* configure = outgoing_message->mutable_configure();
     configure->set_disable_font_smoothing(config.disable_font_smoothing);
     configure->set_disable_wallpaper(config.disable_wallpaper);
     configure->set_disable_effects(config.disable_effects);
     configure->set_block_input(config.block_input);
     configure->set_lock_at_disconnect(config.lock_at_disconnect);
     configure->set_clear_clipboard(config.clear_clipboard);
+    configure->set_cursor_position(config.cursor_position);
 
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Send SELECT_SCREEN";
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_select_source()->mutable_screen()->CopyFrom(screen);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::captureScreen()
@@ -168,38 +170,44 @@ void DesktopSessionIpc::captureScreen()
     }
     else
     {
-        outgoing_message_->Clear();
-        outgoing_message_->mutable_next_screen_capture()->set_update_interval(0);
-        channel_->send(base::serialize(*outgoing_message_));
+        proto::internal::ServiceToDesktop* outgoing_message =
+            messageFromArena<proto::internal::ServiceToDesktop>();
+        outgoing_message->mutable_next_screen_capture()->set_update_interval(0);
+        channel_->send(base::serialize(*outgoing_message));
     }
 }
 
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_key_event()->CopyFrom(event);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_key_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_text_event()->CopyFrom(event);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+
+    outgoing_message->mutable_text_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_mouse_event()->CopyFrom(event);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_mouse_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_clipboard_event()->CopyFrom(event);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::onDisconnected()
@@ -224,41 +232,42 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    incoming_message_->Clear();
+    proto::internal::DesktopToService* incoming_message =
+        messageFromArena<proto::internal::DesktopToService>();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, incoming_message))
     {
         LOG(LS_ERROR) << "Invalid message from desktop";
         return;
     }
 
-    if (incoming_message_->has_screen_captured())
+    if (incoming_message->has_screen_captured())
     {
-        onScreenCaptured(incoming_message_->screen_captured());
+        onScreenCaptured(incoming_message->screen_captured());
     }
-    else if (incoming_message_->has_audio_packet())
+    else if (incoming_message->has_audio_packet())
     {
-        onAudioCaptured(incoming_message_->audio_packet());
+        onAudioCaptured(incoming_message->audio_packet());
     }
-    else if (incoming_message_->has_cursor_position())
+    else if (incoming_message->has_cursor_position())
     {
-        onCursorPositionChanged(incoming_message_->cursor_position());
+        onCursorPositionChanged(incoming_message->cursor_position());
     }
-    else if (incoming_message_->has_screen_list())
+    else if (incoming_message->has_screen_list())
     {
-        last_screen_list_.reset(incoming_message_->release_screen_list());
+        last_screen_list_.reset(incoming_message->release_screen_list());
         delegate_->onScreenListChanged(*last_screen_list_);
     }
-    else if (incoming_message_->has_shared_buffer())
+    else if (incoming_message->has_shared_buffer())
     {
-        switch (incoming_message_->shared_buffer().type())
+        switch (incoming_message->shared_buffer().type())
         {
             case proto::internal::SharedBuffer::CREATE:
-                onCreateSharedBuffer(incoming_message_->shared_buffer().shared_buffer_id());
+                onCreateSharedBuffer(incoming_message->shared_buffer().shared_buffer_id());
                 break;
 
             case proto::internal::SharedBuffer::RELEASE:
-                onReleaseSharedBuffer(incoming_message_->shared_buffer().shared_buffer_id());
+                onReleaseSharedBuffer(incoming_message->shared_buffer().shared_buffer_id());
                 break;
 
             default:
@@ -266,9 +275,9 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
                 break;
         }
     }
-    else if (incoming_message_->has_clipboard_event())
+    else if (incoming_message->has_clipboard_event())
     {
-        delegate_->onClipboardEvent(incoming_message_->clipboard_event());
+        delegate_->onClipboardEvent(incoming_message->clipboard_event());
     }
     else
     {
@@ -337,9 +346,10 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
         LOG(LS_WARNING) << "Invalid delegate";
     }
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_next_screen_capture()->set_update_interval(40);
-    channel_->send(base::serialize(*outgoing_message_));
+    proto::internal::ServiceToDesktop* outgoing_message =
+        messageFromArena<proto::internal::ServiceToDesktop>();
+    outgoing_message->mutable_next_screen_capture()->set_update_interval(40);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cursor_position)

@@ -57,9 +57,7 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 
 ClientDesktop::ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
-      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this)),
-      incoming_message_(std::make_unique<proto::HostToClient>()),
-      outgoing_message_(std::make_unique<proto::ClientToHost>())
+      desktop_control_proxy_(std::make_shared<DesktopControlProxy>(io_task_runner, this))
 {
     LOG(LS_INFO) << "Ctor";
 }
@@ -93,9 +91,9 @@ void ClientDesktop::onSessionStarted(const base::Version& peer_version)
 
 void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
-    incoming_message_->Clear();
+    proto::HostToClient* incoming_message_ = messageFromArena<proto::HostToClient>();
 
-    if (!base::parse(buffer, incoming_message_.get()))
+    if (!base::parse(buffer, incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from host";
         return;
@@ -147,9 +145,9 @@ void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_clipboard_event()->CopyFrom(*out_event);
-    sendMessage(*outgoing_message_);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_clipboard_event()->CopyFrom(*out_event);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
@@ -174,42 +172,42 @@ void ClientDesktop::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::ENABLE_CLIPBOARD);
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_config()->CopyFrom(desktop_config_);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_config()->CopyFrom(desktop_config_);
 
     LOG(LS_INFO) << "Send new config to host";
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::setCurrentScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Current screen changed: " << screen.id();
 
-    outgoing_message_->Clear();
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
 
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::setPreferredSize(int width, int height)
 {
     LOG(LS_INFO) << "Preferred size changed: " << width << "x" << height;
 
-    outgoing_message_->Clear();
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
 
     proto::PreferredSize preferred_size;
     preferred_size.set_width(width);
     preferred_size.set_height(height);
 
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
 
     extension->set_name(common::kPreferredSizeExtension);
     extension->set_data(preferred_size.SerializeAsString());
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& file_path)
@@ -245,14 +243,13 @@ void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& 
         webm_file_writer_.reset();
     }
 
-    outgoing_message_->Clear();
-
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
 
     extension->set_name(common::kVideoRecordingExtension);
     extension->set_data(video_recording.SerializeAsString());
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
@@ -261,10 +258,10 @@ void ClientDesktop::onKeyEvent(const proto::KeyEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_key_event()->CopyFrom(*out_event);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_key_event()->CopyFrom(*out_event);
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onTextEvent(const proto::TextEvent& event)
@@ -273,10 +270,10 @@ void ClientDesktop::onTextEvent(const proto::TextEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_text_event()->CopyFrom(*out_event);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_text_event()->CopyFrom(*out_event);
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
@@ -285,10 +282,10 @@ void ClientDesktop::onMouseEvent(const proto::MouseEvent& event)
     if (!out_event.has_value())
         return;
 
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_mouse_event()->CopyFrom(*out_event);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_mouse_event()->CopyFrom(*out_event);
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
@@ -299,9 +296,8 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
         return;
     }
 
-    outgoing_message_->Clear();
-
-    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
 
     proto::PowerControl power_control;
     power_control.set_action(action);
@@ -309,21 +305,24 @@ void ClientDesktop::onPowerControl(proto::PowerControl::Action action)
     extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
-    sendMessage(*outgoing_message_);
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onRemoteUpdate()
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_extension()->set_name(common::kRemoteUpdateExtension);
-    sendMessage(*outgoing_message_);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    outgoing_message->mutable_extension()->set_name(common::kRemoteUpdateExtension);
+    sendMessage(*outgoing_message);
 }
 
-void ClientDesktop::onSystemInfoRequest()
+void ClientDesktop::onSystemInfoRequest(const std::string& request)
 {
-    outgoing_message_->Clear();
-    outgoing_message_->mutable_extension()->set_name(common::kSystemInfoExtension);
-    sendMessage(*outgoing_message_);
+    proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
+    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
+    extension->set_name(common::kSystemInfoExtension);
+    extension->set_data(request);
+
+    sendMessage(*outgoing_message);
 }
 
 void ClientDesktop::onMetricsRequest()

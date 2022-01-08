@@ -78,8 +78,8 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
     pending_id_requests_.emplace(session_name);
 
-    proto::PeerToRouter message;
-    proto::HostIdRequest* host_id_request = message.mutable_host_id_request();
+    proto::PeerToRouter* message = messageFromArena<proto::PeerToRouter>();
+    proto::HostIdRequest* host_id_request = message->mutable_host_id_request();
 
     if (host_key.empty())
     {
@@ -95,7 +95,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
     // Send host ID request.
     LOG(LS_INFO) << "Send ID request to router";
-    channel_->send(base::serialize(message));
+    channel_->send(base::serialize(*message));
 }
 
 void RouterController::resetHostId(base::HostId host_id)
@@ -108,9 +108,9 @@ void RouterController::resetHostId(base::HostId host_id)
         return;
     }
 
-    proto::PeerToRouter message;
-    message.mutable_reset_host_id()->set_host_id(host_id);
-    channel_->send(base::serialize(message));
+    proto::PeerToRouter* message = messageFromArena<proto::PeerToRouter>();
+    message->mutable_reset_host_id()->set_host_id(host_id);
+    channel_->send(base::serialize(*message));
 }
 
 void RouterController::onConnected()
@@ -167,14 +167,14 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
 
 void RouterController::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::RouterToPeer in_message;
-    if (!base::parse(buffer, &in_message))
+    proto::RouterToPeer* in_message = messageFromArena<proto::RouterToPeer>();
+    if (!base::parse(buffer, in_message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (in_message.has_host_id_response())
+    if (in_message->has_host_id_response())
     {
         if (pending_id_requests_.empty())
         {
@@ -182,7 +182,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
             return;
         }
 
-        const proto::HostIdResponse& host_id_response = in_message.host_id_response();
+        const proto::HostIdResponse& host_id_response = in_message->host_id_response();
 
         switch (host_id_response.error_code())
         {
@@ -194,12 +194,12 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
             {
                 LOG(LS_INFO) << "Host is not in the router's database. Reset ID";
 
-                proto::PeerToRouter out_message;
-                out_message.mutable_host_id_request()->set_type(proto::HostIdRequest::NEW_ID);
+                proto::PeerToRouter* out_message = messageFromArena<proto::PeerToRouter>();
+                out_message->mutable_host_id_request()->set_type(proto::HostIdRequest::NEW_ID);
 
                 // Send host ID request.
                 LOG(LS_INFO) << "Send ID request to router";
-                channel_->send(base::serialize(out_message));
+                channel_->send(base::serialize(*out_message));
                 return;
             }
 
@@ -229,11 +229,11 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
         pending_id_requests_.pop();
     }
-    else if (in_message.has_connection_offer())
+    else if (in_message->has_connection_offer())
     {
         LOG(LS_INFO) << "New connection offer";
 
-        const proto::ConnectionOffer& connection_offer = in_message.connection_offer();
+        const proto::ConnectionOffer& connection_offer = in_message->connection_offer();
 
         if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS &&
             connection_offer.peer_role() == proto::ConnectionOffer::HOST)
