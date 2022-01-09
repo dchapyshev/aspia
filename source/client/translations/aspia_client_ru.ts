@@ -845,37 +845,37 @@
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="57"/>
         <source>Process Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя процесса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="62"/>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Протокол</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="67"/>
         <source>Local Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальный адрес</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="72"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальный порт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="77"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаленный адрес</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="82"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаленный порт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="87"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="95"/>
@@ -1238,22 +1238,22 @@
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="57"/>
         <source>Destonation</source>
-        <translation type="unfinished"></translation>
+        <translation>Назначение</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="62"/>
         <source>Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>Маска</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="67"/>
         <source>Gateway</source>
-        <translation type="unfinished">Шлюз</translation>
+        <translation>Шлюз</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="72"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Метрика</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="80"/>
