@@ -630,6 +630,8 @@ if (WIN32)
         win/service.h
         win/service_controller.cc
         win/service_controller.h
+        win/service_enumerator.cc
+        win/service_enumerator.h
         win/session_enumerator.cc
         win/session_enumerator.h
         win/session_info.cc

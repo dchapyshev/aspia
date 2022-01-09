@@ -41,7 +41,12 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
+    static QString statusToString(proto::system_info::Drivers::Driver::Status status);
+    static QString startupTypeToString(
+        proto::system_info::Drivers::Driver::StartupType startup_type);
+
     Ui::SysInfoDrivers ui;
+    int current_column_ = 0;
 };
 
 } // namespace client

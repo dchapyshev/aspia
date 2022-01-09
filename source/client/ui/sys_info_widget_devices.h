@@ -42,7 +42,7 @@ private slots:
 
 private:
     Ui::SysInfoDevices ui;
-    int current_column_ = -1;
+    int current_column_ = 0;
 };
 
 } // namespace client

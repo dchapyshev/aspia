@@ -909,27 +909,54 @@
 <context>
     <name>SysInfoDrivers</name>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">参数</translation>
+        <translation type="obsolete">参数</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="53"/>
         <source>Value</source>
-        <translation type="unfinished">值</translation>
+        <translation type="obsolete">值</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="57"/>
+        <source>Display Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="62"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="67"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="72"/>
+        <source>Status</source>
+        <translation type="unfinished">状态</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="77"/>
+        <source>Startup Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="82"/>
+        <source>Executable File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="90"/>
         <source>Copy Row</source>
         <translation type="unfinished">复制行</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">复制名称</translation>
+        <translation type="obsolete">复制名称</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="95"/>
         <source>Copy Value</source>
         <translation type="unfinished">复制值</translation>
     </message>
@@ -1189,27 +1216,59 @@
 <context>
     <name>SysInfoServices</name>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">参数</translation>
+        <translation type="obsolete">参数</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="53"/>
         <source>Value</source>
-        <translation type="unfinished">值</translation>
+        <translation type="obsolete">值</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="57"/>
+        <source>Display Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="62"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="67"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="72"/>
+        <source>Status</source>
+        <translation type="unfinished">状态</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="77"/>
+        <source>Startup Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="82"/>
+        <source>Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="87"/>
+        <source>Executable File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="95"/>
         <source>Copy Row</source>
         <translation type="unfinished">复制行</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">复制名称</translation>
+        <translation type="obsolete">复制名称</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="100"/>
         <source>Copy Value</source>
         <translation type="unfinished">复制值</translation>
     </message>
@@ -2657,6 +2716,75 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetDrivers</name>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="129"/>
+        <source>Continue Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="132"/>
+        <source>Pause Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="135"/>
+        <source>Paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="138"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="141"/>
+        <source>Start Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="144"/>
+        <source>Stop Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="147"/>
+        <source>Stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="150"/>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="176"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="161"/>
+        <source>Auto Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="164"/>
+        <source>Demand Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="167"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="170"/>
+        <source>Boot Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="173"/>
+        <source>System Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
@@ -2800,6 +2928,75 @@
         <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
         <source>Jobs Count</source>
         <translation type="unfinished">任务数</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetServices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="131"/>
+        <source>Continue Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="134"/>
+        <source>Pause Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="137"/>
+        <source>Paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="140"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="143"/>
+        <source>Start Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="146"/>
+        <source>Stop Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="149"/>
+        <source>Stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="152"/>
+        <location filename="../ui/sys_info_widget_services.cc" line="178"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="163"/>
+        <source>Auto Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="166"/>
+        <source>Demand Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="169"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="172"/>
+        <source>Boot Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="175"/>
+        <source>System Start</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

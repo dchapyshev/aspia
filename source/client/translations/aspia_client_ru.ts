@@ -917,27 +917,54 @@
 <context>
     <name>SysInfoDrivers</name>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="53"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="57"/>
+        <source>Display Name</source>
+        <translation>Отображаемое имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="62"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="67"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="72"/>
+        <source>Status</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="77"/>
+        <source>Startup Type</source>
+        <translation>Тип запуска</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="82"/>
+        <source>Executable File</source>
+        <translation>Исполняемый файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="90"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="95"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1197,27 +1224,59 @@
 <context>
     <name>SysInfoServices</name>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="53"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="57"/>
+        <source>Display Name</source>
+        <translation>Отображаемое имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="62"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="67"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="72"/>
+        <source>Status</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="77"/>
+        <source>Startup Type</source>
+        <translation>Тип запуска</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="82"/>
+        <source>Account</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="87"/>
+        <source>Executable File</source>
+        <translation>Исполняемый файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.ui" line="95"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="100"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -2721,6 +2780,75 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetDrivers</name>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="129"/>
+        <source>Continue Pending</source>
+        <translation>Возобновление</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="132"/>
+        <source>Pause Pending</source>
+        <translation>Приостановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="135"/>
+        <source>Paused</source>
+        <translation>Приостановлен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="138"/>
+        <source>Running</source>
+        <translation>Запущен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="141"/>
+        <source>Start Pending</source>
+        <translation>Запуск</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="144"/>
+        <source>Stop Pending</source>
+        <translation>Остановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="147"/>
+        <source>Stopped</source>
+        <translation>Остановлен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="150"/>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="176"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="161"/>
+        <source>Auto Start</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="164"/>
+        <source>Demand Start</source>
+        <translation>По требованию</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="167"/>
+        <source>Disabled</source>
+        <translation>Отключен</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="170"/>
+        <source>Boot Start</source>
+        <translation>При загрузке</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_drivers.cc" line="173"/>
+        <source>System Start</source>
+        <translation>При старте системы</translation>
+    </message>
+</context>
+<context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
@@ -2864,6 +2992,75 @@
         <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
         <source>Jobs Count</source>
         <translation>Количество заданий</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetServices</name>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="131"/>
+        <source>Continue Pending</source>
+        <translation>Возобновление</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="134"/>
+        <source>Pause Pending</source>
+        <translation>Приостановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="137"/>
+        <source>Paused</source>
+        <translation>Приостановлена</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="140"/>
+        <source>Running</source>
+        <translation>Запущена</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="143"/>
+        <source>Start Pending</source>
+        <translation>Запуск</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="146"/>
+        <source>Stop Pending</source>
+        <translation>Остановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="149"/>
+        <source>Stopped</source>
+        <translation>Остановлена</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="152"/>
+        <location filename="../ui/sys_info_widget_services.cc" line="178"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="163"/>
+        <source>Auto Start</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="166"/>
+        <source>Demand Start</source>
+        <translation>По требованию</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="169"/>
+        <source>Disabled</source>
+        <translation>Отключена</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="172"/>
+        <source>Boot Start</source>
+        <translation>При загрузке</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_services.cc" line="175"/>
+        <source>System Start</source>
+        <translation>При старте системы</translation>
     </message>
 </context>
 <context>

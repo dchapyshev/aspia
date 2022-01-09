@@ -28,20 +28,16 @@ SysInfoWidgetDrivers::SysInfoWidgetDrivers(QWidget* parent)
     : SysInfoWidget(parent)
 {
     ui.setupUi(this);
+    ui.tree->setMouseTracking(true);
 
     connect(ui.action_copy_row, &QAction::triggered, this, [this]()
     {
         copyRow(ui.tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
-    {
-        copyColumn(ui.tree->currentItem(), 0);
-    });
-
     connect(ui.action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui.tree->currentItem(), current_column_);
     });
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
@@ -51,6 +47,12 @@ SysInfoWidgetDrivers::SysInfoWidgetDrivers(QWidget* parent)
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
+    });
+
+    connect(ui.tree, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_column_ = column;
     });
 }
 
@@ -70,6 +72,32 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::SystemInfo& system_info)
         ui.tree->setEnabled(false);
         return;
     }
+
+    const proto::system_info::Drivers& drivers = system_info.drivers();
+    QIcon item_icon(QStringLiteral(":/img/graphic-card.png"));
+
+    for (int i = 0; i < drivers.driver_size(); ++i)
+    {
+        const proto::system_info::Drivers::Driver& driver = drivers.driver(i);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        item->setIcon(0, item_icon);
+        item->setText(0, QString::fromStdString(driver.display_name()));
+        item->setText(1, QString::fromStdString(driver.name()));
+        item->setText(2, QString::fromStdString(driver.description()));
+        item->setText(3, statusToString(driver.status()));
+        item->setText(4, startupTypeToString(driver.startup_type()));
+        item->setText(5, QString::fromStdString(driver.binary_path()));
+
+        ui.tree->addTopLevelItem(item);
+    }
+
+    ui.tree->setColumnWidth(0, 200);
+    ui.tree->setColumnWidth(1, 150);
+    ui.tree->setColumnWidth(2, 200);
+    ui.tree->setColumnWidth(3, 70);
+    ui.tree->setColumnWidth(4, 100);
+    ui.tree->setColumnWidth(5, 200);
 }
 
 QTreeWidget* SysInfoWidgetDrivers::treeWidget()
@@ -87,10 +115,66 @@ void SysInfoWidgetDrivers::onContextMenu(const QPoint& point)
 
     QMenu menu;
     menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
     menu.addAction(ui.action_copy_value);
 
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
+}
+
+// static
+QString SysInfoWidgetDrivers::statusToString(proto::system_info::Drivers::Driver::Status status)
+{
+    switch (status)
+    {
+        case proto::system_info::Drivers::Driver::STATUS_CONTINUE_PENDING:
+            return tr("Continue Pending");
+
+        case proto::system_info::Drivers::Driver::STATUS_PAUSE_PENDING:
+            return tr("Pause Pending");
+
+        case proto::system_info::Drivers::Driver::STATUS_PAUSED:
+            return tr("Paused");
+
+        case proto::system_info::Drivers::Driver::STATUS_RUNNING:
+            return tr("Running");
+
+        case proto::system_info::Drivers::Driver::STATUS_START_PENDING:
+            return tr("Start Pending");
+
+        case proto::system_info::Drivers::Driver::STATUS_STOP_PENDING:
+            return tr("Stop Pending");
+
+        case proto::system_info::Drivers::Driver::STATUS_STOPPED:
+            return tr("Stopped");
+
+        default:
+            return tr("Unknown");
+    }
+}
+
+// static
+QString SysInfoWidgetDrivers::startupTypeToString(
+    proto::system_info::Drivers::Driver::StartupType startup_type)
+{
+    switch (startup_type)
+    {
+        case proto::system_info::Drivers::Driver::STARTUP_TYPE_AUTO_START:
+            return tr("Auto Start");
+
+        case proto::system_info::Drivers::Driver::STARTUP_TYPE_DEMAND_START:
+            return tr("Demand Start");
+
+        case proto::system_info::Drivers::Driver::STARTUP_TYPE_DISABLED:
+            return tr("Disabled");
+
+        case proto::system_info::Drivers::Driver::STARTUP_TYPE_BOOT_START:
+            return tr("Boot Start");
+
+        case proto::system_info::Drivers::Driver::STARTUP_TYPE_SYSTEM_START:
+            return tr("System Start");
+
+        default:
+            return tr("Unknown");
+    }
 }
 
 } // namespace client

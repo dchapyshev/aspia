@@ -27,11 +27,298 @@
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
+#include "base/win/service_enumerator.h"
 #include "common/desktop_session_constants.h"
 
 namespace host {
 
 namespace {
+
+void fillDevices(proto::SystemInfo* system_info)
+{
+    for (base::win::DeviceEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::WindowsDevices::Device* device =
+            system_info->mutable_windows_devices()->add_device();
+
+        device->set_friendly_name(enumerator.friendlyName());
+        device->set_description(enumerator.description());
+        device->set_driver_version(enumerator.driverVersion());
+        device->set_driver_date(enumerator.driverDate());
+        device->set_driver_vendor(enumerator.driverVendor());
+        device->set_device_id(enumerator.deviceID());
+    }
+}
+
+void fillPrinters(proto::SystemInfo* system_info)
+{
+    for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::Printers::Printer* printer =
+            system_info->mutable_printers()->add_printer();
+
+        printer->set_name(enumerator.name());
+        printer->set_default_(enumerator.isDefault());
+        printer->set_shared(enumerator.isShared());
+        printer->set_port(enumerator.portName());
+        printer->set_driver(enumerator.driverName());
+        printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
+        printer->set_share_name(enumerator.shareName());
+    }
+}
+
+void fillNetworkAdapters(proto::SystemInfo* system_info)
+{
+    for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::NetworkAdapters::Adapter* adapter =
+            system_info->mutable_network_adapters()->add_adapter();
+
+        adapter->set_adapter_name(enumerator.adapterName());
+        adapter->set_connection_name(enumerator.connectionName());
+        adapter->set_iface(enumerator.interfaceType());
+        adapter->set_speed(enumerator.speed());
+        adapter->set_mac(enumerator.macAddress());
+        adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
+
+        if (enumerator.isDhcp4Enabled())
+        {
+            std::string dhcp4_server = enumerator.dhcp4Server();
+            if (!dhcp4_server.empty())
+                adapter->add_dhcp()->append(dhcp4_server);
+        }
+
+        for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
+             !gateway.isAtEnd(); gateway.advance())
+        {
+            adapter->add_gateway()->assign(gateway.address());
+        }
+
+        for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
+             !ip.isAtEnd(); ip.advance())
+        {
+            proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
+
+            address->set_ip(ip.address());
+            address->set_mask(ip.mask());
+        }
+
+        for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
+             !dns.isAtEnd(); dns.advance())
+        {
+            adapter->add_dns()->assign(dns.address());
+        }
+    }
+}
+
+void fillNetworkShares(proto::SystemInfo* system_info)
+{
+    for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::NetworkShares::Share* share =
+            system_info->mutable_network_shares()->add_share();
+
+        share->set_name(enumerator.name());
+        share->set_description(enumerator.description());
+        share->set_local_path(enumerator.localPath());
+        share->set_current_uses(enumerator.currentUses());
+        share->set_max_uses(enumerator.maxUses());
+
+        using ShareType = base::win::NetShareEnumerator::Type;
+
+        switch (enumerator.type())
+        {
+            case ShareType::DISK:
+                share->set_type("Disk");
+                break;
+
+            case ShareType::PRINTER:
+                share->set_type("Printer");
+                break;
+
+            case ShareType::DEVICE:
+                share->set_type("Device");
+                break;
+
+            case ShareType::IPC:
+                share->set_type("IPC");
+                break;
+
+            case ShareType::SPECIAL:
+                share->set_type("Special");
+                break;
+
+            case ShareType::TEMPORARY:
+                share->set_type("Temporary");
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void fillServices(proto::SystemInfo* system_info)
+{
+    using ServiceEnumerator = base::win::ServiceEnumerator;
+
+    for (ServiceEnumerator enumerator(ServiceEnumerator::Type::SERVICES);
+         !enumerator.isAtEnd();
+         enumerator.advance())
+    {
+        proto::system_info::Services::Service* service =
+            system_info->mutable_services()->add_service();
+
+        service->set_name(enumerator.name());
+        service->set_display_name(enumerator.displayName());
+        service->set_description(enumerator.description());
+
+        switch (enumerator.status())
+        {
+            case ServiceEnumerator::Status::CONTINUE_PENDING:
+                service->set_status(proto::system_info::Services::Service::STATUS_CONTINUE_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::PAUSE_PENDING:
+                service->set_status(proto::system_info::Services::Service::STATUS_PAUSE_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::PAUSED:
+                service->set_status(proto::system_info::Services::Service::STATUS_PAUSED);
+                break;
+
+            case ServiceEnumerator::Status::RUNNING:
+                service->set_status(proto::system_info::Services::Service::STATUS_RUNNING);
+                break;
+
+            case ServiceEnumerator::Status::START_PENDING:
+                service->set_status(proto::system_info::Services::Service::STATUS_START_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::STOP_PENDING:
+                service->set_status(proto::system_info::Services::Service::STATUS_STOP_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::STOPPED:
+                service->set_status(proto::system_info::Services::Service::STATUS_STOPPED);
+                break;
+
+            default:
+                service->set_status(proto::system_info::Services::Service::STATUS_UNKNOWN);
+                break;
+        }
+
+        switch (enumerator.startupType())
+        {
+            case ServiceEnumerator::StartupType::AUTO_START:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_AUTO_START);
+                break;
+
+            case ServiceEnumerator::StartupType::DEMAND_START:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DEMAND_START);
+                break;
+
+            case ServiceEnumerator::StartupType::DISABLED:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_DISABLED);
+                break;
+
+            case ServiceEnumerator::StartupType::BOOT_START:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_BOOT_START);
+                break;
+
+            case ServiceEnumerator::StartupType::SYSTEM_START:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_SYSTEM_START);
+                break;
+
+            default:
+                service->set_startup_type(proto::system_info::Services::Service::STARTUP_TYPE_UNKNOWN);
+                break;
+        }
+
+        service->set_binary_path(enumerator.binaryPath());
+        service->set_start_name(enumerator.startName());
+    }
+}
+
+void fillDrivers(proto::SystemInfo* system_info)
+{
+    using ServiceEnumerator = base::win::ServiceEnumerator;
+
+    for (ServiceEnumerator enumerator(ServiceEnumerator::Type::DRIVERS);
+         !enumerator.isAtEnd();
+         enumerator.advance())
+    {
+        proto::system_info::Drivers::Driver* driver = system_info->mutable_drivers()->add_driver();
+
+        driver->set_name(enumerator.name());
+        driver->set_display_name(enumerator.displayName());
+        driver->set_description(enumerator.description());
+
+        switch (enumerator.status())
+        {
+            case ServiceEnumerator::Status::CONTINUE_PENDING:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_CONTINUE_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::PAUSE_PENDING:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSE_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::PAUSED:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_PAUSED);
+                break;
+
+            case ServiceEnumerator::Status::RUNNING:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_RUNNING);
+                break;
+
+            case ServiceEnumerator::Status::START_PENDING:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_START_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::STOP_PENDING:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_STOP_PENDING);
+                break;
+
+            case ServiceEnumerator::Status::STOPPED:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_STOPPED);
+                break;
+
+            default:
+                driver->set_status(proto::system_info::Drivers::Driver::STATUS_UNKNOWN);
+                break;
+        }
+
+        switch (enumerator.startupType())
+        {
+            case ServiceEnumerator::StartupType::AUTO_START:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_AUTO_START);
+                break;
+
+            case ServiceEnumerator::StartupType::DEMAND_START:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DEMAND_START);
+                break;
+
+            case ServiceEnumerator::StartupType::DISABLED:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_DISABLED);
+                break;
+
+            case ServiceEnumerator::StartupType::BOOT_START:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_BOOT_START);
+                break;
+
+            case ServiceEnumerator::StartupType::SYSTEM_START:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_SYSTEM_START);
+                break;
+
+            default:
+                driver->set_startup_type(proto::system_info::Drivers::Driver::STARTUP_TYPE_UNKNOWN);
+                break;
+        }
+
+        driver->set_binary_path(enumerator.binaryPath());
+    }
+}
 
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
@@ -156,18 +443,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
 
     if (category == common::kSystemInfo_Devices)
     {
-        for (base::win::DeviceEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-        {
-            proto::system_info::WindowsDevices::Device* device =
-                system_info->mutable_windows_devices()->add_device();
-
-            device->set_friendly_name(enumerator.friendlyName());
-            device->set_description(enumerator.description());
-            device->set_driver_version(enumerator.driverVersion());
-            device->set_driver_date(enumerator.driverDate());
-            device->set_driver_vendor(enumerator.driverVendor());
-            device->set_device_id(enumerator.deviceID());
-        }
+        fillDevices(system_info);
     }
     else if (category == common::kSystemInfo_VideoAdapters)
     {
@@ -179,19 +455,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_Printers)
     {
-        for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-        {
-            proto::system_info::Printers::Printer* printer =
-                system_info->mutable_printers()->add_printer();
-
-            printer->set_name(enumerator.name());
-            printer->set_default_(enumerator.isDefault());
-            printer->set_shared(enumerator.isShared());
-            printer->set_port(enumerator.portName());
-            printer->set_driver(enumerator.driverName());
-            printer->set_jobs_count(static_cast<uint32_t>(enumerator.jobsCount()));
-            printer->set_share_name(enumerator.shareName());
-        }
+        fillPrinters(system_info);
     }
     else if (category == common::kSystemInfo_PowerOptions)
     {
@@ -199,11 +463,11 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_Drivers)
     {
-        // TODO
+        fillDrivers(system_info);
     }
     else if (category == common::kSystemInfo_Services)
     {
-        // TODO
+        fillServices(system_info);
     }
     else if (category == common::kSystemInfo_EnvironmentVariables)
     {
@@ -215,46 +479,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_NetworkAdapters)
     {
-        for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-        {
-            proto::system_info::NetworkAdapters::Adapter* adapter =
-                system_info->mutable_network_adapters()->add_adapter();
-
-            adapter->set_adapter_name(enumerator.adapterName());
-            adapter->set_connection_name(enumerator.connectionName());
-            adapter->set_iface(enumerator.interfaceType());
-            adapter->set_speed(enumerator.speed());
-            adapter->set_mac(enumerator.macAddress());
-            adapter->set_dhcp_enabled(enumerator.isDhcp4Enabled());
-
-            if (enumerator.isDhcp4Enabled())
-            {
-                std::string dhcp4_server = enumerator.dhcp4Server();
-                if (!dhcp4_server.empty())
-                    adapter->add_dhcp()->append(dhcp4_server);
-            }
-
-            for (base::AdapterEnumerator::GatewayEnumerator gateway(enumerator);
-                 !gateway.isAtEnd(); gateway.advance())
-            {
-                adapter->add_gateway()->assign(gateway.address());
-            }
-
-            for (base::AdapterEnumerator::IpAddressEnumerator ip(enumerator);
-                 !ip.isAtEnd(); ip.advance())
-            {
-                proto::system_info::NetworkAdapters::Adapter::Address* address = adapter->add_address();
-
-                address->set_ip(ip.address());
-                address->set_mask(ip.mask());
-            }
-
-            for (base::AdapterEnumerator::DnsEnumerator dns(enumerator);
-                 !dns.isAtEnd(); dns.advance())
-            {
-                adapter->add_dns()->assign(dns.address());
-            }
-        }
+        fillNetworkAdapters(system_info);
     }
     else if (category == common::kSystemInfo_Routes)
     {
@@ -266,49 +491,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_NetworkShares)
     {
-        for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
-        {
-            proto::system_info::NetworkShares::Share* share =
-                system_info->mutable_network_shares()->add_share();
-
-            share->set_name(enumerator.name());
-            share->set_description(enumerator.description());
-            share->set_local_path(enumerator.localPath());
-            share->set_current_uses(enumerator.currentUses());
-            share->set_max_uses(enumerator.maxUses());
-
-            using ShareType = base::win::NetShareEnumerator::Type;
-
-            switch (enumerator.type())
-            {
-                case ShareType::DISK:
-                    share->set_type("Disk");
-                    break;
-
-                case ShareType::PRINTER:
-                    share->set_type("Printer");
-                    break;
-
-                case ShareType::DEVICE:
-                    share->set_type("Device");
-                    break;
-
-                case ShareType::IPC:
-                    share->set_type("IPC");
-                    break;
-
-                case ShareType::SPECIAL:
-                    share->set_type("Special");
-                    break;
-
-                case ShareType::TEMPORARY:
-                    share->set_type("Temporary");
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        fillNetworkShares(system_info);
     }
     else if (category == common::kSystemInfo_Ras)
     {

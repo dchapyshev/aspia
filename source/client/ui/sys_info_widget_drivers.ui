@@ -43,14 +43,43 @@
        <height>16</height>
       </size>
      </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
      <column>
       <property name="text">
-       <string>Parameter</string>
+       <string>Display Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Value</string>
+       <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Description</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Startup Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Executable File</string>
       </property>
      </column>
     </widget>
@@ -59,11 +88,6 @@
   <action name="action_copy_row">
    <property name="text">
     <string>Copy Row</string>
-   </property>
-  </action>
-  <action name="action_copy_name">
-   <property name="text">
-    <string>Copy Name</string>
    </property>
   </action>
   <action name="action_copy_value">
