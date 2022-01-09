@@ -26,8 +26,10 @@
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/route_enumerator.h"
+#include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
+#include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/monitor_enumerator.h"
 #include "base/win/net_share_enumerator.h"
@@ -554,6 +556,92 @@ void fillVideoAdapters(proto::SystemInfo* system_info)
     }
 }
 
+void fillPowerOptions(proto::SystemInfo* system_info)
+{
+    proto::system_info::PowerOptions* power_options = system_info->mutable_power_options();
+    base::win::PowerInfo power_info;
+
+    switch (power_info.powerSource())
+    {
+        case base::win::PowerInfo::PowerSource::DC_BATTERY:
+            power_options->set_power_source(proto::system_info::PowerOptions::POWER_SOURCE_DC_BATTERY);
+            break;
+
+        case base::win::PowerInfo::PowerSource::AC_LINE:
+            power_options->set_power_source(proto::system_info::PowerOptions::POWER_SOURCE_AC_LINE);
+            break;
+
+        default:
+            break;
+    }
+
+    switch (power_info.batteryStatus())
+    {
+        case base::win::PowerInfo::BatteryStatus::HIGH:
+            power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_HIGH);
+            break;
+
+        case base::win::PowerInfo::BatteryStatus::LOW:
+            power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_LOW);
+            break;
+
+        case base::win::PowerInfo::BatteryStatus::CRITICAL:
+            power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_CRITICAL);
+            break;
+
+        case base::win::PowerInfo::BatteryStatus::CHARGING:
+            power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_CHARGING);
+            break;
+
+        case base::win::PowerInfo::BatteryStatus::NO_BATTERY:
+            power_options->set_battery_status(proto::system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY);
+            break;
+
+        default:
+            break;
+    }
+
+    power_options->set_battery_life_percent(power_info.batteryLifePercent());
+    power_options->set_full_battery_life_time(power_info.batteryFullLifeTime());
+    power_options->set_remaining_battery_life_time(power_info.batteryRemainingLifeTime());
+
+    for (base::win::BatteryEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::PowerOptions::Battery* battery = power_options->add_battery();
+        battery->set_device_name(enumerator.deviceName());
+        battery->set_manufacturer(enumerator.manufacturer());
+        battery->set_manufacture_date(enumerator.manufactureDate());
+        battery->set_unique_id(enumerator.uniqueId());
+        battery->set_serial_number(enumerator.serialNumber());
+        battery->set_temperature(enumerator.temperature());
+        battery->set_design_capacity(enumerator.designCapacity());
+        battery->set_type(enumerator.type());
+        battery->set_full_charged_capacity(enumerator.fullChargedCapacity());
+        battery->set_depreciation(enumerator.depreciation());
+        battery->set_current_capacity(enumerator.currentCapacity());
+        battery->set_voltage(enumerator.voltage());
+
+        auto append_state = [&](proto::system_info::PowerOptions::Battery::State state)
+        {
+            battery->set_state(battery->state() | static_cast<uint32_t>(state));
+        };
+
+        uint32_t state = enumerator.state();
+
+        if (state & base::win::BatteryEnumerator::CHARGING)
+            append_state(proto::system_info::PowerOptions::Battery::STATE_CHARGING);
+
+        if (state & base::win::BatteryEnumerator::CRITICAL)
+            append_state(proto::system_info::PowerOptions::Battery::STATE_CRITICAL);
+
+        if (state & base::win::BatteryEnumerator::DISCHARGING)
+            append_state(proto::system_info::PowerOptions::Battery::STATE_DISCHARGING);
+
+        if (state & base::win::BatteryEnumerator::POWER_ONLINE)
+            append_state(proto::system_info::PowerOptions::Battery::STATE_POWER_ONLINE);
+    }
+}
+
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
@@ -693,7 +781,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_PowerOptions)
     {
-        // TODO
+        fillPowerOptions(system_info);
     }
     else if (category == common::kSystemInfo_Drivers)
     {

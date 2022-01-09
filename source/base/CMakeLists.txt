@@ -606,6 +606,8 @@ if (WIN32)
         win/net_share_enumerator.h
         win/object_watcher.cc
         win/object_watcher.h
+        win/power_info.cc
+        win/power_info.h
         win/printer_enumerator.cc
         win/printer_enumerator.h
         win/process.cc

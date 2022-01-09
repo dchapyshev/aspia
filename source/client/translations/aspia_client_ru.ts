@@ -1148,27 +1148,27 @@
 <context>
     <name>SysInfoPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="51"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="56"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="64"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="69"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="74"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -3213,6 +3213,183 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetPowerOptions</name>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="140"/>
+        <source>Power Source</source>
+        <translation>Источник питания</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="142"/>
+        <source>Battery Status</source>
+        <translation>Состояние батареи</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="148"/>
+        <source>Battery Life Percent</source>
+        <translation>Срок службы</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="154"/>
+        <source>Full Battery Life Time</source>
+        <translation>Полное время работы</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
+        <source>%1 s</source>
+        <translation>%1 с</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>
+        <source>Remaining Battery Life Time</source>
+        <translation>Оставшееся время работы</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="172"/>
+        <source>Device Name</source>
+        <translation>Имя устройства</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="175"/>
+        <source>Manufacturer</source>
+        <translation>Производитель</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="178"/>
+        <source>Manufacture Date</source>
+        <translation>Дата производства</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="181"/>
+        <source>Unique Id</source>
+        <translation>Уникальный идентификатор</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="184"/>
+        <source>Serial Number</source>
+        <translation>Серийный номер</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="187"/>
+        <source>Tempareture</source>
+        <translation>Температура</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="190"/>
+        <source>Design Capacity</source>
+        <translation>Исходная емкость</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="190"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="196"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="202"/>
+        <source>%1 mWh</source>
+        <translation>%1 мВт/ч</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="193"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="196"/>
+        <source>Full Charged Capacity</source>
+        <translation>Полная емкость</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="199"/>
+        <source>Depreciation</source>
+        <translation>Степень износа</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="202"/>
+        <source>Current Capacity</source>
+        <translation>Текущая емкость</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="205"/>
+        <source>Voltage</source>
+        <translation>Напряжение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="205"/>
+        <source>%1 mV</source>
+        <translation>%1 мВ</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="211"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="293"/>
+        <source>Charging</source>
+        <translation>Зарядка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="211"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="214"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="217"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="220"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="214"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="290"/>
+        <source>Critical</source>
+        <translation>Критическое</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="217"/>
+        <source>Discharging</source>
+        <translation>Разрядка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="220"/>
+        <source>Power OnLine</source>
+        <translation>Питание от сети</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="224"/>
+        <source>State</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="229"/>
+        <source>Battery #%1</source>
+        <translation>Батарея #%1</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="267"/>
+        <source>DC Battery</source>
+        <translation>Батарея постоянного тока</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="270"/>
+        <source>AC Line</source>
+        <translation>Линия переменного тока</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="273"/>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="299"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="284"/>
+        <source>High</source>
+        <translation>Высокий заряд</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="287"/>
+        <source>Low</source>
+        <translation>Низкий заряд</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_power_options.cc" line="296"/>
+        <source>No Battery</source>
+        <translation>Нет батареи</translation>
+    </message>
+</context>
+<context>
     <name>client::SysInfoWidgetPrinters</name>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
@@ -3465,7 +3642,6 @@
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -3485,69 +3661,56 @@
         <translation>Логические диски</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="334"/>
         <source>Adapter Name</source>
-        <translation>Имя адаптера</translation>
+        <translation type="vanished">Имя адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="337"/>
         <source>Interface Type</source>
-        <translation>Тип интерфейса</translation>
+        <translation type="vanished">Тип интерфейса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="340"/>
         <source>Connection Speed</source>
-        <translation>Скорость соединения</translation>
+        <translation type="vanished">Скорость соединения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="343"/>
         <source>MAC Address</source>
-        <translation>MAC адрес</translation>
+        <translation type="vanished">MAC адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
         <source>DHCP Enabled</source>
-        <translation>DHCP включен</translation>
+        <translation type="vanished">DHCP включен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="345"/>
         <source>Yes</source>
-        <translation>Да</translation>
+        <translation type="vanished">Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
         <source>DHCP Server #%1</source>
-        <translation>DHCP сервер #%1</translation>
+        <translation type="vanished">DHCP сервер #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="350"/>
         <source>DHCP Server</source>
-        <translation>DHCP сервер</translation>
+        <translation type="vanished">DHCP сервер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
         <source>Address #%1</source>
-        <translation>Адрес #%1</translation>
+        <translation type="vanished">Адрес #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="362"/>
         <source>Address</source>
-        <translation>Адрес</translation>
+        <translation type="vanished">Адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
         <source>Gateway #%1</source>
-        <translation>Шлюз #%1</translation>
+        <translation type="vanished">Шлюз #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="370"/>
         <source>Gateway</source>
-        <translation>Шлюз</translation>
+        <translation type="vanished">Шлюз</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="390"/>
         <source>Network Connections</source>
-        <translation>Сетевые подключения</translation>
+        <translation type="vanished">Сетевые подключения</translation>
     </message>
     <message>
         <source>Default</source>

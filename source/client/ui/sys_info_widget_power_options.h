@@ -39,6 +39,8 @@ public:
 
 private slots:
     void onContextMenu(const QPoint& point);
+    static QString powerSourceToString(proto::system_info::PowerOptions::PowerSource value);
+    static QString batteryStatusToString(proto::system_info::PowerOptions::BatteryStatus value);
 
 private:
     Ui::SysInfoPowerOptions ui;

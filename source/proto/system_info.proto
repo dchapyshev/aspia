@@ -261,37 +261,26 @@ message PowerOptions
             STATE_POWER_ONLINE = 8;
         }
 
-        enum Type
-        {
-            TYPE_UNKNOWN = 0;
-            TYPE_PBAC    = 1;
-            TYPE_LION    = 2;
-            TYPE_NICD    = 3;
-            TYPE_NIMH    = 4;
-            TYPE_NIZN    = 5;
-            TYPE_RAM     = 6;
-        }
-
-        string device_name          = 1;
-        string manufacturer         = 2;
-        string manufacture_date     = 3;
-        string unique_id            = 4;
-        string serial_number        = 5;
-        string temperature          = 6;
-        int32 design_capacity       = 7;
-        Type type                   = 8;
-        int32 full_charged_capacity = 9;
-        int32 depreciation          = 10;
-        int32 current_capacity      = 11;
-        int32 voltage               = 12;
-        uint32 state                = 13;
+        string device_name           = 1;
+        string manufacturer          = 2;
+        string manufacture_date      = 3;
+        string unique_id             = 4;
+        string serial_number         = 5;
+        string temperature           = 6;
+        uint32 design_capacity       = 7;
+        string type                  = 8;
+        uint32 full_charged_capacity = 9;
+        uint32 depreciation          = 10;
+        uint32 current_capacity      = 11;
+        uint32 voltage               = 12;
+        uint32 state                 = 13;
     }
 
     PowerSource power_source          = 1;
     BatteryStatus battery_status      = 2;
-    int64 full_battery_life_time      = 3;
-    int64 remaining_battery_life_time = 4;
-    int32 battery_life_percent        = 5;
+    uint64 full_battery_life_time      = 3;
+    uint64 remaining_battery_life_time = 4;
+    uint32 battery_life_percent        = 5;
     repeated Battery battery          = 6;
 }
 
