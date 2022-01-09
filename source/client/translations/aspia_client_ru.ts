@@ -3603,6 +3603,59 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetVideoAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="126"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="129"/>
+        <source>Adapter String</source>
+        <translation>Строка адаптера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="132"/>
+        <source>BIOS String</source>
+        <translation>Строка BIOS</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="135"/>
+        <source>Chip Type</source>
+        <translation>Тип чипа</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="138"/>
+        <source>DAC Type</source>
+        <translation>Тип ЦАП</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
+        <source>Memory Size</source>
+        <translation>Размер памяти</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
+        <source>%1 bytes</source>
+        <translation>%1 байт</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="144"/>
+        <source>Driver Date</source>
+        <translation>Дата драйвера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="147"/>
+        <source>Driver Version</source>
+        <translation>Версия драйвера</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="150"/>
+        <source>Driver Provider</source>
+        <translation>Поставщик драйвера</translation>
+    </message>
+</context>
+<context>
     <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="111"/>

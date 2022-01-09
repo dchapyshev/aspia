@@ -3429,6 +3429,59 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetVideoAdapters</name>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="126"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="129"/>
+        <source>Adapter String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="132"/>
+        <source>BIOS String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="135"/>
+        <source>Chip Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="138"/>
+        <source>DAC Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
+        <source>Memory Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
+        <source>%1 bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="144"/>
+        <source>Driver Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="147"/>
+        <source>Driver Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_video_adapters.cc" line="150"/>
+        <source>Driver Provider</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::SystemInfoWindow</name>
     <message>
         <location filename="../ui/system_info_window.cc" line="111"/>

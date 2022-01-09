@@ -32,6 +32,7 @@
 #include "base/win/monitor_enumerator.h"
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
+#include "base/win/video_adapter_enumerator.h"
 #include "common/desktop_session_constants.h"
 
 namespace host {
@@ -534,6 +535,25 @@ void fillEnvironmentVariables(proto::SystemInfo* system_info)
     }
 }
 
+void fillVideoAdapters(proto::SystemInfo* system_info)
+{
+    for (base::win::VideoAdapterEnumarator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::VideoAdapters::Adapter* adapter =
+            system_info->mutable_video_adapters()->add_adapter();
+
+        adapter->set_description(enumerator.description());
+        adapter->set_adapter_string(enumerator.adapterString());
+        adapter->set_bios_string(enumerator.biosString());
+        adapter->set_chip_type(enumerator.chipString());
+        adapter->set_dac_type(enumerator.dacType());
+        adapter->set_driver_date(enumerator.driverDate());
+        adapter->set_driver_version(enumerator.driverVersion());
+        adapter->set_driver_provider(enumerator.driverVendor());
+        adapter->set_memory_size(enumerator.memorySize());
+    }
+}
+
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
@@ -661,7 +681,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_VideoAdapters)
     {
-        // TODO
+        fillVideoAdapters(system_info);
     }
     else if (category == common::kSystemInfo_Monitors)
     {
