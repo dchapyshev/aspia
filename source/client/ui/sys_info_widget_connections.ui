@@ -43,14 +43,48 @@
        <height>16</height>
       </size>
      </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
      <column>
       <property name="text">
-       <string>Parameter</string>
+       <string>Process Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Value</string>
+       <string>Protocol</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Local Address</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Local Port</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Remote Address</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Remote Port</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>State</string>
       </property>
      </column>
     </widget>
@@ -59,11 +93,6 @@
   <action name="action_copy_row">
    <property name="text">
     <string>Copy Row</string>
-   </property>
-  </action>
-  <action name="action_copy_name">
-   <property name="text">
-    <string>Copy Name</string>
    </property>
   </action>
   <action name="action_copy_value">

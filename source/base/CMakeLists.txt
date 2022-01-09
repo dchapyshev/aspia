@@ -501,8 +501,12 @@ list(APPEND SOURCE_BASE_NET
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET
+        net/connect_enumerator.cc
+        net/connect_enumerator.h
         net/firewall_manager.cc
-        net/firewall_manager.h)
+        net/firewall_manager.h
+        net/route_enumerator.cc
+        net/route_enumerator.h)
 endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS

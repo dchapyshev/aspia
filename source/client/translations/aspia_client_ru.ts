@@ -835,27 +835,59 @@
 <context>
     <name>SysInfoConnections</name>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="53"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="57"/>
+        <source>Process Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="62"/>
+        <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="67"/>
+        <source>Local Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="72"/>
+        <source>Local Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="77"/>
+        <source>Remote Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="82"/>
+        <source>Remote Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="87"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="95"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="100"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1196,27 +1228,44 @@
 <context>
     <name>SysInfoRoutes</name>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="53"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="57"/>
+        <source>Destonation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="62"/>
+        <source>Mask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="67"/>
+        <source>Gateway</source>
+        <translation type="unfinished">Шлюз</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="72"/>
+        <source>Metric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="80"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="85"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>

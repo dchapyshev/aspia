@@ -831,27 +831,59 @@
 <context>
     <name>SysInfoConnections</name>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">参数</translation>
+        <translation type="obsolete">参数</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="53"/>
         <source>Value</source>
-        <translation type="unfinished">值</translation>
+        <translation type="obsolete">值</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="57"/>
+        <source>Process Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="62"/>
+        <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="67"/>
+        <source>Local Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="72"/>
+        <source>Local Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="77"/>
+        <source>Remote Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="82"/>
+        <source>Remote Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="87"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_connections.ui" line="95"/>
         <source>Copy Row</source>
         <translation type="unfinished">复制行</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">复制名称</translation>
+        <translation type="obsolete">复制名称</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="100"/>
         <source>Copy Value</source>
         <translation type="unfinished">复制值</translation>
     </message>
@@ -1188,27 +1220,44 @@
 <context>
     <name>SysInfoRoutes</name>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">参数</translation>
+        <translation type="obsolete">参数</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="53"/>
         <source>Value</source>
-        <translation type="unfinished">值</translation>
+        <translation type="obsolete">值</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="57"/>
+        <source>Destonation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="62"/>
+        <source>Mask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="67"/>
+        <source>Gateway</source>
+        <translation type="unfinished">网关</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="72"/>
+        <source>Metric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_routes.ui" line="80"/>
         <source>Copy Row</source>
         <translation type="unfinished">复制行</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">复制名称</translation>
+        <translation type="obsolete">复制名称</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="85"/>
         <source>Copy Value</source>
         <translation type="unfinished">复制值</translation>
     </message>

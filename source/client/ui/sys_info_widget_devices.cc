@@ -99,8 +99,11 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::SystemInfo& system_info)
         tree->addTopLevelItem(item);
     }
 
-    for (int i = 0; i < tree->topLevelItemCount(); ++i)
-        ui.tree->resizeColumnToContents(i);
+    ui.tree->setColumnWidth(0, 200);
+    ui.tree->setColumnWidth(1, 90);
+    ui.tree->setColumnWidth(2, 90);
+    ui.tree->setColumnWidth(3, 90);
+    ui.tree->setColumnWidth(4, 200);
 }
 
 QTreeWidget* SysInfoWidgetDevices::treeWidget()

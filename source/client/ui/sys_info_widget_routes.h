@@ -42,6 +42,7 @@ private slots:
 
 private:
     Ui::SysInfoRoutes ui;
+    int current_column_ = 0;
 };
 
 } // namespace client

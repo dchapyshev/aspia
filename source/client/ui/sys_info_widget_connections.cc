@@ -28,20 +28,16 @@ SysInfoWidgetConnections::SysInfoWidgetConnections(QWidget* parent)
     : SysInfoWidget(parent)
 {
     ui.setupUi(this);
+    ui.tree->setMouseTracking(true);
 
     connect(ui.action_copy_row, &QAction::triggered, this, [this]()
     {
         copyRow(ui.tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
-    {
-        copyColumn(ui.tree->currentItem(), 0);
-    });
-
     connect(ui.action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui.tree->currentItem(), current_column_);
     });
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
@@ -51,6 +47,12 @@ SysInfoWidgetConnections::SysInfoWidgetConnections(QWidget* parent)
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
+    });
+
+    connect(ui.tree, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_column_ = column;
     });
 }
 
@@ -65,11 +67,42 @@ void SysInfoWidgetConnections::setSystemInfo(const proto::SystemInfo& system_inf
 {
     ui.tree->clear();
 
-    if (!system_info.has_windows_devices())
+    if (!system_info.has_connections())
     {
         ui.tree->setEnabled(false);
         return;
     }
+
+    const proto::system_info::Connections& connections = system_info.connections();
+    QIcon item_icon(QStringLiteral(":/img/servers-network.png"));
+
+    for (int i = 0; i < connections.connection_size(); ++i)
+    {
+        const proto::system_info::Connections::Connection& connection = connections.connection(i);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        item->setIcon(0, item_icon);
+        item->setText(0, QString::fromStdString(connection.process_name()));
+        item->setText(1, QString::fromStdString(connection.protocol()));
+        item->setText(2, QString::fromStdString(connection.local_address()));
+        item->setText(3, QString::number(connection.local_port()));
+
+        item->setText(4, QString::fromStdString(connection.remote_address()));
+        if (connection.remote_port() != 0)
+            item->setText(5, QString::number(connection.remote_port()));
+
+        item->setText(6, QString::fromStdString(connection.state()));
+
+        ui.tree->addTopLevelItem(item);
+    }
+
+    ui.tree->setColumnWidth(0, 150);
+    ui.tree->setColumnWidth(1, 60);
+    ui.tree->setColumnWidth(2, 90);
+    ui.tree->setColumnWidth(3, 80);
+    ui.tree->setColumnWidth(4, 90);
+    ui.tree->setColumnWidth(5, 80);
+    ui.tree->setColumnWidth(6, 100);
 }
 
 QTreeWidget* SysInfoWidgetConnections::treeWidget()
@@ -87,7 +120,6 @@ void SysInfoWidgetConnections::onContextMenu(const QPoint& point)
 
     QMenu menu;
     menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
     menu.addAction(ui.action_copy_value);
 
     menu.exec(ui.tree->viewport()->mapToGlobal(point));

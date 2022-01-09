@@ -23,6 +23,8 @@
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
 #include "base/net/adapter_enumerator.h"
+#include "base/net/connect_enumerator.h"
+#include "base/net/route_enumerator.h"
 #include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
@@ -472,6 +474,51 @@ void fillMonitors(proto::SystemInfo* system_info)
     }
 }
 
+void fillConnection(proto::SystemInfo* system_info)
+{
+    for (base::ConnectEnumerator enumerator(base::ConnectEnumerator::Mode::TCP);
+         !enumerator.isAtEnd();
+         enumerator.advance())
+    {
+        proto::system_info::Connections::Connection* connection =
+            system_info->mutable_connections()->add_connection();
+
+        connection->set_protocol(enumerator.protocol());
+        connection->set_process_name(enumerator.processName());
+        connection->set_local_address(enumerator.localAddress());
+        connection->set_remote_address(enumerator.remoteAddress());
+        connection->set_local_port(enumerator.localPort());
+        connection->set_remote_port(enumerator.remotePort());
+        connection->set_state(enumerator.state());
+    }
+
+    for (base::ConnectEnumerator enumerator(base::ConnectEnumerator::Mode::UDP);
+         !enumerator.isAtEnd();
+         enumerator.advance())
+    {
+        proto::system_info::Connections::Connection* connection =
+            system_info->mutable_connections()->add_connection();
+
+        connection->set_protocol(enumerator.protocol());
+        connection->set_process_name(enumerator.processName());
+        connection->set_local_address(enumerator.localAddress());
+        connection->set_local_port(enumerator.localPort());
+    }
+}
+
+void fillRoutes(proto::SystemInfo* system_info)
+{
+    for (base::RouteEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::Routes::Route* route = system_info->mutable_routes()->add_route();
+
+        route->set_destonation(enumerator.destonation());
+        route->set_mask(enumerator.mask());
+        route->set_gateway(enumerator.gateway());
+        route->set_metric(enumerator.metric());
+    }
+}
+
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
@@ -635,11 +682,11 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_Routes)
     {
-        // TODO
+        fillRoutes(system_info);
     }
     else if (category == common::kSystemInfo_Connections)
     {
-        // TODO
+        fillConnection(system_info);
     }
     else if (category == common::kSystemInfo_NetworkShares)
     {
