@@ -580,6 +580,8 @@ if (WIN32)
     list(APPEND SOURCE_BASE_WIN
         win/desktop.cc
         win/desktop.h
+        win/device_enumerator.cc
+        win/device_enumerator.h
         win/drive_enumerator.cc
         win/drive_enumerator.h
         win/file_version_info.cc
@@ -609,6 +611,7 @@ if (WIN32)
         win/scoped_co_mem.h
         win/scoped_com_initializer.cc
         win/scoped_com_initializer.h
+        win/scoped_device_info.h
         win/scoped_gdi_object.h
         win/scoped_hdc.h
         win/scoped_hglobal.h

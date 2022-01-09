@@ -153,6 +153,7 @@ if (WIN32)
         iphlpapi
         netapi32
         sas
+        setupapi
         userenv
         uxtheme
         version

@@ -859,27 +859,45 @@
 <context>
     <name>SysInfoDevices</name>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="48"/>
-        <source>Parameter</source>
+        <source>Value</source>
+        <translation type="obsolete">Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="57"/>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="62"/>
+        <source>Driver Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="53"/>
-        <source>Value</source>
-        <translation type="unfinished">Valor</translation>
+        <location filename="../ui/sys_info_widget_devices.ui" line="67"/>
+        <source>Driver Date</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="72"/>
+        <source>Driver Vendor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="77"/>
+        <source>Device ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="85"/>
         <source>Copy Row</source>
         <translation type="unfinished">Copiar Linha</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Copiar Nome</translation>
+        <translation type="obsolete">Copiar Nome</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="90"/>
         <source>Copy Value</source>
         <translation type="unfinished">Copiar Valor</translation>
     </message>
@@ -1264,47 +1282,47 @@
         <translation type="vanished">Valor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="116"/>
+        <location filename="../ui/system_info_window.ui" line="129"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="119"/>
+        <location filename="../ui/system_info_window.ui" line="132"/>
         <source>Save (Ctrl+S)</source>
         <translation>Salvar (CTRL+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="131"/>
+        <location filename="../ui/system_info_window.ui" line="144"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="134"/>
+        <location filename="../ui/system_info_window.ui" line="147"/>
         <source>Print (Ctrl+P)</source>
         <translation>Imprimir (CTRL+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="142"/>
+        <location filename="../ui/system_info_window.ui" line="155"/>
         <source>Copy Row</source>
         <translation>Copiar Linha</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="147"/>
+        <location filename="../ui/system_info_window.ui" line="160"/>
         <source>Copy Name</source>
         <translation>Copiar Nome</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="152"/>
+        <location filename="../ui/system_info_window.ui" line="165"/>
         <source>Copy Value</source>
         <translation>Copiar Valor</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="161"/>
+        <location filename="../ui/system_info_window.ui" line="174"/>
         <source>Refresh</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="164"/>
+        <location filename="../ui/system_info_window.ui" line="177"/>
         <source>Refresh (F5)</source>
         <translation>Atualizar (F5)</translation>
     </message>

@@ -28,20 +28,16 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
     : SysInfoWidget(parent)
 {
     ui.setupUi(this);
+    ui.tree->setMouseTracking(true);
 
     connect(ui.action_copy_row, &QAction::triggered, this, [this]()
     {
         copyRow(ui.tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
-    {
-        copyColumn(ui.tree->currentItem(), 0);
-    });
-
     connect(ui.action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui.tree->currentItem(), current_column_);
     });
 
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
@@ -51,6 +47,12 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
+    });
+
+    connect(ui.tree, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_column_ = column;
     });
 }
 
@@ -70,6 +72,35 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::SystemInfo& system_info)
         ui.tree->setEnabled(false);
         return;
     }
+
+    const proto::system_info::WindowsDevices& devices = system_info.windows_devices();
+    QIcon item_icon(QStringLiteral(":/img/graphic-card.png"));
+    QTreeWidget* tree = ui.tree;
+
+    for (int i = 0; i < devices.device_size(); ++i)
+    {
+        const proto::system_info::WindowsDevices::Device& device = devices.device(i);
+
+        QString name = QString::fromStdString(device.friendly_name());
+        if (name.isEmpty())
+            name = QString::fromStdString(device.description());
+
+        if (name.isEmpty())
+            continue;
+
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        item->setIcon(0, item_icon);
+        item->setText(0, name);
+        item->setText(1, QString::fromStdString(device.driver_version()));
+        item->setText(2, QString::fromStdString(device.driver_date()));
+        item->setText(3, QString::fromStdString(device.driver_vendor()));
+        item->setText(4, QString::fromStdString(device.device_id()));
+
+        tree->addTopLevelItem(item);
+    }
+
+    for (int i = 0; i < tree->topLevelItemCount(); ++i)
+        ui.tree->resizeColumnToContents(i);
 }
 
 QTreeWidget* SysInfoWidgetDevices::treeWidget()
@@ -87,7 +118,6 @@ void SysInfoWidgetDevices::onContextMenu(const QPoint& point)
 
     QMenu menu;
     menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
     menu.addAction(ui.action_copy_value);
 
     menu.exec(ui.tree->viewport()->mapToGlobal(point));

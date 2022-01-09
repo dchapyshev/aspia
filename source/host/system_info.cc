@@ -23,6 +23,7 @@
 #include "base/smbios_reader.h"
 #include "base/sys_info.h"
 #include "base/net/adapter_enumerator.h"
+#include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/net_share_enumerator.h"
@@ -155,7 +156,18 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
 
     if (category == common::kSystemInfo_Devices)
     {
-        // TODO
+        for (base::win::DeviceEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+        {
+            proto::system_info::WindowsDevices::Device* device =
+                system_info->mutable_windows_devices()->add_device();
+
+            device->set_friendly_name(enumerator.friendlyName());
+            device->set_description(enumerator.description());
+            device->set_driver_version(enumerator.driverVersion());
+            device->set_driver_date(enumerator.driverDate());
+            device->set_driver_vendor(enumerator.driverVendor());
+            device->set_device_id(enumerator.deviceID());
+        }
     }
     else if (category == common::kSystemInfo_VideoAdapters)
     {

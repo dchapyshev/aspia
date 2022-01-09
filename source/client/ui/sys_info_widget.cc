@@ -179,13 +179,27 @@ void SysInfoWidget::copyRow(QTreeWidgetItem* item)
     if (!item)
         return;
 
-    QString name = item->text(0);
-    QString value = item->text(1);
+    QString result;
 
-    if (value.isEmpty())
-        copyTextToClipboard(name);
+    int column_count = item->columnCount();
+    if (column_count > 2)
+    {
+        for (int i = 0; i < column_count; ++i)
+        {
+            QString text = item->text(i);
+
+            if (!text.isEmpty())
+                result += text + QLatin1Char(' ');
+        }
+
+        result.chop(1);
+    }
     else
-        copyTextToClipboard(name + QLatin1String(": ") + value);
+    {
+        result = item->text(0) + QLatin1String(": ") + item->text(1);
+    }
+
+    copyTextToClipboard(result);
 }
 
 void SysInfoWidget::copyColumn(QTreeWidgetItem* item, int column)
