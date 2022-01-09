@@ -584,6 +584,8 @@ list(APPEND SOURCE_BASE_THREADING
 
 if (WIN32)
     list(APPEND SOURCE_BASE_WIN
+        win/battery_enumerator.cc
+        win/battery_enumerator.h
         win/desktop.cc
         win/desktop.h
         win/device.cc
