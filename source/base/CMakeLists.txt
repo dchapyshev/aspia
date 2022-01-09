@@ -30,6 +30,8 @@ list(APPEND SOURCE_BASE
     crc32.h
     debug.cc
     debug.h
+    edid.cc
+    edid.h
     endian_util.cc
     endian_util.h
     environment.cc
@@ -590,6 +592,8 @@ if (WIN32)
         win/message_window.h
         win/mini_dump_writer.cc
         win/mini_dump_writer.h
+        win/monitor_enumerator.cc
+        win/monitor_enumerator.h
         win/net_share_enumerator.cc
         win/net_share_enumerator.h
         win/object_watcher.cc

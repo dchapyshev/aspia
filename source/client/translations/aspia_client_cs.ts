@@ -2491,6 +2491,160 @@
     </message>
 </context>
 <context>
+    <name>client::SysInfoWidgetMonitors</name>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="140"/>
+        <source>Monitor Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="143"/>
+        <source>Manufacturer Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="146"/>
+        <source>Monitor ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="149"/>
+        <source>Serial Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="153"/>
+        <source>EDID Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="165"/>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="182"/>
+        <source>Diagonal Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="232"/>
+        <source>%1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="159"/>
+        <source>Date Of Manufacture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="160"/>
+        <source>Week %1 / %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="169"/>
+        <source>Image Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="170"/>
+        <source>%1x%2 cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="187"/>
+        <source>Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="194"/>
+        <source>Horizontal Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="195"/>
+        <source>%1 - %2 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="201"/>
+        <source>Vertical Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="202"/>
+        <source>%1 - %2 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
+        <source>Pixel Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="210"/>
+        <source>%1 MHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="210"/>
+        <source>Maximum Pixel Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="216"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="216"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="223"/>
+        <source>Supported Features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="236"/>
+        <source>Supported Video Modes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
+        <source>Input Signal Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="279"/>
+        <source>Digital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="282"/>
+        <source>Analog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="285"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>

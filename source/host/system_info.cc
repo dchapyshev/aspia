@@ -26,6 +26,7 @@
 #include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
 #include "base/win/printer_enumerator.h"
+#include "base/win/monitor_enumerator.h"
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
 #include "common/desktop_session_constants.h"
@@ -320,6 +321,157 @@ void fillDrivers(proto::SystemInfo* system_info)
     }
 }
 
+void fillMonitors(proto::SystemInfo* system_info)
+{
+    for (base::win::MonitorEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        std::unique_ptr<base::Edid> edid = enumerator.edid();
+        if (!edid)
+        {
+            LOG(LS_INFO) << "No EDID information for monitor";
+            continue;
+        }
+
+        proto::system_info::Monitors::Monitor* monitor =
+            system_info->mutable_monitors()->add_monitor();
+
+        std::string system_name = enumerator.friendlyName();
+        if (system_name.empty())
+            system_name = enumerator.description();
+
+        monitor->set_system_name(system_name);
+        monitor->set_monitor_name(edid->monitorName());
+        monitor->set_manufacturer_name(edid->manufacturerName());
+        monitor->set_monitor_id(edid->monitorId());
+        monitor->set_serial_number(edid->serialNumber());
+        monitor->set_edid_version(edid->edidVersion());
+        monitor->set_edid_revision(edid->edidRevision());
+        monitor->set_week_of_manufacture(edid->weekOfManufacture());
+        monitor->set_year_of_manufacture(edid->yearOfManufacture());
+        monitor->set_max_horizontal_image_size(edid->maxHorizontalImageSize());
+        monitor->set_max_vertical_image_size(edid->maxVerticalImageSize());
+        monitor->set_horizontal_resolution(edid->horizontalResolution());
+        monitor->set_vertical_resoulution(edid->verticalResolution());
+        monitor->set_gamma(edid->gamma());
+        monitor->set_max_horizontal_rate(edid->maxHorizontalRate());
+        monitor->set_min_horizontal_rate(edid->minHorizontalRate());
+        monitor->set_max_vertical_rate(edid->maxVerticalRate());
+        monitor->set_min_vertical_rate(edid->minVerticalRate());
+        monitor->set_pixel_clock(edid->pixelClock());
+        monitor->set_max_pixel_clock(edid->maxSupportedPixelClock());
+
+        switch (edid->inputSignalType())
+        {
+            case base::Edid::INPUT_SIGNAL_TYPE_DIGITAL:
+                monitor->set_input_signal_type(
+                    proto::system_info::Monitors::Monitor::INPUT_SIGNAL_TYPE_DIGITAL);
+                break;
+
+            case base::Edid::INPUT_SIGNAL_TYPE_ANALOG:
+                monitor->set_input_signal_type(
+                    proto::system_info::Monitors::Monitor::INPUT_SIGNAL_TYPE_ANALOG);
+                break;
+
+            default:
+                break;
+        }
+
+        uint8_t supported_features = edid->featureSupport();
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_DEFAULT_GTF_SUPPORTED)
+            monitor->set_default_gtf_supported(true);
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_SUSPEND)
+            monitor->set_suspend_supported(true);
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_STANDBY)
+            monitor->set_standby_supported(true);
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_ACTIVE_OFF)
+            monitor->set_active_off_supported(true);
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_PREFERRED_TIMING_MODE)
+            monitor->set_preferred_timing_mode_supported(true);
+
+        if (supported_features & base::Edid::FEATURE_SUPPORT_SRGB)
+            monitor->set_srgb_supported(true);
+
+        auto add_timing = [&](int width, int height, int freq)
+        {
+            proto::system_info::Monitors::Monitor::Timing* timing = monitor->add_timings();
+
+            timing->set_width(width);
+            timing->set_height(height);
+            timing->set_frequency(freq);
+        };
+
+        uint8_t estabilished_timings1 = edid->estabilishedTimings1();
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_800X600_60HZ)
+            add_timing(800, 600, 60);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_800X600_56HZ)
+            add_timing(800, 600, 56);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_640X480_75HZ)
+            add_timing(640, 480, 75);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_640X480_72HZ)
+            add_timing(640, 480, 72);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_640X480_67HZ)
+            add_timing(640, 480, 67);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_640X480_60HZ)
+            add_timing(640, 480, 60);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_720X400_88HZ)
+            add_timing(720, 400, 88);
+
+        if (estabilished_timings1 & base::Edid::ESTABLISHED_TIMINGS_1_720X400_70HZ)
+            add_timing(720, 400, 70);
+
+        uint8_t estabilished_timings2 = edid->estabilishedTimings2();
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1280X1024_75HZ)
+            add_timing(1280, 1024, 75);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1024X768_75HZ)
+            add_timing(1024, 768, 75);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1024X768_70HZ)
+            add_timing(1024, 768, 70);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1024X768_60HZ)
+            add_timing(1024, 768, 60);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_1024X768_87HZ)
+            add_timing(1024, 768, 87);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_832X624_75HZ)
+            add_timing(832, 624, 75);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_800X600_75HZ)
+            add_timing(800, 600, 75);
+
+        if (estabilished_timings2 & base::Edid::ESTABLISHED_TIMINGS_2_800X600_72HZ)
+            add_timing(800, 600, 72);
+
+        uint8_t manufacturer_timings = edid->manufacturersTimings();
+
+        if (manufacturer_timings & base::Edid::MANUFACTURERS_TIMINGS_1152X870_75HZ)
+            add_timing(1152, 870, 75);
+
+        for (int index = 0; index < edid->standardTimingsCount(); ++index)
+        {
+            int width, height, freq;
+
+            if (edid->standardTimings(index, &width, &height, &freq))
+                add_timing(width, height, freq);
+        }
+    }
+}
+
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
@@ -451,7 +603,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_Monitors)
     {
-        // TODO
+        fillMonitors(system_info);
     }
     else if (category == common::kSystemInfo_Printers)
     {

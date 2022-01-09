@@ -41,6 +41,9 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
+    static QString inputSignalTypeToString(
+        proto::system_info::Monitors::Monitor::InputSignalType value);
+
     Ui::SysInfoMonitors ui;
 };
 
