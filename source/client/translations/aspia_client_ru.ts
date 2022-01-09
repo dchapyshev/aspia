@@ -1004,27 +1004,31 @@
 <context>
     <name>SysInfoEnvVars</name>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="54"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="59"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="67"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="72"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="77"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>

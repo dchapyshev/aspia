@@ -43,9 +43,15 @@
        <height>16</height>
       </size>
      </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
-       <string>Parameter</string>
+       <string>Name</string>
       </property>
      </column>
      <column>

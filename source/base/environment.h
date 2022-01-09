@@ -23,6 +23,7 @@
 #include "build/build_config.h"
 
 #include <string>
+#include <vector>
 
 namespace base {
 
@@ -51,6 +52,9 @@ public:
     // Returns true on success, otherwise returns false. This method should not
     // be called in a multi-threaded process.
     static bool unSet(std::string_view variable_name);
+
+    // Returns a list of the environment variables.
+    static std::vector<std::pair<std::string, std::string>> list();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Environment);

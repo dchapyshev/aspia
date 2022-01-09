@@ -996,27 +996,31 @@
 <context>
     <name>SysInfoEnvVars</name>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">Argument</translation>
+        <translation type="obsolete">Argument</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="54"/>
+        <source>Name</source>
+        <translation type="unfinished">Naam</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="59"/>
         <source>Value</source>
         <translation type="unfinished">Waarde</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="67"/>
         <source>Copy Row</source>
         <translation type="unfinished">Kopieer Rij</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="72"/>
         <source>Copy Name</source>
         <translation type="unfinished">Kopieer Naam</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="77"/>
         <source>Copy Value</source>
         <translation type="unfinished">Kopieer Waarde</translation>
     </message>

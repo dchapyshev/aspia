@@ -956,27 +956,27 @@
 <context>
     <name>SysInfoEnvVars</name>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="48"/>
-        <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="54"/>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="59"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="67"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="72"/>
         <source>Copy Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="77"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>

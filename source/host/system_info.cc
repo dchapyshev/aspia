@@ -18,6 +18,7 @@
 
 #include "host/system_info.h"
 
+#include "base/environment.h"
 #include "base/logging.h"
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
@@ -519,6 +520,20 @@ void fillRoutes(proto::SystemInfo* system_info)
     }
 }
 
+void fillEnvironmentVariables(proto::SystemInfo* system_info)
+{
+    std::vector<std::pair<std::string, std::string>> list = base::Environment::list();
+
+    for (const auto& item : list)
+    {
+        proto::system_info::EnvironmentVariables::Variable* variable =
+            system_info->mutable_env_vars()->add_variable();
+
+        variable->set_name(item.first);
+        variable->set_value(item.second);
+    }
+}
+
 void createSummaryInfo(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
@@ -670,7 +685,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_EnvironmentVariables)
     {
-        // TODO
+        fillEnvironmentVariables(system_info);
     }
     else if (category == common::kSystemInfo_EventLogs)
     {

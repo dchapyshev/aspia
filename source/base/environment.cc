@@ -137,4 +137,37 @@ bool Environment::unSet(std::string_view variable_name)
     return unSetImpl(variable_name);
 }
 
+// static
+std::vector<std::pair<std::string, std::string>> Environment::list()
+{
+    std::vector<std::pair<std::string, std::string>> result;
+
+#if defined(OS_WIN)
+    wchar_t* strings = GetEnvironmentStringsW();
+    if (!strings)
+        return result;
+
+    for (wchar_t* current = strings; *current != 0; current++)
+    {
+        wchar_t* context;
+        wchar_t* name = std::wcstok(current, L"=", &context);
+        if (name && std::wcsncmp(name, L"::", 2) != 0)
+        {
+            wchar_t* value = std::wcstok(nullptr, L"=", &context);
+            if (value)
+                result.emplace_back(utf8FromWide(name), utf8FromWide(value));
+        }
+
+        while (*current != 0)
+            current++;
+    }
+
+    FreeEnvironmentStringsW(strings);
+    return result;
+
+#else
+    return result;
+#endif
+}
+
 } // namespace base

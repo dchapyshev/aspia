@@ -70,6 +70,23 @@ void SysInfoWidgetEnvVars::setSystemInfo(const proto::SystemInfo& system_info)
         ui.tree->setEnabled(false);
         return;
     }
+
+    const proto::system_info::EnvironmentVariables& variables = system_info.env_vars();
+    QIcon item_icon(QStringLiteral(":/img/block.png"));
+
+    for (int i = 0; i < variables.variable_size(); ++i)
+    {
+        const proto::system_info::EnvironmentVariables::Variable& variable = variables.variable(i);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        item->setIcon(0, item_icon);
+        item->setText(0, QString::fromStdString(variable.name()));
+        item->setText(1, QString::fromStdString(variable.value()));
+
+        ui.tree->addTopLevelItem(item);
+    }
+
+    ui.tree->resizeColumnToContents(0);
 }
 
 QTreeWidget* SysInfoWidgetEnvVars::treeWidget()
