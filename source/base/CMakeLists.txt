@@ -586,6 +586,8 @@ if (WIN32)
     list(APPEND SOURCE_BASE_WIN
         win/desktop.cc
         win/desktop.h
+        win/device.cc
+        win/device.h
         win/device_enumerator.cc
         win/device_enumerator.h
         win/drive_enumerator.cc
