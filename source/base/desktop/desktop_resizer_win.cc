@@ -62,13 +62,13 @@ public:
 
     const std::wstring& deviceName() const;
     bool modeForResolution(const Size& resolution, DEVMODEW* mode);
-    ScalableVector<Size> supportedResolutions() const;
+    std::vector<Size> supportedResolutions() const;
 
 private:
     void updateBestModeForResolution(const DEVMODEW& current_mode, const DEVMODEW& candidate_mode);
 
     std::wstring name_;
-    ScalableMap<Size, DEVMODEW> best_mode_;
+    std::map<Size, DEVMODEW> best_mode_;
 };
 
 DesktopResizerWin::Screen::Screen(ScreenId screen_id)
@@ -123,9 +123,9 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
     return true;
 }
 
-ScalableVector<Size> DesktopResizerWin::Screen::supportedResolutions() const
+std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
-    ScalableVector<Size> result;
+    std::vector<Size> result;
 
     for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
         result.push_back(it->first);
@@ -210,7 +210,7 @@ DesktopResizerWin::~DesktopResizerWin()
     restoreResulution();
 }
 
-ScalableVector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
+std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())

@@ -20,7 +20,9 @@
 #define BASE__DESKTOP__WIN__DXGI_CONTEXT_H
 
 #include "base/desktop/region.h"
-#include "base/memory/scalable_vector.h"
+
+#include <memory>
+#include <vector>
 
 namespace base {
 
@@ -43,7 +45,7 @@ struct DxgiAdapterContext final
     ~DxgiAdapterContext();
 
     // Child DxgiOutputContext belongs to this AdapterContext.
-    ScalableVector<DxgiOutputContext> contexts;
+    std::vector<DxgiOutputContext> contexts;
 };
 
 // A DxgiFrameContext stores the status of a single DxgiFrame of DxgiDuplicatorController.
@@ -63,7 +65,7 @@ public:
     int controller_id = 0;
 
     // Child DxgiAdapterContext belongs to this DxgiFrameContext.
-    ScalableVector<DxgiAdapterContext> contexts;
+    std::vector<DxgiAdapterContext> contexts;
 
     std::shared_ptr<DxgiDuplicatorController> controller;
 };

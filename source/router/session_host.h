@@ -19,7 +19,6 @@
 #ifndef ROUTER__SESSION_HOST_H
 #define ROUTER__SESSION_HOST_H
 
-#include "base/memory/scalable_vector.h"
 #include "base/peer/host_id.h"
 #include "proto/router_peer.pb.h"
 #include "router/session.h"
@@ -34,7 +33,7 @@ public:
     SessionHost();
     ~SessionHost();
 
-    using HostIdList = base::ScalableVector<base::HostId>;
+    using HostIdList = std::vector<base::HostId>;
 
     const HostIdList& hostIdList() const { return host_id_list_; }
     bool hasHostId(base::HostId host_id) const;

@@ -92,7 +92,7 @@ private:
     base::WaitableTimer reconnect_timer_;
     RouterInfo router_info_;
 
-    base::ScalableQueue<std::string> pending_id_requests_;
+    std::queue<std::string> pending_id_requests_;
 
     DISALLOW_COPY_AND_ASSIGN(RouterController);
 };

@@ -38,7 +38,7 @@ public:
     static std::filesystem::path filePath();
 
     // Database implementation.
-    base::ScalableVector<base::User> userList() const override;
+    std::vector<base::User> userList() const override;
     bool addUser(const base::User& user) override;
     bool modifyUser(const base::User& user) override;
     bool removeUser(int64_t entry_id) override;

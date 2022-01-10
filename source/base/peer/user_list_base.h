@@ -19,7 +19,6 @@
 #ifndef BASE__PEER__USER_LIST_BASE_H
 #define BASE__PEER__USER_LIST_BASE_H
 
-#include "base/memory/scalable_vector.h"
 #include "base/peer/user.h"
 
 namespace base {
@@ -33,7 +32,7 @@ public:
     virtual User find(std::u16string_view username) const = 0;
     virtual const ByteArray& seedKey() const = 0;
     virtual void setSeedKey(const ByteArray& seed_key) = 0;
-    virtual ScalableVector<User> list() const = 0;
+    virtual std::vector<User> list() const = 0;
 };
 
 } // namespace base

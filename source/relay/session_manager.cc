@@ -70,7 +70,7 @@ base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPoo
 
 // Removes a session from the list and returns a pointer to it.
 template<class T>
-std::unique_ptr<T> removeSessionT(base::ScalableVector<std::unique_ptr<T>>* session_list, T* session)
+std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list, T* session)
 {
     session->stop();
 

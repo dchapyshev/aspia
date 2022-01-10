@@ -244,6 +244,8 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     for (int i = 0; i < ui.tree_category->topLevelItemCount(); ++i)
         ui.tree_category->expandItem(ui.tree_category->topLevelItem(i));
 
+    ui.tree_category->setCurrentItem(summary_category);
+
     connect(ui.action_save, &QAction::triggered, this, [this]()
     {
         QString file_path =
@@ -306,7 +308,15 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
     ui.tree_category->setEnabled(true);
     ui.widget->setEnabled(true);
 
-    sys_info_widgets_[current_widget_]->setSystemInfo(system_info);
+    if (system_info.footer().category().empty())
+    {
+        for (int i = 0; i < sys_info_widgets_.count(); ++i)
+            sys_info_widgets_[i]->setSystemInfo(system_info);
+    }
+    else
+    {
+        sys_info_widgets_[current_widget_]->setSystemInfo(system_info);
+    }
 }
 
 void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
@@ -335,17 +345,6 @@ void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* colum
 
             layout_->addWidget(widget);
             widget->setVisible(true);
-
-            if (!widget->treeWidget()->topLevelItemCount())
-            {
-                LOG(LS_INFO) << "Empty information. Sending request";
-
-                ui.tree_category->setEnabled(false);
-                ui.widget->setEnabled(false);
-
-                sendSystemInfoRequest(category);
-            }
-
             break;
         }
     }

@@ -21,7 +21,6 @@
 
 #include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/memory/scalable_map.h"
 #include "host/desktop_session.h"
 
 namespace host {
@@ -56,7 +55,7 @@ protected:
 
 private:
     class SharedBuffer;
-    using SharedBuffers = base::ScalableMap<int, std::unique_ptr<SharedBuffer>>;
+    using SharedBuffers = std::map<int, std::unique_ptr<SharedBuffer>>;
 
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
     void onCursorPositionChanged(const proto::CursorPosition& cursor_position);

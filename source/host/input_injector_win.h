@@ -19,7 +19,6 @@
 #ifndef HOST__INPUT_INJECTOR_WIN_H
 #define HOST__INPUT_INJECTOR_WIN_H
 
-#include "base/memory/scalable_set.h"
 #include "base/win/scoped_thread_desktop.h"
 #include "host/input_injector.h"
 
@@ -45,7 +44,7 @@ private:
     base::ScopedThreadDesktop desktop_;
 
     bool block_input_ = false;
-    base::ScalableSet<uint32_t> pressed_keys_;
+    std::set<uint32_t> pressed_keys_;
 
     base::Point screen_offset_;
     base::Point last_mouse_pos_;

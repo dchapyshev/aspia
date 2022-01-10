@@ -19,10 +19,9 @@
 #ifndef BASE__MESSAGE_LOOP__PENDING_TASK_H
 #define BASE__MESSAGE_LOOP__PENDING_TASK_H
 
-#include "base/memory/scalable_queue.h"
-
 #include <chrono>
 #include <functional>
+#include <queue>
 
 namespace base {
 
@@ -57,7 +56,7 @@ public:
 };
 
 // Wrapper around std::queue specialized for PendingTask which adds a Swap helper method.
-class TaskQueue : public ScalableQueue<PendingTask>
+class TaskQueue : public std::queue<PendingTask>
 {
 public:
     void Swap(TaskQueue* queue)
@@ -67,7 +66,7 @@ public:
 };
 
 // PendingTasks are sorted by their |delayed_run_time| property.
-using DelayedTaskQueue = ScalablePriorityQueue<PendingTask>;
+using DelayedTaskQueue = std::priority_queue<PendingTask>;
 
 } // namespace base
 

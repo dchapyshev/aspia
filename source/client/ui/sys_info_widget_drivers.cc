@@ -93,7 +93,7 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::SystemInfo& system_info)
     }
 
     ui.tree->setColumnWidth(0, 200);
-    ui.tree->setColumnWidth(1, 150);
+    ui.tree->setColumnWidth(1, 100);
     ui.tree->setColumnWidth(2, 200);
     ui.tree->setColumnWidth(3, 70);
     ui.tree->setColumnWidth(4, 100);

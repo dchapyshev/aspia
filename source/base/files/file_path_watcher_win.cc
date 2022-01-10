@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/memory/scalable_vector.h"
 #include "base/strings/unicode.h"
 #include "base/win/object_watcher.h"
 
@@ -279,7 +278,7 @@ bool FilePathWatcherImpl::updateWatch()
     // Start at the target and walk up the directory chain until we succesfully create a watch
     // handle in |handle_|. |child_dirs| keeps a stack of child directories stripped from target,
     // in reverse order.
-    ScalableVector<std::filesystem::path> child_dirs;
+    std::vector<std::filesystem::path> child_dirs;
     std::filesystem::path watched_path(target_);
 
     while (true)

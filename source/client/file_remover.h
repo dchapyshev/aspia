@@ -19,7 +19,6 @@
 #ifndef CLIENT__FILE_REMOVER_H
 #define CLIENT__FILE_REMOVER_H
 
-#include "base/memory/scalable_queue.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
 
@@ -82,7 +81,7 @@ public:
     };
 
 
-    using TaskList = base::ScalableDeque<Task>;
+    using TaskList = std::deque<Task>;
     using FinishCallback = std::function<void()>;
 
     void start(const TaskList& items, const FinishCallback& callback);

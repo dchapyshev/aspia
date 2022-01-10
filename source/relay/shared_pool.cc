@@ -19,7 +19,6 @@
 #include "relay/shared_pool.h"
 
 #include "base/logging.h"
-#include "base/memory/scalable_map.h"
 
 #include <mutex>
 
@@ -43,7 +42,7 @@ private:
     Delegate* delegate_;
 
     mutable std::mutex pool_lock_;
-    base::ScalableMap<uint32_t, SessionKey> map_;
+    std::map<uint32_t, SessionKey> map_;
     uint32_t current_key_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Pool);

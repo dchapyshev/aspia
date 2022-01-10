@@ -88,7 +88,7 @@ bool FirewallManager::isFirewallEnabled() const
 
 bool FirewallManager::hasAnyRule()
 {
-    ScalableVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     return !rules.empty();
@@ -135,7 +135,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
 
 void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
 {
-    ScalableVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
@@ -159,14 +159,14 @@ void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
 
 void FirewallManager::deleteAllRules()
 {
-    ScalableVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
         deleteRule(rule);
 }
 
-void FirewallManager::allRules(ScalableVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
+void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
 {
     Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
 

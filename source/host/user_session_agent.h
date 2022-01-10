@@ -21,7 +21,6 @@
 
 #include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/memory/scalable_vector.h"
 #include "proto/host_internal.pb.h"
 
 namespace host {
@@ -56,7 +55,7 @@ public:
         proto::SessionType session_type;
     };
 
-    using ClientList = base::ScalableVector<Client>;
+    using ClientList = std::vector<Client>;
 
     UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
                      std::shared_ptr<base::TaskRunner> task_runner);

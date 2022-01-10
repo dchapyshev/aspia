@@ -21,7 +21,9 @@
 
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/geometry.h"
-#include "base/memory/scalable_vector.h"
+
+#include <memory>
+#include <vector>
 
 namespace base {
 
@@ -35,7 +37,7 @@ public:
     // Create a platform-specific DesktopResizer instance.
     static std::unique_ptr<DesktopResizer> create();
 
-    virtual ScalableVector<Size> supportedResolutions(ScreenId screen_id) = 0;
+    virtual std::vector<Size> supportedResolutions(ScreenId screen_id) = 0;
     virtual void setResolution(ScreenId screen_id, const Size& resolution) = 0;
     virtual void restoreResolution(ScreenId screen_id) = 0;
     virtual void restoreResulution() = 0;

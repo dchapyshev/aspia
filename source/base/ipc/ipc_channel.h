@@ -22,7 +22,6 @@
 #include "base/process_handle.h"
 #include "base/session_id.h"
 #include "base/memory/byte_array.h"
-#include "base/memory/scalable_queue.h"
 #include "base/threading/thread_checker.h"
 
 #if defined(OS_WIN)
@@ -105,7 +104,7 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    ScalableQueue<ByteArray> write_queue_;
+    std::queue<ByteArray> write_queue_;
     uint32_t write_size_ = 0;
 
     uint32_t read_size_ = 0;

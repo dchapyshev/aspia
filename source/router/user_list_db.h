@@ -39,7 +39,7 @@ public:
     base::User find(std::u16string_view username) const override;
     const base::ByteArray& seedKey() const override;
     void setSeedKey(const base::ByteArray& seed_key) override;
-    base::ScalableVector<base::User> list() const override;
+    std::vector<base::User> list() const override;
 
 private:
     explicit UserListDb(std::unique_ptr<Database> db);

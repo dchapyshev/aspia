@@ -3838,7 +3838,7 @@
     <message>
         <location filename="../ui/system_info_window.cc" line="129"/>
         <source>Video Adapters</source>
-        <translation>Видео адаптеры</translation>
+        <translation type="unfinished">Видеоадаптеры</translation>
     </message>
     <message>
         <location filename="../ui/system_info_window.cc" line="135"/>
@@ -3901,22 +3901,22 @@
         <translation>RAS</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
+        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>HTML File</source>
         <translation>HTML-файл</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="253"/>
+        <location filename="../ui/system_info_window.cc" line="255"/>
         <source>HTML File (*.html)</source>
         <translation>HTML-файл (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="264"/>
+        <location filename="../ui/system_info_window.cc" line="266"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
+        <location filename="../ui/system_info_window.cc" line="267"/>
         <source>Failed to save file: %1</source>
         <translation>Не удалось сохранить файл: %1</translation>
     </message>

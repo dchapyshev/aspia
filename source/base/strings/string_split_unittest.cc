@@ -34,7 +34,7 @@ namespace base {
 
 TEST(StringUtilTest, SplitString_Basics)
 {
-    ScalableVector<std::string> r;
+    std::vector<std::string> r;
 
     r = splitString(std::string(), ",:;", KEEP_WHITESPACE, SPLIT_WANT_ALL);
     EXPECT_TRUE(r.empty());
@@ -73,7 +73,7 @@ TEST(StringUtilTest, SplitString_Basics)
 
 TEST(StringUtilTest, SplitString_WhitespaceAndResultType)
 {
-    ScalableVector<std::string> r;
+    std::vector<std::string> r;
 
     // Empty input handling.
     r = splitString(std::string(), ",", KEEP_WHITESPACE, SPLIT_WANT_ALL);
@@ -108,7 +108,7 @@ TEST(StringUtilTest, SplitString_WhitespaceAndResultType)
 
 TEST(StringSplitTest, StringSplitKeepWhitespace)
 {
-    ScalableVector<std::string> r;
+    std::vector<std::string> r;
 
     r = splitString("   ", "*", base::KEEP_WHITESPACE, base::SPLIT_WANT_ALL);
     ASSERT_EQ(1U, r.size());
@@ -154,7 +154,7 @@ TEST(StringSplitTest, SplitStringAlongWhitespace)
 
     for (const auto& i : data)
     {
-        ScalableVector<std::string> results =
+        std::vector<std::string> results =
             splitString(i.input, kWhitespaceASCII, KEEP_WHITESPACE, SPLIT_WANT_NONEMPTY);
         ASSERT_EQ(i.expected_result_count, results.size());
         if (i.expected_result_count > 0)

@@ -82,6 +82,11 @@ message SystemInfoRequest
     bytes data      = 2;
 }
 
+message SystemInfoFooter
+{
+    string category = 1;
+}
+
 // Extension name: "system_info"
 // Sent by host to client.
 message SystemInfo
@@ -107,6 +112,7 @@ message SystemInfo
     system_info.Routes routes                    = 19;
     system_info.Connections connections          = 20;
     system_info.Ras ras                          = 21;
+    SystemInfoFooter footer                      = 128000;
 }
 
 // Extension name: "video_recording"

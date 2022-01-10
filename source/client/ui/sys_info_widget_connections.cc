@@ -97,11 +97,11 @@ void SysInfoWidgetConnections::setSystemInfo(const proto::SystemInfo& system_inf
     }
 
     ui.tree->setColumnWidth(0, 150);
-    ui.tree->setColumnWidth(1, 60);
-    ui.tree->setColumnWidth(2, 90);
-    ui.tree->setColumnWidth(3, 80);
-    ui.tree->setColumnWidth(4, 90);
-    ui.tree->setColumnWidth(5, 80);
+    ui.tree->setColumnWidth(1, 70);
+    ui.tree->setColumnWidth(2, 110);
+    ui.tree->setColumnWidth(3, 100);
+    ui.tree->setColumnWidth(4, 110);
+    ui.tree->setColumnWidth(5, 100);
     ui.tree->setColumnWidth(6, 100);
 }
 

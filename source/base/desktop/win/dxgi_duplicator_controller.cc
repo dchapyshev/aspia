@@ -129,7 +129,7 @@ int DxgiDuplicatorController::screenCount()
     return 0;
 }
 
-bool DxgiDuplicatorController::deviceNames(ScalableVector<std::wstring>* output)
+bool DxgiDuplicatorController::deviceNames(std::vector<std::wstring>* output)
 {
     DCHECK(output);
 
@@ -252,7 +252,7 @@ bool DxgiDuplicatorController::doInitialize()
     d3d_info_.min_feature_level = static_cast<D3D_FEATURE_LEVEL>(0);
     d3d_info_.max_feature_level = static_cast<D3D_FEATURE_LEVEL>(0);
 
-    ScalableVector<D3dDevice> devices = D3dDevice::enumDevices();
+    std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
     {
         LOG(LS_WARNING) << "No D3dDevice found";

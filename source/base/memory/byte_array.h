@@ -19,8 +19,6 @@
 #ifndef BASE__MEMORY__BYTE_ARRAY_H
 #define BASE__MEMORY__BYTE_ARRAY_H
 
-#include "base/memory/scalable_vector.h"
-
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -29,7 +27,7 @@
 
 namespace base {
 
-using ByteArray = ScalableVector<uint8_t>;
+using ByteArray = std::vector<uint8_t>;
 
 ByteArray fromData(const void* data, size_t size);
 

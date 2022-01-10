@@ -19,7 +19,6 @@
 #ifndef ROUTER__DATABASE_H
 #define ROUTER__DATABASE_H
 
-#include "base/memory/scalable_vector.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
 
@@ -37,7 +36,7 @@ public:
         NO_HOST_FOUND = 2
     };
 
-    virtual base::ScalableVector<base::User> userList() const = 0;
+    virtual std::vector<base::User> userList() const = 0;
     virtual bool addUser(const base::User& user) = 0;
     virtual bool modifyUser(const base::User& user) = 0;
     virtual bool removeUser(int64_t entry_id) = 0;

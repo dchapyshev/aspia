@@ -89,7 +89,7 @@ void SessionAdmin::doUserListRequest()
     std::unique_ptr<proto::RouterToAdmin> message = std::make_unique<proto::RouterToAdmin>();
     proto::UserList* list = message->mutable_user_list();
 
-    base::ScalableVector<base::User> users = database->userList();
+    std::vector<base::User> users = database->userList();
     for (const auto& user : users)
         list->add_user()->CopyFrom(user.serialize());
 

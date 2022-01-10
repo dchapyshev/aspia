@@ -20,7 +20,6 @@
 #define BASE__AUDIO__AUDIO_PLAYER_H
 
 #include "base/macros_magic.h"
-#include "base/memory/scalable_queue.h"
 
 #include <memory>
 #include <mutex>
@@ -49,10 +48,10 @@ private:
 
     std::unique_ptr<AudioOutput> output_;
 
-    ScalableQueue<std::unique_ptr<proto::AudioPacket>> incoming_queue_;
+    std::queue<std::unique_ptr<proto::AudioPacket>> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    ScalableQueue<std::unique_ptr<proto::AudioPacket>> work_queue_;
+    std::queue<std::unique_ptr<proto::AudioPacket>> work_queue_;
     size_t source_pos_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(AudioPlayer);

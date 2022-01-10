@@ -19,9 +19,8 @@
 #ifndef BASE__STRINGS__STRING_SPLIT_H
 #define BASE__STRINGS__STRING_SPLIT_H
 
-#include "base/memory/scalable_vector.h"
-
 #include <string>
+#include <vector>
 
 namespace base {
 
@@ -52,17 +51,17 @@ enum SplitResult
 //
 // To split on either commas or semicolons, keeping all whitespace:
 //
-//   ScalableVector<std::string> tokens = base::splitString(
+//   std::vector<std::string> tokens = base::splitString(
 //       input, ",;", base::KEEP_WHITESPACE, base::SPLIT_WANT_ALL);
-ScalableVector<std::string> splitString(std::string_view input,
-                                        std::string_view separators,
+std::vector<std::string> splitString(std::string_view input,
+                                     std::string_view separators,
+                                     WhitespaceHandling whitespace,
+                                     SplitResult result_type);
+
+std::vector<std::u16string> splitString(std::u16string_view input,
+                                        std::u16string_view separators,
                                         WhitespaceHandling whitespace,
                                         SplitResult result_type);
-
-ScalableVector<std::u16string> splitString(std::u16string_view input,
-                                           std::u16string_view separators,
-                                           WhitespaceHandling whitespace,
-                                           SplitResult result_type);
 
 // Like splitString above except it returns a vector of std::*string_view which reference the
 // original buffer without copying. Although you have to be careful to keep the original string
@@ -75,15 +74,15 @@ ScalableVector<std::u16string> splitString(std::u16string_view input,
 //                              base::KEEP_WHITESPACE,
 //                              base::SPLIT_WANT_NONEMPTY)) {
 //     ...
-ScalableVector<std::string_view> splitStringView(std::string_view input,
-                                                 std::string_view separators,
+std::vector<std::string_view> splitStringView(std::string_view input,
+                                              std::string_view separators,
+                                              WhitespaceHandling whitespace,
+                                              SplitResult result_type);
+
+std::vector<std::u16string_view> splitStringView(std::u16string_view input,
+                                                 std::u16string_view separators,
                                                  WhitespaceHandling whitespace,
                                                  SplitResult result_type);
-
-ScalableVector<std::u16string_view> splitStringView(std::u16string_view input,
-                                                    std::u16string_view separators,
-                                                    WhitespaceHandling whitespace,
-                                                    SplitResult result_type);
 
 } // namespace base
 

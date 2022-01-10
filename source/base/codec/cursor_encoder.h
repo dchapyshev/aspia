@@ -21,7 +21,6 @@
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
-#include "base/memory/scalable_vector.h"
 
 #include <vector>
 
@@ -45,7 +44,7 @@ private:
     bool compressCursor(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const;
 
     ScopedZstdCStream stream_;
-    ScalableVector<uint32_t> cache_;
+    std::vector<uint32_t> cache_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };

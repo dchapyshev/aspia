@@ -103,7 +103,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     ui.frame->hide();
     showFullScreenButtons(false);
 
-    hide_timer_->start(std::chrono::seconds(2));
+    hide_timer_->start(0);
     adjustSize();
 }
 

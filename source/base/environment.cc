@@ -18,12 +18,12 @@
 
 #include "base/environment.h"
 
-#include "base/memory/scalable_vector.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 #include <memory>
+#include <vector>
 
 #if defined(OS_WIN)
 #include <Windows.h>
@@ -45,7 +45,7 @@ bool getImpl(std::string_view variable_name, std::string* result)
 
     if (result)
     {
-        ScalableVector<wchar_t> value(value_length);
+        std::vector<wchar_t> value(value_length);
         GetEnvironmentVariableW(
             wideFromUtf8(variable_name).c_str(), value.data(), value_length);
         *result = utf8FromWide(value.data());

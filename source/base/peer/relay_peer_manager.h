@@ -20,10 +20,10 @@
 #define BASE__PEER__RELAY_PEER_MANAGER_H
 
 #include "base/macros_magic.h"
-#include "base/memory/scalable_vector.h"
 #include "base/peer/relay_peer.h"
 
 #include <memory>
+#include <vector>
 
 namespace proto {
 class RelayCredentials;
@@ -61,7 +61,7 @@ private:
     std::shared_ptr<TaskRunner> task_runner_;
     Delegate* delegate_;
 
-    ScalableVector<std::unique_ptr<RelayPeer>> pending_;
+    std::vector<std::unique_ptr<RelayPeer>> pending_;
 
     DISALLOW_COPY_AND_ASSIGN(RelayPeerManager);
 };

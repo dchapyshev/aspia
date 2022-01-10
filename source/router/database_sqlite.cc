@@ -372,7 +372,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
-base::ScalableVector<base::User> DatabaseSqlite::userList() const
+std::vector<base::User> DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -385,7 +385,7 @@ base::ScalableVector<base::User> DatabaseSqlite::userList() const
         return {};
     }
 
-    base::ScalableVector<base::User> users;
+    std::vector<base::User> users;
     for (;;)
     {
         error_code = sqlite3_step(statement);

@@ -19,7 +19,6 @@
 #ifndef BASE__PEER__SERVER_AUTHENTICATOR_MANAGER_H
 #define BASE__PEER__SERVER_AUTHENTICATOR_MANAGER_H
 
-#include "base/memory/scalable_vector.h"
 #include "base/peer/server_authenticator.h"
 
 namespace base {
@@ -74,7 +73,7 @@ private:
 
     std::shared_ptr<TaskRunner> task_runner_;
     std::shared_ptr<UserListBase> user_list_;
-    ScalableVector<std::unique_ptr<ServerAuthenticator>> pending_;
+    std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
     ByteArray private_key_;
 

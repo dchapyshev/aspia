@@ -20,7 +20,6 @@
 #define CLIENT__UI__DESKTOP_WIDGET_H
 
 #include "base/desktop/frame.h"
-#include "base/memory/scalable_set.h"
 #include "build/build_config.h"
 #include "proto/desktop.pb.h"
 
@@ -31,6 +30,9 @@
 #include <QEvent>
 #include <QPainter>
 #include <QWidget>
+
+#include <memory>
+#include <set>
 
 namespace client {
 
@@ -103,7 +105,7 @@ private:
     QPoint prev_pos_;
     uint32_t prev_mask_ = 0;
 
-    base::ScalableSet<uint32_t> pressed_keys_;
+    std::set<uint32_t> pressed_keys_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
 };

@@ -3405,22 +3405,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
+        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>HTML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="253"/>
+        <location filename="../ui/system_info_window.cc" line="255"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="264"/>
+        <location filename="../ui/system_info_window.cc" line="266"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
+        <location filename="../ui/system_info_window.cc" line="267"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished"></translation>
     </message>

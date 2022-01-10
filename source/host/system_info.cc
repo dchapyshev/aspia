@@ -642,28 +642,37 @@ void fillPowerOptions(proto::SystemInfo* system_info)
     }
 }
 
-void createSummaryInfo(proto::SystemInfo* system_info)
+void fillComputer(proto::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
     computer->set_name(base::SysInfo::computerName());
     computer->set_domain(base::SysInfo::computerDomain());
     computer->set_workgroup(base::SysInfo::computerWorkgroup());
     computer->set_uptime(base::SysInfo::uptime());
+}
 
+void fillOperatingSystem(proto::SystemInfo* system_info)
+{
     proto::system_info::OperatingSystem* operating_system = system_info->mutable_operating_system();
     operating_system->set_name(base::SysInfo::operatingSystemName());
     operating_system->set_version(base::SysInfo::operatingSystemVersion());
     operating_system->set_arch(base::SysInfo::operatingSystemArchitecture());
     operating_system->set_key(base::SysInfo::operatingSystemKey());
     operating_system->set_install_date(base::SysInfo::operatingSystemInstallDate());
+}
 
+void fillProcessor(proto::SystemInfo* system_info)
+{
     proto::system_info::Processor* processor = system_info->mutable_processor();
     processor->set_vendor(base::SysInfo::processorVendor());
     processor->set_model(base::SysInfo::processorName());
     processor->set_packages(static_cast<uint32_t>(base::SysInfo::processorPackages()));
     processor->set_cores(static_cast<uint32_t>(base::SysInfo::processorCores()));
     processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));
+}
 
+void fillBios(proto::SystemInfo* system_info)
+{
     for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -682,6 +691,21 @@ void createSummaryInfo(proto::SystemInfo* system_info)
             }
             break;
 
+            default:
+                break;
+        }
+    }
+}
+
+void fillMotherboard(proto::SystemInfo* system_info)
+{
+    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
+         !enumerator.isAtEnd(); enumerator.advance())
+    {
+        const base::SmbiosTable* table = enumerator.table();
+
+        switch (table->type)
+        {
             case base::SMBIOS_TABLE_TYPE_BASEBOARD:
             {
                 base::SmbiosBaseboard baseboard_table(table);
@@ -694,6 +718,21 @@ void createSummaryInfo(proto::SystemInfo* system_info)
             }
             break;
 
+            default:
+                break;
+        }
+    }
+}
+
+void fillMemory(proto::SystemInfo* system_info)
+{
+    for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
+         !enumerator.isAtEnd(); enumerator.advance())
+    {
+        const base::SmbiosTable* table = enumerator.table();
+
+        switch (table->type)
+        {
             case base::SMBIOS_TABLE_TYPE_MEMORY_DEVICE:
             {
                 base::SmbiosMemoryDevice memory_device_table(table);
@@ -722,7 +761,10 @@ void createSummaryInfo(proto::SystemInfo* system_info)
                 break;
         }
     }
+}
 
+void fillDrives(proto::SystemInfo* system_info)
+{
     for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         const base::win::DriveEnumerator::DriveInfo& drive_info = enumerator.driveInfo();
@@ -735,6 +777,29 @@ void createSummaryInfo(proto::SystemInfo* system_info)
         drive->set_total_size(drive_info.totalSpace());
         drive->set_free_size(drive_info.freeSpace());
     }
+}
+
+void createSummaryInfo(proto::SystemInfo* system_info)
+{
+    fillComputer(system_info);
+    fillOperatingSystem(system_info);
+    fillProcessor(system_info);
+    fillBios(system_info);
+    fillMotherboard(system_info);
+    fillMemory(system_info);
+    fillDrives(system_info);
+    fillDevices(system_info);
+    fillVideoAdapters(system_info);
+    fillMonitors(system_info);
+    fillPrinters(system_info);
+    fillPowerOptions(system_info);
+    fillDrivers(system_info);
+    fillServices(system_info);
+    fillEnvironmentVariables(system_info);
+    fillNetworkAdapters(system_info);
+    fillRoutes(system_info);
+    fillConnection(system_info);
+    fillNetworkShares(system_info);
 }
 
 } // namespace
@@ -762,6 +827,8 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
 
     LOG(LS_INFO) << "Requested system info category: " << category;
+
+    system_info->mutable_footer()->set_category(category);
 
     if (category == common::kSystemInfo_Devices)
     {

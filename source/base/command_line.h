@@ -19,20 +19,20 @@
 #ifndef BASE__COMMAND_LINE_H
 #define BASE__COMMAND_LINE_H
 
-#include "base/memory/scalable_map.h"
-#include "base/memory/scalable_vector.h"
 #include "build/build_config.h"
 
 #include <filesystem>
+#include <map>
 #include <string>
+#include <vector>
 
 namespace base {
 
 class CommandLine
 {
 public:
-    using StringVector = ScalableVector<std::u16string>;
-    using SwitchMap = ScalableMap<std::u16string, std::u16string, std::less<>>;
+    using StringVector = std::vector<std::u16string>;
+    using SwitchMap = std::map<std::u16string, std::u16string, std::less<>>;
 
     // A constructor for CommandLines that only carry switches and arguments.
     enum NoProgram { NO_PROGRAM };

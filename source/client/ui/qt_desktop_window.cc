@@ -254,7 +254,7 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     video_encodings_ = video_encodings;
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    base::ScalableVector<std::string_view> extensions_list = base::splitStringView(
+    std::vector<std::string_view> extensions_list = base::splitStringView(
         extensions, ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
 
     // By default, remote update is disabled.

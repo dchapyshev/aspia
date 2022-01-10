@@ -39,7 +39,7 @@ public:
     explicit DxgiAdapterDuplicator(const D3dDevice& device);
 
     // Move constructor, to make it possible to store instances of DxgiAdapterDuplicator in
-    // ScalableVector<>.
+    // std::vector<>.
     DxgiAdapterDuplicator(DxgiAdapterDuplicator&& other);
 
     ~DxgiAdapterDuplicator();
@@ -84,7 +84,7 @@ private:
     bool doInitialize();
 
     const D3dDevice device_;
-    ScalableVector<DxgiOutputDuplicator> duplicators_;
+    std::vector<DxgiOutputDuplicator> duplicators_;
     Rect desktop_rect_;
 };
 

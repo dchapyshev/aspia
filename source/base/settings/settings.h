@@ -20,8 +20,8 @@
 #define BASE__SETTINGS__SETTINGS_H
 
 #include "base/converter.h"
-#include "base/memory/scalable_map.h"
-#include "base/memory/scalable_vector.h"
+
+#include <map>
 
 namespace base {
 
@@ -42,8 +42,8 @@ struct StringLess
 class Settings
 {
 public:
-    using Map = ScalableMap<std::string, std::string, internal::StringLess>;
-    using Array = ScalableVector<Settings>;
+    using Map = std::map<std::string, std::string, internal::StringLess>;
+    using Array = std::vector<Settings>;
 
     static const std::string_view kSeparator;
 
