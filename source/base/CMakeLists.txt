@@ -195,13 +195,7 @@ list(APPEND SOURCE_BASE_CODEC
     codec/video_encoder_vpx.cc
     codec/video_encoder_vpx.h
     codec/video_encoder_zstd.cc
-    codec/video_encoder_zstd.h
-    codec/webm_file_muxer.cc
-    codec/webm_file_muxer.h
-    codec/webm_file_writer.cc
-    codec/webm_file_writer.h
-    codec/webm_video_encoder.cc
-    codec/webm_video_encoder.h)
+    codec/video_encoder_zstd.h)
 
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc

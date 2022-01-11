@@ -31,9 +31,6 @@ class AudioPlayer;
 class CursorDecoder;
 class Frame;
 class VideoDecoder;
-class WaitableTimer;
-class WebmFileWriter;
-class WebmVideoEncoder;
 } // namespace base
 
 namespace client {
@@ -58,7 +55,6 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& config) override;
     void setCurrentScreen(const proto::Screen& screen) override;
     void setPreferredSize(int width, int height) override;
-    void setVideoRecording(bool enable, const std::filesystem::path& file_path) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
     void onTextEvent(const proto::TextEvent& event) override;
     void onMouseEvent(const proto::MouseEvent& event) override;
@@ -106,10 +102,6 @@ private:
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
 
     InputEventFilter input_event_filter_;
-
-    std::unique_ptr<base::WaitableTimer> webm_video_encode_timer_;
-    std::unique_ptr<base::WebmVideoEncoder> webm_video_encoder_;
-    std::unique_ptr<base::WebmFileWriter> webm_file_writer_;
 
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;

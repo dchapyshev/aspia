@@ -51,12 +51,6 @@ find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 
-find_library(WEBM_RELEASE_LIB NAMES libwebm webm NO_DEFAULT_PATH PATHS "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib" REQUIRED)
-find_library(WEBM_DEBUG_LIB NAMES libwebm libwebmd webm NO_DEFAULT_PATH PATHS "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib" REQUIRED)
-
-message(STATUS "WebM Release: ${WEBM_RELEASE_LIB}")
-message(STATUS "WebM Debug: ${WEBM_DEBUG_LIB}")
-
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 if (WIN32)
