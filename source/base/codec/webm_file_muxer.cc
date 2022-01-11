@@ -23,7 +23,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include <libwebm/webmids.h>
+#include <libwebm/webmids.hpp>
 
 namespace base {
 
