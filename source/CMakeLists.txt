@@ -181,10 +181,10 @@ set(CPACK_PACKAGE_NAME "aspia")
 set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
 set(CPACK_PACKAGE_CONTACT "Dmitry Chapyshev <dmitry@aspia.ru>")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://aspia.org/")
-set(CPACK_PACKAGE_VERSION "2.2.0")
+set(CPACK_PACKAGE_VERSION "2.2.1")
 set(CPACK_PACKAGE_VERSION_MAJOR "2")
 set(CPACK_PACKAGE_VERSION_MINOR "2")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
 
 #--------------------------------------------------------------------------------------------------
 # Console
