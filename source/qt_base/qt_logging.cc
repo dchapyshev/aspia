@@ -29,16 +29,13 @@ base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
     switch (type)
     {
         case QtCriticalMsg:
+        case QtFatalMsg:
             return base::LOG_LS_ERROR;
 
-        case QtFatalMsg:
-            return base::LOG_LS_FATAL;
-
+        case QtDebugMsg:
         case QtInfoMsg:
             return base::LOG_LS_INFO;
 
-        case QtDebugMsg:
-        case QtWarningMsg:
         default:
             return base::LOG_LS_WARNING;
     }
@@ -50,9 +47,13 @@ void messageHandler(QtMsgType type,
 {
     const char* filename = context.file;
     if (!filename)
-        filename = "<empty>";
+        filename = "<filename>";
 
-    base::LogMessage log_message(filename, context.line, context.function, messageTypeToSeverity(type));
+    const char* function = context.function;
+    if (!function)
+        function = "<function>";
+
+    base::LogMessage log_message(filename, context.line, function, messageTypeToSeverity(type));
     log_message.stream() << msg;
 }
 
