@@ -73,6 +73,7 @@ list(APPEND SOURCE_HOST_CORE
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE
+        host_core.rc
         input_injector_win.cc
         input_injector_win.h)
 endif()
