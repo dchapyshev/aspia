@@ -10,9 +10,11 @@ Windows
 
    2.2. **SDK 10.0.18362.0** should be selected when installing.
 
-   2.3. **ATL/MFC** libraries shuld be selected when installing.
+   2.3. **ATL/MFC** libraries should be selected when installing.
 
-3. Download and install [CMake](https://cmake.org/download).
+   2.4. **English language pack** (required for vcpkg).
+
+3. Download and install [CMake](https://cmake.org/download) (version >= 3.17.0).
 4. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg) (forked from Microsoft repository).
 5. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
 * asio
@@ -29,7 +31,7 @@ Windows
 * sqlite3
 * libwebm
 * zstd
-6. Go to the source directory and run the following commands:
+6. Go to the directory with source code (root directory) and run the following commands:
    **<br/>mkdir build
    <br/>cd build
    <br/>cmake ..\ -G "Visual Studio 16 2019" -A Win32 -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
