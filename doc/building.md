@@ -10,7 +10,7 @@ Windows
 
    2.2. **SDK 10.0.18362.0** should be selected when installing.
 
-   2.3. **ATL/MFC** libraries shuld be selected when installing.
+   2.3. **ATL/MFC** libraries should be selected when installing.
 
    2.4. **English language pack** (required for vcpkg).
 
