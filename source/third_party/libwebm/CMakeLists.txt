@@ -36,3 +36,7 @@ add_library(libwebm STATIC ${SOURCE_LIBWEBM})
 target_link_libraries(libwebm)
 target_include_directories(libwebm PRIVATE ${CMAKE_SOURCE_DIR})
 set_target_properties(libwebm PROPERTIES FOLDER third_party)
+
+if (WIN32)
+    target_compile_definitions(libwebm PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+endif()

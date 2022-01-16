@@ -218,7 +218,7 @@ int Edid::horizontalResolution() const
     uint32_t lo = static_cast<uint32_t>(descriptor->horizontal_active);
     uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->horizontal_active_blanking)) >> 4);
 
-    return (hi << 8) | lo;
+    return static_cast<int>((hi << 8) | lo);
 }
 
 int Edid::verticalResolution() const
@@ -232,7 +232,7 @@ int Edid::verticalResolution() const
     uint32_t lo = static_cast<uint32_t>(descriptor->vertical_active);
     uint32_t hi = ((0xF0 & static_cast<uint32_t>(descriptor->vertical_active_blanking)) >> 4);
 
-    return (hi << 8) | lo;
+    return static_cast<int>((hi << 8) | lo);
 }
 
 double Edid::gamma() const
