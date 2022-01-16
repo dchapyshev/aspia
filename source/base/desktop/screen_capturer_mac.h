@@ -33,7 +33,10 @@ public:
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
+    ScreenId currentScreen() const override;
     const Frame* captureFrame(Error* error) override;
+    const MouseCursor* captureCursor() override;
+    Point cursorPosition() override;
 
 protected:
     // ScreenCapturer implementation.

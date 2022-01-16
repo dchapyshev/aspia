@@ -48,12 +48,30 @@ bool ScreenCapturerMac::selectScreen(ScreenId /* screen_id */)
     return false;
 }
 
+ScreenCapturer::ScreenId ScreenCapturerMac::currentScreen() const
+{
+    NOTIMPLEMENTED();
+    return kInvalidScreenId;
+}
+
 const Frame* ScreenCapturerMac::captureFrame(Error* error)
 {
     DCHECK(error);
     NOTIMPLEMENTED();
     *error = Error::PERMANENT;
     return nullptr;
+}
+
+const MouseCursor* ScreenCapturerMac::captureCursor()
+{
+    NOTIMPLEMENTED();
+    return nullptr;
+}
+
+Point ScreenCapturerMac::cursorPosition()
+{
+    NOTIMPLEMENTED();
+    return Point();
 }
 
 void ScreenCapturerMac::reset()
