@@ -48,7 +48,7 @@ public:
     void onMouseEvent(const proto::MouseEvent& event);
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();
-    void onSystemInfoRequest(const std::string& request);
+    void onSystemInfoRequest(const proto::SystemInfoRequest& request);
     void onMetricsRequest();
 
 private:

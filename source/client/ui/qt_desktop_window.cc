@@ -130,7 +130,20 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 
     connect(panel_, &DesktopPanel::startSystemInfo, this, [this]()
     {
-        desktop_control_proxy_->onSystemInfoRequest(std::string());
+        if (!system_info_)
+        {
+            system_info_ = new SystemInfoWindow(this);
+            system_info_->setAttribute(Qt::WA_DeleteOnClose);
+
+            connect(system_info_, &SystemInfoWindow::systemInfoRequired,
+                    this, [this](const proto::SystemInfoRequest& request)
+            {
+                desktop_control_proxy_->onSystemInfoRequest(request);
+            });
+        }
+
+        system_info_->show();
+        system_info_->activateWindow();
     });
 
     connect(panel_, &DesktopPanel::startStatistics, this, [this]()
@@ -297,21 +310,8 @@ void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_posi
 
 void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
 {
-    if (!system_info_)
-    {
-        system_info_ = new SystemInfoWindow(this);
-        system_info_->setAttribute(Qt::WA_DeleteOnClose);
-
-        connect(system_info_, &SystemInfoWindow::systemInfoRequired,
-                this, [this](const std::string& request)
-        {
-            desktop_control_proxy_->onSystemInfoRequest(request);
-        });
-    }
-
-    system_info_->setSystemInfo(system_info);
-    system_info_->show();
-    system_info_->activateWindow();
+    if (system_info_)
+        system_info_->setSystemInfo(system_info);
 }
 
 void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)

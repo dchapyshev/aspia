@@ -29,6 +29,7 @@
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
+#include "base/win/event_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
 #include "base/win/monitor_enumerator.h"
@@ -779,7 +780,80 @@ void fillDrives(proto::SystemInfo* system_info)
     }
 }
 
-void createSummaryInfo(proto::SystemInfo* system_info)
+void fillEventLogs(proto::SystemInfo* system_info, const proto::system_info::EventLogsData& data)
+{
+    const wchar_t* log_name;
+    switch (data.type())
+    {
+        case proto::system_info::EventLogs::Event::TYPE_APPLICATION:
+            log_name = L"Application";
+            break;
+
+        case proto::system_info::EventLogs::Event::TYPE_SECURITY:
+            log_name = L"Security";
+            break;
+
+        case proto::system_info::EventLogs::Event::TYPE_SYSTEM:
+            log_name = L"System";
+            break;
+
+        default:
+            return;
+    }
+
+    base::win::EventEnumerator enumerator(log_name, data.record_start(), data.record_count());
+
+    system_info->mutable_event_logs()->set_type(data.type());
+    system_info->mutable_event_logs()->set_total_records(enumerator.count());
+
+    while (!enumerator.isAtEnd())
+    {
+        proto::system_info::EventLogs::Event::Level level;
+        switch (enumerator.type())
+        {
+            case base::win::EventEnumerator::Type::ERR:
+                level = proto::system_info::EventLogs::Event::LEVEL_ERROR;
+                break;
+
+            case base::win::EventEnumerator::Type::WARN:
+                level = proto::system_info::EventLogs::Event::LEVEL_WARNING;
+                break;
+
+            case base::win::EventEnumerator::Type::INFO:
+                level = proto::system_info::EventLogs::Event::LEVEL_INFORMATION;
+                break;
+
+            case base::win::EventEnumerator::Type::AUDIT_SUCCESS:
+                level = proto::system_info::EventLogs::Event::LEVEL_AUDIT_SUCCESS;
+                break;
+
+            case base::win::EventEnumerator::Type::AUDIT_FAILURE:
+                level = proto::system_info::EventLogs::Event::LEVEL_AUDIT_FAILURE;
+                break;
+
+            case base::win::EventEnumerator::Type::SUCCESS:
+                level = proto::system_info::EventLogs::Event::LEVEL_SUCCESS;
+                break;
+
+            default:
+                continue;
+        }
+
+        proto::system_info::EventLogs::Event* event =
+            system_info->mutable_event_logs()->add_event();
+
+        event->set_level(level);
+        event->set_time(enumerator.time());
+        event->set_category(enumerator.category());
+        event->set_event_id(enumerator.eventId());
+        event->set_source(enumerator.source());
+        event->set_description(enumerator.description());
+
+        enumerator.advance();
+    }
+}
+
+void fillSummaryInfo(proto::SystemInfo* system_info)
 {
     fillComputer(system_info);
     fillOperatingSystem(system_info);
@@ -788,34 +862,15 @@ void createSummaryInfo(proto::SystemInfo* system_info)
     fillMotherboard(system_info);
     fillMemory(system_info);
     fillDrives(system_info);
-    fillDevices(system_info);
-    fillVideoAdapters(system_info);
-    fillMonitors(system_info);
-    fillPrinters(system_info);
-    fillPowerOptions(system_info);
-    fillDrivers(system_info);
-    fillServices(system_info);
-    fillEnvironmentVariables(system_info);
-    fillNetworkAdapters(system_info);
-    fillRoutes(system_info);
-    fillConnection(system_info);
-    fillNetworkShares(system_info);
 }
 
 } // namespace
 
-void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* system_info)
+void createSystemInfo(const proto::SystemInfoRequest& request, proto::SystemInfo* system_info)
 {
-    if (serialized_request.empty())
+    if (request.category().empty())
     {
-        createSummaryInfo(system_info);
-        return;
-    }
-
-    proto::SystemInfoRequest request;
-    if (!request.ParseFromString(serialized_request))
-    {
-        LOG(LS_WARNING) << "Unable to parse system info request";
+        fillSummaryInfo(system_info);
         return;
     }
 
@@ -864,7 +919,7 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     }
     else if (category == common::kSystemInfo_EventLogs)
     {
-        // TODO
+        fillEventLogs(system_info, request.event_logs_data());
     }
     else if (category == common::kSystemInfo_NetworkAdapters)
     {
@@ -881,10 +936,6 @@ void createSystemInfo(const std::string& serialized_request, proto::SystemInfo* 
     else if (category == common::kSystemInfo_NetworkShares)
     {
         fillNetworkShares(system_info);
-    }
-    else if (category == common::kSystemInfo_Ras)
-    {
-        // TODO
     }
     else
     {

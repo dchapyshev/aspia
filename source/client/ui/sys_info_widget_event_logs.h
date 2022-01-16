@@ -34,14 +34,28 @@ public:
 
     // SysInfo implementation.
     std::string category() const override;
+    proto::SystemInfoRequest request() const override;
     void setSystemInfo(const proto::SystemInfo& system_info) override;
     QTreeWidget* treeWidget() override;
 
 private slots:
     void onContextMenu(const QPoint& point);
+    void onPageActivated(int index);
 
 private:
+    proto::SystemInfoRequest createRequest(
+        proto::system_info::EventLogs::Event::Type type, uint32_t start) const;
+    static QString levelToString(proto::system_info::EventLogs::Event::Level value);
+
     Ui::SysInfoEventLogs ui;
+    int current_column_ = 0;
+
+    static const uint32_t kRecordsPerPage = 1000;
+
+    proto::system_info::EventLogs::Event::Type current_type_ =
+        proto::system_info::EventLogs::Event::TYPE_SYSTEM;
+    uint32_t total_records_ = 0;
+    uint32_t start_record_ = 0;
 };
 
 } // namespace client

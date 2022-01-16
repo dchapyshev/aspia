@@ -462,8 +462,19 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
+        proto::SystemInfoRequest* system_info_request = messageFromArena<proto::SystemInfoRequest>();
+
+        if (!extension.data().empty())
+        {
+            if (!system_info_request->ParseFromString(extension.data()))
+            {
+                LOG(LS_WARNING) << "Unable to parse system info request";
+            }
+        }
+
         proto::SystemInfo* system_info = messageFromArena<proto::SystemInfo>();
-        createSystemInfo(extension.data(), system_info);
+
+        createSystemInfo(*system_info_request, system_info);
 
         proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
         proto::DesktopExtension* desktop_extension = outgoing_message->mutable_extension();

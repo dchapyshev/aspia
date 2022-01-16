@@ -677,6 +677,33 @@
     </message>
 </context>
 <context>
+    <name>LogLevel</name>
+    <message>
+        <source>Error</source>
+        <translation type="obsolete">Ошибка</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="obsolete">Предупреждение</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="obsolete">Информация</translation>
+    </message>
+    <message>
+        <source>Audit Success</source>
+        <translation type="obsolete">Успех аудита</translation>
+    </message>
+    <message>
+        <source>Audit Failure</source>
+        <translation type="obsolete">Неудача аудита</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="obsolete">Успешно</translation>
+    </message>
+</context>
+<context>
     <name>RouterManagerWindow</name>
     <message>
         <location filename="../ui/router_manager_window.ui" line="20"/>
@@ -843,42 +870,42 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="57"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="54"/>
         <source>Process Name</source>
         <translation>Имя процесса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="62"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="59"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="64"/>
         <source>Local Address</source>
         <translation>Локальный адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="69"/>
         <source>Local Port</source>
         <translation>Локальный порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="77"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="74"/>
         <source>Remote Address</source>
         <translation>Удаленный адрес</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="82"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="79"/>
         <source>Remote Port</source>
         <translation>Удаленный порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="87"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="84"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="95"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="92"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -887,7 +914,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="100"/>
+        <location filename="../ui/sys_info_widget_connections.ui" line="97"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -903,7 +930,7 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="57"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="54"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
@@ -912,27 +939,27 @@
         <translation type="vanished">Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="62"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="59"/>
         <source>Driver Version</source>
         <translation>Версия драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="64"/>
         <source>Driver Date</source>
         <translation>Дата драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="69"/>
         <source>Driver Vendor</source>
         <translation>Поставщик</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="77"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="74"/>
         <source>Device ID</source>
         <translation>ID устройства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="85"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="82"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -941,7 +968,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="90"/>
+        <location filename="../ui/sys_info_widget_devices.ui" line="87"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -957,37 +984,37 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="57"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="54"/>
         <source>Display Name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="62"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="59"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="64"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="69"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="77"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="74"/>
         <source>Startup Type</source>
         <translation>Тип запуска</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="82"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="79"/>
         <source>Executable File</source>
         <translation>Исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="90"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="87"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -996,7 +1023,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="95"/>
+        <location filename="../ui/sys_info_widget_drivers.ui" line="92"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1008,27 +1035,27 @@
         <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="54"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="51"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="59"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="56"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="64"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="69"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="77"/>
+        <location filename="../ui/sys_info_widget_env_vars.ui" line="74"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1036,27 +1063,81 @@
 <context>
     <name>SysInfoEventLogs</name>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="vanished">Значение</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">Тип</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
-        <source>Value</source>
-        <translation>Значение</translation>
+        <source>Previous</source>
+        <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="60"/>
+        <source>Next</source>
+        <translation>Вперед</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="83"/>
+        <source>Events type</source>
+        <translation>Тип событий</translation>
+    </message>
+    <message>
+        <source>Show</source>
+        <translation type="vanished">Показать</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="130"/>
+        <source>Level</source>
+        <translation>Уровень</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="vanished">Обновить</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="125"/>
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="135"/>
+        <source>Category</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="140"/>
+        <source>Event ID</source>
+        <translation>ID события</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="145"/>
+        <source>Source</source>
+        <translation>Источник</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="172"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="190"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1064,27 +1145,27 @@
 <context>
     <name>SysInfoMonitors</name>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_monitors.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1092,27 +1173,27 @@
 <context>
     <name>SysInfoNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_net_adapters.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1120,27 +1201,27 @@
 <context>
     <name>SysInfoNetShares</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_net_shares.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1148,27 +1229,27 @@
 <context>
     <name>SysInfoPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="51"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="56"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="64"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="69"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="74"/>
+        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1176,27 +1257,27 @@
 <context>
     <name>SysInfoPrinters</name>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_printers.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_printers.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_printers.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_printers.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_printers.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1204,29 +1285,24 @@
 <context>
     <name>SysInfoRas</name>
     <message>
-        <location filename="../ui/sys_info_widget_ras.ui" line="48"/>
         <source>Parameter</source>
-        <translation>Параметр</translation>
+        <translation type="vanished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_ras.ui" line="53"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_ras.ui" line="61"/>
         <source>Copy Row</source>
-        <translation>Копировать строку</translation>
+        <translation type="vanished">Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_ras.ui" line="66"/>
         <source>Copy Name</source>
-        <translation>Копировать имя</translation>
+        <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_ras.ui" line="71"/>
         <source>Copy Value</source>
-        <translation>Копировать значение</translation>
+        <translation type="vanished">Копировать значение</translation>
     </message>
 </context>
 <context>
@@ -1240,27 +1316,27 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="57"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="54"/>
         <source>Destonation</source>
         <translation>Назначение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="62"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="59"/>
         <source>Mask</source>
         <translation>Маска</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="64"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="69"/>
         <source>Metric</source>
         <translation>Метрика</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="80"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="77"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -1269,7 +1345,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="85"/>
+        <location filename="../ui/sys_info_widget_routes.ui" line="82"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1285,42 +1361,42 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="57"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="54"/>
         <source>Display Name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="62"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="59"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="67"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="64"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="72"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="69"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="77"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="74"/>
         <source>Startup Type</source>
         <translation>Тип запуска</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="82"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="79"/>
         <source>Account</source>
         <translation>Пользователь</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="87"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="84"/>
         <source>Executable File</source>
         <translation>Исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="95"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="92"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -1329,7 +1405,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="100"/>
+        <location filename="../ui/sys_info_widget_services.ui" line="97"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1337,27 +1413,27 @@
 <context>
     <name>SysInfoSummary</name>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_summary.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_summary.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_summary.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_summary.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_summary.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1365,27 +1441,27 @@
 <context>
     <name>SysInfoVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="48"/>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="53"/>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="50"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="61"/>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="66"/>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="71"/>
+        <location filename="../ui/sys_info_widget_video_adapters.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -1406,47 +1482,47 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="129"/>
+        <location filename="../ui/system_info_window.ui" line="126"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="132"/>
+        <location filename="../ui/system_info_window.ui" line="129"/>
         <source>Save (Ctrl+S)</source>
         <translation>Сохранить (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="144"/>
+        <location filename="../ui/system_info_window.ui" line="141"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="147"/>
+        <location filename="../ui/system_info_window.ui" line="144"/>
         <source>Print (Ctrl+P)</source>
         <translation>Печать (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="155"/>
+        <location filename="../ui/system_info_window.ui" line="152"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="160"/>
+        <location filename="../ui/system_info_window.ui" line="157"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="165"/>
+        <location filename="../ui/system_info_window.ui" line="162"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="174"/>
+        <location filename="../ui/system_info_window.ui" line="171"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="177"/>
+        <location filename="../ui/system_info_window.ui" line="174"/>
         <source>Refresh (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
@@ -1974,21 +2050,28 @@
     </message>
 </context>
 <context>
+    <name>client::LogLevelModel</name>
+    <message>
+        <source>Error</source>
+        <translation type="obsolete">Ошибка</translation>
+    </message>
+</context>
+<context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="227"/>
-        <location filename="../ui/qt_desktop_window.cc" line="235"/>
+        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="248"/>
         <location filename="../ui/qt_desktop_window.cc" line="609"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="228"/>
+        <location filename="../ui/qt_desktop_window.cc" line="241"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="236"/>
+        <location filename="../ui/qt_desktop_window.cc" line="249"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
@@ -2751,32 +2834,32 @@
 <context>
     <name>client::SysInfoWidget</name>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="64"/>
+        <location filename="../ui/sys_info_widget.cc" line="71"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="69"/>
+        <location filename="../ui/sys_info_widget.cc" line="76"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="74"/>
+        <location filename="../ui/sys_info_widget.cc" line="81"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="79"/>
+        <location filename="../ui/sys_info_widget.cc" line="86"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="84"/>
+        <location filename="../ui/sys_info_widget.cc" line="91"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="100"/>
+        <location filename="../ui/sys_info_widget.cc" line="107"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -2785,7 +2868,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="101"/>
+        <location filename="../ui/sys_info_widget.cc" line="108"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n минута</numerusform>
@@ -2794,7 +2877,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="102"/>
+        <location filename="../ui/sys_info_widget.cc" line="109"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n час</numerusform>
@@ -2803,7 +2886,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="126"/>
+        <location filename="../ui/sys_info_widget.cc" line="133"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -2812,22 +2895,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="147"/>
+        <location filename="../ui/sys_info_widget.cc" line="154"/>
         <source>Gbps</source>
         <translation>Гбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="152"/>
+        <location filename="../ui/sys_info_widget.cc" line="159"/>
         <source>Mbps</source>
         <translation>Мбит/c</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="157"/>
+        <location filename="../ui/sys_info_widget.cc" line="164"/>
         <source>Kbps</source>
         <translation>Кбит/с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="162"/>
+        <location filename="../ui/sys_info_widget.cc" line="169"/>
         <source>bps</source>
         <translation>бит/c</translation>
     </message>
@@ -2899,6 +2982,63 @@
         <location filename="../ui/sys_info_widget_drivers.cc" line="173"/>
         <source>System Start</source>
         <translation>При старте системы</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetEventLogs</name>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="63"/>
+        <source>Application</source>
+        <translation>Приложения</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="65"/>
+        <source>Security</source>
+        <translation>Безопасность</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="67"/>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="vanished">Успешно</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="297"/>
+        <source>Information</source>
+        <translation>Информация</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="187"/>
+        <source>Page %1/%2</source>
+        <translation>Страница %1/%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
+        <source>Audit Success</source>
+        <translation>Успех аудита</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
+        <source>Audit Failure</source>
+        <translation>Неудача аудита</translation>
     </message>
 </context>
 <context>
@@ -3821,102 +3961,101 @@
 <context>
     <name>client::SystemInfoWindow</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="111"/>
+        <location filename="../ui/system_info_window.cc" line="116"/>
         <source>Summary</source>
         <translation>Сводка</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="118"/>
+        <location filename="../ui/system_info_window.cc" line="123"/>
         <source>Hardware</source>
         <translation>Оборудование</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="123"/>
+        <location filename="../ui/system_info_window.cc" line="128"/>
         <source>Devices</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="129"/>
+        <location filename="../ui/system_info_window.cc" line="134"/>
         <source>Video Adapters</source>
-        <translation type="unfinished">Видеоадаптеры</translation>
+        <translation>Видеоадаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="135"/>
+        <location filename="../ui/system_info_window.cc" line="140"/>
         <source>Monitors</source>
         <translation>Мониторы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="147"/>
+        <location filename="../ui/system_info_window.cc" line="152"/>
         <source>Power Options</source>
         <translation>Параметры питания</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="161"/>
+        <location filename="../ui/system_info_window.cc" line="166"/>
         <source>Software</source>
         <translation>Программное обеспечение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="166"/>
+        <location filename="../ui/system_info_window.cc" line="171"/>
         <source>Drivers</source>
         <translation>Драйверы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="172"/>
+        <location filename="../ui/system_info_window.cc" line="177"/>
         <source>Services</source>
         <translation>Службы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="178"/>
+        <location filename="../ui/system_info_window.cc" line="183"/>
         <source>Environment Variables</source>
         <translation>Переменные окружения</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="184"/>
+        <location filename="../ui/system_info_window.cc" line="189"/>
         <source>Event Logs</source>
         <translation>Журнал событий</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="197"/>
+        <location filename="../ui/system_info_window.cc" line="202"/>
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="202"/>
+        <location filename="../ui/system_info_window.cc" line="207"/>
         <source>Network Adapters</source>
         <translation>Сетевые адаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="208"/>
+        <location filename="../ui/system_info_window.cc" line="213"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="214"/>
+        <location filename="../ui/system_info_window.cc" line="219"/>
         <source>Connections</source>
         <translation>Подключения</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="226"/>
         <source>RAS</source>
-        <translation>RAS</translation>
+        <translation type="vanished">RAS</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="253"/>
+        <location filename="../ui/system_info_window.cc" line="251"/>
         <source>HTML File</source>
         <translation>HTML-файл</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="255"/>
+        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>HTML File (*.html)</source>
         <translation>HTML-файл (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="266"/>
+        <location filename="../ui/system_info_window.cc" line="264"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="267"/>
+        <location filename="../ui/system_info_window.cc" line="265"/>
         <source>Failed to save file: %1</source>
         <translation>Не удалось сохранить файл: %1</translation>
     </message>
@@ -4117,7 +4256,7 @@
         <translation type="vanished">Количество заданий</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="141"/>
+        <location filename="../ui/system_info_window.cc" line="146"/>
         <source>Printers</source>
         <translation>Принтеры</translation>
     </message>
@@ -4142,7 +4281,7 @@
         <translation type="vanished">Максимум использований</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="220"/>
+        <location filename="../ui/system_info_window.cc" line="225"/>
         <source>Network Shares</source>
         <translation>Сетевые ресурсы</translation>
     </message>

@@ -79,7 +79,8 @@ message PowerControl
 message SystemInfoRequest
 {
     string category = 1;
-    bytes data      = 2;
+    // Fields 2 - 10: Reserved.
+    system_info.EventLogsData event_logs_data = 11;
 }
 
 message SystemInfoFooter
@@ -111,7 +112,6 @@ message SystemInfo
     system_info.EventLogs event_logs             = 18;
     system_info.Routes routes                    = 19;
     system_info.Connections connections          = 20;
-    system_info.Ras ras                          = 21;
     SystemInfoFooter footer                      = 128000;
 }
 

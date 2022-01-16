@@ -40,14 +40,13 @@ public:
     void setSystemInfo(const proto::SystemInfo& system_info);
 
 signals:
-    void systemInfoRequired(const std::string& request);
+    void systemInfoRequired(const proto::SystemInfoRequest& request);
 
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);
+    void onRefresh();
 
 private:
-    void sendSystemInfoRequest(const std::string& category);
-
     Ui::SystemInfoWindow ui;
     QHBoxLayout* layout_ = nullptr;
     QList<SysInfoWidget*> sys_info_widgets_;

@@ -51,6 +51,9 @@
         <file>locale.png</file>
         <file>document-list.png</file>
         <file>block.png</file>
+        <file>error.png</file>
+        <file>warning.png</file>
+        <file>information.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

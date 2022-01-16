@@ -151,7 +151,7 @@ void DesktopControlProxy::onRemoteUpdate()
         desktop_control_->onRemoteUpdate();
 }
 
-void DesktopControlProxy::onSystemInfoRequest(const std::string& request)
+void DesktopControlProxy::onSystemInfoRequest(const proto::SystemInfoRequest& request)
 {
     if (!io_task_runner_->belongsToCurrentThread())
     {

@@ -34,6 +34,7 @@ public:
     ~SysInfoWidget() = default;
 
     virtual std::string category() const = 0;
+    virtual proto::SystemInfoRequest request() const;
     virtual void setSystemInfo(const proto::SystemInfo& system_info) = 0;
     virtual QTreeWidget* treeWidget() = 0;
 
@@ -41,6 +42,9 @@ public:
     static QString delayToString(uint64_t delay);
     static QString speedToString(uint64_t speed);
     static QString timeToString(time_t time);
+
+signals:
+    void systemInfoRequest(const proto::SystemInfoRequest& request);
 
 protected:
     SysInfoWidget(QWidget* parent = nullptr);

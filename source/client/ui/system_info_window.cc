@@ -29,7 +29,6 @@
 #include "client/ui/sys_info_widget_net_shares.h"
 #include "client/ui/sys_info_widget_power_options.h"
 #include "client/ui/sys_info_widget_printers.h"
-#include "client/ui/sys_info_widget_ras.h"
 #include "client/ui/sys_info_widget_routes.h"
 #include "client/ui/sys_info_widget_services.h"
 #include "client/ui/sys_info_widget_summary.h"
@@ -44,6 +43,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
+#include <QTimer>
 
 namespace client {
 
@@ -102,10 +102,15 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetEventLogs(this));
     sys_info_widgets_.append(new SysInfoWidgetRoutes(this));
     sys_info_widgets_.append(new SysInfoWidgetConnections(this));
-    sys_info_widgets_.append(new SysInfoWidgetRas(this));
 
-    for (int i = 1; i < sys_info_widgets_.count(); ++i)
-        sys_info_widgets_[i]->hide();
+    for (int i = 0; i < sys_info_widgets_.count(); ++i)
+    {
+        if (i != 0)
+            sys_info_widgets_[i]->hide();
+
+        connect(sys_info_widgets_[i], &SysInfoWidget::systemInfoRequest,
+                this, &SystemInfoWindow::systemInfoRequired);
+    }
 
     CategoryItem* summary_category = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM, QStringLiteral(":/img/computer.png"), tr("Summary"));
@@ -194,7 +199,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* network_category = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM, QStringLiteral(":/img/graphic-card.png"), tr("Network"));
+        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/graphic-card.png"), tr("Network"));
 
     CategoryItem* network_adapters = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
@@ -220,17 +225,10 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         tr("Network Shares"),
         common::kSystemInfo_NetworkShares);
 
-    CategoryItem* ras = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/globe-network-ethernet.png"),
-        tr("RAS"),
-        common::kSystemInfo_Ras);
-
     network_category->addChild(network_adapters);
     network_category->addChild(routes);
     network_category->addChild(connections);
     network_category->addChild(network_shares);
-    network_category->addChild(ras);
 
     //----------------------------------------------------------------------------------------------
     // TOP LEVEL CATEGORIES
@@ -285,13 +283,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         document.print(&printer);
     });
 
-    connect(ui.action_refresh, &QAction::triggered, this, [this]()
-    {
-        ui.tree_category->setEnabled(false);
-        ui.widget->setEnabled(false);
-
-        sendSystemInfoRequest(sys_info_widgets_[current_widget_]->category());
-    });
+    connect(ui.action_refresh, &QAction::triggered, this, &SystemInfoWindow::onRefresh);
 
     connect(ui.tree_category, &QTreeWidget::itemClicked,
             this, &SystemInfoWindow::onCategoryItemClicked);
@@ -299,23 +291,20 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     layout_ = new QHBoxLayout(ui.widget);
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(sys_info_widgets_[current_widget_]);
+
+    QTimer::singleShot(0, this, &SystemInfoWindow::onRefresh);
 }
 
 SystemInfoWindow::~SystemInfoWindow() = default;
 
 void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
 {
-    ui.tree_category->setEnabled(true);
-    ui.widget->setEnabled(true);
+    for (int i = 0; i < sys_info_widgets_.count(); ++i)
+    {
+        SysInfoWidget* widget = sys_info_widgets_[i];
 
-    if (system_info.footer().category().empty())
-    {
-        for (int i = 0; i < sys_info_widgets_.count(); ++i)
-            sys_info_widgets_[i]->setSystemInfo(system_info);
-    }
-    else
-    {
-        sys_info_widgets_[current_widget_]->setSystemInfo(system_info);
+        if (widget->category() == system_info.footer().category())
+            widget->setSystemInfo(system_info);
     }
 }
 
@@ -350,12 +339,10 @@ void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* colum
     }
 }
 
-void SystemInfoWindow::sendSystemInfoRequest(const std::string& category)
+void SystemInfoWindow::onRefresh()
 {
-    proto::SystemInfoRequest request;
-    request.set_category(category);
-
-    emit systemInfoRequired(request.SerializeAsString());
+    for (int i = 0; i < sys_info_widgets_.count(); ++i)
+        emit systemInfoRequired(sys_info_widgets_[i]->request());
 }
 
 } // namespace client

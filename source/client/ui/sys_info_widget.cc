@@ -48,6 +48,13 @@ SysInfoWidget::SysInfoWidget(QWidget* parent)
     // Nothing
 }
 
+proto::SystemInfoRequest SysInfoWidget::request() const
+{
+    proto::SystemInfoRequest system_info_request;
+    system_info_request.set_category(category());
+    return system_info_request;
+}
+
 // static
 QString SysInfoWidget::sizeToString(int64_t size)
 {

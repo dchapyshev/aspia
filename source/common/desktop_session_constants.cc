@@ -53,6 +53,5 @@ const char kSystemInfo_NetworkAdapters[] = "network_adapters";
 const char kSystemInfo_Routes[] = "routes";
 const char kSystemInfo_Connections[] = "connections";
 const char kSystemInfo_NetworkShares[] = "network_shares";
-const char kSystemInfo_Ras[] = "ras";
 
 } // namespace common

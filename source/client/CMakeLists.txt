@@ -193,9 +193,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_printers.cc
     ui/sys_info_widget_printers.h
     ui/sys_info_widget_printers.ui
-    ui/sys_info_widget_ras.cc
-    ui/sys_info_widget_ras.h
-    ui/sys_info_widget_ras.ui
     ui/sys_info_widget_routes.cc
     ui/sys_info_widget_routes.h
     ui/sys_info_widget_routes.ui

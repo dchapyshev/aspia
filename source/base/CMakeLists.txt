@@ -203,7 +203,9 @@ list(APPEND SOURCE_BASE_CODEC
     codec/webm_file_writer.cc
     codec/webm_file_writer.h
     codec/webm_video_encoder.cc
-    codec/webm_video_encoder.h)
+    codec/webm_video_encoder.h
+    codec/zstd_compress.cc
+    codec/zstd_compress.h)
 
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc
@@ -590,6 +592,8 @@ if (WIN32)
         win/device_enumerator.h
         win/drive_enumerator.cc
         win/drive_enumerator.h
+        win/event_enumerator.cc
+        win/event_enumerator.h
         win/file_version_info.cc
         win/file_version_info.h
         win/message_window.cc

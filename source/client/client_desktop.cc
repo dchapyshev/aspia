@@ -319,12 +319,12 @@ void ClientDesktop::onRemoteUpdate()
     sendMessage(*outgoing_message);
 }
 
-void ClientDesktop::onSystemInfoRequest(const std::string& request)
+void ClientDesktop::onSystemInfoRequest(const proto::SystemInfoRequest& request)
 {
     proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
     proto::DesktopExtension* extension = outgoing_message->mutable_extension();
     extension->set_name(common::kSystemInfoExtension);
-    extension->set_data(request);
+    extension->set_data(request.SerializeAsString());
 
     sendMessage(*outgoing_message);
 }

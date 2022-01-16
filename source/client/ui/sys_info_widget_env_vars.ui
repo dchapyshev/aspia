@@ -31,9 +31,6 @@
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
      </property>
