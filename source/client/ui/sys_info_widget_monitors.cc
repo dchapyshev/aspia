@@ -21,6 +21,8 @@
 #include "base/macros_magic.h"
 #include "common/desktop_session_constants.h"
 
+#include <cmath>
+
 #include <QMenu>
 
 namespace client {

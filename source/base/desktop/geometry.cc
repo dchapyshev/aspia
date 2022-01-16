@@ -19,6 +19,7 @@
 #include "base/desktop/geometry.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace base {
 

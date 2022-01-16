@@ -48,12 +48,30 @@ bool ScreenCapturerX11::selectScreen(ScreenId /* screen_id */)
     return false;
 }
 
+ScreenCapturer::ScreenId ScreenCapturerX11::currentScreen() const
+{
+    NOTIMPLEMENTED();
+    return kInvalidScreenId;
+}
+
 const Frame* ScreenCapturerX11::captureFrame(Error* error)
 {
     DCHECK(error);
     NOTIMPLEMENTED();
     *error = Error::PERMANENT;
     return nullptr;
+}
+
+const MouseCursor* ScreenCapturerX11::captureCursor()
+{
+    NOTIMPLEMENTED();
+    return nullptr;
+}
+
+Point ScreenCapturerX11::cursorPosition()
+{
+    NOTIMPLEMENTED();
+    return Point();
 }
 
 void ScreenCapturerX11::reset()

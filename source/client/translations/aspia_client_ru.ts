@@ -3045,27 +3045,27 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="140"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="142"/>
         <source>Monitor Name</source>
         <translation>Имя монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="143"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="145"/>
         <source>Manufacturer Name</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="146"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="148"/>
         <source>Monitor ID</source>
         <translation>ID монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="149"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="151"/>
         <source>Serial Number</source>
         <translation>Серийный номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="153"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="155"/>
         <source>EDID Version</source>
         <translation>Версия EDID</translation>
     </message>
@@ -3082,7 +3082,7 @@
         <translation type="vanished">Год производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="165"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="167"/>
         <source>Gamma</source>
         <translation>Гамма</translation>
     </message>
@@ -3099,7 +3099,7 @@
         <translation type="vanished">Вертикальный размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="182"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="184"/>
         <source>Diagonal Size</source>
         <translation>Размер диагонали</translation>
     </message>
@@ -3132,7 +3132,7 @@
         <translation type="vanished">Минимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="232"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="234"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
@@ -3141,113 +3141,113 @@
         <translation type="vanished">Максимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="159"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="161"/>
         <source>Date Of Manufacture</source>
         <translation>Дата производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="160"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="162"/>
         <source>Week %1 / %2</source>
         <translation>Неделя %1 / %2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="169"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="171"/>
         <source>Image Size</source>
         <translation>Размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="170"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="172"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="187"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="189"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="194"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="196"/>
         <source>Horizontal Frequency</source>
         <translation>Частота строк</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="195"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="197"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 кГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="201"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="203"/>
         <source>Vertical Frequency</source>
         <translation>Частота кадров</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="202"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="204"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Гц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="209"/>
         <source>Pixel Clock</source>
         <translation>Пиксельная частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="210"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="209"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="210"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
         <source>Maximum Pixel Clock</source>
         <translation>Максимальная пиксельная частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="216"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="216"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="221"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="225"/>
         <source>Supported Features</source>
         <translation>Поддерживаемые возможности</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="236"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="238"/>
         <source>Supported Video Modes</source>
         <translation>Поддерживаемые видеорежимы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="214"/>
         <source>Input Signal Type</source>
         <translation>Тип входного сигнала</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="279"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="281"/>
         <source>Digital</source>
         <translation>Цифровой</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="282"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="284"/>
         <source>Analog</source>
         <translation>Аналоговый</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="285"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="287"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>

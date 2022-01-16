@@ -23,6 +23,8 @@
 #include "base/logging.h"
 #include "base/strings/string_printf.h"
 
+#include <cstring>
+
 namespace base {
 
 namespace {
@@ -300,7 +302,10 @@ std::string Edid::serialNumber() const
 
 uint8_t* Edid::getDescriptor(int type) const
 {
-    for (size_t index = 0; index < _countof(Data::detailed_timing_description); ++index)
+    size_t count = sizeof(Data::detailed_timing_description) /
+        sizeof(Data::detailed_timing_description[0]);
+
+    for (size_t index = 0; index < count; ++index)
     {
         uint8_t* descriptor = &edid_->detailed_timing_description[index][0];
 
@@ -315,7 +320,7 @@ std::string Edid::manufacturerName() const
 {
     std::string signature = getManufacturerSignature();
 
-    for (size_t i = 0; i < _countof(kManufacturers); ++i)
+    for (size_t i = 0; i < std::size(kManufacturers); ++i)
     {
         if (signature == kManufacturers[i].signature)
             return kManufacturers[i].name;
@@ -441,7 +446,9 @@ uint8_t Edid::manufacturersTimings() const
 
 int Edid::standardTimingsCount() const
 {
-    return _countof(Data::standard_timing_identification);
+    size_t count = sizeof(Data::standard_timing_identification) /
+        sizeof(Data::standard_timing_identification[0]);
+    return static_cast<int>(count);
 }
 
 bool Edid::standardTimings(int index, int* width, int* height, int* frequency)
