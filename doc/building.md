@@ -31,7 +31,7 @@ Windows
 * sqlite3
 * libwebm
 * zstd
-6. Go to the source directory and run the following commands:
+6. Go to the directory with source code (root directory) and run the following commands:
    **<br/>mkdir build
    <br/>cd build
    <br/>cmake ..\ -G "Visual Studio 16 2019" -A Win32 -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
