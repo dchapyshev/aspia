@@ -60,6 +60,9 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     ui.setupUi(this);
     ui.tree->setMouseTracking(true);
 
+    // Hide description column.
+    ui.tree->setColumnHidden(5, true);
+
     ui.combobox_type->addItem(tr("Application"),
         static_cast<uint32_t>(proto::system_info::EventLogs::Event::TYPE_APPLICATION));
     ui.combobox_type->addItem(tr("Security"),
@@ -100,7 +103,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         QString description;
 
         if (current)
-            description = current->data(0, Qt::UserRole).toString();
+            description = current->text(5);
         ui.edit_description->setPlainText(description);
 
         bool enable = !description.isEmpty();
@@ -191,8 +194,8 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::SystemInfo& system_info)
     ui.button_prev->setEnabled(current_page > 0);
     ui.button_next->setEnabled(current_page < ui.combobox_page->count() - 1);
 
-    LOG(LS_WARNING) << "Events count: " << event_logs.event_size();
-    LOG(LS_WARNING) << "Current page: " << current_page << " (total: " << total_records_
+    LOG(LS_INFO) << "Events count: " << event_logs.event_size();
+    LOG(LS_INFO) << "Current page: " << current_page << " (total: " << total_records_
                     << " start: " << start_record_ << ")";
 
     ui.combobox_page->setCurrentIndex(current_page);
@@ -206,12 +209,12 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::SystemInfo& system_info)
         const proto::system_info::EventLogs::Event& event = event_logs.event(i);
 
         EventItem* item = new EventItem(event.time());
-        item->setData(0, Qt::UserRole, QString::fromStdString(event.description()));
         item->setText(0, timeToString(event.time()));
         item->setText(1, levelToString(event.level()));
         item->setText(2, QString::fromStdString(event.category()));
         item->setText(3, QString::number(event.event_id()));
         item->setText(4, QString::fromStdString(event.source()));
+        item->setText(5, QString::fromStdString(event.description()));
 
         switch (event.level())
         {
@@ -265,7 +268,7 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 void SysInfoWidgetEventLogs::onPageActivated(int index)
 {
     start_record_ = static_cast<uint32_t>(index) * kRecordsPerPage;
-    LOG(LS_WARNING) << "Page activated: " << index << " (start: " << start_record_ << ")";
+    LOG(LS_INFO) << "Page activated: " << index << " (start: " << start_record_ << ")";
     emit systemInfoRequest(request());
 }
 

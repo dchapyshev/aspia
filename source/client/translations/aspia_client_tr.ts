@@ -1020,17 +1020,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="172"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="150"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="190"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2508,52 +2509,52 @@
 <context>
     <name>client::SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="63"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="66"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="65"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="68"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="67"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="70"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="315"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="297"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="187"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="190"/>
         <source>Page %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
         <source>Audit Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
         <source>Audit Failure</source>
         <translation type="unfinished"></translation>
     </message>

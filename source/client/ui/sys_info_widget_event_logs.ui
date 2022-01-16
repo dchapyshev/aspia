@@ -145,6 +145,11 @@
         <string>Source</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>Description</string>
+       </property>
+      </column>
      </widget>
      <widget class="QFrame" name="frame_description">
       <property name="frameShape">

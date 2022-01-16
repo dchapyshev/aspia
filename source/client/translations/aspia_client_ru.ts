@@ -1123,12 +1123,13 @@
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="172"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="150"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="190"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
@@ -1137,7 +1138,7 @@
         <translation type="vanished">Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
+        <location filename="../ui/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
@@ -2987,17 +2988,17 @@
 <context>
     <name>client::SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="63"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="66"/>
         <source>Application</source>
         <translation>Приложения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="65"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="68"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="67"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="70"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
@@ -3006,37 +3007,37 @@
         <translation type="vanished">Успешно</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="315"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="297"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="187"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="190"/>
         <source>Page %1/%2</source>
         <translation>Страница %1/%2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
         <source>Audit Success</source>
         <translation>Успех аудита</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
+        <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
         <source>Audit Failure</source>
         <translation>Неудача аудита</translation>
     </message>

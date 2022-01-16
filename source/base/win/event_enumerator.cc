@@ -283,17 +283,17 @@ EventEnumerator::EventEnumerator(std::wstring_view log_name, uint32_t start, uin
 
     records_count_ = records_count;
 
-    current_pos_ = static_cast<int>(first_record + records_count) - static_cast<int>(start) - 1;
+    int end = static_cast<int>(first_record + records_count);
+
+    current_pos_ = end - static_cast<int>(start) - 1;
     if (current_pos_ < static_cast<int>(first_record))
         current_pos_ = static_cast<int>(first_record);
-    else if (current_pos_ > static_cast<int>(first_record + records_count) - 1)
-        current_pos_ = static_cast<int>(first_record + records_count) - 1;
+    else if (current_pos_ > end - 1)
+        current_pos_ = end - 1;
 
-    end_record_ = current_pos_ - static_cast<int>(count);
+    end_record_ = current_pos_ - static_cast<int>(count) + 1;
     if (end_record_ < static_cast<int>(first_record))
         end_record_ = static_cast<int>(first_record);
-    else if (end_record_ > static_cast<int>(first_record + records_count))
-        end_record_ = static_cast<int>(first_record + records_count);
 
     LOG(LS_INFO) << "Log name: " << log_name_;
     LOG(LS_INFO) << "First: " << first_record << " count: " << records_count
