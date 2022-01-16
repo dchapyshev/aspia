@@ -18,6 +18,8 @@
 
 #include "third_party/tbb_c_allocator/tbb_c_allocator.h"
 
+#include <cstdlib>
+
 #if defined(USE_TBB_ALLOCATOR)
 #include <tbb/scalable_allocator.h>
 #endif

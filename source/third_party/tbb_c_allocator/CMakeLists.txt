@@ -21,5 +21,5 @@ list(APPEND SOURCE_TBB_C_ALLOCATOR tbb_c_allocator.cc tbb_c_allocator.h)
 source_group("" FILES ${SOURCE_TBB_C_ALLOCATOR})
 
 add_library(tbb_c_allocator STATIC ${SOURCE_TBB_C_ALLOCATOR})
-target_link_libraries(tbb_c_allocator TBB::tbb TBB::tbbmalloc)
+target_link_libraries(tbb_c_allocator ${TBB_LIBS})
 set_target_properties(tbb_c_allocator PROPERTIES FOLDER third_party)

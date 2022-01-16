@@ -86,6 +86,10 @@ if (WIN32)
         Qt5::QWindowsPrinterSupportPlugin)
 endif()
 
+if (TBB_FOUND)
+    set(TBB_LIBS TBB::tbb TBB::tbbmalloc)
+endif()
+
 set(THIRD_PARTY_LIBS
     protobuf::libprotobuf-lite
     zstd::libzstd_static
@@ -97,8 +101,7 @@ set(THIRD_PARTY_LIBS
     unofficial::libvpx::libvpx
     x11region
     yuv
-    TBB::tbb
-    TBB::tbbmalloc)
+    ${TBB_LIBS})
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 
