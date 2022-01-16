@@ -54,12 +54,6 @@ find_package(TBB CONFIG) # Optional component
 
 message(STATUS "TBB found: ${TBB_FOUND}")
 
-find_library(WEBM_RELEASE_LIB NAMES libwebm webm NO_DEFAULT_PATH PATHS "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib" REQUIRED)
-find_library(WEBM_DEBUG_LIB NAMES libwebm libwebmd webm NO_DEFAULT_PATH PATHS "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib" REQUIRED)
-
-message(STATUS "WebM Release: ${WEBM_RELEASE_LIB}")
-message(STATUS "WebM Debug: ${WEBM_DEBUG_LIB}")
-
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)
 endif()

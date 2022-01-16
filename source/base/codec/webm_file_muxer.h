@@ -26,8 +26,8 @@
 #include <memory>
 #include <string>
 
-#include <libwebm/mkvmuxer.hpp>
-#include <libwebm/mkvwriter.hpp>
+#include "third_party/libwebm/mkvmuxer.hpp"
+#include "third_party/libwebm/mkvwriter.hpp"
 
 namespace base {
 

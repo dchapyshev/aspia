@@ -1,6 +1,6 @@
 #
 # Aspia Project
-# Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+# Copyright (C) 2022 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,15 +16,23 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(libwebm)
-add_subdirectory(modp_b64)
-add_subdirectory(tbb_c_allocator)
-add_subdirectory(x11region)
+list(APPEND SOURCE_LIBWEBM
+    common/webmids.h
+    mkvmuxer/mkvmuxer.cc
+    mkvmuxer/mkvmuxer.h
+    mkvmuxer/mkvmuxertypes.h
+    mkvmuxer/mkvmuxerutil.cc
+    mkvmuxer/mkvmuxerutil.h
+    mkvmuxer/mkvwriter.cc
+    mkvmuxer/mkvwriter.h
+    mkvparser/mkvparser.cc
+    mkvparser/mkvparser.h
+    mkvparser/mkvreader.cc
+    mkvparser/mkvreader.h)
 
-if (APPLE)
-    add_subdirectory(portaudio)
-endif()
+source_group("" FILES ${SOURCE_LIBWEBM})
 
-if (LINUX)
-    add_subdirectory(xdg_user_dirs)
-endif()
+add_library(libwebm STATIC ${SOURCE_LIBWEBM})
+target_link_libraries(libwebm)
+target_include_directories(libwebm PRIVATE ${CMAKE_SOURCE_DIR})
+set_target_properties(libwebm PROPERTIES FOLDER third_party)
