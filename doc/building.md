@@ -14,7 +14,7 @@ Windows
 
    2.4. **English language pack** (required for vcpkg).
 
-3. Download and install [CMake](https://cmake.org/download).
+3. Download and install [CMake](https://cmake.org/download) (version >= 3.17.0).
 4. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg) (forked from Microsoft repository).
 5. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
 * asio
