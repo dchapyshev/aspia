@@ -79,8 +79,7 @@ bool CursorEncoder::compressCursor(
     }
 
     const ByteArray& image = mouse_cursor.constImage();
-
-    if (!image.data() || !image.size())
+    if (image.empty())
     {
         LOG(LS_WARNING) << "Invalid cursor image buffer";
         return false;

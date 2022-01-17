@@ -100,7 +100,8 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     LOG(LS_INFO) << "Preffered relay: " << preffered_relay->first;
 
-    if (preffered_relay->second.empty())
+    std::vector<proto::RelayKey>& keys = preffered_relay->second;
+    if (keys.empty())
     {
         LOG(LS_ERROR) << "Empty key pool for relay";
         return std::nullopt;
@@ -108,12 +109,12 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     Credentials credentials;
     credentials.session_id = preffered_relay->first;
-    credentials.key = std::move(preffered_relay->second.back());
+    credentials.key = std::move(keys.back());
 
     // Removing the key from the pool.
-    preffered_relay->second.pop_back();
+    keys.pop_back();
 
-    if (preffered_relay->second.empty())
+    if (keys.empty())
     {
         LOG(LS_INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
         pool_.erase(preffered_relay->first);

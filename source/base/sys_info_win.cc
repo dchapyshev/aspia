@@ -257,7 +257,6 @@ int64_t SysInfo::operatingSystemInstallDate()
                            access);
     if (status == ERROR_SUCCESS)
     {
-        std::wstring value;
         DWORD install_date;
 
         status = key.readValueDW(L"InstallDate", &install_date);

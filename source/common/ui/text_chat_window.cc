@@ -175,7 +175,8 @@ void TextChatWindow::addOutgoingMessage(time_t timestamp, const QString& message
 
 void TextChatWindow::onSendMessage()
 {
-    QString message = ui->edit_message->text();
+    QLineEdit* edit_message = ui->edit_message;
+    QString message = edit_message->text();
     if (message.isEmpty())
         return;
 
@@ -192,8 +193,8 @@ void TextChatWindow::onSendMessage()
     int64_t timestamp = QDateTime::currentSecsSinceEpoch();
 
     addOutgoingMessage(timestamp, message);
-    ui->edit_message->clear();
-    ui->edit_message->setFocus();
+    edit_message->clear();
+    edit_message->setFocus();
 
     proto::TextChatMessage text_chat_message;
     text_chat_message.set_timestamp(timestamp);

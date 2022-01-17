@@ -29,6 +29,11 @@ namespace client {
 
 namespace {
 
+bool isDoubleEqual(double first, double second)
+{
+    return (std::fabs(first - second) < DBL_EPSILON);
+}
+
 class Item : public QTreeWidgetItem
 {
 public:
@@ -163,7 +168,7 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::SystemInfo& system_info)
                                           .arg(monitor.year_of_manufacture()));
         }
 
-        if (monitor.gamma() != 0.0)
+        if (!isDoubleEqual(monitor.gamma(), 0.0))
             group << mk(tr("Gamma"), QString::number(monitor.gamma(), 'f', 1));
 
         if (monitor.max_horizontal_image_size() != 0 && monitor.max_vertical_image_size() != 0)
@@ -171,10 +176,7 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::SystemInfo& system_info)
             group << mk(tr("Image Size"),
                         tr("%1x%2 cm").arg(monitor.max_horizontal_image_size())
                                       .arg(monitor.max_vertical_image_size()));
-        }
 
-        if (monitor.max_horizontal_image_size() != 0 && monitor.max_vertical_image_size() != 0)
-        {
             // Calculate the monitor diagonal by the Pythagorean theorem and translate from
             // centimeters to inches.
             double diagonal_size =
@@ -205,7 +207,7 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::SystemInfo& system_info)
                                         .arg(monitor.max_vertical_rate()));
         }
 
-        if (monitor.pixel_clock() != 0.0)
+        if (!isDoubleEqual(monitor.pixel_clock(), 0.0))
             group << mk(tr("Pixel Clock"), tr("%1 MHz").arg(monitor.pixel_clock()));
 
         if (monitor.max_pixel_clock() != 0)
