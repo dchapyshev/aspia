@@ -19,12 +19,14 @@ void build(Solution &s)
     auto &aspia = s.addProject("aspia", "master");
     aspia += Git("https://github.com/dchapyshev/aspia", "", "{v}");
 
+    constexpr auto cppstd = cpp17;
+
     auto setup_target = [&aspia](auto &t, const String &name, bool add_tests = false, String dir = {}) -> decltype(auto)
     {
         if (dir.empty())
             dir = name;
 
-        t += cpp17;
+        t += cppstd;
         t.Public += "."_idir;
         t.setRootDirectory(dir);
         t += IncludeDirectory("."s);
@@ -65,7 +67,7 @@ void build(Solution &s)
         if (add_tests)
         {
             auto &bt = t.addExecutable("test");
-            bt += cpp17;
+            bt += cppstd;
             bt += FileRegex(dir, ".*_unittest.*", true);
             bt += t;
             bt += "org.sw.demo.google.googletest.gmock"_dep;
@@ -95,6 +97,7 @@ void build(Solution &s)
     auto &base = aspia.addStaticLibrary("base");
     base += "third_party/modp_b64/.*\\.[hc]"_rr;
     base += "third_party/x11region/.*\\.[hc]"_rr;
+    base += "third_party/tbb_c_allocator/.*"_rr;
     base -= "build/.*"_rr;
     setup_target(base, "base", false);
     base.Public += "UNICODE"_def;
@@ -118,17 +121,24 @@ void build(Solution &s)
     {
         base -= "x11/.*"_rr;
         base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
-        base += "Dbghelp.lib"_slib, "Mswsock.lib"_slib, "Avrt.lib"_slib, "comsuppw.lib"_slib, "Winspool.lib"_slib;
+        base +=
+            "Dbghelp.lib"_slib,
+            "Mswsock.lib"_slib,
+            "Avrt.lib"_slib,
+            "comsuppw.lib"_slib,
+            "Winspool.lib"_slib,
+            "Setupapi.lib"_slib
+            ;
     }
     automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 
     auto &relay = aspia.addExecutable("relay");
-    relay += cpp17;
+    relay += cppstd;
     relay += "relay/.*"_rr;
     relay += base;
 
     auto &router = aspia.addExecutable("router");
-    router += cpp17;
+    router += cppstd;
     router += "router/.*"_rr;
     router += base;
     router += "org.sw.demo.sqlite3"_dep;
