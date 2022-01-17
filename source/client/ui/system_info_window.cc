@@ -306,6 +306,18 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
         if (widget->category() == system_info.footer().category())
             widget->setSystemInfo(system_info);
     }
+
+    SysInfoWidget* current = sys_info_widgets_[current_widget_];
+    if (current->treeWidget()->topLevelItemCount() == 0)
+    {
+        ui.action_save->setEnabled(false);
+        ui.action_print->setEnabled(false);
+    }
+    else
+    {
+        ui.action_save->setEnabled(true);
+        ui.action_print->setEnabled(true);
+    }
 }
 
 void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
@@ -336,6 +348,18 @@ void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* colum
             widget->setVisible(true);
             break;
         }
+    }
+
+    SysInfoWidget* current = sys_info_widgets_[current_widget_];
+    if (current->treeWidget()->topLevelItemCount() == 0)
+    {
+        ui.action_save->setEnabled(false);
+        ui.action_print->setEnabled(false);
+    }
+    else
+    {
+        ui.action_save->setEnabled(true);
+        ui.action_print->setEnabled(true);
     }
 }
 
