@@ -66,7 +66,7 @@ public:
     void onMouseEvent(const proto::MouseEvent& event) override;
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
-    void onSystemInfoRequest(const proto::SystemInfoRequest& request) override;
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
     void onMetricsRequest() override;
 
 protected:

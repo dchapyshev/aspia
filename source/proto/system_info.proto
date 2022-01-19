@@ -441,3 +441,40 @@ message Connections
 
     repeated Connection connection = 1;
 }
+
+message SystemInfoRequest
+{
+    string category = 1;
+    // Fields 2 - 10: Reserved.
+    EventLogsData event_logs_data = 11;
+}
+
+message SystemInfoFooter
+{
+    string category = 1;
+}
+
+message SystemInfo
+{
+    Computer computer                = 1;
+    OperatingSystem operating_system = 2;
+    Motherboard motherboard          = 3;
+    Bios bios                        = 4;
+    Processor processor              = 5;
+    Memory memory                    = 6;
+    LogicalDrives logical_drives     = 7;
+    Printers printers                = 8;
+    NetworkAdapters network_adapters = 9;
+    NetworkShares network_shares     = 10;
+    WindowsDevices windows_devices   = 11;
+    VideoAdapters video_adapters     = 12;
+    Monitors monitors                = 13;
+    PowerOptions power_options       = 14;
+    Drivers drivers                  = 15;
+    Services services                = 16;
+    EnvironmentVariables env_vars    = 17;
+    EventLogs event_logs             = 18;
+    Routes routes                    = 19;
+    Connections connections          = 20;
+    SystemInfoFooter footer          = 128000;
+}

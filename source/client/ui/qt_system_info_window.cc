@@ -16,9 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/system_info_window.h"
+#include "client/ui/qt_system_info_window.h"
 
 #include "base/logging.h"
+#include "client/client_system_info.h"
+#include "client/system_info_control_proxy.h"
 #include "client/ui/sys_info_widget_connections.h"
 #include "client/ui/sys_info_widget_devices.h"
 #include "client/ui/sys_info_widget_drivers.h"
@@ -34,7 +36,9 @@
 #include "client/ui/sys_info_widget_summary.h"
 #include "client/ui/sys_info_widget_video_adapters.h"
 #include "client/ui/tree_to_html.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
+#include "qt_base/application.h"
+#include "ui_qt_system_info_window.h"
 
 #include <QClipboard>
 #include <QDateTime>
@@ -43,7 +47,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
-#include <QTimer>
 
 namespace client {
 
@@ -78,15 +81,18 @@ private:
 
 } // namespace
 
-SystemInfoWindow::SystemInfoWindow(QWidget* parent)
-    : QMainWindow(parent)
+QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
+    : SessionWindow(parent),
+      ui(std::make_unique<Ui::SystemInfoWindow>()),
+      system_info_window_proxy_(
+          std::make_shared<SystemInfoWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     QList<int> sizes;
     sizes.push_back(210);
     sizes.push_back(width() - 210);
-    ui.splitter->setSizes(sizes);
+    ui->splitter->setSizes(sizes);
 
     sys_info_widgets_.append(new SysInfoWidgetSummary(this));
     sys_info_widgets_.append(new SysInfoWidgetDevices(this));
@@ -109,11 +115,20 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
             sys_info_widgets_[i]->hide();
 
         connect(sys_info_widgets_[i], &SysInfoWidget::systemInfoRequest,
-                this, &SystemInfoWindow::systemInfoRequired);
+                this, [=](const proto::system_info::SystemInfoRequest& request)
+        {
+            if (system_info_control_proxy_)
+                system_info_control_proxy_->onSystemInfoRequest(request);
+
+            emit systemInfoRequired(request);
+        });
     }
 
     CategoryItem* summary_category = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM, QStringLiteral(":/img/computer.png"), tr("Summary"));
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/computer.png"),
+        tr("Summary"),
+        common::kSystemInfo_Summary);
 
     //----------------------------------------------------------------------------------------------
     // HARDWARE
@@ -234,17 +249,17 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     // TOP LEVEL CATEGORIES
     //----------------------------------------------------------------------------------------------
 
-    ui.tree_category->addTopLevelItem(summary_category);
-    ui.tree_category->addTopLevelItem(hardware_category);
-    ui.tree_category->addTopLevelItem(software_category);
-    ui.tree_category->addTopLevelItem(network_category);
+    ui->tree_category->addTopLevelItem(summary_category);
+    ui->tree_category->addTopLevelItem(hardware_category);
+    ui->tree_category->addTopLevelItem(software_category);
+    ui->tree_category->addTopLevelItem(network_category);
 
-    for (int i = 0; i < ui.tree_category->topLevelItemCount(); ++i)
-        ui.tree_category->expandItem(ui.tree_category->topLevelItem(i));
+    for (int i = 0; i < ui->tree_category->topLevelItemCount(); ++i)
+        ui->tree_category->expandItem(ui->tree_category->topLevelItem(i));
 
-    ui.tree_category->setCurrentItem(summary_category);
+    ui->tree_category->setCurrentItem(summary_category);
 
-    connect(ui.action_save, &QAction::triggered, this, [this]()
+    connect(ui->action_save, &QAction::triggered, this, [this]()
     {
         QString file_path =
             QFileDialog::getSaveFileName(this,
@@ -267,7 +282,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         }
     });
 
-    connect(ui.action_print, &QAction::triggered, this, [this]()
+    connect(ui->action_print, &QAction::triggered, this, [this]()
     {
         QString html = treeToHtmlString(sys_info_widgets_[current_widget_]->treeWidget());
 
@@ -283,21 +298,41 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         document.print(&printer);
     });
 
-    connect(ui.action_refresh, &QAction::triggered, this, &SystemInfoWindow::onRefresh);
+    connect(ui->action_refresh, &QAction::triggered, this, &QtSystemInfoWindow::onRefresh);
 
-    connect(ui.tree_category, &QTreeWidget::itemClicked,
-            this, &SystemInfoWindow::onCategoryItemClicked);
+    connect(ui->tree_category, &QTreeWidget::itemClicked,
+            this, &QtSystemInfoWindow::onCategoryItemClicked);
 
-    layout_ = new QHBoxLayout(ui.widget);
+    layout_ = new QHBoxLayout(ui->widget);
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(sys_info_widgets_[current_widget_]);
-
-    QTimer::singleShot(0, this, &SystemInfoWindow::onRefresh);
 }
 
-SystemInfoWindow::~SystemInfoWindow() = default;
+QtSystemInfoWindow::~QtSystemInfoWindow()
+{
+    LOG(LS_INFO) << "Dtor";
+    system_info_window_proxy_->dettach();
+}
 
-void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
+std::unique_ptr<Client> QtSystemInfoWindow::createClient()
+{
+    std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>(
+        qt_base::Application::ioTaskRunner());
+
+    client->setSystemInfoWindow(system_info_window_proxy_);
+
+    return std::move(client);
+}
+
+void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy)
+{
+    system_info_control_proxy_ = std::move(system_info_control_proxy);
+    show();
+    activateWindow();
+    onRefresh();
+}
+
+void QtSystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -310,17 +345,17 @@ void SystemInfoWindow::setSystemInfo(const proto::SystemInfo& system_info)
     SysInfoWidget* current = sys_info_widgets_[current_widget_];
     if (current->treeWidget()->topLevelItemCount() == 0)
     {
-        ui.action_save->setEnabled(false);
-        ui.action_print->setEnabled(false);
+        ui->action_save->setEnabled(false);
+        ui->action_print->setEnabled(false);
     }
     else
     {
-        ui.action_save->setEnabled(true);
-        ui.action_print->setEnabled(true);
+        ui->action_save->setEnabled(true);
+        ui->action_print->setEnabled(true);
     }
 }
 
-void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
+void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);
     if (!category_item)
@@ -353,20 +388,27 @@ void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* colum
     SysInfoWidget* current = sys_info_widgets_[current_widget_];
     if (current->treeWidget()->topLevelItemCount() == 0)
     {
-        ui.action_save->setEnabled(false);
-        ui.action_print->setEnabled(false);
+        ui->action_save->setEnabled(false);
+        ui->action_print->setEnabled(false);
     }
     else
     {
-        ui.action_save->setEnabled(true);
-        ui.action_print->setEnabled(true);
+        ui->action_save->setEnabled(true);
+        ui->action_print->setEnabled(true);
     }
 }
 
-void SystemInfoWindow::onRefresh()
+void QtSystemInfoWindow::onRefresh()
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
-        emit systemInfoRequired(sys_info_widgets_[i]->request());
+    {
+        proto::system_info::SystemInfoRequest request = sys_info_widgets_[i]->request();
+
+        if (system_info_control_proxy_)
+            system_info_control_proxy_->onSystemInfoRequest(request);
+
+        emit systemInfoRequired(request);
+    }
 }
 
 } // namespace client

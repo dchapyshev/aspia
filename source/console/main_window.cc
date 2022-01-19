@@ -23,6 +23,7 @@
 #include "build/version.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "client/ui/qt_system_info_window.h"
 #include "client/ui/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
@@ -122,6 +123,9 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_file_transfer_connect, &QAction::triggered,
             this, &MainWindow::onFileTransferConnect);
 
+    connect(ui.action_system_info_connect, &QAction::triggered,
+            this, &MainWindow::onSystemInfoConnect);
+
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
         Application* instance = Application::instance();
@@ -141,6 +145,7 @@ MainWindow::MainWindow(const QString& file_path)
     session_type_group->addAction(ui.action_desktop_manage);
     session_type_group->addAction(ui.action_desktop_view);
     session_type_group->addAction(ui.action_file_transfer);
+    session_type_group->addAction(ui.action_system_info);
 
     switch (settings.sessionType())
     {
@@ -154,6 +159,10 @@ MainWindow::MainWindow(const QString& file_path)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
+            break;
+
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            ui.action_system_info->setChecked(true);
             break;
 
         default:
@@ -486,6 +495,21 @@ void MainWindow::onFileTransferConnect()
     }
 }
 
+void MainWindow::onSystemInfoConnect()
+{
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+    {
+        ComputerItem* computer_item = tab->currentComputer();
+        if (computer_item)
+        {
+            proto::address_book::Computer* computer = computer_item->computer();
+            computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+            connectToComputer(*computer, tab->routerConfig());
+        }
+    }
+}
+
 void MainWindow::onCurrentTabChanged(int index)
 {
     if (index == -1)
@@ -662,6 +686,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
         menu.addAction(ui.action_desktop_manage_connect);
         menu.addAction(ui.action_desktop_view_connect);
         menu.addAction(ui.action_file_transfer_connect);
+        menu.addAction(ui.action_system_info_connect);
         menu.addSeparator();
         menu.addAction(ui.action_modify_computer);
         menu.addAction(ui.action_copy_computer);
@@ -696,6 +721,10 @@ void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer
     else if (ui.action_file_transfer->isChecked())
     {
         computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+    }
+    else if (ui.action_system_info->isChecked())
+    {
+        computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
     }
     else
     {
@@ -955,6 +984,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
         settings.setSessionType(proto::SESSION_TYPE_DESKTOP_VIEW);
     else if (ui.action_file_transfer->isChecked())
         settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
+    else if (ui.action_system_info->isChecked())
+        settings.setSessionType(proto::SESSION_TYPE_SYSTEM_INFO);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -1189,6 +1220,10 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             session_window = new client::QtFileManagerWindow();
+            break;
+
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            session_window = new client::QtSystemInfoWindow();
             break;
 
         default:

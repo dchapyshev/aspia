@@ -36,13 +36,13 @@
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 namespace host {
 
 namespace {
 
-void fillDevices(proto::SystemInfo* system_info)
+void fillDevices(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::DeviceEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -58,7 +58,7 @@ void fillDevices(proto::SystemInfo* system_info)
     }
 }
 
-void fillPrinters(proto::SystemInfo* system_info)
+void fillPrinters(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::PrinterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -75,7 +75,7 @@ void fillPrinters(proto::SystemInfo* system_info)
     }
 }
 
-void fillNetworkAdapters(proto::SystemInfo* system_info)
+void fillNetworkAdapters(proto::system_info::SystemInfo* system_info)
 {
     for (base::AdapterEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -119,7 +119,7 @@ void fillNetworkAdapters(proto::SystemInfo* system_info)
     }
 }
 
-void fillNetworkShares(proto::SystemInfo* system_info)
+void fillNetworkShares(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::NetShareEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -166,7 +166,7 @@ void fillNetworkShares(proto::SystemInfo* system_info)
     }
 }
 
-void fillServices(proto::SystemInfo* system_info)
+void fillServices(proto::system_info::SystemInfo* system_info)
 {
     using ServiceEnumerator = base::win::ServiceEnumerator;
 
@@ -248,7 +248,7 @@ void fillServices(proto::SystemInfo* system_info)
     }
 }
 
-void fillDrivers(proto::SystemInfo* system_info)
+void fillDrivers(proto::system_info::SystemInfo* system_info)
 {
     using ServiceEnumerator = base::win::ServiceEnumerator;
 
@@ -328,7 +328,7 @@ void fillDrivers(proto::SystemInfo* system_info)
     }
 }
 
-void fillMonitors(proto::SystemInfo* system_info)
+void fillMonitors(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::MonitorEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -479,7 +479,7 @@ void fillMonitors(proto::SystemInfo* system_info)
     }
 }
 
-void fillConnection(proto::SystemInfo* system_info)
+void fillConnection(proto::system_info::SystemInfo* system_info)
 {
     for (base::ConnectEnumerator enumerator(base::ConnectEnumerator::Mode::TCP);
          !enumerator.isAtEnd();
@@ -511,7 +511,7 @@ void fillConnection(proto::SystemInfo* system_info)
     }
 }
 
-void fillRoutes(proto::SystemInfo* system_info)
+void fillRoutes(proto::system_info::SystemInfo* system_info)
 {
     for (base::RouteEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -524,7 +524,7 @@ void fillRoutes(proto::SystemInfo* system_info)
     }
 }
 
-void fillEnvironmentVariables(proto::SystemInfo* system_info)
+void fillEnvironmentVariables(proto::system_info::SystemInfo* system_info)
 {
     std::vector<std::pair<std::string, std::string>> list = base::Environment::list();
 
@@ -538,7 +538,7 @@ void fillEnvironmentVariables(proto::SystemInfo* system_info)
     }
 }
 
-void fillVideoAdapters(proto::SystemInfo* system_info)
+void fillVideoAdapters(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::VideoAdapterEnumarator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -557,7 +557,7 @@ void fillVideoAdapters(proto::SystemInfo* system_info)
     }
 }
 
-void fillPowerOptions(proto::SystemInfo* system_info)
+void fillPowerOptions(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::PowerOptions* power_options = system_info->mutable_power_options();
     base::win::PowerInfo power_info;
@@ -643,7 +643,7 @@ void fillPowerOptions(proto::SystemInfo* system_info)
     }
 }
 
-void fillComputer(proto::SystemInfo* system_info)
+void fillComputer(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Computer* computer = system_info->mutable_computer();
     computer->set_name(base::SysInfo::computerName());
@@ -652,7 +652,7 @@ void fillComputer(proto::SystemInfo* system_info)
     computer->set_uptime(base::SysInfo::uptime());
 }
 
-void fillOperatingSystem(proto::SystemInfo* system_info)
+void fillOperatingSystem(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::OperatingSystem* operating_system = system_info->mutable_operating_system();
     operating_system->set_name(base::SysInfo::operatingSystemName());
@@ -662,7 +662,7 @@ void fillOperatingSystem(proto::SystemInfo* system_info)
     operating_system->set_install_date(base::SysInfo::operatingSystemInstallDate());
 }
 
-void fillProcessor(proto::SystemInfo* system_info)
+void fillProcessor(proto::system_info::SystemInfo* system_info)
 {
     proto::system_info::Processor* processor = system_info->mutable_processor();
     processor->set_vendor(base::SysInfo::processorVendor());
@@ -672,7 +672,7 @@ void fillProcessor(proto::SystemInfo* system_info)
     processor->set_threads(static_cast<uint32_t>(base::SysInfo::processorThreads()));
 }
 
-void fillBios(proto::SystemInfo* system_info)
+void fillBios(proto::system_info::SystemInfo* system_info)
 {
     for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
@@ -698,7 +698,7 @@ void fillBios(proto::SystemInfo* system_info)
     }
 }
 
-void fillMotherboard(proto::SystemInfo* system_info)
+void fillMotherboard(proto::system_info::SystemInfo* system_info)
 {
     for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
@@ -725,7 +725,7 @@ void fillMotherboard(proto::SystemInfo* system_info)
     }
 }
 
-void fillMemory(proto::SystemInfo* system_info)
+void fillMemory(proto::system_info::SystemInfo* system_info)
 {
     for (base::SmbiosTableEnumerator enumerator(base::readSmbiosDump());
          !enumerator.isAtEnd(); enumerator.advance())
@@ -764,7 +764,7 @@ void fillMemory(proto::SystemInfo* system_info)
     }
 }
 
-void fillDrives(proto::SystemInfo* system_info)
+void fillDrives(proto::system_info::SystemInfo* system_info)
 {
     for (base::win::DriveEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
@@ -780,7 +780,8 @@ void fillDrives(proto::SystemInfo* system_info)
     }
 }
 
-void fillEventLogs(proto::SystemInfo* system_info, const proto::system_info::EventLogsData& data)
+void fillEventLogs(proto::system_info::SystemInfo* system_info,
+                   const proto::system_info::EventLogsData& data)
 {
     const wchar_t* log_name;
     switch (data.type())
@@ -853,7 +854,7 @@ void fillEventLogs(proto::SystemInfo* system_info, const proto::system_info::Eve
     }
 }
 
-void fillSummaryInfo(proto::SystemInfo* system_info)
+void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
     fillOperatingSystem(system_info);
@@ -866,7 +867,8 @@ void fillSummaryInfo(proto::SystemInfo* system_info)
 
 } // namespace
 
-void createSystemInfo(const proto::SystemInfoRequest& request, proto::SystemInfo* system_info)
+void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
+                      proto::system_info::SystemInfo* system_info)
 {
     if (request.category().empty())
     {
@@ -875,17 +877,16 @@ void createSystemInfo(const proto::SystemInfoRequest& request, proto::SystemInfo
     }
 
     const std::string& category = request.category();
-    if (category.empty())
-    {
-        LOG(LS_WARNING) << "Unable to get system info category";
-        return;
-    }
 
     LOG(LS_INFO) << "Requested system info category: " << category;
 
     system_info->mutable_footer()->set_category(category);
 
-    if (category == common::kSystemInfo_Devices)
+    if (category == common::kSystemInfo_Summary)
+    {
+        fillSummaryInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_Devices)
     {
         fillDevices(system_info);
     }

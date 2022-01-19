@@ -19,7 +19,7 @@
 #ifndef CLIENT__UI__SYS_INFO_H
 #define CLIENT__UI__SYS_INFO_H
 
-#include "proto/desktop_extensions.pb.h"
+#include "proto/system_info.pb.h"
 
 #include <QWidget>
 #include <QTreeWidgetItem>
@@ -34,8 +34,8 @@ public:
     ~SysInfoWidget() = default;
 
     virtual std::string category() const = 0;
-    virtual proto::SystemInfoRequest request() const;
-    virtual void setSystemInfo(const proto::SystemInfo& system_info) = 0;
+    virtual proto::system_info::SystemInfoRequest request() const;
+    virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
     virtual QTreeWidget* treeWidget() = 0;
 
     static QString sizeToString(int64_t size);
@@ -44,7 +44,7 @@ public:
     static QString timeToString(time_t time);
 
 signals:
-    void systemInfoRequest(const proto::SystemInfoRequest& request);
+    void systemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
 protected:
     SysInfoWidget(QWidget* parent = nullptr);

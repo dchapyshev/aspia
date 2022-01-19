@@ -319,7 +319,7 @@ void ClientDesktop::onRemoteUpdate()
     sendMessage(*outgoing_message);
 }
 
-void ClientDesktop::onSystemInfoRequest(const proto::SystemInfoRequest& request)
+void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
     proto::ClientToHost* outgoing_message = messageFromArena<proto::ClientToHost>();
     proto::DesktopExtension* extension = outgoing_message->mutable_extension();
@@ -607,7 +607,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
-        proto::SystemInfo system_info;
+        proto::system_info::SystemInfo system_info;
 
         if (!system_info.ParseFromString(extension.data()))
         {

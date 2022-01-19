@@ -27,103 +27,103 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="56"/>
+        <location filename="../client_main.cc" line="57"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="364"/>
+        <location filename="../client_main.cc" line="365"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="368"/>
+        <location filename="../client_main.cc" line="369"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="373"/>
+        <location filename="../client_main.cc" line="374"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="377"/>
+        <location filename="../client_main.cc" line="378"/>
         <source>Password of user.</source>
         <translation>Пароль пользователя.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="381"/>
+        <location filename="../client_main.cc" line="382"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="386"/>
+        <location filename="../client_main.cc" line="387"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Тип кодека. Возможные значения: vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="390"/>
+        <location filename="../client_main.cc" line="391"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Глубина цвета. Возможные значения: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="394"/>
+        <location filename="../client_main.cc" line="395"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Уровень сжатия. Возможные значения: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="398"/>
+        <location filename="../client_main.cc" line="399"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Включить или отключить звук. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="402"/>
+        <location filename="../client_main.cc" line="403"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="406"/>
+        <location filename="../client_main.cc" line="407"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="410"/>
+        <location filename="../client_main.cc" line="411"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="415"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="419"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Включить или отключить сглаживание шрифтов. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="423"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Очищать буфер обмена при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="426"/>
+        <location filename="../client_main.cc" line="427"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="430"/>
+        <location filename="../client_main.cc" line="431"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="434"/>
+        <location filename="../client_main.cc" line="435"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="55"/>
-        <location filename="../client_main.cc" line="540"/>
+        <location filename="../client_main.cc" line="56"/>
+        <location filename="../client_main.cc" line="545"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -136,7 +136,7 @@
         <translation type="vanished">Введен некорректный тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="541"/>
+        <location filename="../client_main.cc" line="546"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -1470,7 +1470,7 @@
 <context>
     <name>SystemInfoWindow</name>
     <message>
-        <location filename="../ui/system_info_window.ui" line="14"/>
+        <location filename="../ui/qt_system_info_window.ui" line="14"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
@@ -1483,47 +1483,52 @@
         <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="126"/>
+        <location filename="../ui/qt_system_info_window.ui" line="35"/>
+        <source>toolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.ui" line="108"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="129"/>
+        <location filename="../ui/qt_system_info_window.ui" line="111"/>
         <source>Save (Ctrl+S)</source>
         <translation>Сохранить (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="141"/>
+        <location filename="../ui/qt_system_info_window.ui" line="123"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="144"/>
+        <location filename="../ui/qt_system_info_window.ui" line="126"/>
         <source>Print (Ctrl+P)</source>
         <translation>Печать (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="152"/>
+        <location filename="../ui/qt_system_info_window.ui" line="134"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="157"/>
+        <location filename="../ui/qt_system_info_window.ui" line="139"/>
         <source>Copy Name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="162"/>
+        <location filename="../ui/qt_system_info_window.ui" line="144"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="171"/>
+        <location filename="../ui/qt_system_info_window.ui" line="153"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.ui" line="174"/>
+        <location filename="../ui/qt_system_info_window.ui" line="156"/>
         <source>Refresh (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
@@ -1690,23 +1695,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="119"/>
+        <location filename="../ui/client_window.cc" line="120"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="208"/>
-        <location filename="../ui/client_window.cc" line="225"/>
+        <location filename="../ui/client_window.cc" line="209"/>
+        <location filename="../ui/client_window.cc" line="226"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="209"/>
+        <location filename="../ui/client_window.cc" line="210"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="226"/>
+        <location filename="../ui/client_window.cc" line="227"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -2060,34 +2065,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
-        <location filename="../ui/qt_desktop_window.cc" line="609"/>
+        <location filename="../ui/qt_desktop_window.cc" line="239"/>
+        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="241"/>
+        <location filename="../ui/qt_desktop_window.cc" line="240"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="249"/>
+        <location filename="../ui/qt_desktop_window.cc" line="248"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="587"/>
+        <location filename="../ui/qt_desktop_window.cc" line="597"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="589"/>
+        <location filename="../ui/qt_desktop_window.cc" line="599"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="609"/>
+        <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -2113,6 +2118,114 @@
         <location filename="../ui/qt_file_manager_window.cc" line="87"/>
         <source>Session error: %1</source>
         <translation>Ошибка сессии: %1</translation>
+    </message>
+</context>
+<context>
+    <name>client::QtSystemInfoWindow</name>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="131"/>
+        <source>Summary</source>
+        <translation type="unfinished">Сводка</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="139"/>
+        <source>Hardware</source>
+        <translation type="unfinished">Оборудование</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="144"/>
+        <source>Devices</source>
+        <translation type="unfinished">Устройства</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="150"/>
+        <source>Video Adapters</source>
+        <translation type="unfinished">Видеоадаптеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="156"/>
+        <source>Monitors</source>
+        <translation type="unfinished">Мониторы</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="162"/>
+        <source>Printers</source>
+        <translation type="unfinished">Принтеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="168"/>
+        <source>Power Options</source>
+        <translation type="unfinished">Параметры питания</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="182"/>
+        <source>Software</source>
+        <translation type="unfinished">Программное обеспечение</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="187"/>
+        <source>Drivers</source>
+        <translation type="unfinished">Драйверы</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="193"/>
+        <source>Services</source>
+        <translation type="unfinished">Службы</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="199"/>
+        <source>Environment Variables</source>
+        <translation type="unfinished">Переменные окружения</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="205"/>
+        <source>Event Logs</source>
+        <translation type="unfinished">Журнал событий</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="218"/>
+        <source>Network</source>
+        <translation type="unfinished">Сеть</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="223"/>
+        <source>Network Adapters</source>
+        <translation type="unfinished">Сетевые адаптеры</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="229"/>
+        <source>Routes</source>
+        <translation type="unfinished">Маршруты</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="235"/>
+        <source>Connections</source>
+        <translation type="unfinished">Подключения</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="241"/>
+        <source>Network Shares</source>
+        <translation type="unfinished">Сетевые ресурсы</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="267"/>
+        <source>HTML File</source>
+        <translation type="unfinished">HTML-файл</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="269"/>
+        <source>HTML File (*.html)</source>
+        <translation type="unfinished">HTML-файл (*.html)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="280"/>
+        <source>Warning</source>
+        <translation type="unfinished">Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="281"/>
+        <source>Failed to save file: %1</source>
+        <translation type="unfinished">Не удалось сохранить файл: %1</translation>
     </message>
 </context>
 <context>
@@ -2433,103 +2546,108 @@
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="250"/>
+        <location filename="../ui/session_window.cc" line="212"/>
+        <source>System Information</source>
+        <translation type="unfinished">Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="254"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="254"/>
+        <location filename="../ui/session_window.cc" line="258"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="258"/>
+        <location filename="../ui/session_window.cc" line="262"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="262"/>
+        <location filename="../ui/session_window.cc" line="266"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="270"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="270"/>
+        <location filename="../ui/session_window.cc" line="274"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="274"/>
+        <location filename="../ui/session_window.cc" line="278"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="278"/>
+        <location filename="../ui/session_window.cc" line="282"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="282"/>
+        <location filename="../ui/session_window.cc" line="286"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="292"/>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="296"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="308"/>
+        <location filename="../ui/session_window.cc" line="312"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентификация успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="312"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Network authentication error.</source>
         <translation>Ошибка сети при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="316"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="343"/>
+        <location filename="../ui/session_window.cc" line="347"/>
         <source>No host with the specified ID was found.</source>
         <translation>Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="347"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="351"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="355"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="359"/>
+        <location filename="../ui/session_window.cc" line="363"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -3045,27 +3163,27 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="142"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="147"/>
         <source>Monitor Name</source>
         <translation>Имя монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="145"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="150"/>
         <source>Manufacturer Name</source>
         <translation>Производитель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="148"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="153"/>
         <source>Monitor ID</source>
         <translation>ID монитора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="151"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="156"/>
         <source>Serial Number</source>
         <translation>Серийный номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="155"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="160"/>
         <source>EDID Version</source>
         <translation>Версия EDID</translation>
     </message>
@@ -3082,7 +3200,7 @@
         <translation type="vanished">Год производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="167"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="172"/>
         <source>Gamma</source>
         <translation>Гамма</translation>
     </message>
@@ -3099,7 +3217,7 @@
         <translation type="vanished">Вертикальный размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="186"/>
         <source>Diagonal Size</source>
         <translation>Размер диагонали</translation>
     </message>
@@ -3132,7 +3250,7 @@
         <translation type="vanished">Минимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="234"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="236"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
@@ -3141,113 +3259,113 @@
         <translation type="vanished">Максимальная частота по вертикали</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="161"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="166"/>
         <source>Date Of Manufacture</source>
         <translation>Дата производства</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="162"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="167"/>
         <source>Week %1 / %2</source>
         <translation>Неделя %1 / %2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="171"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="176"/>
         <source>Image Size</source>
         <translation>Размер изображения</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="172"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="177"/>
         <source>%1x%2 cm</source>
         <translation>%1x%2 cm</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="189"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="191"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="196"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="198"/>
         <source>Horizontal Frequency</source>
         <translation>Частота строк</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="197"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="199"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 кГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="203"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="205"/>
         <source>Vertical Frequency</source>
         <translation>Частота кадров</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="204"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Гц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="209"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="211"/>
         <source>Pixel Clock</source>
         <translation>Пиксельная частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="209"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="211"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="214"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="214"/>
         <source>Maximum Pixel Clock</source>
         <translation>Максимальная пиксельная частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="221"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="224"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="221"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="223"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="224"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="225"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="227"/>
         <source>Supported Features</source>
         <translation>Поддерживаемые возможности</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="238"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="240"/>
         <source>Supported Video Modes</source>
         <translation>Поддерживаемые видеорежимы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="214"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="216"/>
         <source>Input Signal Type</source>
         <translation>Тип входного сигнала</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="281"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="283"/>
         <source>Digital</source>
         <translation>Цифровой</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="284"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="286"/>
         <source>Analog</source>
         <translation>Аналоговый</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="287"/>
+        <location filename="../ui/sys_info_widget_monitors.cc" line="289"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -3962,103 +4080,84 @@
 <context>
     <name>client::SystemInfoWindow</name>
     <message>
-        <location filename="../ui/system_info_window.cc" line="116"/>
         <source>Summary</source>
-        <translation>Сводка</translation>
+        <translation type="vanished">Сводка</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="123"/>
         <source>Hardware</source>
-        <translation>Оборудование</translation>
+        <translation type="vanished">Оборудование</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="128"/>
         <source>Devices</source>
-        <translation>Устройства</translation>
+        <translation type="vanished">Устройства</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="134"/>
         <source>Video Adapters</source>
-        <translation>Видеоадаптеры</translation>
+        <translation type="vanished">Видеоадаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="140"/>
         <source>Monitors</source>
-        <translation>Мониторы</translation>
+        <translation type="vanished">Мониторы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="152"/>
         <source>Power Options</source>
-        <translation>Параметры питания</translation>
+        <translation type="vanished">Параметры питания</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="166"/>
         <source>Software</source>
-        <translation>Программное обеспечение</translation>
+        <translation type="vanished">Программное обеспечение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="171"/>
         <source>Drivers</source>
-        <translation>Драйверы</translation>
+        <translation type="vanished">Драйверы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="177"/>
         <source>Services</source>
-        <translation>Службы</translation>
+        <translation type="vanished">Службы</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="183"/>
         <source>Environment Variables</source>
-        <translation>Переменные окружения</translation>
+        <translation type="vanished">Переменные окружения</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="189"/>
         <source>Event Logs</source>
-        <translation>Журнал событий</translation>
+        <translation type="vanished">Журнал событий</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="202"/>
         <source>Network</source>
-        <translation>Сеть</translation>
+        <translation type="vanished">Сеть</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="207"/>
         <source>Network Adapters</source>
-        <translation>Сетевые адаптеры</translation>
+        <translation type="vanished">Сетевые адаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="213"/>
         <source>Routes</source>
-        <translation>Маршруты</translation>
+        <translation type="vanished">Маршруты</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="219"/>
         <source>Connections</source>
-        <translation>Подключения</translation>
+        <translation type="vanished">Подключения</translation>
     </message>
     <message>
         <source>RAS</source>
         <translation type="vanished">RAS</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="251"/>
         <source>HTML File</source>
-        <translation>HTML-файл</translation>
+        <translation type="vanished">HTML-файл</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="253"/>
         <source>HTML File (*.html)</source>
-        <translation>HTML-файл (*.html)</translation>
+        <translation type="vanished">HTML-файл (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="264"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="265"/>
         <source>Failed to save file: %1</source>
-        <translation>Не удалось сохранить файл: %1</translation>
+        <translation type="vanished">Не удалось сохранить файл: %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4257,9 +4356,8 @@
         <translation type="vanished">Количество заданий</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="146"/>
         <source>Printers</source>
-        <translation>Принтеры</translation>
+        <translation type="vanished">Принтеры</translation>
     </message>
     <message>
         <source>Description</source>
@@ -4282,9 +4380,8 @@
         <translation type="vanished">Максимум использований</translation>
     </message>
     <message>
-        <location filename="../ui/system_info_window.cc" line="225"/>
         <source>Network Shares</source>
-        <translation>Сетевые ресурсы</translation>
+        <translation type="vanished">Сетевые ресурсы</translation>
     </message>
     <message>
         <source>TB</source>

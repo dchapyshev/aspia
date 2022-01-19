@@ -19,7 +19,7 @@
 #include "client/ui/sys_info_widget_event_logs.h"
 
 #include "base/logging.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -151,7 +151,7 @@ std::string SysInfoWidgetEventLogs::category() const
     return common::kSystemInfo_EventLogs;
 }
 
-proto::SystemInfoRequest SysInfoWidgetEventLogs::request() const
+proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::request() const
 {
     proto::system_info::EventLogs::Event::Type type =
         static_cast<proto::system_info::EventLogs::Event::Type>(
@@ -159,7 +159,7 @@ proto::SystemInfoRequest SysInfoWidgetEventLogs::request() const
     return createRequest(type, start_record_);
 }
 
-void SysInfoWidgetEventLogs::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
     ui.combobox_type->setEnabled(true);
@@ -272,7 +272,7 @@ void SysInfoWidgetEventLogs::onPageActivated(int index)
     emit systemInfoRequest(request());
 }
 
-proto::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
+proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
     proto::system_info::EventLogs::Event::Type type, uint32_t start) const
 {
     ui.button_next->setEnabled(false);
@@ -280,7 +280,7 @@ proto::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
     ui.combobox_page->setEnabled(false);
     ui.combobox_type->setEnabled(false);
 
-    proto::SystemInfoRequest system_info_request;
+    proto::system_info::SystemInfoRequest system_info_request;
     system_info_request.set_category(category());
 
     proto::system_info::EventLogsData* data = system_info_request.mutable_event_logs_data();

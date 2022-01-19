@@ -864,37 +864,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="170"/>
+        <location filename="../notifier_window.cc" line="174"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="214"/>
+        <location filename="../notifier_window.cc" line="218"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="219"/>
+        <location filename="../notifier_window.cc" line="223"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="238"/>
+        <location filename="../notifier_window.cc" line="242"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="243"/>
+        <location filename="../notifier_window.cc" line="247"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="262"/>
+        <location filename="../notifier_window.cc" line="266"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="267"/>
+        <location filename="../notifier_window.cc" line="271"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -902,61 +902,61 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="133"/>
-        <location filename="../user_dialog.cc" line="145"/>
-        <location filename="../user_dialog.cc" line="156"/>
-        <location filename="../user_dialog.cc" line="167"/>
-        <location filename="../user_dialog.cc" line="189"/>
-        <location filename="../user_dialog.cc" line="205"/>
+        <location filename="../user_dialog.cc" line="134"/>
+        <location filename="../user_dialog.cc" line="146"/>
+        <location filename="../user_dialog.cc" line="157"/>
+        <location filename="../user_dialog.cc" line="168"/>
+        <location filename="../user_dialog.cc" line="190"/>
+        <location filename="../user_dialog.cc" line="206"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="134"/>
+        <location filename="../user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="146"/>
+        <location filename="../user_dialog.cc" line="147"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="157"/>
+        <location filename="../user_dialog.cc" line="158"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="168"/>
+        <location filename="../user_dialog.cc" line="169"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="179"/>
+        <location filename="../user_dialog.cc" line="180"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="182"/>
+        <location filename="../user_dialog.cc" line="183"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="186"/>
+        <location filename="../user_dialog.cc" line="187"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="206"/>
+        <location filename="../user_dialog.cc" line="207"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="260"/>
+        <location filename="../user_dialog.cc" line="261"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>

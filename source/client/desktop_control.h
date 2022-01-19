@@ -21,6 +21,7 @@
 
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
+#include "proto/system_info.pb.h"
 
 #include <filesystem>
 
@@ -41,7 +42,7 @@ public:
     virtual void onMouseEvent(const proto::MouseEvent& event) = 0;
     virtual void onPowerControl(proto::PowerControl::Action action) = 0;
     virtual void onRemoteUpdate() = 0;
-    virtual void onSystemInfoRequest(const proto::SystemInfoRequest& request) = 0;
+    virtual void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) = 0;
     virtual void onMetricsRequest() = 0;
 };
 

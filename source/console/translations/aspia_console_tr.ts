@@ -312,246 +312,258 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="108"/>
+        <location filename="../main_window.ui" line="109"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="119"/>
+        <location filename="../main_window.ui" line="120"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="123"/>
+        <location filename="../main_window.ui" line="124"/>
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="141"/>
+        <location filename="../main_window.ui" line="142"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="156"/>
-        <location filename="../main_window.ui" line="452"/>
+        <location filename="../main_window.ui" line="157"/>
+        <location filename="../main_window.ui" line="454"/>
         <source>Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="200"/>
+        <location filename="../main_window.ui" line="202"/>
         <source>&amp;New address book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="203"/>
+        <location filename="../main_window.ui" line="205"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="212"/>
+        <location filename="../main_window.ui" line="214"/>
         <source>&amp;Open address book...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="215"/>
+        <location filename="../main_window.ui" line="217"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="227"/>
+        <location filename="../main_window.ui" line="229"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="230"/>
+        <location filename="../main_window.ui" line="232"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="238"/>
+        <location filename="../main_window.ui" line="240"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="241"/>
+        <location filename="../main_window.ui" line="243"/>
         <source>Ctrl+Alt+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="249"/>
+        <location filename="../main_window.ui" line="251"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="252"/>
+        <location filename="../main_window.ui" line="254"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="261"/>
+        <location filename="../main_window.ui" line="263"/>
         <source>&amp;Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="273"/>
+        <location filename="../main_window.ui" line="275"/>
         <source>Add Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="285"/>
+        <location filename="../main_window.ui" line="287"/>
         <source>Modify Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="297"/>
+        <location filename="../main_window.ui" line="299"/>
         <source>Delete Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="309"/>
+        <location filename="../main_window.ui" line="311"/>
         <source>Add Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="321"/>
+        <location filename="../main_window.ui" line="323"/>
         <source>Modify Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="333"/>
+        <location filename="../main_window.ui" line="335"/>
         <source>Delete Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="348"/>
+        <location filename="../main_window.ui" line="350"/>
         <source>Desktop &amp;Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="360"/>
+        <location filename="../main_window.ui" line="362"/>
         <source>Desktop &amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="372"/>
+        <location filename="../main_window.ui" line="374"/>
         <source>&amp;File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="381"/>
+        <location filename="../main_window.ui" line="383"/>
         <source>&amp;Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="384"/>
+        <location filename="../main_window.ui" line="386"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="393"/>
+        <location filename="../main_window.ui" line="395"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="405"/>
+        <location filename="../main_window.ui" line="407"/>
         <source>Address Book Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="414"/>
-        <location filename="../main_window.ui" line="417"/>
+        <location filename="../main_window.ui" line="416"/>
+        <location filename="../main_window.ui" line="419"/>
         <source>Desktop Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="426"/>
-        <location filename="../main_window.ui" line="429"/>
+        <location filename="../main_window.ui" line="428"/>
+        <location filename="../main_window.ui" line="431"/>
         <source>Desktop View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="438"/>
-        <location filename="../main_window.ui" line="441"/>
+        <location filename="../main_window.ui" line="440"/>
+        <location filename="../main_window.ui" line="443"/>
         <source>File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="463"/>
+        <location filename="../main_window.ui" line="465"/>
         <source>Status Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="475"/>
+        <location filename="../main_window.ui" line="477"/>
         <source>Fast Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="572"/>
+        <location filename="../main_window.ui" line="574"/>
         <source>Router Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="580"/>
+        <location filename="../main_window.ui" line="582"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="483"/>
+        <location filename="../main_window.ui" line="594"/>
+        <source>&amp;System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="597"/>
+        <location filename="../main_window.ui" line="606"/>
+        <location filename="../main_window.ui" line="609"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="485"/>
         <source>Show tray icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="491"/>
+        <location filename="../main_window.ui" line="493"/>
         <source>Minimize to tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="496"/>
+        <location filename="../main_window.ui" line="498"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="508"/>
+        <location filename="../main_window.ui" line="510"/>
         <source>Save all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="511"/>
+        <location filename="../main_window.ui" line="513"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="519"/>
+        <location filename="../main_window.ui" line="521"/>
         <source>Close all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="522"/>
+        <location filename="../main_window.ui" line="524"/>
         <source>Ctrl+Shift+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="527"/>
+        <location filename="../main_window.ui" line="529"/>
         <source>Check for updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="532"/>
+        <location filename="../main_window.ui" line="534"/>
         <source>Update Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="537"/>
+        <location filename="../main_window.ui" line="539"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="548"/>
+        <location filename="../main_window.ui" line="550"/>
         <source>Remember latest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="560"/>
+        <location filename="../main_window.ui" line="562"/>
         <source>Copy Computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -964,88 +976,88 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="173"/>
-        <location filename="../main_window.cc" line="1155"/>
+        <location filename="../main_window.cc" line="182"/>
+        <location filename="../main_window.cc" line="1186"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="174"/>
+        <location filename="../main_window.cc" line="183"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="248"/>
+        <location filename="../main_window.cc" line="257"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="249"/>
+        <location filename="../main_window.cc" line="258"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="276"/>
+        <location filename="../main_window.cc" line="285"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="287"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="533"/>
-        <location filename="../main_window.cc" line="841"/>
-        <location filename="../main_window.cc" line="918"/>
+        <location filename="../main_window.cc" line="557"/>
+        <location filename="../main_window.cc" line="870"/>
+        <location filename="../main_window.cc" line="947"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="534"/>
-        <location filename="../main_window.cc" line="919"/>
+        <location filename="../main_window.cc" line="558"/>
+        <location filename="../main_window.cc" line="948"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="737"/>
+        <location filename="../main_window.cc" line="766"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="744"/>
+        <location filename="../main_window.cc" line="773"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="745"/>
-        <location filename="../main_window.cc" line="750"/>
+        <location filename="../main_window.cc" line="774"/>
+        <location filename="../main_window.cc" line="779"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="842"/>
+        <location filename="../main_window.cc" line="871"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="875"/>
+        <location filename="../main_window.cc" line="904"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="890"/>
+        <location filename="../main_window.cc" line="919"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="434"/>
-        <location filename="../main_window.cc" line="1026"/>
+        <location filename="../main_window.cc" line="443"/>
+        <location filename="../main_window.cc" line="1057"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1156"/>
+        <location filename="../main_window.cc" line="1187"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>

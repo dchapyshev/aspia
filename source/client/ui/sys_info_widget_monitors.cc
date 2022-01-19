@@ -19,7 +19,7 @@
 #include "client/ui/sys_info_widget_monitors.h"
 
 #include "base/macros_magic.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <cmath>
 
@@ -123,7 +123,7 @@ std::string SysInfoWidgetMonitors::category() const
     return common::kSystemInfo_Monitors;
 }
 
-void SysInfoWidgetMonitors::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

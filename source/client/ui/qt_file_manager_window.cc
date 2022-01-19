@@ -67,7 +67,7 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
 
     client->setFileManagerWindow(file_manager_window_proxy_);
 
-    return client;
+    return std::move(client);
 }
 
 void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_proxy)

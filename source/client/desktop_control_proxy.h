@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
+#include "proto/system_info.pb.h"
 
 namespace base {
 class TaskRunner;
@@ -48,7 +49,7 @@ public:
     void onMouseEvent(const proto::MouseEvent& event);
     void onPowerControl(proto::PowerControl::Action action);
     void onRemoteUpdate();
-    void onSystemInfoRequest(const proto::SystemInfoRequest& request);
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onMetricsRequest();
 
 private:

@@ -19,7 +19,7 @@
 #include "client/ui/sys_info_widget_video_adapters.h"
 
 #include "base/macros_magic.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -105,7 +105,7 @@ std::string SysInfoWidgetVideoAdapters::category() const
     return common::kSystemInfo_VideoAdapters;
 }
 
-void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

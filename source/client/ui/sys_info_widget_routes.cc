@@ -18,7 +18,7 @@
 
 #include "client/ui/sys_info_widget_routes.h"
 
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -63,7 +63,7 @@ std::string SysInfoWidgetRoutes::category() const
     return common::kSystemInfo_Routes;
 }
 
-void SysInfoWidgetRoutes::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetRoutes::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

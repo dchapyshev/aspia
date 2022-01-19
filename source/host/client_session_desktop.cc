@@ -462,7 +462,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
-        proto::SystemInfoRequest* system_info_request = messageFromArena<proto::SystemInfoRequest>();
+        proto::system_info::SystemInfoRequest* system_info_request =
+            messageFromArena<proto::system_info::SystemInfoRequest>();
 
         if (!extension.data().empty())
         {
@@ -472,7 +473,8 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
             }
         }
 
-        proto::SystemInfo* system_info = messageFromArena<proto::SystemInfo>();
+        proto::system_info::SystemInfo* system_info =
+            messageFromArena<proto::system_info::SystemInfo>();
 
         createSystemInfo(*system_info_request, system_info);
 

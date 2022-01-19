@@ -858,37 +858,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="170"/>
+        <location filename="../notifier_window.cc" line="174"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="214"/>
+        <location filename="../notifier_window.cc" line="218"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="219"/>
+        <location filename="../notifier_window.cc" line="223"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="238"/>
+        <location filename="../notifier_window.cc" line="242"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="243"/>
+        <location filename="../notifier_window.cc" line="247"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="262"/>
+        <location filename="../notifier_window.cc" line="266"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="267"/>
+        <location filename="../notifier_window.cc" line="271"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -896,32 +896,32 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="133"/>
-        <location filename="../user_dialog.cc" line="145"/>
-        <location filename="../user_dialog.cc" line="156"/>
-        <location filename="../user_dialog.cc" line="167"/>
-        <location filename="../user_dialog.cc" line="189"/>
-        <location filename="../user_dialog.cc" line="205"/>
+        <location filename="../user_dialog.cc" line="134"/>
+        <location filename="../user_dialog.cc" line="146"/>
+        <location filename="../user_dialog.cc" line="157"/>
+        <location filename="../user_dialog.cc" line="168"/>
+        <location filename="../user_dialog.cc" line="190"/>
+        <location filename="../user_dialog.cc" line="206"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="134"/>
+        <location filename="../user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="146"/>
+        <location filename="../user_dialog.cc" line="147"/>
         <source>The username you entered already exists.</source>
         <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="157"/>
+        <location filename="../user_dialog.cc" line="158"/>
         <source>The passwords you entered do not match.</source>
         <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="168"/>
+        <location filename="../user_dialog.cc" line="169"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -929,12 +929,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="179"/>
+        <location filename="../user_dialog.cc" line="180"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="182"/>
+        <location filename="../user_dialog.cc" line="183"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -942,17 +942,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="186"/>
+        <location filename="../user_dialog.cc" line="187"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="206"/>
+        <location filename="../user_dialog.cc" line="207"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="260"/>
+        <location filename="../user_dialog.cc" line="261"/>
         <source>Double-click to change</source>
         <translation>Doppelklicken, um zu ändern</translation>
     </message>

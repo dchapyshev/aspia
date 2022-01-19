@@ -34,7 +34,7 @@ public:
 
     // SysInfo implementation.
     std::string category() const override;
-    void setSystemInfo(const proto::SystemInfo& system_info) override;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
     QTreeWidget* treeWidget() override;
 
 private slots:

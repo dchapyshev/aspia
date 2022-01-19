@@ -34,8 +34,8 @@ public:
 
     // SysInfo implementation.
     std::string category() const override;
-    proto::SystemInfoRequest request() const override;
-    void setSystemInfo(const proto::SystemInfo& system_info) override;
+    proto::system_info::SystemInfoRequest request() const override;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
     QTreeWidget* treeWidget() override;
 
 private slots:
@@ -43,7 +43,7 @@ private slots:
     void onPageActivated(int index);
 
 private:
-    proto::SystemInfoRequest createRequest(
+    proto::system_info::SystemInfoRequest createRequest(
         proto::system_info::EventLogs::Event::Type type, uint32_t start) const;
     static QString levelToString(proto::system_info::EventLogs::Event::Level value);
 

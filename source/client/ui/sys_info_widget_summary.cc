@@ -19,7 +19,7 @@
 #include "client/ui/sys_info_widget_summary.h"
 
 #include "base/macros_magic.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -113,10 +113,10 @@ SysInfoWidgetSummary::~SysInfoWidgetSummary() = default;
 
 std::string SysInfoWidgetSummary::category() const
 {
-    return std::string();
+    return common::kSystemInfo_Summary;
 }
 
-void SysInfoWidgetSummary::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

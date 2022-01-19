@@ -26,6 +26,7 @@
 #include "client/ui/client_window.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "client/ui/qt_system_info_window.h"
 #include "qt_base/scoped_qt_logging.h"
 
 #if defined(OS_WIN)
@@ -481,10 +482,14 @@ int clientMain(int argc, char* argv[])
         {
             config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
         }
+        else if (session_type == QLatin1String("system-info"))
+        {
+            config.session_type = proto::SESSION_TYPE_SYSTEM_INFO;
+        }
         else
         {
             onInvalidValue(QStringLiteral("session-type"),
-                           QStringLiteral("desktop-manage, desktop-view, file-transfer"));
+                           QStringLiteral("desktop-manage, desktop-view, file-transfer, system-info"));
             return 1;
         }
 
@@ -566,6 +571,10 @@ int clientMain(int argc, char* argv[])
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new client::QtFileManagerWindow();
+                break;
+
+            case proto::SESSION_TYPE_SYSTEM_INFO:
+                session_window = new client::QtSystemInfoWindow();
                 break;
 
             default:

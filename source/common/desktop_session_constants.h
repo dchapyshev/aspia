@@ -37,20 +37,6 @@ extern const char kSupportedExtensionsForView[];
 extern const uint32_t kSupportedVideoEncodings;
 extern const uint32_t kSupportedAudioEncodings;
 
-extern const char kSystemInfo_Devices[];
-extern const char kSystemInfo_VideoAdapters[];
-extern const char kSystemInfo_Monitors[];
-extern const char kSystemInfo_Printers[];
-extern const char kSystemInfo_PowerOptions[];
-extern const char kSystemInfo_Drivers[];
-extern const char kSystemInfo_Services[];
-extern const char kSystemInfo_EnvironmentVariables[];
-extern const char kSystemInfo_EventLogs[];
-extern const char kSystemInfo_NetworkAdapters[];
-extern const char kSystemInfo_Routes[];
-extern const char kSystemInfo_Connections[];
-extern const char kSystemInfo_NetworkShares[];
-
 } // namespace common
 
 #endif // COMMON__DESKTOP_SESSION_CONSTANTS_H

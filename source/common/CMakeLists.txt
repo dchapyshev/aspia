@@ -47,7 +47,9 @@ list(APPEND SOURCE_COMMON
     keycode_converter.cc
     keycode_converter.h
     session_type.cc
-    session_type.h)
+    session_type.h
+    system_info_constants.cc
+    system_info_constants.h)
 
 if (WIN32)
     list(APPEND SOURCE_COMMON

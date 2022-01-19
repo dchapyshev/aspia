@@ -107,7 +107,7 @@ void DesktopWindowProxy::setCursorPosition(const proto::CursorPosition& cursor_p
         desktop_window_->setCursorPosition(cursor_position);
 }
 
-void DesktopWindowProxy::setSystemInfo(const proto::SystemInfo& system_info)
+void DesktopWindowProxy::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

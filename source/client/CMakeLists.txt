@@ -31,6 +31,8 @@ list(APPEND SOURCE_CLIENT_CORE
     client_main.h
     client_proxy.cc
     client_proxy.h
+    client_system_info.cc
+    client_system_info.h
     config_factory.cc
     config_factory.h
     desktop_control.h
@@ -81,7 +83,13 @@ list(APPEND SOURCE_CLIENT_CORE
     router_controller.h
     status_window.h
     status_window_proxy.cc
-    status_window_proxy.h)
+    status_window_proxy.h
+    system_info_control.h
+    system_info_control_proxy.cc
+    system_info_control_proxy.h
+    system_info_window.h
+    system_info_window_proxy.cc
+    system_info_window_proxy.h)
 
 list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
@@ -146,6 +154,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/qt_file_manager_window.cc
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
+    ui/qt_system_info_window.cc
+    ui/qt_system_info_window.h
+    ui/qt_system_info_window.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui
@@ -205,9 +216,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_video_adapters.cc
     ui/sys_info_widget_video_adapters.h
     ui/sys_info_widget_video_adapters.ui
-    ui/system_info_window.cc
-    ui/system_info_window.h
-    ui/system_info_window.ui
     ui/tree_to_html.cc
     ui/tree_to_html.h)
 

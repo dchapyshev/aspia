@@ -30,7 +30,7 @@
 #include "client/ui/frame_factory_qimage.h"
 #include "client/ui/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
-#include "client/ui/system_info_window.h"
+#include "client/ui/qt_system_info_window.h"
 #include "client/ui/statistics_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
@@ -132,18 +132,17 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     {
         if (!system_info_)
         {
-            system_info_ = new SystemInfoWindow(this);
+            system_info_ = new QtSystemInfoWindow();
             system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-            connect(system_info_, &SystemInfoWindow::systemInfoRequired,
-                    this, [this](const proto::SystemInfoRequest& request)
+            connect(system_info_, &QtSystemInfoWindow::systemInfoRequired,
+                    this, [this](const proto::system_info::SystemInfoRequest& request)
             {
                 desktop_control_proxy_->onSystemInfoRequest(request);
             });
         }
 
-        system_info_->show();
-        system_info_->activateWindow();
+        system_info_->start(nullptr);
     });
 
     connect(panel_, &DesktopPanel::startStatistics, this, [this]()
@@ -308,7 +307,7 @@ void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_posi
     desktop_->update();
 }
 
-void QtDesktopWindow::setSystemInfo(const proto::SystemInfo& system_info)
+void QtDesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     if (system_info_)
         system_info_->setSystemInfo(system_info);
@@ -373,6 +372,11 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
                              QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
 }
 
+void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
+{
+    desktop_control_proxy_->onSystemInfoRequest(request);
+}
+
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
     panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
@@ -399,6 +403,12 @@ void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 {
     desktop_->userLeftFromWindow();
     QWidget::focusOutEvent(event);
+}
+
+void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
+{
+    if (system_info_)
+        system_info_->close();
 }
 
 bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)

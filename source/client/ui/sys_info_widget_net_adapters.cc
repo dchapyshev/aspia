@@ -20,7 +20,7 @@
 
 #include "base/macros_magic.h"
 #include "base/logging.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -111,7 +111,7 @@ std::string SysInfoWidgetNetAdapters::category() const
     return common::kSystemInfo_NetworkAdapters;
 }
 
-void SysInfoWidgetNetAdapters::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

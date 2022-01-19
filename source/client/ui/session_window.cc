@@ -208,6 +208,10 @@ void SessionWindow::setClientTitle(const Config& config)
             session_name = tr("File Transfer");
             break;
 
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            session_name = tr("System Information");
+            break;
+
         default:
             NOTREACHED();
             break;

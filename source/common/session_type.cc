@@ -35,6 +35,9 @@ const char* sessionTypeToString(proto::SessionType session_type)
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return QT_TRANSLATE_NOOP("SessionType", "File Transfer");
 
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            return QT_TRANSLATE_NOOP("SessionType", "System Information");
+
         default:
             return "";
     }

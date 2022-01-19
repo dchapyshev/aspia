@@ -206,6 +206,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
         send_connection_list(desktop_clients_);
         send_connection_list(file_transfer_clients_);
+        send_connection_list(system_info_clients_);
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
     }
@@ -319,7 +320,7 @@ base::User UserSession::user() const
 
 size_t UserSession::clientsCount() const
 {
-    return desktop_clients_.size() + file_transfer_clients_.size();
+    return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size();
 }
 
 void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
@@ -849,6 +850,7 @@ void UserSession::onClientSessionFinished()
 
     delete_finished(&desktop_clients_);
     delete_finished(&file_transfer_clients_);
+    delete_finished(&system_info_clients_);
 
     if (desktop_clients_.empty())
     {
@@ -1046,6 +1048,7 @@ void UserSession::killClientSession(uint32_t id)
 
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&file_transfer_clients_, id);
+    stop_by_id(&system_info_clients_, id);
 }
 
 void UserSession::sendRouterState(const base::Location& location)
@@ -1113,6 +1116,13 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         {
             LOG(LS_INFO) << "New file transfer session";
             file_transfer_clients_.emplace_back(std::move(client_session));
+        }
+        break;
+
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+        {
+            LOG(LS_INFO) << "New system info session";
+            system_info_clients_.emplace_back(std::move(client_session));
         }
         break;
 

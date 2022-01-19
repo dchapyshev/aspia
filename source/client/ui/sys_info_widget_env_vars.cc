@@ -18,7 +18,7 @@
 
 #include "client/ui/sys_info_widget_env_vars.h"
 
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -61,7 +61,7 @@ std::string SysInfoWidgetEnvVars::category() const
     return common::kSystemInfo_EnvironmentVariables;
 }
 
-void SysInfoWidgetEnvVars::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetEnvVars::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

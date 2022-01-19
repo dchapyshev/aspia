@@ -64,6 +64,11 @@
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
+    <message>
+        <location filename="../session_type.cc" line="39"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -279,13 +284,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="185"/>
-        <location filename="../ui/text_chat_window.cc" line="238"/>
+        <location filename="../ui/text_chat_window.cc" line="186"/>
+        <location filename="../ui/text_chat_window.cc" line="239"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_window.cc" line="186"/>
+        <location filename="../ui/text_chat_window.cc" line="187"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -293,17 +298,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="227"/>
+        <location filename="../ui/text_chat_window.cc" line="228"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="229"/>
+        <location filename="../ui/text_chat_window.cc" line="230"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="239"/>
+        <location filename="../ui/text_chat_window.cc" line="240"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

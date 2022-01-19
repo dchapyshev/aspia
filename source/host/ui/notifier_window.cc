@@ -53,6 +53,10 @@ public:
                 setIcon(0, QIcon(QStringLiteral(":/img/folder-stand.png")));
                 break;
 
+            case proto::SESSION_TYPE_SYSTEM_INFO:
+                setIcon(0, QIcon(QStringLiteral(":/img/computer_info.png")));
+                break;
+
             default:
                 LOG(LS_FATAL) << "Unexpected session type: " << client.session_type;
                 return;

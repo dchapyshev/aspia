@@ -19,11 +19,12 @@
 #ifndef HOST__SYSTEM_INFO_H
 #define HOST__SYSTEM_INFO_H
 
-#include "proto/desktop_extensions.pb.h"
+#include "proto/system_info.pb.h"
 
 namespace host {
 
-void createSystemInfo(const proto::SystemInfoRequest& request, proto::SystemInfo* system_info);
+void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
+                      proto::system_info::SystemInfo* system_info);
 
 } // namespace host
 

@@ -64,6 +64,11 @@
         <source>File Transfer</source>
         <translation>Transferência de Arquivo</translation>
     </message>
+    <message>
+        <location filename="../session_type.cc" line="39"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>
@@ -279,13 +284,13 @@
         <translation>Usuário %1 encerrou a conversa.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="185"/>
-        <location filename="../ui/text_chat_window.cc" line="238"/>
+        <location filename="../ui/text_chat_window.cc" line="186"/>
+        <location filename="../ui/text_chat_window.cc" line="239"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_window.cc" line="186"/>
+        <location filename="../ui/text_chat_window.cc" line="187"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>A mensagem é muito longa. O mensagem pode ter no máximo %n caracteres.</numerusform>
@@ -293,17 +298,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="227"/>
+        <location filename="../ui/text_chat_window.cc" line="228"/>
         <source>Save File</source>
         <translation>Salvar Arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="229"/>
+        <location filename="../ui/text_chat_window.cc" line="230"/>
         <source>TXT files (*.txt)</source>
         <translation>Arquivos TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="239"/>
+        <location filename="../ui/text_chat_window.cc" line="240"/>
         <source>Could not open file for writing.</source>
         <translation>Não foi possível abrir o arquivo para gravação.</translation>
     </message>

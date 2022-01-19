@@ -102,6 +102,7 @@
     <addaction name="action_desktop_manage"/>
     <addaction name="action_desktop_view"/>
     <addaction name="action_file_transfer"/>
+    <addaction name="action_system_info"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -123,7 +124,7 @@
       <string>&amp;Language</string>
      </property>
      <property name="icon">
-      <iconset resource="resources/console.qrc">
+      <iconset resource="../client/resources/client.qrc">
        <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
      </property>
     </widget>
@@ -187,6 +188,7 @@
    <addaction name="action_desktop_manage"/>
    <addaction name="action_desktop_view"/>
    <addaction name="action_file_transfer"/>
+   <addaction name="action_system_info"/>
    <addaction name="separator"/>
    <addaction name="action_about"/>
    <addaction name="action_exit"/>
@@ -578,6 +580,33 @@
    </property>
    <property name="text">
     <string>Show icons in menus</string>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../client/resources/client.qrc">
+     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;System Information</string>
+   </property>
+   <property name="toolTip">
+    <string>System Information</string>
+   </property>
+  </action>
+  <action name="action_system_info_connect">
+   <property name="icon">
+    <iconset resource="../client/resources/client.qrc">
+     <normaloff>:/img/computer_info.png</normaloff>:/img/computer_info.png</iconset>
+   </property>
+   <property name="text">
+    <string>System Information</string>
+   </property>
+   <property name="toolTip">
+    <string>System Information</string>
    </property>
   </action>
  </widget>

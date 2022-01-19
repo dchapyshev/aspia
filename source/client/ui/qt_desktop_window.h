@@ -22,6 +22,7 @@
 #include "base/version.h"
 #include "client/client_desktop.h"
 #include "client/desktop_window.h"
+#include "client/system_info_control.h"
 #include "client/ui/session_window.h"
 #include "client/ui/desktop_widget.h"
 
@@ -39,12 +40,13 @@ namespace client {
 class DesktopConfigDialog;
 class DesktopPanel;
 class DesktopWindowProxy;
-class SystemInfoWindow;
+class QtSystemInfoWindow;
 class StatisticsDialog;
 
 class QtDesktopWindow :
     public SessionWindow,
-    public DesktopWindow
+    public DesktopWindow,
+    public SystemInfoControl
 {
     Q_OBJECT
 
@@ -64,12 +66,15 @@ public:
     void setCapabilities(const std::string& extensions, uint32_t video_encodings) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setCursorPosition(const proto::CursorPosition& cursor_position) override;
-    void setSystemInfo(const proto::SystemInfo& system_info) override;
+    void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
     void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
     void drawFrame() override;
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;
+
+    // SystemInfoControl implementation.
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
 
 protected:
     // QWidget implementation.
@@ -77,6 +82,7 @@ protected:
     void leaveEvent(QEvent* event) override;
     void changeEvent(QEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
@@ -105,7 +111,7 @@ private:
     DesktopPanel* panel_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
 
-    QPointer<SystemInfoWindow> system_info_;
+    QPointer<QtSystemInfoWindow> system_info_;
     QPointer<StatisticsDialog> statistics_dialog_;
 
     QTimer* resize_timer_ = nullptr;

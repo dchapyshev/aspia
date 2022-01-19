@@ -18,7 +18,7 @@
 
 #include "client/ui/sys_info_widget_drivers.h"
 
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -63,7 +63,7 @@ std::string SysInfoWidgetDrivers::category() const
     return common::kSystemInfo_Drivers;
 }
 
-void SysInfoWidgetDrivers::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

@@ -19,7 +19,7 @@
 #include "client/ui/sys_info_widget_power_options.h"
 
 #include "base/macros_magic.h"
-#include "common/desktop_session_constants.h"
+#include "common/system_info_constants.h"
 
 #include <QMenu>
 
@@ -123,7 +123,7 @@ std::string SysInfoWidgetPowerOptions::category() const
     return common::kSystemInfo_PowerOptions;
 }
 
-void SysInfoWidgetPowerOptions::setSystemInfo(const proto::SystemInfo& system_info)
+void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
 

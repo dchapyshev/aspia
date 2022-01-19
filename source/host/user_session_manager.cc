@@ -343,6 +343,8 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         return;
     }
 
+    bool user_session_found = false;
+
     for (const auto& session : sessions_)
     {
         if (session->sessionId() == session_id)
@@ -372,8 +374,14 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
             }
 
             session->onClientSession(std::move(client_session));
+            user_session_found = true;
             break;
         }
+    }
+
+    if (!user_session_found)
+    {
+        LOG(LS_WARNING) << "User session with id " << session_id << " not found";
     }
 }
 
