@@ -1954,107 +1954,107 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="131"/>
+        <location filename="../ui/qt_system_info_window.cc" line="130"/>
         <source>Summary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="139"/>
+        <location filename="../ui/qt_system_info_window.cc" line="138"/>
         <source>Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="144"/>
+        <location filename="../ui/qt_system_info_window.cc" line="143"/>
         <source>Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="150"/>
+        <location filename="../ui/qt_system_info_window.cc" line="149"/>
         <source>Video Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="156"/>
+        <location filename="../ui/qt_system_info_window.cc" line="155"/>
         <source>Monitors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="162"/>
+        <location filename="../ui/qt_system_info_window.cc" line="161"/>
         <source>Printers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="168"/>
+        <location filename="../ui/qt_system_info_window.cc" line="167"/>
         <source>Power Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="182"/>
+        <location filename="../ui/qt_system_info_window.cc" line="181"/>
         <source>Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="187"/>
+        <location filename="../ui/qt_system_info_window.cc" line="186"/>
         <source>Drivers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="193"/>
+        <location filename="../ui/qt_system_info_window.cc" line="192"/>
         <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="199"/>
+        <location filename="../ui/qt_system_info_window.cc" line="198"/>
         <source>Environment Variables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="205"/>
+        <location filename="../ui/qt_system_info_window.cc" line="204"/>
         <source>Event Logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="218"/>
+        <location filename="../ui/qt_system_info_window.cc" line="217"/>
         <source>Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="223"/>
+        <location filename="../ui/qt_system_info_window.cc" line="222"/>
         <source>Network Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="229"/>
+        <location filename="../ui/qt_system_info_window.cc" line="228"/>
         <source>Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="235"/>
+        <location filename="../ui/qt_system_info_window.cc" line="234"/>
         <source>Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="241"/>
+        <location filename="../ui/qt_system_info_window.cc" line="240"/>
         <source>Network Shares</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="267"/>
+        <location filename="../ui/qt_system_info_window.cc" line="266"/>
         <source>HTML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="269"/>
+        <location filename="../ui/qt_system_info_window.cc" line="268"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="280"/>
+        <location filename="../ui/qt_system_info_window.cc" line="279"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="281"/>
+        <location filename="../ui/qt_system_info_window.cc" line="280"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished"></translation>
     </message>

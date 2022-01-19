@@ -20,19 +20,19 @@
 
 namespace common {
 
-const char kSystemInfo_Summary[] = "summary";
-const char kSystemInfo_Devices[] = "devices";
-const char kSystemInfo_VideoAdapters[] = "video_adapters";
-const char kSystemInfo_Monitors[] = "monitors";
-const char kSystemInfo_Printers[] = "printers";
-const char kSystemInfo_PowerOptions[] = "power_options";
-const char kSystemInfo_Drivers[] = "drivers";
-const char kSystemInfo_Services[] = "services";
-const char kSystemInfo_EnvironmentVariables[] = "environment_variables";
-const char kSystemInfo_EventLogs[] = "event_logs";
-const char kSystemInfo_NetworkAdapters[] = "network_adapters";
-const char kSystemInfo_Routes[] = "routes";
-const char kSystemInfo_Connections[] = "connections";
-const char kSystemInfo_NetworkShares[] = "network_shares";
+const char kSystemInfo_Summary[] = "D9FE7CED-175C-4069-AB80-9B4F897EB376";
+const char kSystemInfo_Devices[] = "1451B77D-276E-47BB-989B-D8B61A468F8B";
+const char kSystemInfo_VideoAdapters[] = "D2867BED-1408-467C-8ABE-6BD8B32DE17B";
+const char kSystemInfo_Monitors[] = "344E1796-EFF2-4F4D-B48B-3A10CEA834B8";
+const char kSystemInfo_Printers[] = "19193E9A-D2A6-44F8-83D2-A6B0F8651DAC";
+const char kSystemInfo_PowerOptions[] = "838C76EA-D13F-4718-8C7E-D483221ECF99";
+const char kSystemInfo_Drivers[] = "82E18359-39CC-41FA-A8DA-70077F1340FB";
+const char kSystemInfo_Services[] = "F56D910E-9A08-4459-8F11-F0F42817F0CD";
+const char kSystemInfo_EnvironmentVariables[] = "F06EA182-23FB-4347-9C9E-F66582C9EF71";
+const char kSystemInfo_EventLogs[] = "8F2499F5-30B8-42B5-82DF-6FBE0BCCDD6F";
+const char kSystemInfo_NetworkAdapters[] = "A27B3B0E-BF55-43B3-989B-40705DAF3290";
+const char kSystemInfo_Routes[] = "224C9198-FF86-40B6-96FD-19938B952021";
+const char kSystemInfo_Connections[] = "E720729A-7C96-4603-A46B-91FBC95420D6";
+const char kSystemInfo_NetworkShares[] = "EC295A1A-6CBD-4334-9697-38E542687902";
 
 } // namespace common
