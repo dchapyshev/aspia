@@ -936,6 +936,11 @@
         <translation type="unfinished">Kopieer Rij</translation>
     </message>
     <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="92"/>
+        <source>Search in Google</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Copy Name</source>
         <translation type="obsolete">Kopieer Naam</translation>
     </message>
@@ -1445,11 +1450,6 @@
     <message>
         <source>Value</source>
         <translation type="vanished">Waarde</translation>
-    </message>
-    <message>
-        <location filename="../ui/qt_system_info_window.ui" line="35"/>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.ui" line="108"/>

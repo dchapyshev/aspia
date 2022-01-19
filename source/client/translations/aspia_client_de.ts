@@ -916,6 +916,11 @@
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/sys_info_widget_devices.ui" line="92"/>
+        <source>Search in Google</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SysInfoDrivers</name>
@@ -1333,11 +1338,6 @@
     <message>
         <location filename="../ui/qt_system_info_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/qt_system_info_window.ui" line="35"/>
-        <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

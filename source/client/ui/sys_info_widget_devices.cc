@@ -20,9 +20,42 @@
 
 #include "common/system_info_constants.h"
 
+#include <QDesktopServices>
 #include <QMenu>
+#include <QUrl>
 
 namespace client {
+
+namespace {
+
+QString encodeUrl(const QString& str)
+{
+    if (str.isEmpty())
+        return QString();
+
+    QString result;
+
+    for (const auto ch : str)
+    {
+        if (ch.isDigit() || ch.isLetter() || ch == QLatin1Char('-') || ch == QLatin1Char('_') ||
+            ch == QLatin1Char('.') || ch == QLatin1Char('~'))
+        {
+            result += ch;
+        }
+        else if (ch == QLatin1Char(' '))
+        {
+            result += QLatin1Char('+');
+        }
+        else
+        {
+            result += QLatin1Char('%') + QString::number(ch.unicode(), 16);
+        }
+    }
+
+    return result;
+}
+
+} // namespace
 
 SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
     : SysInfoWidget(parent)
@@ -53,6 +86,20 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
             this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
+    });
+
+    connect(ui.action_find_device, &QAction::triggered, this, [this]()
+    {
+        QTreeWidgetItem* item = ui.tree->currentItem();
+        if (!item)
+            return;
+
+        QString device_id = item->text(4);
+        if (device_id.isEmpty())
+            return;
+
+        QUrl find_url(QString("https://www.google.com/search?q=%1").arg(encodeUrl(device_id)));
+        QDesktopServices::openUrl(find_url);
     });
 }
 
@@ -122,6 +169,8 @@ void SysInfoWidgetDevices::onContextMenu(const QPoint& point)
     QMenu menu;
     menu.addAction(ui.action_copy_row);
     menu.addAction(ui.action_copy_value);
+    menu.addSeparator();
+    menu.addAction(ui.action_find_device);
 
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }

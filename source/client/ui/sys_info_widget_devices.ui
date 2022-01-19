@@ -87,6 +87,11 @@
     <string>Copy Value</string>
    </property>
   </action>
+  <action name="action_find_device">
+   <property name="text">
+    <string>Search in Google</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

@@ -32,7 +32,7 @@
    <item>
     <widget class="QToolBar" name="toolbar">
      <property name="windowTitle">
-      <string>toolBar</string>
+      <string/>
      </property>
      <property name="iconSize">
       <size>
