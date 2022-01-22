@@ -22,6 +22,7 @@
 #include "common/system_info_constants.h"
 
 #include <cmath>
+#include <limits>
 
 #include <QMenu>
 
@@ -31,7 +32,7 @@ namespace {
 
 bool isDoubleEqual(double first, double second)
 {
-    return (std::fabs(first - second) < DBL_EPSILON);
+    return (std::fabs(first - second) < std::numeric_limits<double>::epsilon());
 }
 
 class Item : public QTreeWidgetItem
