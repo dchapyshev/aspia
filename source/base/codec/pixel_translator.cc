@@ -21,6 +21,8 @@
 #include "base/macros_magic.h"
 #include "build/build_config.h"
 
+#include <limits>
+
 namespace base {
 
 namespace {
