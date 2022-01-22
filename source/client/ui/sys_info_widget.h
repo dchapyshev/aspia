@@ -42,6 +42,7 @@ public:
     static QString delayToString(uint64_t delay);
     static QString speedToString(uint64_t speed);
     static QString timeToString(time_t time);
+    static void searchInGoogle(const QString& request);
 
 signals:
     void systemInfoRequest(const proto::system_info::SystemInfoRequest& request);

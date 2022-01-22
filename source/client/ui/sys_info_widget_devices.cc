@@ -20,42 +20,9 @@
 
 #include "common/system_info_constants.h"
 
-#include <QDesktopServices>
 #include <QMenu>
-#include <QUrl>
 
 namespace client {
-
-namespace {
-
-QString encodeUrl(const QString& str)
-{
-    if (str.isEmpty())
-        return QString();
-
-    QString result;
-
-    for (const auto ch : str)
-    {
-        if (ch.isDigit() || ch.isLetter() || ch == QLatin1Char('-') || ch == QLatin1Char('_') ||
-            ch == QLatin1Char('.') || ch == QLatin1Char('~'))
-        {
-            result += ch;
-        }
-        else if (ch == QLatin1Char(' '))
-        {
-            result += QLatin1Char('+');
-        }
-        else
-        {
-            result += QLatin1Char('%') + QString::number(ch.unicode(), 16);
-        }
-    }
-
-    return result;
-}
-
-} // namespace
 
 SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
     : SysInfoWidget(parent)
@@ -98,8 +65,7 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
         if (device_id.isEmpty())
             return;
 
-        QUrl find_url(QString("https://www.google.com/search?q=%1").arg(encodeUrl(device_id)));
-        QDesktopServices::openUrl(find_url);
+        searchInGoogle(device_id);
     });
 }
 

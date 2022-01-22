@@ -21,8 +21,10 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDateTime>
+#include <QDesktopServices>
 #include <QLocale>
 #include <QTreeWidgetItem>
+#include <QUrl>
 
 namespace client {
 
@@ -38,6 +40,33 @@ void copyTextToClipboard(const QString& text)
         return;
 
     clipboard->setText(text);
+}
+
+QString encodeUrl(const QString& str)
+{
+    if (str.isEmpty())
+        return QString();
+
+    QString result;
+
+    for (const auto ch : str)
+    {
+        if (ch.isDigit() || ch.isLetter() || ch == QLatin1Char('-') || ch == QLatin1Char('_') ||
+            ch == QLatin1Char('.') || ch == QLatin1Char('~'))
+        {
+            result += ch;
+        }
+        else if (ch == QLatin1Char(' '))
+        {
+            result += QLatin1Char('+');
+        }
+        else
+        {
+            result += QLatin1Char('%') + QString::number(ch.unicode(), 16);
+        }
+    }
+
+    return result;
 }
 
 } // namespace
@@ -207,6 +236,13 @@ void SysInfoWidget::copyRow(QTreeWidgetItem* item)
     }
 
     copyTextToClipboard(result);
+}
+
+// static
+void SysInfoWidget::searchInGoogle(const QString& request)
+{
+    QUrl find_url(QString("https://www.google.com/search?q=%1").arg(encodeUrl(request)));
+    QDesktopServices::openUrl(find_url);
 }
 
 void SysInfoWidget::copyColumn(QTreeWidgetItem* item, int column)
