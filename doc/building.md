@@ -88,6 +88,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 10.3. If you have
 2. In vcpkg, you need to install the following libraries (use triplet x64-linux in all cases):
 * asio
 * gtest
+* icu
 * libvpx
 * libyuv
 * openssl
