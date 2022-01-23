@@ -35,6 +35,7 @@
 #include "common/ui/update_dialog.h"
 #include "qt_base/qt_logging.h"
 
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -316,7 +317,7 @@ void MainWindow::onSaveAs()
         QString old_path = tab->filePath();
         if (mru_.isPinnedFile(old_path))
         {
-            QScopedPointer<AddressBookTab> duplicate_tab(tab->duplicateTab());
+            std::unique_ptr<AddressBookTab> duplicate_tab(tab->duplicateTab());
             if (duplicate_tab->saveAs())
             {
                 if (Application::instance()->settings().isRecentOpenEnabled())
@@ -326,7 +327,7 @@ void MainWindow::onSaveAs()
                         rebuildMruMenu();
                 }
 
-                addAddressBookTab(duplicate_tab.take());
+                addAddressBookTab(duplicate_tab.release());
             }
         }
         else if (tab->saveAs())

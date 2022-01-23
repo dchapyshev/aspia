@@ -38,7 +38,6 @@
 #include <QApplication>
 #include <QBrush>
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -570,7 +569,8 @@ void QtDesktopWindow::autosizeWindow()
     if (screen_size_.isEmpty())
         return;
 
-    QRect local_screen_rect = QApplication::desktop()->availableGeometry(this);
+    QScreen* current_screen = window()->screen();
+    QRect local_screen_rect = current_screen->availableGeometry();
     QSize window_size = screen_size_ + frameSize() - size();
 
     if (window_size.width() < local_screen_rect.width() &&

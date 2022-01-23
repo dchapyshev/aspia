@@ -42,8 +42,8 @@ public:
     explicit HostTreeItem(const proto::Session& session)
         : session(session)
     {
-        QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
@@ -63,8 +63,8 @@ class RelayTreeItem : public QTreeWidgetItem
 public:
     explicit RelayTreeItem(const proto::Session& session)
     {
-        QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
@@ -592,8 +592,8 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
             tree_host_info->addTopLevelItem(item);
         };
 
-        QString time = QLocale::system().toString(
-            QDateTime::fromTime_t(static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         add_item(tr("Computer Name"), QString::fromStdString(session.computer_name()));
         add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));

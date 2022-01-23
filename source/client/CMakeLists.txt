@@ -227,7 +227,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
     ${SOURCE_CLIENT_CORE_RESOURCES}
     ${SOURCE_CLIENT_CORE_UI})
-target_link_libraries(aspia_client_core
+target_link_libraries(aspia_client_core PRIVATE
     aspia_base
     aspia_common
     aspia_proto

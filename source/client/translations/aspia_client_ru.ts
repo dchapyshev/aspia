@@ -1695,23 +1695,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="121"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="209"/>
-        <location filename="../ui/client_window.cc" line="226"/>
+        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="227"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="211"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="227"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -1752,56 +1752,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="230"/>
+        <location filename="../ui/desktop_panel.cc" line="231"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="232"/>
+        <location filename="../ui/desktop_panel.cc" line="233"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="252"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="379"/>
-        <location filename="../ui/desktop_panel.cc" line="390"/>
-        <location filename="../ui/desktop_panel.cc" line="401"/>
-        <location filename="../ui/desktop_panel.cc" line="412"/>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="424"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="381"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="403"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="414"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="425"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="475"/>
+        <location filename="../ui/desktop_panel.cc" line="476"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -2065,19 +2065,19 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="238"/>
+        <location filename="../ui/qt_desktop_window.cc" line="246"/>
         <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="239"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
+        <location filename="../ui/qt_desktop_window.cc" line="247"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>

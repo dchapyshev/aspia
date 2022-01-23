@@ -988,88 +988,88 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="182"/>
-        <location filename="../main_window.cc" line="1186"/>
+        <location filename="../main_window.cc" line="183"/>
+        <location filename="../main_window.cc" line="1187"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="183"/>
+        <location filename="../main_window.cc" line="184"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>O arquivo da lista de endereços fixada &quot;%1&quot; não foi encontrado. &lt;br/&gt; Este arquivo será desafixado.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="257"/>
+        <location filename="../main_window.cc" line="258"/>
         <source>Information</source>
         <translation>Informação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="258"/>
+        <location filename="../main_window.cc" line="259"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>O catálogo de endereços &quot;%1&quot; já está aberto.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="285"/>
+        <location filename="../main_window.cc" line="286"/>
         <source>Open Address Book</source>
         <translation>Abrir Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="287"/>
+        <location filename="../main_window.cc" line="288"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Catálogo de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="557"/>
-        <location filename="../main_window.cc" line="870"/>
-        <location filename="../main_window.cc" line="947"/>
+        <location filename="../main_window.cc" line="558"/>
+        <location filename="../main_window.cc" line="871"/>
+        <location filename="../main_window.cc" line="948"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="558"/>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="559"/>
+        <location filename="../main_window.cc" line="949"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="766"/>
+        <location filename="../main_window.cc" line="767"/>
         <source>Close other tabs</source>
         <translation>Fechar outras abas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="773"/>
+        <location filename="../main_window.cc" line="774"/>
         <source>Close tab</source>
         <translation>Fechar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="774"/>
-        <location filename="../main_window.cc" line="779"/>
+        <location filename="../main_window.cc" line="775"/>
+        <location filename="../main_window.cc" line="780"/>
         <source>Pin tab</source>
         <translation>Fixar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="871"/>
+        <location filename="../main_window.cc" line="872"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="904"/>
+        <location filename="../main_window.cc" line="905"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="919"/>
+        <location filename="../main_window.cc" line="920"/>
         <source>Show</source>
         <translation>Exibir</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="443"/>
-        <location filename="../main_window.cc" line="1057"/>
+        <location filename="../main_window.cc" line="444"/>
+        <location filename="../main_window.cc" line="1058"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1187"/>
+        <location filename="../main_window.cc" line="1188"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

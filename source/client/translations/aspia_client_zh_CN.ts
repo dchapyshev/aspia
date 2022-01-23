@@ -1659,23 +1659,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="121"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="209"/>
-        <location filename="../ui/client_window.cc" line="226"/>
+        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="227"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="211"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="227"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -1716,56 +1716,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="230"/>
+        <location filename="../ui/desktop_panel.cc" line="231"/>
         <source>Monitor %1 (primary)</source>
         <translation>监视器%1（主）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="232"/>
+        <location filename="../ui/desktop_panel.cc" line="233"/>
         <source>Monitor %1</source>
         <translation>监视器 %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="252"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="379"/>
-        <location filename="../ui/desktop_panel.cc" line="390"/>
-        <location filename="../ui/desktop_panel.cc" line="401"/>
-        <location filename="../ui/desktop_panel.cc" line="412"/>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="424"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="381"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="403"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="414"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="425"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="475"/>
+        <location filename="../ui/desktop_panel.cc" line="476"/>
         <source>Scale</source>
         <translation>缩放</translation>
     </message>
@@ -2022,19 +2022,19 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="238"/>
+        <location filename="../ui/qt_desktop_window.cc" line="246"/>
         <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="239"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
+        <location filename="../ui/qt_desktop_window.cc" line="247"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>

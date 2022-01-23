@@ -18,7 +18,7 @@
 
 #include "host/ui/connect_confirm_dialog.h"
 
-#include "common/session_type.h"
+#include "common/ui/session_type.h"
 
 #include <QAbstractButton>
 #include <QScreen>

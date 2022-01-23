@@ -28,7 +28,7 @@
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "common/desktop_session_constants.h"
-#include "common/session_type.h"
+#include "common/ui/session_type.h"
 #include "console/application.h"
 
 #include <QMessageBox>

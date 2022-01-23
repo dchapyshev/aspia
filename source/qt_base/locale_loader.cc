@@ -119,12 +119,12 @@ void LocaleLoader::installTranslators(const QString& locale)
 
     for (const auto& file : file_list.value())
     {
-        QScopedPointer<QTranslator> translator(new QTranslator());
+        std::unique_ptr<QTranslator> translator = std::make_unique<QTranslator>();
 
         if (translator->load(file, kTranslationsDir))
         {
             if (QCoreApplication::installTranslator(translator.get()))
-                translator_list_.push_back(translator.take());
+                translator_list_.push_back(translator.release());
         }
     }
 }

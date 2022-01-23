@@ -1659,23 +1659,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="121"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="209"/>
-        <location filename="../ui/client_window.cc" line="226"/>
+        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="227"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="211"/>
         <source>An invalid computer address was entered.</source>
         <translation>Er is een ongelid computer adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="227"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Er is een host ID ingevoerd, maar de router was niet geconfigureerd. Configureer de router voor het maken van een verbinding.</translation>
     </message>
@@ -1716,56 +1716,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="230"/>
+        <location filename="../ui/desktop_panel.cc" line="231"/>
         <source>Monitor %1 (primary)</source>
         <translation>Beeldscherm %1 (primair)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="232"/>
+        <location filename="../ui/desktop_panel.cc" line="233"/>
         <source>Monitor %1</source>
         <translation>Beeldscherm %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="252"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="379"/>
-        <location filename="../ui/desktop_panel.cc" line="390"/>
-        <location filename="../ui/desktop_panel.cc" line="401"/>
-        <location filename="../ui/desktop_panel.cc" line="412"/>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="424"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="381"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet U zeker dat U de computer op afstand wilt herstarten?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="403"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="414"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt beeindigen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="425"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet U zeker dat U de gebruikers sessie van de computer op afstand wilt vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="475"/>
+        <location filename="../ui/desktop_panel.cc" line="476"/>
         <source>Scale</source>
         <translation>Schaal</translation>
     </message>
@@ -2022,19 +2022,19 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="238"/>
+        <location filename="../ui/qt_desktop_window.cc" line="246"/>
         <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="239"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
+        <location filename="../ui/qt_desktop_window.cc" line="247"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>

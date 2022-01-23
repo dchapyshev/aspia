@@ -1627,23 +1627,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="120"/>
+        <location filename="../ui/client_window.cc" line="121"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="209"/>
-        <location filename="../ui/client_window.cc" line="226"/>
+        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="227"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="210"/>
+        <location filename="../ui/client_window.cc" line="211"/>
         <source>An invalid computer address was entered.</source>
         <translation>Um endereço inválido do computador foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="227"/>
+        <location filename="../ui/client_window.cc" line="228"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -1684,56 +1684,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="230"/>
+        <location filename="../ui/desktop_panel.cc" line="231"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (primário)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="232"/>
+        <location filename="../ui/desktop_panel.cc" line="233"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="252"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="379"/>
-        <location filename="../ui/desktop_panel.cc" line="390"/>
-        <location filename="../ui/desktop_panel.cc" line="401"/>
-        <location filename="../ui/desktop_panel.cc" line="412"/>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="424"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
+        <location filename="../ui/desktop_panel.cc" line="381"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
+        <location filename="../ui/desktop_panel.cc" line="392"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="403"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="414"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="425"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="475"/>
+        <location filename="../ui/desktop_panel.cc" line="476"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -1990,19 +1990,19 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="238"/>
+        <location filename="../ui/qt_desktop_window.cc" line="246"/>
         <location filename="../ui/qt_desktop_window.cc" line="619"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="239"/>
         <source>There are no supported video encodings.</source>
         <translation>Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
+        <location filename="../ui/qt_desktop_window.cc" line="247"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>

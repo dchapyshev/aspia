@@ -19,7 +19,7 @@
 #include "host/ui/user_dialog.h"
 
 #include "base/logging.h"
-#include "common/session_type.h"
+#include "common/ui/session_type.h"
 #include "proto/common.pb.h"
 
 #include <QMessageBox>

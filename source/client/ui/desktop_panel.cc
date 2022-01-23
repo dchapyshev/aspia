@@ -22,6 +22,7 @@
 #include "client/ui/desktop_settings.h"
 #include "client/ui/select_screen_action.h"
 
+#include <QActionGroup>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPropertyAnimation>
