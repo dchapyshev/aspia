@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/session_type.h"
+#include "common/ui/session_type.h"
 
 #include <QCoreApplication>
 

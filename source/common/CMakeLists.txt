@@ -46,8 +46,6 @@ list(APPEND SOURCE_COMMON
     file_worker.h
     keycode_converter.cc
     keycode_converter.h
-    session_type.cc
-    session_type.h
     system_info_constants.cc
     system_info_constants.h)
 
@@ -86,6 +84,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.ui
     ui/language_action.cc
     ui/language_action.h
+    ui/session_type.cc
+    ui/session_type.h
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui
@@ -124,7 +124,7 @@ add_library(aspia_common STATIC
     ${SOURCE_COMMON_UI}
     ${SOURCE_COMMON_WIN}
     ${SOURCE_COMMON_RESOURCES})
-target_link_libraries(aspia_common
+target_link_libraries(aspia_common PRIVATE
     aspia_base
     aspia_proto
     ${QT_COMMON_LIBS}
