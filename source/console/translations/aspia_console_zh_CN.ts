@@ -73,27 +73,27 @@
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.ui" line="92"/>
+        <location filename="../address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
         <translation>计算机名</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="97"/>
+        <location filename="../address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
         <translation>地址 / ID</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="102"/>
+        <location filename="../address_book_tab.ui" line="108"/>
         <source>Comment</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="107"/>
+        <location filename="../address_book_tab.ui" line="113"/>
         <source>Created</source>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="112"/>
+        <location filename="../address_book_tab.ui" line="118"/>
         <source>Modified</source>
         <translation>修改时间</translation>
     </message>

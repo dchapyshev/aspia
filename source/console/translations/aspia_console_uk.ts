@@ -73,27 +73,27 @@
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.ui" line="92"/>
+        <location filename="../address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
         <translation>Ім&apos;я комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="97"/>
+        <location filename="../address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
         <translation>Адреса / ID</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="102"/>
+        <location filename="../address_book_tab.ui" line="108"/>
         <source>Comment</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="107"/>
+        <location filename="../address_book_tab.ui" line="113"/>
         <source>Created</source>
         <translation>Стоврено</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.ui" line="112"/>
+        <location filename="../address_book_tab.ui" line="118"/>
         <source>Modified</source>
         <translation>Змінено</translation>
     </message>
