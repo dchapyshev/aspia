@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-#include <audioclient.h>
+#include <Audioclient.h>
 #include <audiopolicy.h>
 #include <mmdeviceapi.h>
 #include <wrl/client.h>
