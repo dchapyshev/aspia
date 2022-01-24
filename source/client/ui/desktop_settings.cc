@@ -39,7 +39,7 @@ DesktopSettings::DesktopSettings()
 
 int DesktopSettings::scale() const
 {
-    int result = settings_.value(kScaleParam, 100).toInt();
+    int result = settings_.value(kScaleParam, -1).toInt();
 
     switch (result)
     {

@@ -591,11 +591,13 @@ void DesktopPanel::updateScaleMenu()
 {
     if (scale_ == -1)
     {
+        ui.action_autoscroll->setEnabled(false);
         ui.action_fit_window->setChecked(true);
         scale_group_->setEnabled(false);
     }
     else
     {
+        ui.action_autoscroll->setEnabled(true);
         ui.action_fit_window->setChecked(false);
         scale_group_->setEnabled(true);
 
