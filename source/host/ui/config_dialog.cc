@@ -66,11 +66,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 
-    connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, [=]()
-    {
-        setConfigChanged(true);
-    });
-
     //---------------------------------------------------------------------------------------------
     // Security Tab
     //---------------------------------------------------------------------------------------------
@@ -143,6 +138,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.combobox_no_user_action, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
+    {
+        setConfigChanged(true);
+    });
+
+    //---------------------------------------------------------------------------------------------
+    // Other
+    connect(ui.checkbox_disable_shutdown, &QCheckBox::toggled, [=]()
     {
         setConfigChanged(true);
     });
@@ -251,6 +253,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &ConfigDialog::onButtonBoxClicked);
     reloadAll();
+
+    QTimer::singleShot(0, this, &ConfigDialog::adjustSize);
 }
 
 ConfigDialog::~ConfigDialog()

@@ -74,7 +74,7 @@ public:
                 base::SessionId session_id,
                 std::unique_ptr<base::IpcChannel> channel,
                 Delegate* delegate);
-    ~UserSession();
+    ~UserSession() override;
 
     static const char* typeToString(Type type);
     static const char* stateToString(State state);

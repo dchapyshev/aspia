@@ -327,7 +327,16 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
     DCHECK(client_session);
 
-    if (connection_confirmation_)
+    bool confirm_required = true;
+
+    proto::SessionType session_type = client_session->sessionType();
+    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+    {
+        LOG(LS_INFO) << "Confirmation for system info session NOT required";
+        confirm_required = false;
+    }
+
+    if (connection_confirmation_ && confirm_required)
     {
         LOG(LS_INFO) << "User confirmation of connection is required (state: "
                      << stateToString(state_) << ")";
@@ -937,6 +946,13 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     if (!channel_)
     {
         LOG(LS_WARNING) << "No active IPC channel";
+        return;
+    }
+
+    proto::SessionType session_type = client_session.sessionType();
+    if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+    {
+        LOG(LS_INFO) << "Notify for system info session NOT required";
         return;
     }
 
