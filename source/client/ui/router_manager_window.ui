@@ -64,6 +64,9 @@
            <property name="indentation">
             <number>0</number>
            </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
            <column>
             <property name="text">
              <string>Computer Name</string>
@@ -164,6 +167,9 @@
          <widget class="QTreeWidget" name="tree_relay">
           <property name="indentation">
            <number>0</number>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <column>
            <property name="text">

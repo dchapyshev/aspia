@@ -52,6 +52,18 @@ public:
 
     ~HostTreeItem() override = default;
 
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const override
+    {
+        if (treeWidget()->sortColumn() == 2)
+        {
+            const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+            return session.timepoint() < other_item->session.timepoint();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
     proto::Session session;
 
 private:
@@ -62,9 +74,10 @@ class RelayTreeItem : public QTreeWidgetItem
 {
 public:
     explicit RelayTreeItem(const proto::Session& session)
+        : timepoint(session.timepoint())
     {
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
-            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+            static_cast<uint>(timepoint)), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
@@ -82,6 +95,20 @@ public:
         setText(4, QString::fromStdString(session.computer_name()));
         setText(5, QString::fromStdString(session.os_name()));
     }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const override
+    {
+        if (treeWidget()->sortColumn() == 1)
+        {
+            const RelayTreeItem* other_item = static_cast<const RelayTreeItem*>(&other);
+            return timepoint < other_item->timepoint;
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    const uint64_t timepoint;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);

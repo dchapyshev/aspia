@@ -50,22 +50,22 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../session_type.cc" line="30"/>
+        <location filename="../ui/session_type.cc" line="30"/>
         <source>Desktop Manage</source>
         <translation>Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../session_type.cc" line="33"/>
+        <location filename="../ui/session_type.cc" line="33"/>
         <source>Desktop View</source>
         <translation>Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../session_type.cc" line="36"/>
+        <location filename="../ui/session_type.cc" line="36"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../session_type.cc" line="39"/>
+        <location filename="../ui/session_type.cc" line="39"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
