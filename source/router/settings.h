@@ -40,9 +40,6 @@ public:
     void setPrivateKey(const base::ByteArray& private_key);
     base::ByteArray privateKey() const;
 
-    void setMinLogLevel(int level);
-    int minLogLevel() const;
-
     using WhiteList = std::vector<std::u16string>;
 
     void setClientWhiteList(const WhiteList& list);

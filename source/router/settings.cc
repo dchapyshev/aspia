@@ -51,7 +51,6 @@ void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
     setPrivateKey(base::ByteArray());
-    setMinLogLevel(1);
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
     setAdminWhiteList(WhiteList());
@@ -81,16 +80,6 @@ void Settings::setPrivateKey(const base::ByteArray& private_key)
 base::ByteArray Settings::privateKey() const
 {
     return base::fromHex(impl_.get<std::string>("PrivateKey"));
-}
-
-void Settings::setMinLogLevel(int level)
-{
-    impl_.set<int>("MinLogLevel", level);
-}
-
-int Settings::minLogLevel() const
-{
-    return impl_.get<int>("MinLogLevel", 1);
 }
 
 void Settings::setClientWhiteList(const WhiteList& list)

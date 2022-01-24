@@ -54,7 +54,6 @@ void Settings::reset()
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(std::chrono::minutes(5));
     setMaxPeerCount(100);
-    setMinLogLevel(1);
 }
 
 void Settings::flush()
@@ -130,16 +129,6 @@ void Settings::setMaxPeerCount(uint32_t count)
 uint32_t Settings::maxPeerCount() const
 {
     return impl_.get<uint32_t>("MaxPeerCount", 100);
-}
-
-void Settings::setMinLogLevel(int level)
-{
-    impl_.set<int>("MinLogLevel", level);
-}
-
-int Settings::minLogLevel() const
-{
-    return impl_.get<int>("MinLogLevel", 1);
 }
 
 } // namespace relay

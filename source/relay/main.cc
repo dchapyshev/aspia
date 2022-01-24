@@ -36,21 +36,6 @@
 
 namespace {
 
-void initLogging()
-{
-    relay::Settings settings;
-
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = settings.minLogLevel();
-
-    base::initLogging(logging_settings);
-}
-
-void shutdownLogging()
-{
-    base::shutdownLogging();
-}
-
 void createConfig()
 {
     std::filesystem::path settings_file_path = relay::Settings::filePath();
@@ -90,7 +75,7 @@ void showHelp()
 int wmain()
 {
     base::installFailureHandler(L"aspia_relay");
-    initLogging();
+    base::initLogging();
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -127,13 +112,13 @@ int wmain()
         relay::Service().exec();
     }
 
-    shutdownLogging();
+    base::shutdownLogging();
     return 0;
 }
 #else
 int main(int argc, const char* const* argv)
 {
-    initLogging();
+    base::initLogging();
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -168,6 +153,6 @@ int main(int argc, const char* const* argv)
     }
 
     crypto_initializer.reset();
-    shutdownLogging();
+    base::shutdownLogging();
 }
 #endif

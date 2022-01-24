@@ -57,9 +57,6 @@ public:
     void setMaxPeerCount(uint32_t count);
     uint32_t maxPeerCount() const;
 
-    void setMinLogLevel(int level);
-    int minLogLevel() const;
-
 private:
     base::JsonSettings impl_;
 };

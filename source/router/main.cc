@@ -41,21 +41,6 @@
 
 namespace {
 
-void initLogging()
-{
-    router::Settings settings;
-
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = settings.minLogLevel();
-
-    base::initLogging(logging_settings);
-}
-
-void shutdownLogging()
-{
-    base::shutdownLogging();
-}
-
 bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
 {
     base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
@@ -242,7 +227,7 @@ void showHelp()
 int wmain()
 {
     base::installFailureHandler(L"aspia_router");
-    initLogging();
+    base::initLogging();
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -283,13 +268,13 @@ int wmain()
         router::Service().exec();
     }
 
-    shutdownLogging();
+    base::shutdownLogging();
     return 0;
 }
 #else
 int main(int argc, const char* const* argv)
 {
-    initLogging();
+    base::initLogging();
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -328,6 +313,6 @@ int main(int argc, const char* const* argv)
     }
 
     crypto_initializer.reset();
-    shutdownLogging();
+    base::shutdownLogging();
 }
 #endif
