@@ -31,7 +31,7 @@ class SessionHost : public Session
 {
 public:
     SessionHost();
-    ~SessionHost();
+    ~SessionHost() override;
 
     using HostIdList = std::vector<base::HostId>;
 

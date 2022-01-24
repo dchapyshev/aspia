@@ -41,7 +41,7 @@ class Server
 {
 public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Server();
+    ~Server() override;
 
     bool start();
 

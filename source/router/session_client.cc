@@ -53,6 +53,10 @@ void SessionClient::onMessageReceived(const base::ByteArray& buffer)
     {
         readConnectionRequest(message->connection_request());
     }
+    else if (message->has_check_host_status())
+    {
+        readCheckHostStatus(message->check_host_status());
+    }
     else
     {
         LOG(LS_WARNING) << "Unhandled message from client";
@@ -126,6 +130,21 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
 
     LOG(LS_INFO) << "Sending connection offer to client";
     offer->set_peer_role(proto::ConnectionOffer::CLIENT);
+    sendMessage(*message);
+}
+
+void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host_status)
+{
+    std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
+    proto::HostStatus* host_status = message->mutable_host_status();
+
+    if (server().hostSessionById(check_host_status.host_id()))
+        host_status->set_status(proto::HostStatus::STATUS_ONLINE);
+    else
+        host_status->set_status(proto::HostStatus::STATUS_OFFLINE);
+
+    LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
+                 << ": " << host_status->status();
     sendMessage(*message);
 }
 

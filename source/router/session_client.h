@@ -31,7 +31,7 @@ class SessionClient : public Session
 {
 public:
     SessionClient();
-    ~SessionClient();
+    ~SessionClient() override;
 
 protected:
     // Session implementation.
@@ -43,6 +43,7 @@ protected:
 
 private:
     void readConnectionRequest(const proto::ConnectionRequest& request);
+    void readCheckHostStatus(const proto::CheckHostStatus& check_host_status);
 
     DISALLOW_COPY_AND_ASSIGN(SessionClient);
 };

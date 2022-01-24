@@ -29,7 +29,7 @@ class SessionRelay : public Session
 {
 public:
     SessionRelay();
-    ~SessionRelay();
+    ~SessionRelay() override;
 
     using PeerData = std::pair<std::string, uint16_t>;
 

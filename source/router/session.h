@@ -34,7 +34,7 @@ class Session : public base::NetworkChannel::Listener
 {
 public:
     explicit Session(proto::RouterSession session_type);
-    virtual ~Session();
+    virtual ~Session() override;
 
     using SessionId = int64_t;
 

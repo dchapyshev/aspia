@@ -30,7 +30,7 @@ class SessionAdmin : public Session
 {
 public:
     SessionAdmin();
-    ~SessionAdmin();
+    ~SessionAdmin() override;
 
 protected:
     // Session implementation.

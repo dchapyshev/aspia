@@ -83,10 +83,28 @@ message ConnectionOffer
     RelayCredentials relay = 3;
 }
 
+message CheckHostStatus
+{
+    fixed64 host_id = 1;
+}
+
+message HostStatus
+{
+    enum Status
+    {
+        STATUS_UNKNOWN = 0;
+        STATUS_OFFLINE = 1;
+        STATUS_ONLINE  = 2;
+    }
+
+    Status status = 1;
+}
+
 message RouterToPeer
 {
     HostIdResponse host_id_response  = 1;
     ConnectionOffer connection_offer = 2;
+    HostStatus host_status           = 3;
 }
 
 message PeerToRouter
@@ -94,4 +112,5 @@ message PeerToRouter
     ConnectionRequest connection_request = 1;
     HostIdRequest host_id_request        = 2;
     ResetHostId reset_host_id            = 3;
+    CheckHostStatus check_host_status    = 4;
 }
