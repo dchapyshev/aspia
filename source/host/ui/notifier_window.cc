@@ -57,6 +57,10 @@ public:
                 setIcon(0, QIcon(QStringLiteral(":/img/computer_info.png")));
                 break;
 
+            case proto::SESSION_TYPE_TEXT_CHAT:
+                setIcon(0, QIcon(QStringLiteral(":/img/text-chat.png")));
+                break;
+
             default:
                 LOG(LS_FATAL) << "Unexpected session type: " << client.session_type;
                 return;
@@ -123,7 +127,6 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 
 #if 1
     ui.button_voice_chat->setVisible(false);
-    ui.button_text_chat->setVisible(false);
 #endif
 
     setAttribute(Qt::WA_TranslucentBackground);

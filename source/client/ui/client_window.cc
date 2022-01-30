@@ -274,6 +274,10 @@ void ClientWindow::connectToHost()
             session_window = new client::QtSystemInfoWindow();
             break;
 
+        case proto::SESSION_TYPE_TEXT_CHAT:
+            // TODO: Implement me!
+            break;
+
         default:
             NOTREACHED();
             break;
@@ -324,6 +328,7 @@ void ClientWindow::reloadSessionTypes()
     add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
     add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
     add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(QStringLiteral(":/img/text_chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

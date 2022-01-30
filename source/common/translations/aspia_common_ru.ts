@@ -69,6 +69,11 @@
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
+    <message>
+        <location filename="../ui/session_type.cc" line="42"/>
+        <source>Text Chat</source>
+        <translation>Текстовый чат</translation>
+    </message>
 </context>
 <context>
     <name>StatusDialog</name>

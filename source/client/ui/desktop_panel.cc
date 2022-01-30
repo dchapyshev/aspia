@@ -173,6 +173,13 @@ void DesktopPanel::enableSystemInfo(bool enable)
     updateSize();
 }
 
+void DesktopPanel::enableTextChat(bool enable)
+{
+    ui.action_text_chat->setVisible(enable);
+    ui.action_text_chat->setEnabled(enable);
+    updateSize();
+}
+
 void DesktopPanel::enableRemoteUpdate(bool enable)
 {
     ui.action_update->setVisible(enable);

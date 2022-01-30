@@ -33,11 +33,12 @@ class DesktopPanel : public QFrame
 
 public:
     DesktopPanel(proto::SessionType session_type, QWidget* parent);
-    ~DesktopPanel();
+    ~DesktopPanel() override;
 
     void enableScreenSelect(bool enable);
     void enablePowerControl(bool enable);
     void enableSystemInfo(bool enable);
+    void enableTextChat(bool enable);
     void enableRemoteUpdate(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);

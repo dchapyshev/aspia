@@ -38,6 +38,9 @@ const char* sessionTypeToString(proto::SessionType session_type)
         case proto::SESSION_TYPE_SYSTEM_INFO:
             return QT_TRANSLATE_NOOP("SessionType", "System Information");
 
+        case proto::SESSION_TYPE_TEXT_CHAT:
+            return QT_TRANSLATE_NOOP("SessionType", "Text Chat");
+
         default:
             return "";
     }

@@ -69,6 +69,7 @@
      <addaction name="action_fullscreen"/>
      <addaction name="separator"/>
      <addaction name="action_file_transfer"/>
+     <addaction name="action_text_chat"/>
      <addaction name="action_system_info"/>
      <addaction name="separator"/>
      <addaction name="action_update"/>
@@ -417,6 +418,21 @@
   <action name="action_paste_clipboard_as_keystrokes">
    <property name="text">
     <string>Paste clipboard as keystrokes</string>
+   </property>
+  </action>
+  <action name="action_text_chat">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
+   </property>
+   <property name="text">
+    <string>Text Chat</string>
+   </property>
+   <property name="toolTip">
+    <string>Text Chat</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

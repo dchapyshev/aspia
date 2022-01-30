@@ -280,6 +280,7 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     panel_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
     panel_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
     panel_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
+    panel_->enableTextChat(base::contains(extensions_list, common::kTextChatExtension));
 }
 
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
