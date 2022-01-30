@@ -46,7 +46,7 @@
                 <ServiceDependency Id="AFD"/>
                 <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
-            <!--ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" /-->
+            <ServiceControl Id="StartService" Stop="both" Remove="uninstall" Name="$(var.ServiceName)" Wait="yes" />
         </Component>
     </DirectoryRef>
 
