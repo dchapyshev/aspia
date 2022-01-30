@@ -42,7 +42,7 @@ Windows
 
 Linux
 -----
-The build for Linux was tested only in Ubuntu 20.04 and Debian 10.3. If you have a different distribution kit or its version, then additional steps may be required.
+The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have a different distribution kit or its version, then additional steps may be required.
 1. Install the following packages in your package manager (**packages must be installed before installing vcpkg and its packages**):
 * ninja-build
 * autoconf
@@ -71,6 +71,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 10.3. If you have
 * libxcb-randr0-dev
 * libxcb-render-util0-dev
 * libxcb-xinerama-dev
+* libxcb-util-dev
 * libxkbcommon-dev
 * libxkbcommon-x11-dev
 * libatspi2.0-dev
