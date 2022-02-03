@@ -726,7 +726,7 @@ if (LINUX)
     set(BASE_PLATFORM_LIBS ${XFIXES_LIB} stdc++fs ICU::uc ICU::dt xdg_user_dirs)
 endif()
 
-target_link_libraries(aspia_base aspia_proto ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS})
+target_link_libraries(aspia_base PRIVATE aspia_proto ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS})
 
 if (WIN32)
     set(BASE_TESTS_PLATFORM_LIBS crypt32 iphlpapi ws2_32)
@@ -750,7 +750,7 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_SETTINGS_TESTS}
     ${SOURCE_BASE_STRINGS_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
-target_link_libraries(aspia_base_tests
+target_link_libraries(aspia_base_tests PRIVATE
     aspia_base
     aspia_proto
     GTest::gtest

@@ -111,6 +111,10 @@ if (APPLE)
     set_source_files_properties(${aspia_console_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
 
+if (LINUX)
+    set(CONSOLE_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ICU::uc ICU::dt)
+endif()
+
 add_executable(aspia_console MACOSX_BUNDLE
     ${aspia_console_ICON}
     ${SOURCE_CONSOLE}

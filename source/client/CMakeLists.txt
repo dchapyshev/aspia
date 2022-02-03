@@ -227,7 +227,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
     ${SOURCE_CLIENT_CORE_RESOURCES}
     ${SOURCE_CLIENT_CORE_UI})
-target_link_libraries(aspia_client_core PRIVATE
+target_link_libraries(aspia_client_core
     aspia_base
     aspia_common
     aspia_proto
@@ -277,7 +277,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(CLIENT_PLATFORM_LIBS stdc++fs Xfixes ICU::uc ICU::dt)
+    set(CLIENT_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ICU::uc ICU::dt)
 endif()
 
 if (APPLE)
