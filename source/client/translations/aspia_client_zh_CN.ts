@@ -338,147 +338,153 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="125"/>
+        <location filename="../ui/desktop_panel.ui" line="126"/>
         <source>Lock toolbar</source>
         <translation>锁定工具栏</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="137"/>
+        <location filename="../ui/desktop_panel.ui" line="138"/>
         <source>Session configuration</source>
         <translation>会话配置</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="149"/>
+        <location filename="../ui/desktop_panel.ui" line="150"/>
         <source>Monitor selection</source>
         <translation>监视器选择</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="164"/>
+        <location filename="../ui/desktop_panel.ui" line="165"/>
         <source>Automatic window size</source>
         <translation>自动窗口大小</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="179"/>
+        <location filename="../ui/desktop_panel.ui" line="180"/>
         <source>Switch to full screen mode or back</source>
         <translation>切换到全屏模式或返回</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="190"/>
+        <location filename="../ui/desktop_panel.ui" line="191"/>
         <source>Automatic scrolling</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="202"/>
+        <location filename="../ui/desktop_panel.ui" line="203"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>发送 Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="214"/>
+        <location filename="../ui/desktop_panel.ui" line="215"/>
         <source>Advanced menu</source>
         <translation>高级菜单</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="219"/>
-        <location filename="../ui/desktop_panel.ui" line="222"/>
-        <location filename="../ui/desktop_panel.ui" line="225"/>
+        <location filename="../ui/desktop_panel.ui" line="220"/>
+        <location filename="../ui/desktop_panel.ui" line="223"/>
+        <location filename="../ui/desktop_panel.ui" line="226"/>
         <source>Save screenshot...</source>
         <translation>保存截图...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="237"/>
+        <location filename="../ui/desktop_panel.ui" line="238"/>
         <source>File transfer</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="245"/>
+        <location filename="../ui/desktop_panel.ui" line="246"/>
         <source>Scale</source>
         <translation>缩放</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="256"/>
+        <location filename="../ui/desktop_panel.ui" line="257"/>
         <source>Send key combinations</source>
         <translation>发送组合键</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="265"/>
-        <location filename="../ui/desktop_panel.ui" line="268"/>
+        <location filename="../ui/desktop_panel.ui" line="266"/>
+        <location filename="../ui/desktop_panel.ui" line="269"/>
         <source>Power control</source>
         <translation>电源控制</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="276"/>
+        <location filename="../ui/desktop_panel.ui" line="277"/>
         <source>Shutdown</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="281"/>
+        <location filename="../ui/desktop_panel.ui" line="282"/>
         <source>Reboot</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="286"/>
+        <location filename="../ui/desktop_panel.ui" line="287"/>
         <source>Logoff</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="291"/>
+        <location filename="../ui/desktop_panel.ui" line="292"/>
         <source>Lock</source>
         <translation>锁定</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="300"/>
+        <location filename="../ui/desktop_panel.ui" line="301"/>
         <source>Remote Update</source>
         <translation>远程升级</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="312"/>
+        <location filename="../ui/desktop_panel.ui" line="313"/>
         <source>System Information</source>
         <translation>系统信息</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="324"/>
+        <location filename="../ui/desktop_panel.ui" line="325"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="327"/>
+        <location filename="../ui/desktop_panel.ui" line="328"/>
         <source>Close session</source>
         <translation>关闭会话</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="386"/>
+        <location filename="../ui/desktop_panel.ui" line="387"/>
         <source>Fit window</source>
         <translation>安装窗口</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="395"/>
+        <location filename="../ui/desktop_panel.ui" line="396"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="398"/>
+        <location filename="../ui/desktop_panel.ui" line="399"/>
         <source>Minimize window</source>
         <translation>最小化窗口</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="403"/>
-        <location filename="../ui/desktop_panel.ui" line="406"/>
+        <location filename="../ui/desktop_panel.ui" line="404"/>
+        <location filename="../ui/desktop_panel.ui" line="407"/>
         <source>Statistics</source>
         <translation>统计</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="411"/>
+        <location filename="../ui/desktop_panel.ui" line="412"/>
         <source>Reboot (Safe mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="414"/>
+        <location filename="../ui/desktop_panel.ui" line="415"/>
         <source>Reboot in safe mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="419"/>
+        <location filename="../ui/desktop_panel.ui" line="420"/>
         <source>Paste clipboard as keystrokes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="429"/>
+        <location filename="../ui/desktop_panel.ui" line="432"/>
+        <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1716,56 +1722,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="231"/>
+        <location filename="../ui/desktop_panel.cc" line="238"/>
         <source>Monitor %1 (primary)</source>
         <translation>监视器%1（主）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="233"/>
+        <location filename="../ui/desktop_panel.cc" line="240"/>
         <source>Monitor %1</source>
         <translation>监视器 %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="252"/>
+        <location filename="../ui/desktop_panel.cc" line="259"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="387"/>
+        <location filename="../ui/desktop_panel.cc" line="398"/>
+        <location filename="../ui/desktop_panel.cc" line="409"/>
+        <location filename="../ui/desktop_panel.cc" line="420"/>
+        <location filename="../ui/desktop_panel.cc" line="431"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="381"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="392"/>
+        <location filename="../ui/desktop_panel.cc" line="399"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="403"/>
+        <location filename="../ui/desktop_panel.cc" line="410"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
+        <location filename="../ui/desktop_panel.cc" line="421"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
+        <location filename="../ui/desktop_panel.cc" line="432"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="476"/>
+        <location filename="../ui/desktop_panel.cc" line="483"/>
         <source>Scale</source>
         <translation>缩放</translation>
     </message>
@@ -2024,7 +2030,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="238"/>
         <location filename="../ui/qt_desktop_window.cc" line="246"/>
-        <location filename="../ui/qt_desktop_window.cc" line="619"/>
+        <location filename="../ui/qt_desktop_window.cc" line="620"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -2039,17 +2045,17 @@
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="597"/>
+        <location filename="../ui/qt_desktop_window.cc" line="598"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="599"/>
+        <location filename="../ui/qt_desktop_window.cc" line="600"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="619"/>
+        <location filename="../ui/qt_desktop_window.cc" line="620"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>

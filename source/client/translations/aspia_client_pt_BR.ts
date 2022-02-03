@@ -338,147 +338,153 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="125"/>
+        <location filename="../ui/desktop_panel.ui" line="126"/>
         <source>Lock toolbar</source>
         <translation>Bloquear barra de ferramentas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="137"/>
+        <location filename="../ui/desktop_panel.ui" line="138"/>
         <source>Session configuration</source>
         <translation>Configuração da sessão</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="149"/>
+        <location filename="../ui/desktop_panel.ui" line="150"/>
         <source>Monitor selection</source>
         <translation>Seleção do monitor</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="164"/>
+        <location filename="../ui/desktop_panel.ui" line="165"/>
         <source>Automatic window size</source>
         <translation>Tamanho da janela automático</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="179"/>
+        <location filename="../ui/desktop_panel.ui" line="180"/>
         <source>Switch to full screen mode or back</source>
         <translation>Trocar para o modo de tela cheia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="190"/>
+        <location filename="../ui/desktop_panel.ui" line="191"/>
         <source>Automatic scrolling</source>
         <translation>Rolagem automática</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="202"/>
+        <location filename="../ui/desktop_panel.ui" line="203"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Enviar CTRL+ALT+DEL</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="214"/>
+        <location filename="../ui/desktop_panel.ui" line="215"/>
         <source>Advanced menu</source>
         <translation>Menu avançado</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="219"/>
-        <location filename="../ui/desktop_panel.ui" line="222"/>
-        <location filename="../ui/desktop_panel.ui" line="225"/>
+        <location filename="../ui/desktop_panel.ui" line="220"/>
+        <location filename="../ui/desktop_panel.ui" line="223"/>
+        <location filename="../ui/desktop_panel.ui" line="226"/>
         <source>Save screenshot...</source>
         <translation>Salvar captura de tela...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="237"/>
+        <location filename="../ui/desktop_panel.ui" line="238"/>
         <source>File transfer</source>
         <translation>Transferência de arquivos</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="245"/>
+        <location filename="../ui/desktop_panel.ui" line="246"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="256"/>
+        <location filename="../ui/desktop_panel.ui" line="257"/>
         <source>Send key combinations</source>
         <translation>Enviar combinação de teclas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="265"/>
-        <location filename="../ui/desktop_panel.ui" line="268"/>
+        <location filename="../ui/desktop_panel.ui" line="266"/>
+        <location filename="../ui/desktop_panel.ui" line="269"/>
         <source>Power control</source>
         <translation>Controle de energia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="276"/>
+        <location filename="../ui/desktop_panel.ui" line="277"/>
         <source>Shutdown</source>
         <translation>Desligar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="281"/>
+        <location filename="../ui/desktop_panel.ui" line="282"/>
         <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="286"/>
+        <location filename="../ui/desktop_panel.ui" line="287"/>
         <source>Logoff</source>
         <translation>Logoff</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="291"/>
+        <location filename="../ui/desktop_panel.ui" line="292"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="300"/>
+        <location filename="../ui/desktop_panel.ui" line="301"/>
         <source>Remote Update</source>
         <translation>Atualização remota</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="312"/>
+        <location filename="../ui/desktop_panel.ui" line="313"/>
         <source>System Information</source>
         <translation>Informações do Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="324"/>
+        <location filename="../ui/desktop_panel.ui" line="325"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="327"/>
+        <location filename="../ui/desktop_panel.ui" line="328"/>
         <source>Close session</source>
         <translation>Fechar sessão</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="386"/>
+        <location filename="../ui/desktop_panel.ui" line="387"/>
         <source>Fit window</source>
         <translation>Ajustar a janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="395"/>
+        <location filename="../ui/desktop_panel.ui" line="396"/>
         <source>Minimize</source>
         <translation>Minimizar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="398"/>
+        <location filename="../ui/desktop_panel.ui" line="399"/>
         <source>Minimize window</source>
         <translation>Minimizar janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="403"/>
-        <location filename="../ui/desktop_panel.ui" line="406"/>
+        <location filename="../ui/desktop_panel.ui" line="404"/>
+        <location filename="../ui/desktop_panel.ui" line="407"/>
         <source>Statistics</source>
         <translation>Estatísticas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="411"/>
+        <location filename="../ui/desktop_panel.ui" line="412"/>
         <source>Reboot (Safe mode)</source>
         <translation>Reiniciar (Modo seguro)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="414"/>
+        <location filename="../ui/desktop_panel.ui" line="415"/>
         <source>Reboot in safe mode</source>
         <translation>Reiniciar no modo seguro</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="419"/>
+        <location filename="../ui/desktop_panel.ui" line="420"/>
         <source>Paste clipboard as keystrokes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="429"/>
+        <location filename="../ui/desktop_panel.ui" line="432"/>
+        <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1684,56 +1690,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="231"/>
+        <location filename="../ui/desktop_panel.cc" line="238"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (primário)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="233"/>
+        <location filename="../ui/desktop_panel.cc" line="240"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="252"/>
+        <location filename="../ui/desktop_panel.cc" line="259"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="380"/>
-        <location filename="../ui/desktop_panel.cc" line="391"/>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="387"/>
+        <location filename="../ui/desktop_panel.cc" line="398"/>
+        <location filename="../ui/desktop_panel.cc" line="409"/>
+        <location filename="../ui/desktop_panel.cc" line="420"/>
+        <location filename="../ui/desktop_panel.cc" line="431"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="381"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="392"/>
+        <location filename="../ui/desktop_panel.cc" line="399"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="403"/>
+        <location filename="../ui/desktop_panel.cc" line="410"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
+        <location filename="../ui/desktop_panel.cc" line="421"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
+        <location filename="../ui/desktop_panel.cc" line="432"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="476"/>
+        <location filename="../ui/desktop_panel.cc" line="483"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -1992,7 +1998,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="238"/>
         <location filename="../ui/qt_desktop_window.cc" line="246"/>
-        <location filename="../ui/qt_desktop_window.cc" line="619"/>
+        <location filename="../ui/qt_desktop_window.cc" line="620"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -2007,17 +2013,17 @@
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="597"/>
+        <location filename="../ui/qt_desktop_window.cc" line="598"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="599"/>
+        <location filename="../ui/qt_desktop_window.cc" line="600"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="619"/>
+        <location filename="../ui/qt_desktop_window.cc" line="620"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
