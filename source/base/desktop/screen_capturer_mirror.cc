@@ -138,7 +138,8 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     const Rect& screen_rect = helper_->screenRect();
 
     frame_->setTopLeft(screen_rect.topLeft().subtract(desktop_rect_.topLeft()));
-    frame_->setDpi(Point(96, 96));
+    frame_->setDpi(Point(GetDeviceCaps(desktop_dc_, LOGPIXELSX),
+                         GetDeviceCaps(desktop_dc_, LOGPIXELSY)));
 
     return frame_.get();
 }
