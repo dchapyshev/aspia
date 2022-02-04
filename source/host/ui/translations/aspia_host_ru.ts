@@ -869,37 +869,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="173"/>
+        <location filename="../notifier_window.cc" line="178"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="217"/>
+        <location filename="../notifier_window.cc" line="222"/>
         <source>Unlock mouse</source>
         <translation>Разблокировать мышь</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="222"/>
+        <location filename="../notifier_window.cc" line="227"/>
         <source>Lock mouse</source>
         <translation>Блокировать мышь</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="241"/>
+        <location filename="../notifier_window.cc" line="246"/>
         <source>Unlock keyboard</source>
         <translation>Разблокировать клавиатуру</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="246"/>
+        <location filename="../notifier_window.cc" line="251"/>
         <source>Lock keyboard</source>
         <translation>Блокировать клавиатуру</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="265"/>
+        <location filename="../notifier_window.cc" line="270"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="270"/>
+        <location filename="../notifier_window.cc" line="275"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>

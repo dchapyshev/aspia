@@ -126,6 +126,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     connect(ui.button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
 
 #if 1
+    ui.button_text_chat->setVisible(false);
     ui.button_voice_chat->setVisible(false);
 #endif
 

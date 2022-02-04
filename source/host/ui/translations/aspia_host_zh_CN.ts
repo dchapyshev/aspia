@@ -865,37 +865,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="173"/>
+        <location filename="../notifier_window.cc" line="178"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="217"/>
+        <location filename="../notifier_window.cc" line="222"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="222"/>
+        <location filename="../notifier_window.cc" line="227"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="241"/>
+        <location filename="../notifier_window.cc" line="246"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="246"/>
+        <location filename="../notifier_window.cc" line="251"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="265"/>
+        <location filename="../notifier_window.cc" line="270"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="270"/>
+        <location filename="../notifier_window.cc" line="275"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
