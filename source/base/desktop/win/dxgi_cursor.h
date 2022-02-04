@@ -22,7 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/desktop/mouse_cursor.h"
 
-#include <DXGI.h>
+#include <dxgi.h>
 #include <DXGI1_2.h>
 
 namespace base {
