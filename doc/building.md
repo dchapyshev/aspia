@@ -48,6 +48,8 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * autoconf
 * autopoint
 * python
+* bison
+* gperf
 * libgl1-mesa-dev
 * libglu1-mesa-dev
 * libharfbuzz-dev
