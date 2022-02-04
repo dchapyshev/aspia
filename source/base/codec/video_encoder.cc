@@ -32,13 +32,20 @@ void VideoEncoder::fillPacketInfo(const Frame* frame, proto::VideoPacket* packet
 {
     packet->set_encoding(encoding_);
 
-    if (last_size_ != frame->size())
+    if (last_size_ != frame->size() || last_dpi_ != frame->dpi())
     {
         last_size_ = frame->size();
+        last_dpi_ = frame->dpi();
 
-        proto::Rect* rect = packet->mutable_format()->mutable_video_rect();
-        rect->set_width(last_size_.width());
-        rect->set_height(last_size_.height());
+        proto::VideoPacketFormat* format = packet->mutable_format();
+
+        proto::Rect* video_rect = format->mutable_video_rect();
+        video_rect->set_width(last_size_.width());
+        video_rect->set_height(last_size_.height());
+
+        proto::Dpi* screen_dpi = format->mutable_screen_dpi();
+        screen_dpi->set_dpi_x(last_dpi_.x());
+        screen_dpi->set_dpi_y(last_dpi_.y());
     }
 }
 
