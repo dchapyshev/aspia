@@ -48,6 +48,9 @@ public:
     int32_t x() const { return x_; }
     int32_t y() const { return y_; }
 
+    void setX(int32_t x) { x_ = x; }
+    void setY(int32_t y) { y_ = y; }
+
     void set(int32_t x, int32_t y)
     {
         x_ = x;
