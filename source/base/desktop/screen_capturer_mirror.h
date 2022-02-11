@@ -31,7 +31,7 @@ class ScreenCapturerMirror : public ScreenCapturer
 {
 public:
     ScreenCapturerMirror();
-    ~ScreenCapturerMirror();
+    ~ScreenCapturerMirror() override;
 
     bool isSupported();
 
@@ -63,6 +63,7 @@ private:
 
     win::ScopedGetDC desktop_dc_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
+    std::vector<std::pair<Rect, Point>> dpi_for_rect_;
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;
 

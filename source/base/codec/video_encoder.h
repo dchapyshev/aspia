@@ -42,7 +42,6 @@ protected:
 private:
     const proto::VideoEncoding encoding_;
     Size last_size_;
-    Point last_dpi_;
 };
 
 } // namespace base

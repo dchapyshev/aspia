@@ -362,14 +362,55 @@ void QtDesktopWindow::drawFrame()
 
 void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
-    QImage image(mouse_cursor->constImage().data(),
-                 mouse_cursor->width(),
-                 mouse_cursor->height(),
-                 mouse_cursor->stride(),
+    base::Point local_dpi(base::MouseCursor::kDefaultDpiX, base::MouseCursor::kDefaultDpiY);
+    base::Point remote_dpi = mouse_cursor->constDpi();
+
+    LOG(LS_WARNING) << "CURSOR!!! LOCAL: " << local_dpi << " REMOTE: " << remote_dpi;
+
+    QWidget* current_window = window();
+    if (current_window)
+    {
+        QScreen* current_screen = current_window->screen();
+        if (current_screen)
+        {
+            local_dpi.setX(static_cast<int32_t>(current_screen->logicalDotsPerInchX()));
+            local_dpi.setY(static_cast<int32_t>(current_screen->logicalDotsPerInchY()));
+        }
+    }
+
+    int width = mouse_cursor->width();
+    int height = mouse_cursor->height();
+    int hotspot_x = mouse_cursor->hotSpotX();
+    int hotspot_y = mouse_cursor->hotSpotY();
+
+    QImage image(mouse_cursor->constImage().data(), width, height, mouse_cursor->stride(),
                  QImage::Format::Format_ARGB32);
 
-    desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
-                             QPoint(mouse_cursor->hotSpotX(), mouse_cursor->hotSpotY()));
+    if (local_dpi != remote_dpi)
+    {
+        double scale_factor_x =
+            static_cast<double>(local_dpi.x()) / static_cast<double>(remote_dpi.x());
+        double scale_factor_y =
+            static_cast<double>(local_dpi.y()) / static_cast<double>(remote_dpi.y());
+
+        LOG(LS_WARNING) << "SCALE X: " << scale_factor_x << " SCALE Y: " << scale_factor_y;
+
+        width = std::max(static_cast<int>(static_cast<double>(width) * scale_factor_x), 1);
+        height = std::max(static_cast<int>(static_cast<double>(height) * scale_factor_y), 1);
+        hotspot_x = static_cast<int>(static_cast<double>(hotspot_x) * scale_factor_x);
+        hotspot_y = static_cast<int>(static_cast<double>(hotspot_y) * scale_factor_y);
+
+        QImage scaled_image =
+            image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        desktop_->setCursorShape(QPixmap::fromImage(std::move(scaled_image)),
+                                 QPoint(hotspot_x, hotspot_y));
+    }
+    else
+    {
+        desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
+                                 QPoint(hotspot_x, hotspot_y));
+    }
 }
 
 void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)

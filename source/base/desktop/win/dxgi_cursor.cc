@@ -35,7 +35,7 @@ DxgiCursor::DxgiCursor()
 
 DxgiCursor::~DxgiCursor() = default;
 
-const MouseCursor* DxgiCursor::mouseCursor()
+MouseCursor* DxgiCursor::mouseCursor()
 {
     if (pointer_shape_.empty())
         return nullptr;
@@ -115,6 +115,16 @@ Point DxgiCursor::position() const
 void DxgiCursor::setPosition(const Point& pointer_position)
 {
     pointer_position_ = pointer_position;
+}
+
+Point DxgiCursor::nativePosition() const
+{
+    return native_pointer_position_;
+}
+
+void DxgiCursor::setNativePosition(const Point& native_pointer_position)
+{
+    native_pointer_position_ = native_pointer_position;
 }
 
 bool DxgiCursor::isVisible() const

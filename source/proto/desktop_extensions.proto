@@ -24,8 +24,14 @@ package proto;
 
 message Resolution
 {
-    int32 width  = 2;
-    int32 height = 3;
+    int32 width  = 1;
+    int32 height = 2;
+}
+
+message Point
+{
+    int32 x = 1;
+    int32 y = 2;
 }
 
 // Extension name: "select_screen"
@@ -34,7 +40,9 @@ message Screen
 {
     int64 id              = 1;
     string title          = 2;
-    Resolution resolution = 3;
+    Point position        = 3;
+    Resolution resolution = 4;
+    Point dpi             = 5;
 }
 
 // Extension name: "select_screen"

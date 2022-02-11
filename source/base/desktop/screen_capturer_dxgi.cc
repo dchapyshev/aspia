@@ -67,7 +67,8 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
         {
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
-            screen_list->screens.push_back({ max_screen_id, std::string(), Size(), false });
+            screen_list->screens.push_back(
+                { max_screen_id, std::string(), Point(), Size(), Point(), false });
         }
     }
 
@@ -138,7 +139,17 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
         return false;
     }
 
-    return screenListFromDeviceNames(device_names, screens);
+    bool result = screenListFromDeviceNames(device_names, screens);
+
+    dpi_for_rect_.clear();
+
+    for (const auto& screen : screens->screens)
+    {
+        dpi_for_rect_.emplace_back(
+            Rect::makeXYWH(screen.position, screen.resolution), screen.dpi);
+    }
+
+    return result;
 }
 
 bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
@@ -251,7 +262,24 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
 const MouseCursor* ScreenCapturerDxgi::captureCursor()
 {
-    return cursor_->mouseCursor();
+    MouseCursor* mouse_cursor = cursor_->mouseCursor();
+    if (mouse_cursor)
+    {
+        Point position = cursor_->nativePosition();
+
+        for (const auto& item : dpi_for_rect_)
+        {
+            const Rect& rect = item.first;
+
+            if (rect.contains(position))
+            {
+                const Point& dpi = item.second;
+                mouse_cursor->dpi() = dpi;
+            }
+        }
+    }
+
+    return mouse_cursor;
 }
 
 Point ScreenCapturerDxgi::cursorPosition()

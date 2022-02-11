@@ -23,7 +23,84 @@
 #include "base/strings/unicode.h"
 #include "base/win/scoped_gdi_object.h"
 
+#include <VersionHelpers.h>
+
 namespace base {
+
+namespace {
+
+Point dpiByRect(const Rect& rect)
+{
+    Point result(96, 96);
+
+    if (!IsWindows8Point1OrGreater())
+    {
+        // We can get DPI for a specific monitor starting with Windows 8.1.
+        return result;
+    }
+
+    RECT native_rect;
+    native_rect.left = rect.left();
+    native_rect.top = rect.top();
+    native_rect.right = rect.right();
+    native_rect.bottom = rect.bottom();
+
+    HMONITOR monitor = MonitorFromRect(&native_rect, MONITOR_DEFAULTTONEAREST);
+    if (!monitor)
+    {
+        PLOG(LS_WARNING) << "MonitorFromRect failed";
+        return result;
+    }
+
+    HMODULE module = LoadLibraryW(L"shcore.dll");
+    if (module)
+    {
+        enum MONITOR_DPI_TYPE_WIN81
+        {
+            MDT_EFFECTIVE_DPI_WIN81,
+            MDT_ANGULAR_DPI_WIN81,
+            MDT_RAW_DPI_WIN81,
+            MDT_DEFAULT_WIN81
+        };
+
+        typedef HRESULT(WINAPI* GetDpiForMonitorFunc)
+            (HMONITOR, MONITOR_DPI_TYPE_WIN81, UINT*, UINT*);
+
+        GetDpiForMonitorFunc getDpiForMonitorFunc =
+            reinterpret_cast<GetDpiForMonitorFunc>(GetProcAddress(module, "GetDpiForMonitor"));
+        if (getDpiForMonitorFunc)
+        {
+            UINT dpi_x = 0;
+            UINT dpi_y = 0;
+
+            HRESULT hr = getDpiForMonitorFunc(monitor, MDT_EFFECTIVE_DPI_WIN81, &dpi_x, &dpi_y);
+            if (FAILED(hr))
+            {
+                LOG(LS_WARNING) << "GetDpiForMonitor failed: "
+                                << SystemError(static_cast<DWORD>(hr)).toString();
+            }
+            else
+            {
+                result.setX(static_cast<int32_t>(dpi_x));
+                result.setY(static_cast<int32_t>(dpi_y));
+            }
+        }
+        else
+        {
+            PLOG(LS_WARNING) << "GetProcAddress failed";
+        }
+
+        FreeLibrary(module);
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "LoadLibraryW failed";
+    }
+
+    return result;
+}
+
+} // namespace
 
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
@@ -57,12 +134,15 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
             return false;
         }
 
+        std::string device_name = utf8FromWide(device.DeviceName);
         bool is_primary = (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE);
-        Size resolution = Size(static_cast<int32_t>(device_mode.dmPelsWidth),
-                               static_cast<int32_t>(device_mode.dmPelsHeight));
+        Rect rect = Rect::makeXYWH(device_mode.dmPosition.x, device_mode.dmPosition.y,
+            static_cast<int32_t>(device_mode.dmPelsWidth),
+            static_cast<int32_t>(device_mode.dmPelsHeight));
+        Point dpi = dpiByRect(rect);
 
         screen_list->screens.push_back(
-            {device_index, utf8FromWide(device.DeviceName), resolution, is_primary });
+            {device_index, device_name, rect.topLeft(), rect.size(), dpi, is_primary });
     }
 
     return true;

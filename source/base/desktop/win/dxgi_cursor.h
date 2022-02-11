@@ -33,10 +33,13 @@ public:
     DxgiCursor();
     ~DxgiCursor();
 
-    const MouseCursor* mouseCursor();
+    MouseCursor* mouseCursor();
 
     Point position() const;
     void setPosition(const Point& pointer_position);
+
+    Point nativePosition() const;
+    void setNativePosition(const Point& native_pointer_position);
 
     bool isVisible() const;
     void setVisible(bool visible);
@@ -48,6 +51,7 @@ private:
     DXGI_OUTDUPL_POINTER_SHAPE_INFO pointer_shape_info_;
     ByteArray pointer_shape_;
     Point pointer_position_;
+    Point native_pointer_position_;
     bool is_visible_ = false;
 
     std::unique_ptr<MouseCursor> mouse_cursor_;

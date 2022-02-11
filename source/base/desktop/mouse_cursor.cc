@@ -20,10 +20,11 @@
 
 namespace base {
 
-MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot)
+MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
     : image_(std::move(image)),
       size_(size),
-      hotspot_(hotspot)
+      hotspot_(hotspot),
+      dpi_(dpi)
 {
     // Nothing
 }
@@ -40,9 +41,11 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
         image_ = std::move(other.image_);
         size_ = other.size_;
         hotspot_ = other.hotspot_;
+        dpi_ = other.dpi_;
 
         other.size_ = Size();
         other.hotspot_ = Point();
+        other.dpi_ = Point();
     }
 
     return *this;
@@ -57,6 +60,7 @@ bool MouseCursor::equals(const MouseCursor& other)
 {
     return size_.equals(other.size_) &&
            hotspot_.equals(other.hotspot_) &&
+           dpi_.equals(other.dpi_) &&
            base::equals(image_, other.image_);
 }
 

@@ -92,6 +92,10 @@ message CursorShape
 
     // Cursor pixmap data in 32-bit BGRA format compressed with Zstd.
     bytes data = 6;
+
+    // Screen DPI for current cursor.
+    int32 dpi_x = 7;
+    int32 dpi_y = 8;
 }
 
 message CursorPosition
@@ -127,12 +131,6 @@ message PixelFormat
     uint32 blue_shift  = 7;
 }
 
-message Dpi
-{
-    int32 dpi_x = 1;
-    int32 dpi_y = 2;
-}
-
 // Identifies how the image was encoded.
 enum VideoEncoding
 {
@@ -148,7 +146,6 @@ message VideoPacketFormat
     PixelFormat pixel_format = 2;
     Size screen_size         = 3;
     uint32 capturer_type     = 4;
-    Dpi screen_dpi           = 5;
 }
 
 message VideoPacket

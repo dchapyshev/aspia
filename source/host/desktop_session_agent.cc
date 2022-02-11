@@ -288,9 +288,17 @@ void DesktopSessionAgent::onScreenListChanged(
         screen->set_id(screen_item.id);
         screen->set_title(screen_item.title);
 
+        proto::Point* position = screen->mutable_position();
+        position->set_x(screen_item.position.x());
+        position->set_y(screen_item.position.y());
+
         proto::Resolution* resolution = screen->mutable_resolution();
         resolution->set_width(screen_item.resolution.width());
         resolution->set_height(screen_item.resolution.height());
+
+        proto::Point* dpi = screen->mutable_dpi();
+        dpi->set_x(screen_item.dpi.x());
+        dpi->set_y(screen_item.dpi.y());
 
         if (screen_item.is_primary)
             screen_list->set_primary_screen(screen_item.id);
@@ -350,6 +358,8 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_mouse_cursor->set_height(mouse_cursor->height());
         serialized_mouse_cursor->set_hotspot_x(mouse_cursor->hotSpotX());
         serialized_mouse_cursor->set_hotspot_y(mouse_cursor->hotSpotY());
+        serialized_mouse_cursor->set_dpi_x(mouse_cursor->constDpi().x());
+        serialized_mouse_cursor->set_dpi_y(mouse_cursor->constDpi().y());
         serialized_mouse_cursor->set_data(base::toStdString(mouse_cursor->constImage()));
     }
 

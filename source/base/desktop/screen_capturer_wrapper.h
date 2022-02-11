@@ -84,7 +84,7 @@ private:
     std::unique_ptr<DesktopResizer> resizer_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
 
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
 };

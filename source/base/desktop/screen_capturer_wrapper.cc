@@ -124,6 +124,12 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
             LOG(LS_INFO) << "No desktop resizer";
         }
 
+        for (const auto& screen : screen_list.screens)
+        {
+            LOG(LS_INFO) << "Screen #" << screen.id << " (position: " << screen.position
+                         << " resolution: " << screen.resolution << " DPI: " << screen.dpi << ")";
+        }
+
         delegate_->onScreenListChanged(screen_list, screen_id);
     }
     else

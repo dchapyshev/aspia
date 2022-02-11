@@ -115,6 +115,7 @@ private:
     const D3dDevice device_;
     const Microsoft::WRL::ComPtr<IDXGIOutput1> output_;
     const std::wstring device_name_;
+    const Rect initial_desktop_rect_;
     Rect desktop_rect_;
     Microsoft::WRL::ComPtr<IDXGIOutputDuplication> duplication_;
     DXGI_OUTDUPL_DESC desc_;

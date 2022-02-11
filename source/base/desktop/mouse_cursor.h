@@ -29,8 +29,11 @@ class MouseCursor
 public:
     static const int kBytesPerPixel = 4;
     static const int kBitsPerPixel = 32;
+    static const int kDefaultDpiX = 96;
+    static const int kDefaultDpiY = 96;
 
-    MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot);
+    MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot,
+                const Point& dpi = Point(kDefaultDpiX, kDefaultDpiY));
 
     MouseCursor(MouseCursor&& other) noexcept;
     MouseCursor& operator=(MouseCursor&& other) noexcept;
@@ -48,6 +51,9 @@ public:
     int hotSpotX() const { return hotspot_.x(); }
     int hotSpotY() const { return hotspot_.y(); }
 
+    const Point& constDpi() const { return dpi_; }
+    Point& dpi() { return dpi_; }
+
     const ByteArray& constImage() const { return image_; }
     ByteArray& image() { return image_; }
 
@@ -59,6 +65,7 @@ private:
     ByteArray image_;
     Size size_;
     Point hotspot_;
+    Point dpi_;
 };
 
 } // namespace base

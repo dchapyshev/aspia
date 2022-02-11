@@ -175,8 +175,8 @@ bool DxgiAdapterDuplicator::duplicateMonitor(
     DCHECK_LT(monitor_id, static_cast<int>(duplicators_.size()));
     DCHECK_EQ(context->contexts.size(), duplicators_.size());
 
-    return duplicators_[monitor_id].duplicate(
-        &context->contexts[monitor_id], Point(), target, cursor);
+    return duplicators_[static_cast<size_t>(monitor_id)].duplicate(
+        &context->contexts[static_cast<size_t>(monitor_id)], Point(), target, cursor);
 }
 
 Rect DxgiAdapterDuplicator::screenRect(int id) const
@@ -184,7 +184,7 @@ Rect DxgiAdapterDuplicator::screenRect(int id) const
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));
 
-    return duplicators_[id].desktopRect();
+    return duplicators_[static_cast<size_t>(id)].desktopRect();
 }
 
 const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
@@ -192,7 +192,7 @@ const std::wstring& DxgiAdapterDuplicator::deviceName(int id) const
     DCHECK_GE(id, 0);
     DCHECK_LT(id, static_cast<int>(duplicators_.size()));
 
-    return duplicators_[id].deviceName();
+    return duplicators_[static_cast<size_t>(id)].deviceName();
 }
 
 int DxgiAdapterDuplicator::screenCount() const

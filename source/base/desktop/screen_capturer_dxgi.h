@@ -60,6 +60,7 @@ private:
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     FrameQueue<DxgiFrame> queue_;
     std::unique_ptr<DxgiCursor> cursor_;
+    std::vector<std::pair<Rect, Point>> dpi_for_rect_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerDxgi);
 };

@@ -49,6 +49,11 @@ bool Rect::contains(int32_t x, int32_t y) const
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
 
+bool Rect::contains(const Point& pos) const
+{
+    return contains(pos.x(), pos.y());
+}
+
 bool Rect::containsRect(const Rect& rect) const
 {
     return (rect.left_ >= left_ && rect.right_  <= right_ &&

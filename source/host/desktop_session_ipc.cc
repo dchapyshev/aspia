@@ -337,9 +337,11 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
             base::Size(serialized_mouse_cursor.width(), serialized_mouse_cursor.height());
         base::Point hotspot =
             base::Point(serialized_mouse_cursor.hotspot_x(), serialized_mouse_cursor.hotspot_y());
+        base::Point dpi =
+            base::Point(serialized_mouse_cursor.dpi_x(), serialized_mouse_cursor.dpi_y());
 
         last_mouse_cursor_ = std::make_unique<base::MouseCursor>(
-            base::fromStdString(serialized_mouse_cursor.data()), size, hotspot);
+            base::fromStdString(serialized_mouse_cursor.data()), size, hotspot, dpi);
 
         mouse_cursor = last_mouse_cursor_.get();
     }

@@ -66,7 +66,17 @@ int ScreenCapturerGdi::screenCount()
 
 bool ScreenCapturerGdi::screenList(ScreenList* screens)
 {
-    return ScreenCaptureUtils::screenList(screens);
+    bool result = ScreenCaptureUtils::screenList(screens);
+
+    dpi_for_rect_.clear();
+
+    for (const auto& screen : screens->screens)
+    {
+        dpi_for_rect_.emplace_back(
+            Rect::makeXYWH(screen.position, screen.resolution), screen.dpi);
+    }
+
+    return result;
 }
 
 bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
@@ -138,6 +148,19 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
             if (mouse_cursor_)
             {
                 prev_cursor_info_ = curr_cursor_info_;
+
+                for (const auto& item : dpi_for_rect_)
+                {
+                    const Rect& rect = item.first;
+
+                    if (rect.contains(curr_cursor_info_.ptScreenPos.x,
+                                      curr_cursor_info_.ptScreenPos.y))
+                    {
+                        const Point& dpi = item.second;
+                        mouse_cursor_->dpi() = dpi;
+                    }
+                }
+
                 return mouse_cursor_.get();
             }
         }

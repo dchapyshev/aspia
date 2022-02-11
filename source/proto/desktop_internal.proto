@@ -45,7 +45,9 @@ message MouseCursor
     int32 height    = 2;
     int32 hotspot_x = 3;
     int32 hotspot_y = 4;
-    bytes data      = 5;
+    int32 dpi_x     = 5;
+    int32 dpi_y     = 6;
+    bytes data      = 7;
 }
 
 message SharedBuffer

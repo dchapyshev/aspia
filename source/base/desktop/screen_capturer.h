@@ -63,7 +63,9 @@ public:
     {
         ScreenId id = kInvalidScreenId;
         std::string title;
+        Point position;
         Size resolution;
+        Point dpi;
         bool is_primary = false;
     };
 

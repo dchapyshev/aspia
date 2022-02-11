@@ -32,7 +32,7 @@ class ScreenCapturerGdi : public ScreenCapturer
 {
 public:
     ScreenCapturerGdi();
-    ~ScreenCapturerGdi();
+    ~ScreenCapturerGdi() override;
 
     // ScreenCapturer implementation.
     int screenCount() override;
@@ -68,6 +68,8 @@ private:
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;
+
+    std::vector<std::pair<Rect, Point>> dpi_for_rect_;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGdi);
 };

@@ -78,6 +78,7 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
     : device_(device),
       output_(output),
       device_name_(desc.DeviceName),
+      initial_desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates)),
       desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates))
 {
     DCHECK(output_);
@@ -255,10 +256,12 @@ bool DxgiOutputDuplicator::duplicate(
         {
             DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
 
-            int x = frame_info.PointerPosition.Position.x + offset.x() + shape_info->HotSpot.x;
-            int y = frame_info.PointerPosition.Position.y + offset.y() + shape_info->HotSpot.y;
+            int pos_x = frame_info.PointerPosition.Position.x + shape_info->HotSpot.x + offset.x();
+            int pos_y = frame_info.PointerPosition.Position.y + shape_info->HotSpot.y + offset.y();
 
-            cursor->setPosition(Point(x, y));
+            cursor->setNativePosition(
+                Point(pos_x + initial_desktop_rect_.x(), pos_y + initial_desktop_rect_.y()));
+            cursor->setPosition(Point(pos_x, pos_y));
         }
     }
 

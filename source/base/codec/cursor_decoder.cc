@@ -108,6 +108,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
     {
         Size size(cursor_shape.width(), cursor_shape.height());
         Point hotspot(cursor_shape.hotspot_x(), cursor_shape.hotspot_y());
+        Point dpi(cursor_shape.dpi_x(), cursor_shape.dpi_y());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
@@ -124,8 +125,14 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
             return nullptr;
         }
 
+        if (dpi.x() <= 0 || dpi.x() > std::numeric_limits<int16_t>::max() ||
+            dpi.y() <= 0 || dpi.y() > std::numeric_limits<int16_t>::max())
+        {
+            dpi = Point(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
+        }
+
         std::unique_ptr<MouseCursor> mouse_cursor =
-            std::make_unique<MouseCursor>(std::move(image), size, hotspot);
+            std::make_unique<MouseCursor>(std::move(image), size, hotspot, dpi);
 
         if (cursor_shape.flags() & proto::CursorShape::RESET_CACHE)
         {

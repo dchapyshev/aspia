@@ -152,11 +152,17 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* 
         }
     }
 
+    Point dpi = mouse_cursor.constDpi();
+    if (dpi.x() <= 0 || dpi.y() <= 0)
+        dpi = Point(MouseCursor::kDefaultDpiX, MouseCursor::kDefaultDpiY);
+
     // Set cursor parameters.
     cursor_shape->set_width(size.width());
     cursor_shape->set_height(size.height());
     cursor_shape->set_hotspot_x(mouse_cursor.hotSpot().x());
     cursor_shape->set_hotspot_y(mouse_cursor.hotSpot().y());
+    cursor_shape->set_dpi_x(dpi.x());
+    cursor_shape->set_dpi_y(dpi.y());
 
     // Compress the cursor using ZSTD.
     if (!compressCursor(mouse_cursor, cursor_shape))
