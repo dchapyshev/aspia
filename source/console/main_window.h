@@ -41,7 +41,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(const QString& file_path);
-    ~MainWindow();
+    ~MainWindow() override;
 
 public slots:
     void showConsole();
