@@ -74,7 +74,7 @@ private:
 #endif // defined(OS_WIN)
 
     int screen_count_ = 0;
-    int dxgi_error_count_ = 0;
+    int permanent_error_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;

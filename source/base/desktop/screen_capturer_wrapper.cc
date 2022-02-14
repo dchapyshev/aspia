@@ -172,8 +172,11 @@ void ScreenCapturerWrapper::captureFrame()
                 break;
 
             case ScreenCapturer::Error::PERMANENT:
+            {
+                ++permanent_error_count_;
                 selectCapturer();
-                break;
+            }
+            break;
 
             default:
                 NOTREACHED();
@@ -266,8 +269,15 @@ void ScreenCapturerWrapper::selectCapturer()
         }
     };
 
-    if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
-        preferred_type_ == ScreenCapturer::Type::DEFAULT)
+    static const int kMaxPermanentErrorCount = 3;
+
+    if (permanent_error_count_ >= kMaxPermanentErrorCount)
+    {
+        // Skip other capturer types and using GDI capturer.
+        permanent_error_count_ = 0;
+    }
+    else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
+             preferred_type_ == ScreenCapturer::Type::DEFAULT)
     {
         if (win::windowsVersion() >= win::VERSION_WIN8)
         {
