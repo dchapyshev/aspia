@@ -94,17 +94,7 @@ int ScreenCapturerMirror::screenCount()
 
 bool ScreenCapturerMirror::screenList(ScreenList* screens)
 {
-    bool result = ScreenCaptureUtils::screenList(screens);
-
-    dpi_for_rect_.clear();
-
-    for (const auto& screen : screens->screens)
-    {
-        dpi_for_rect_.emplace_back(
-            Rect::makeXYWH(screen.position, screen.resolution), screen.dpi);
-    }
-
-    return result;
+    return ScreenCaptureUtils::screenList(screens);
 }
 
 bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
@@ -147,9 +137,11 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 
     const Rect& screen_rect = helper_->screenRect();
 
+    last_dpi_.setX(GetDeviceCaps(desktop_dc_, LOGPIXELSX));
+    last_dpi_.setY(GetDeviceCaps(desktop_dc_, LOGPIXELSY));
+
     frame_->setTopLeft(screen_rect.topLeft().subtract(desktop_rect_.topLeft()));
-    frame_->setDpi(Point(GetDeviceCaps(desktop_dc_, LOGPIXELSX),
-                         GetDeviceCaps(desktop_dc_, LOGPIXELSY)));
+    frame_->setDpi(last_dpi_);
 
     return frame_.get();
 }
@@ -193,19 +185,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
             if (mouse_cursor_)
             {
                 prev_cursor_info_ = curr_cursor_info_;
-
-                for (const auto& item : dpi_for_rect_)
-                {
-                    const Rect& rect = item.first;
-
-                    if (rect.contains(curr_cursor_info_.ptScreenPos.x,
-                                      curr_cursor_info_.ptScreenPos.y))
-                    {
-                        const Point& dpi = item.second;
-                        mouse_cursor_->dpi() = dpi;
-                    }
-                }
-
+                mouse_cursor_->dpi() = last_dpi_;
                 return mouse_cursor_.get();
             }
         }
