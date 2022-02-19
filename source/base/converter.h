@@ -88,7 +88,7 @@ struct ConverterImpl<ByteArray>
 {
     static bool fromString(std::string_view str, ByteArray* value)
     {
-        *value = std::move(fromHex(str));
+        *value = fromHex(str);
         return true;
     }
 
