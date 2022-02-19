@@ -110,6 +110,13 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_NoSystemBackground);
     setMouseTracking(true);
+
+    enableKeyHooks(true);
+}
+
+DesktopWidget::~DesktopWidget()
+{
+    enableKeyHooks(false);
 }
 
 base::Frame* DesktopWidget::desktopFrame()
@@ -335,7 +342,6 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
 void DesktopWidget::enableKeyCombinations(bool enable)
 {
     enable_key_sequenses_ = enable;
-    enableKeyHooks(enable);
 }
 
 void DesktopWidget::enableRemoteCursorPosition(bool enable)
@@ -346,7 +352,6 @@ void DesktopWidget::enableRemoteCursorPosition(bool enable)
 
 void DesktopWidget::userLeftFromWindow()
 {
-    enableKeyHooks(false);
     releaseMouseButtons();
     releaseKeyboardButtons();
 }
@@ -425,9 +430,6 @@ void DesktopWidget::leaveEvent(QEvent* event)
 
 void DesktopWidget::focusInEvent(QFocusEvent* event)
 {
-    if (enable_key_sequenses_)
-        enableKeyHooks(true);
-
     QWidget::focusInEvent(event);
 }
 
@@ -501,30 +503,34 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 {
     if (code == HC_ACTION)
     {
-        DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
-        if (self)
+        QWidget* root_widget = QApplication::activeWindow();
+        if (root_widget)
         {
-            KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
-
-            if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
+            DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
+            if (self && self->enable_key_sequenses_)
             {
-                uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
-                                  proto::KeyEvent::PRESSED : 0);
+                KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
 
-                flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
-                flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
-
-                uint32_t scan_code = hook->scanCode;
-
-                if (hook->flags & LLKHF_EXTENDED)
-                    scan_code |= 0x100;
-
-                uint32_t usb_keycode =
-                    common::KeycodeConverter::nativeKeycodeToUsbKeycode(static_cast<int>(scan_code));
-                if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
+                if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
                 {
-                    self->executeKeyEvent(usb_keycode, flags);
-                    return TRUE;
+                    uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
+                        proto::KeyEvent::PRESSED : 0);
+
+                    flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+                    flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+
+                    uint32_t scan_code = hook->scanCode;
+
+                    if (hook->flags & LLKHF_EXTENDED)
+                        scan_code |= 0x100;
+
+                    uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+                        static_cast<int>(scan_code));
+                    if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
+                    {
+                        self->executeKeyEvent(usb_keycode, flags);
+                        return TRUE;
+                    }
                 }
             }
         }
