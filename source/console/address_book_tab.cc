@@ -101,6 +101,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
       file_(std::move(file)),
       data_(std::move(data))
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     ui.tree_group->setComputerMimeType(ui.tree_computer->mimeType());
@@ -171,6 +172,8 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
 AddressBookTab::~AddressBookTab()
 {
+    LOG(LS_INFO) << "Dtor";
+
     cleanupData(&data_);
     cleanupFile(&file_);
 

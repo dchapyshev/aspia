@@ -27,6 +27,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
                                              proto::address_book::EncryptionType encryption_type)
     : QDialog(parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
@@ -53,6 +54,11 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
 
     ui.edit_file->setText(file_path);
     ui.edit_password->setFocus();
+}
+
+OpenAddressBookDialog::~OpenAddressBookDialog()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 QString OpenAddressBookDialog::password() const

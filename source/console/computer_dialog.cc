@@ -18,6 +18,7 @@
 
 #include "console/computer_dialog.h"
 
+#include "base/logging.h"
 #include "base/crypto/secure_memory.h"
 #include "client/config_factory.h"
 #include "console/computer_dialog_desktop.h"
@@ -50,6 +51,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
       mode_(mode),
       computer_(computer.value_or(ComputerFactory::defaultComputer()))
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     client::ConfigFactory::fixupDesktopConfig(
@@ -112,8 +114,9 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
     QSize min_size;
 
-    for (auto tab : tabs_)
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
     {
+        QWidget* tab = *it;
         min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
         min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
     }
@@ -127,6 +130,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 
 ComputerDialog::~ComputerDialog()
 {
+    LOG(LS_INFO) << "Dtor";
     base::memZero(computer_.mutable_name());
     base::memZero(computer_.mutable_address());
     base::memZero(computer_.mutable_username());
@@ -145,8 +149,11 @@ bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
     {
-        for (auto tab : tabs_)
+        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        {
+            QWidget* tab = *it;
             tab->resize(ui.widget->size());
+        }
     }
 
     return QDialog::eventFilter(watched, event);
@@ -162,8 +169,9 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        for (auto tab : tabs_)
+        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
         {
+            QWidget* tab = *it;
             int type = static_cast<ComputerDialogTab*>(tab)->type();
 
             if (type == ITEM_TYPE_GENERAL)
@@ -211,8 +219,9 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 
 void ComputerDialog::showTab(int type)
 {
-    for (auto tab : tabs_)
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
     {
+        QWidget* tab = *it;
         if (static_cast<ComputerDialogTab*>(tab)->type() == type)
             tab->show();
         else

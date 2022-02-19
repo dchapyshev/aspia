@@ -82,22 +82,19 @@ void DesktopEnvironment::revertAll()
         animation.iMinAnimate = TRUE;
 
         SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
-
         animation_changed_ = false;
     }
 
     win::ScopedHandle user_token;
-
     if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), user_token.recieve()))
     {
         PLOG(LS_WARNING) << "WTSQueryUserToken failed";
         return;
     }
 
-    win::ScopedImpersonator impersonator;
-
     // The process of the desktop session is running with "SYSTEM" account.
     // We need the current real user, not "SYSTEM".
+    win::ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(user_token))
     {
         LOG(LS_WARNING) << "loggedOnUser failed";

@@ -42,6 +42,8 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
       address_book_guid_(address_book_guid),
       router_config_(router_config)
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
     readState();
 
@@ -97,6 +99,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
 FastConnectDialog::~FastConnectDialog()
 {
+    LOG(LS_INFO) << "Dtor";
     writeState();
 }
 

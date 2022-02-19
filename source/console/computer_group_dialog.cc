@@ -18,6 +18,8 @@
 
 #include "console/computer_group_dialog.h"
 
+#include "base/logging.h"
+
 #include <QAbstractButton>
 #include <QDateTime>
 #include <QMessageBox>
@@ -40,6 +42,7 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
       mode_(mode),
       computer_group_(computer_group)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     restoreGeometry(settings_.computerGroupDialogGeometry());
@@ -50,6 +53,11 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_group_->name()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
+}
+
+ComputerGroupDialog::~ComputerGroupDialog()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)

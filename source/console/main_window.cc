@@ -46,6 +46,8 @@ namespace console {
 
 MainWindow::MainWindow(const QString& file_path)
 {
+    LOG(LS_INFO) << "Ctor";
+
     Settings& settings = Application::instance()->settings();
     Application::instance()->setAttribute(
         Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
@@ -223,10 +225,15 @@ MainWindow::MainWindow(const QString& file_path)
 #endif
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void MainWindow::showConsole()
 {
+    LOG(LS_INFO) << "Show console";
+
     if (tray_icon_ && isHidden())
     {
         onShowHideToTray();
@@ -241,6 +248,7 @@ void MainWindow::showConsole()
 
 void MainWindow::openAddressBook(const QString& file_path)
 {
+    LOG(LS_INFO) << "Open address book: " << file_path;
     showConsole();
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -347,6 +355,8 @@ void MainWindow::onSaveAs()
 
 void MainWindow::onSaveAll()
 {
+    LOG(LS_INFO) << "Save All called";
+
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
@@ -360,17 +370,22 @@ void MainWindow::onSaveAll()
 
 void MainWindow::onClose()
 {
+    LOG(LS_INFO) << "Close called";
     onCloseTab(ui.tab_widget->currentIndex());
 }
 
 void MainWindow::onCloseAll()
 {
+    LOG(LS_INFO) << "Close All called";
+
     for (int i = ui.tab_widget->count(); i >= 0; --i)
         onCloseTab(i);
 }
 
 void MainWindow::onAddressBookProperties()
 {
+    LOG(LS_INFO) << "Open address book properties";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyAddressBook();
@@ -378,6 +393,8 @@ void MainWindow::onAddressBookProperties()
 
 void MainWindow::onAddComputer()
 {
+    LOG(LS_INFO) << "Add Computer called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->addComputer();
@@ -385,6 +402,8 @@ void MainWindow::onAddComputer()
 
 void MainWindow::onCopyComputer()
 {
+    LOG(LS_INFO) << "Copy Computer called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->copyComputer();
@@ -392,6 +411,8 @@ void MainWindow::onCopyComputer()
 
 void MainWindow::onModifyComputer()
 {
+    LOG(LS_INFO) << "Modify Computer called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyComputer();
@@ -399,6 +420,8 @@ void MainWindow::onModifyComputer()
 
 void MainWindow::onDeleteComputer()
 {
+    LOG(LS_INFO) << "Delete Computer called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->removeComputer();
@@ -406,6 +429,8 @@ void MainWindow::onDeleteComputer()
 
 void MainWindow::onAddComputerGroup()
 {
+    LOG(LS_INFO) << "Add Computer Group called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->addComputerGroup();
@@ -413,6 +438,8 @@ void MainWindow::onAddComputerGroup()
 
 void MainWindow::onModifyComputerGroup()
 {
+    LOG(LS_INFO) << "Modify Computer Group called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->modifyComputerGroup();
@@ -420,6 +447,8 @@ void MainWindow::onModifyComputerGroup()
 
 void MainWindow::onDeleteComputerGroup()
 {
+    LOG(LS_INFO) << "Delete Computer Group called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         tab->removeComputerGroup();
@@ -446,6 +475,8 @@ void MainWindow::onAbout()
 
 void MainWindow::onFastConnect()
 {
+    LOG(LS_INFO) << "Fast Connect called";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
         FastConnectDialog(this, tab->addressBookGuid(), tab->routerConfig()).exec();
@@ -453,6 +484,8 @@ void MainWindow::onFastConnect()
 
 void MainWindow::onDesktopManageConnect()
 {
+    LOG(LS_INFO) << "Connect to desktop manage session";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
@@ -468,6 +501,8 @@ void MainWindow::onDesktopManageConnect()
 
 void MainWindow::onDesktopViewConnect()
 {
+    LOG(LS_INFO) << "Connect to desktop view session";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
@@ -483,6 +518,8 @@ void MainWindow::onDesktopViewConnect()
 
 void MainWindow::onFileTransferConnect()
 {
+    LOG(LS_INFO) << "Connect to file transfer session";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
@@ -498,6 +535,8 @@ void MainWindow::onFileTransferConnect()
 
 void MainWindow::onSystemInfoConnect()
 {
+    LOG(LS_INFO) << "Connect to system info session";
+
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
@@ -513,6 +552,8 @@ void MainWindow::onSystemInfoConnect()
 
 void MainWindow::onCurrentTabChanged(int index)
 {
+    LOG(LS_INFO) << "Current tab changed to: " << index;
+
     if (index == -1)
     {
         ui.action_save->setEnabled(false);
@@ -542,6 +583,8 @@ void MainWindow::onCurrentTabChanged(int index)
 
 void MainWindow::onCloseTab(int index)
 {
+    LOG(LS_INFO) << "Close tab: " << index;
+
     if (index == -1)
         return;
 
@@ -939,6 +982,8 @@ void MainWindow::changeEvent(QEvent* event)
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event detected";
+
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
@@ -1054,7 +1099,7 @@ void MainWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.png")));
+        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.ico")));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();

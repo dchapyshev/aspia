@@ -33,7 +33,7 @@ public:
     OpenAddressBookDialog(QWidget* parent,
                           const QString& file_path,
                           proto::address_book::EncryptionType encryption_type);
-    ~OpenAddressBookDialog() = default;
+    ~OpenAddressBookDialog() override;
 
     QString password() const;
 

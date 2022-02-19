@@ -740,89 +740,89 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="212"/>
+        <location filename="../address_book_tab.cc" line="215"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>No se puede abrir el archivo del libro de direcciones &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="219"/>
+        <location filename="../address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>No se puede leer el archivo del libro de direcciones &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="228"/>
+        <location filename="../address_book_tab.cc" line="231"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>El archivo del libro de direcciones &quot;%1&quot; está dañado o tiene un formato desconocido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="272"/>
+        <location filename="../address_book_tab.cc" line="275"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>No se puede descifrar el libro de direcciones con la contraseña especificada.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="278"/>
+        <location filename="../address_book_tab.cc" line="281"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>El archivo del libro de direcciones está dañado o tiene un formato desconocido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="265"/>
+        <location filename="../address_book_tab.cc" line="268"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>El archivo del libro de direcciones está cifrado con un tipo de cifrado no admitido.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="503"/>
+        <location filename="../address_book_tab.cc" line="506"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>¿Está seguro de que desea eliminar el grupo de equipos &quot;%1&quot; y todos los elementos secundarios?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="507"/>
-        <location filename="../address_book_tab.cc" line="529"/>
+        <location filename="../address_book_tab.cc" line="510"/>
+        <location filename="../address_book_tab.cc" line="532"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="525"/>
+        <location filename="../address_book_tab.cc" line="528"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>¿Está seguro de que desea eliminar el ordenador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="825"/>
+        <location filename="../address_book_tab.cc" line="828"/>
         <source>Save Address Book</source>
         <translation>Guardar Libro de Direcciones</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="827"/>
+        <location filename="../address_book_tab.cc" line="830"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Libro de Direcciones (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="837"/>
+        <location filename="../address_book_tab.cc" line="840"/>
         <source>Unable to create or open address book file.</source>
         <translation>No se puede crear o abrir el archivo del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="850"/>
+        <location filename="../address_book_tab.cc" line="853"/>
         <source>Unable to write address book file.</source>
         <translation>No se puede escribir el archivo del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="878"/>
+        <location filename="../address_book_tab.cc" line="881"/>
         <source>Root Group</source>
         <translation>Grupo Raíz</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="889"/>
-        <location filename="../address_book_tab.cc" line="903"/>
+        <location filename="../address_book_tab.cc" line="892"/>
+        <location filename="../address_book_tab.cc" line="906"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="891"/>
+        <location filename="../address_book_tab.cc" line="894"/>
         <source>Could not open address book</source>
         <translation>No se pudo abrir el libro de direcciones</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="905"/>
+        <location filename="../address_book_tab.cc" line="908"/>
         <source>Failed to save address book</source>
         <translation>No se pudo guardar el libro de direcciones</translation>
     </message>
@@ -959,28 +959,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="75"/>
+        <location filename="../fast_connect_dialog.cc" line="77"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="76"/>
+        <location filename="../fast_connect_dialog.cc" line="78"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>Se borrará la lista de direcciones ingresadas. ¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="182"/>
-        <location filename="../fast_connect_dialog.cc" line="202"/>
+        <location filename="../fast_connect_dialog.cc" line="185"/>
+        <location filename="../fast_connect_dialog.cc" line="205"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="183"/>
+        <location filename="../fast_connect_dialog.cc" line="186"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Se especifica la conexión por ID, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="203"/>
+        <location filename="../fast_connect_dialog.cc" line="206"/>
         <source>An invalid computer address was entered.</source>
         <translation>Se ingresó una dirección de ordenador no válida.</translation>
     </message>
@@ -988,88 +988,88 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="183"/>
-        <location filename="../main_window.cc" line="1187"/>
+        <location filename="../main_window.cc" line="185"/>
+        <location filename="../main_window.cc" line="1232"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="184"/>
+        <location filename="../main_window.cc" line="186"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>El archivo libro de direcciones anclado &quot;%1&quot; no se encontró.&lt;br/&gt;Este archivo no se fijará.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="258"/>
+        <location filename="../main_window.cc" line="266"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="259"/>
+        <location filename="../main_window.cc" line="267"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>El Libro de Direcciones &quot;%1&quot; ya está abierto.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="286"/>
+        <location filename="../main_window.cc" line="294"/>
         <source>Open Address Book</source>
         <translation>Abrir Libro de Direcciones</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="288"/>
+        <location filename="../main_window.cc" line="296"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Libro de Direcciones de Aspia (* .aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="558"/>
-        <location filename="../main_window.cc" line="871"/>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="914"/>
+        <location filename="../main_window.cc" line="993"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="559"/>
-        <location filename="../main_window.cc" line="949"/>
+        <location filename="../main_window.cc" line="602"/>
+        <location filename="../main_window.cc" line="994"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>El Libro de Direcciones &quot;%1&quot; ha sido cambiado. ¿Guardar cambios?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="767"/>
+        <location filename="../main_window.cc" line="810"/>
         <source>Close other tabs</source>
         <translation>Cerrar otras pestañas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="774"/>
+        <location filename="../main_window.cc" line="817"/>
         <source>Close tab</source>
         <translation>Cerrar pestaña</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="775"/>
-        <location filename="../main_window.cc" line="780"/>
+        <location filename="../main_window.cc" line="818"/>
+        <location filename="../main_window.cc" line="823"/>
         <source>Pin tab</source>
         <translation>Pestaña Anclado</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="872"/>
+        <location filename="../main_window.cc" line="915"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Se borrará el libro de direcciones abierto recientemente. ¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="905"/>
+        <location filename="../main_window.cc" line="948"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="920"/>
+        <location filename="../main_window.cc" line="963"/>
         <source>Show</source>
         <translation>Mostrar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="444"/>
-        <location filename="../main_window.cc" line="1058"/>
+        <location filename="../main_window.cc" line="473"/>
+        <location filename="../main_window.cc" line="1103"/>
         <source>Aspia Console</source>
         <translation>Consola Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1188"/>
+        <location filename="../main_window.cc" line="1233"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>La conexión por ID se especifica en las propiedades del ordenador, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
@@ -1085,12 +1085,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="42"/>
+        <location filename="../open_address_book_dialog.cc" line="43"/>
         <source>Without Encryption</source>
         <translation>Sin cifrado</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="46"/>
+        <location filename="../open_address_book_dialog.cc" line="47"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>

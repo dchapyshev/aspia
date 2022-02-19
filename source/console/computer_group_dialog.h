@@ -36,7 +36,7 @@ public:
                         Mode mode,
                         const QString& parent_name,
                         proto::address_book::ComputerGroup* computer_group);
-    ~ComputerGroupDialog() = default;
+    ~ComputerGroupDialog() override;
 
 protected:
     // QDialog implementation.

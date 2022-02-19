@@ -18,6 +18,7 @@
 
 #include "console/update_settings_dialog.h"
 
+#include "base/logging.h"
 #include "build/build_config.h"
 #include "console/settings.h"
 
@@ -26,6 +27,7 @@ namespace console {
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     Settings settings;
@@ -65,6 +67,9 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     });
 }
 
-UpdateSettingsDialog::~UpdateSettingsDialog() = default;
+UpdateSettingsDialog::~UpdateSettingsDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 } // namespace console
