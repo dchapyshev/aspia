@@ -19,13 +19,13 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
-#include "base/desktop/desktop_environment.h"
 #include "base/desktop/desktop_resizer.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
 
 #if defined(OS_WIN)
+#include "base/desktop/desktop_environment_win.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/screen_capturer_mirror.h"
@@ -45,9 +45,11 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     : preferred_type_(preferred_type),
       delegate_(delegate),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
-      environment_(std::make_unique<DesktopEnvironment>())
+      environment_(std::make_unique<DesktopEnvironmentWin>())
 {
     LOG(LS_INFO) << "Ctor";
+
+    switchToInputDesktop();
 
 #if defined(OS_WIN)
     // If the monitor is turned off, this call will turn it on.
@@ -55,9 +57,39 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     {
         PLOG(LS_WARNING) << "SetThreadExecutionState failed";
     }
+
+    wchar_t desktop[100] = { 0 };
+    if (desktop_.assignedDesktop().name(desktop, sizeof(desktop)))
+    {
+        if (_wcsicmp(desktop, L"Screen-saver") == 0)
+        {
+            auto send_key = [](WORD key_code, DWORD flags)
+            {
+                INPUT input;
+                memset(&input, 0, sizeof(input));
+
+                input.type       = INPUT_KEYBOARD;
+                input.ki.wVk     = key_code;
+                input.ki.dwFlags = flags;
+                input.ki.wScan   = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
+
+                // Do the keyboard event.
+                if (!SendInput(1, &input, sizeof(input)))
+                {
+                    PLOG(LS_WARNING) << "SendInput failed";
+                }
+            };
+
+            send_key(VK_SPACE, 0);
+            send_key(VK_SPACE, KEYEVENTF_KEYUP);
+        }
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unable to get name of desktop";
+    }
 #endif // defined(OS_WIN)
 
-    switchToInputDesktop();
     selectCapturer();
 }
 
@@ -295,7 +327,7 @@ void ScreenCapturerWrapper::selectCapturer()
         }
     };
 
-    static const int kMaxPermanentErrorCount = 3;
+    static const int kMaxPermanentErrorCount = 5;
 
     if (permanent_error_count_ >= kMaxPermanentErrorCount)
     {
@@ -358,10 +390,13 @@ void ScreenCapturerWrapper::switchToInputDesktop()
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
-        wchar_t desktop_name[128] = { 0 };
-        input_desktop.name(desktop_name, sizeof(desktop_name));
+        wchar_t new_name[128] = { 0 };
+        input_desktop.name(new_name, sizeof(new_name));
 
-        LOG(LS_INFO) << "Input desktop changed to " << desktop_name;
+        wchar_t old_name[128] = { 0 };
+        desktop_.assignedDesktop().name(old_name, sizeof(old_name));
+
+        LOG(LS_INFO) << "Input desktop changed from '" << old_name << "' to '" << new_name << "'";
 
         if (screen_capturer_)
             screen_capturer_->reset();
@@ -369,6 +404,9 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         // If setThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
         desktop_.setThreadDesktop(std::move(input_desktop));
+
+        if (environment_)
+            environment_->onDesktopChanged();
     }
 #endif // defined(OS_WIN)
 }

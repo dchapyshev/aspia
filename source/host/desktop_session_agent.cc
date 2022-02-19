@@ -22,6 +22,7 @@
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/capture_scheduler.h"
+#include "base/desktop/desktop_environment_win.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/desktop/shared_frame.h"
@@ -59,7 +60,7 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : base::ProtobufArena(task_runner),
-      task_runner_(task_runner)
+      io_task_runner_(task_runner)
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -81,11 +82,14 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
+
+    ui_thread_.start(base::MessageLoop::Type::WIN, this);
 }
 
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
+    ui_thread_.stop();
 }
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
@@ -109,7 +113,7 @@ void DesktopSessionAgent::onDisconnected()
     LOG(LS_INFO) << "IPC channel disconnected";
 
     setEnabled(false);
-    task_runner_->postQuit();
+    io_task_runner_->postQuit();
 }
 
 void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
@@ -393,24 +397,58 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(*outgoing_message));
 }
 
+void DesktopSessionAgent::onBeforeThreadRunning()
+{
+    LOG(LS_INFO) << "Starting UI thread";
+
+    session_watcher_ = std::make_unique<base::win::SessionWatcher>();
+    session_watcher_->start(this);
+}
+
+void DesktopSessionAgent::onAfterThreadRunning()
+{
+    LOG(LS_INFO) << "Stopping UI thread";
+    session_watcher_.reset();
+}
+
+void DesktopSessionAgent::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopSessionAgent::onSessionEvent, shared_from_this(), status, session_id));
+        return;
+    }
+
+    LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
+                 << ", session id: " << session_id;
+
+    if (status == base::win::SessionStatus::SESSION_LOGON)
+    {
+        if (!is_session_enabled_)
+            base::DesktopEnvironmentWin::prepareEnvironment();
+    }
+}
+
 void DesktopSessionAgent::setEnabled(bool enable)
 {
     LOG(LS_INFO) << "Enable session: " << enable;
 
+    if (is_session_enabled_ == enable)
+    {
+        LOG(LS_INFO) << "Session already " << (enable ? "enabled" : "disabled");
+        return;
+    }
+
+    is_session_enabled_ = enable;
     if (enable)
     {
-        if (input_injector_)
-        {
-            LOG(LS_INFO) << "Session already enabled";
-            return;
-        }
-
         input_injector_ = std::make_unique<InputInjectorWin>();
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
         // thread. Create a separate thread.
         clipboard_monitor_ = std::make_unique<common::ClipboardMonitor>();
-        clipboard_monitor_->start(task_runner_, this);
+        clipboard_monitor_->start(io_task_runner_, this);
 
         // Create a shared memory factory.
         // We will receive notifications of all creations and destruction of shared memory.
@@ -428,7 +466,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         LOG(LS_INFO) << "Session successfully enabled";
 
-        task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+        io_task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
     }
     else
     {
@@ -488,13 +526,14 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
     if (update_interval == std::chrono::milliseconds::zero())
     {
         // Capture immediately.
-        task_runner_->postTask(std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
+        io_task_runner_->postTask(
+            std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()));
     }
     else
     {
         capture_scheduler_->setUpdateInterval(update_interval);
 
-        task_runner_->postDelayedTask(
+        io_task_runner_->postDelayedTask(
             std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
             capture_scheduler_->nextCaptureDelay());
     }

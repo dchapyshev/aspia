@@ -315,6 +315,7 @@ list(APPEND SOURCE_BASE_DESKTOP
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_win.cc
+        desktop/desktop_environment_win.h
         desktop/desktop_resizer_win.cc
         desktop/desktop_resizer_win.h
         desktop/frame_dib.cc

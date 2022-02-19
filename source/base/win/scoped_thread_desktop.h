@@ -29,25 +29,23 @@ public:
     ScopedThreadDesktop();
     ~ScopedThreadDesktop();
 
-    //
-    // Returns true if |desktop| has the same desktop name as the currently
-    // assigned desktop (if assigned) or as the initial desktop (if not assigned).
-    // Returns false in any other case including failing Win32 APIs and
-    // uninitialized desktop handles.
-    //
+    // Returns true if |desktop| has the same desktop name as the currently assigned desktop (if
+    // assigned) or as the initial desktop (if not assigned).
+    // Returns false in any other case including failing Win32 APIs and uninitialized desktop handles.
     bool isSame(const Desktop& desktop) const;
 
     // Reverts the calling thread to use the initial desktop.
     void revert();
 
-    //
-    // Assigns |desktop| to be the calling thread. Returns true if the thread has
-    // been switched to |desktop| successfully. Takes ownership of |desktop|.
-    //
+    // Assigns |desktop| to be the calling thread. Returns true if the thread has been switched to
+    // |desktop| successfully. Takes ownership of |desktop|.
     bool setThreadDesktop(Desktop&& desktop);
 
+    const Desktop& assignedDesktop() const { return assigned_; }
+    const Desktop& initialDesktop() const { return initial_; }
+
 private:
-    // The desktop handle assigned to the calling thread by Set
+    // The desktop handle assigned to the calling thread by |setThreadDesktop|.
     Desktop assigned_;
 
     // The desktop handle assigned to the calling thread at creation.

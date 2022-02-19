@@ -16,43 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DESKTOP_ENVIRONMENT_H
-#define BASE__DESKTOP__WIN__DESKTOP_ENVIRONMENT_H
+#ifndef BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H
+#define BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H
 
-#include "base/macros_magic.h"
-
-#include <optional>
+#include "base/desktop/desktop_environment.h"
 
 namespace base {
 
-class DesktopEnvironment
+class DesktopEnvironmentWin : public DesktopEnvironment
 {
 public:
-    DesktopEnvironment();
-    virtual ~DesktopEnvironment();
+    DesktopEnvironmentWin();
+    ~DesktopEnvironmentWin() override;
 
-    void setWallpaper(bool enable);
-    void setFontSmoothing(bool enable);
-    void setEffects(bool enable);
-
-    void onDesktopChanged();
+    static void prepareEnvironment();
 
 protected:
-    virtual void disableWallpaper() = 0;
-    virtual void disableFontSmoothing() = 0;
-    virtual void disableEffects() = 0;
-    virtual void revertAll() = 0;
+    void disableWallpaper() override;
+    void disableFontSmoothing() override;
+    void disableEffects() override;
+    void revertAll() override;
 
 private:
-    void applyNewSettings();
+    bool drop_shadow_changed_ = false;
+    bool animation_changed_ = false;
 
-    std::optional<bool> wallpaper_;
-    std::optional<bool> font_smoothing_;
-    std::optional<bool> effects_;
-
-    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironment);
+    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentWin);
 };
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DESKTOP_ENVIRONMENT_H
+#endif // BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H

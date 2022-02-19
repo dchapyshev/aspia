@@ -25,57 +25,99 @@ namespace base {
 DesktopEnvironment::DesktopEnvironment()
 {
     LOG(LS_INFO) << "Ctor";
-    applyNewSettings();
 }
 
 DesktopEnvironment::~DesktopEnvironment()
 {
     LOG(LS_INFO) << "Dtor";
-    revertAll();
 }
 
 void DesktopEnvironment::setWallpaper(bool enable)
 {
-    if (wallpaper_ == enable)
-        return;
+    static const bool kDefaultValue = true;
 
-    wallpaper_ = enable;
+    bool has_changes = false;
+    if (wallpaper_.has_value())
+    {
+        has_changes = true;
+    }
+    else
+    {
+        if (enable != kDefaultValue)
+            has_changes = true;
+    }
 
-    revertAll();
-    applyNewSettings();
+    if (has_changes)
+    {
+        wallpaper_.emplace(enable);
+
+        revertAll();
+        applyNewSettings();
+    }
 }
 
 void DesktopEnvironment::setFontSmoothing(bool enable)
 {
-    if (font_smoothing_ == enable)
-        return;
+    static const bool kDefaultValue = true;
 
-    font_smoothing_ = enable;
+    bool has_changes = false;
+    if (font_smoothing_.has_value())
+    {
+        has_changes = true;
+    }
+    else
+    {
+        if (enable != kDefaultValue)
+            has_changes = true;
+    }
 
-    revertAll();
-    applyNewSettings();
+    if (has_changes)
+    {
+        font_smoothing_.emplace(enable);
+
+        revertAll();
+        applyNewSettings();
+    }
 }
 
 void DesktopEnvironment::setEffects(bool enable)
 {
-    if (effects_ == enable)
-        return;
+    static const bool kDefaultValue = true;
 
-    effects_ = enable;
+    bool has_changes = false;
+    if (effects_.has_value())
+    {
+        has_changes = true;
+    }
+    else
+    {
+        if (enable != kDefaultValue)
+            has_changes = true;
+    }
 
-    revertAll();
+    if (has_changes)
+    {
+        effects_.emplace(enable);
+
+        revertAll();
+        applyNewSettings();
+    }
+}
+
+void DesktopEnvironment::onDesktopChanged()
+{
     applyNewSettings();
 }
 
 void DesktopEnvironment::applyNewSettings()
 {
-    if (!wallpaper_)
+    if (wallpaper_.has_value() && !*wallpaper_)
         disableWallpaper();
 
-    if (!font_smoothing_)
+    if (font_smoothing_.has_value() && !*font_smoothing_)
         disableFontSmoothing();
 
-    if (!effects_)
+    if (effects_.has_value() && !*effects_)
         disableEffects();
 }
 
