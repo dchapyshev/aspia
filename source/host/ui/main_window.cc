@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
-    tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.png")));
+    tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.ico")));
     tray_icon_.setToolTip(tr("Aspia Host"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();

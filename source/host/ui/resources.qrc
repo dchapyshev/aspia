@@ -36,5 +36,6 @@
     <file alias="keyboard-lock.png">resources/keyboard-lock.png</file>
     <file alias="locale.png">resources/locale.png</file>
     <file alias="computer_info.png">resources/computer_info.png</file>
+    <file alias="main.ico">resources/main.ico</file>
   </qresource>
 </RCC>
