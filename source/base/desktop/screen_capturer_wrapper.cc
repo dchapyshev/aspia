@@ -51,7 +51,10 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
 
 #if defined(OS_WIN)
     // If the monitor is turned off, this call will turn it on.
-    SetThreadExecutionState(ES_DISPLAY_REQUIRED);
+    if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
+    {
+        PLOG(LS_WARNING) << "SetThreadExecutionState failed";
+    }
 #endif // defined(OS_WIN)
 
     switchToInputDesktop();
@@ -174,6 +177,8 @@ void ScreenCapturerWrapper::captureFrame()
             case ScreenCapturer::Error::PERMANENT:
             {
                 ++permanent_error_count_;
+
+                LOG(LS_WARNING) << "Permanent error detected (" << permanent_error_count_ << ")";
                 selectCapturer();
             }
             break;
@@ -182,6 +187,10 @@ void ScreenCapturerWrapper::captureFrame()
                 NOTREACHED();
                 break;
         }
+    }
+    else
+    {
+        permanent_error_count_ = 0;
     }
 
     delegate_->onScreenCaptured(frame, screen_capturer_->captureCursor());
@@ -243,6 +252,10 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
             }
         }
     }
+    else
+    {
+        LOG(LS_WARNING) << "ScreenCapturer::screenList failed";
+    }
 
     LOG(LS_INFO) << "Primary screen NOT found";
     return ScreenCapturer::kFullDesktopScreenId;
@@ -252,12 +265,17 @@ void ScreenCapturerWrapper::selectCapturer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
+    LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer: "
+                 << static_cast<int>(preferred_type_);
+
 #if defined(OS_WIN)
     auto try_mirror_capturer = [this]()
     {
         // Mirror screen capture is available only in Windows 7/2008 R2.
         if (win::windowsVersion() == base::win::VERSION_WIN7)
         {
+            LOG(LS_INFO) << "Windows 7/2008R2 detected. Try to initialize MIRROR capturer";
+
             std::unique_ptr<ScreenCapturerMirror> capturer_mirror =
                 std::make_unique<ScreenCapturerMirror>();
 
@@ -266,6 +284,14 @@ void ScreenCapturerWrapper::selectCapturer()
                 LOG(LS_INFO) << "Using MIRROR capturer";
                 screen_capturer_ = std::move(capturer_mirror);
             }
+            else
+            {
+                LOG(LS_INFO) << "MIRROR capturer unavailable";
+            }
+        }
+        else
+        {
+            LOG(LS_INFO) << "Windows version is not equal to 7/2008R2. MIRROR capturer unavailable";
         }
     };
 
@@ -274,6 +300,7 @@ void ScreenCapturerWrapper::selectCapturer()
     if (permanent_error_count_ >= kMaxPermanentErrorCount)
     {
         // Skip other capturer types and using GDI capturer.
+        LOG(LS_INFO) << "Number of permanent errors has been exceeded. Reset to GDI capturer";
         permanent_error_count_ = 0;
     }
     else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
