@@ -19,6 +19,7 @@
 #ifndef BASE__CONVERTER_H
 #define BASE__CONVERTER_H
 
+#include "build/build_config.h"
 #include "base/memory/byte_array.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
@@ -65,6 +66,22 @@ struct ConverterImpl<std::u16string>
         return utf8FromUtf16(value);
     }
 };
+
+#if defined(OS_WIN)
+template <>
+struct ConverterImpl<std::wstring>
+{
+    static bool fromString(std::string_view str, std::wstring* value)
+    {
+        return utf8ToWide(str, value);
+    }
+
+    static std::string toString(const std::wstring& value)
+    {
+        return utf8FromWide(value);
+    }
+};
+#endif // defined(OS_WIN)
 
 template <>
 struct ConverterImpl<ByteArray>
