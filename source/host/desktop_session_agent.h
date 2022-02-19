@@ -48,7 +48,7 @@ class DesktopSessionAgent
 {
 public:
     explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
-    ~DesktopSessionAgent();
+    ~DesktopSessionAgent() override;
 
     void start(std::u16string_view channel_id);
 

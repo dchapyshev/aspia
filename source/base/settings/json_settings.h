@@ -37,7 +37,7 @@ public:
                  std::string_view application_name,
                  std::string_view file_name,
                  Encrypted encrypted = Encrypted::NO);
-    ~JsonSettings();
+    ~JsonSettings() override;
 
     bool isWritable() const;
     void sync();

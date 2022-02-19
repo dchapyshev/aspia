@@ -34,7 +34,7 @@ class Process : public ObjectWatcher::Delegate
 public:
     Process(std::shared_ptr<TaskRunner> task_runner, ProcessId process_id);
     Process(std::shared_ptr<TaskRunner> task_runner, HANDLE process, HANDLE thread);
-    ~Process();
+    ~Process() override;
 
     using ExitCallback = std::function<void(int exit_code)>;
 
