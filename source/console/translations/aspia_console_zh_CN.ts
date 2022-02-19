@@ -826,27 +826,27 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="62"/>
+        <location filename="../computer_dialog.cc" line="64"/>
         <source>(copy)</source>
         <translation>(copy)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="73"/>
+        <location filename="../computer_dialog.cc" line="75"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="77"/>
+        <location filename="../computer_dialog.cc" line="79"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="84"/>
+        <location filename="../computer_dialog.cc" line="86"/>
         <source>Manage</source>
         <translation>管理</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="88"/>
+        <location filename="../computer_dialog.cc" line="90"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
@@ -924,26 +924,26 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="68"/>
+        <location filename="../computer_group_dialog.cc" line="76"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名字太长，名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="76"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="84"/>
+        <location filename="../computer_group_dialog.cc" line="92"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="112"/>
+        <location filename="../computer_group_dialog.cc" line="120"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>

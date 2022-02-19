@@ -826,27 +826,27 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="62"/>
+        <location filename="../computer_dialog.cc" line="64"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="73"/>
+        <location filename="../computer_dialog.cc" line="75"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="77"/>
+        <location filename="../computer_dialog.cc" line="79"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="84"/>
+        <location filename="../computer_dialog.cc" line="86"/>
         <source>Manage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="88"/>
+        <location filename="../computer_dialog.cc" line="90"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -926,7 +926,7 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="68"/>
+        <location filename="../computer_group_dialog.cc" line="76"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -934,12 +934,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="76"/>
+        <location filename="../computer_group_dialog.cc" line="84"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="84"/>
+        <location filename="../computer_group_dialog.cc" line="92"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -947,7 +947,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="112"/>
+        <location filename="../computer_group_dialog.cc" line="120"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
