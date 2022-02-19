@@ -29,8 +29,8 @@ class SysInfoWidgetMonitors : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetMonitors(QWidget* parent = nullptr);
-    ~SysInfoWidgetMonitors();
+    explicit SysInfoWidgetMonitors(QWidget* parent = nullptr);
+    ~SysInfoWidgetMonitors() override;
 
     // SysInfo implementation.
     std::string category() const override;

@@ -34,7 +34,7 @@ class ClientWindow : public QMainWindow
 
 public:
     explicit ClientWindow(QWidget* parent = nullptr);
-    ~ClientWindow();
+    ~ClientWindow() override;
 
 protected:
     // QMainWindow implementation.

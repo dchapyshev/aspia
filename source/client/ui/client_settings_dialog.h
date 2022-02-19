@@ -33,7 +33,7 @@ class ClientSettingsDialog : public QDialog
 
 public:
     explicit ClientSettingsDialog(QWidget* parent = nullptr);
-    ~ClientSettingsDialog();
+    ~ClientSettingsDialog() override;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

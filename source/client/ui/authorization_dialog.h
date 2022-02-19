@@ -32,7 +32,7 @@ class AuthorizationDialog : public QDialog
 
 public:
     explicit AuthorizationDialog(QWidget* parent = nullptr);
-    ~AuthorizationDialog();
+    ~AuthorizationDialog() override;
 
     void setOneTimePasswordEnabled(bool enable);
 

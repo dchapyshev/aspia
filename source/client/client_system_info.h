@@ -33,12 +33,12 @@ class ClientSystemInfo
 {
 public:
     explicit ClientSystemInfo(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientSystemInfo();
+    ~ClientSystemInfo() override;
 
     void setSystemInfoWindow(std::shared_ptr<SystemInfoWindowProxy> system_info_window_proxy);
 
     // SystemInfoControl implementation.
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
+    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
 
 protected:
     // Client implementation.

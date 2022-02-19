@@ -30,7 +30,7 @@ namespace client {
 class FrameQImage : public base::Frame
 {
 public:
-    ~FrameQImage() = default;
+    ~FrameQImage() override = default;
 
     static std::unique_ptr<FrameQImage> create(const base::Size& size);
     static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);

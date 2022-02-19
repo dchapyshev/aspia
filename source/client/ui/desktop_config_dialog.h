@@ -42,7 +42,7 @@ public:
                         const proto::DesktopConfig& config,
                         uint32_t video_encodings,
                         QWidget* parent = nullptr);
-    ~DesktopConfigDialog();
+    ~DesktopConfigDialog() override;
 
     const proto::DesktopConfig& config() { return config_; }
 

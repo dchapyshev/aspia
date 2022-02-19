@@ -29,8 +29,8 @@ class SysInfoWidgetDrivers : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetDrivers(QWidget* parent = nullptr);
-    ~SysInfoWidgetDrivers();
+    explicit SysInfoWidgetDrivers(QWidget* parent = nullptr);
+    ~SysInfoWidgetDrivers() override;
 
     // SysInfo implementation.
     std::string category() const override;

@@ -159,7 +159,7 @@ public:
                  std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                  std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                  Type type);
-    ~FileTransfer();
+    ~FileTransfer() override;
 
     void start(const std::string& source_path,
                const std::string& target_path,

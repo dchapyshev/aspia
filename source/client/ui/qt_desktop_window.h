@@ -54,7 +54,7 @@ public:
     QtDesktopWindow(proto::SessionType session_type,
                     const proto::DesktopConfig& desktop_config,
                     QWidget* parent = nullptr);
-    ~QtDesktopWindow();
+    ~QtDesktopWindow() override;
 
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() override;

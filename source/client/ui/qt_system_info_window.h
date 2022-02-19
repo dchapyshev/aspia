@@ -44,7 +44,7 @@ class QtSystemInfoWindow
 
 public:
     explicit QtSystemInfoWindow(QWidget* parent = nullptr);
-    ~QtSystemInfoWindow();
+    ~QtSystemInfoWindow() override;
 
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() override;

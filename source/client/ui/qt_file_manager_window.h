@@ -45,7 +45,7 @@ class QtFileManagerWindow
 
 public:
     explicit QtFileManagerWindow(QWidget* parent = nullptr);
-    ~QtFileManagerWindow();
+    ~QtFileManagerWindow() override;
 
     // SessionWindow implementation.
     std::unique_ptr<Client> createClient() override;

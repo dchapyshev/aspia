@@ -29,8 +29,8 @@ class SysInfoWidgetNetShares : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetNetShares(QWidget* parent = nullptr);
-    ~SysInfoWidgetNetShares();
+    explicit SysInfoWidgetNetShares(QWidget* parent = nullptr);
+    ~SysInfoWidgetNetShares() override;
 
     // SysInfo implementation.
     std::string category() const override;

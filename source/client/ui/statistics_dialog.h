@@ -33,7 +33,7 @@ class StatisticsDialog : public QDialog
 
 public:
     explicit StatisticsDialog(QWidget* parent = nullptr);
-    ~StatisticsDialog();
+    ~StatisticsDialog() override;
 
     void setMetrics(const DesktopWindow::Metrics& metrics);
 

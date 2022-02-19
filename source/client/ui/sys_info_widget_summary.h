@@ -29,8 +29,8 @@ class SysInfoWidgetSummary : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetSummary(QWidget* parent = nullptr);
-    ~SysInfoWidgetSummary();
+    explicit SysInfoWidgetSummary(QWidget* parent = nullptr);
+    ~SysInfoWidgetSummary() override;
 
     // SysInfo implementation.
     std::string category() const override;

@@ -48,7 +48,7 @@ class ClientFileTransfer
 {
 public:
     explicit ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientFileTransfer();
+    ~ClientFileTransfer() override;
 
     void setFileManagerWindow(std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy);
 

@@ -29,8 +29,8 @@ class SysInfoWidgetEventLogs : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetEventLogs(QWidget* parent = nullptr);
-    ~SysInfoWidgetEventLogs();
+    explicit SysInfoWidgetEventLogs(QWidget* parent = nullptr);
+    ~SysInfoWidgetEventLogs() override;
 
     // SysInfo implementation.
     std::string category() const override;

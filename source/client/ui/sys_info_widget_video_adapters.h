@@ -29,8 +29,8 @@ class SysInfoWidgetVideoAdapters : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetVideoAdapters(QWidget* parent = nullptr);
-    ~SysInfoWidgetVideoAdapters();
+    explicit SysInfoWidgetVideoAdapters(QWidget* parent = nullptr);
+    ~SysInfoWidgetVideoAdapters() override;
 
     // SysInfo implementation.
     std::string category() const override;

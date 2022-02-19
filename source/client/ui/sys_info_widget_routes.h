@@ -29,8 +29,8 @@ class SysInfoWidgetRoutes : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetRoutes(QWidget* parent = nullptr);
-    ~SysInfoWidgetRoutes();
+    explicit SysInfoWidgetRoutes(QWidget* parent = nullptr);
+    ~SysInfoWidgetRoutes() override;
 
     // SysInfo implementation.
     std::string category() const override;

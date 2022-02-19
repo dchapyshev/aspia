@@ -52,7 +52,7 @@ class ClientDesktop
 {
 public:
     explicit ClientDesktop(std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~ClientDesktop();
+    ~ClientDesktop() override;
 
     void setDesktopWindow(std::shared_ptr<DesktopWindowProxy> desktop_window_proxy);
 

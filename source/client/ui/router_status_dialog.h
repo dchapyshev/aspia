@@ -30,7 +30,7 @@ class RouterStatusDialog : public QDialog
 
 public:
     RouterStatusDialog(QWidget* parent);
-    ~RouterStatusDialog();
+    ~RouterStatusDialog() override;
 
     void setStatus(const QString& message);
 

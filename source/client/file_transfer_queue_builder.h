@@ -30,7 +30,7 @@ public:
     FileTransferQueueBuilder(
         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
         common::FileTask::Target target);
-    ~FileTransferQueueBuilder();
+    ~FileTransferQueueBuilder() override;
 
     using FinishCallback = std::function<void(proto::FileError)>;
 

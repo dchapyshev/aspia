@@ -29,8 +29,8 @@ class SysInfoWidgetEnvVars : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetEnvVars(QWidget* parent = nullptr);
-    ~SysInfoWidgetEnvVars();
+    explicit SysInfoWidgetEnvVars(QWidget* parent = nullptr);
+    ~SysInfoWidgetEnvVars() override;
 
     // SysInfo implementation.
     std::string category() const override;

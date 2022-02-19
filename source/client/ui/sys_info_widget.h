@@ -31,7 +31,7 @@ class SysInfoWidget : public QWidget
     Q_OBJECT
 
 public:
-    ~SysInfoWidget() = default;
+    ~SysInfoWidget() override = default;
 
     virtual std::string category() const = 0;
     virtual proto::system_info::SystemInfoRequest request() const;
@@ -48,7 +48,7 @@ signals:
     void systemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
 protected:
-    SysInfoWidget(QWidget* parent = nullptr);
+    explicit SysInfoWidget(QWidget* parent = nullptr);
 
     void copyRow(QTreeWidgetItem* item);
     void copyColumn(QTreeWidgetItem* item, int column);

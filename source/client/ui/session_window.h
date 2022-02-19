@@ -46,7 +46,7 @@ class SessionWindow
 
 public:
     explicit SessionWindow(QWidget* parent = nullptr);
-    virtual ~SessionWindow();
+    virtual ~SessionWindow() override;
 
     // Connects to a host.
     // If the username and/or password are not specified in the connection parameters, the

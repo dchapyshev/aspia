@@ -49,7 +49,7 @@ public:
                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                 std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                 common::FileTask::Target target);
-    ~FileRemover();
+    ~FileRemover() override;
 
     enum Action
     {

@@ -45,7 +45,7 @@ class RouterManagerWindow
 
 public:
     explicit RouterManagerWindow(QWidget* parent = nullptr);
-    ~RouterManagerWindow();
+    ~RouterManagerWindow() override;
 
     void connectToRouter(const RouterConfig& router_config);
 

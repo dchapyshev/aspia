@@ -29,8 +29,8 @@ class SysInfoWidgetPowerOptions : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetPowerOptions(QWidget* parent = nullptr);
-    ~SysInfoWidgetPowerOptions();
+    explicit SysInfoWidgetPowerOptions(QWidget* parent = nullptr);
+    ~SysInfoWidgetPowerOptions() override;
 
     // SysInfo implementation.
     std::string category() const override;

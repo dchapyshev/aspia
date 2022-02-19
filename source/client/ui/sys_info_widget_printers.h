@@ -17,7 +17,7 @@
 //
 
 #ifndef CLIENT__UI__SYS_INFO_PRINTERS_H
-#define CLIENT__UI__SYS_INFO_MONITORS_H
+#define CLIENT__UI__SYS_INFO_PRINTERS_H
 
 #include "client/ui/sys_info_widget.h"
 #include "ui_sys_info_widget_printers.h"
@@ -29,8 +29,8 @@ class SysInfoWidgetPrinters : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetPrinters(QWidget* parent = nullptr);
-    ~SysInfoWidgetPrinters();
+    explicit SysInfoWidgetPrinters(QWidget* parent = nullptr);
+    ~SysInfoWidgetPrinters() override;
 
     // SysInfo implementation.
     std::string category() const override;

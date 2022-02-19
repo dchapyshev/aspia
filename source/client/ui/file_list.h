@@ -35,7 +35,7 @@ class FileList : public QTreeView
 
 public:
     explicit FileList(QWidget* parent = nullptr);
-    ~FileList() = default;
+    ~FileList() override = default;
 
     void showDriveList(AddressBarModel* model);
     void showFileList(const proto::FileList& file_list);

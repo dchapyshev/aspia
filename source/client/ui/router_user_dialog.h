@@ -34,7 +34,7 @@ public:
     RouterUserDialog(const base::User& user,
                      const std::vector<std::u16string>& users,
                      QWidget* parent);
-    ~RouterUserDialog();
+    ~RouterUserDialog() override;
 
     const base::User& user() const;
 

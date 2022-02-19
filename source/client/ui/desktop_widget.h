@@ -42,7 +42,7 @@ class DesktopWidget : public QWidget
 
 public:
     explicit DesktopWidget(QWidget* parent);
-    ~DesktopWidget() = default;
+    ~DesktopWidget() override = default;
 
     base::Frame* desktopFrame();
     void setDesktopFrame(std::shared_ptr<base::Frame>& frame);

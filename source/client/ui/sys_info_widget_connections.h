@@ -29,8 +29,8 @@ class SysInfoWidgetConnections : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetConnections(QWidget* parent = nullptr);
-    ~SysInfoWidgetConnections();
+    explicit SysInfoWidgetConnections(QWidget* parent = nullptr);
+    ~SysInfoWidgetConnections() override;
 
     // SysInfo implementation.
     std::string category() const override;

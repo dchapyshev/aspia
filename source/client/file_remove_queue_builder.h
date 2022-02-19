@@ -31,7 +31,7 @@ public:
     FileRemoveQueueBuilder(
         std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
         common::FileTask::Target target);
-    ~FileRemoveQueueBuilder();
+    ~FileRemoveQueueBuilder() override;
 
     using FinishCallback = std::function<void(proto::FileError)>;
 

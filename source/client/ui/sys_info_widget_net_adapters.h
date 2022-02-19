@@ -29,8 +29,8 @@ class SysInfoWidgetNetAdapters : public SysInfoWidget
     Q_OBJECT
 
 public:
-    SysInfoWidgetNetAdapters(QWidget* parent = nullptr);
-    ~SysInfoWidgetNetAdapters();
+    explicit SysInfoWidgetNetAdapters(QWidget* parent = nullptr);
+    ~SysInfoWidgetNetAdapters() override;
 
     // SysInfo implementation.
     std::string category() const override;

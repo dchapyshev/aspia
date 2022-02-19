@@ -77,7 +77,7 @@ public:
 
     RouterController(const RouterConfig& router_config,
                      std::shared_ptr<base::TaskRunner> task_runner);
-    ~RouterController();
+    ~RouterController() override;
 
     void connectTo(base::HostId host_id, Delegate* delegate);
 
