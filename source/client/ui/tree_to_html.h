@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__TREE_TO_HTML_H
-#define CLIENT__UI__TREE_TO_HTML_H
+#ifndef CLIENT_UI_TREE_TO_HTML_H
+#define CLIENT_UI_TREE_TO_HTML_H
 
 #include <QString>
 
@@ -33,4 +33,4 @@ bool treeToHtmlFile(const QTreeWidget* tree,
 
 } // namespace client
 
-#endif // CLIENT__UI__TREE_TO_HTML_H
+#endif // CLIENT_UI_TREE_TO_HTML_H

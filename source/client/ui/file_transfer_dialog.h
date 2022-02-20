@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__FILE_TRANSFER_DIALOG_H
-#define CLIENT__UI__FILE_TRANSFER_DIALOG_H
+#ifndef CLIENT_UI_FILE_TRANSFER_DIALOG_H
+#define CLIENT_UI_FILE_TRANSFER_DIALOG_H
 
 #include "build/build_config.h"
 #include "client/file_transfer.h"
@@ -38,7 +38,7 @@ class FileTransferDialog
 
 public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
-    ~FileTransferDialog();
+    ~FileTransferDialog() override;
 
     std::shared_ptr<FileTransferWindowProxy> windowProxy() { return transfer_window_proxy_; }
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__FILE_TRANSFER_DIALOG_H
+#endif // CLIENT_UI_FILE_TRANSFER_DIALOG_H

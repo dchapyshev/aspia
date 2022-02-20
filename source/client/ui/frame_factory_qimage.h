@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__FRAME_FACTORY_QIMAGE_H
-#define CLIENT__UI__FRAME_FACTORY_QIMAGE_H
+#ifndef CLIENT_UI_FRAME_FACTORY_QIMAGE_H
+#define CLIENT_UI_FRAME_FACTORY_QIMAGE_H
 
 #include "base/macros_magic.h"
 #include "client/frame_factory.h"
@@ -28,7 +28,7 @@ class FrameFactoryQImage : public FrameFactory
 {
 public:
     FrameFactoryQImage();
-    ~FrameFactoryQImage();
+    ~FrameFactoryQImage() override;
 
     std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) override;
 
@@ -38,4 +38,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__FRAME_FACTORY_QIMAGE_H
+#endif // CLIENT_UI_FRAME_FACTORY_QIMAGE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__FILE_PANEL_H
-#define CLIENT__UI__FILE_PANEL_H
+#ifndef CLIENT_UI_FILE_PANEL_H
+#define CLIENT_UI_FILE_PANEL_H
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
@@ -32,7 +32,7 @@ class FilePanel : public QWidget
 
 public:
     explicit FilePanel(QWidget* parent = nullptr);
-    ~FilePanel() = default;
+    ~FilePanel() override = default;
 
     void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
     void onFileList(proto::FileError error_code, const proto::FileList& file_list);
@@ -95,4 +95,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__FILE_PANEL_H
+#endif // CLIENT_UI_FILE_PANEL_H

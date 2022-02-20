@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_PROXY_H
-#define CLIENT__CLIENT_PROXY_H
+#ifndef CLIENT_CLIENT_PROXY_H
+#define CLIENT_CLIENT_PROXY_H
 
 #include "base/macros_magic.h"
 #include "client/client_config.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_PROXY_H
+#endif // CLIENT_CLIENT_PROXY_H

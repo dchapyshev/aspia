@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__INPUT_EVENT_FILTER_H
-#define CLIENT__INPUT_EVENT_FILTER_H
+#ifndef CLIENT_INPUT_EVENT_FILTER_H
+#define CLIENT_INPUT_EVENT_FILTER_H
 
 #include "proto/common.pb.h"
 #include "proto/desktop.pb.h"
@@ -67,4 +67,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__INPUT_EVENT_FILTER_H
+#endif // CLIENT_INPUT_EVENT_FILTER_H

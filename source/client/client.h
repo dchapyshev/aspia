@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_H
-#define CLIENT__CLIENT_H
+#ifndef CLIENT_CLIENT_H
+#define CLIENT_CLIENT_H
 
 #include "base/version.h"
 #include "client/client_config.h"
@@ -40,7 +40,7 @@ class Client
 {
 public:
     explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
-    virtual ~Client();
+    virtual ~Client() override;
 
     // Starts a session.
     void start(const Config& config);
@@ -101,4 +101,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_H
+#endif // CLIENT_CLIENT_H

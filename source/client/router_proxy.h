@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_PROXY_H
-#define CLIENT__ROUTER_PROXY_H
+#ifndef CLIENT_ROUTER_PROXY_H
+#define CLIENT_ROUTER_PROXY_H
 
 #include "base/macros_magic.h"
 #include "proto/router_common.pb.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_PROXY_H
+#endif // CLIENT_ROUTER_PROXY_H

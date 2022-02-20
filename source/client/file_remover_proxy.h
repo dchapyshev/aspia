@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REMOVER_PROXY_H
-#define CLIENT__FILE_REMOVER_PROXY_H
+#ifndef CLIENT_FILE_REMOVER_PROXY_H
+#define CLIENT_FILE_REMOVER_PROXY_H
 
 #include "client/file_remover.h"
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_REMOVER_PROXY_H
+#endif // CLIENT_FILE_REMOVER_PROXY_H

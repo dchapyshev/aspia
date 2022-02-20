@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__APPLICATION_H
-#define CLIENT__UI__APPLICATION_H
+#ifndef CLIENT_UI_APPLICATION_H
+#define CLIENT_UI_APPLICATION_H
 
 #include "client/ui/client_settings.h"
 #include "qt_base/application.h"
@@ -44,4 +44,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__APPLICATION_H
+#endif // CLIENT_UI_APPLICATION_H

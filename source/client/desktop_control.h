@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__DESKTOP_CONTROL_H
-#define CLIENT__DESKTOP_CONTROL_H
+#ifndef CLIENT_DESKTOP_CONTROL_H
+#define CLIENT_DESKTOP_CONTROL_H
 
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
@@ -48,4 +48,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__DESKTOP_CONTROL_H
+#endif // CLIENT_DESKTOP_CONTROL_H

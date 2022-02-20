@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_H
-#define CLIENT__ROUTER_H
+#ifndef CLIENT_ROUTER_H
+#define CLIENT_ROUTER_H
 
 #include "base/macros_magic.h"
 #include "base/peer/client_authenticator.h"
@@ -37,7 +37,7 @@ class Router : public base::NetworkChannel::Listener
 public:
     Router(std::shared_ptr<RouterWindowProxy> window_proxy,
            std::shared_ptr<base::TaskRunner> io_task_runner);
-    ~Router();
+    ~Router() override;
 
     void setUserName(std::u16string_view user_name);
     void setPassword(std::u16string_view password);
@@ -70,4 +70,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_H
+#endif // CLIENT_ROUTER_H

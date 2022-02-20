@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_CONFIG_STORAGE_H
-#define CLIENT__ROUTER_CONFIG_STORAGE_H
+#ifndef CLIENT_ROUTER_CONFIG_STORAGE_H
+#define CLIENT_ROUTER_CONFIG_STORAGE_H
 
 #include "base/macros_magic.h"
 #include "base/settings/json_settings.h"
@@ -45,4 +45,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_CONFIG_STORAGE_H
+#endif // CLIENT_ROUTER_CONFIG_STORAGE_H

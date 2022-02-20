@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REMOVER_H
-#define CLIENT__FILE_REMOVER_H
+#ifndef CLIENT_FILE_REMOVER_H
+#define CLIENT_FILE_REMOVER_H
 
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
@@ -116,4 +116,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_REMOVER_H
+#endif // CLIENT_FILE_REMOVER_H

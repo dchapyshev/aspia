@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_CONFIG_H
-#define CLIENT__CLIENT_CONFIG_H
+#ifndef CLIENT_CLIENT_CONFIG_H
+#define CLIENT_CLIENT_CONFIG_H
 
 #include "client/router_config.h"
 #include "proto/common.pb.h"
@@ -43,4 +43,4 @@ struct Config
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_CONFIG_H
+#endif // CLIENT_CLIENT_CONFIG_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_CONFIG_H
-#define CLIENT__ROUTER_CONFIG_H
+#ifndef CLIENT_ROUTER_CONFIG_H
+#define CLIENT_ROUTER_CONFIG_H
 
 #include <cstdint>
 #include <string>
@@ -48,4 +48,4 @@ using RouterConfigList = std::vector<RouterConfig>;
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_CONFIG_H
+#endif // CLIENT_ROUTER_CONFIG_H

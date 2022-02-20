@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__FILE_MIME_DATA_H
-#define CLIENT__UI__FILE_MIME_DATA_H
+#ifndef CLIENT_UI_FILE_MIME_DATA_H
+#define CLIENT_UI_FILE_MIME_DATA_H
 
 #include "client/file_transfer.h"
 
@@ -31,7 +31,7 @@ class FileMimeData : public QMimeData
 {
 public:
     FileMimeData() = default;
-    virtual ~FileMimeData();
+    virtual ~FileMimeData() override;
 
     static QString createMimeType();
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__FILE_MIME_DATA_H
+#endif // CLIENT_UI_FILE_MIME_DATA_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_WINDOW_PROXY_H
-#define CLIENT__ROUTER_WINDOW_PROXY_H
+#ifndef CLIENT_ROUTER_WINDOW_PROXY_H
+#define CLIENT_ROUTER_WINDOW_PROXY_H
 
 #include "client/router_window.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_WINDOW_PROXY_H
+#endif // CLIENT_ROUTER_WINDOW_PROXY_H

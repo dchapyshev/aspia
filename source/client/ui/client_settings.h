@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__CLIENT_SETTINGS_H
-#define CLIENT__UI__CLIENT_SETTINGS_H
+#ifndef CLIENT_UI_CLIENT_SETTINGS_H
+#define CLIENT_UI_CLIENT_SETTINGS_H
 
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__CLIENT_SETTINGS_H
+#endif // CLIENT_UI_CLIENT_SETTINGS_H

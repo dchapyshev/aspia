@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__SYS_INFO_SUMMARY_H
-#define CLIENT__UI__SYS_INFO_SUMMARY_H
+#ifndef CLIENT_UI_SYS_INFO_SUMMARY_H
+#define CLIENT_UI_SYS_INFO_SUMMARY_H
 
 #include "client/ui/sys_info_widget.h"
 #include "ui_sys_info_widget_summary.h"
@@ -46,4 +46,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__SYS_INFO_SUMMARY_H
+#endif // CLIENT_UI_SYS_INFO_SUMMARY_H

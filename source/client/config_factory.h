@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CONFIG_FACTORY_H
-#define CLIENT__CONFIG_FACTORY_H
+#ifndef CLIENT_CONFIG_FACTORY_H
+#define CLIENT_CONFIG_FACTORY_H
 
 #include "base/macros_magic.h"
 #include "proto/desktop.pb.h"
@@ -42,4 +42,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CONFIG_FACTORY_H
+#endif // CLIENT_CONFIG_FACTORY_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_CONTROLLER_H
-#define CLIENT__ROUTER_CONTROLLER_H
+#ifndef CLIENT_ROUTER_CONTROLLER_H
+#define CLIENT_ROUTER_CONTROLLER_H
 
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
@@ -107,4 +107,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_CONTROLLER_H
+#endif // CLIENT_ROUTER_CONTROLLER_H

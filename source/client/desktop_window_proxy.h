@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__DESKTOP_WINDOW_PROXY_H
-#define CLIENT__DESKTOP_WINDOW_PROXY_H
+#ifndef CLIENT_DESKTOP_WINDOW_PROXY_H
+#define CLIENT_DESKTOP_WINDOW_PROXY_H
 
 #include "base/macros_magic.h"
 #include "client/desktop_window.h"
@@ -67,4 +67,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__DESKTOP_WINDOW_PROXY_H
+#endif // CLIENT_DESKTOP_WINDOW_PROXY_H

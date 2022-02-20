@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_FILE_TRANSFER_H
-#define CLIENT__CLIENT_FILE_TRANSFER_H
+#ifndef CLIENT_CLIENT_FILE_TRANSFER_H
+#define CLIENT_CLIENT_FILE_TRANSFER_H
 
 #include "client/client.h"
 #include "client/file_control.h"
@@ -106,4 +106,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_FILE_TRANSFER_H
+#endif // CLIENT_CLIENT_FILE_TRANSFER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_CONTROL_H
-#define CLIENT__FILE_CONTROL_H
+#ifndef CLIENT_FILE_CONTROL_H
+#define CLIENT_FILE_CONTROL_H
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
@@ -50,4 +50,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__FILE_CONTROL_H
+#endif // CLIENT_FILE_CONTROL_H

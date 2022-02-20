@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_DESKTOP_H
-#define CLIENT__CLIENT_DESKTOP_H
+#ifndef CLIENT_CLIENT_DESKTOP_H
+#define CLIENT_CLIENT_DESKTOP_H
 
 #include "base/macros_magic.h"
 #include "base/protobuf_arena.h"
@@ -135,4 +135,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_DESKTOP_H
+#endif // CLIENT_CLIENT_DESKTOP_H

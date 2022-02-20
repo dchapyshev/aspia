@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__QT_DESKTOP_WINDOW_H
-#define CLIENT__UI__QT_DESKTOP_WINDOW_H
+#ifndef CLIENT_UI_QT_DESKTOP_WINDOW_H
+#define CLIENT_UI_QT_DESKTOP_WINDOW_H
 
 #include "base/version.h"
 #include "client/client_desktop.h"
@@ -126,4 +126,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__QT_DESKTOP_WINDOW_H
+#endif // CLIENT_UI_QT_DESKTOP_WINDOW_H

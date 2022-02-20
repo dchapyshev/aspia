@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__ROUTER_WINDOW_H
-#define CLIENT__ROUTER_WINDOW_H
+#ifndef CLIENT_ROUTER_WINDOW_H
+#define CLIENT_ROUTER_WINDOW_H
 
 #include "base/peer/client_authenticator.h"
 
@@ -46,4 +46,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_WINDOW_H
+#endif // CLIENT_ROUTER_WINDOW_H

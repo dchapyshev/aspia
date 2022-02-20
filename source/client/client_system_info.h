@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_SYSTEM_INFO_H
-#define CLIENT__CLIENT_SYSTEM_INFO_H
+#ifndef CLIENT_CLIENT_SYSTEM_INFO_H
+#define CLIENT_CLIENT_SYSTEM_INFO_H
 
 #include "client/client.h"
 #include "client/system_info_control.h"
@@ -57,4 +57,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__CLIENT_SYSTEM_INFO_H
+#endif // CLIENT_CLIENT_SYSTEM_INFO_H

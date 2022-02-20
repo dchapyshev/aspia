@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__ROUTER_USER_DIALOG_H
-#define CLIENT__UI__ROUTER_USER_DIALOG_H
+#ifndef CLIENT_UI_ROUTER_USER_DIALOG_H
+#define CLIENT_UI_ROUTER_USER_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "base/peer/user.h"
@@ -58,4 +58,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__ROUTER_USER_DIALOG_H
+#endif // CLIENT_UI_ROUTER_USER_DIALOG_H

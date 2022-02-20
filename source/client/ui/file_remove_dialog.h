@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__FILE_REMOVE_DIALOG_H
-#define CLIENT__UI__FILE_REMOVE_DIALOG_H
+#ifndef CLIENT_UI_FILE_REMOVE_DIALOG_H
+#define CLIENT_UI_FILE_REMOVE_DIALOG_H
 
 #include "build/build_config.h"
 #include "client/file_remove_window.h"
@@ -38,7 +38,7 @@ class FileRemoveDialog
 
 public:
     explicit FileRemoveDialog(QWidget* parent);
-    ~FileRemoveDialog();
+    ~FileRemoveDialog() override;
 
     std::shared_ptr<FileRemoveWindowProxy> windowProxy() { return remover_window_proxy_; }
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__FILE_REMOVE_DIALOG_H
+#endif // CLIENT_UI_FILE_REMOVE_DIALOG_H

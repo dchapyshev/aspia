@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__DESKTOP_PANEL_H
-#define CLIENT__UI__DESKTOP_PANEL_H
+#ifndef CLIENT_UI_DESKTOP_PANEL_H
+#define CLIENT_UI_DESKTOP_PANEL_H
 
 #include "base/macros_magic.h"
 #include "client/ui/desktop_settings.h"
@@ -121,4 +121,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__DESKTOP_PANEL_H
+#endif // CLIENT_UI_DESKTOP_PANEL_H

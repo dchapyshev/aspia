@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_REMOVE_WINDOW_PROXY_H
-#define CLIENT__FILE_REMOVE_WINDOW_PROXY_H
+#ifndef CLIENT_FILE_REMOVE_WINDOW_PROXY_H
+#define CLIENT_FILE_REMOVE_WINDOW_PROXY_H
 
 #include "base/macros_magic.h"
 #include "proto/file_transfer.pb.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_REMOVE_WINDOW_PROXY_H
+#endif // CLIENT_FILE_REMOVE_WINDOW_PROXY_H

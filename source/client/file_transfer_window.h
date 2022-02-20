@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_TRANSFER_WINDOW_H
-#define CLIENT__FILE_TRANSFER_WINDOW_H
+#ifndef CLIENT_FILE_TRANSFER_WINDOW_H
+#define CLIENT_FILE_TRANSFER_WINDOW_H
 
 #include "client/file_transfer.h"
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__FILE_TRANSFER_WINDOW_H
+#endif // CLIENT_FILE_TRANSFER_WINDOW_H

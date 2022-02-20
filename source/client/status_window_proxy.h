@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__STATUS_WINDOW_PROXY_H
-#define CLIENT__STATUS_WINDOW_PROXY_H
+#ifndef CLIENT_STATUS_WINDOW_PROXY_H
+#define CLIENT_STATUS_WINDOW_PROXY_H
 
 #include "base/macros_magic.h"
 #include "client/status_window.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__STATUS_WINDOW_PROXY_H
+#endif // CLIENT_STATUS_WINDOW_PROXY_H

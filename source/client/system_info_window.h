@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__SYSTEM_INFO_WINDOW_H
-#define CLIENT__SYSTEM_INFO_WINDOW_H
+#ifndef CLIENT_SYSTEM_INFO_WINDOW_H
+#define CLIENT_SYSTEM_INFO_WINDOW_H
 
 #include <memory>
 
@@ -40,4 +40,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__SYSTEM_INFO_WINDOW_H
+#endif // CLIENT_SYSTEM_INFO_WINDOW_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__DESKTOP_WIDGET_H
-#define CLIENT__UI__DESKTOP_WIDGET_H
+#ifndef CLIENT_UI_DESKTOP_WIDGET_H
+#define CLIENT_UI_DESKTOP_WIDGET_H
 
 #include "base/desktop/frame.h"
 #include "build/build_config.h"
@@ -112,4 +112,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__DESKTOP_WIDGET_H
+#endif // CLIENT_UI_DESKTOP_WIDGET_H

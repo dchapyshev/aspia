@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__CLIENT_MAIN_H
-#define CLIENT__CLIENT_MAIN_H
+#ifndef CLIENT_CLIENT_MAIN_H
+#define CLIENT_CLIENT_MAIN_H
 
 int clientMain(int argc, char* argv[]);
 
-#endif // CLIENT__CLIENT_MAIN_H
+#endif // CLIENT_CLIENT_MAIN_H

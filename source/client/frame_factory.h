@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FRAME_FACTORY_H
-#define CLIENT__FRAME_FACTORY_H
+#ifndef CLIENT_FRAME_FACTORY_H
+#define CLIENT_FRAME_FACTORY_H
 
 #include <memory>
 
@@ -38,4 +38,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__FRAME_FACTORY_H
+#endif // CLIENT_FRAME_FACTORY_H

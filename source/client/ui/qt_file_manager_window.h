@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__QT_FILE_MANAGER_WINDOW_H
-#define CLIENT__UI__QT_FILE_MANAGER_WINDOW_H
+#ifndef CLIENT_UI_QT_FILE_MANAGER_WINDOW_H
+#define CLIENT_UI_QT_FILE_MANAGER_WINDOW_H
 
 #include "client/file_manager_window.h"
 #include "client/file_remover.h"
@@ -103,4 +103,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__QT_FILE_MANAGER_WINDOW_H
+#endif // CLIENT_UI_QT_FILE_MANAGER_WINDOW_H

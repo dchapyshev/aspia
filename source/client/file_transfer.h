@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_TRANSFER_H
-#define CLIENT__FILE_TRANSFER_H
+#ifndef CLIENT_FILE_TRANSFER_H
+#define CLIENT_FILE_TRANSFER_H
 
 #include "base/waitable_timer.h"
 #include "common/file_task.h"
@@ -215,4 +215,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_TRANSFER_H
+#endif // CLIENT_FILE_TRANSFER_H

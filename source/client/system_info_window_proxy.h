@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__SYSTEM_INFO_WINDOW_PROXY_H
-#define CLIENT__SYSTEM_INFO_WINDOW_PROXY_H
+#ifndef CLIENT_SYSTEM_INFO_WINDOW_PROXY_H
+#define CLIENT_SYSTEM_INFO_WINDOW_PROXY_H
 
 #include "base/macros_magic.h"
 #include "client/system_info_window.h"
@@ -51,4 +51,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__SYSTEM_INFO_WINDOW_PROXY_H
+#endif // CLIENT_SYSTEM_INFO_WINDOW_PROXY_H

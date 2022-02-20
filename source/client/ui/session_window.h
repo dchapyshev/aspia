@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__SESSION_WINDOW_H
-#define CLIENT__UI__SESSION_WINDOW_H
+#ifndef CLIENT_UI_SESSION_WINDOW_H
+#define CLIENT_UI_SESSION_WINDOW_H
 
 #include "client/client_config.h"
 #include "client/status_window.h"
@@ -84,4 +84,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__SESSION_WINDOW_H
+#endif // CLIENT_UI_SESSION_WINDOW_H

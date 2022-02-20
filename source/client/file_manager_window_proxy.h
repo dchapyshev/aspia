@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_MANAGER_WINDOW_PROXY_H
-#define CLIENT__FILE_MANAGER_WINDOW_PROXY_H
+#ifndef CLIENT_FILE_MANAGER_WINDOW_PROXY_H
+#define CLIENT_FILE_MANAGER_WINDOW_PROXY_H
 
 #include "common/file_task.h"
 #include "proto/file_transfer.pb.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_MANAGER_WINDOW_PROXY_H
+#endif // CLIENT_FILE_MANAGER_WINDOW_PROXY_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
-#define CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
+#ifndef CLIENT_FILE_TRANSFER_QUEUE_BUILDER_H
+#define CLIENT_FILE_TRANSFER_QUEUE_BUILDER_H
 
 #include "client/file_transfer.h"
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
+#endif // CLIENT_FILE_TRANSFER_QUEUE_BUILDER_H

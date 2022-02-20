@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__DESKTOP_WINDOW_H
-#define CLIENT__DESKTOP_WINDOW_H
+#ifndef CLIENT_DESKTOP_WINDOW_H
+#define CLIENT_DESKTOP_WINDOW_H
 
 #include <chrono>
 #include <memory>
@@ -101,4 +101,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT__DESKTOP_WINDOW_H
+#endif // CLIENT_DESKTOP_WINDOW_H

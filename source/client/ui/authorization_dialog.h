@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__UI__AUTHORIZATION_DIALOG_H
-#define CLIENT__UI__AUTHORIZATION_DIALOG_H
+#ifndef CLIENT_UI_AUTHORIZATION_DIALOG_H
+#define CLIENT_UI_AUTHORIZATION_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "ui_authorization_dialog.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT__UI__AUTHORIZATION_DIALOG_H
+#endif // CLIENT_UI_AUTHORIZATION_DIALOG_H
