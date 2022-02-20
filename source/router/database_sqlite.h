@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_SQLITE_H
-#define ROUTER__DATABASE_SQLITE_H
+#ifndef ROUTER_DATABASE_SQLITE_H
+#define ROUTER_DATABASE_SQLITE_H
 
 #include "base/macros_magic.h"
 #include "router/database.h"
@@ -31,7 +31,7 @@ namespace router {
 class DatabaseSqlite : public Database
 {
 public:
-    ~DatabaseSqlite();
+    ~DatabaseSqlite() override;
 
     static std::unique_ptr<DatabaseSqlite> create();
     static std::unique_ptr<DatabaseSqlite> open();
@@ -57,4 +57,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__DATABASE_SQLITE_H
+#endif // ROUTER_DATABASE_SQLITE_H

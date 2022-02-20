@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__WIN__SERVICE_H
-#define ROUTER__WIN__SERVICE_H
+#ifndef ROUTER_WIN_SERVICE_H
+#define ROUTER_WIN_SERVICE_H
 
 #include "base/win/service.h"
 
@@ -29,7 +29,7 @@ class Service : public base::win::Service
 {
 public:
     Service();
-    ~Service();
+    ~Service() override;
 
 protected:
     // base::win::Service implementation.
@@ -46,4 +46,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__WIN__SERVICE_H
+#endif // ROUTER_WIN_SERVICE_H

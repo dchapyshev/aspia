@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__USER_LIST_DB_H
-#define ROUTER__USER_LIST_DB_H
+#ifndef ROUTER_USER_LIST_DB_H
+#define ROUTER_USER_LIST_DB_H
 
 #include "base/macros_magic.h"
 #include "base/peer/user_list_base.h"
@@ -30,7 +30,7 @@ class DatabaseFactory;
 class UserListDb : public base::UserListBase
 {
 public:
-    ~UserListDb();
+    ~UserListDb() override;
 
     static std::unique_ptr<UserListDb> open(const DatabaseFactory& factory);
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__USER_LIST_DB_H
+#endif // ROUTER_USER_LIST_DB_H

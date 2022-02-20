@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SERVER_H
-#define ROUTER__SERVER_H
+#ifndef ROUTER_SERVER_H
+#define ROUTER_SERVER_H
 
 #include "base/net/network_server.h"
 #include "base/peer/host_id.h"
@@ -84,4 +84,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__ROUTER_SERVER_H
+#endif // ROUTER_ROUTER_SERVER_H

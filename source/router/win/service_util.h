@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__WIN__SERVICE_UTIL_H
-#define ROUTER__WIN__SERVICE_UTIL_H
+#ifndef ROUTER_WIN_SERVICE_UTIL_H
+#define ROUTER_WIN_SERVICE_UTIL_H
 
 namespace router {
 
@@ -28,4 +28,4 @@ void removeService();
 
 } // namespace router
 
-#endif // ROUTER__WIN__SERVICE_UTIL_H
+#endif // ROUTER_WIN_SERVICE_UTIL_H

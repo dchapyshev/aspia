@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SESSION_ADMIN_H
-#define ROUTER__SESSION_ADMIN_H
+#ifndef ROUTER_SESSION_ADMIN_H
+#define ROUTER_SESSION_ADMIN_H
 
 #include "proto/router_admin.pb.h"
 #include "router/session.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__SESSION_ADMIN_H
+#endif // ROUTER_SESSION_ADMIN_H

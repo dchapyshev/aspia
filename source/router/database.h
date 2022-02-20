@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_H
-#define ROUTER__DATABASE_H
+#ifndef ROUTER_DATABASE_H
+#define ROUTER_DATABASE_H
 
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
@@ -47,4 +47,4 @@ public:
 
 } // namespace router
 
-#endif // ROUTER__DATABASE_H
+#endif // ROUTER_DATABASE_H

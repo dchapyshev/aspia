@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__WIN__SERVICE_CONSTANTS_H
-#define ROUTER__WIN__SERVICE_CONSTANTS_H
+#ifndef ROUTER_WIN_SERVICE_CONSTANTS_H
+#define ROUTER_WIN_SERVICE_CONSTANTS_H
 
 namespace router {
 
@@ -28,4 +28,4 @@ extern const char16_t kServiceDescription[];
 
 } // namespace router
 
-#endif // ROUTER__WIN__SERVICE_CONSTANTS_H
+#endif // ROUTER_WIN_SERVICE_CONSTANTS_H

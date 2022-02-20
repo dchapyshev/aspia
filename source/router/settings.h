@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SETTINGS_H
-#define ROUTER__SETTINGS_H
+#ifndef ROUTER_SETTINGS_H
+#define ROUTER_SETTINGS_H
 
 #include "base/settings/json_settings.h"
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__SETTINGS_H
+#endif // ROUTER_SETTINGS_H

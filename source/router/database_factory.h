@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__DATABASE_FACTORY_H
-#define ROUTER__DATABASE_FACTORY_H
+#ifndef ROUTER_DATABASE_FACTORY_H
+#define ROUTER_DATABASE_FACTORY_H
 
 #include <memory>
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace router
 
-#endif // ROUTER__DATABASE_FACTORY_H
+#endif // ROUTER_DATABASE_FACTORY_H

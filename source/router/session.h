@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SESSION_H
-#define ROUTER__SESSION_H
+#ifndef ROUTER_SESSION_H
+#define ROUTER_SESSION_H
 
 #include "base/version.h"
 #include "base/net/network_channel.h"
@@ -106,4 +106,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__SESSION_H
+#endif // ROUTER_SESSION_H

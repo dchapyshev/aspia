@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SHARED_KEY_POOL_H
-#define ROUTER__SHARED_KEY_POOL_H
+#ifndef ROUTER_SHARED_KEY_POOL_H
+#define ROUTER_SHARED_KEY_POOL_H
 
 #include "base/macros_magic.h"
 #include "proto/router_common.pb.h"
@@ -71,4 +71,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__SHARED_KEY_POOL_H
+#endif // ROUTER_SHARED_KEY_POOL_H

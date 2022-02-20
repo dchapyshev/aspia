@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER__SESSION_HOST_H
-#define ROUTER__SESSION_HOST_H
+#ifndef ROUTER_SESSION_HOST_H
+#define ROUTER_SESSION_HOST_H
 
 #include "base/peer/host_id.h"
 #include "proto/router_peer.pb.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace router
 
-#endif // ROUTER__SESSION_HOST_H
+#endif // ROUTER_SESSION_HOST_H
