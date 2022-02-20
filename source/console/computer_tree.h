@@ -31,7 +31,7 @@ class ComputerTree : public QTreeWidget
 
 public:
     explicit ComputerTree(QWidget* parent = nullptr);
-    ~ComputerTree() = default;
+    ~ComputerTree() override = default;
 
     QString mimeType() const { return mime_type_; }
 

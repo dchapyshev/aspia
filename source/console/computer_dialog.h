@@ -42,7 +42,7 @@ public:
                    Mode mode,
                    const QString& parent_name,
                    const std::optional<proto::address_book::Computer>& computer = std::nullopt);
-    ~ComputerDialog();
+    ~ComputerDialog() override;
 
     const proto::address_book::Computer& computer() const { return computer_; }
 

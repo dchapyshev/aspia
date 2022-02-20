@@ -32,7 +32,7 @@ class ComputerItem : public QTreeWidgetItem
 {
 public:
     ComputerItem(proto::address_book::Computer* computer, ComputerGroupItem* parent_group_item);
-    ~ComputerItem() = default;
+    ~ComputerItem() override = default;
 
     void updateItem();
 

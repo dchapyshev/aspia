@@ -35,7 +35,7 @@ class AddressBookTab : public QWidget
     Q_OBJECT
 
 public:
-    ~AddressBookTab();
+    ~AddressBookTab() override;
 
     static AddressBookTab* createNew(QWidget* parent);
     static AddressBookTab* openFromFile(const QString& file_path, QWidget* parent);

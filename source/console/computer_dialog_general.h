@@ -32,7 +32,7 @@ class ComputerDialogGeneral : public ComputerDialogTab
 
 public:
     ComputerDialogGeneral(int type, QWidget* parent);
-    ~ComputerDialogGeneral() = default;
+    ~ComputerDialogGeneral() override = default;
 
     void restoreSettings(const QString& parent_name,
                          const proto::address_book::Computer& computer);

@@ -26,7 +26,7 @@ namespace console {
 class ComputerDialogTab : public QWidget
 {
 public:
-    virtual ~ComputerDialogTab() = default;
+    virtual ~ComputerDialogTab() override = default;
 
     int type() const { return type_; }
 

@@ -35,7 +35,7 @@ public:
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
                       std::string* key);
-    ~AddressBookDialog() = default;
+    ~AddressBookDialog() override = default;
 
 protected:
     // QDialog implementation.

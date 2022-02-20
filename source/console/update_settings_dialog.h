@@ -30,7 +30,7 @@ class UpdateSettingsDialog : public QDialog
 
 public:
     UpdateSettingsDialog(QWidget* parent = nullptr);
-    ~UpdateSettingsDialog();
+    ~UpdateSettingsDialog() override;
 
 private:
     Ui::UpdateSettingsDialog ui;

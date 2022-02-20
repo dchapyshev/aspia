@@ -29,7 +29,7 @@ class ComputerGroupMimeData : public QMimeData
 {
 public:
     ComputerGroupMimeData() = default;
-    virtual ~ComputerGroupMimeData() = default;
+    virtual ~ComputerGroupMimeData() override = default;
 
     void setComputerGroupItem(ComputerGroupItem* computer_group_item, const QString& mime_type)
     {

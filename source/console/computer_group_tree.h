@@ -29,7 +29,7 @@ class ComputerGroupTree : public QTreeWidget
 
 public:
     ComputerGroupTree(QWidget* parent);
-    ~ComputerGroupTree() = default;
+    ~ComputerGroupTree() override = default;
 
     void setComputerMimeType(const QString& mime_type);
     bool dragging() const;

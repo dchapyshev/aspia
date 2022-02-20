@@ -29,7 +29,7 @@ class ComputerMimeData : public QMimeData
 {
 public:
     ComputerMimeData() = default;
-    virtual ~ComputerMimeData() = default;
+    virtual ~ComputerMimeData() override = default;
 
     void setComputerItem(ComputerItem* computer_item, const QString& mime_type)
     {

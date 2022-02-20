@@ -31,7 +31,7 @@ class ComputerDialogParent : public ComputerDialogTab
 
 public:
     ComputerDialogParent(int type, QWidget* parent);
-    ~ComputerDialogParent() = default;
+    ~ComputerDialogParent() override = default;
 
 private:
     Ui::ComputerDialogParent ui;

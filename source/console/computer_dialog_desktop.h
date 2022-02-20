@@ -33,7 +33,7 @@ class ComputerDialogDesktop : public ComputerDialogTab
 
 public:
     ComputerDialogDesktop(int type, QWidget* parent);
-    ~ComputerDialogDesktop() = default;
+    ~ComputerDialogDesktop() override = default;
 
     void restoreSettings(proto::SessionType session_type, const proto::DesktopConfig& config);
     void saveSettings(proto::DesktopConfig* config);
