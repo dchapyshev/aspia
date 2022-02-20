@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__NOTIFIER_WINDOW_H
-#define HOST__UI__NOTIFIER_WINDOW_H
+#ifndef HOST_UI_NOTIFIER_WINDOW_H
+#define HOST_UI_NOTIFIER_WINDOW_H
 
 #include "host/user_session_agent.h"
 #include "ui_notifier_window.h"
@@ -84,4 +84,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__NOTIFIER_WINDOW_H
+#endif // HOST_UI_NOTIFIER_WINDOW_H

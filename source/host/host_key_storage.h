@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__HOST_KEY_STORAGE_H
-#define HOST__HOST_KEY_STORAGE_H
+#ifndef HOST_HOST_KEY_STORAGE_H
+#define HOST_HOST_KEY_STORAGE_H
 
 #include "base/macros_magic.h"
 #include "base/settings/json_settings.h"
@@ -41,4 +41,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__HOST_KEY_STORAGE_H
+#endif // HOST_HOST_KEY_STORAGE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__WIN__UPDATER_LAUNCHER_H
-#define HOST__WIN__UPDATER_LAUNCHER_H
+#ifndef HOST_WIN_UPDATER_LAUNCHER_H
+#define HOST_WIN_UPDATER_LAUNCHER_H
 
 #include "base/session_id.h"
 
@@ -27,4 +27,4 @@ bool launchUpdater(base::SessionId session_id);
 
 } // namespace host
 
-#endif // HOST__WIN__UPDATER_LAUNCHER_H
+#endif // HOST_WIN_UPDATER_LAUNCHER_H

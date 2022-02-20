@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__CONFIG_DIALOG_H
-#define HOST__UI__CONFIG_DIALOG_H
+#ifndef HOST_UI_CONFIG_DIALOG_H
+#define HOST_UI_CONFIG_DIALOG_H
 
 #include "base/peer/user_list.h"
 #include "qt_base/locale_loader.h"
@@ -73,4 +73,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__CONFIG_DIALOG_H
+#endif // HOST_UI_CONFIG_DIALOG_H

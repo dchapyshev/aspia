@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INPUT_INJECTOR_WIN_H
-#define HOST__INPUT_INJECTOR_WIN_H
+#ifndef HOST_INPUT_INJECTOR_WIN_H
+#define HOST_INPUT_INJECTOR_WIN_H
 
 #include "base/win/scoped_thread_desktop.h"
 #include "host/input_injector.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__INPUT_INJECTOR_WIN_H
+#endif // HOST_INPUT_INJECTOR_WIN_H

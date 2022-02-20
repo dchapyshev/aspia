@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIENT_SESSION_DESKTOP_H
-#define HOST__CLIENT_SESSION_DESKTOP_H
+#ifndef HOST_CLIENT_SESSION_DESKTOP_H
+#define HOST_CLIENT_SESSION_DESKTOP_H
 
 #include "base/macros_magic.h"
 #include "base/protobuf_arena.h"
@@ -84,4 +84,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__CLIENT_SESSION_DESKTOP_H
+#endif // HOST_CLIENT_SESSION_DESKTOP_H

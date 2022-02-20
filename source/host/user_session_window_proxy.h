@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_WINDOW_PROXY_H
-#define HOST__USER_SESSION_WINDOW_PROXY_H
+#ifndef HOST_USER_SESSION_WINDOW_PROXY_H
+#define HOST_USER_SESSION_WINDOW_PROXY_H
 
 #include "host/user_session_agent.h"
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_WINDOW_PROXY_H
+#endif // HOST_USER_SESSION_WINDOW_PROXY_H

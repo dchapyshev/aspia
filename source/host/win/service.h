@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__SERVICE_H
-#define HOST__SERVICE_H
+#ifndef HOST_SERVICE_H
+#define HOST_SERVICE_H
 
 #include "base/win/service.h"
 
@@ -29,7 +29,7 @@ class Service : public base::win::Service
 {
 public:
     Service();
-    ~Service();
+    ~Service() override;
 
 protected:
     // base::win::Service implementation.
@@ -46,4 +46,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__SERVICE_H
+#endif // HOST_SERVICE_H

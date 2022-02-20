@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__SETTINGS_UTIL_H
-#define HOST__UI__SETTINGS_UTIL_H
+#ifndef HOST_UI_SETTINGS_UTIL_H
+#define HOST_UI_SETTINGS_UTIL_H
 
 #include "base/macros_magic.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__SETTINGS_UTIL_H
+#endif // HOST_UI_SETTINGS_UTIL_H

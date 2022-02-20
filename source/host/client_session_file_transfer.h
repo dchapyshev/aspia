@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIENT_SESSION_FILE_TRANSFER_H
-#define HOST__CLIENT_SESSION_FILE_TRANSFER_H
+#ifndef HOST_CLIENT_SESSION_FILE_TRANSFER_H
+#define HOST_CLIENT_SESSION_FILE_TRANSFER_H
 
 #include "base/macros_magic.h"
 #include "host/client_session.h"
@@ -47,4 +47,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__CLIENT_SESSION_FILE_TRANSFER_H
+#endif // HOST_CLIENT_SESSION_FILE_TRANSFER_H

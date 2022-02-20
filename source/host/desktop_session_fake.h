@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_SESSION_FAKE_H
-#define HOST__DESKTOP_SESSION_FAKE_H
+#ifndef HOST_DESKTOP_SESSION_FAKE_H
+#define HOST_DESKTOP_SESSION_FAKE_H
 
 #include "base/macros_magic.h"
 #include "host/desktop_session.h"
@@ -57,4 +57,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__DESKTOP_SESSION_FAKE_H
+#endif // HOST_DESKTOP_SESSION_FAKE_H

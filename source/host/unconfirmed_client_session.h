@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UNCONFIRMED_CLIENT_SESSION_H
-#define HOST__UNCONFIRMED_CLIENT_SESSION_H
+#ifndef HOST_UNCONFIRMED_CLIENT_SESSION_H
+#define HOST_UNCONFIRMED_CLIENT_SESSION_H
 
 #include "base/macros_magic.h"
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UNCONFIRMED_CLIENT_SESSION_H
+#endif // HOST_UNCONFIRMED_CLIENT_SESSION_H

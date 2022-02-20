@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_SESSION_IPC_H
-#define HOST__DESKTOP_SESSION_IPC_H
+#ifndef HOST_DESKTOP_SESSION_IPC_H
+#define HOST_DESKTOP_SESSION_IPC_H
 
 #include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
@@ -76,4 +76,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__DESKTOP_SESSION_IPC_H
+#endif // HOST_DESKTOP_SESSION_IPC_H

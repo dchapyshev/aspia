@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_AGENT_H
-#define HOST__USER_SESSION_AGENT_H
+#ifndef HOST_USER_SESSION_AGENT_H
+#define HOST_USER_SESSION_AGENT_H
 
 #include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
@@ -89,4 +89,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_AGENT_H
+#endif // HOST_USER_SESSION_AGENT_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__CONNECT_CONFIRM_DIALOG_H
-#define HOST__UI__CONNECT_CONFIRM_DIALOG_H
+#ifndef HOST_UI_CONNECT_CONFIRM_DIALOG_H
+#define HOST_UI_CONNECT_CONFIRM_DIALOG_H
 
 #include <QDialog>
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__CONNECT_CONFIRM_DIALOG_H
+#endif // HOST_UI_CONNECT_CONFIRM_DIALOG_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__WIN__SAS_INJECTOR_H
-#define HOST__WIN__SAS_INJECTOR_H
+#ifndef HOST_WIN_SAS_INJECTOR_H
+#define HOST_WIN_SAS_INJECTOR_H
 
 namespace host {
 
@@ -25,4 +25,4 @@ void injectSAS();
 
 } // namespace host
 
-#endif // HOST__WIN__SAS_INJECTOR_H
+#endif // HOST_WIN_SAS_INJECTOR_H

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_AGENT_MAIN_H
-#define HOST__DESKTOP_AGENT_MAIN_H
+#ifndef HOST_DESKTOP_AGENT_MAIN_H
+#define HOST_DESKTOP_AGENT_MAIN_H
 
 #include "host/host_export.h"
 
 void HOST_EXPORT desktopAgentMain(int argc, const char* const* argv);
 
-#endif // HOST__DESKTOP_AGENT_MAIN_H
+#endif // HOST_DESKTOP_AGENT_MAIN_H

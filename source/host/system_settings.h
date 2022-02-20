@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__SYSTEM_SETTINGS_H
-#define HOST__SYSTEM_SETTINGS_H
+#ifndef HOST_SYSTEM_SETTINGS_H
+#define HOST_SYSTEM_SETTINGS_H
 
 #include "base/macros_magic.h"
 #include "base/settings/json_settings.h"
@@ -116,4 +116,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__SYSTEM_SETTINGS_H
+#endif // HOST_SYSTEM_SETTINGS_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_CONSTANTS_H
-#define HOST__USER_SESSION_CONSTANTS_H
+#ifndef HOST_USER_SESSION_CONSTANTS_H
+#define HOST_USER_SESSION_CONSTANTS_H
 
 namespace host {
 
@@ -25,4 +25,4 @@ extern const char16_t kIpcChannelIdForUI[];
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_CONSTANTS_H
+#endif // HOST_USER_SESSION_CONSTANTS_H

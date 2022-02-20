@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__ROUTER_CONTROLLER_H
-#define HOST__ROUTER_CONTROLLER_H
+#ifndef HOST_ROUTER_CONTROLLER_H
+#define HOST_ROUTER_CONTROLLER_H
 
 #include "base/protobuf_arena.h"
 #include "base/waitable_timer.h"
@@ -99,4 +99,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__ROUTER_CONTROLLER_H
+#endif // HOST_ROUTER_CONTROLLER_H

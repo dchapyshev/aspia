@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_EXPORT_H
-#define HOST_EXPORT_H
+#ifndef HOST_HOST_EXPORT_H
+#define HOST_HOST_EXPORT_H
 
 #if defined(HOST_IMPLEMENTATION)
 #define HOST_EXPORT __declspec(dllexport)
@@ -25,4 +25,4 @@
 #define HOST_EXPORT __declspec(dllimport)
 #endif // defined(HOST_IMPLEMENTATION)
 
-#endif // HOST_EXPORT_H
+#endif // HOST_HOST_EXPORT_H

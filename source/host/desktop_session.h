@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_SESSION_H
-#define HOST__DESKTOP_SESSION_H
+#ifndef HOST_DESKTOP_SESSION_H
+#define HOST_DESKTOP_SESSION_H
 
 #include "proto/desktop_internal.pb.h"
 
@@ -87,4 +87,4 @@ public:
 
 } // namespace host
 
-#endif // HOST__DESKTOP_SESSION_H
+#endif // HOST_DESKTOP_SESSION_H

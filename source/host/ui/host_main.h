@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__HOST_MAIN_H
-#define HOST__UI__HOST_MAIN_H
+#ifndef HOST_UI_HOST_MAIN_H
+#define HOST_UI_HOST_MAIN_H
 
 #include "host/host_export.h"
 
 int HOST_EXPORT hostMain(int argc, char* argv[]);
 
-#endif // HOST__UI__HOST_MAIN_H
+#endif // HOST_UI_HOST_MAIN_H

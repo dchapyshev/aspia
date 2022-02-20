@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_SESSION_AGENT_H
-#define HOST__DESKTOP_SESSION_AGENT_H
+#ifndef HOST_DESKTOP_SESSION_AGENT_H
+#define HOST_DESKTOP_SESSION_AGENT_H
 
 #include "base/protobuf_arena.h"
 #include "base/desktop/screen_capturer_wrapper.h"
@@ -112,4 +112,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__DESKTOP_SESSION_AGENT_H
+#endif // HOST_DESKTOP_SESSION_AGENT_H

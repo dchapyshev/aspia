@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__SERVER_H
-#define HOST__SERVER_H
+#ifndef HOST_SERVER_H
+#define HOST_SERVER_H
 
 #include "base/net/network_server.h"
 #include "base/peer/server_authenticator_manager.h"
@@ -88,4 +88,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__SERVER_H
+#endif // HOST_SERVER_H

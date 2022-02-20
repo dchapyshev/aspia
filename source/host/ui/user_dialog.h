@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__USER_DIALOG_H
-#define HOST__UI__USER_DIALOG_H
+#ifndef HOST_UI_USER_DIALOG_H
+#define HOST_UI_USER_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "base/peer/user.h"
@@ -58,4 +58,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__USER_DIALOG_H
+#endif // HOST_UI_USER_DIALOG_H

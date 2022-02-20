@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__CHANGE_PASSWORD_DIALOG_H
-#define HOST__UI__CHANGE_PASSWORD_DIALOG_H
+#ifndef HOST_UI_CHANGE_PASSWORD_DIALOG_H
+#define HOST_UI_CHANGE_PASSWORD_DIALOG_H
 
 #include "ui_change_password_dialog.h"
 
@@ -46,4 +46,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__CHANGE_PASSWORD_DIALOG_H
+#endif // HOST_UI_CHANGE_PASSWORD_DIALOG_H

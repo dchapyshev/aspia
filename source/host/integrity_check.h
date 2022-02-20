@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INTEGRITY_CHECK_H
-#define HOST__INTEGRITY_CHECK_H
+#ifndef HOST_INTEGRITY_CHECK_H
+#define HOST_INTEGRITY_CHECK_H
 
 namespace host {
 
@@ -27,4 +27,4 @@ bool integrityCheck();
 
 } // namespace host
 
-#endif // HOST__INTEGRITY_CHECK_H
+#endif // HOST_INTEGRITY_CHECK_H

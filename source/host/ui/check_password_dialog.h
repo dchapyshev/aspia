@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__UI__CHECK_PASSWORD_DIALOG_H
-#define HOST__UI__CHECK_PASSWORD_DIALOG_H
+#ifndef HOST_UI_CHECK_PASSWORD_DIALOG_H
+#define HOST_UI_CHECK_PASSWORD_DIALOG_H
 
 #include "ui_check_password_dialog.h"
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__UI__CHECK_PASSWORD_DIALOG_H
+#endif // HOST_UI_CHECK_PASSWORD_DIALOG_H

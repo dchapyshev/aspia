@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__USER_SESSION_MANAGER_H
-#define HOST__USER_SESSION_MANAGER_H
+#ifndef HOST_USER_SESSION_MANAGER_H
+#define HOST_USER_SESSION_MANAGER_H
 
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
@@ -86,4 +86,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__USER_SESSION_MANAGER_H
+#endif // HOST_USER_SESSION_MANAGER_H

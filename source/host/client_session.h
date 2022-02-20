@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__CLIENT_SESSION_H
-#define HOST__CLIENT_SESSION_H
+#ifndef HOST_CLIENT_SESSION_H
+#define HOST_CLIENT_SESSION_H
 
 #include "base/session_id.h"
 #include "base/version.h"
@@ -110,4 +110,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__CLIENT_SESSION_H
+#endif // HOST_CLIENT_SESSION_H

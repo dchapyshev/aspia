@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__DESKTOP_SESSION_MANAGER_H
-#define HOST__DESKTOP_SESSION_MANAGER_H
+#ifndef HOST_DESKTOP_SESSION_MANAGER_H
+#define HOST_DESKTOP_SESSION_MANAGER_H
 
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
@@ -83,4 +83,4 @@ private:
 
 } // namespace host
 
-#endif // HOST__DESKTOP_SESSION_MANAGER_H
+#endif // HOST_DESKTOP_SESSION_MANAGER_H

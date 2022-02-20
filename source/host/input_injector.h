@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST__INPUT_INJECTOR_H
-#define HOST__INPUT_INJECTOR_H
+#ifndef HOST_INPUT_INJECTOR_H
+#define HOST_INPUT_INJECTOR_H
 
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
@@ -39,4 +39,4 @@ public:
 
 } // namespace host
 
-#endif // HOST__INPUT_INJECTOR_H
+#endif // HOST_INPUT_INJECTOR_H
