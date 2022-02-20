@@ -35,7 +35,7 @@ class UpdateCheckerImpl : public QObject
 
 public:
     explicit UpdateCheckerImpl(QObject* parent = nullptr);
-    ~UpdateCheckerImpl();
+    ~UpdateCheckerImpl() override;
 
     void setUpdateServer(const QString& update_server);
     void setPackageName(const QString& package_name);

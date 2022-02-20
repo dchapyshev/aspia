@@ -32,7 +32,7 @@ class UserTreeItem : public QTreeWidgetItem
 {
 public:
     UserTreeItem(const base::User& user);
-    ~UserTreeItem() = default;
+    ~UserTreeItem() override = default;
 
     const base::User& user() const { return user_; }
     void setUser(const base::User& user);

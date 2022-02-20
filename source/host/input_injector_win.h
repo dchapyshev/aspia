@@ -28,7 +28,7 @@ class InputInjectorWin : public InputInjector
 {
 public:
     InputInjectorWin();
-    ~InputInjectorWin();
+    ~InputInjectorWin() override;
 
     // InputInjector implementation.
     void setScreenOffset(const base::Point& offset) override;

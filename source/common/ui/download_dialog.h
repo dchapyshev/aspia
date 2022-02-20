@@ -33,7 +33,7 @@ class DownloadDialog : public QDialog
 
 public:
     DownloadDialog(const QUrl& url, QFile& file, QWidget* parent = nullptr);
-    ~DownloadDialog() = default;
+    ~DownloadDialog() override = default;
 
 private:
     Ui::DownloadDialog ui;

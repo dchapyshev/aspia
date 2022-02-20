@@ -43,7 +43,7 @@ class MainWindow
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 public slots:
     void connectToService();

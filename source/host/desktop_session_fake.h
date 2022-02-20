@@ -32,7 +32,7 @@ class DesktopSessionFake : public DesktopSession
 {
 public:
     DesktopSessionFake(std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate);
-    ~DesktopSessionFake();
+    ~DesktopSessionFake() override;
 
     // DesktopSession implementation.
     void start() override;

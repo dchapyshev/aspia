@@ -37,7 +37,7 @@ class DesktopSessionProxy;
 class ClientSession : public base::NetworkChannel::Listener
 {
 public:
-    virtual ~ClientSession();
+    virtual ~ClientSession() override;
 
     class Delegate
     {

@@ -40,7 +40,7 @@ class Server
 {
 public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Server();
+    ~Server() override;
 
     void start();
     void setSessionEvent(base::win::SessionStatus status, base::SessionId session_id);

@@ -38,7 +38,7 @@ class UserSessionManager
 {
 public:
     explicit UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner);
-    ~UserSessionManager();
+    ~UserSessionManager() override;
 
     class Delegate
     {

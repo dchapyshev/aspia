@@ -34,7 +34,7 @@ class ClipboardWin : public Clipboard
 {
 public:
     ClipboardWin();
-    ~ClipboardWin();
+    ~ClipboardWin() override;
 
 protected:
     // Clipboard implementation.

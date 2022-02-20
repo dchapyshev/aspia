@@ -31,7 +31,7 @@ public:
     enum class Mode { CREATE_NEW_PASSWORD, CHANGE_PASSWORD };
 
     explicit ChangePasswordDialog(Mode mode, QWidget* parent = nullptr);
-    ~ChangePasswordDialog();
+    ~ChangePasswordDialog() override;
 
     QString oldPassword() const;
     QString newPassword() const;

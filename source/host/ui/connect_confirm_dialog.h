@@ -33,7 +33,7 @@ class ConnectConfirmDialog : public QDialog
 public:
     explicit ConnectConfirmDialog(const proto::internal::ConnectConfirmationRequest& request,
                                   QWidget* parent = nullptr);
-    ~ConnectConfirmDialog();
+    ~ConnectConfirmDialog() override;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

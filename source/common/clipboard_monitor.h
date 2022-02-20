@@ -30,7 +30,7 @@ class ClipboardMonitor
 {
 public:
     ClipboardMonitor();
-    ~ClipboardMonitor();
+    ~ClipboardMonitor() override;
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                common::Clipboard::Delegate* delegate);

@@ -35,7 +35,7 @@ class AboutDialog : public QDialog
 
 public:
     explicit AboutDialog(const QString& application_name, QWidget* parent = nullptr);
-    ~AboutDialog();
+    ~AboutDialog() override;
 
 private:
     QScopedPointer<Ui::AboutDialog> ui;

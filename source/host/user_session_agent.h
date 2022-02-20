@@ -59,7 +59,7 @@ public:
 
     UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
                      std::shared_ptr<base::TaskRunner> task_runner);
-    ~UserSessionAgent();
+    ~UserSessionAgent() override;
 
     void start();
 

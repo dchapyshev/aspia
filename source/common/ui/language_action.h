@@ -31,7 +31,7 @@ public:
     LanguageAction(const QString& locale_code,
                    const QString& locale_name,
                    QObject* parent = nullptr);
-    ~LanguageAction() = default;
+    ~LanguageAction() override = default;
 
     const QString& locale() const { return locale_code_; }
 

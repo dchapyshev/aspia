@@ -35,7 +35,7 @@ class TextChatWindow : public QWidget
 
 public:
     explicit TextChatWindow(QWidget* parent = nullptr);
-    ~TextChatWindow();
+    ~TextChatWindow() override;
 
     void readMessage(const proto::TextChatMessage& message);
     void readStatus(const proto::TextChatStatus& status);

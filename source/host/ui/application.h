@@ -30,7 +30,7 @@ class Application : public qt_base::Application
 
 public:
     Application(int& argc, char* argv[]);
-    virtual ~Application();
+    virtual ~Application() override;
 
     static Application* instance();
 

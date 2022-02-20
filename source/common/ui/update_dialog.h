@@ -42,7 +42,7 @@ public:
                  const QString& package_name,
                  QWidget* parent = nullptr);
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
-    ~UpdateDialog();
+    ~UpdateDialog() override;
 
 protected:
     // QDialog implementation.

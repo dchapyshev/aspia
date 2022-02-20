@@ -30,7 +30,7 @@ class TextChatOutgoingMessage : public TextChatMessage
 
 public:
     explicit TextChatOutgoingMessage(QWidget* parent = nullptr);
-    ~TextChatOutgoingMessage();
+    ~TextChatOutgoingMessage() override;
 
     void setMessageText(const QString& text) override;
     QString messageText() const override;

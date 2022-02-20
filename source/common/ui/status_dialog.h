@@ -35,7 +35,7 @@ class StatusDialog : public QDialog
 
 public:
     explicit StatusDialog(QWidget* parent = nullptr);
-    ~StatusDialog();
+    ~StatusDialog() override;
 
     void addMessage(const QString& message);
     void addMessageAndActivate(const QString& message);

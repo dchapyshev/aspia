@@ -43,7 +43,7 @@ class DesktopSessionManager
 public:
     DesktopSessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                           DesktopSession::Delegate* delegate);
-    ~DesktopSessionManager();
+    ~DesktopSessionManager() override;
 
     void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);

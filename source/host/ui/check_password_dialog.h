@@ -29,7 +29,7 @@ class CheckPasswordDialog : public QDialog
 
 public:
     explicit CheckPasswordDialog(QWidget* parent = nullptr);
-    ~CheckPasswordDialog();
+    ~CheckPasswordDialog() override;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

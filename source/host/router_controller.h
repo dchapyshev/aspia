@@ -39,7 +39,7 @@ class RouterController
 {
 public:
     explicit RouterController(std::shared_ptr<base::TaskRunner> task_runner);
-    ~RouterController();
+    ~RouterController() override;
 
     struct RouterInfo
     {

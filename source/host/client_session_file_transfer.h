@@ -28,7 +28,7 @@ class ClientSessionFileTransfer : public ClientSession
 {
 public:
     explicit ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel);
-    ~ClientSessionFileTransfer();
+    ~ClientSessionFileTransfer() override;
 
 protected:
     // net::Listener implementation.

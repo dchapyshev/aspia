@@ -28,7 +28,7 @@ class ClientSessionSystemInfo : public ClientSession
 {
 public:
     explicit ClientSessionSystemInfo(std::unique_ptr<base::NetworkChannel> channel);
-    ~ClientSessionSystemInfo();
+    ~ClientSessionSystemInfo() override;
 
 protected:
     // net::Listener implementation.
