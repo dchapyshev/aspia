@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__MRU_ACTION_H
-#define CONSOLE__MRU_ACTION_H
+#ifndef CONSOLE_MRU_ACTION_H
+#define CONSOLE_MRU_ACTION_H
 
 #include "base/macros_magic.h"
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__MRU_ACTION_H
+#endif // CONSOLE_MRU_ACTION_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_DIALOG_TAB_H
-#define CONSOLE__COMPUTER_DIALOG_TAB_H
+#ifndef CONSOLE_COMPUTER_DIALOG_TAB_H
+#define CONSOLE_COMPUTER_DIALOG_TAB_H
 
 #include <QWidget>
 
@@ -44,4 +44,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_DIALOG_TAB_H
+#endif // CONSOLE_COMPUTER_DIALOG_TAB_H

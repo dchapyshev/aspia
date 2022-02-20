@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_GROUP_DRAG_H
-#define CONSOLE__COMPUTER_GROUP_DRAG_H
+#ifndef CONSOLE_COMPUTER_GROUP_DRAG_H
+#define CONSOLE_COMPUTER_GROUP_DRAG_H
 
 #include "console/computer_group_mime_data.h"
 
@@ -28,7 +28,7 @@ namespace console {
 class ComputerGroupDrag : public QDrag
 {
 public:
-    ComputerGroupDrag(QObject* drag_source = nullptr)
+    explicit ComputerGroupDrag(QObject* drag_source = nullptr)
         : QDrag(drag_source)
     {
         // Nothing
@@ -44,4 +44,4 @@ public:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_GROUP_DRAG_H
+#endif // CONSOLE_COMPUTER_GROUP_DRAG_H

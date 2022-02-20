@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_GROUP_MIME_DATA_H
-#define CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#ifndef CONSOLE_COMPUTER_GROUP_MIME_DATA_H
+#define CONSOLE_COMPUTER_GROUP_MIME_DATA_H
 
 #include "console/computer_group_item.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_GROUP_MIME_DATA_H
+#endif // CONSOLE_COMPUTER_GROUP_MIME_DATA_H

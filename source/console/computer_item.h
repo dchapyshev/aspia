@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_ITEM_H
-#define CONSOLE__COMPUTER_ITEM_H
+#ifndef CONSOLE_COMPUTER_ITEM_H
+#define CONSOLE_COMPUTER_ITEM_H
 
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_ITEM_H
+#endif // CONSOLE_COMPUTER_ITEM_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__MAIN_WINDOW_H
-#define CONSOLE__MAIN_WINDOW_H
+#ifndef CONSOLE_MAIN_WINDOW_H
+#define CONSOLE_MAIN_WINDOW_H
 
 #include "client/router_config.h"
 #include "common/ui/update_checker.h"
@@ -115,4 +115,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__MAIN_WINDOW_H
+#endif // CONSOLE_MAIN_WINDOW_H

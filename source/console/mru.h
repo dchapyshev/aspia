@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__MRU_H
-#define CONSOLE__MRU_H
+#ifndef CONSOLE_MRU_H
+#define CONSOLE_MRU_H
 
 #include <QStringList>
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__MRU_H
+#endif // CONSOLE_MRU_H

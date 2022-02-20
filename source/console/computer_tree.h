@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_TREE_H
-#define CONSOLE__COMPUTER_TREE_H
+#ifndef CONSOLE_COMPUTER_TREE_H
+#define CONSOLE_COMPUTER_TREE_H
 
 #include "base/macros_magic.h"
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_TREE_H
+#endif // CONSOLE_COMPUTER_TREE_H

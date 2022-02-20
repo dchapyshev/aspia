@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__FAST_CONNECT_DIALOG_H
-#define CONSOLE__FAST_CONNECT_DIALOG_H
+#ifndef CONSOLE_FAST_CONNECT_DIALOG_H
+#define CONSOLE_FAST_CONNECT_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "client/client_config.h"
@@ -67,4 +67,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__FAST_CONNECT_DIALOG_H
+#endif // CONSOLE_FAST_CONNECT_DIALOG_H

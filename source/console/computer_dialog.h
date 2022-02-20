@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_DIALOG_H
-#define CONSOLE__COMPUTER_DIALOG_H
+#ifndef CONSOLE_COMPUTER_DIALOG_H
+#define CONSOLE_COMPUTER_DIALOG_H
 
 #include "console/settings.h"
 #include "proto/address_book.pb.h"
@@ -71,4 +71,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_DIALOG_H
+#endif // CONSOLE_COMPUTER_DIALOG_H

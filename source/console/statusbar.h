@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__STATUSBAR_H
-#define CONSOLE__STATUSBAR_H
+#ifndef CONSOLE_STATUSBAR_H
+#define CONSOLE_STATUSBAR_H
 
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
@@ -43,4 +43,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__STATUSBAR_H
+#endif // CONSOLE_STATUSBAR_H

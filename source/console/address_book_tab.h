@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__ADDRESS_BOOK_TAB_H
-#define CONSOLE__ADDRESS_BOOK_TAB_H
+#ifndef CONSOLE_ADDRESS_BOOK_TAB_H
+#define CONSOLE_ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
 #include "client/router_config.h"
@@ -123,4 +123,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__ADDRESS_BOOK_TAB_H
+#endif // CONSOLE_ADDRESS_BOOK_TAB_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CONSOLE__COMPUTER_DIALOG_DESKTOP_H
-#define CONSOLE__COMPUTER_DIALOG_DESKTOP_H
+#ifndef CONSOLE_COMPUTER_DIALOG_DESKTOP_H
+#define CONSOLE_COMPUTER_DIALOG_DESKTOP_H
 
 #include "base/macros_magic.h"
 #include "console/computer_dialog_tab.h"
@@ -50,4 +50,4 @@ private:
 
 } // namespace console
 
-#endif // CONSOLE__COMPUTER_DIALOG_DESKTOP_H
+#endif // CONSOLE_COMPUTER_DIALOG_DESKTOP_H
