@@ -206,7 +206,7 @@ void build(Solution &s)
 
     auto setup_exe = [](auto &t) -> decltype(auto)
     {
-        if (auto L = t.getSelectedTool()->as<VisualStudioLinker*>(); L)
+        if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
             L->Subsystem = vs::Subsystem::Windows;
         t += "org.sw.demo.qtproject.qt.base.winmain" QT_VERSION ""_dep;
         return t;
