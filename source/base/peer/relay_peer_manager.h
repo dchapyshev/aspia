@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__RELAY_PEER_MANAGER_H
-#define BASE__PEER__RELAY_PEER_MANAGER_H
+#ifndef BASE_PEER_RELAY_PEER_MANAGER_H
+#define BASE_PEER_RELAY_PEER_MANAGER_H
 
 #include "base/macros_magic.h"
 #include "base/peer/relay_peer.h"
@@ -46,7 +46,7 @@ public:
     };
 
     RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
-    ~RelayPeerManager();
+    ~RelayPeerManager() override;
 
     void addConnectionOffer(const proto::RelayCredentials& credentials);
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__RELAY_PEER_MANAGER_H
+#endif // BASE_PEER_RELAY_PEER_MANAGER_H

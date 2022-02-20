@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_PUMP_ASIO_H
-#define BASE__MESSAGE_LOOP__MESSAGE_PUMP_ASIO_H
+#ifndef BASE_MESSAGE_LOOP_MESSAGE_PUMP_ASIO_H
+#define BASE_MESSAGE_LOOP_MESSAGE_PUMP_ASIO_H
 
 #include "base/macros_magic.h"
 #include "base/message_loop/message_pump.h"
@@ -30,7 +30,7 @@ class MessagePumpForAsio : public MessagePump
 {
 public:
     MessagePumpForAsio() = default;
-    ~MessagePumpForAsio() = default;
+    ~MessagePumpForAsio() override = default;
 
     // MessagePump methods:
     void run(Delegate* delegate) override;
@@ -54,4 +54,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_PUMP_ASIO_H
+#endif // BASE_MESSAGE_LOOP_MESSAGE_PUMP_ASIO_H

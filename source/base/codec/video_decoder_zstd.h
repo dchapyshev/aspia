@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__VIDEO_DECODER_ZSTD_H
-#define BASE__CODEC__VIDEO_DECODER_ZSTD_H
+#ifndef BASE_CODEC_VIDEO_DECODER_ZSTD_H
+#define BASE_CODEC_VIDEO_DECODER_ZSTD_H
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_zstd_stream.h"
@@ -30,7 +30,7 @@ class PixelTranslator;
 class VideoDecoderZstd : public VideoDecoder
 {
 public:
-    ~VideoDecoderZstd();
+    ~VideoDecoderZstd() override;
 
     static std::unique_ptr<VideoDecoderZstd> create();
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__VIDEO_DECODER_ZSTD_H
+#endif // BASE_CODEC_VIDEO_DECODER_ZSTD_H

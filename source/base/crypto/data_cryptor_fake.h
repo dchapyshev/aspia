@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__DATA_CRYPTOR_FAKE_H
-#define BASE__CRYPTO__DATA_CRYPTOR_FAKE_H
+#ifndef BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
+#define BASE_CRYPTO_DATA_CRYPTOR_FAKE_H
 
 #include "base/macros_magic.h"
 #include "base/crypto/data_cryptor.h"
@@ -28,7 +28,7 @@ class DataCryptorFake : public DataCryptor
 {
 public:
     DataCryptorFake() = default;
-    ~DataCryptorFake() = default;
+    ~DataCryptorFake() override = default;
 
     bool encrypt(std::string_view in, std::string* out) override;
     bool decrypt(std::string_view in, std::string* out) override;
@@ -39,4 +39,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__DATA_CRYPTOR_FAKE_H
+#endif // BASE_CRYPTO_DATA_CRYPTOR_FAKE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SESSION_ID_H
-#define BASE__SESSION_ID_H
+#ifndef BASE_SESSION_ID_H
+#define BASE_SESSION_ID_H
 
 #include "build/build_config.h"
 
@@ -48,4 +48,4 @@ const SessionId kInvalidSessionId = -1;
 
 } // namespace base
 
-#endif // BASE__SESSION_ID_H
+#endif // BASE_SESSION_ID_H

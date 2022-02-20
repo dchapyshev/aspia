@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__ADDRESS_H
-#define BASE__NET__ADDRESS_H
+#ifndef BASE_NET_ADDRESS_H
+#define BASE_NET_ADDRESS_H
 
 #include "build/build_config.h"
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__ADDRESS_H
+#endif // BASE_NET_ADDRESS_H

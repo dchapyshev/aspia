@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__SCREEN_CAPTURER_H
-#define BASE__DESKTOP__SCREEN_CAPTURER_H
+#ifndef BASE_DESKTOP_SCREEN_CAPTURER_H
+#define BASE_DESKTOP_SCREEN_CAPTURER_H
 
 #include "base/desktop/frame.h"
 
@@ -160,4 +160,4 @@ FrameType* ScreenCapturer::FrameQueue<FrameType>::previousFrame() const
 
 } // namespace base
 
-#endif // BASE__DESKTOP__CAPTURER_H
+#endif // BASE_DESKTOP_CAPTURER_H

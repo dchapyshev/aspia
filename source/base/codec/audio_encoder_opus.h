@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__AUDIO_ENCODER_OPUS_H
-#define BASE__CODEC__AUDIO_ENCODER_OPUS_H
+#ifndef BASE_CODEC_AUDIO_ENCODER_OPUS_H
+#define BASE_CODEC_AUDIO_ENCODER_OPUS_H
 
 #include "base/macros_magic.h"
 #include "base/codec/audio_encoder.h"
@@ -70,4 +70,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__AUDIO_ENCODER_OPUS_H
+#endif // BASE_CODEC_AUDIO_ENCODER_OPUS_H

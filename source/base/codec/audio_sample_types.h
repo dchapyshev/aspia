@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__AUDIO_SAMPLE_TYPES_H
-#define BASE__CODEC__AUDIO_SAMPLE_TYPES_H
+#ifndef BASE_CODEC_AUDIO_SAMPLE_TYPES_H
+#define BASE_CODEC_AUDIO_SAMPLE_TYPES_H
 
 #include <cmath>
 #include <cstdint>
@@ -211,4 +211,4 @@ using SignedInt32SampleTypeTraits = FixedSampleTypeTraits<int32_t>;
 
 } // namespace base
 
-#endif // BASE__CODEC__AUDIO_SAMPLE_TYPES_H
+#endif // BASE_CODEC_AUDIO_SAMPLE_TYPES_H

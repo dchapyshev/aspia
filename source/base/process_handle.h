@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PROCESS_HANDLE_H
-#define BASE__PROCESS_HANDLE_H
+#ifndef BASE_PROCESS_HANDLE_H
+#define BASE_PROCESS_HANDLE_H
 
 #include "build/build_config.h"
 
@@ -52,4 +52,4 @@ ProcessId currentProcessId();
 
 } // namespace base
 
-#endif // BASE__PROCESS_HANDLE_H
+#endif // BASE_PROCESS_HANDLE_H

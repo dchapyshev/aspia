@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
-#define BASE__CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#ifndef BASE_CRYPTO_SCOPED_CRYPTO_INITIALIZER_H
+#define BASE_CRYPTO_SCOPED_CRYPTO_INITIALIZER_H
 
 #include "base/macros_magic.h"
 
@@ -38,4 +38,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__SCOPED_CRYPTO_INITIALIZER_H
+#endif // BASE_CRYPTO_SCOPED_CRYPTO_INITIALIZER_H

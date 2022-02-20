@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__MINI_DUMP_WRITER_H
-#define BASE__WIN__MINI_DUMP_WRITER_H
+#ifndef BASE_WIN_MINI_DUMP_WRITER_H
+#define BASE_WIN_MINI_DUMP_WRITER_H
 
 namespace base {
 
@@ -25,4 +25,4 @@ void installFailureHandler(const wchar_t* file_prefix);
 
 } // namespace base
 
-#endif // BASE__WIN__MINI_DUMP_WRITER_H
+#endif // BASE_WIN_MINI_DUMP_WRITER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__DESKTOP_RESIZER_H
-#define BASE__DESKTOP__DESKTOP_RESIZER_H
+#ifndef BASE_DESKTOP_DESKTOP_RESIZER_H
+#define BASE_DESKTOP_DESKTOP_RESIZER_H
 
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/geometry.h"
@@ -45,4 +45,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__DESKTOP_RESIZER_H
+#endif // BASE_DESKTOP_DESKTOP_RESIZER_H

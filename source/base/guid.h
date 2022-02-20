@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__GUID_H
-#define BASE__GUID_H
+#ifndef BASE_GUID_H
+#define BASE_GUID_H
 
 #include <string>
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__GUID_H
+#endif // BASE_GUID_H

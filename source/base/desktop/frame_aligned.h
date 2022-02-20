@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__FRAME_ALIGNED_H
-#define BASE__DESKTOP__FRAME_ALIGNED_H
+#ifndef BASE_DESKTOP_FRAME_ALIGNED_H
+#define BASE_DESKTOP_FRAME_ALIGNED_H
 
 #include "base/desktop/frame.h"
 
@@ -28,7 +28,7 @@ namespace base {
 class FrameAligned : public Frame
 {
 public:
-    ~FrameAligned();
+    ~FrameAligned() override;
 
     static std::unique_ptr<FrameAligned> create(
         const Size& size, const PixelFormat& format, size_t alignment);
@@ -41,4 +41,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__FRAME_ALIGNED_H
+#endif // BASE_DESKTOP_FRAME_ALIGNED_H

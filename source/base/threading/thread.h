@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__THREADING__THREAD_H
-#define BASE__THREADING__THREAD_H
+#ifndef BASE_THREADING_THREAD_H
+#define BASE_THREADING_THREAD_H
 
 #include "base/message_loop/message_loop.h"
 #include "build/build_config.h"
@@ -121,4 +121,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__THREADING__THREAD_H
+#endif // BASE_THREADING_THREAD_H

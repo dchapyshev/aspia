@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__LOGGING_H
-#define BASE__LOGGING_H
+#ifndef BASE_LOGGING_H
+#define BASE_LOGGING_H
 
 #include "base/scoped_clear_last_error.h"
 #include "base/system_error.h"
@@ -588,4 +588,4 @@ std::ostream& operator<<(std::ostream& out, const std::u16string& ustr);
     } while (0);                                                                                 \
     EAT_STREAM_PARAMETERS
 
-#endif // BASE__LOGGING_H
+#endif // BASE_LOGGING_H

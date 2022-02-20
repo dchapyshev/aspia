@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SMBIOS_PARSER_H
-#define BASE__SMBIOS_PARSER_H
+#ifndef BASE_SMBIOS_PARSER_H
+#define BASE_SMBIOS_PARSER_H
 
 #include "base/macros_magic.h"
 #include "base/smbios.h"
@@ -104,4 +104,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SMBIOS_PARSER_H
+#endif // BASE_SMBIOS_PARSER_H

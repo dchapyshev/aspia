@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__WRITE_TASK_H
-#define BASE__NET__WRITE_TASK_H
+#ifndef BASE_NET_WRITE_TASK_H
+#define BASE_NET_WRITE_TASK_H
 
 #include "base/memory/byte_array.h"
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__WRITE_TASK_H
+#endif // BASE_NET_WRITE_TASK_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__SRP_CONSTANTS_H
-#define BASE__CRYPTO__SRP_CONSTANTS_H
+#ifndef BASE_CRYPTO_SRP_CONSTANTS_H
+#define BASE_CRYPTO_SRP_CONSTANTS_H
 
 #include <optional>
 #include <string_view>
@@ -38,4 +38,4 @@ std::optional<SrpNgPair> pairByGroup(std::string_view group);
 
 } // namespace base
 
-#endif // BASE__CRYPTO__SRP_CONSTANTS_H
+#endif // BASE_CRYPTO_SRP_CONSTANTS_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__USER_H
-#define BASE__PEER__USER_H
+#ifndef BASE_PEER_USER_H
+#define BASE_PEER_USER_H
 
 #include "base/memory/byte_array.h"
 #include "proto/router_admin.pb.h"
@@ -66,4 +66,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__PEER__USER_H
+#endif // BASE_PEER_USER_H

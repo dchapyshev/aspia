@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__LARGE_NUMBER_INCREMENT_H
-#define BASE__CRYPTO__LARGE_NUMBER_INCREMENT_H
+#ifndef BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H
+#define BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H
 
 #include "base/memory/byte_array.h"
 
@@ -28,4 +28,4 @@ void largeNumberIncrement(ByteArray* buffer);
 
 } // namespace base
 
-#endif // BASE__CRYPTO__LARGE_NUMBER_INCREMENT_H
+#endif // BASE_CRYPTO_LARGE_NUMBER_INCREMENT_H

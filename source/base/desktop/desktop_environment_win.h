@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H
-#define BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H
+#ifndef BASE_DESKTOP_DESKTOP_ENVIRONMENT_WIN_H
+#define BASE_DESKTOP_DESKTOP_ENVIRONMENT_WIN_H
 
 #include "base/desktop/desktop_environment.h"
 
@@ -46,4 +46,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__DESKTOP_ENVIRONMENT_WIN_H
+#endif // BASE_DESKTOP_DESKTOP_ENVIRONMENT_WIN_H

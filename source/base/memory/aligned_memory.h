@@ -45,8 +45,8 @@
 //   std::unique_ptr<float, AlignedFreeDeleter> my_array(
 //       static_cast<float*>(alignedAlloc(size, alignment)));
 
-#ifndef BASE__MEMORY__ALIGNED_MEMORY_H
-#define BASE__MEMORY__ALIGNED_MEMORY_H
+#ifndef BASE_MEMORY_ALIGNED_MEMORY_H
+#define BASE_MEMORY_ALIGNED_MEMORY_H
 
 #include "build/build_config.h"
 
@@ -82,4 +82,4 @@ struct AlignedFreeDeleter
 
 }  // namespace base
 
-#endif // BASE__MEMORY__ALIGNED_MEMORY_H
+#endif // BASE_MEMORY_ALIGNED_MEMORY_H

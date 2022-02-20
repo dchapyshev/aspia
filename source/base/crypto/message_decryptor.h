@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__MESSAGE_DECRYPTOR_H
-#define BASE__CRYPTO__MESSAGE_DECRYPTOR_H
+#ifndef BASE_CRYPTO_MESSAGE_DECRYPTOR_H
+#define BASE_CRYPTO_MESSAGE_DECRYPTOR_H
 
 #include <cstddef>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__MESSAGE_DECRYPTOR_H
+#endif // BASE_CRYPTO_MESSAGE_DECRYPTOR_H

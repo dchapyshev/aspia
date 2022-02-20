@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__NETWORK_SERVER_H
-#define BASE__NET__NETWORK_SERVER_H
+#ifndef BASE_NET_NETWORK_SERVER_H
+#define BASE_NET_NETWORK_SERVER_H
 
 #include "base/macros_magic.h"
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__NETWORK_SERVER_H
+#endif // BASE_NET_NETWORK_SERVER_H

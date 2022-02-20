@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STL_UTIL_H
-#define BASE__STL_UTIL_H
+#ifndef BASE_STL_UTIL_H
+#define BASE_STL_UTIL_H
 
 #include <algorithm>
 #include <deque>
@@ -136,4 +136,4 @@ bool contains(const Container& container, const Value& value)
 
 } // namespace base
 
-#endif // BASE__STL_UTIL_H
+#endif // BASE_STL_UTIL_H

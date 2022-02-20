@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__D3D_DEVICE_H
-#define BASE__DESKTOP__WIN__D3D_DEVICE_H
+#ifndef BASE_DESKTOP_WIN_D3D_DEVICE_H
+#define BASE_DESKTOP_WIN_D3D_DEVICE_H
 
 #include <vector>
 
-#include <D3D11.h>
-#include <DXGI.h>
+#include <d3d11.h>
+#include <dxgi.h>
 #include <wrl/client.h>
 
 namespace base {
@@ -61,4 +61,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__D3D_DEVICE_H
+#endif // BASE_DESKTOP_WIN_D3D_DEVICE_H

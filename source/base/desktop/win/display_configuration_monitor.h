@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
-#define BASE__DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
+#ifndef BASE_DESKTOP_WIN_DISPLAY_CONFIGURATION_MONITOR_H
+#define BASE_DESKTOP_WIN_DISPLAY_CONFIGURATION_MONITOR_H
 
 #include "base/desktop/geometry.h"
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DISPLAY_CONFIGURATION_MONITOR_H
+#endif // BASE_DESKTOP_WIN_DISPLAY_CONFIGURATION_MONITOR_H

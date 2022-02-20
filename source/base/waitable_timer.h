@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WAITABLE_TIMER_H
-#define BASE__WAITABLE_TIMER_H
+#ifndef BASE_WAITABLE_TIMER_H
+#define BASE_WAITABLE_TIMER_H
 
 #include "base/macros_magic.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__WAITABLE_TIMER_H
+#endif // BASE_WAITABLE_TIMER_H

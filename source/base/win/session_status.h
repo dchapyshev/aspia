@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SESSION_STATUS_H
-#define BASE__WIN__SESSION_STATUS_H
+#ifndef BASE_WIN_SESSION_STATUS_H
+#define BASE_WIN_SESSION_STATUS_H
 
 namespace base::win {
 
@@ -41,4 +41,4 @@ const char* sessionStatusToString(SessionStatus status);
 
 } // namespace base::win
 
-#endif // BASE__WIN__SESSION_STATUS_H
+#endif // BASE_WIN_SESSION_STATUS_H

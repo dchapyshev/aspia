@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SYS_INFO_H
-#define BASE__SYS_INFO_H
+#ifndef BASE_SYS_INFO_H
+#define BASE_SYS_INFO_H
 
 #include "base/macros_magic.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SYS_INFO_H
+#endif // BASE_SYS_INFO_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DEBUG_H
-#define BASE__DEBUG_H
+#ifndef BASE_DEBUG_H
+#define BASE_DEBUG_H
 
 namespace base {
 
@@ -27,4 +27,4 @@ void debugBreak();
 
 } // namespace base
 
-#endif // BASE__DEBUG_H
+#endif // BASE_DEBUG_H

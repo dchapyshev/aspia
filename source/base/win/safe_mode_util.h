@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SAFE_MODE_UTIL_H
-#define BASE__WIN__SAFE_MODE_UTIL_H
+#ifndef BASE_WIN_SAFE_MODE_UTIL_H
+#define BASE_WIN_SAFE_MODE_UTIL_H
 
 #include "base/macros_magic.h"
 
@@ -37,4 +37,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__SAFE_MODE_UTIL_H
+#endif // BASE_WIN_SAFE_MODE_UTIL_H

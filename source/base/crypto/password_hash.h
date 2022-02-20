@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__PASSWORD_HASH_H
-#define BASE__CRYPTO__PASSWORD_HASH_H
+#ifndef BASE_CRYPTO_PASSWORD_HASH_H
+#define BASE_CRYPTO_PASSWORD_HASH_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -42,4 +42,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__PASSWORD_HASH_H
+#endif // BASE_CRYPTO_PASSWORD_HASH_H

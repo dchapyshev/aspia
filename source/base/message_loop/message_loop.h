@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
-#define BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
+#ifndef BASE_MESSAGE_LOOP_MESSAGE_LOOP_H
+#define BASE_MESSAGE_LOOP_MESSAGE_LOOP_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -51,7 +51,7 @@ public:
     using Dispatcher = MessagePumpDispatcher;
 
     explicit MessageLoop(Type type = Type::DEFAULT);
-    virtual ~MessageLoop();
+    virtual ~MessageLoop() override;
 
     Type type() const { return type_; }
 
@@ -151,4 +151,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_LOOP_H
+#endif // BASE_MESSAGE_LOOP_MESSAGE_LOOP_H

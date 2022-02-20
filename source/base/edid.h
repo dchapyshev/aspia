@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__EDID_H
-#define BASE__WIN__EDID_H
+#ifndef BASE_EDID_H
+#define BASE_EDID_H
 
 #include "base/macros_magic.h"
 
@@ -250,4 +250,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__WIN__EDID_H
+#endif // BASE_EDID_H

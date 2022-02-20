@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__CONNECT_ENUMERATOR_H
-#define BASE__NET__CONNECT_ENUMERATOR_H
+#ifndef BASE_NET_CONNECT_ENUMERATOR_H
+#define BASE_NET_CONNECT_ENUMERATOR_H
 
 #include "base/macros_magic.h"
 #include "base/win/scoped_object.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__CONNECT_ENUMERATOR_H
+#endif // BASE_NET_CONNECT_ENUMERATOR_H

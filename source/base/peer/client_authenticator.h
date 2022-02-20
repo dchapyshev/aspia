@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__CLIENT_AUTHENTICATOR_H
-#define BASE__PEER__CLIENT_AUTHENTICATOR_H
+#ifndef BASE_PEER_CLIENT_AUTHENTICATOR_H
+#define BASE_PEER_CLIENT_AUTHENTICATOR_H
 
 #include "base/crypto/big_num.h"
 #include "base/peer/authenticator.h"
@@ -28,7 +28,7 @@ class ClientAuthenticator : public Authenticator
 {
 public:
     explicit ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner);
-    ~ClientAuthenticator();
+    ~ClientAuthenticator() override;
 
     void setPeerPublicKey(const ByteArray& public_key);
     void setIdentify(proto::Identify identify);
@@ -80,4 +80,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__CLIENT_AUTHENTICATOR_H
+#endif // BASE_PEER_CLIENT_AUTHENTICATOR_H

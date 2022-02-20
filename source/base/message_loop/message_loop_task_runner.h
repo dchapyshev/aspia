@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H
-#define BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H
+#ifndef BASE_MESSAGE_LOOP_MESSAGE_LOOP_TASK_RUNNER_H
+#define BASE_MESSAGE_LOOP_MESSAGE_LOOP_TASK_RUNNER_H
 
 #include "base/task_runner.h"
 #include "base/message_loop/message_loop.h"
@@ -58,4 +58,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_LOOP_TASK_RUNNER_H
+#endif // BASE_MESSAGE_LOOP_MESSAGE_LOOP_TASK_RUNNER_H

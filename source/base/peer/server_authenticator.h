@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__SERVER_AUTHENTICATOR_H
-#define BASE__PEER__SERVER_AUTHENTICATOR_H
+#ifndef BASE_PEER_SERVER_AUTHENTICATOR_H
+#define BASE_PEER_SERVER_AUTHENTICATOR_H
 
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
@@ -32,7 +32,7 @@ class ServerAuthenticator : public Authenticator
 {
 public:
     explicit ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner);
-    ~ServerAuthenticator();
+    ~ServerAuthenticator() override;
 
     enum class AnonymousAccess
     {
@@ -99,4 +99,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__SERVER_AUTHENTICATOR_H
+#endif // BASE_PEER_SERVER_AUTHENTICATOR_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SYSTEM_TIME_H
-#define BASE__SYSTEM_TIME_H
+#ifndef BASE_SYSTEM_TIME_H
+#define BASE_SYSTEM_TIME_H
 
 namespace base {
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SYSTEM_TIME_H
+#endif // BASE_SYSTEM_TIME_H

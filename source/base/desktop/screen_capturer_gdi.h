@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__SCREEN_CAPTURER_GDI_H
-#define BASE__DESKTOP__SCREEN_CAPTURER_GDI_H
+#ifndef BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
+#define BASE_DESKTOP_SCREEN_CAPTURER_GDI_H
 
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/shared_frame.h"
@@ -75,4 +75,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__SCREEN_CAPTURER_GDI_H
+#endif // BASE_DESKTOP_SCREEN_CAPTURER_GDI_H

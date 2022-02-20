@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__MESSAGE_WINDOW_H
-#define BASE__WIN__MESSAGE_WINDOW_H
+#ifndef BASE_WIN_MESSAGE_WINDOW_H
+#define BASE_WIN_MESSAGE_WINDOW_H
 
 #include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
@@ -55,11 +55,11 @@ private:
     MessageCallback message_callback_;
     HWND hwnd_ = nullptr;
 
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(MessageWindow);
 };
 
 } // namespace base::win
 
-#endif // BASE__WIN__MESSAGE_WINDOW_H
+#endif // BASE_WIN_MESSAGE_WINDOW_H

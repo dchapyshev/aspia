@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__STRING_SPLIT_H
-#define BASE__STRINGS__STRING_SPLIT_H
+#ifndef BASE_STRINGS_STRING_SPLIT_H
+#define BASE_STRINGS_STRING_SPLIT_H
 
 #include <string>
 #include <vector>
@@ -86,4 +86,4 @@ std::vector<std::u16string_view> splitStringView(std::u16string_view input,
 
 } // namespace base
 
-#endif // BASE__STRINGS__STRING_SPLIT_H
+#endif // BASE_STRINGS_STRING_SPLIT_H

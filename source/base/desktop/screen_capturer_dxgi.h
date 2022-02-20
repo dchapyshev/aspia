@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__SCREEN_CAPTURER_DXGI_H
-#define BASE__DESKTOP__SCREEN_CAPTURER_DXGI_H
+#ifndef BASE_DESKTOP_SCREEN_CAPTURER_DXGI_H
+#define BASE_DESKTOP_SCREEN_CAPTURER_DXGI_H
 
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/win/dxgi_duplicator_controller.h"
@@ -29,7 +29,7 @@ class ScreenCapturerDxgi : public ScreenCapturer
 {
 public:
     ScreenCapturerDxgi();
-    ~ScreenCapturerDxgi();
+    ~ScreenCapturerDxgi() override;
 
     // Whether the system supports DXGI based capturing.
     bool isSupported();
@@ -67,4 +67,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__SCREEN_CAPTURER_DXGI_H
+#endif // BASE_DESKTOP_SCREEN_CAPTURER_DXGI_H

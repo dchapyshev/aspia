@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SMBIOS_READER_H
-#define BASE__SMBIOS_READER_H
+#ifndef BASE_SMBIOS_READER_H
+#define BASE_SMBIOS_READER_H
 
 #include <string>
 
@@ -27,4 +27,4 @@ std::string readSmbiosDump();
 
 } // namespace base
 
-#endif // BASE__SMBIOS_READER_H
+#endif // BASE_SMBIOS_READER_H

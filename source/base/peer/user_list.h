@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__USER_LIST_H
-#define BASE__PEER__USER_LIST_H
+#ifndef BASE_PEER_USER_LIST_H
+#define BASE_PEER_USER_LIST_H
 
 #include "base/macros_magic.h"
 #include "base/peer/user_list_base.h"
@@ -27,7 +27,7 @@ namespace base {
 class UserList : public UserListBase
 {
 public:
-    ~UserList();
+    ~UserList() override;
 
     static std::unique_ptr<UserList> createEmpty();
     std::unique_ptr<UserList> duplicate() const;
@@ -52,4 +52,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__USER_LIST_H
+#endif // BASE_PEER_USER_LIST_H

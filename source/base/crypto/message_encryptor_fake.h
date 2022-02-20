@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H
-#define BASE__CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H
+#ifndef BASE_CRYPTO_MESSAGE_ENCRYPTOR_FAKE_H
+#define BASE_CRYPTO_MESSAGE_ENCRYPTOR_FAKE_H
 
 #include "base/macros_magic.h"
 #include "base/crypto/message_encryptor.h"
@@ -28,7 +28,7 @@ class MessageEncryptorFake : public MessageEncryptor
 {
 public:
     MessageEncryptorFake();
-    ~MessageEncryptorFake();
+    ~MessageEncryptorFake() override;
 
     // MessageEncryptor implementation.
     size_t encryptedDataSize(size_t in_size) override;
@@ -40,4 +40,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__MESSAGE_ENCRYPTOR_FAKE_H
+#endif // BASE_CRYPTO_MESSAGE_ENCRYPTOR_FAKE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_CAPTURER_H
-#define BASE__AUDIO__AUDIO_CAPTURER_H
+#ifndef BASE_AUDIO_AUDIO_CAPTURER_H
+#define BASE_AUDIO_AUDIO_CAPTURER_H
 
 #include "proto/desktop.pb.h"
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_CAPTURER_H
+#endif // BASE_AUDIO_AUDIO_CAPTURER_H

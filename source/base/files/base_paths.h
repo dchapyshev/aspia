@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__FILES__BASE_PATHS_H
-#define BASE__FILES__BASE_PATHS_H
+#ifndef BASE_FILES_BASE_PATHS_H
+#define BASE_FILES_BASE_PATHS_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -64,4 +64,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__FILES__BASE_PATHS_H
+#endif // BASE_FILES_BASE_PATHS_H

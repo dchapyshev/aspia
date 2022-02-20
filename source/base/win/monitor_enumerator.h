@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__MONITOR_ENUMERATOR_H
-#define BASE__WIN__MONITOR_ENUMERATOR_H
+#ifndef BASE_WIN_MONITOR_ENUMERATOR_H
+#define BASE_WIN_MONITOR_ENUMERATOR_H
 
 #include "base/win/device_enumerator.h"
 #include "base/edid.h"
@@ -30,7 +30,7 @@ class MonitorEnumerator : public DeviceEnumerator
 {
 public:
     MonitorEnumerator();
-    ~MonitorEnumerator() = default;
+    ~MonitorEnumerator() override = default;
 
     std::unique_ptr<Edid> edid() const;
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__MONITOR_ENUMERATOR_H
+#endif // BASE_WIN_MONITOR_ENUMERATOR_H

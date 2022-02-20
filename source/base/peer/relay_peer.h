@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__RELAY_PEER_H
-#define BASE__PEER__RELAY_PEER_H
+#ifndef BASE_PEER_RELAY_PEER_H
+#define BASE_PEER_RELAY_PEER_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -69,4 +69,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__RELAY_PEER_H
+#endif // BASE_PEER_RELAY_PEER_H

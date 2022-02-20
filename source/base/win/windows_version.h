@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__WINDOWS_VERSION_H
-#define BASE__WIN__WINDOWS_VERSION_H
+#ifndef BASE_WIN_WINDOWS_VERSION_H
+#define BASE_WIN_WINDOWS_VERSION_H
 
 #include "base/macros_magic.h"
 #include "base/version.h"
@@ -159,4 +159,4 @@ Version windowsVersion();
 
 } // namespace base::win
 
-#endif // BASE__WIN__WINDOWS_VERSION_H
+#endif // BASE_WIN_WINDOWS_VERSION_H

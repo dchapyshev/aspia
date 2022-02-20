@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__WEBM_VIDEO_ENCODER_H
-#define BASE__CODEC__WEBM_VIDEO_ENCODER_H
+#ifndef BASE_CODEC_WEBM_VIDEO_ENCODER_H
+#define BASE_CODEC_WEBM_VIDEO_ENCODER_H
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__WEBM_VIDEO_ENCODER_H
+#endif // BASE_CODEC_WEBM_VIDEO_ENCODER_H

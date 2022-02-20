@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__NETWORK_CHANNEL_PROXY_H
-#define BASE__NET__NETWORK_CHANNEL_PROXY_H
+#ifndef BASE_NET_NETWORK_CHANNEL_PROXY_H
+#define BASE_NET_NETWORK_CHANNEL_PROXY_H
 
 #include "base/net/network_channel.h"
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__NETWORK_CHANNEL_PROXY_H
+#endif // BASE_NET_NETWORK_CHANNEL_PROXY_H

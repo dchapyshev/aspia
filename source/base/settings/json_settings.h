@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SETTINGS__JSON_SETTINGS_H
-#define BASE__SETTINGS__JSON_SETTINGS_H
+#ifndef BASE_SETTINGS_JSON_SETTINGS_H
+#define BASE_SETTINGS_JSON_SETTINGS_H
 
 #include "base/macros_magic.h"
 #include "base/settings/settings.h"
@@ -66,4 +66,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SETTINGS__JSON_SETTINGS_H
+#endif // BASE_SETTINGS_JSON_SETTINGS_H

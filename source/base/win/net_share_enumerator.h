@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__NET_SHARE_ENUMERATOR_H
-#define BASE__WIN__NET_SHARE_ENUMERATOR_H
+#ifndef BASE_WIN_NET_SHARE_ENUMERATOR_H
+#define BASE_WIN_NET_SHARE_ENUMERATOR_H
 
 #include <string>
 
 #include <Windows.h>
-#include <lm.h>
+#include <LM.h>
 
 namespace base::win {
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__NET_SHARE_ENUMERATOR_H
+#endif // BASE_WIN_NET_SHARE_ENUMERATOR_H

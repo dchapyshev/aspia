@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__STRING_NUMBER_CONVERSIONS_H
-#define BASE__STRINGS__STRING_NUMBER_CONVERSIONS_H
+#ifndef BASE_STRINGS_STRING_NUMBER_CONVERSIONS_H
+#define BASE_STRINGS_STRING_NUMBER_CONVERSIONS_H
 
 #include <cstdint>
 #include <string>
@@ -98,4 +98,4 @@ std::u16string numberToString16(unsigned long long value);
 
 } // namespace base
 
-#endif // BASE__STRINGS__STRING_NUMBER_CONVERSIONS_H
+#endif // BASE_STRINGS_STRING_NUMBER_CONVERSIONS_H

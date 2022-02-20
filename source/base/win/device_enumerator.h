@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__DEVICE_ENUMERATOR_H
-#define BASE__WIN__DEVICE_ENUMERATOR_H
+#ifndef BASE_WIN_DEVICE_ENUMERATOR_H
+#define BASE_WIN_DEVICE_ENUMERATOR_H
 
 #include "base/win/scoped_device_info.h"
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__DEVICE_ENUMERATOR_H
+#endif // BASE_WIN_DEVICE_ENUMERATOR_H

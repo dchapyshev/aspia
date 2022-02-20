@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__FILE_VERSION_INFO_H
-#define BASE__WIN__FILE_VERSION_INFO_H
+#ifndef BASE_WIN_FILE_VERSION_INFO_H
+#define BASE_WIN_FILE_VERSION_INFO_H
 
 #include "base/macros_magic.h"
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__FILE_VERSION_INFO_H
+#endif // BASE_WIN_FILE_VERSION_INFO_H

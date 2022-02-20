@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DFMIRAGE_H
-#define BASE__DESKTOP__WIN__DFMIRAGE_H
+#ifndef BASE_DESKTOP_WIN_DFMIRAGE_H
+#define BASE_DESKTOP_WIN_DFMIRAGE_H
 
 #include "build/build_config.h"
 
@@ -103,4 +103,4 @@ typedef struct
 
 } // base
 
-#endif // BASE__DESKTOP__WIN__DFMIRAGE_H
+#endif // BASE_DESKTOP_WIN_DFMIRAGE_H

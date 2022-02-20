@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_PUMP_H
-#define BASE__MESSAGE_LOOP__MESSAGE_PUMP_H
+#ifndef BASE_MESSAGE_LOOP_MESSAGE_PUMP_H
+#define BASE_MESSAGE_LOOP_MESSAGE_PUMP_H
 
 #include <chrono>
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_PUMP_H
+#endif // BASE_MESSAGE_LOOP_MESSAGE_PUMP_H

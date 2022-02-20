@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
-#define BASE__DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
+#ifndef BASE_DESKTOP_WIN_DXGI_OUTPUT_DUPLICATOR_H
+#define BASE_DESKTOP_WIN_DXGI_OUTPUT_DUPLICATOR_H
 
 #include "base/desktop/frame_rotation.h"
 #include "base/desktop/shared_frame.h"
@@ -28,8 +28,8 @@
 #include "base/memory/byte_array.h"
 #include "base/win/desktop.h"
 
-#include <DXGI.h>
-#include <DXGI1_2.h>
+#include <dxgi.h>
+#include <dxgi1_2.h>
 #include <wrl/client.h>
 
 #include <string>
@@ -140,4 +140,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DXGI_OUTPUT_DUPLICATOR_H
+#endif // BASE_DESKTOP_WIN_DXGI_OUTPUT_DUPLICATOR_H

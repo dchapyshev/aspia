@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__IPC__SHARED_MEMORY_H
-#define BASE__IPC__SHARED_MEMORY_H
+#ifndef BASE_IPC_SHARED_MEMORY_H
+#define BASE_IPC_SHARED_MEMORY_H
 
 #include "base/macros_magic.h"
 #include "base/logging.h"
@@ -83,7 +83,7 @@ public:
 class SharedMemory : public SharedMemoryBase
 {
 public:
-    virtual ~SharedMemory();
+    virtual ~SharedMemory() override;
 
     static std::unique_ptr<SharedMemory> create(
         Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
@@ -111,4 +111,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__IPC__SHARED_MEMORY_H
+#endif // BASE_IPC_SHARED_MEMORY_H

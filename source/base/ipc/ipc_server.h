@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__IPC__SERVER_H
-#define BASE__IPC__SERVER_H
+#ifndef BASE_IPC_IPC_SERVER_H
+#define BASE_IPC_IPC_SERVER_H
 
 #include "base/threading/thread_checker.h"
 
@@ -63,11 +63,11 @@ private:
     class Listener;
     std::array<std::shared_ptr<Listener>, 8> listeners_;
 
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };
 
 } // namespace base
 
-#endif // BASE__IPC__SERVER_H
+#endif // BASE_IPC_IPC_SERVER_H

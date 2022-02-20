@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__VARIABLE_SIZE_H
-#define BASE__NET__VARIABLE_SIZE_H
+#ifndef BASE_NET_VARIABLE_SIZE_H
+#define BASE_NET_VARIABLE_SIZE_H
 
 #include "base/macros_magic.h"
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__VARIABLE_SIZE_H
+#endif // BASE_NET_VARIABLE_SIZE_H

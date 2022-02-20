@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_SILENCE_DETECTOR_H
-#define BASE__AUDIO__AUDIO_SILENCE_DETECTOR_H
+#ifndef BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
+#define BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
 
 #include <cstddef>
 #include <cstdint>
@@ -59,4 +59,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_SILENCE_DETECTOR_H
+#endif // BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SYSTEM_ERROR_H
-#define BASE__SYSTEM_ERROR_H
+#ifndef BASE_SYSTEM_ERROR_H
+#define BASE_SYSTEM_ERROR_H
 
 #include "build/build_config.h"
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SYSTEM_ERROR_H
+#endif // BASE_SYSTEM_ERROR_H

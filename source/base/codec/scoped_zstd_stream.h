@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__SCOPED_ZSTD_STREAM_H
-#define BASE__CODEC__SCOPED_ZSTD_STREAM_H
+#ifndef BASE_CODEC_SCOPED_ZSTD_STREAM_H
+#define BASE_CODEC_SCOPED_ZSTD_STREAM_H
 
 #include <zstd.h>
 
@@ -40,4 +40,4 @@ using ScopedZstdDStream = std::unique_ptr<ZSTD_DStream, ZstdDStreamDeleter>;
 
 } // namespace base
 
-#endif // BASE__CODEC__SCOPED_ZSTD_STREAM_H
+#endif // BASE_CODEC_SCOPED_ZSTD_STREAM_H

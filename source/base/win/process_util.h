@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__PROCESS_UTIL_H
-#define BASE__WIN__PROCESS_UTIL_H
+#ifndef BASE_WIN_PROCESS_UTIL_H
+#define BASE_WIN_PROCESS_UTIL_H
 
 #include "base/command_line.h"
 #include "base/win/scoped_object.h"
@@ -49,4 +49,4 @@ bool isProcessStartedFromService();
 
 } // namespace base::win
 
-#endif // BASE__WIN__PROCESS_UTIL_H
+#endif // BASE_WIN_PROCESS_UTIL_H

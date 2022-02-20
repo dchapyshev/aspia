@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DXGI_ADAPTER_DUPLICATOR_H
-#define BASE__DESKTOP__WIN__DXGI_ADAPTER_DUPLICATOR_H
+#ifndef BASE_DESKTOP_WIN_DXGI_ADAPTER_DUPLICATOR_H
+#define BASE_DESKTOP_WIN_DXGI_ADAPTER_DUPLICATOR_H
 
 #include "base/desktop/shared_frame.h"
 #include "base/desktop/win/d3d_device.h"
@@ -90,4 +90,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DXGI_ADAPTER_DUPLICATOR_H
+#endif // BASE_DESKTOP_WIN_DXGI_ADAPTER_DUPLICATOR_H

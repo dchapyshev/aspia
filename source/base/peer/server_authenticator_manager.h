@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__SERVER_AUTHENTICATOR_MANAGER_H
-#define BASE__PEER__SERVER_AUTHENTICATOR_MANAGER_H
+#ifndef BASE_PEER_SERVER_AUTHENTICATOR_MANAGER_H
+#define BASE_PEER_SERVER_AUTHENTICATOR_MANAGER_H
 
 #include "base/peer/server_authenticator.h"
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__SERVER_AUTHENTICATOR_MANAGER_H
+#endif // BASE_PEER_SERVER_AUTHENTICATOR_MANAGER_H

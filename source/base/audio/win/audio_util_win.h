@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__WIN__AUDIO_UTIL_WIN_H
-#define BASE__AUDIO__WIN__AUDIO_UTIL_WIN_H
+#ifndef BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
+#define BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
 
 #include <cstdint>
 
@@ -52,4 +52,4 @@ bool isDeviceActive(IMMDevice* device);
 
 } // namespace base
 
-#endif // BASE__AUDIO__WIN__AUDIO_UTIL_WIN_H
+#endif // BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H

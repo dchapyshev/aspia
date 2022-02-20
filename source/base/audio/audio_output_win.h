@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_OUTPUT_WIN_H
-#define BASE__AUDIO__AUDIO_OUTPUT_WIN_H
+#ifndef BASE_AUDIO_AUDIO_OUTPUT_WIN_H
+#define BASE_AUDIO_AUDIO_OUTPUT_WIN_H
 
 #include "base/audio/audio_output.h"
 #include "base/win/scoped_object.h"
@@ -25,7 +25,7 @@
 #include <atomic>
 #include <memory>
 
-#include <audioclient.h>
+#include <Audioclient.h>
 #include <audiopolicy.h>
 #include <wrl/client.h>
 
@@ -39,7 +39,7 @@ class AudioOutputWin
 {
 public:
     explicit AudioOutputWin(const NeedMoreDataCB& need_more_data_cb);
-    ~AudioOutputWin();
+    ~AudioOutputWin() override;
 
     // AudioOutput implementation.
     bool start() override;
@@ -104,4 +104,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_OUTPUT_WIN_H
+#endif // BASE_AUDIO_AUDIO_OUTPUT_WIN_H

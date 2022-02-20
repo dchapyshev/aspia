@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__SHARED_MEMORY_FRAME_H
-#define BASE__DESKTOP__SHARED_MEMORY_FRAME_H
+#ifndef BASE_DESKTOP_SHARED_MEMORY_FRAME_H
+#define BASE_DESKTOP_SHARED_MEMORY_FRAME_H
 
 #include "base/desktop/frame.h"
 
@@ -30,7 +30,7 @@ class SharedMemoryFactory;
 class SharedMemoryFrame : public Frame
 {
 public:
-    ~SharedMemoryFrame();
+    ~SharedMemoryFrame() override;
 
     static std::unique_ptr<Frame> create(
         const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory);
@@ -49,4 +49,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__SHARED_MEMORY_FRAME_H
+#endif // BASE_DESKTOP_SHARED_MEMORY_FRAME_H

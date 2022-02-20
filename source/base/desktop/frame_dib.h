@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__FRAME_DIB_H
-#define BASE__DESKTOP__FRAME_DIB_H
+#ifndef BASE_DESKTOP_FRAME_DIB_H
+#define BASE_DESKTOP_FRAME_DIB_H
 
 #include "base/desktop/frame.h"
 #include "base/win/scoped_gdi_object.h"
@@ -32,7 +32,7 @@ class SharedMemoryFactory;
 class FrameDib : public Frame
 {
 public:
-    ~FrameDib() = default;
+    ~FrameDib() override = default;
 
     static std::unique_ptr<FrameDib> create(const Size& size,
                                             const PixelFormat& format,
@@ -57,4 +57,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__FRAME_DIB_H
+#endif // BASE_DESKTOP_FRAME_DIB_H

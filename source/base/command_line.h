@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__COMMAND_LINE_H
-#define BASE__COMMAND_LINE_H
+#ifndef BASE_COMMAND_LINE_H
+#define BASE_COMMAND_LINE_H
 
 #include "build/build_config.h"
 
@@ -160,4 +160,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__COMMAND_LINE_H
+#endif // BASE_COMMAND_LINE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SCOPED_LOCAL_H
-#define BASE__WIN__SCOPED_LOCAL_H
+#ifndef BASE_WIN_SCOPED_LOCAL_H
+#define BASE_WIN_SCOPED_LOCAL_H
 
 #include "base/macros_magic.h"
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__SCOPED_LOCAL_H
+#endif // BASE_WIN_SCOPED_LOCAL_H

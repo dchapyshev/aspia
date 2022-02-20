@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__REGION_H
-#define BASE__DESKTOP__REGION_H
+#ifndef BASE_DESKTOP_REGION_H
+#define BASE_DESKTOP_REGION_H
 
 #include "base/desktop/geometry.h"
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__REGION_H
+#endif // BASE_DESKTOP_REGION_H

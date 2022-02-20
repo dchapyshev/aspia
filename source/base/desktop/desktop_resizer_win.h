@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__DESKTOP_RESIZER_WIN_H
-#define BASE__DESKTOP__DESKTOP_RESIZER_WIN_H
+#ifndef BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
+#define BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
 
 #include "base/macros_magic.h"
 #include "base/desktop/desktop_resizer.h"
@@ -30,7 +30,7 @@ class DesktopResizerWin : public DesktopResizer
 {
 public:
     DesktopResizerWin();
-    ~DesktopResizerWin();
+    ~DesktopResizerWin() override;
 
     std::vector<Size> supportedResolutions(ScreenId screen_id) override;
     void setResolution(ScreenId screen_id, const Size& resolution) override;
@@ -46,4 +46,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__DESKTOP_RESIZER_WIN_H
+#endif // BASE_DESKTOP_DESKTOP_RESIZER_WIN_H

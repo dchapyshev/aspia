@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
-#define BASE__CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#ifndef BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
+#define BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H
 
 #include "base/macros_magic.h"
 #include "base/crypto/data_cryptor.h"
@@ -27,8 +27,8 @@ namespace base {
 class DataCryptorChaCha20Poly1305 : public DataCryptor
 {
 public:
-    DataCryptorChaCha20Poly1305(std::string_view key);
-    ~DataCryptorChaCha20Poly1305();
+    explicit DataCryptorChaCha20Poly1305(std::string_view key);
+    ~DataCryptorChaCha20Poly1305() override;
 
     bool encrypt(std::string_view in, std::string* out) override;
     bool decrypt(std::string_view in, std::string* out) override;
@@ -41,4 +41,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__DATA_CRYPTOR_CHACHA20_POLY1305_H
+#endif // BASE_CRYPTO_DATA_CRYPTOR_CHACHA20_POLY1305_H

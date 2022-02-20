@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__DATA_CRYPTOR_H
-#define BASE__CRYPTO__DATA_CRYPTOR_H
+#ifndef BASE_CRYPTO_DATA_CRYPTOR_H
+#define BASE_CRYPTO_DATA_CRYPTOR_H
 
 #include <string>
 
@@ -34,4 +34,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__DATA_CRYPTOR_H
+#endif // BASE_CRYPTO_DATA_CRYPTOR_H

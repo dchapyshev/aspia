@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__TCP_KEEP_ALIVE_H
-#define BASE__NET__TCP_KEEP_ALIVE_H
+#ifndef BASE_NET_TCP_KEEP_ALIVE_H
+#define BASE_NET_TCP_KEEP_ALIVE_H
 
 #include "build/build_config.h"
 
@@ -41,4 +41,4 @@ bool setTcpKeepAlive(NativeSocket socket,
 
 } // namespace base
 
-#endif // BASE__NET__TCP_KEEP_ALIVE_H
+#endif // BASE_NET_TCP_KEEP_ALIVE_H

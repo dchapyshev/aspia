@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SCOPED_COM_INITIALIZER_H
-#define BASE__WIN__SCOPED_COM_INITIALIZER_H
+#ifndef BASE_WIN_SCOPED_COM_INITIALIZER_H
+#define BASE_WIN_SCOPED_COM_INITIALIZER_H
 
 #include "base/threading/thread_checker.h"
 
@@ -53,11 +53,11 @@ private:
 
     HRESULT hr_;
 
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };
 
 } // namespace base::win
 
-#endif // BASE__WIN__SCOPED_COM_INITIALIZER_H
+#endif // BASE_WIN_SCOPED_COM_INITIALIZER_H

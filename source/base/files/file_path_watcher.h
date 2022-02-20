@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__FILES__FILE_PATH_WATCHER_H
-#define BASE__FILES__FILE_PATH_WATCHER_H
+#ifndef BASE_FILES_FILE_PATH_WATCHER_H
+#define BASE_FILES_FILE_PATH_WATCHER_H
 
 #include "base/macros_magic.h"
 
@@ -112,4 +112,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__FILES__FILE_PATH_WATCHER_H
+#endif // BASE_FILES_FILE_PATH_WATCHER_H

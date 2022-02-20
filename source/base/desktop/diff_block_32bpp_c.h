@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__DIFF_BLOCK_32BPP_C_H
-#define BASE__DESKTOP__DIFF_BLOCK_32BPP_C_H
+#ifndef BASE_DESKTOP_DIFF_BLOCK_32BPP_C_H
+#define BASE_DESKTOP_DIFF_BLOCK_32BPP_C_H
 
 #include <cstdint>
 
@@ -31,4 +31,4 @@ uint8_t diffFullBlock_32bpp_16x16_C(
 
 } // namespace base
 
-#endif // BASE__DESKTOP__DIFF_BLOCK_32BPP_C_H
+#endif // BASE_DESKTOP_DIFF_BLOCK_32BPP_C_H

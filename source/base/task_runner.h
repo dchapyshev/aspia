@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__TASK_RUNNER_H
-#define BASE__TASK_RUNNER_H
+#ifndef BASE_TASK_RUNNER_H
+#define BASE_TASK_RUNNER_H
 
 #include <chrono>
 #include <functional>
@@ -64,4 +64,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__TASK_RUNNER_H
+#endif // BASE_TASK_RUNNER_H

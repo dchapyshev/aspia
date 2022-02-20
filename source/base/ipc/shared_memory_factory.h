@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__IPC__SHARED_MEMORY_FACTORY_H
-#define BASE__IPC__SHARED_MEMORY_FACTORY_H
+#ifndef BASE_IPC_SHARED_MEMORY_FACTORY_H
+#define BASE_IPC_SHARED_MEMORY_FACTORY_H
 
 #include "base/macros_magic.h"
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__IPC__SHARED_MEMORY_FACTORY_H
+#endif // BASE_IPC_SHARED_MEMORY_FACTORY_H

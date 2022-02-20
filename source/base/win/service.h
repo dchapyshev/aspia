@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SERVICE_H
-#define BASE__WIN__SERVICE_H
+#ifndef BASE_WIN_SERVICE_H
+#define BASE_WIN_SERVICE_H
 
 #include "base/message_loop/message_loop.h"
 #include "base/session_id.h"
@@ -33,7 +33,7 @@ class Service
 {
 public:
     Service(std::u16string_view name, MessageLoop::Type type);
-    ~Service();
+    virtual ~Service();
 
     void exec();
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__SERVICE_H
+#endif // BASE_WIN_SERVICE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__OS_CRYPT_H
-#define BASE__CRYPTO__OS_CRYPT_H
+#ifndef BASE_CRYPTO_OS_CRYPT_H
+#define BASE_CRYPTO_OS_CRYPT_H
 
 #include "base/macros_magic.h"
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__OS_CRYPT_H
+#endif // BASE_CRYPTO_OS_CRYPT_H

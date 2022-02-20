@@ -16,11 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MEMORY__TYPED_BUFFER_H
-#define BASE__MEMORY__TYPED_BUFFER_H
+#ifndef BASE_MEMORY_TYPED_BUFFER_H
+#define BASE_MEMORY_TYPED_BUFFER_H
 
 #include "base/macros_magic.h"
 
+#include <algorithm>
 #include <cstdint>
 
 namespace base {
@@ -116,4 +117,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__MEMORY__TYPED_BUFFER_H
+#endif // BASE_MEMORY_TYPED_BUFFER_H

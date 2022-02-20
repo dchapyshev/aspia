@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__PENDING_TASK_H
-#define BASE__MESSAGE_LOOP__PENDING_TASK_H
+#ifndef BASE_MESSAGE_LOOP_PENDING_TASK_H
+#define BASE_MESSAGE_LOOP_PENDING_TASK_H
 
 #include <chrono>
 #include <functional>
@@ -70,4 +70,4 @@ using DelayedTaskQueue = std::priority_queue<PendingTask>;
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__PENDING_TASK_H
+#endif // BASE_MESSAGE_LOOP_PENDING_TASK_H

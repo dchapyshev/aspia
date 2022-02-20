@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRING__UTIL_CONSTANTS_H
-#define BASE__STRING__UTIL_CONSTANTS_H
+#ifndef BASE_STRING_UTIL_CONSTANTS_H
+#define BASE_STRING_UTIL_CONSTANTS_H
 
 namespace base {
 
@@ -28,4 +28,4 @@ extern const char kUtf8ByteOrderMark[];
 
 } // namespace base
 
-#endif // BASE__STRING__UTIL_CONSTANTS_H
+#endif // BASE_STRING_UTIL_CONSTANTS_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__FILES__FILE_UTIL_H
-#define BASE__FILES__FILE_UTIL_H
+#ifndef BASE_FILES_FILE_UTIL_H
+#define BASE_FILES_FILE_UTIL_H
 
 #include "base/memory/byte_array.h"
 
@@ -34,4 +34,4 @@ bool readFile(const std::filesystem::path& filename, std::string* buffer);
 
 } // namespace base
 
-#endif // BASE__FILES__FILE_UTIL_H
+#endif // BASE_FILES_FILE_UTIL_H

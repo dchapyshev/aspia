@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__COMPILER_SPECIFIC_H
-#define BASE__COMPILER_SPECIFIC_H
+#ifndef BASE_COMPILER_SPECIFIC_H
+#define BASE_COMPILER_SPECIFIC_H
 
 #include "build/build_config.h"
 
@@ -40,4 +40,4 @@
 #define ALWAYS_INLINE inline
 #endif
 
-#endif // BASE__COMPILER_SPECIFIC_H
+#endif // BASE_COMPILER_SPECIFIC_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__SECURE_MEMORY_H
-#define BASE__CRYPTO__SECURE_MEMORY_H
+#ifndef BASE_CRYPTO_SECURE_MEMORY_H
+#define BASE_CRYPTO_SECURE_MEMORY_H
 
 #include "base/memory/byte_array.h"
 
@@ -30,4 +30,4 @@ void memZero(ByteArray* str);
 
 } // namespace base
 
-#endif // BASE__CRYPTO__SECURE_MEMORY_H
+#endif // BASE_CRYPTO_SECURE_MEMORY_H

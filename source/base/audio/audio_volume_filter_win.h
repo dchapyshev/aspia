@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_VOLUME_FILER_WIN_H
-#define BASE__AUDIO__AUDIO_VOLUME_FILER_WIN_H
+#ifndef BASE_AUDIO_AUDIO_VOLUME_FILER_WIN_H
+#define BASE_AUDIO_AUDIO_VOLUME_FILER_WIN_H
 
 #include "base/audio/audio_volume_filter.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_VOLUME_FILER_WIN_H
+#endif // BASE_AUDIO_AUDIO_VOLUME_FILER_WIN_H

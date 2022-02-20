@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DXGI_FRAME_H
-#define BASE__DESKTOP__WIN__DXGI_FRAME_H
+#ifndef BASE_DESKTOP_WIN_DXGI_FRAME_H
+#define BASE_DESKTOP_WIN_DXGI_FRAME_H
 
 #include "base/desktop/screen_capturer.h"
 #include "base/desktop/shared_frame.h"
@@ -66,4 +66,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DXGI_FRAME_H
+#endif // BASE_DESKTOP_WIN_DXGI_FRAME_H

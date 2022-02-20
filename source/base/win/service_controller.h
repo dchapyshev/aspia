@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SERVICE_CONTROLLER_H
-#define BASE__WIN__SERVICE_CONTROLLER_H
+#ifndef BASE_WIN_SERVICE_CONTROLLER_H
+#define BASE_WIN_SERVICE_CONTROLLER_H
 
 #include "base/win/scoped_object.h"
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__SERVICE_CONTROLLER_H
+#endif // BASE_WIN_SERVICE_CONTROLLER_H

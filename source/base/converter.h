@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CONVERTER_H
-#define BASE__CONVERTER_H
+#ifndef BASE_CONVERTER_H
+#define BASE_CONVERTER_H
 
 #include "build/build_config.h"
 #include "base/memory/byte_array.h"
@@ -287,4 +287,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__CONVERTER_H
+#endif // BASE_CONVERTER_H

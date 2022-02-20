@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SCOPED_USER_OBJECT_H
-#define BASE__WIN__SCOPED_USER_OBJECT_H
+#ifndef BASE_WIN_SCOPED_USER_OBJECT_H
+#define BASE_WIN_SCOPED_USER_OBJECT_H
 
 #include "base/macros_magic.h"
 
@@ -162,4 +162,4 @@ using ScopedHHOOK = ScopedUserObject<HHOOK, DestroyHookTraits>;
 
 } // namespace base::win
 
-#endif // BASE__WIN__SCOPED_USER_OBJECT_H
+#endif // BASE_WIN_SCOPED_USER_OBJECT_H

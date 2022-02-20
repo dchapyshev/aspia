@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__CURSOR_H
-#define BASE__DESKTOP__WIN__CURSOR_H
+#ifndef BASE_DESKTOP_WIN_CURSOR_H
+#define BASE_DESKTOP_WIN_CURSOR_H
 
 #include <Windows.h>
 
@@ -29,4 +29,4 @@ MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__CURSOR_H
+#endif // BASE_DESKTOP_WIN_CURSOR_H

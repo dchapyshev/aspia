@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MEMORY__BYTE_ARRAY_H
-#define BASE__MEMORY__BYTE_ARRAY_H
+#ifndef BASE_MEMORY_BYTE_ARRAY_H
+#define BASE_MEMORY_BYTE_ARRAY_H
 
 #include <cstdint>
 #include <string>
@@ -56,4 +56,4 @@ std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray);
 
 } // namespace base
 
-#endif // BASE__MEMORY__BYTE_ARRAY_H
+#endif // BASE_MEMORY_BYTE_ARRAY_H

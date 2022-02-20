@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__MV2_HELPER_H
-#define BASE__DESKTOP__WIN__MV2_HELPER_H
+#ifndef BASE_DESKTOP_WIN_MV2_HELPER_H
+#define BASE_DESKTOP_WIN_MV2_HELPER_H
 
 #include "base/win/scoped_hdc.h"
 #include "base/win/scoped_object.h"
@@ -29,7 +29,7 @@ namespace base {
 class Mv2Helper : public MirrorHelper
 {
 public:
-    ~Mv2Helper();
+    ~Mv2Helper() override;
 
     static std::unique_ptr<Mv2Helper> create(const Rect& screen_rect);
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__MV2_HELPER_H
+#endif // BASE_DESKTOP_WIN_MV2_HELPER_H

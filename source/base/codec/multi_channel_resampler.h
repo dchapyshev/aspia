@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__MULTI_CHANNEL_RESAMPLER_H
-#define BASE__CODEC__MULTI_CHANNEL_RESAMPLER_H
+#ifndef BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H
+#define BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H
 
 #include <cstddef>
 #include <memory>
@@ -100,4 +100,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__MULTI_CHANNEL_RESAMPLER_H
+#endif // BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H

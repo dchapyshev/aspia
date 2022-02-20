@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__ENVIRONMENT_H
-#define BASE__ENVIRONMENT_H
+#ifndef BASE_ENVIRONMENT_H
+#define BASE_ENVIRONMENT_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__ENVIRONMENT_H
+#endif // BASE_ENVIRONMENT_H

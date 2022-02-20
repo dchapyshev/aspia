@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H
-#define BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H
+#ifndef BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
+#define BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
 
 #include "base/macros_magic.h"
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__WIN__SCOPED_MMCSS_REGISTRATION_H
+#endif // BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H

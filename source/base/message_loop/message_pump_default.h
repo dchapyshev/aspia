@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
-#define BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
+#ifndef BASE_MESSAGE_LOOP_MESSAGE_PUMP_DEFAULT_H
+#define BASE_MESSAGE_LOOP_MESSAGE_PUMP_DEFAULT_H
 
 #include "base/macros_magic.h"
 #include "base/message_loop/message_pump.h"
@@ -31,7 +31,7 @@ class MessagePumpDefault : public MessagePump
 {
 public:
     MessagePumpDefault() = default;
-    ~MessagePumpDefault() = default;
+    ~MessagePumpDefault() override = default;
 
     // MessagePump methods:
     void run(Delegate* delegate) override;
@@ -57,4 +57,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
+#endif // BASE_MESSAGE_LOOP_MESSAGE_PUMP_DEFAULT_H

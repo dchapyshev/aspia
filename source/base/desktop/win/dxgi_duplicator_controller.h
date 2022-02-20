@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DXGI_DUPLICATOR_CONTROLLER_H
-#define BASE__DESKTOP__WIN__DXGI_DUPLICATOR_CONTROLLER_H
+#ifndef BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H
+#define BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H
 
 #include "base/desktop/win/d3d_device.h"
 #include "base/desktop/win/display_configuration_monitor.h"
@@ -25,7 +25,7 @@
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_frame.h"
 
-#include <D3DCommon.h>
+#include <d3dcommon.h>
 
 #include <string>
 #include <vector>
@@ -196,4 +196,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DXGI_DUPLICATOR_CONTROLLER_H
+#endif // BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__AUTHENTICATOR_H
-#define BASE__PEER__AUTHENTICATOR_H
+#ifndef BASE_PEER_AUTHENTICATOR_H
+#define BASE_PEER_AUTHENTICATOR_H
 
 #include "base/waitable_timer.h"
 #include "base/version.h"
@@ -32,7 +32,7 @@ class Authenticator : public NetworkChannel::Listener
 {
 public:
     explicit Authenticator(std::shared_ptr<TaskRunner> task_runner);
-    virtual ~Authenticator() = default;
+    virtual ~Authenticator() override = default;
 
     enum class State
     {
@@ -113,4 +113,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PEER__AUTHENTICATOR_H
+#endif // BASE_PEER_AUTHENTICATOR_H

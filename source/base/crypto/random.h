@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__RANDOM_H
-#define BASE__CRYPTO__RANDOM_H
+#ifndef BASE_CRYPTO_RANDOM_H
+#define BASE_CRYPTO_RANDOM_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -45,4 +45,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__RANDOM_H
+#endif // BASE_CRYPTO_RANDOM_H

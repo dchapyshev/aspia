@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SCOPED_IMPERSONATOR_H
-#define BASE__WIN__SCOPED_IMPERSONATOR_H
+#ifndef BASE_WIN_SCOPED_IMPERSONATOR_H
+#define BASE_WIN_SCOPED_IMPERSONATOR_H
 
 #include "base/macros_magic.h"
 #include "base/threading/thread_checker.h"
@@ -42,11 +42,11 @@ public:
 
 private:
     bool impersonated_ = false;
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(ScopedImpersonator);
 };
 
 } // namespace base::win
 
-#endif // BASE__WIN__SCOPED_IMPERSONATOR_H
+#endif // BASE_WIN_SCOPED_IMPERSONATOR_H

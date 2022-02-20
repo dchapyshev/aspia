@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CPUID_UTIL_H
-#define BASE__CPUID_UTIL_H
+#ifndef BASE_CPUID_UTIL_H
+#define BASE_CPUID_UTIL_H
 
 #include "build/build_config.h"
 
@@ -59,4 +59,4 @@ private:
 } // namespace base
 
 #endif // defined(ARCH_CPU_X86_FAMILY)
-#endif // BASE__CPUID_UTIL_H
+#endif // BASE_CPUID_UTIL_H

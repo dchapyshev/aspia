@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__LOCATION_H
-#define BASE__LOCATION_H
+#ifndef BASE_LOCATION_H
+#define BASE_LOCATION_H
 
 #include "build/build_config.h"
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__LOCATION_H
+#endif // BASE_LOCATION_H

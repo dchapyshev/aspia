@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__STRCAT_H
-#define BASE__STRINGS__STRCAT_H
+#ifndef BASE_STRINGS_STRCAT_H
+#define BASE_STRINGS_STRCAT_H
 
 #include <initializer_list>
 #include <string>
@@ -56,4 +56,4 @@ void strAppend(std::u16string* dest, std::initializer_list<std::u16string_view> 
 
 } // namespace base
 
-#endif // BASE__STRINGS__STRCAT_H
+#endif // BASE_STRINGS_STRCAT_H

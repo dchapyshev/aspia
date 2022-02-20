@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__SRP_MATH_H
-#define BASE__CRYPTO__SRP_MATH_H
+#ifndef BASE_CRYPTO_SRP_MATH_H
+#define BASE_CRYPTO_SRP_MATH_H
 
 #include "base/crypto/big_num.h"
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__SRP_H
+#endif // BASE_CRYPTO_SRP_MATH_H

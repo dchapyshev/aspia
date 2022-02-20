@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__UNICODE_H
-#define BASE__STRINGS__UNICODE_H
+#ifndef BASE_STRINGS_UNICODE_H
+#define BASE_STRINGS_UNICODE_H
 
 #include "build/build_config.h"
 
@@ -103,4 +103,4 @@ std::string local8BitFromWide(std::wstring_view in);
 
 } // namespace base
 
-#endif // BASE__STRINGS__UNICODE_H
+#endif // BASE_STRINGS_UNICODE_H

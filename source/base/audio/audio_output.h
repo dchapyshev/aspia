@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_OUTPUT_H
-#define BASE__AUDIO__AUDIO_OUTPUT_H
+#ifndef BASE_AUDIO_AUDIO_OUTPUT_H
+#define BASE_AUDIO_AUDIO_OUTPUT_H
 
 #include <cstdint>
 #include <functional>
@@ -52,4 +52,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_OUTPUT_H
+#endif // BASE_AUDIO_AUDIO_OUTPUT_H

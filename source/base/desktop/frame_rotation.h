@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__FRAME_ROTATION_H
-#define BASE__DESKTOP__FRAME_ROTATION_H
+#ifndef BASE_DESKTOP_FRAME_ROTATION_H
+#define BASE_DESKTOP_FRAME_ROTATION_H
 
 #include "base/desktop/frame.h"
 
@@ -57,4 +57,4 @@ Rect rotateRect(const Rect& rect, const Size& size, Rotation rotation);
 
 } // namespace base
 
-#endif // BASE__DESKTOP__FRAME_ROTATION_H
+#endif // BASE_DESKTOP_FRAME_ROTATION_H

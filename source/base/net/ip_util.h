@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__IP_UTIL_H
-#define BASE__NET__IP_UTIL_H
+#ifndef BASE_NET_IP_UTIL_H
+#define BASE_NET_IP_UTIL_H
 
 #include <string_view>
 
@@ -28,4 +28,4 @@ bool isValidIpV6Address(std::u16string_view address);
 
 } // namespace base
 
-#endif // BASE__NET__IP_UTIL_H
+#endif // BASE_NET_IP_UTIL_H

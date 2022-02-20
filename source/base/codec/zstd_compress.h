@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__ZSTD_COMPRESS_H
-#define BASE__CODEC__ZSTD_COMPRESS_H
+#ifndef BASE_CODEC_ZSTD_COMPRESS_H
+#define BASE_CODEC_ZSTD_COMPRESS_H
 
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
@@ -43,4 +43,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__ZSTD_COMPRESS_H
+#endif // BASE_CODEC_ZSTD_COMPRESS_H

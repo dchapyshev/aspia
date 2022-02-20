@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__VIDEO_DECODER_VPX_H
-#define BASE__CODEC__VIDEO_DECODER_VPX_H
+#ifndef BASE_CODEC_VIDEO_DECODER_VPX_H
+#define BASE_CODEC_VIDEO_DECODER_VPX_H
 
 #include "base/macros_magic.h"
 #include "base/codec/scoped_vpx_codec.h"
@@ -28,7 +28,7 @@ namespace base {
 class VideoDecoderVPX : public VideoDecoder
 {
 public:
-    ~VideoDecoderVPX();
+    ~VideoDecoderVPX() override;
 
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
@@ -45,4 +45,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__VIDEO_DECODER_VPX_H
+#endif // BASE_CODEC_VIDEO_DECODER_VPX_H

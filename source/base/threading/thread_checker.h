@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__THREADING__THREAD_CHECKER_H
-#define BASE__THREADING__THREAD_CHECKER_H
+#ifndef BASE_THREADING_THREAD_CHECKER_H
+#define BASE_THREADING_THREAD_CHECKER_H
 
 #include "base/macros_magic.h"
 
@@ -96,4 +96,4 @@ private:
 #define DETACH_FROM_THREAD(name)
 #endif // NDEBUG
 
-#endif // BASE__THREADING__THREAD_CHECKER_H
+#endif // BASE_THREADING_THREAD_CHECKER_H

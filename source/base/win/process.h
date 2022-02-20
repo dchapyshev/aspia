@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__PROCESS_H
-#define BASE__WIN__PROCESS_H
+#ifndef BASE_WIN_PROCESS_H
+#define BASE_WIN_PROCESS_H
 
 #include "base/process_handle.h"
 #include "base/session_id.h"
@@ -71,4 +71,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__PROCESS_H
+#endif // BASE_WIN_PROCESS_H

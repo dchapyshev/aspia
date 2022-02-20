@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__SCOPED_VPX_CODEC_H
-#define BASE__CODEC__SCOPED_VPX_CODEC_H
+#ifndef BASE_CODEC_SCOPED_VPX_CODEC_H
+#define BASE_CODEC_SCOPED_VPX_CODEC_H
 
 #include <memory>
 
@@ -37,4 +37,4 @@ using ScopedVpxCodec = std::unique_ptr<vpx_codec_ctx_t, VpxCodecDeleter>;
 
 } // namespace base
 
-#endif // BASE__CODEC__SCOPED_VPX_CODEC_H
+#endif // BASE_CODEC_SCOPED_VPX_CODEC_H

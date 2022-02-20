@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__VIDEO_ENCODER_ZSTD_H
-#define BASE__CODEC__VIDEO_ENCODER_ZSTD_H
+#ifndef BASE_CODEC_VIDEO_ENCODER_ZSTD_H
+#define BASE_CODEC_VIDEO_ENCODER_ZSTD_H
 
 #include "base/macros_magic.h"
 #include "base/memory/aligned_memory.h"
@@ -33,7 +33,7 @@ class PixelTranslator;
 class VideoEncoderZstd : public VideoEncoder
 {
 public:
-    ~VideoEncoderZstd();
+    ~VideoEncoderZstd() override;
 
     static std::unique_ptr<VideoEncoderZstd> create(
         const PixelFormat& target_format, int compression_ratio);
@@ -59,4 +59,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__VIDEO_ENCODER_ZSTD_H
+#endif // BASE_CODEC_VIDEO_ENCODER_ZSTD_H

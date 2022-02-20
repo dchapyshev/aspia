@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRC32_H
-#define BASE__CRC32_H
+#ifndef BASE_CRC32_H
+#define BASE_CRC32_H
 
 #include <cstdint>
 #include <cstddef>
@@ -33,4 +33,4 @@ uint32_t crc32(uint32_t sum, const void* data, size_t size);
 
 } // namespace base
 
-#endif // BASE__CRC32_H
+#endif // BASE_CRC32_H

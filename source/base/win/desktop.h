@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__DESKTOP_H
-#define BASE__WIN__DESKTOP_H
+#ifndef BASE_WIN_DESKTOP_H
+#define BASE_WIN_DESKTOP_H
 
 #include "base/macros_magic.h"
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__WIN__DESKTOP_H
+#endif // BASE_WIN_DESKTOP_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__PIXEL_FORMAT_H
-#define BASE__DESKTOP__PIXEL_FORMAT_H
+#ifndef BASE_DESKTOP_PIXEL_FORMAT_H
+#define BASE_DESKTOP_PIXEL_FORMAT_H
 
 #include <cstdint>
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__PIXEL_FORMAT_H
+#endif // BASE_DESKTOP_PIXEL_FORMAT_H

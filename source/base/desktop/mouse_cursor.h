@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__MOUSE_CURSOR_H
-#define BASE__DESKTOP__MOUSE_CURSOR_H
+#ifndef BASE_DESKTOP_MOUSE_CURSOR_H
+#define BASE_DESKTOP_MOUSE_CURSOR_H
 
 #include "base/desktop/geometry.h"
 #include "base/memory/byte_array.h"
@@ -70,4 +70,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__MOUSE_CURSOR_H
+#endif // BASE_DESKTOP_MOUSE_CURSOR_H

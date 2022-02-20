@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__OPENSSL_UTIL_H
-#define BASE__CRYPTO__OPENSSL_UTIL_H
+#ifndef BASE_CRYPTO_OPENSSL_UTIL_H
+#define BASE_CRYPTO_OPENSSL_UTIL_H
 
 #include "base/memory/byte_array.h"
 
@@ -78,4 +78,4 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArra
 
 } // namespace base
 
-#endif // BASE__CRYPTO__OPENSSL_UTIL_H
+#endif // BASE_CRYPTO_OPENSSL_UTIL_H

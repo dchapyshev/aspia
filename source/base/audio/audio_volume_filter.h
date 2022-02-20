@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_VOLUME_FILTER_H
-#define BASE__AUDIO__AUDIO_VOLUME_FILTER_H
+#ifndef BASE_AUDIO_AUDIO_VOLUME_FILTER_H
+#define BASE_AUDIO_AUDIO_VOLUME_FILTER_H
 
 #include "base/audio/audio_silence_detector.h"
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_VOLUME_FILTER_H
+#endif // BASE_AUDIO_AUDIO_VOLUME_FILTER_H

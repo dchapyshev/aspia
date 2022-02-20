@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__AUDIO_BUS_H
-#define BASE__CODEC__AUDIO_BUS_H
+#ifndef BASE_CODEC_AUDIO_BUS_H
+#define BASE_CODEC_AUDIO_BUS_H
 
 #include "base/macros_magic.h"
 #include "base/codec/audio_sample_types.h"
@@ -312,4 +312,4 @@ void AudioBus::CopyConvertFromAudioBusToInterleavedTarget(
 
 } // namespace base
 
-#endif // BASE__CODEC__AUDIO_BUS_H
+#endif // BASE_CODEC_AUDIO_BUS_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_PLAYER_H
-#define BASE__AUDIO__AUDIO_PLAYER_H
+#ifndef BASE_AUDIO_AUDIO_PLAYER_H
+#define BASE_AUDIO_AUDIO_PLAYER_H
 
 #include "base/macros_magic.h"
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_PLAYER_H
+#endif // BASE_AUDIO_AUDIO_PLAYER_H

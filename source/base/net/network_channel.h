@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__NETWORK_CHANNEL_H
-#define BASE__NET__NETWORK_CHANNEL_H
+#ifndef BASE_NET_NETWORK_CHANNEL_H
+#define BASE_NET_NETWORK_CHANNEL_H
 
 #include "base/memory/byte_array.h"
 #include "base/net/variable_size.h"
@@ -277,4 +277,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__NETWORK_CHANNEL_H
+#endif // BASE_NET_NETWORK_CHANNEL_H

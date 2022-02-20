@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SCOPED_LOGGING_H
-#define BASE__SCOPED_LOGGING_H
+#ifndef BASE_SCOPED_LOGGING_H
+#define BASE_SCOPED_LOGGING_H
 
 #include "base/logging.h"
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SCOPED_LOGGING_H
+#endif // BASE_SCOPED_LOGGING_H

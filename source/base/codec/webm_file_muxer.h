@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__WEBM_FILE_MUXER_H
-#define BASE__CODEC__WEBM_FILE_MUXER_H
+#ifndef BASE_CODEC_WEBM_FILE_MUXER_H
+#define BASE_CODEC_WEBM_FILE_MUXER_H
 
 #include "base/macros_magic.h"
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__WEBM_FILE_MUXER_H
+#endif // BASE_CODEC_WEBM_FILE_MUXER_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_CAPTURER_WIN_H
-#define BASE__AUDIO__AUDIO_CAPTURER_WIN_H
+#ifndef BASE_AUDIO_AUDIO_CAPTURER_WIN_H
+#define BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 
 #include "base/macros_magic.h"
 #include "base/waitable_timer.h"
@@ -28,7 +28,7 @@
 
 #include <asio/high_resolution_timer.hpp>
 
-#include <audioclient.h>
+#include <Audioclient.h>
 #include <mmdeviceapi.h>
 #include <wrl/client.h>
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_CAPTURER_WIN_H
+#endif // BASE_AUDIO_AUDIO_CAPTURER_WIN_H

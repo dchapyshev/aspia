@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DXGI_CONTEXT_H
-#define BASE__DESKTOP__WIN__DXGI_CONTEXT_H
+#ifndef BASE_DESKTOP_WIN_DXGI_CONTEXT_H
+#define BASE_DESKTOP_WIN_DXGI_CONTEXT_H
 
 #include "base/desktop/region.h"
 
@@ -72,4 +72,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DXGI_CONTEXT_H
+#endif // BASE_DESKTOP_WIN_DXGI_CONTEXT_H

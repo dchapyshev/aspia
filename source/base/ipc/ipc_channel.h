@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__IPC__CHANNEL_H
-#define BASE__IPC__CHANNEL_H
+#ifndef BASE_IPC_CHANNEL_H
+#define BASE_IPC_CHANNEL_H
 
 #include "base/process_handle.h"
 #include "base/session_id.h"
@@ -113,11 +113,11 @@ private:
     ProcessId peer_process_id_ = kNullProcessId;
     SessionId peer_session_id_ = kInvalidSessionId;
 
-    THREAD_CHECKER(thread_checker_);
+    THREAD_CHECKER(thread_checker_)
 
     DISALLOW_COPY_AND_ASSIGN(IpcChannel);
 };
 
 } // namespace base
 
-#endif // BASE__IPC__CHANNEL_H
+#endif // BASE_IPC_CHANNEL_H

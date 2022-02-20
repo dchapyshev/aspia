@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__POWER_SAVE_BLOCKER_H
-#define BASE__DESKTOP__POWER_SAVE_BLOCKER_H
+#ifndef BASE_DESKTOP_POWER_SAVE_BLOCKER_H
+#define BASE_DESKTOP_POWER_SAVE_BLOCKER_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -44,4 +44,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__POWER_SAVE_BLOCKER_H
+#endif // BASE_DESKTOP_WIN_POWER_SAVE_BLOCKER_H

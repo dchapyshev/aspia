@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__BASE64_H
-#define BASE__BASE64_H
+#ifndef BASE_BASE64_H
+#define BASE_BASE64_H
 
 #include "base/macros_magic.h"
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__BASE64_H
+#endif // BASE_BASE64_H

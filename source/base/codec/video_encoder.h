@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__VIDEO_ENCODER_H
-#define BASE__CODEC__VIDEO_ENCODER_H
+#ifndef BASE_CODEC_VIDEO_ENCODER_H
+#define BASE_CODEC_VIDEO_ENCODER_H
 
 #include "base/desktop/geometry.h"
 #include "proto/desktop.pb.h"
@@ -46,4 +46,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CODEC__VIDEO_ENCODER_H
+#endif // BASE_CODEC_VIDEO_ENCODER_H

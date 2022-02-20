@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PEER__USER_LIST_BASE_H
-#define BASE__PEER__USER_LIST_BASE_H
+#ifndef BASE_PEER_USER_LIST_BASE_H
+#define BASE_PEER_USER_LIST_BASE_H
 
 #include "base/peer/user.h"
 
@@ -37,4 +37,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__PEER__USER_LIST_BASE_H
+#endif // BASE_PEER_USER_LIST_BASE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__PROTOBUF_ARENA_H
-#define BASE__PROTOBUF_ARENA_H
+#ifndef BASE_PROTOBUF_ARENA_H
+#define BASE_PROTOBUF_ARENA_H
 
 #include <memory>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__PROTOBUF_ARENA_H
+#endif // BASE_PROTOBUF_ARENA_H

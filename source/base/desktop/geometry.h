@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__GEOMETRY_H
-#define BASE__DESKTOP__GEOMETRY_H
+#ifndef BASE_DESKTOP_GEOMETRY_H
+#define BASE_DESKTOP_GEOMETRY_H
 
 #include <cstdint>
 #include <ostream>
@@ -276,4 +276,4 @@ std::ostream& operator<<(std::ostream& stream, const Size& size);
 
 } // namespace base
 
-#endif // BASE__DESKTOP__GEOMETRY_H
+#endif // BASE_DESKTOP_GEOMETRY_H

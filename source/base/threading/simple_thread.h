@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__THREADING__SIMPLE_THREAD_H
-#define BASE__THREADING__SIMPLE_THREAD_H
+#ifndef BASE_THREADING_SIMPLE_THREAD_H
+#define BASE_THREADING_SIMPLE_THREAD_H
 
 #include "base/macros_magic.h"
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__THREADING__SIMPLE_THREAD_H
+#endif // BASE_THREADING_SIMPLE_THREAD_H

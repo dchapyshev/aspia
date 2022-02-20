@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__VERSION_H
-#define BASE__VERSION_H
+#ifndef BASE_VERSION_H
+#define BASE_VERSION_H
 
 #include "proto/common.pb.h"
 
@@ -91,4 +91,4 @@ std::ostream& operator<<(std::ostream& stream, const Version& v);
 
 } // namespace base
 
-#endif // BASE__VERSION_H
+#endif // BASE_VERSION_H

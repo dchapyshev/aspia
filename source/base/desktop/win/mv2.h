@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__MV2_H
-#define BASE__DESKTOP__WIN__MV2_H
+#ifndef BASE_DESKTOP_WIN_MV2_H
+#define BASE_DESKTOP_WIN_MV2_H
 
 #include <cstdint>
 
@@ -54,4 +54,4 @@ typedef struct
 
 } // base
 
-#endif // BASE__DESKTOP__WIN__MV2_H
+#endif // BASE_DESKTOP_WIN_MV2_H

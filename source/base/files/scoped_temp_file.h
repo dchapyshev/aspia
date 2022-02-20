@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__FILES__SCOPED_TEMP_FILE_H
-#define BASE__FILES__SCOPED_TEMP_FILE_H
+#ifndef BASE_FILES_SCOPED_TEMP_FILE_H
+#define BASE_FILES_SCOPED_TEMP_FILE_H
 
 #include "base/macros_magic.h"
 
@@ -44,4 +44,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__FILES__SCOPED_TEMP_FILE_H
+#endif // BASE_FILES_SCOPED_TEMP_FILE_H

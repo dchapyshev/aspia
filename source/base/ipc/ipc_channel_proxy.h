@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__IPC__CHANNEL_PROXY_H
-#define BASE__IPC__CHANNEL_PROXY_H
+#ifndef BASE_IPC_IPC_CHANNEL_PROXY_H
+#define BASE_IPC_IPC_CHANNEL_PROXY_H
 
 #include "base/ipc/ipc_channel.h"
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__IPC__CHANNEL_PROXY_H
+#endif // BASE_IPC_IPC_CHANNEL_PROXY_H

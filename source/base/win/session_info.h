@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__WIN__SESSION_INFO_H
-#define BASE__WIN__SESSION_INFO_H
+#ifndef BASE_WIN_SESSION_INFO_H
+#define BASE_WIN_SESSION_INFO_H
 
 #include "base/session_id.h"
 #include "base/win/scoped_wts_memory.h"
@@ -75,4 +75,4 @@ private:
 
 } // namespace base::win
 
-#endif // BASE__WIN__SESSION_INFO_H
+#endif // BASE_WIN_SESSION_INFO_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__CAPTURE_SCHEDULER_H
-#define BASE__DESKTOP__CAPTURE_SCHEDULER_H
+#ifndef BASE_DESKTOP_CAPTURE_SCHEDULER_H
+#define BASE_DESKTOP_CAPTURE_SCHEDULER_H
 
 #include "base/macros_magic.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__CAPTURE_SCHEDULER_H
+#endif // BASE_DESKTOP_CAPTURE_SCHEDULER_H

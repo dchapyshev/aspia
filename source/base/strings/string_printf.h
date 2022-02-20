@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__STRING_PRINTF_H
-#define BASE__STRINGS__STRING_PRINTF_H
+#ifndef BASE_STRINGS_STRING_PRINTF_H
+#define BASE_STRINGS_STRING_PRINTF_H
 
 #include "build/build_config.h"
 
@@ -42,4 +42,4 @@ const std::wstring& sStringPrintf(std::wstring* dst, const wchar_t* format, ...)
 
 } // namespace base
 
-#endif // BASE__STRINGS__STRING_PRINTF_H
+#endif // BASE_STRINGS_STRING_PRINTF_H

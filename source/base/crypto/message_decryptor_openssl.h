@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CRYPTO__MESSAGE_DECRYPTOR_OPENSSL_H
-#define BASE__CRYPTO__MESSAGE_DECRYPTOR_OPENSSL_H
+#ifndef BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H
+#define BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H
 
 #include "base/macros_magic.h"
 #include "base/crypto/message_decryptor.h"
@@ -29,7 +29,7 @@ namespace base {
 class MessageDecryptorOpenssl : public MessageDecryptor
 {
 public:
-    ~MessageDecryptorOpenssl();
+    ~MessageDecryptorOpenssl() override;
 
     static std::unique_ptr<MessageDecryptor> createForAes256Gcm(
         const ByteArray& key, const ByteArray& iv);
@@ -52,4 +52,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__CRYPTO__MESSAGE_DECRYPTOR_OPENSSL_H
+#endif // BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H

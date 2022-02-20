@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__CODEC__PIXEL_TRANSLATOR_H
-#define BASE__CODEC__PIXEL_TRANSLATOR_H
+#ifndef BASE_CODEC_PIXEL_TRANSLATOR_H
+#define BASE_CODEC_PIXEL_TRANSLATOR_H
 
 #include "base/desktop/pixel_format.h"
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace base
 
-#endif // BASE__CODEC__PIXEL_TRANSLATOR_H
+#endif // BASE_CODEC_PIXEL_TRANSLATOR_H

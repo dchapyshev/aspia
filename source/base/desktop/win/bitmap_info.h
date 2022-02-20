@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__BITMAP_INFO_H
-#define BASE__DESKTOP__WIN__BITMAP_INFO_H
+#ifndef BASE_DESKTOP_WIN_BITMAP_INFO_H
+#define BASE_DESKTOP_WIN_BITMAP_INFO_H
 
 #include <cstdint>
 
@@ -42,4 +42,4 @@ struct BitmapInfo
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__BITMAP_INFO_H
+#endif // BASE_DESKTOP_WIN_BITMAP_INFO_H

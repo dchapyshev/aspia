@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__NET__FIREWALL_MANAGER_H
-#define BASE__NET__FIREWALL_MANAGER_H
+#ifndef BASE_NET_FIREWALL_MANAGER_H
+#define BASE_NET_FIREWALL_MANAGER_H
 
 #include "base/macros_magic.h"
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__NET__FIREWALL_MANAGER_H
+#endif // BASE_NET_FIREWALL_MANAGER_H

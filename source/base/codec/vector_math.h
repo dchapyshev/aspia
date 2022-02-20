@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC__VECTOR_MATH_H
-#define BASE_CODEC__VECTOR_MATH_H
+#ifndef BASE_CODEC_VECTOR_MATH_H
+#define BASE_CODEC_VECTOR_MATH_H
 
 #include <utility>
 
@@ -48,4 +48,4 @@ void crossfade(const float src[], int len, float dest[]);
 
 } // namespace base
 
-#endif // BASE_CODEC__VECTOR_MATH_H
+#endif // BASE_CODEC_VECTOR_MATH_H

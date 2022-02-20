@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__SCOPED_TASK_RUNNER_H
-#define BASE__SCOPED_TASK_RUNNER_H
+#ifndef BASE_SCOPED_TASK_RUNNER_H
+#define BASE_SCOPED_TASK_RUNNER_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -41,4 +41,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__SCOPED_TASK_RUNNER_H
+#endif // BASE_SCOPED_TASK_RUNNER_H

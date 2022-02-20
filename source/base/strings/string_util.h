@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__STRINGS__STRING_UTIL_H
-#define BASE__STRINGS__STRING_UTIL_H
+#ifndef BASE_STRINGS_STRING_UTIL_H
+#define BASE_STRINGS_STRING_UTIL_H
 
 #include "build/build_config.h"
 
@@ -215,4 +215,4 @@ inline const char16_t* asUtf16(std::wstring_view str)
 
 } // namespace base
 
-#endif // BASE__STRINGS__STRING_UTIL_H
+#endif // BASE_STRINGS_STRING_UTIL_H

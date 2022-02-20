@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__AUDIO_CAPTURER_WRAPPER_H
-#define BASE__AUDIO__AUDIO_CAPTURER_WRAPPER_H
+#ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
+#define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
 #include "base/threading/thread.h"
 #include "proto/desktop_internal.pb.h"
@@ -31,7 +31,7 @@ class AudioCapturerWrapper : public Thread::Delegate
 {
 public:
     explicit AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy);
-    ~AudioCapturerWrapper();
+    ~AudioCapturerWrapper() override;
 
     void start();
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__AUDIO__AUDIO_CAPTURER_WRAPPER_H
+#endif // BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H

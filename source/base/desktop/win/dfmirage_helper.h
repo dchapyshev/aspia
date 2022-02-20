@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__WIN__DFMIRAGE_HELPER_H
-#define BASE__DESKTOP__WIN__DFMIRAGE_HELPER_H
+#ifndef BASE_DESKTOP_WIN_DFMIRAGE_HELPER_H
+#define BASE_DESKTOP_WIN_DFMIRAGE_HELPER_H
 
 #include "base/win/scoped_hdc.h"
 #include "base/desktop/win/dfmirage.h"
@@ -28,7 +28,7 @@ namespace base {
 class DFMirageHelper : public MirrorHelper
 {
 public:
-    ~DFMirageHelper();
+    ~DFMirageHelper() override;
 
     static std::unique_ptr<DFMirageHelper> create(const Rect& screen_rect);
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__WIN__DFMIRAGE_HELPER_H
+#endif // BASE_DESKTOP_WIN_DFMIRAGE_HELPER_H
