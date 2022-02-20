@@ -44,17 +44,8 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     screens_group_ = new QActionGroup(screens_menu_);
     ui.action_monitors->setMenu(screens_menu_);
 
-    connect(screens_menu_, &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
-    connect(screens_menu_, &QMenu::aboutToHide, this, [this]()
-    {
-        allow_hide_ = true;
-
-        if (!rect().contains(mapToGlobal(QCursor::pos())))
-            leaved_ = true;
-
-        if (leaved_)
-            delayedHide();
-    });
+    connect(screens_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
+    connect(screens_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
 
     connect(screens_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
@@ -153,14 +144,8 @@ void DesktopPanel::enablePowerControl(bool enable)
         button->setPopupMode(QToolButton::InstantPopup);
 
         connect(power_menu_.get(), &QMenu::triggered, this, &DesktopPanel::onPowerControl);
-        connect(power_menu_.get(), &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
-        connect(power_menu_.get(), &QMenu::aboutToHide, this, [this]()
-        {
-            allow_hide_ = true;
-
-            if (leaved_)
-                delayedHide();
-        });
+        connect(power_menu_.get(), &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
+        connect(power_menu_.get(), &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
     }
 
     updateSize();
@@ -464,6 +449,28 @@ void DesktopPanel::onChangeScreenAction(QAction* action)
     emit screenSelected(screen);
 }
 
+void DesktopPanel::onMenuShow()
+{
+    allow_hide_ = false;
+}
+
+void DesktopPanel::onMenuHide()
+{
+    allow_hide_ = true;
+
+    QTimer::singleShot(std::chrono::milliseconds(500), this, [=]()
+    {
+        if (!allow_hide_)
+            return;
+
+        if (!rect().contains(mapToGlobal(QCursor::pos())))
+            leaved_ = true;
+
+        if (leaved_)
+            delayedHide();
+    });
+}
+
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
@@ -561,14 +568,8 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
-    connect(additional_menu_, &QMenu::aboutToShow, this, [this]() { allow_hide_ = false; });
-    connect(additional_menu_, &QMenu::aboutToHide, this, [this]()
-    {
-        allow_hide_ = true;
-
-        if (leaved_)
-            delayedHide();
-    });
+    connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
+    connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
 }
 
 void DesktopPanel::showFullScreenButtons(bool show)

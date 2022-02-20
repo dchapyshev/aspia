@@ -81,6 +81,8 @@ private slots:
     void onPowerControl(QAction* action);
     void onChangeResolutionAction(QAction* action);
     void onChangeScreenAction(QAction* action);
+    void onMenuShow();
+    void onMenuHide();
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
