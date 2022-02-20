@@ -364,6 +364,12 @@ void NotifierWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
+void NotifierWindow::moveEvent(QMoveEvent* event)
+{
+    LOG(LS_INFO) << "Notifier moved to: " << event->pos() << " (from: " << event->oldPos() << ")";
+    QWidget::moveEvent(event);
+}
+
 void NotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
@@ -382,7 +388,6 @@ void NotifierWindow::updateWindowPosition()
     int x = available_rect.x() + (available_rect.width() - window_size.width());
     int y = available_rect.y() + (available_rect.height() - window_size.height());
 
-    LOG(LS_INFO) << "Available geometry for primary screen: " << available_rect;
     LOG(LS_INFO) << "Notifier window size: " << window_size;
     LOG(LS_INFO) << "Notifier window moved to: " << x << "x" << y;
 
@@ -442,14 +447,28 @@ QRect NotifierWindow::currentAvailableRect()
 {
 #if defined(OS_WIN)
     RECT work_area;
+    memset(&work_area, 0, sizeof(work_area));
+
     if (!SystemParametersInfoW(SPI_GETWORKAREA, 0, &work_area, 0))
     {
         LOG(LS_ERROR) << "SystemParametersInfoW failed";
         return QRect();
     }
 
-    return QRect(QPoint(work_area.left, work_area.top),
-                 QSize(work_area.right - work_area.left, work_area.bottom - work_area.top));
+    QScreen* primary_screen = QApplication::primaryScreen();
+    if (!primary_screen)
+    {
+        LOG(LS_ERROR) << "Primary screen not available";
+        return QRect();
+    }
+
+    qreal device_pixel_ratio = primary_screen->devicePixelRatio();
+    QRect rect(QPoint(work_area.left, work_area.top) / device_pixel_ratio,
+               QSize(work_area.right - work_area.left, work_area.bottom - work_area.top) /
+                   device_pixel_ratio);
+
+    LOG(LS_INFO) << "Available rect: " << rect << " pixel ratio: " << device_pixel_ratio;
+    return rect;
 #else
     QScreen* primary_screen = QApplication::primaryScreen();
     if (!primary_screen)
