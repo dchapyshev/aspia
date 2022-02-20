@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__UPDATE_INFO_H
-#define COMMON__UI__UPDATE_INFO_H
+#ifndef COMMON_UI_UPDATE_INFO_H
+#define COMMON_UI_UPDATE_INFO_H
 
 #include "base/version.h"
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__UI__UPDATE_INFO_H
+#endif // COMMON_UI_UPDATE_INFO_H

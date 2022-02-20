@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__UPDATE_DIALOG_H
-#define COMMON__UI__UPDATE_DIALOG_H
+#ifndef COMMON_UI_UPDATE_DIALOG_H
+#define COMMON_UI_UPDATE_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "common/ui/update_info.h"
@@ -67,4 +67,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__UI__UPDATE_DIALOG_H
+#endif // COMMON_UI_UPDATE_DIALOG_H

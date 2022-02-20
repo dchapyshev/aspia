@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_TASK_PRODUCER_H
-#define COMMON__FILE_TASK_PRODUCER_H
+#ifndef COMMON_FILE_TASK_PRODUCER_H
+#define COMMON_FILE_TASK_PRODUCER_H
 
 #include <memory>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace common
 
-#endif // COMMON__FILE_TASK_PRODUCER_H
+#endif // COMMON_FILE_TASK_PRODUCER_H

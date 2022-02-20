@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_ENUMERATOR_H
-#define COMMON__FILE_ENUMERATOR_H
+#ifndef COMMON_FILE_ENUMERATOR_H
+#define COMMON_FILE_ENUMERATOR_H
 
 #include "base/macros_magic.h"
 #include "build/build_config.h"
@@ -79,4 +79,4 @@ private:
 
 }  // namespace common
 
-#endif // COMMON__FILE_ENUMERATOR_H
+#endif // COMMON_FILE_ENUMERATOR_H

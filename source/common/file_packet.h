@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_PACKET_H
-#define COMMON__FILE_PACKET_H
+#ifndef COMMON_FILE_PACKET_H
+#define COMMON_FILE_PACKET_H
 
 namespace common {
 
@@ -27,4 +27,4 @@ static const size_t kMaxFilePacketSize = 64 * 1024; // 64 kB
 
 } // namespace common
 
-#endif // COMMON__FILE_PACKET_H
+#endif // COMMON_FILE_PACKET_H

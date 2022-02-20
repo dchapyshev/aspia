@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT__FILE_TASK_FACTORY_H
-#define CLIENT__FILE_TASK_FACTORY_H
+#ifndef CLIENT_FILE_TASK_FACTORY_H
+#define CLIENT_FILE_TASK_FACTORY_H
 
 #include "common/file_task.h"
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace common
 
-#endif // CLIENT__FILE_TASK_FACTORY_H
+#endif // CLIENT_FILE_TASK_FACTORY_H

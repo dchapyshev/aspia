@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__CLIPBOARD_H
-#define COMMON__CLIPBOARD_H
+#ifndef COMMON_CLIPBOARD_H
+#define COMMON_CLIPBOARD_H
 
 #include "proto/desktop.pb.h"
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__CLIPBOARD_H
+#endif // COMMON_CLIPBOARD_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__LANGUAGE_ACTION_H
-#define COMMON__UI__LANGUAGE_ACTION_H
+#ifndef COMMON_UI_LANGUAGE_ACTION_H
+#define COMMON_UI_LANGUAGE_ACTION_H
 
 #include "base/macros_magic.h"
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__UI__LANGUAGE_ACTION_H
+#endif // COMMON_UI_LANGUAGE_ACTION_H

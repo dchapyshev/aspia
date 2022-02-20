@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__CLIPBOARD_MONITOR_H
-#define COMMON__CLIPBOARD_MONITOR_H
+#ifndef COMMON_CLIPBOARD_MONITOR_H
+#define COMMON_CLIPBOARD_MONITOR_H
 
 #include "base/threading/thread.h"
 #include "common/clipboard.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__CLIPBOARD_MONITOR_H
+#endif // COMMON_CLIPBOARD_MONITOR_H

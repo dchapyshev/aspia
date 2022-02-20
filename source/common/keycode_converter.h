@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__KEYCODE_CONVERTER_H
-#define COMMON__KEYCODE_CONVERTER_H
+#ifndef COMMON_KEYCODE_CONVERTER_H
+#define COMMON_KEYCODE_CONVERTER_H
 
 #include "base/macros_magic.h"
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__KEYCODE_CONVERTER_H
+#endif // COMMON_KEYCODE_CONVERTER_H

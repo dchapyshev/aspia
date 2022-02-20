@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__DESKTOP_SESSION_CONSTANTS_H
-#define COMMON__DESKTOP_SESSION_CONSTANTS_H
+#ifndef COMMON_DESKTOP_SESSION_CONSTANTS_H
+#define COMMON_DESKTOP_SESSION_CONSTANTS_H
 
 #include <cstdint>
 
@@ -39,4 +39,4 @@ extern const uint32_t kSupportedAudioEncodings;
 
 } // namespace common
 
-#endif // COMMON__DESKTOP_SESSION_CONSTANTS_H
+#endif // COMMON_DESKTOP_SESSION_CONSTANTS_H

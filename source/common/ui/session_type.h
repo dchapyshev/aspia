@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__SESSION_TYPE_H
-#define COMMON__UI__SESSION_TYPE_H
+#ifndef COMMON_UI_SESSION_TYPE_H
+#define COMMON_UI_SESSION_TYPE_H
 
 #include "proto/common.pb.h"
 
@@ -31,4 +31,4 @@ QString sessionTypeToLocalizedString(proto::SessionType session_type);
 
 } // namespace common
 
-#endif // COMMON__UI__SESSION_TYPE_H
+#endif // COMMON_UI_SESSION_TYPE_H

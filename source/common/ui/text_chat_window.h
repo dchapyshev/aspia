@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__TEXT_CHAT_WINDOW_H
-#define COMMON__UI__TEXT_CHAT_WINDOW_H
+#ifndef COMMON_UI_TEXT_CHAT_WINDOW_H
+#define COMMON_UI_TEXT_CHAT_WINDOW_H
 
 #include "proto/text_chat.pb.h"
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__UI__TEXT_CHAT_WINDOW_H
+#endif // COMMON_UI_TEXT_CHAT_WINDOW_H

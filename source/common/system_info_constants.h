@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__SYSTEM_INFO_CONSTANTS_H
-#define COMMON__SYSTEM_INFO_CONSTANTS_H
+#ifndef COMMON_SYSTEM_INFO_CONSTANTS_H
+#define COMMON_SYSTEM_INFO_CONSTANTS_H
 
 namespace common {
 
@@ -38,4 +38,4 @@ extern const char kSystemInfo_NetworkShares[];
 
 } // namespace common
 
-#endif // COMMON__SYSTEM_INFO_CONSTANTS_H
+#endif // COMMON_SYSTEM_INFO_CONSTANTS_H

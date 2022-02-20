@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_DEPACKETIZER_H
-#define COMMON__FILE_DEPACKETIZER_H
+#ifndef COMMON_FILE_DEPACKETIZER_H
+#define COMMON_FILE_DEPACKETIZER_H
 
 #include "base/macros_magic.h"
 #include "proto/file_transfer.pb.h"
@@ -53,4 +53,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__FILE_DEPACKETIZER_H
+#endif // COMMON_FILE_DEPACKETIZER_H

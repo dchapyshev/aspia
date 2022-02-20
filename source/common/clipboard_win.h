@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__CLIPBOARD_WIN_H
-#define COMMON__CLIPBOARD_WIN_H
+#ifndef COMMON_CLIPBOARD_WIN_H
+#define COMMON_CLIPBOARD_WIN_H
 
 #include "base/macros_magic.h"
 #include "common/clipboard.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__CLIPBOARD_WIN_H
+#endif // COMMON_CLIPBOARD_WIN_H

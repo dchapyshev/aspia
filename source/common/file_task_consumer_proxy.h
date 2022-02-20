@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__FILE_TASK_CONSUMER_PROXY_H
-#define COMMON__FILE_TASK_CONSUMER_PROXY_H
+#ifndef COMMON_FILE_TASK_CONSUMER_PROXY_H
+#define COMMON_FILE_TASK_CONSUMER_PROXY_H
 
 #include "base/macros_magic.h"
 #include "common/file_task_consumer.h"
@@ -28,7 +28,7 @@ class FileTaskConsumerProxy : public FileTaskConsumer
 {
 public:
     explicit FileTaskConsumerProxy(FileTaskConsumer* task_consumer);
-    ~FileTaskConsumerProxy();
+    ~FileTaskConsumerProxy() override;
 
     void dettach();
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__FILE_TASK_CONSUMER_PROXY_H
+#endif // COMMON_FILE_TASK_CONSUMER_PROXY_H

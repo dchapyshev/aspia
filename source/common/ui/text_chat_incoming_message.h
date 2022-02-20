@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__UI__TEXT_CHAT_INCOMING_MESSAGE_H
-#define COMMON__UI__TEXT_CHAT_INCOMING_MESSAGE_H
+#ifndef COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
+#define COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
 
 #include "common/ui/text_chat_message.h"
 #include "ui_text_chat_incoming_message.h"
@@ -45,4 +45,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__UI__TEXT_CHAT_INCOMING_MESSAGE_H
+#endif // COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
