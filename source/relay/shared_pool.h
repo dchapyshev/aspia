@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__SHARED_POOL_H
-#define RELAY__SHARED_POOL_H
+#ifndef RELAY_SHARED_POOL_H
+#define RELAY_SHARED_POOL_H
 
 #include "relay/session_key.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__SHARED_POOL_H
+#endif // RELAY_SHARED_POOL_H

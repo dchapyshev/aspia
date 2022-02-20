@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__WIN__SERVICE_H
-#define RELAY__WIN__SERVICE_H
+#ifndef RELAY_WIN_SERVICE_H
+#define RELAY_WIN_SERVICE_H
 
 #include "base/win/service.h"
 
@@ -29,7 +29,7 @@ class Service : public base::win::Service
 {
 public:
     Service();
-    ~Service();
+    ~Service() override;
 
 protected:
     // base::win::Service implementation.
@@ -46,4 +46,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__WIN__SERVICE_H
+#endif // RELAY_WIN_SERVICE_H

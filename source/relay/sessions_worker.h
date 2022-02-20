@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__SESSIONS_WORKER_H
-#define RELAY__SESSIONS_WORKER_H
+#ifndef RELAY_SESSIONS_WORKER_H
+#define RELAY_SESSIONS_WORKER_H
 
 #include "base/threading/thread.h"
 #include "relay/session_manager.h"
@@ -34,7 +34,7 @@ public:
     SessionsWorker(uint16_t peer_port,
                    const std::chrono::minutes& peer_idle_timeout,
                    std::unique_ptr<SharedPool> shared_pool);
-    ~SessionsWorker();
+    ~SessionsWorker() override;
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                SessionManager::Delegate* delegate);
@@ -64,4 +64,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__SESSIONS_WORKER_H
+#endif // RELAY_SESSIONS_WORKER_H

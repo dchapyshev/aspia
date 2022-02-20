@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__WIN__SERVICE_CONSTANTS_H
-#define RELAY__WIN__SERVICE_CONSTANTS_H
+#ifndef RELAY_WIN_SERVICE_CONSTANTS_H
+#define RELAY_WIN_SERVICE_CONSTANTS_H
 
 namespace relay {
 
@@ -28,4 +28,4 @@ extern const char16_t kServiceDescription[];
 
 } // namespace relay
 
-#endif // RELAY__WIN__SERVICE_CONSTANTS_H
+#endif // RELAY_WIN_SERVICE_CONSTANTS_H

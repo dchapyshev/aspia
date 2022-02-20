@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__SESSION_H
-#define RELAY__SESSION_H
+#ifndef RELAY_SESSION_H
+#define RELAY_SESSION_H
 
 #include "base/macros_magic.h"
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__SESSION_H
+#endif // RELAY_SESSION_H

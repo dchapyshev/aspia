@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__SETTINGS_H
-#define RELAY__SETTINGS_H
+#ifndef RELAY_SETTINGS_H
+#define RELAY_SETTINGS_H
 
 #include "base/settings/json_settings.h"
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__SETTINGS_H
+#endif // RELAY_SETTINGS_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__PENDING_SESSION_H
-#define RELAY__PENDING_SESSION_H
+#ifndef RELAY_PENDING_SESSION_H
+#define RELAY_PENDING_SESSION_H
 
 #include "base/waitable_timer.h"
 #include "base/memory/byte_array.h"
@@ -85,11 +85,11 @@ private:
     base::ByteArray buffer_;
 
     base::ByteArray secret_;
-    uint32_t key_id_ = -1;
+    uint32_t key_id_ = static_cast<uint32_t>(-1);
 
     DISALLOW_COPY_AND_ASSIGN(PendingSession);
 };
 
 } // namespace relay
 
-#endif // RELAY__PENDING_SESSION_H
+#endif // RELAY_PENDING_SESSION_H

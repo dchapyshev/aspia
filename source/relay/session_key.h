@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__SESSION_KEY_H
-#define RELAY__SESSION_KEY_H
+#ifndef RELAY_SESSION_KEY_H
+#define RELAY_SESSION_KEY_H
 
 #include "base/crypto/key_pair.h"
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__SESSION_KEY_H
+#endif // RELAY_SESSION_KEY_H

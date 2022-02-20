@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY__CONTROLLER_H
-#define RELAY__CONTROLLER_H
+#ifndef RELAY_CONTROLLER_H
+#define RELAY_CONTROLLER_H
 
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
@@ -39,7 +39,7 @@ class Controller
 {
 public:
     explicit Controller(std::shared_ptr<base::TaskRunner> task_runner);
-    ~Controller();
+    ~Controller() override;
 
     bool start();
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY__CONTROLLER_H
+#endif // RELAY_CONTROLLER_H
