@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__DESKTOP__SCREEN_CAPTURER_MAC_H
-#define BASE__DESKTOP__SCREEN_CAPTURER_MAC_H
+#ifndef BASE_DESKTOP_SCREEN_CAPTURER_MAC_H
+#define BASE_DESKTOP_SCREEN_CAPTURER_MAC_H
 
 #include "base/desktop/screen_capturer.h"
 
@@ -27,7 +27,7 @@ class ScreenCapturerMac : public ScreenCapturer
 {
 public:
     ScreenCapturerMac();
-    ~ScreenCapturerMac();
+    ~ScreenCapturerMac() override;
 
     // ScreenCapturer implementation.
     int screenCount() override;
@@ -48,4 +48,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__DESKTOP__SCREEN_CAPTURER_MAC_H
+#endif // BASE_DESKTOP_SCREEN_CAPTURER_MAC_H

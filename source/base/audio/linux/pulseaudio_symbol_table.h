@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__AUDIO__LINUX__PULSEAUDIO_SYMBOL_TABLE_H
-#define BASE__AUDIO__LINUX__PULSEAUDIO_SYMBOL_TABLE_H
+#ifndef BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
+#define BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H
 
 #include "base/audio/linux/late_binding_symbol_table.h"
 
@@ -75,4 +75,4 @@ LATE_BINDING_SYMBOL_TABLE_DECLARE_END(PulseAudioSymbolTable)
 
 } // namespace base
 
-#endif // BASE__AUDIO__LINUX__PULSEAUDIO_SYMBOL_TABLE_H
+#endif // BASE_AUDIO_LINUX_PULSEAUDIO_SYMBOL_TABLE_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__X11__X_SERVER_CLIPBOARD_H
-#define BASE__X11__X_SERVER_CLIPBOARD_H
+#ifndef BASE_X11_X_SERVER_CLIPBOARD_H
+#define BASE_X11_X_SERVER_CLIPBOARD_H
 
 #include "base/macros_magic.h"
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace base
 
-#endif // BASE__X11__X_SERVER_CLIPBOARD_H
+#endif // BASE_X11_X_SERVER_CLIPBOARD_H

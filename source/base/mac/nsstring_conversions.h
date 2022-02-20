@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE__MAC__NSSTRING_CONVERSIONS_H
-#define BASE__MAC__NSSTRING_CONVERSIONS_H
+#ifndef BASE_MAC_NSSTRING_CONVERSIONS_H
+#define BASE_MAC_NSSTRING_CONVERSIONS_H
 
 #include <string>
 
@@ -44,4 +44,4 @@ std::u16string NSStringToUtf16(NSString* nsstring);
 
 } // namespace base
 
-#endif // BASE__MAC__NSSTRING_CONVERSIONS_H
+#endif // BASE_MAC_NSSTRING_CONVERSIONS_H

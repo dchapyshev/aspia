@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON__CLIPBOARD_MAC_H
-#define COMMON__CLIPBOARD_MAC_H
+#ifndef COMMON_CLIPBOARD_MAC_H
+#define COMMON_CLIPBOARD_MAC_H
 
 #include "base/macros_magic.h"
 #include "base/waitable_timer.h"
@@ -48,4 +48,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON__CLIPBOARD_MAC_H
+#endif // COMMON_CLIPBOARD_MAC_H
