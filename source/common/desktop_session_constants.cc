@@ -31,10 +31,10 @@ const char kVideoRecordingExtension[] = "video_recording";
 const char kTextChatExtension[] = "text_chat";
 
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;text_chat";
+    "select_screen;preferred_size;power_control;remote_update;system_info";
 
 const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;system_info;video_recording;text_chat";
+    "select_screen;preferred_size;system_info";
 
 const uint32_t kSupportedVideoEncodings =
     proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
