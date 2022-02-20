@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__APPLICATION_H
-#define QT_BASE__APPLICATION_H
+#ifndef QT_BASE_APPLICATION_H
+#define QT_BASE_APPLICATION_H
 
 #include "base/threading/thread.h"
 #include "qt_base/locale_loader.h"
@@ -39,7 +39,7 @@ class Application : public QApplication
 
 public:
     Application(int& argc, char* argv[]);
-    virtual ~Application();
+    virtual ~Application() override;
 
     static Application* instance();
     static std::shared_ptr<base::TaskRunner> uiTaskRunner();
@@ -81,4 +81,4 @@ private:
 
 } // namespace qt_base
 
-#endif // QT_BASE__APPLICATION_H
+#endif // QT_BASE_APPLICATION_H

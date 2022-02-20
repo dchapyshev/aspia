@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__LOCALE_LOADER_H
-#define QT_BASE__LOCALE_LOADER_H
+#ifndef QT_BASE_LOCALE_LOADER_H
+#define QT_BASE_LOCALE_LOADER_H
 
 #include "base/macros_magic.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace qt_base
 
-#endif // QT_BASE__LOCALE_LOADER_H
+#endif // QT_BASE_LOCALE_LOADER_H

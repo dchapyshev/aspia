@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__SCOPED_QT_LOGGING_H
-#define QT_BASE__SCOPED_QT_LOGGING_H
+#ifndef QT_BASE_SCOPED_QT_LOGGING_H
+#define QT_BASE_SCOPED_QT_LOGGING_H
 
 #include "qt_base/qt_logging.h"
 
@@ -26,7 +26,7 @@ namespace qt_base {
 class ScopedQtLogging
 {
 public:
-    ScopedQtLogging(const base::LoggingSettings& settings = base::LoggingSettings())
+    explicit ScopedQtLogging(const base::LoggingSettings& settings = base::LoggingSettings())
     {
         initialized_ = base::initLogging(settings);
         if (initialized_)
@@ -45,4 +45,4 @@ private:
 
 } // namespace qt_base
 
-#endif // QT_BASE__SCOPED_QT_LOGGING_H
+#endif // QT_BASE_SCOPED_QT_LOGGING_H

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__QT_TASK_RUNNER_H
-#define QT_BASE__QT_TASK_RUNNER_H
+#ifndef QT_BASE_QT_TASK_RUNNER_H
+#define QT_BASE_QT_TASK_RUNNER_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -28,7 +28,7 @@ class QtTaskRunner : public base::TaskRunner
 {
 public:
     QtTaskRunner();
-    ~QtTaskRunner();
+    ~QtTaskRunner() override;
 
     // TaskRunner implementation.
     bool belongsToCurrentThread() const override;
@@ -47,4 +47,4 @@ private:
 
 } // namespace qt_base
 
-#endif // QT_BASE__QT_TASK_RUNNER_H
+#endif // QT_BASE_QT_TASK_RUNNER_H

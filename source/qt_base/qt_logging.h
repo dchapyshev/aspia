@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef QT_BASE__QT_LOGGING_H
-#define QT_BASE__QT_LOGGING_H
+#ifndef QT_BASE_QT_LOGGING_H
+#define QT_BASE_QT_LOGGING_H
 
 #include "base/logging.h"
 
@@ -39,4 +39,4 @@ std::ostream& operator<<(std::ostream& out, const QSize& qsize);
 std::ostream& operator<<(std::ostream& out, const QString& qstr);
 std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist);
 
-#endif // QT_BASE__QT_LOGGING_H
+#endif // QT_BASE_QT_LOGGING_H
