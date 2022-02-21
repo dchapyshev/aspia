@@ -224,7 +224,7 @@ void build(Solution &s) {
         common.Public += base, protocol;
         common.Public += "org.sw.demo.openssl.crypto"_dep;
         common.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
-        if (common.getBuildSettings().TargetOS.Type == OSType::Windows) {
+        if (common.getBuildSettings().TargetOS.Type == OSType::Windows && QT_VERSION_NUMBER == 5) {
             common.Public += "org.sw.demo.qtproject.qt.winextras" QT_VERSION ""_dep;
         }
         qt_progs_and_tr(common);
