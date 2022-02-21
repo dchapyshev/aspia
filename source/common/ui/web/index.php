@@ -1,7 +1,8 @@
 <?php
+
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +17,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
+
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 	<head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Aspia Update Server</title>
+		<style>
+			@import url('http://fonts.googleapis.com/css?family=Open+Sans:300');
+			@import url('https://fonts.googleapis.com/css?family=Montserrat:700');
+
+			html {height: 100%; line-height: 1; color: #fff; background: linear-gradient(#3c5c9b,#5988ba)}
+			body {height: 100%; width: 100%; position: fixed; top: 0; left: 0}
+			section {position: relative; top: 38%; padding: 0 12%}
+
+			h1 {font-family: 'Montserrat', Verdana; font-weight: 700; font-size: 5rem;  margin: 0; text-shadow: 0 15px 40px rgba(0,0,0,.25)}
+			h3 {font-family: 'Open Sans', sans-serif; font-weight: 300; margin-top: 0.5rem}
+		</style>
 	</head>
 	<body>
-		<table>
-			<tr>
-				<td>Welcome to Aspia Update Server</td>
-			</tr>
-		</table>
+		<section>
+			<h1>Aspia</h1>
+			<h3>Welcome to update server</h3>
+		</section>
 	</body>
 </html>
