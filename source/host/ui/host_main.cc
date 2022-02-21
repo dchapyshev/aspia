@@ -53,7 +53,14 @@ bool waitForValidInputDesktop()
         if (input_desktop.isValid())
         {
             if (input_desktop.setThreadDesktop())
+            {
+                wchar_t desktop_name[100] = { 0 };
+                if (input_desktop.name(desktop_name, sizeof(desktop_name)))
+                {
+                    LOG(LS_INFO) << "Attached to desktop: " << desktop_name;
+                }
                 break;
+            }
         }
 
         Sleep(100);
@@ -100,6 +107,26 @@ int hostMain(int argc, char* argv[])
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
 #if defined(OS_WIN)
+    MEMORYSTATUSEX memory_status;
+    memset(&memory_status, 0, sizeof(memory_status));
+    memory_status.dwLength = sizeof(memory_status);
+
+    if (GlobalMemoryStatusEx(&memory_status))
+    {
+        static const uint32_t kMB = 1024 * 1024;
+
+        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
+                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+    }
+
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
@@ -130,7 +157,31 @@ int hostMain(int argc, char* argv[])
         PLOG(LS_WARNING) << "GetUserNameW failed";
     }
 
+    SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
+    PSID admins_group = nullptr;
+    BOOL is_user_admin = AllocateAndInitializeSid(&nt_authority,
+                                                  2,
+                                                  SECURITY_BUILTIN_DOMAIN_RID,
+                                                  DOMAIN_ALIAS_RID_ADMINS,
+                                                  0, 0, 0, 0, 0, 0,
+                                                  &admins_group);
+    if (is_user_admin)
+    {
+        if (!CheckTokenMembership(nullptr, admins_group, &is_user_admin))
+        {
+            PLOG(LS_WARNING) << "CheckTokenMembership failed";
+            is_user_admin = FALSE;
+        }
+        FreeSid(admins_group);
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "AllocateAndInitializeSid failed";
+    }
+
     LOG(LS_INFO) << "Running as user: '" << username << "'";
+    LOG(LS_INFO) << "Member of admins group: " << (is_user_admin ? "Yes" : "No");
+    LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
 
