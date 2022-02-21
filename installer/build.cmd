@@ -25,6 +25,7 @@ echo "Creating MSI packages for Aspia Console"
 "%WIX%\bin\light" -out "%1\aspia-console-ru-ru.msi" -cultures:ru-ru -ext WixUtilExtension -ext WixUIExtension -loc translations\console.ru-ru.wxl "%1\console.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-console-uk-ua.msi" -cultures:uk-ua -ext WixUtilExtension -ext WixUIExtension -loc translations\console.uk-ua.wxl "%1\console.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-console-zh-cn.msi" -cultures:zh-cn -ext WixUtilExtension -ext WixUIExtension -loc translations\console.zh-cn.wxl "%1\console.wixobj"
+"%WIX%\bin\light" -out "%1\aspia-console-zh-tw.msi" -cultures:zh-tw -ext WixUtilExtension -ext WixUIExtension -loc translations\console.zh-tw.wxl "%1\console.wixobj"
 
 echo "Creating MSI transforms for Aspia Console"
 "%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-de-de.msi" -out "%1\console-de-de.mst"
@@ -33,6 +34,7 @@ echo "Creating MSI transforms for Aspia Console"
 "%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-ru-ru.msi" -out "%1\console-ru-ru.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-uk-ua.msi" -out "%1\console-uk-ua.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-zh-cn.msi" -out "%1\console-zh-cn.mst"
+"%WIX%\bin\torch" -p -t language "%1\aspia-console-en-us.msi" "%1\aspia-console-zh-tw.msi" -out "%1\console-zh-tw.mst"
 
 echo "Integration of transforms for Aspia Console"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-de-de.mst" 1031
@@ -41,8 +43,9 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-ru-ru.mst" 1049
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-uk-ua.mst" 1058
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-console-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-console-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
 
 echo "Creating MSI packages for Aspia Client"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension client.wxs
@@ -53,6 +56,7 @@ echo "Creating MSI packages for Aspia Client"
 "%WIX%\bin\light" -out "%1\aspia-client-ru-ru.msi" -cultures:ru-ru -ext WixUtilExtension -ext WixUIExtension -loc translations\client.ru-ru.wxl "%1\client.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-client-uk-ua.msi" -cultures:uk-ua -ext WixUtilExtension -ext WixUIExtension -loc translations\client.uk-ua.wxl "%1\client.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-client-zh-cn.msi" -cultures:zh-cn -ext WixUtilExtension -ext WixUIExtension -loc translations\client.zh-cn.wxl "%1\client.wixobj"
+"%WIX%\bin\light" -out "%1\aspia-client-zh-tw.msi" -cultures:zh-tw -ext WixUtilExtension -ext WixUIExtension -loc translations\client.zh-tw.wxl "%1\client.wixobj"
 
 echo "Creating MSI transforms for Aspia Client"
 "%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-de-de.msi" -out "%1\client-de-de.mst"
@@ -61,6 +65,7 @@ echo "Creating MSI transforms for Aspia Client"
 "%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-ru-ru.msi" -out "%1\client-ru-ru.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-uk-ua.msi" -out "%1\client-uk-ua.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-zh-cn.msi" -out "%1\client-zh-cn.mst"
+"%WIX%\bin\torch" -p -t language "%1\aspia-client-en-us.msi" "%1\aspia-client-zh-tw.msi" -out "%1\client-zh-tw.mst"
 
 echo "Integration of transforms for Aspia Client"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-de-de.mst" 1031
@@ -69,8 +74,9 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-ru-ru.mst" 1049
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-uk-ua.mst" 1058
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-client-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-client-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
 
 echo "Creating MSI packages for Aspia Host"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension host.wxs
@@ -81,6 +87,7 @@ echo "Creating MSI packages for Aspia Host"
 "%WIX%\bin\light" -out "%1\aspia-host-ru-ru.msi" -cultures:ru-ru -ext WixUtilExtension -ext WixUIExtension -loc translations\host.ru-ru.wxl "%1\host.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-host-uk-ua.msi" -cultures:uk-ua -ext WixUtilExtension -ext WixUIExtension -loc translations\host.uk-ua.wxl "%1\host.wixobj"
 "%WIX%\bin\light" -out "%1\aspia-host-zh-cn.msi" -cultures:zh-cn -ext WixUtilExtension -ext WixUIExtension -loc translations\host.zh-cn.wxl "%1\host.wixobj"
+"%WIX%\bin\light" -out "%1\aspia-host-zh-tw.msi" -cultures:zh-tw -ext WixUtilExtension -ext WixUIExtension -loc translations\host.zh-tw.wxl "%1\host.wixobj"
 
 echo "Creating MSI transforms for Aspia Host"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-de-de.msi" -out "%1\host-de-de.mst"
@@ -89,6 +96,7 @@ echo "Creating MSI transforms for Aspia Host"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-ru-ru.msi" -out "%1\host-ru-ru.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-uk-ua.msi" -out "%1\host-uk-ua.mst"
 "%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-zh-cn.msi" -out "%1\host-zh-cn.mst"
+"%WIX%\bin\torch" -p -t language "%1\aspia-host-en-us.msi" "%1\aspia-host-zh-tw.msi" -out "%1\host-zh-tw.mst"
 
 echo "Integration of transforms for Aspia Host"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-de-de.mst" 1031
@@ -97,8 +105,9 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-ru-ru.mst" 1049
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-uk-ua.mst" 1058
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-cn.mst" 2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-host-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-host-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
 
 echo "Creating MSI packages for Aspia Router"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension router.wxs
