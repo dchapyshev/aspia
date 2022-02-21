@@ -115,11 +115,11 @@ int hostMain(int argc, char* argv[])
         else
         {
             LOG(LS_INFO) << "Process session ID: " << session_id;
-            LOG(LS_INFO) << "Running in user session: " << session_info.userName();
+            LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
             LOG(LS_INFO) << "Session connect state: "
                 << base::win::SessionInfo::connectStateToString(session_info.connectState());
-            LOG(LS_INFO) << "WinStation name: " << session_info.winStationName();
-            LOG(LS_INFO) << "Domain name: " << session_info.domain();
+            LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
+            LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
         }
     }
 
@@ -130,9 +130,9 @@ int hostMain(int argc, char* argv[])
         PLOG(LS_WARNING) << "GetUserNameW failed";
     }
 
-    LOG(LS_INFO) << "Running as user: " << username;
+    LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
-    LOG(LS_INFO) << "Computer name: " << base::SysInfo::computerName();
+    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
