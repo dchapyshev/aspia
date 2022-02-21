@@ -298,7 +298,11 @@ bool DesktopPanel::isPanelPinned() const
     return ui.action_pin->isChecked();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void DesktopPanel::enterEvent(QEvent* /* event */)
+#else
+void DesktopPanel::enterEvent(QEnterEvent* /* event */)
+#endif
 {
     leaved_ = false;
 
