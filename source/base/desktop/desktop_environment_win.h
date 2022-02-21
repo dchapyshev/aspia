@@ -29,7 +29,7 @@ public:
     DesktopEnvironmentWin();
     ~DesktopEnvironmentWin() override;
 
-    static void prepareEnvironment();
+    static void updateEnvironment();
 
 protected:
     void disableWallpaper() override;
