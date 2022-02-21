@@ -57,14 +57,12 @@ void hostServiceMain()
     {
         static const uint32_t kMB = 1024 * 1024;
 
-        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB) << " MB";
-        LOG(LS_INFO) << "Free physical memory: " << (memory_status.ullAvailPhys / kMB) << " MB";
-
-        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB) << " MB";
-        LOG(LS_INFO) << "Free page file: " << (memory_status.ullAvailPageFile / kMB) << " MB";
-
-        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB) << " MB";
-        LOG(LS_INFO) << "Free virtual memory: " << (memory_status.ullAvailVirtual / kMB) << " MB";
+        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
+                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
     }
     else
     {

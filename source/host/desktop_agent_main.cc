@@ -65,14 +65,12 @@ void desktopAgentMain(int argc, const char* const* argv)
     {
         static const uint32_t kMB = 1024 * 1024;
 
-        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB) << " MB";
-        LOG(LS_INFO) << "Free physical memory: " << (memory_status.ullAvailPhys / kMB) << " MB";
-
-        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB) << " MB";
-        LOG(LS_INFO) << "Free page file: " << (memory_status.ullAvailPageFile / kMB) << " MB";
-
-        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB) << " MB";
-        LOG(LS_INFO) << "Free virtual memory: " << (memory_status.ullAvailVirtual / kMB) << " MB";
+        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
+                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
     }
     else
     {
@@ -104,10 +102,12 @@ void desktopAgentMain(int argc, const char* const* argv)
 
             if (SUCCEEDED(adapter->GetDesc(&adapter_desc)))
             {
+                static const uint32_t kMB = 1024 * 1024;
+
                 LOG(LS_INFO) << adapter_desc.Description << " ("
-                             << "video memory: " << adapter_desc.DedicatedVideoMemory
-                             << ", system memory: " << adapter_desc.DedicatedSystemMemory
-                             << ", shared memory: " << adapter_desc.SharedSystemMemory
+                             << "video memory: " << (adapter_desc.DedicatedVideoMemory / kMB) << "MB"
+                             << ", system memory: " << (adapter_desc.DedicatedSystemMemory / kMB) << "MB"
+                             << ", shared memory: " << (adapter_desc.SharedSystemMemory / kMB) << "MB"
                              << ")";
             }
 
