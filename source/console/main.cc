@@ -29,7 +29,11 @@
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_INIT_RESOURCE(qt_translations);
+#else
+    Q_INIT_RESOURCE(qt_translations6);
+#endif
     Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);

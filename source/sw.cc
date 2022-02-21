@@ -1,6 +1,7 @@
 #pragma sw require header org.sw.demo.google.protobuf.protoc
 #pragma sw require header org.sw.demo.qtproject.qt.base.tools.moc-6
 
+#define QT_VERSION_NUMBER 6
 #define QT_VERSION "-6"
 
 /*void configure(Build &s)
@@ -234,7 +235,10 @@ void build(Solution &s) {
         qt_base.Public += base;
         qt_base.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
         automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, qt_base);
-        qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations.qrc");
+        if (QT_VERSION_NUMBER == 5)
+            qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations.qrc");
+        else
+            qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations6.qrc");
     }
 
     auto setup_exe = [](auto &t) -> decltype(auto) {
@@ -288,8 +292,7 @@ void build(Solution &s) {
             core.Public += "sas.lib"_slib;
         core.Public += common, qt_base;
         core.Public += "org.sw.demo.boost.property_tree"_dep;
-        if (core.getBuildSettings().TargetOS.Type == OSType::Windows)
-        {
+        if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
             core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
             core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
         }
