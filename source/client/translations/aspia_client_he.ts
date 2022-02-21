@@ -1904,7 +1904,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="238"/>
         <location filename="../ui/qt_desktop_window.cc" line="246"/>
-        <location filename="../ui/qt_desktop_window.cc" line="661"/>
+        <location filename="../ui/qt_desktop_window.cc" line="657"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1919,17 +1919,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="639"/>
+        <location filename="../ui/qt_desktop_window.cc" line="635"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="641"/>
+        <location filename="../ui/qt_desktop_window.cc" line="637"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="661"/>
+        <location filename="../ui/qt_desktop_window.cc" line="657"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

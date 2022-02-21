@@ -302,11 +302,11 @@ void DesktopPanel::enterEvent(QEvent* /* event */)
 {
     leaved_ = false;
 
+    if (hide_timer_->isActive())
+        hide_timer_->stop();
+
     if (allow_hide_)
     {
-        if (hide_timer_->isActive())
-            hide_timer_->stop();
-
         ui.toolbar->show();
         ui.frame->hide();
 
@@ -463,7 +463,7 @@ void DesktopPanel::onMenuHide()
         if (!allow_hide_)
             return;
 
-        if (!rect().contains(mapToGlobal(QCursor::pos())))
+        if (!rect().contains(mapFromGlobal(QCursor::pos())))
             leaved_ = true;
 
         if (leaved_)
