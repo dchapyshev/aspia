@@ -64,6 +64,34 @@ SessionInfo::ConnectState SessionInfo::connectState() const
     return static_cast<ConnectState>(info_->State);
 }
 
+// static
+const char* SessionInfo::connectStateToString(ConnectState connect_state)
+{
+    switch (connect_state)
+    {
+        case ConnectState::ACTIVE:
+            return "ACTIVE";
+        case ConnectState::CONNECTED:
+            return "CONNECTED";
+        case ConnectState::CONNECT_QUERY:
+            return "CONNECT_QUERY";
+        case ConnectState::SHADOW:
+            return "SHADOW";
+        case ConnectState::DISCONNECTED:
+            return "DISCONNECTED";
+        case ConnectState::IDLE:
+            return "IDLE";
+        case ConnectState::LISTEN:
+            return "LISTEN";
+        case ConnectState::RESET:
+            return "RESET";
+        case ConnectState::DOWN:
+            return "DOWN";
+        case ConnectState::INIT:
+            return "INIT";
+    }
+}
+
 std::string SessionInfo::winStationName() const
 {
     return utf8FromUtf16(winStationName16());

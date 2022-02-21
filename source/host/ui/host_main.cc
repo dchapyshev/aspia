@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
+#include "base/environment.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -35,6 +36,7 @@
 #include "base/win/mini_dump_writer.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_thread_desktop.h"
+#include "base/win/session_info.h"
 #endif // defined(OS_WIN)
 
 #include <QMessageBox>
@@ -96,6 +98,50 @@ int hostMain(int argc, char* argv[])
                  << " packages: " << base::SysInfo::processorPackages()
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
+
+#if defined(OS_WIN)
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
+    else
+    {
+        base::win::SessionInfo session_info(session_id);
+        if (!session_info.isValid())
+        {
+            LOG(LS_WARNING) << "Unable to get session info";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Session ID: " << session_id;
+            LOG(LS_INFO) << "Running in user session: " << session_info.userName();
+            LOG(LS_INFO) << "Session connect state: "
+                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+            LOG(LS_INFO) << "WinStation name: " << session_info.winStationName();
+            LOG(LS_INFO) << "Domain name: " << session_info.domain();
+        }
+    }
+
+    wchar_t username[64] = { 0 };
+    DWORD username_size = sizeof(username) / sizeof(username[0]);
+    if (!GetUserNameW(username, &username_size))
+    {
+        PLOG(LS_WARNING) << "GetUserNameW failed";
+    }
+
+    LOG(LS_INFO) << "Running as user: " << username;
+    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
+    LOG(LS_INFO) << "Computer name: " << base::SysInfo::computerName();
+
+    LOG(LS_INFO) << "Environment variables";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& variable : base::Environment::list())
+    {
+        LOG(LS_INFO) << variable.first << ": " << variable.second;
+    }
+    LOG(LS_INFO) << "#####################################################";
+#endif
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (is_hidden)

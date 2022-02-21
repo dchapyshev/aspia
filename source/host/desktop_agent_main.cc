@@ -19,10 +19,12 @@
 #include "host/desktop_agent_main.h"
 
 #include "base/command_line.h"
+#include "base/environment.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/message_loop/message_loop.h"
 #include "base/win/mini_dump_writer.h"
+#include "base/win/session_info.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 
@@ -49,6 +51,48 @@ void desktopAgentMain(int argc, const char* const* argv)
                  << " packages: " << base::SysInfo::processorPackages()
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
+
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
+    else
+    {
+        base::win::SessionInfo session_info(session_id);
+        if (!session_info.isValid())
+        {
+            LOG(LS_WARNING) << "Unable to get session info";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Session ID: " << session_id;
+            LOG(LS_INFO) << "Running in user session: " << session_info.userName();
+            LOG(LS_INFO) << "Session connect state: "
+                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+            LOG(LS_INFO) << "WinStation name: " << session_info.winStationName();
+            LOG(LS_INFO) << "Domain name: " << session_info.domain();
+        }
+    }
+
+    wchar_t username[64] = { 0 };
+    DWORD username_size = sizeof(username) / sizeof(username[0]);
+    if (!GetUserNameW(username, &username_size))
+    {
+        PLOG(LS_WARNING) << "GetUserNameW failed";
+    }
+
+    LOG(LS_INFO) << "Running as user: " << username;
+    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
+    LOG(LS_INFO) << "Computer name: " << base::SysInfo::computerName();
+
+    LOG(LS_INFO) << "Environment variables";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& variable : base::Environment::list())
+    {
+        LOG(LS_INFO) << variable.first << ": " << variable.second;
+    }
+    LOG(LS_INFO) << "#####################################################";
 
     if (command_line->hasSwitch(u"channel_id"))
     {
