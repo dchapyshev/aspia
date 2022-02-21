@@ -298,15 +298,19 @@ bool DesktopPanel::isPanelPinned() const
     return ui.action_pin->isChecked();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void DesktopPanel::enterEvent(QEvent* /* event */)
+#else
+void DesktopPanel::enterEvent(QEnterEvent* /* event */)
+#endif
 {
     leaved_ = false;
 
+    if (hide_timer_->isActive())
+        hide_timer_->stop();
+
     if (allow_hide_)
     {
-        if (hide_timer_->isActive())
-            hide_timer_->stop();
-
         ui.toolbar->show();
         ui.frame->hide();
 
@@ -463,7 +467,7 @@ void DesktopPanel::onMenuHide()
         if (!allow_hide_)
             return;
 
-        if (!rect().contains(mapToGlobal(QCursor::pos())))
+        if (!rect().contains(mapFromGlobal(QCursor::pos())))
             leaved_ = true;
 
         if (leaved_)

@@ -365,8 +365,6 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
     base::Point local_dpi(base::MouseCursor::kDefaultDpiX, base::MouseCursor::kDefaultDpiY);
     base::Point remote_dpi = mouse_cursor->constDpi();
 
-    LOG(LS_WARNING) << "CURSOR!!! LOCAL: " << local_dpi << " REMOTE: " << remote_dpi;
-
     QWidget* current_window = window();
     if (current_window)
     {
@@ -392,8 +390,6 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
             static_cast<double>(local_dpi.x()) / static_cast<double>(remote_dpi.x());
         double scale_factor_y =
             static_cast<double>(local_dpi.y()) / static_cast<double>(remote_dpi.y());
-
-        LOG(LS_WARNING) << "SCALE X: " << scale_factor_x << " SCALE Y: " << scale_factor_y;
 
         width = std::max(static_cast<int>(static_cast<double>(width) * scale_factor_x), 1);
         height = std::max(static_cast<int>(static_cast<double>(height) * scale_factor_y), 1);

@@ -51,6 +51,7 @@ public:
     };
 
     ConnectState connectState() const;
+    static const char* connectStateToString(ConnectState connect_state);
 
     std::string winStationName() const;
     std::u16string winStationName16() const;

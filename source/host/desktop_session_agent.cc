@@ -82,14 +82,11 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
-
-    ui_thread_.start(base::MessageLoop::Type::WIN, this);
 }
 
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
-    ui_thread_.stop();
 }
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
@@ -397,42 +394,11 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(*outgoing_message));
 }
 
-void DesktopSessionAgent::onBeforeThreadRunning()
-{
-    LOG(LS_INFO) << "Starting UI thread";
-
-    session_watcher_ = std::make_unique<base::win::SessionWatcher>();
-    session_watcher_->start(this);
-}
-
-void DesktopSessionAgent::onAfterThreadRunning()
-{
-    LOG(LS_INFO) << "Stopping UI thread";
-    session_watcher_.reset();
-}
-
-void DesktopSessionAgent::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
-{
-    if (!io_task_runner_->belongsToCurrentThread())
-    {
-        io_task_runner_->postTask(
-            std::bind(&DesktopSessionAgent::onSessionEvent, shared_from_this(), status, session_id));
-        return;
-    }
-
-    LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
-                 << ", session id: " << session_id;
-
-    if (status == base::win::SessionStatus::SESSION_LOGON)
-    {
-        if (!is_session_enabled_)
-            base::DesktopEnvironmentWin::prepareEnvironment();
-    }
-}
-
 void DesktopSessionAgent::setEnabled(bool enable)
 {
     LOG(LS_INFO) << "Enable session: " << enable;
+
+    base::DesktopEnvironmentWin::updateEnvironment();
 
     if (is_session_enabled_ == enable)
     {

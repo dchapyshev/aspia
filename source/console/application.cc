@@ -38,7 +38,9 @@ Application::Application(int& argc, char* argv[])
     setOrganizationName(QStringLiteral("Aspia"));
     setApplicationName(QStringLiteral("Console"));
     setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+#endif
     setQuitOnLastWindowClosed(false);
     setWindowIcon(QIcon(QStringLiteral(":/img/main.ico")));
 

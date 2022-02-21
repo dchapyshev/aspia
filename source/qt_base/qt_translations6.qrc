@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="/tr">
+    <file>qtbase_cs.qm</file>
+    <file>qtbase_da.qm</file>
+    <file>qtbase_de.qm</file>
+    <file>qtbase_es.qm</file>
+    <file>qtbase_fi.qm</file>
+    <file>qtbase_fr.qm</file>
+    <file>qtbase_he.qm</file>
+    <file>qtbase_hu.qm</file>
+    <file>qtbase_it.qm</file>
+    <file>qtbase_pl.qm</file>
+    <file>qtbase_ru.qm</file>
+    <file>qtbase_tr.qm</file>
+    <file>qtbase_uk.qm</file>
+  </qresource>
+</RCC>

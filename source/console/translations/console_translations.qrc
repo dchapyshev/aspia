@@ -21,5 +21,6 @@
     <file>aspia_console_tr.qm</file>
     <file>aspia_console_uk.qm</file>
     <file>aspia_console_zh_CN.qm</file>
+    <file>aspia_console_zh_TW.qm</file>
   </qresource>
 </RCC>

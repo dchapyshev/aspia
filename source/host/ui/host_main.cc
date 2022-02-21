@@ -19,6 +19,7 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
+#include "base/environment.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -35,6 +36,7 @@
 #include "base/win/mini_dump_writer.h"
 #include "base/win/process_util.h"
 #include "base/win/scoped_thread_desktop.h"
+#include "base/win/session_info.h"
 #endif // defined(OS_WIN)
 
 #include <QMessageBox>
@@ -51,7 +53,14 @@ bool waitForValidInputDesktop()
         if (input_desktop.isValid())
         {
             if (input_desktop.setThreadDesktop())
+            {
+                wchar_t desktop_name[100] = { 0 };
+                if (input_desktop.name(desktop_name, sizeof(desktop_name)))
+                {
+                    LOG(LS_INFO) << "Attached to desktop: " << desktop_name;
+                }
                 break;
+            }
         }
 
         Sleep(100);
@@ -71,7 +80,11 @@ bool waitForValidInputDesktop()
 
 int hostMain(int argc, char* argv[])
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_INIT_RESOURCE(qt_translations);
+#else
+    Q_INIT_RESOURCE(qt_translations6);
+#endif
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
 
@@ -96,6 +109,94 @@ int hostMain(int argc, char* argv[])
                  << " packages: " << base::SysInfo::processorPackages()
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
+
+#if defined(OS_WIN)
+    MEMORYSTATUSEX memory_status;
+    memset(&memory_status, 0, sizeof(memory_status));
+    memory_status.dwLength = sizeof(memory_status);
+
+    if (GlobalMemoryStatusEx(&memory_status))
+    {
+        static const uint32_t kMB = 1024 * 1024;
+
+        LOG(LS_INFO) << "Total physical memory: " << (memory_status.ullTotalPhys / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(LS_INFO) << "Total page file: " << (memory_status.ullTotalPageFile / kMB)
+                     << "MB (free: " << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(LS_INFO) << "Total virtual memory: " << (memory_status.ullTotalVirtual / kMB)
+                     << "MB (free: " << (memory_status.ullAvailVirtual / kMB) << "MB)";
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+    }
+
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
+    else
+    {
+        base::win::SessionInfo session_info(session_id);
+        if (!session_info.isValid())
+        {
+            LOG(LS_WARNING) << "Unable to get session info";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Process session ID: " << session_id;
+            LOG(LS_INFO) << "Running in user session: '" << session_info.userName() << "'";
+            LOG(LS_INFO) << "Session connect state: "
+                << base::win::SessionInfo::connectStateToString(session_info.connectState());
+            LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
+            LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
+        }
+    }
+
+    wchar_t username[64] = { 0 };
+    DWORD username_size = sizeof(username) / sizeof(username[0]);
+    if (!GetUserNameW(username, &username_size))
+    {
+        PLOG(LS_WARNING) << "GetUserNameW failed";
+    }
+
+    SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
+    PSID admins_group = nullptr;
+    BOOL is_user_admin = AllocateAndInitializeSid(&nt_authority,
+                                                  2,
+                                                  SECURITY_BUILTIN_DOMAIN_RID,
+                                                  DOMAIN_ALIAS_RID_ADMINS,
+                                                  0, 0, 0, 0, 0, 0,
+                                                  &admins_group);
+    if (is_user_admin)
+    {
+        if (!CheckTokenMembership(nullptr, admins_group, &is_user_admin))
+        {
+            PLOG(LS_WARNING) << "CheckTokenMembership failed";
+            is_user_admin = FALSE;
+        }
+        FreeSid(admins_group);
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "AllocateAndInitializeSid failed";
+    }
+
+    LOG(LS_INFO) << "Running as user: '" << username << "'";
+    LOG(LS_INFO) << "Member of admins group: " << (is_user_admin ? "Yes" : "No");
+    LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
+    LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
+    LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+
+    LOG(LS_INFO) << "Environment variables";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& variable : base::Environment::list())
+    {
+        LOG(LS_INFO) << variable.first << ": " << variable.second;
+    }
+    LOG(LS_INFO) << "#####################################################";
+#endif
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (is_hidden)

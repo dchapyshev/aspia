@@ -23,8 +23,6 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
-#include "base/threading/thread.h"
-#include "base/win/session_watcher.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -46,9 +44,7 @@ class DesktopSessionAgent
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
-      public common::Clipboard::Delegate,
-      public base::Thread::Delegate,
-      public base::win::SessionWatcher::Delegate
+      public common::Clipboard::Delegate
 {
 public:
     explicit DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner);
@@ -75,13 +71,6 @@ protected:
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
-    // base::Thread::Delegate implementation.
-    void onBeforeThreadRunning() override;
-    void onAfterThreadRunning() override;
-
-    // base::win::SessionWatcher::Delegate implementation.
-    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
-
 private:
     void setEnabled(bool enable);
     void captureBegin();
@@ -103,9 +92,6 @@ private:
     base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
-
-    base::Thread ui_thread_;
-    std::unique_ptr<base::win::SessionWatcher> session_watcher_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionAgent);
 };
