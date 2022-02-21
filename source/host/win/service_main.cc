@@ -62,7 +62,7 @@ void hostServiceMain()
         }
         else
         {
-            LOG(LS_INFO) << "Session ID: " << session_id;
+            LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: " << session_info.userName();
             LOG(LS_INFO) << "Session connect state: "
                 << base::win::SessionInfo::connectStateToString(session_info.connectState());

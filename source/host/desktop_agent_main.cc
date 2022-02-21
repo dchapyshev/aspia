@@ -28,6 +28,11 @@
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
 
+#include <dxgi.h>
+#include <d3d11.h>
+#include <comdef.h>
+#include <wrl/client.h>
+
 void desktopAgentMain(int argc, const char* const* argv)
 {
     base::installFailureHandler(L"aspia_desktop_agent");
@@ -52,6 +57,43 @@ void desktopAgentMain(int argc, const char* const* argv)
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
+    LOG(LS_INFO) << "Video adapters";
+    LOG(LS_INFO) << "#####################################################";
+    Microsoft::WRL::ComPtr<IDXGIFactory> factory;
+    _com_error error = CreateDXGIFactory(__uuidof(IDXGIFactory),
+                                         reinterpret_cast<void**>(factory.GetAddressOf()));
+    if (error.Error() != S_OK || !factory)
+    {
+        LOG(LS_INFO) << "CreateDXGIFactory failed: " << error.ErrorMessage();
+    }
+    else
+    {
+        UINT adapter_index = 0;
+
+        while (true)
+        {
+            Microsoft::WRL::ComPtr<IDXGIAdapter> adapter;
+            error = factory->EnumAdapters(adapter_index, adapter.GetAddressOf());
+            if (error.Error() != S_OK)
+                break;
+
+            DXGI_ADAPTER_DESC adapter_desc;
+            memset(&adapter_desc, 0, sizeof(adapter_desc));
+
+            if (SUCCEEDED(adapter->GetDesc(&adapter_desc)))
+            {
+                LOG(LS_INFO) << adapter_desc.Description << " ("
+                             << "video memory: " << adapter_desc.DedicatedVideoMemory
+                             << ", system memory: " << adapter_desc.DedicatedSystemMemory
+                             << ", shared memory: " << adapter_desc.SharedSystemMemory
+                             << ")";
+            }
+
+            ++adapter_index;
+        }
+    }
+    LOG(LS_INFO) << "#####################################################";
+
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
@@ -66,7 +108,7 @@ void desktopAgentMain(int argc, const char* const* argv)
         }
         else
         {
-            LOG(LS_INFO) << "Session ID: " << session_id;
+            LOG(LS_INFO) << "Process session ID: " << session_id;
             LOG(LS_INFO) << "Running in user session: " << session_info.userName();
             LOG(LS_INFO) << "Session connect state: "
                 << base::win::SessionInfo::connectStateToString(session_info.connectState());
