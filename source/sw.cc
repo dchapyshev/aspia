@@ -256,7 +256,7 @@ void build(Solution &s) {
         client_core += ".*"_rr;
         client_core.Public += common;
         client_core.Public += "org.sw.demo.qtproject.qt.base.printsupport" QT_VERSION ""_dep;
-        if (client_core.getBuildSettings().TargetOS.Type == OSType::Windows)
+        if (client_core.getBuildSettings().TargetOS.Type == OSType::Windows && QT_VERSION_NUMBER == 5)
             client_core.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.windows" QT_VERSION ""_dep;
         else if (client_core.getBuildSettings().TargetOS.Type == OSType::Linux)
             client_core.Public += "org.sw.demo.qtproject.qt.base.plugins.printsupport.cups" QT_VERSION ""_dep;
