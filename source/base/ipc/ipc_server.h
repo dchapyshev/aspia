@@ -19,6 +19,7 @@
 #ifndef BASE_IPC_IPC_SERVER_H
 #define BASE_IPC_IPC_SERVER_H
 
+#include "base/memory/local_memory.h"
 #include "base/threading/thread_checker.h"
 
 #include <asio/io_context.hpp>
@@ -61,7 +62,7 @@ private:
     std::u16string channel_name_;
 
     class Listener;
-    std::array<std::shared_ptr<Listener>, 8> listeners_;
+    std::array<base::local_shared_ptr<Listener>, 8> listeners_;
 
     THREAD_CHECKER(thread_checker_)
 

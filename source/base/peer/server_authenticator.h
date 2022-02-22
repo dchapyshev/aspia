@@ -21,6 +21,7 @@
 
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
+#include "base/memory/local_memory.h"
 #include "base/net/network_channel.h"
 #include "base/peer/authenticator.h"
 
@@ -41,7 +42,7 @@ public:
     };
 
     // Sets the user list.
-    void setUserList(std::shared_ptr<UserListBase> user_list);
+    void setUserList(base::local_shared_ptr<UserListBase> user_list);
 
     // Sets the private key.
     [[nodiscard]] bool setPrivateKey(const ByteArray& private_key);
@@ -66,7 +67,7 @@ private:
     void onSessionResponse(const ByteArray& buffer);
     [[nodiscard]] ByteArray createSrpKey();
 
-    std::shared_ptr<UserListBase> user_list_;
+    base::local_shared_ptr<UserListBase> user_list_;
 
     enum class InternalState
     {

@@ -46,7 +46,7 @@ const DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 } // namespace
 
-class IpcServer::Listener : public std::enable_shared_from_this<Listener>
+class IpcServer::Listener : public base::enable_shared_from_this<Listener>
 {
 public:
     Listener(IpcServer* server, size_t index);
@@ -189,7 +189,7 @@ IpcServer::IpcServer()
     LOG(LS_INFO) << "Ctor";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
-        listeners_[i] = std::make_shared<Listener>(this, i);
+        listeners_[i] = base::make_local_shared<Listener>(this, i);
 }
 
 IpcServer::~IpcServer()
@@ -263,7 +263,7 @@ void IpcServer::stop()
 
 bool IpcServer::runListener(size_t index)
 {
-    std::shared_ptr<Listener> listener = listeners_[index];
+    base::local_shared_ptr<Listener> listener = listeners_[index];
     if (!listener)
         return false;
 

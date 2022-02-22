@@ -50,7 +50,7 @@ ServerAuthenticator::~ServerAuthenticator()
     LOG(LS_INFO) << "Dtor";
 }
 
-void ServerAuthenticator::setUserList(std::shared_ptr<UserListBase> user_list)
+void ServerAuthenticator::setUserList(base::local_shared_ptr<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);

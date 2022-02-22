@@ -72,7 +72,7 @@ private:
     void onComplete();
 
     std::shared_ptr<TaskRunner> task_runner_;
-    std::shared_ptr<UserListBase> user_list_;
+    base::local_shared_ptr<UserListBase> user_list_;
     std::vector<std::unique_ptr<ServerAuthenticator>> pending_;
 
     ByteArray private_key_;
