@@ -24,7 +24,7 @@
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
 
-// removed completely in qt6
+// Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(OS_WIN)
 class QWinTaskbarProgress;
