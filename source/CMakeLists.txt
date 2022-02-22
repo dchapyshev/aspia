@@ -25,6 +25,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
+add_definitions(-DUSE_PCG_GENERATOR)
+
 if (TBB_FOUND)
     add_definitions(-DUSE_TBB_ALLOCATOR)
 endif()

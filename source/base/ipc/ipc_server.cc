@@ -20,12 +20,15 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
+
+#if defined(USE_PCG_GENERATOR)
+#include "third_party/pcg-cpp/pcg_random.hpp"
+#endif // defined(USE_PCG_GENERATOR)
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
@@ -34,6 +37,8 @@
 #include <asio/windows/overlapped_ptr.hpp>
 #include <asio/windows/stream_handle.hpp>
 #endif // defined(OS_WIN)
+
+#include <random>
 
 namespace base {
 
@@ -214,8 +219,18 @@ std::u16string IpcServer::createUniqueId()
 #error Not implemented
 #endif
 
+#if defined(USE_PCG_GENERATOR)
+    pcg_extras::seed_seq_from<std::random_device> device;
+    pcg32_fast engine(device);
+#else // defined(USE_PCG_GENERATOR)
+    std::random_device device;
+    std::mt19937 engine(device());
+#endif
+
+    std::uniform_int_distribution<uint32_t> distance(0, std::numeric_limits<uint32_t>::max());
+
+    uint32_t random_number = distance(engine);
     uint32_t channel_id = last_channel_id++;
-    uint32_t random_number = Random::number32();
 
     return utf16FromAscii(
         stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
