@@ -3,8 +3,8 @@
     <String Id="Locale" Overridable="yes">zh_TW</String>
     <String Id="ProductName" Overridable="yes">Aspia Console</String>
     <String Id="ShortcutName" Overridable="yes">Aspia Console</String>
-    <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-    <String Id="AddressBookFile" Overridable="yes">Aspia Address Book (.aab)</String>
-    <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
-    <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>
+    <String Id="DowngradeErrorMessage" Overridable="yes">已安裝較新版本的應用程式。</String>
+    <String Id="AddressBookFile" Overridable="yes">Aspia 通訊錄 (.aab)</String>
+    <String Id="CreateDesktopShortcut" Overridable="yes">建立桌面捷徑</String>
+    <String Id="CreateProgramMenuShortcut" Overridable="yes">在「開始」功能表建立捷徑</String>
 </WixLocalization>
