@@ -28,7 +28,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-// removed completely in qt6
+// Removed completely in qt6.
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #if defined(OS_WIN)
 #include <QWinTaskbarButton>
