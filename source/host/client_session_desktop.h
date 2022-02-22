@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/protobuf_arena.h"
 #include "base/desktop/geometry.h"
+#include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 
@@ -48,7 +49,7 @@ public:
                          std::shared_ptr<base::TaskRunner> task_runner);
     ~ClientSessionDesktop() override;
 
-    void setDesktopSessionProxy(std::shared_ptr<DesktopSessionProxy> desktop_session_proxy);
+    void setDesktopSessionProxy(base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy);
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
     void encodeAudio(const proto::AudioPacket& audio_packet);
@@ -70,7 +71,7 @@ private:
     void readExtension(const proto::DesktopExtension& extension);
     void readConfig(const proto::DesktopConfig& config);
 
-    std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
+    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<base::ScaleReducer> scale_reducer_;
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;

@@ -63,7 +63,7 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
-      database_factory_(std::make_shared<DatabaseFactorySqlite>())
+      database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
 {
     DCHECK(task_runner_);
 }

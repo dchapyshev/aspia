@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/shared_memory_frame.h"
+#include "base/memory/local_memory.h"
 #include "base/ipc/shared_memory.h"
 
 namespace host {
@@ -32,7 +33,7 @@ public:
 
     static std::unique_ptr<SharedBuffer> wrap(std::unique_ptr<base::SharedMemory> shared_memory)
     {
-        std::shared_ptr<base::SharedMemory> shared_frame(shared_memory.release());
+        base::local_shared_ptr<base::SharedMemory> shared_frame(shared_memory.release());
         return std::unique_ptr<SharedBuffer>(new SharedBuffer(shared_frame));
     }
 
@@ -57,13 +58,13 @@ public:
     }
 
 private:
-    explicit SharedBuffer(std::shared_ptr<base::SharedMemory>& shared_memory)
+    explicit SharedBuffer(base::local_shared_ptr<base::SharedMemory>& shared_memory)
         : shared_memory_(shared_memory)
     {
         // Nothing
     }
 
-    std::shared_ptr<base::SharedMemory> shared_memory_;
+    base::local_shared_ptr<base::SharedMemory> shared_memory_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };

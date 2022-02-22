@@ -20,13 +20,14 @@
 #define HOST_DESKTOP_SESSION_PROXY_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 #include "host/desktop_session.h"
 
 namespace host {
 
 class DesktopSessionManager;
 
-class DesktopSessionProxy : public std::enable_shared_from_this<DesktopSessionProxy>
+class DesktopSessionProxy : public base::enable_shared_from_this<DesktopSessionProxy>
 {
 public:
     DesktopSessionProxy();

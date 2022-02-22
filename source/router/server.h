@@ -68,7 +68,7 @@ protected:
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::shared_ptr<DatabaseFactory> database_factory_;
+    base::local_shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<base::NetworkServer> server_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
