@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
+#include "base/memory/local_memory.h"
 
 namespace base {
 
@@ -34,7 +35,7 @@ public:
 
 private:
     class Impl;
-    std::shared_ptr<Impl> impl_;
+    base::local_shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedTaskRunner);
 };

@@ -23,7 +23,7 @@
 
 namespace base::win {
 
-class ObjectWatcher::Impl : public std::enable_shared_from_this<Impl>
+class ObjectWatcher::Impl : public base::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(std::shared_ptr<TaskRunner> task_runner);
@@ -182,7 +182,7 @@ void CALLBACK ObjectWatcher::Impl::doneWaiting(PVOID context, BOOLEAN timed_out)
 }
 
 ObjectWatcher::ObjectWatcher(std::shared_ptr<TaskRunner> task_runner)
-    : impl_(std::make_shared<Impl>(std::move(task_runner)))
+    : impl_(base::make_local_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }

@@ -20,6 +20,7 @@
 #define BASE_WAITABLE_TIMER_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 
 #include <chrono>
 #include <functional>
@@ -51,7 +52,7 @@ public:
 
 private:
     class Impl;
-    std::shared_ptr<Impl> impl_;
+    base::local_shared_ptr<Impl> impl_;
 
     Type type_;
     std::shared_ptr<TaskRunner> task_runner_;
