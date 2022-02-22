@@ -43,6 +43,8 @@ void build(Solution &s) {
         t -= ".*_mac.*"_rr;
         t -= ".*_posix.*"_rr;
         t -= ".*_x11.*"_rr;
+        t -= ".*/x11/.*"_rr;
+        t -= ".*x11/.*"_rr;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             t += ".*_win.*"_rr;
             t += ".*/win/.*"_rr;
@@ -53,6 +55,8 @@ void build(Solution &s) {
             t += ".*_linux.*"_rr;
             t += ".*/linux/.*"_rr;
             t += ".*_x11.*"_rr;
+            t += ".*/x11/.*"_rr;
+            t += ".*x11/.*"_rr;
         }
         if (t.getBuildSettings().TargetOS.Type != OSType::Windows) {
             t.ExportAllSymbols = true;
@@ -295,6 +299,8 @@ void build(Solution &s) {
         if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
             core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
             core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+            core += "DXGI.lib"_slib;
+            core += "d3d11.lib"_slib;
         }
         qt_progs_and_tr2(core);
 

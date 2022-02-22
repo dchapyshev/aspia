@@ -38,6 +38,7 @@
 #include "host/ui/notifier_window.h"
 #include "qt_base/qt_logging.h"
 
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QMessageBox>

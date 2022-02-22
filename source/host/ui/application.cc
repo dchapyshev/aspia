@@ -38,7 +38,11 @@ public:
     static EventFilter* instance();
 
     // QAbstractNativeEventFilter implementation.
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     bool nativeEventFilter(const QByteArray& event_type, void* message, long* result) override;
+#else
+    bool nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result) override;
+#endif
 
 private:
     EventFilter() = default;
@@ -53,7 +57,11 @@ EventFilter* EventFilter::instance()
     return &event_filter;
 }
 
-bool EventFilter::nativeEventFilter(const QByteArray& /* event_type */, void* message, long* result)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
+#else
+bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result)
+#endif
 {
     MSG* native_message = reinterpret_cast<MSG*>(message);
 
@@ -76,7 +84,9 @@ Application::Application(int& argc, char* argv[])
     setOrganizationName(QStringLiteral("Aspia"));
     setApplicationName(QStringLiteral("Host"));
     setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
+#endif
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
         EventFilter::instance());
