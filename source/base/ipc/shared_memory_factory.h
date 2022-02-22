@@ -20,6 +20,7 @@
 #define BASE_IPC_SHARED_MEMORY_FACTORY_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 
 #include <memory>
 
@@ -59,7 +60,7 @@ private:
     void onSharedMemoryCreate(int id);
     void onSharedMemoryDestroy(int id);
 
-    std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
+    base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedMemoryFactory);

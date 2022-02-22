@@ -101,7 +101,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 
 ScreenCapturerDxgi::ScreenCapturerDxgi()
     : ScreenCapturer(Type::WIN_DXGI),
-      controller_(std::make_shared<DxgiDuplicatorController>()),
+      controller_(base::make_local_shared<DxgiDuplicatorController>()),
       cursor_(std::make_unique<DxgiCursor>())
 {
     LOG(LS_INFO) << "Ctor";

@@ -179,7 +179,7 @@ const SharedMemory::PlatformHandle kInvalidHandle = -1;
 SharedMemory::SharedMemory(int id,
                            ScopedPlatformHandle&& handle,
                            void* data,
-                           std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+                           base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
     : factory_proxy_(std::move(factory_proxy)),
       handle_(std::move(handle)),
       data_(data),
@@ -201,7 +201,7 @@ SharedMemory::~SharedMemory()
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::create(
-    Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+    Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
 #if defined(OS_WIN)
     static const int kRetryCount = 10;
@@ -235,7 +235,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::open(
-    Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+    Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
 #if defined(OS_WIN)
     ScopedPlatformHandle file;

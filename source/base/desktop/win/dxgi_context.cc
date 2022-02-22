@@ -27,7 +27,7 @@ DxgiAdapterContext::DxgiAdapterContext(const DxgiAdapterContext& context) = defa
 DxgiAdapterContext& DxgiAdapterContext::operator=(const DxgiAdapterContext& other) = default;
 DxgiAdapterContext::~DxgiAdapterContext() = default;
 
-DxgiFrameContext::DxgiFrameContext(std::shared_ptr<DxgiDuplicatorController>& controller)
+DxgiFrameContext::DxgiFrameContext(base::local_shared_ptr<DxgiDuplicatorController>& controller)
     : controller(controller)
 {
     // Nothing
