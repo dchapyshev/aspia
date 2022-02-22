@@ -17,5 +17,6 @@
     <file>qtbase_ru.qm</file>
     <file>qtbase_tr.qm</file>
     <file>qtbase_uk.qm</file>
+    <file>qtbase_zh_TW.qm</file>
   </qresource>
 </RCC>
