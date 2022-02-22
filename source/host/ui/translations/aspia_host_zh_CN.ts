@@ -268,18 +268,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="217"/>
-        <location filename="../host_main.cc" line="236"/>
+        <location filename="../host_main.cc" line="221"/>
+        <location filename="../host_main.cc" line="240"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="218"/>
+        <location filename="../host_main.cc" line="222"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="237"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
