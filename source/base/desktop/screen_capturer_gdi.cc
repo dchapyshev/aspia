@@ -138,7 +138,11 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
             if (mouse_cursor_)
             {
                 prev_cursor_info_ = curr_cursor_info_;
-                mouse_cursor_->dpi() = last_dpi_;
+
+                int dpi_x = GetDeviceCaps(desktop_dc_, LOGPIXELSX);
+                int dpi_y = GetDeviceCaps(desktop_dc_, LOGPIXELSY);
+
+                mouse_cursor_->dpi() = Point(dpi_x, dpi_y);
                 return mouse_cursor_.get();
             }
         }
@@ -227,11 +231,7 @@ const Frame* ScreenCapturerGdi::captureImage()
         }
     }
 
-    last_dpi_.setX(GetDeviceCaps(desktop_dc_, LOGPIXELSX));
-    last_dpi_.setY(GetDeviceCaps(desktop_dc_, LOGPIXELSY));
-
     current->setTopLeft(screen_rect_.topLeft().subtract(desktop_dc_rect_.topLeft()));
-    current->setDpi(last_dpi_);
 
     if (!previous || previous->size() != current->size())
     {

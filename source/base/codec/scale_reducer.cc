@@ -55,8 +55,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
         target_size_ = target_size;
         target_frame_.reset();
 
-        LOG(LS_INFO) << "Scale mode changed (dpi:" << source_frame->dpi()
-                     << " source:" << source_size << " target:" << target_size
+        LOG(LS_INFO) << "Scale mode changed (source:" << source_size << " target:" << target_size
                      << " scale_x:" << scale_x_ << " scale_y:" << scale_y_ << ")";
     }
 

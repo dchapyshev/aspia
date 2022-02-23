@@ -313,8 +313,6 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
                 std::move(shared_buffer));
 
             last_frame_->setCapturerType(serialized_frame.capturer_type());
-            last_frame_->setDpi(base::Point(
-                serialized_frame.dpi_x(), serialized_frame.dpi_y()));
 
             base::Region* updated_region = last_frame_->updatedRegion();
 

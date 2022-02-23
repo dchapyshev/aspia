@@ -72,7 +72,6 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
            static_cast<size_t>(frame_->stride()) * static_cast<size_t>(frame_->size().height()));
 
     frame_->setCapturerType(static_cast<uint32_t>(base::ScreenCapturer::Type::FAKE));
-    frame_->setDpi(base::Point(96, 96));
 }
 
 DesktopSessionFake::FrameGenerator::~FrameGenerator()

@@ -34,9 +34,7 @@ message DesktopFrame
     int32 shared_buffer_id   = 2;
     int32 width              = 3;
     int32 height             = 4;
-    int32 dpi_x              = 5;
-    int32 dpi_y              = 6;
-    repeated Rect dirty_rect = 7;
+    repeated Rect dirty_rect = 5;
 }
 
 message MouseCursor
