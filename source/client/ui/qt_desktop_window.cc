@@ -201,6 +201,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
     connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::onKeyEvent);
 
+    connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
+            this, [=](Qt::ApplicationState state)
+    {
+        if (state != Qt::ApplicationActive)
+            desktop_->userLeftFromWindow();
+    });
+
     desktop_->setFocus();
 }
 

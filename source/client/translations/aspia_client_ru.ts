@@ -1938,37 +1938,37 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="90"/>
+        <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Deleting: %1</source>
         <translation>Удаление: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <location filename="../ui/file_remove_dialog.cc" line="127"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="121"/>
+        <location filename="../ui/file_remove_dialog.cc" line="132"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="128"/>
+        <location filename="../ui/file_remove_dialog.cc" line="139"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="136"/>
+        <location filename="../ui/file_remove_dialog.cc" line="147"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="139"/>
+        <location filename="../ui/file_remove_dialog.cc" line="150"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_remove_dialog.cc" line="153"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1976,87 +1976,87 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="98"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
         <source>Current Task: Copying items.</source>
         <translation>Текущая задача: копирование элементов.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="110"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>From: %1</source>
         <translation>Из: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="115"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
         <source>To: %1</source>
         <translation>В: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="156"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="155"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="168"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="158"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="171"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="161"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="174"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="164"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="177"/>
         <source>Replace All</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="180"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="241"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="256"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Текущая задача: Отмена передачи файлов.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="255"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Произошла ошибка при построении очереди файлов для копирования</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="268"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="283"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="282"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="296"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
         <source>Unknown error type while copying files</source>
         <translation>Неизвестный тип ошибки при копировании файлов</translation>
     </message>
@@ -2071,34 +2071,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="238"/>
-        <location filename="../ui/qt_desktop_window.cc" line="246"/>
-        <location filename="../ui/qt_desktop_window.cc" line="657"/>
+        <location filename="../ui/qt_desktop_window.cc" line="245"/>
+        <location filename="../ui/qt_desktop_window.cc" line="253"/>
+        <location filename="../ui/qt_desktop_window.cc" line="664"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
+        <location filename="../ui/qt_desktop_window.cc" line="246"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="254"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="635"/>
+        <location filename="../ui/qt_desktop_window.cc" line="642"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="637"/>
+        <location filename="../ui/qt_desktop_window.cc" line="644"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="657"/>
+        <location filename="../ui/qt_desktop_window.cc" line="664"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
