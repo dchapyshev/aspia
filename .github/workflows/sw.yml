@@ -3,26 +3,35 @@ name: sw
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-2022]
-
+  windows:
+    runs-on: windows-2022
     steps:
     - uses: actions/checkout@v1
     - uses: egorpugin/sw-action@master
-
     - name: build
       run: ./sw build source -static
-
     #- name: test
       #run: ./sw test source
-
     - name: Upload Unit Test Results
       if: always() && matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v2
       with:
         name: Binaries (${{ matrix.os }})
         path: .sw/out/**
-        
+
+  linux:
+    runs-on: ubuntu-20.04
+    container: fedora:35
+    steps:
+    - uses: actions/checkout@v1
+    - name: prepare
+      run: |
+        sudo dnf -y update
+        sudo dnf -y install flex bison cmake which gcc clang clang-tools-extra lld git
+    - uses: egorpugin/sw-action@master
+    - run: ./sw -static build source -compiler gcc
+    - uses: actions/upload-artifact@v1
+      with:
+        name: sw
+        path: .sw/out
+           
