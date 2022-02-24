@@ -29,7 +29,7 @@ jobs:
         sudo dnf -y update
         sudo dnf -y install flex bison cmake which gcc clang clang-tools-extra lld git
     - uses: egorpugin/sw-action@master
-    - run: ./sw -static build -compiler gcc
+    - run: ./sw -static build source -compiler gcc
     - uses: actions/upload-artifact@v1
       with:
         name: sw
