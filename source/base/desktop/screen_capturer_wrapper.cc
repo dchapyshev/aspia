@@ -185,6 +185,8 @@ void ScreenCapturerWrapper::captureFrame()
 
     switchToInputDesktop();
 
+    ++capture_counter_;
+
     int count = screen_capturer_->screenCount();
     if (screen_count_ != count)
     {
@@ -225,21 +227,29 @@ void ScreenCapturerWrapper::captureFrame()
         permanent_error_count_ = 0;
     }
 
-    delegate_->onScreenCaptured(frame, screen_capturer_->captureCursor());
+    const MouseCursor* mouse_cursor = nullptr;
 
-    if (enable_cursor_position_)
+    // Cursor capture only on even frames.
+    if ((capture_counter_ % 2) == 0)
     {
-        Point cursor_pos = screen_capturer_->cursorPosition();
+        mouse_cursor = screen_capturer_->captureCursor();
 
-        int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
-        int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
-
-        if (delta_x > 1 || delta_y > 1)
+        if (enable_cursor_position_)
         {
-            delegate_->onCursorPositionChanged(cursor_pos);
-            last_cursor_pos_ = cursor_pos;
+            Point cursor_pos = screen_capturer_->cursorPosition();
+
+            int32_t delta_x = std::abs(cursor_pos.x() - last_cursor_pos_.x());
+            int32_t delta_y = std::abs(cursor_pos.y() - last_cursor_pos_.y());
+
+            if (delta_x > 1 || delta_y > 1)
+            {
+                delegate_->onCursorPositionChanged(cursor_pos);
+                last_cursor_pos_ = cursor_pos;
+            }
         }
     }
+
+    delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
 void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
