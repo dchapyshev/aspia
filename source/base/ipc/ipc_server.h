@@ -64,7 +64,7 @@ private:
     class Listener;
     std::array<base::local_shared_ptr<Listener>, 8> listeners_;
 
-    THREAD_CHECKER(thread_checker_)
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };

@@ -53,7 +53,7 @@ private:
 
     HRESULT hr_;
 
-    THREAD_CHECKER(thread_checker_)
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };

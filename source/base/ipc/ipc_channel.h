@@ -113,7 +113,7 @@ private:
     ProcessId peer_process_id_ = kNullProcessId;
     SessionId peer_session_id_ = kInvalidSessionId;
 
-    THREAD_CHECKER(thread_checker_)
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(IpcChannel);
 };
