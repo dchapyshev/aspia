@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="zh-tw" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">zh_TW</String>
     <String Id="ProductName" Overridable="yes">Aspia Console</String>
     <String Id="ShortcutName" Overridable="yes">Aspia Console</String>
