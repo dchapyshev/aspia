@@ -1,6 +1,6 @@
 //
 // Aspia Project
-// Copyright (C) 2020 Dmitry Chapyshev <dmitry@aspia.ru>
+// Copyright (C) 2016-2022 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #define ASPIA_VERSION_H
 
 #define ASPIA_VERSION_MAJOR 2
-#define ASPIA_VERSION_MINOR 3
+#define ASPIA_VERSION_MINOR 4
 #define ASPIA_VERSION_PATCH 0
 
 #define ASPIA_VERSION_POSTFIX "dev"
