@@ -19,13 +19,13 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 
 #include "base/logging.h"
+#include "base/desktop/desktop_environment.h"
 #include "base/desktop/desktop_resizer.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
 
 #if defined(OS_WIN)
-#include "base/desktop/desktop_environment_win.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/screen_capturer_mirror.h"
@@ -45,7 +45,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     : preferred_type_(preferred_type),
       delegate_(delegate),
       power_save_blocker_(std::make_unique<PowerSaveBlocker>()),
-      environment_(std::make_unique<DesktopEnvironmentWin>())
+      environment_(DesktopEnvironment::create())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -262,17 +262,20 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_m
 
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
-    environment_->setWallpaper(enable);
+    if (environment_)
+        environment_->setWallpaper(enable);
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
-    environment_->setEffects(enable);
+    if (environment_)
+        environment_->setEffects(enable);
 }
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
-    environment_->setFontSmoothing(enable);
+    if (environment_)
+        environment_->setFontSmoothing(enable);
 }
 
 void ScreenCapturerWrapper::enableCursorPosition(bool enable)

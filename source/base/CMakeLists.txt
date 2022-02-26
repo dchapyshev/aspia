@@ -331,6 +331,7 @@ endif()
 if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_linux.cc
+        desktop/desktop_environment_linux.h
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()
@@ -338,6 +339,7 @@ endif()
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_mac.mm
+        desktop/desktop_environment_mac.h
         desktop/screen_capturer_mac.mm
         desktop/screen_capturer_mac.h)
 endif()

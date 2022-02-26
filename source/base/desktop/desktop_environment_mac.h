@@ -16,34 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_environment_linux.h"
+#ifndef BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H
+#define BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H
 
-#include "base/logging.h"
+#include "base/desktop/desktop_environment.h"
 
 namespace base {
 
-DesktopEnvironmentLinux::DesktopEnvironmentLinux() = default;
-
-DesktopEnvironmentLinux::~DesktopEnvironmentLinux() = default;
-
-void DesktopEnvironmentLinux::disableWallpaper()
+class DesktopEnvironmentMac : public DesktopEnvironment
 {
-    NOTIMPLEMENTED();
-}
+public:
+    DesktopEnvironmentMac();
+    ~DesktopEnvironmentMac() override;
 
-void DesktopEnvironmentLinux::disableFontSmoothing()
-{
-    NOTIMPLEMENTED();
-}
+protected:
+    void disableWallpaper() override;
+    void disableFontSmoothing() override;
+    void disableEffects() override;
+    void revertAll() override;
 
-void DesktopEnvironmentLinux::disableEffects()
-{
-    NOTIMPLEMENTED();
-}
-
-void DesktopEnvironmentLinux::revertAll()
-{
-    NOTIMPLEMENTED();
-}
+private:
+    DISALLOW_COPY_AND_ASSIGN(DesktopEnvironmentMac);
+};
 
 } // namespace base
+
+#endif // BASE_DESKTOP_DESKTOP_ENVIRONMENT_MAC_H

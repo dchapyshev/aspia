@@ -31,6 +31,8 @@ public:
     DesktopEnvironment();
     virtual ~DesktopEnvironment();
 
+    static std::unique_ptr<DesktopEnvironment> create();
+
     void setWallpaper(bool enable);
     void setFontSmoothing(bool enable);
     void setEffects(bool enable);
