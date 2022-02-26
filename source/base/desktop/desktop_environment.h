@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 
 #include <optional>
+#include <memory>
 
 namespace base {
 
