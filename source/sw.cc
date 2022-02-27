@@ -246,6 +246,7 @@ void build(Solution &s) {
     }
 
     auto setup_exe = [](auto &t) -> decltype(auto) {
+        t += cppstd;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
                 L->Subsystem = vs::Subsystem::Windows;
@@ -267,7 +268,7 @@ void build(Solution &s) {
         qt_progs_and_tr(client_core);
     }
 
-    auto add_exe = [&setup_exe](auto &base, const String &name) -> decltype(auto) {
+    auto add_exe = [&](auto &base, const String &name) -> decltype(auto) {
         return setup_exe(base.addExecutable(name));
     };
 
@@ -276,8 +277,8 @@ void build(Solution &s) {
     setup_target(console, "console");
     console.Public += client_core, qt_base;
     if (console.getBuildSettings().TargetOS.Type == OSType::Windows) {
-        console.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
-        console.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+        console += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
+        console += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
     }
     qt_progs_and_tr(console);
 
