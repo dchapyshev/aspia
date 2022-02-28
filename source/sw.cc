@@ -245,7 +245,7 @@ void build(Solution &s) {
             qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations6.qrc");
     }
 
-    auto setup_exe = [](auto &t) -> decltype(auto) {
+    auto setup_exe = [&](auto &t) -> decltype(auto) {
         t += cppstd;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
