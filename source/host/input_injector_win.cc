@@ -125,7 +125,7 @@ void InputInjectorWin::setScreenOffset(const base::Point& offset)
 
 void InputInjectorWin::setBlockInput(bool enable)
 {
-    switchToInputDesktop();
+    beforeInput();
     block_input_ = enable;
     BlockInput(!!enable);
 }
@@ -161,7 +161,7 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
         return;
     }
 
-    switchToInputDesktop();
+    beforeInput();
 
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
     bool curr_state = (event.flags() & proto::KeyEvent::CAPSLOCK) != 0;
@@ -195,7 +195,7 @@ void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
     if (text.empty())
         return;
 
-    switchToInputDesktop();
+    beforeInput();
 
     for (auto it = text.begin(); it != text.end(); ++it)
     {
@@ -214,7 +214,7 @@ void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
 
 void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
 {
-    switchToInputDesktop();
+    beforeInput();
 
     base::Size full_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
                          GetSystemMetrics(SM_CYVIRTUALSCREEN));
@@ -298,13 +298,8 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
     last_mouse_mask_ = mask;
 }
 
-void InputInjectorWin::switchToInputDesktop()
+void InputInjectorWin::beforeInput()
 {
-    base::Desktop input_desktop(base::Desktop::inputDesktop());
-
-    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
-        desktop_.setThreadDesktop(std::move(input_desktop));
-
     BlockInput(!!block_input_);
 
     // We send a notification to the system that it is used to prevent

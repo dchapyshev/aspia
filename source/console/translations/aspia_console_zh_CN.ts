@@ -273,17 +273,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="57"/>
+        <location filename="../main.cc" line="61"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="60"/>
+        <location filename="../main.cc" line="64"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="61"/>
+        <location filename="../main.cc" line="65"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>

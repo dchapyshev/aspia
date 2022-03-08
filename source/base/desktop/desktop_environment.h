@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 
 #include <optional>
+#include <memory>
 
 namespace base {
 
@@ -30,6 +31,8 @@ class DesktopEnvironment
 public:
     DesktopEnvironment();
     virtual ~DesktopEnvironment();
+
+    static std::unique_ptr<DesktopEnvironment> create();
 
     void setWallpaper(bool enable);
     void setFontSmoothing(bool enable);

@@ -22,6 +22,7 @@
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_server.h"
+#include "base/memory/local_memory.h"
 #include "host/desktop_session.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -48,7 +49,7 @@ public:
     void attachSession(const base::Location& location, base::SessionId session_id);
     void dettachSession(const base::Location& location);
 
-    std::shared_ptr<DesktopSessionProxy> sessionProxy() const;
+    base::local_shared_ptr<DesktopSessionProxy> sessionProxy() const;
 
 protected:
     // ipc::Server::Delegate implementation.
@@ -72,7 +73,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::IpcServer> server_;
     std::unique_ptr<DesktopSession> session_;
-    std::shared_ptr<DesktopSessionProxy> session_proxy_;
+    base::local_shared_ptr<DesktopSessionProxy> session_proxy_;
     base::WaitableTimer session_attach_timer_;
 
     State state_ = State::STOPPED;

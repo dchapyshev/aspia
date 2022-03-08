@@ -22,7 +22,7 @@
 
 namespace base {
 
-class ScopedTaskRunner::Impl : public std::enable_shared_from_this<Impl>
+class ScopedTaskRunner::Impl : public base::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(std::shared_ptr<TaskRunner> task_runner)
@@ -61,7 +61,7 @@ private:
 };
 
 ScopedTaskRunner::ScopedTaskRunner(std::shared_ptr<TaskRunner> task_runner)
-    : impl_(std::make_shared<Impl>(std::move(task_runner)))
+    : impl_(base::make_local_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }

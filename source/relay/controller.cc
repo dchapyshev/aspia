@@ -30,11 +30,6 @@ namespace {
 
 const std::chrono::seconds kReconnectTimeout{ 15 };
 
-#if defined(OS_WIN)
-const wchar_t kFirewallRuleName[] = L"Aspia Relay Service";
-const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
-#endif // defined(OS_WIN)
-
 class KeyDeleter
 {
 public:

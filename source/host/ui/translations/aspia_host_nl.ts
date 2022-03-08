@@ -268,18 +268,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="217"/>
-        <location filename="../host_main.cc" line="236"/>
+        <location filename="../host_main.cc" line="221"/>
+        <location filename="../host_main.cc" line="240"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="218"/>
+        <location filename="../host_main.cc" line="222"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Applicatie integriteits controle gefaald. Missende of ontbrekende onderdelen.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="237"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Export en import argumenten kunnen niet samen gespecificeerd worden.</translation>
     </message>
@@ -796,70 +796,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="77"/>
-        <location filename="../main_window.cc" line="529"/>
+        <location filename="../main_window.cc" line="78"/>
+        <location filename="../main_window.cc" line="530"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="153"/>
-        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="154"/>
+        <location filename="../main_window.cc" line="510"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="277"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="331"/>
+        <location filename="../main_window.cc" line="332"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="622"/>
+        <location filename="../main_window.cc" line="623"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="327"/>
-        <location filename="../main_window.cc" line="607"/>
+        <location filename="../main_window.cc" line="328"/>
+        <location filename="../main_window.cc" line="608"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="612"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="335"/>
+        <location filename="../main_window.cc" line="336"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="618"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="339"/>
+        <location filename="../main_window.cc" line="340"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="514"/>
+        <location filename="../main_window.cc" line="515"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="549"/>
+        <location filename="../main_window.cc" line="550"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="550"/>
+        <location filename="../main_window.cc" line="551"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
@@ -907,10 +907,10 @@
     <message>
         <location filename="../user_dialog.cc" line="134"/>
         <location filename="../user_dialog.cc" line="146"/>
-        <location filename="../user_dialog.cc" line="157"/>
-        <location filename="../user_dialog.cc" line="168"/>
-        <location filename="../user_dialog.cc" line="190"/>
-        <location filename="../user_dialog.cc" line="206"/>
+        <location filename="../user_dialog.cc" line="161"/>
+        <location filename="../user_dialog.cc" line="172"/>
+        <location filename="../user_dialog.cc" line="194"/>
+        <location filename="../user_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -925,12 +925,12 @@
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="158"/>
+        <location filename="../user_dialog.cc" line="162"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="169"/>
+        <location filename="../user_dialog.cc" line="173"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet leeg zijn en niet meer dan %n karakter bevatten.</numerusform>
@@ -938,12 +938,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="180"/>
+        <location filename="../user_dialog.cc" line="184"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveilings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="183"/>
+        <location filename="../user_dialog.cc" line="187"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -951,17 +951,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="187"/>
+        <location filename="../user_dialog.cc" line="191"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="207"/>
+        <location filename="../user_dialog.cc" line="211"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Onbekende interne fout bij het aanmaken of aanpassen van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="261"/>
+        <location filename="../user_dialog.cc" line="265"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>

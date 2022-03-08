@@ -20,6 +20,7 @@
 #define BASE_WIN_OBJECT_WATCHER_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 
 #include <memory>
 
@@ -103,7 +104,7 @@ public:
 
 private:
     class Impl;
-    std::shared_ptr<Impl> impl_;
+    base::local_shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(ObjectWatcher);
 };

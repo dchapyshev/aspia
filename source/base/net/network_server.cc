@@ -26,7 +26,7 @@
 
 namespace base {
 
-class NetworkServer::Impl : public std::enable_shared_from_this<Impl>
+class NetworkServer::Impl : public base::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(asio::io_context& io_context);
@@ -114,7 +114,7 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
 }
 
 NetworkServer::NetworkServer()
-    : impl_(std::make_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
+    : impl_(base::make_local_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }

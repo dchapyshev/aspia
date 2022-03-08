@@ -331,6 +331,7 @@ endif()
 if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_linux.cc
+        desktop/desktop_environment_linux.h
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()
@@ -338,6 +339,7 @@ endif()
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_mac.mm
+        desktop/desktop_environment_mac.h
         desktop/screen_capturer_mac.mm
         desktop/screen_capturer_mac.h)
 endif()
@@ -453,7 +455,18 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/byte_array.cc
     memory/byte_array.h
     memory/custom_new.cc
-    memory/typed_buffer.h)
+    memory/local_memory.h
+    memory/typed_buffer.h
+    memory/local_memory_impl/bad_local_weak_ptr.h
+    memory/local_memory_impl/checked_delete.h
+    memory/local_memory_impl/enable_shared_from_this.h
+    memory/local_memory_impl/local_shared_ptr.h
+    memory/local_memory_impl/local_weak_ptr.h
+    memory/local_memory_impl/make_local_shared.h
+    memory/local_memory_impl/shared_count.h
+    memory/local_memory_impl/sp_convertible.h
+    memory/local_memory_impl/sp_counted_base_nt.h
+    memory/local_memory_impl/sp_counted_impl.h)
 
 list(APPEND SOURCE_BASE_MEMORY_TESTS
     memory/aligned_memory_unittest.cc

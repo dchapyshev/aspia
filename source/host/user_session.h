@@ -166,7 +166,7 @@ private:
     ClientSessionList system_info_clients_;
 
     std::unique_ptr<DesktopSessionManager> desktop_session_;
-    std::shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
+    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
     Delegate* delegate_ = nullptr;
 

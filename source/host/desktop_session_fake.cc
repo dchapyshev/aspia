@@ -32,7 +32,7 @@ const int kFrameHeight = 600;
 
 } // namespace
 
-class DesktopSessionFake::FrameGenerator : public std::enable_shared_from_this<FrameGenerator>
+class DesktopSessionFake::FrameGenerator : public base::enable_shared_from_this<FrameGenerator>
 {
 public:
     explicit FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner);
@@ -72,7 +72,6 @@ DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRun
            static_cast<size_t>(frame_->stride()) * static_cast<size_t>(frame_->size().height()));
 
     frame_->setCapturerType(static_cast<uint32_t>(base::ScreenCapturer::Type::FAKE));
-    frame_->setDpi(base::Point(96, 96));
 }
 
 DesktopSessionFake::FrameGenerator::~FrameGenerator()
@@ -125,7 +124,7 @@ void DesktopSessionFake::FrameGenerator::generateFrame()
 
 DesktopSessionFake::DesktopSessionFake(
     std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate)
-    : frame_generator_(std::make_shared<FrameGenerator>(std::move(task_runner))),
+    : frame_generator_(base::make_local_shared<FrameGenerator>(std::move(task_runner))),
       delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";

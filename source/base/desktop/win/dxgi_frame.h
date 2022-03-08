@@ -39,7 +39,7 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
+    explicit DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
                        SharedMemoryFactory* shared_memory_factory);
     ~DxgiFrame();
 

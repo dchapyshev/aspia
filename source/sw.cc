@@ -43,6 +43,8 @@ void build(Solution &s) {
         t -= ".*_mac.*"_rr;
         t -= ".*_posix.*"_rr;
         t -= ".*_x11.*"_rr;
+        t -= ".*/x11/.*"_rr;
+        t -= ".*x11/.*"_rr;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             t += ".*_win.*"_rr;
             t += ".*/win/.*"_rr;
@@ -53,6 +55,8 @@ void build(Solution &s) {
             t += ".*_linux.*"_rr;
             t += ".*/linux/.*"_rr;
             t += ".*_x11.*"_rr;
+            t += ".*/x11/.*"_rr;
+            t += ".*x11/.*"_rr;
         }
         if (t.getBuildSettings().TargetOS.Type != OSType::Windows) {
             t.ExportAllSymbols = true;
@@ -298,6 +302,10 @@ void build(Solution &s) {
             core.Public += "sas.lib"_slib;
         core.Public += common, qt_base;
         core.Public += "org.sw.demo.boost.property_tree"_dep;
+        if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            core += "DXGI.lib"_slib;
+            core += "d3d11.lib"_slib;
+        }
         qt_progs_and_tr2(core);
 
         setup_exe(host);

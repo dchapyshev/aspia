@@ -335,8 +335,6 @@ void DesktopSessionAgent::onScreenCaptured(
         serialized_frame->set_shared_buffer_id(shared_memory->id());
         serialized_frame->set_width(frame->size().width());
         serialized_frame->set_height(frame->size().height());
-        serialized_frame->set_dpi_x(frame->dpi().x());
-        serialized_frame->set_dpi_y(frame->dpi().y());
 
         for (base::Region::Iterator it(frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
         {

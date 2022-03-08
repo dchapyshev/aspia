@@ -155,7 +155,7 @@ static double SincScaleFactor(double io_ratio)
 
 static int CalculateChunkSize(int block_size_, double io_ratio)
 {
-    return block_size_ / io_ratio;
+    return static_cast<int>(block_size_ / io_ratio);
 }
 
 SincResampler::SincResampler(double io_sample_rate_ratio,
@@ -223,7 +223,7 @@ void SincResampler::InitializeKernel()
 
         for (int i = 0; i < kKernelSize; ++i)
         {
-            const int idx = i + offset_idx * kKernelSize;
+            const size_t idx = static_cast<size_t>(i + offset_idx * kKernelSize);
             const float pre_sinc = base::kPiFloat * (i - kKernelSize / 2 - subsample_offset);
             kernel_pre_sinc_storage_[idx] = pre_sinc;
 
@@ -257,7 +257,7 @@ void SincResampler::SetRatio(double io_sample_rate_ratio)
     {
         for (int i = 0; i < kKernelSize; ++i)
         {
-            const int idx = i + offset_idx * kKernelSize;
+            const size_t idx = static_cast<size_t>(i + offset_idx * kKernelSize);
             const float window = kernel_window_storage_[idx];
             const float pre_sinc = kernel_pre_sinc_storage_[idx];
 
@@ -349,7 +349,7 @@ void SincResampler::Flush()
 {
     virtual_source_idx_ = 0;
     buffer_primed_ = false;
-    memset(input_buffer_.get(), 0, sizeof(*input_buffer_.get()) * input_buffer_size_);
+    memset(input_buffer_.get(), 0, sizeof(*input_buffer_.get()) * static_cast<size_t>(input_buffer_size_));
     UpdateRegions(false);
 }
 

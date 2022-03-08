@@ -22,6 +22,10 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 
+#if defined(USE_PCG_GENERATOR)
+#include "third_party/pcg-cpp/pcg_random.hpp"
+#endif // defined(USE_PCG_GENERATOR)
+
 #include <atomic>
 #include <random>
 
@@ -35,11 +39,16 @@ namespace {
 
 int randomInt()
 {
+#if defined(USE_PCG_GENERATOR)
+    pcg_extras::seed_seq_from<std::random_device> device;
+    pcg32_fast engine(device);
+#else // defined(USE_PCG_GENERATOR)
     std::random_device device;
-    std::mt19937 generator(device());
+    std::mt19937 engine(device());
+#endif
 
     std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
-    return distance(generator);
+    return distance(engine);
 }
 
 int createUniqueId()
@@ -170,7 +179,7 @@ const SharedMemory::PlatformHandle kInvalidHandle = -1;
 SharedMemory::SharedMemory(int id,
                            ScopedPlatformHandle&& handle,
                            void* data,
-                           std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+                           base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
     : factory_proxy_(std::move(factory_proxy)),
       handle_(std::move(handle)),
       data_(data),
@@ -192,7 +201,7 @@ SharedMemory::~SharedMemory()
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::create(
-    Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+    Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
 #if defined(OS_WIN)
     static const int kRetryCount = 10;
@@ -226,7 +235,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
 // static
 std::unique_ptr<SharedMemory> SharedMemory::open(
-    Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
+    Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
 {
 #if defined(OS_WIN)
     ScopedPlatformHandle file;

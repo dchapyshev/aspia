@@ -11,21 +11,23 @@ Currently supported
 - Remote desktop management
 - Remote desktop view
 - File transfer
+- System information
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
 - NAT traversal
 - Audio support
-- Client and Console for MacOS X and Linux
+- Client and Console for Windows, MacOSX and Linux
+- Host for Windows only
 
 System requirements
 -------------------
 - x86 or x86_64 CPU with SSE2 support
-- Windows 7/2008 R2 or higher, Debian 11/Ubuntu 20.04 Linux, MacOS X
+- Windows 7/2008 R2 or higher, Debian 11/Ubuntu 20.04 Linux, MacOSX
 
 Night builds
 ------------
-Nightly builds are [available](https://files.aspia.org/nightly) for Windows, MacOS X, Linux.
+Nightly builds are [available](https://files.aspia.org/nightly) for Windows, MacOSX, Linux.
 Please note that nightly builds are not a release and may contain bugs.
 
 Contacts

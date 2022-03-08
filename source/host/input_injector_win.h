@@ -38,10 +38,8 @@ public:
     void injectMouseEvent(const proto::MouseEvent& event) override;
 
 private:
-    void switchToInputDesktop();
+    void beforeInput();
     bool isCtrlAndAltPressed();
-
-    base::ScopedThreadDesktop desktop_;
 
     bool block_input_ = false;
     std::set<uint32_t> pressed_keys_;

@@ -54,7 +54,8 @@ const char* kTranslators[] =
     "Gregor Doroschenko (German)",
     "Lyhyrda Myhaylo (Ukrainian)",
     "Mark Jansen (Dutch)",
-    "Wang Qiang (Chinese)"
+    "Shun-An Lee (Chinese (Taiwan))",
+    "Wang Qiang (Chinese (China))"
 };
 
 const char* kThirdParty[] =

@@ -42,6 +42,8 @@ namespace {
 
 constexpr uint32_t kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEvent::WHEEL_UP;
 
+std::set<uint32_t> g_local_pressed_keys;
+
 bool isNumLockActivated()
 {
 #if defined(OS_WIN)
@@ -112,6 +114,17 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     setMouseTracking(true);
 
     enableKeyHooks(true);
+
+    connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
+            this, [=](Qt::ApplicationState state)
+    {
+        LOG(LS_WARNING) << "Application state changed: " << state;
+        if (state != Qt::ApplicationActive)
+        {
+            releaseKeyboardButtons();
+            releaseMouseButtons();
+        }
+    });
 }
 
 DesktopWidget::~DesktopWidget()
@@ -442,9 +455,9 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
     if (flags & proto::KeyEvent::PRESSED)
-        pressed_keys_.insert(usb_keycode);
+        remote_pressed_keys_.insert(usb_keycode);
     else
-        pressed_keys_.erase(usb_keycode);
+        remote_pressed_keys_.erase(usb_keycode);
 
     proto::KeyEvent event;
     event.set_usb_keycode(usb_keycode);
@@ -478,7 +491,7 @@ void DesktopWidget::releaseMouseButtons()
 
 void DesktopWidget::releaseKeyboardButtons()
 {
-    if (pressed_keys_.empty())
+    if (remote_pressed_keys_.empty())
         return;
 
     uint32_t flags = 0;
@@ -488,12 +501,12 @@ void DesktopWidget::releaseKeyboardButtons()
     proto::KeyEvent key_event;
     key_event.set_flags(flags);
 
-    auto it = pressed_keys_.begin();
-    while (it != pressed_keys_.end())
+    auto it = remote_pressed_keys_.begin();
+    while (it != remote_pressed_keys_.end())
     {
         key_event.set_usb_keycode(*it);
         emit sig_keyEvent(key_event);
-        it = pressed_keys_.erase(it);
+        it = remote_pressed_keys_.erase(it);
     }
 }
 
@@ -503,34 +516,45 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 {
     if (code == HC_ACTION)
     {
-        QWidget* root_widget = QApplication::activeWindow();
-        if (root_widget)
+        KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
+        if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
         {
-            DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
-            if (self && self->enable_key_sequenses_)
+            uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
+                proto::KeyEvent::PRESSED : 0);
+            uint32_t scan_code = hook->scanCode;
+
+            if (hook->flags & LLKHF_EXTENDED)
+                scan_code |= 0x100;
+
+            uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+                static_cast<int>(scan_code));
+            if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
             {
-                KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
+                DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
+                QWidget* root_widget = QApplication::activeWindow();
 
-                if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
+                if (root_widget && self && self->enable_key_sequenses_)
                 {
-                    uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
-                        proto::KeyEvent::PRESSED : 0);
-
                     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
                     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
 
-                    uint32_t scan_code = hook->scanCode;
+                    self->executeKeyEvent(usb_keycode, flags);
 
-                    if (hook->flags & LLKHF_EXTENDED)
-                        scan_code |= 0x100;
-
-                    uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
-                        static_cast<int>(scan_code));
-                    if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
-                    {
-                        self->executeKeyEvent(usb_keycode, flags);
+                    if (flags & proto::KeyEvent::PRESSED)
                         return TRUE;
-                    }
+
+                    auto result = g_local_pressed_keys.find(usb_keycode);
+                    if (result == g_local_pressed_keys.end())
+                        return TRUE;
+
+                    g_local_pressed_keys.erase(usb_keycode);
+                }
+                else
+                {
+                    if (flags & proto::KeyEvent::PRESSED)
+                        g_local_pressed_keys.insert(usb_keycode);
+                    else
+                        g_local_pressed_keys.erase(usb_keycode);
                 }
             }
         }

@@ -25,6 +25,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
+add_definitions(-DUSE_PCG_GENERATOR)
+
 if (TBB_FOUND)
     add_definitions(-DUSE_TBB_ALLOCATOR)
 endif()
@@ -190,9 +192,9 @@ set(CPACK_PACKAGE_NAME "aspia")
 set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
 set(CPACK_PACKAGE_CONTACT "Dmitry Chapyshev <dmitry@aspia.ru>")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://aspia.org/")
-set(CPACK_PACKAGE_VERSION "2.3.0")
+set(CPACK_PACKAGE_VERSION "2.4.0")
 set(CPACK_PACKAGE_VERSION_MAJOR "2")
-set(CPACK_PACKAGE_VERSION_MINOR "3")
+set(CPACK_PACKAGE_VERSION_MINOR "4")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 #--------------------------------------------------------------------------------------------------

@@ -55,7 +55,7 @@ protected:
     void reset() override;
 
 private:
-    std::shared_ptr<DxgiDuplicatorController> controller_;
+    base::local_shared_ptr<DxgiDuplicatorController> controller_;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     FrameQueue<DxgiFrame> queue_;

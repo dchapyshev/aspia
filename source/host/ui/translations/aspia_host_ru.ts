@@ -268,18 +268,18 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="217"/>
-        <location filename="../host_main.cc" line="236"/>
+        <location filename="../host_main.cc" line="221"/>
+        <location filename="../host_main.cc" line="240"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="218"/>
+        <location filename="../host_main.cc" line="222"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="237"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
@@ -798,70 +798,70 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="77"/>
-        <location filename="../main_window.cc" line="529"/>
+        <location filename="../main_window.cc" line="78"/>
+        <location filename="../main_window.cc" line="530"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="153"/>
-        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="154"/>
+        <location filename="../main_window.cc" line="510"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="277"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Not available</source>
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="335"/>
+        <location filename="../main_window.cc" line="336"/>
         <source>Connected to a router %1</source>
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="622"/>
+        <location filename="../main_window.cc" line="623"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="327"/>
-        <location filename="../main_window.cc" line="607"/>
+        <location filename="../main_window.cc" line="328"/>
+        <location filename="../main_window.cc" line="608"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="339"/>
+        <location filename="../main_window.cc" line="340"/>
         <source>Failed to connect to router %1</source>
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="612"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="331"/>
+        <location filename="../main_window.cc" line="332"/>
         <source>Connecting to a router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="618"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="514"/>
+        <location filename="../main_window.cc" line="515"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="549"/>
+        <location filename="../main_window.cc" line="550"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="550"/>
+        <location filename="../main_window.cc" line="551"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
@@ -909,10 +909,10 @@
     <message>
         <location filename="../user_dialog.cc" line="134"/>
         <location filename="../user_dialog.cc" line="146"/>
-        <location filename="../user_dialog.cc" line="157"/>
-        <location filename="../user_dialog.cc" line="168"/>
-        <location filename="../user_dialog.cc" line="190"/>
-        <location filename="../user_dialog.cc" line="206"/>
+        <location filename="../user_dialog.cc" line="161"/>
+        <location filename="../user_dialog.cc" line="172"/>
+        <location filename="../user_dialog.cc" line="194"/>
+        <location filename="../user_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -927,12 +927,12 @@
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="158"/>
+        <location filename="../user_dialog.cc" line="162"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="169"/>
+        <location filename="../user_dialog.cc" line="173"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -941,12 +941,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="180"/>
+        <location filename="../user_dialog.cc" line="184"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="183"/>
+        <location filename="../user_dialog.cc" line="187"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -955,17 +955,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="187"/>
+        <location filename="../user_dialog.cc" line="191"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="207"/>
+        <location filename="../user_dialog.cc" line="211"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="261"/>
+        <location filename="../user_dialog.cc" line="265"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>

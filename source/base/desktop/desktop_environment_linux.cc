@@ -16,28 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_environment.h"
+#include "base/desktop/desktop_environment_linux.h"
 
 #include "base/logging.h"
 
 namespace base {
 
-void DesktopEnvironment::disableWallpaper()
+DesktopEnvironmentLinux::DesktopEnvironmentLinux() = default;
+
+DesktopEnvironmentLinux::~DesktopEnvironmentLinux() = default;
+
+void DesktopEnvironmentLinux::disableWallpaper()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::disableFontSmoothing()
+void DesktopEnvironmentLinux::disableFontSmoothing()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::disableEffects()
+void DesktopEnvironmentLinux::disableEffects()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::revertAll()
+void DesktopEnvironmentLinux::revertAll()
 {
     NOTIMPLEMENTED();
 }

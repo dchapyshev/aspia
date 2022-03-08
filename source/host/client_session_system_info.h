@@ -39,6 +39,7 @@ protected:
     void onStarted() override;
 
 private:
+    DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);
 };
 
 } // namespace host

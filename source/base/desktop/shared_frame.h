@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_SHARED_FRAME_H
 
 #include "base/desktop/frame.h"
+#include "base/memory/local_memory.h"
 
 #include <memory>
 
@@ -46,9 +47,9 @@ public:
     Frame* underlyingFrame();
 
 private:
-    explicit SharedFrame(std::shared_ptr<Frame>& frame);
+    explicit SharedFrame(base::local_shared_ptr<Frame>& frame);
 
-    std::shared_ptr<Frame> frame_;
+    base::local_shared_ptr<Frame> frame_;
 
     DISALLOW_COPY_AND_ASSIGN(SharedFrame);
 };

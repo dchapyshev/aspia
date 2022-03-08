@@ -32,98 +32,98 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="365"/>
+        <location filename="../client_main.cc" line="369"/>
         <source>Remote computer address.</source>
         <translation>Endereço do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="369"/>
+        <location filename="../client_main.cc" line="373"/>
         <source>Remote computer port.</source>
         <translation>Porta do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="374"/>
+        <location filename="../client_main.cc" line="378"/>
         <source>Name of user.</source>
         <translation>Usuário.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="378"/>
+        <location filename="../client_main.cc" line="382"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="382"/>
+        <location filename="../client_main.cc" line="386"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
         <translation>Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="387"/>
+        <location filename="../client_main.cc" line="391"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="391"/>
+        <location filename="../client_main.cc" line="395"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="395"/>
+        <location filename="../client_main.cc" line="399"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="399"/>
+        <location filename="../client_main.cc" line="403"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="403"/>
+        <location filename="../client_main.cc" line="407"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="407"/>
+        <location filename="../client_main.cc" line="411"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="411"/>
+        <location filename="../client_main.cc" line="415"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="415"/>
+        <location filename="../client_main.cc" line="419"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="419"/>
+        <location filename="../client_main.cc" line="423"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="423"/>
+        <location filename="../client_main.cc" line="427"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="427"/>
+        <location filename="../client_main.cc" line="431"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="431"/>
+        <location filename="../client_main.cc" line="435"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="435"/>
+        <location filename="../client_main.cc" line="439"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="56"/>
-        <location filename="../client_main.cc" line="545"/>
+        <location filename="../client_main.cc" line="549"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -132,7 +132,7 @@
         <translation type="vanished">Tipo de sessão incorreta.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="546"/>
+        <location filename="../client_main.cc" line="550"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -1705,41 +1705,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="372"/>
-        <location filename="../ui/desktop_panel.cc" line="383"/>
-        <location filename="../ui/desktop_panel.cc" line="394"/>
-        <location filename="../ui/desktop_panel.cc" line="405"/>
-        <location filename="../ui/desktop_panel.cc" line="416"/>
+        <location filename="../ui/desktop_panel.cc" line="376"/>
+        <location filename="../ui/desktop_panel.cc" line="387"/>
+        <location filename="../ui/desktop_panel.cc" line="398"/>
+        <location filename="../ui/desktop_panel.cc" line="409"/>
+        <location filename="../ui/desktop_panel.cc" line="420"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="373"/>
+        <location filename="../ui/desktop_panel.cc" line="377"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="384"/>
+        <location filename="../ui/desktop_panel.cc" line="388"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="395"/>
+        <location filename="../ui/desktop_panel.cc" line="399"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="406"/>
+        <location filename="../ui/desktop_panel.cc" line="410"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="417"/>
+        <location filename="../ui/desktop_panel.cc" line="421"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="490"/>
+        <location filename="../ui/desktop_panel.cc" line="494"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -1870,37 +1870,37 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="90"/>
+        <location filename="../ui/file_remove_dialog.cc" line="97"/>
         <source>Deleting: %1</source>
         <translation>Excluindo: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <location filename="../ui/file_remove_dialog.cc" line="127"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Ocorreu um erro ao obter a lista de arquivos: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="121"/>
+        <location filename="../ui/file_remove_dialog.cc" line="132"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Erro ao excluir &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="128"/>
+        <location filename="../ui/file_remove_dialog.cc" line="139"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="136"/>
+        <location filename="../ui/file_remove_dialog.cc" line="147"/>
         <source>Skip</source>
         <translation>Pular</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="139"/>
+        <location filename="../ui/file_remove_dialog.cc" line="150"/>
         <source>Skip All</source>
         <translation>Pular todos</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_remove_dialog.cc" line="153"/>
         <source>Abort</source>
         <translation>Cancelar</translation>
     </message>
@@ -1908,87 +1908,87 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="98"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
         <source>Current Task: Copying items.</source>
         <translation>Tarefa atual: Copiando itens.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="110"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="119"/>
         <source>From: %1</source>
         <translation>De: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="115"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
         <source>To: %1</source>
         <translation>Para %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="143"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="156"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="155"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="168"/>
         <source>Skip</source>
         <translation>Pular</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="158"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="171"/>
         <source>Skip All</source>
         <translation>Pular todos</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="161"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="174"/>
         <source>Replace</source>
         <translation>Substituir</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="164"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="177"/>
         <source>Replace All</source>
         <translation>Substituir todos</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="180"/>
         <source>Abort</source>
         <translation>Abortar</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="241"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="256"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Tarefa atual: Cancelando transferência de arquivos.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="255"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Ocorreu um erro ao montar a fila de arquivos para cópia</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Erro ao criar diretório &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="268"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="283"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Erro ao criar arquivo &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Erro ao abrir arquivo &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="282"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Erro ao gravar arquivo &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Erro ao ler arquivo &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="296"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
         <source>Unknown error type while copying files</source>
         <translation>Erro desconhecido ao copiar arquivos</translation>
     </message>

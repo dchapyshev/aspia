@@ -24,7 +24,7 @@
 namespace base {
 
 SharedMemoryFactory::SharedMemoryFactory(Delegate* delegate)
-    : factory_proxy_(std::make_shared<SharedMemoryFactoryProxy>(this)),
+    : factory_proxy_(base::make_local_shared<SharedMemoryFactoryProxy>(this)),
       delegate_(delegate)
 {
     // Nothing

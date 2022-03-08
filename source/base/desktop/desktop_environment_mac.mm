@@ -16,28 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/desktop_environment.h"
+#include "base/desktop/desktop_environment_mac.h"
 
 #include "base/logging.h"
 
 namespace base {
 
-void DesktopEnvironment::disableWallpaper()
+DesktopEnvironmentMac::DesktopEnvironmentMac() = default;
+
+DesktopEnvironmentMac::~DesktopEnvironmentMac() = default;
+
+void DesktopEnvironmentMac::disableWallpaper()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::disableFontSmoothing()
+void DesktopEnvironmentMac::disableFontSmoothing()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::disableEffects()
+void DesktopEnvironmentMac::disableEffects()
 {
     NOTIMPLEMENTED();
 }
 
-void DesktopEnvironment::revertAll()
+void DesktopEnvironmentMac::revertAll()
 {
     NOTIMPLEMENTED();
 }

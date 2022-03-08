@@ -23,7 +23,7 @@
 
 namespace base {
 
-class WaitableTimer::Impl : public std::enable_shared_from_this<Impl>
+class WaitableTimer::Impl : public base::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(Type type,
@@ -99,7 +99,7 @@ void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
 {
     stop();
 
-    impl_ = std::make_shared<Impl>(type_, std::move(signal_callback), task_runner_);
+    impl_ = base::make_local_shared<Impl>(type_, std::move(signal_callback), task_runner_);
     impl_->start(time_delta);
 }
 

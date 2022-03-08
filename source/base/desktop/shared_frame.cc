@@ -20,7 +20,7 @@
 
 namespace base {
 
-SharedFrame::SharedFrame(std::shared_ptr<Frame>& frame)
+SharedFrame::SharedFrame(base::local_shared_ptr<Frame>& frame)
     : Frame(frame->size(), frame->format(), frame->stride(),
             frame->frameData(), frame->sharedMemory()),
       frame_(frame)
@@ -33,7 +33,7 @@ SharedFrame::~SharedFrame() = default;
 // static
 std::unique_ptr<SharedFrame> SharedFrame::wrap(std::unique_ptr<Frame> desktop_frame)
 {
-    std::shared_ptr<Frame> shared_frame(desktop_frame.release());
+    base::local_shared_ptr<Frame> shared_frame(desktop_frame.release());
     return std::unique_ptr<SharedFrame>(new SharedFrame(shared_frame));
 }
 

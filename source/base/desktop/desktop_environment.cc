@@ -18,7 +18,18 @@
 
 #include "base/desktop/desktop_environment.h"
 
+#include "build/build_config.h"
 #include "base/logging.h"
+
+#if defined(OS_WIN)
+#include "base/desktop/desktop_environment_win.h"
+#elif defined(OS_MAC)
+#include "base/desktop/desktop_environment_mac.h"
+#elif defined(OS_LINUX)
+#include "base/desktop/desktop_environment_linux.h"
+#else
+#warning Not supported platform
+#endif
 
 namespace base {
 
@@ -30,6 +41,21 @@ DesktopEnvironment::DesktopEnvironment()
 DesktopEnvironment::~DesktopEnvironment()
 {
     LOG(LS_INFO) << "Dtor";
+}
+
+// static
+std::unique_ptr<DesktopEnvironment> DesktopEnvironment::create()
+{
+#if defined(OS_WIN)
+    return std::make_unique<DesktopEnvironmentWin>();
+#elif defined(OS_MAC)
+    return std::make_unique<DesktopEnvironmentMac>();
+#elif defined(OS_LINUX)
+    return std::make_unique<DesktopEnvironmentLinux>();
+#else
+#warning Not supported platform
+    return nullptr;
+#endif
 }
 
 void DesktopEnvironment::setWallpaper(bool enable)

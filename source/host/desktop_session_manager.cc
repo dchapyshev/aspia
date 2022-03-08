@@ -33,7 +33,7 @@ namespace host {
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
-      session_proxy_(std::make_shared<DesktopSessionProxy>()),
+      session_proxy_(base::make_local_shared<DesktopSessionProxy>()),
       session_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       delegate_(delegate)
 {
@@ -130,7 +130,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_proxy_->attachAndStart(session_.get());
 }
 
-std::shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
+base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
 {
     return session_proxy_;
 }

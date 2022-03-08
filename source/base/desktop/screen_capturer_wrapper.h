@@ -78,13 +78,14 @@ private:
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;
+    uint32_t capture_counter_ = 0;
 
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     std::unique_ptr<DesktopEnvironment> environment_;
     std::unique_ptr<DesktopResizer> resizer_;
     std::unique_ptr<ScreenCapturer> screen_capturer_;
 
-    THREAD_CHECKER(thread_checker_)
+    THREAD_CHECKER(thread_checker_);
 
     DISALLOW_COPY_AND_ASSIGN(ScreenCapturerWrapper);
 };

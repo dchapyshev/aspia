@@ -20,6 +20,7 @@
 #define BASE_NET_NETWORK_SERVER_H
 
 #include "base/macros_magic.h"
+#include "base/memory/local_memory.h"
 
 #include <cstdint>
 #include <memory>
@@ -48,7 +49,7 @@ public:
 
 private:
     class Impl;
-    std::shared_ptr<Impl> impl_;
+    base::local_shared_ptr<Impl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkServer);
 };

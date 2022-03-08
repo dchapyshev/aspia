@@ -63,7 +63,6 @@ private:
 
     win::ScopedGetDC desktop_dc_;
     std::unique_ptr<MouseCursor> mouse_cursor_;
-    Point last_dpi_;
     CURSORINFO curr_cursor_info_;
     CURSORINFO prev_cursor_info_;
 

@@ -72,7 +72,7 @@ ClientSessionDesktop::~ClientSessionDesktop()
 }
 
 void ClientSessionDesktop::setDesktopSessionProxy(
-    std::shared_ptr<DesktopSessionProxy> desktop_session_proxy)
+    base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy)
 {
     desktop_session_proxy_ = std::move(desktop_session_proxy);
     DCHECK(desktop_session_proxy_);

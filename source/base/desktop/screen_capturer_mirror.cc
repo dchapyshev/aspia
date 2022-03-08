@@ -137,12 +137,7 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 
     const Rect& screen_rect = helper_->screenRect();
 
-    last_dpi_.setX(GetDeviceCaps(desktop_dc_, LOGPIXELSX));
-    last_dpi_.setY(GetDeviceCaps(desktop_dc_, LOGPIXELSY));
-
     frame_->setTopLeft(screen_rect.topLeft().subtract(desktop_rect_.topLeft()));
-    frame_->setDpi(last_dpi_);
-
     return frame_.get();
 }
 
@@ -185,7 +180,11 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
             if (mouse_cursor_)
             {
                 prev_cursor_info_ = curr_cursor_info_;
-                mouse_cursor_->dpi() = last_dpi_;
+
+                int dpi_x = GetDeviceCaps(desktop_dc_, LOGPIXELSX);
+                int dpi_y = GetDeviceCaps(desktop_dc_, LOGPIXELSY);
+
+                mouse_cursor_->dpi() = Point(dpi_x, dpi_y);
                 return mouse_cursor_.get();
             }
         }

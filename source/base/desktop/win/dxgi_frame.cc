@@ -24,7 +24,7 @@
 
 namespace base {
 
-DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
+DxgiFrame::DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
                      SharedMemoryFactory* shared_memory_factory)
     : context_(std::move(controller)),
       shared_memory_factory_(shared_memory_factory)

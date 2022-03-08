@@ -64,7 +64,6 @@ private:
     win::ScopedCreateDC memory_dc_;
 
     FrameQueue<Frame> queue_;
-    Point last_dpi_;
 
     std::unique_ptr<MouseCursor> mouse_cursor_;
     CURSORINFO curr_cursor_info_;

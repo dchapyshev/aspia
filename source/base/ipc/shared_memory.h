@@ -21,6 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "base/logging.h"
+#include "base/memory/local_memory.h"
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
@@ -86,9 +87,9 @@ public:
     virtual ~SharedMemory() override;
 
     static std::unique_ptr<SharedMemory> create(
-        Mode mode, size_t size, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
+        Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
     static std::unique_ptr<SharedMemory> open(
-        Mode mode, int id, std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
+        Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy = nullptr);
 
     // SharedMemoryBase implementation.
     void* data() override { return data_; }
@@ -99,9 +100,9 @@ private:
     SharedMemory(int id,
                  ScopedPlatformHandle&& handle,
                  void* data,
-                 std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
+                 base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy);
 
-    std::shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
+    base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy_;
     ScopedPlatformHandle handle_;
     void* data_;
     int id_;
