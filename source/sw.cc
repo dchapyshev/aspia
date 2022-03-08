@@ -258,7 +258,8 @@ void build(Solution &s) {
         qt_progs_and_tr(client_core);
     }
 
-    auto setup_exe = [](auto &t) -> decltype(auto) {
+    auto setup_exe = [&](auto &t) -> decltype(auto) {
+        t += cppstd;
         if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
             if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
                 L->Subsystem = vs::Subsystem::Windows;
@@ -277,7 +278,7 @@ void build(Solution &s) {
         }
         return t;
     };
-    auto add_exe = [&setup_exe](auto &base, const String &name) -> decltype(auto) {
+    auto add_exe = [&](auto &base, const String &name) -> decltype(auto) {
         return setup_exe(base.addExecutable(name));
     };
 
