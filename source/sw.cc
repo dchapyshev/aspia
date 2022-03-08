@@ -134,7 +134,8 @@ void build(Solution &s) {
                 "Avrt.lib"_slib,
                 "comsuppw.lib"_slib,
                 "Winspool.lib"_slib,
-                "Setupapi.lib"_slib
+                "Setupapi.lib"_slib,
+                "Wtsapi32.lib"_slib
                 ;
         } else {
             base -= "win/.*"_rr;
