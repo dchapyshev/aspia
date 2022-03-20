@@ -32,9 +32,18 @@ namespace {
 void updatePerUserSystemParameters()
 {
     win::ScopedHandle user_token;
-    if (!WTSQueryUserToken(WTSGetActiveConsoleSessionId(), user_token.recieve()))
+
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
+    else
+    {
+        if (!WTSQueryUserToken(session_id, user_token.recieve()))
+        {
+            PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        }
     }
 
     // The process of the desktop session is running with "SYSTEM" account.
@@ -60,9 +69,13 @@ void updatePerUserSystemParameters()
                 GetProcAddress(module, "UpdatePerUserSystemParameters"));
         if (update_per_user_system_parameters)
         {
+            static const DWORD kUserLoggedOn = 1;
+            static const DWORD kPolicyChange = 2;
+            static const DWORD kRemoteSettings = 4;
+
             // WARNING! Undocumented function!
             // Any ideas how to update user settings without using it?
-            if (!update_per_user_system_parameters(0x06))
+            if (!update_per_user_system_parameters(kUserLoggedOn | kPolicyChange | kRemoteSettings))
             {
                 PLOG(LS_WARNING) << "UpdatePerUserSystemParameters failed";
             }
