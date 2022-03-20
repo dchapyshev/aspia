@@ -100,7 +100,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
     {
         ComPtr<IDXGIAdapter> adapter;
 
-        error = factory->EnumAdapters(i, adapter.GetAddressOf());
+        error = factory->EnumAdapters(static_cast<UINT>(i), adapter.GetAddressOf());
         if (error.Error() == S_OK)
         {
             D3dDevice device;
