@@ -71,10 +71,14 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
     return session_id != 0;
 }
 
-DxgiDuplicatorController::DxgiDuplicatorController() = default;
+DxgiDuplicatorController::DxgiDuplicatorController()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 
 DxgiDuplicatorController::~DxgiDuplicatorController()
 {
+    LOG(LS_INFO) << "Dtor";
     deinitialize();
 }
 

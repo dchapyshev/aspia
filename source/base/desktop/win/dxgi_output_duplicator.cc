@@ -81,6 +81,8 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(const D3dDevice& device,
       initial_desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates)),
       desktop_rect_(RECTToDesktopRect(desc.DesktopCoordinates))
 {
+    LOG(LS_INFO) << "Ctor";
+
     DCHECK(output_);
     DCHECK(!desktop_rect_.isEmpty());
     DCHECK_GT(desktop_rect_.width(), 0);
@@ -93,6 +95,8 @@ DxgiOutputDuplicator::DxgiOutputDuplicator(DxgiOutputDuplicator&& other) = defau
 
 DxgiOutputDuplicator::~DxgiOutputDuplicator()
 {
+    LOG(LS_INFO) << "Dtor";
+
     if (duplication_)
         duplication_->ReleaseFrame();
 

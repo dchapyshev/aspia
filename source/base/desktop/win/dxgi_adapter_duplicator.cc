@@ -41,11 +41,15 @@ bool isValidRect(const RECT& rect)
 DxgiAdapterDuplicator::DxgiAdapterDuplicator(const D3dDevice& device)
     : device_(device)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 DxgiAdapterDuplicator::DxgiAdapterDuplicator(DxgiAdapterDuplicator&&) = default;
-DxgiAdapterDuplicator::~DxgiAdapterDuplicator() = default;
+
+DxgiAdapterDuplicator::~DxgiAdapterDuplicator()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 bool DxgiAdapterDuplicator::initialize()
 {
