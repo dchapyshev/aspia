@@ -134,7 +134,8 @@ void build(Solution &s) {
                 "Avrt.lib"_slib,
                 "comsuppw.lib"_slib,
                 "Winspool.lib"_slib,
-                "Setupapi.lib"_slib
+                "Setupapi.lib"_slib,
+                "Wtsapi32.lib"_slib
                 ;
         } else {
             base -= "win/.*"_rr;
@@ -245,16 +246,6 @@ void build(Solution &s) {
             qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations6.qrc");
     }
 
-    auto setup_exe = [&](auto &t) -> decltype(auto) {
-        t += cppstd;
-        if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
-            if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
-                L->Subsystem = vs::Subsystem::Windows;
-            t += "org.sw.demo.qtproject.qt.base.winmain" QT_VERSION ""_dep;
-        }
-        return t;
-    };
-
     //
     auto &client_core = add_lib("client");
     {
@@ -268,6 +259,26 @@ void build(Solution &s) {
         qt_progs_and_tr(client_core);
     }
 
+    auto setup_exe = [&](auto &t) -> decltype(auto) {
+        t += cppstd;
+        if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            if (auto L = t.getSelectedTool()->template as<VisualStudioLinker*>(); L)
+                L->Subsystem = vs::Subsystem::Windows;
+            t += "org.sw.demo.qtproject.qt.base.winmain" QT_VERSION ""_dep;
+        }
+        if (t.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            t.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+        }
+        if (t.getBuildSettings().TargetOS.Type == OSType::Linux) {
+            t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.platforms.qwayland.generic" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.platforms.qwayland.egl" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.hardwareintegration.client.wayland_egl" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.shellintegration.xdg" QT_VERSION ""_dep;
+            t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.decorations.bradient" QT_VERSION ""_dep;
+        }
+        return t;
+    };
     auto add_exe = [&](auto &base, const String &name) -> decltype(auto) {
         return setup_exe(base.addExecutable(name));
     };
@@ -276,10 +287,6 @@ void build(Solution &s) {
     auto &console = add_exe(aspia, "console");
     setup_target(console, "console");
     console.Public += client_core, qt_base;
-    if (console.getBuildSettings().TargetOS.Type == OSType::Windows) {
-        console += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
-        console += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
-    }
     qt_progs_and_tr(console);
 
     auto &client = add_exe(aspia, "client_exe");
@@ -298,8 +305,6 @@ void build(Solution &s) {
         core.Public += common, qt_base;
         core.Public += "org.sw.demo.boost.property_tree"_dep;
         if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
-            core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
-            core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
             core += "DXGI.lib"_slib;
             core += "d3d11.lib"_slib;
         }

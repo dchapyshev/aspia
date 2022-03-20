@@ -12,12 +12,11 @@ jobs:
       run: ./sw build source -static
     #- name: test
       #run: ./sw test source
-    - name: Upload Unit Test Results
-      if: always() && matrix.os == 'windows-latest'
+    - name: Upload Binaries
       uses: actions/upload-artifact@v2
       with:
-        name: Binaries (${{ matrix.os }})
-        path: .sw/out/**
+        name: sw-windows
+        path: .sw/out
 
   linux:
     runs-on: ubuntu-20.04
@@ -28,12 +27,14 @@ jobs:
       run: |
         sudo dnf -y update
         sudo dnf -y install flex bison cmake which gcc clang clang-tools-extra lld git \
-            lttng-tools-devel lttng-ust-devel libproxy-devel mesa-libGL-devel \
-            libXfixes-devel libXtst-devel libXext-devel libXrender-devel libX11-devel pulseaudio-libs-devel cups-devel
+            lttng-tools-devel lttng-ust-devel libproxy-devel mesa-libGL-devel mesa-libEGL-devel \
+            libXfixes-devel libXtst-devel libXext-devel libXrender-devel libX11-devel pulseaudio-libs-devel \
+            cups-devel wayland-devel libxkbcommon-devel
     - uses: egorpugin/sw-action@master
     - run: ./sw -static build source -compiler gcc
-    - uses: actions/upload-artifact@v1
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v2
       with:
-        name: sw
+        name: sw-linux
         path: .sw/out
-           
+
