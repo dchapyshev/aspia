@@ -28,6 +28,7 @@
 #include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
+#include "base/win/message_window.h"
 #include "host/input_injector_win.h"
 #include "host/system_settings.h"
 
@@ -82,11 +83,14 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
+
+    ui_thread_.start(base::MessageLoop::Type::WIN, this);
 }
 
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
+    ui_thread_.stop();
 }
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
@@ -384,6 +388,26 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     channel_->send(base::serialize(*outgoing_message));
 }
 
+void DesktopSessionAgent::onBeforeThreadRunning()
+{
+    LOG(LS_INFO) << "UI thread starting";
+
+    message_window_ = std::make_unique<base::win::MessageWindow>();
+    if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
+                                           this,
+                                           std::placeholders::_1, std::placeholders::_2,
+                                           std::placeholders::_3, std::placeholders::_4)))
+    {
+        LOG(LS_ERROR) << "Couldn't create window.";
+        return;
+    }
+}
+
+void DesktopSessionAgent::onAfterThreadRunning()
+{
+    LOG(LS_INFO) << "UI thread stopping";
+}
+
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     proto::internal::DesktopToService* outgoing_message =
@@ -395,8 +419,6 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 void DesktopSessionAgent::setEnabled(bool enable)
 {
     LOG(LS_INFO) << "Enable session: " << enable;
-
-    base::DesktopEnvironmentWin::updateEnvironment();
 
     if (is_session_enabled_ == enable)
     {
@@ -501,6 +523,35 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
             std::bind(&DesktopSessionAgent::captureBegin, shared_from_this()),
             capture_scheduler_->nextCaptureDelay());
     }
+}
+
+bool DesktopSessionAgent::onWindowsMessage(
+    UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& result)
+{
+    switch (message)
+    {
+        case WM_QUERYENDSESSION:
+        {
+            LOG(LS_INFO) << "WM_QUERYENDSESSION received";
+
+            base::DesktopEnvironmentWin::updateEnvironment();
+
+            result = TRUE;
+            return true;
+        }
+
+        case WM_ENDSESSION:
+        {
+            LOG(LS_INFO) << "WM_ENDSESSION received";
+            result = FALSE;
+            return true;
+        }
+
+        default:
+            break;
+    }
+
+    return false;
 }
 
 } // namespace host

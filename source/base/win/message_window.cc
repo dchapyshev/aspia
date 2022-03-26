@@ -68,7 +68,7 @@ bool MessageWindow::create(MessageCallback message_callback)
     hwnd_ = CreateWindowW(kWindowClassName,
                           kWindowName,
                           0, 0, 0, 0, 0,
-                          HWND_MESSAGE,
+                          nullptr,
                           nullptr,
                           instance,
                           this);
@@ -78,6 +78,7 @@ bool MessageWindow::create(MessageCallback message_callback)
         return false;
     }
 
+    ShowWindow(hwnd_, SW_HIDE);
     return true;
 }
 

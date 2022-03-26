@@ -73,9 +73,13 @@ void updatePerUserSystemParameters()
             static const DWORD kPolicyChange = 2;
             static const DWORD kRemoteSettings = 4;
 
+            DWORD flags = kPolicyChange | kRemoteSettings;
+            if (user_token.isValid())
+                flags |= kUserLoggedOn;
+
             // WARNING! Undocumented function!
             // Any ideas how to update user settings without using it?
-            if (!update_per_user_system_parameters(kUserLoggedOn | kPolicyChange | kRemoteSettings))
+            if (!update_per_user_system_parameters(flags))
             {
                 PLOG(LS_WARNING) << "UpdatePerUserSystemParameters failed";
             }
@@ -101,13 +105,13 @@ DesktopEnvironmentWin::DesktopEnvironmentWin()
 DesktopEnvironmentWin::~DesktopEnvironmentWin()
 {
     LOG(LS_INFO) << "Dtor";
-
     revertAll();
 }
 
 // static
 void DesktopEnvironmentWin::updateEnvironment()
 {
+    LOG(LS_INFO) << "Updating environment";
     updatePerUserSystemParameters();
 }
 
@@ -194,8 +198,7 @@ void DesktopEnvironmentWin::revertAll()
 
     if (drop_shadow_changed_)
     {
-        if (!SystemParametersInfoW(
-            SPI_SETDROPSHADOW, 0, reinterpret_cast<PVOID>(TRUE), SPIF_SENDCHANGE))
+        if (!SystemParametersInfoW(SPI_SETDROPSHADOW, 0, reinterpret_cast<PVOID>(TRUE), SPIF_SENDCHANGE))
         {
             PLOG(LS_WARNING) << "SystemParametersInfoW failed";
         }

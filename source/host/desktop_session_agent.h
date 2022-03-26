@@ -23,6 +23,7 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
+#include "base/threading/thread.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_internal.pb.h"
 
@@ -32,6 +33,10 @@ class CaptureScheduler;
 class TaskRunner;
 class Thread;
 class SharedFrame;
+
+namespace win {
+class MessageWindow;
+} // namespace win
 } // namespace base
 
 namespace host {
@@ -44,6 +49,7 @@ class DesktopSessionAgent
       public base::IpcChannel::Listener,
       public base::SharedMemoryFactory::Delegate,
       public base::ScreenCapturerWrapper::Delegate,
+      public base::Thread::Delegate,
       public common::Clipboard::Delegate
 {
 public:
@@ -68,6 +74,10 @@ protected:
                           const base::MouseCursor* mouse_cursor) override;
     void onCursorPositionChanged(const base::Point& position) override;
 
+    // base::Thread::Delegate implementation.
+    void onBeforeThreadRunning() override;
+    void onAfterThreadRunning() override;
+
     // common::Clipboard::Delegate implementation.
     void onClipboardEvent(const proto::ClipboardEvent& event) override;
 
@@ -75,10 +85,14 @@ private:
     void setEnabled(bool enable);
     void captureBegin();
     void captureEnd(const std::chrono::milliseconds& update_interval);
+    bool onWindowsMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
 
     bool is_session_enabled_ = false;
+
+    base::Thread ui_thread_;
+    std::unique_ptr<base::win::MessageWindow> message_window_;
 
     std::unique_ptr<base::IpcChannel> channel_;
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;
