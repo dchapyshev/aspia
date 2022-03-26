@@ -41,12 +41,16 @@ public:
 protected:
     // QDialog implementation.
     void closeEvent(QCloseEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
+    void onInheritConfigToggled(bool checked);
+    void onTabChanged(QTreeWidgetItem* current);
 
 private:
     void showError(const QString& message);
+    void showTab(int type);
 
     Ui::ComputerGroupDialog ui;
 
@@ -54,6 +58,7 @@ private:
 
     const Mode mode_;
     proto::address_book::ComputerGroup* computer_group_;
+    QWidgetList tabs_;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
 };

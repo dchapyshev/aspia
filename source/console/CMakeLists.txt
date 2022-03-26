@@ -46,6 +46,16 @@ list(APPEND SOURCE_CONSOLE
     computer_group_dialog.cc
     computer_group_dialog.h
     computer_group_dialog.ui
+    computer_group_dialog_desktop.cc
+    computer_group_dialog_desktop.h
+    computer_group_dialog_desktop.ui
+    computer_group_dialog_general.cc
+    computer_group_dialog_general.h
+    computer_group_dialog_general.ui
+    computer_group_dialog_parent.cc
+    computer_group_dialog_parent.h
+    computer_group_dialog_parent.ui
+    computer_group_dialog_tab.h
     computer_group_drag.h
     computer_group_item.cc
     computer_group_item.h

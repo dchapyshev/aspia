@@ -25,6 +25,9 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "base/strings/unicode.h"
+#include "console/computer_group_dialog_desktop.h"
+#include "console/computer_group_dialog_general.h"
+#include "console/computer_group_dialog_parent.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -40,6 +43,14 @@ constexpr int kMaxPasswordLength = 64;
 constexpr int kSafePasswordLength = 8;
 constexpr int kMaxCommentLength = 2048;
 constexpr int kHashingSaltSize = 256;
+
+enum ItemType
+{
+    ITEM_TYPE_PARENT,
+    ITEM_TYPE_GENERAL,
+    ITEM_TYPE_DESKTOP_MANAGE,
+    ITEM_TYPE_DESKTOP_VIEW
+};
 
 bool isSafePassword(const QString& password)
 {
@@ -82,6 +93,9 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 
     connect(ui.combo_encryption, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &AddressBookDialog::encryptionTypedChanged);
+
+    connect(ui.tree_category, &QTreeWidget::currentItemChanged,
+            this, &AddressBookDialog::onTabChanged);
 
     ui.combo_encryption->addItem(tr("Without Encryption"),
                                  QVariant(proto::address_book::ENCRYPTION_TYPE_NONE));
@@ -141,7 +155,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         ui.edit_password->setEnabled(false);
 
         // Disable Advanced tab.
-        ui.tab_widget->setTabEnabled(2, false);
+        ui.tab_widget->setTabEnabled(3, false);
     }
 
     const proto::address_book::Router& router = data_->router();
@@ -196,6 +210,57 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         ui.button_show_password->setEnabled(checked);
     });
 
+    QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
+    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setText(0, tr("General"));
+
+    QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
+    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setText(0, tr("Sessions"));
+
+    ui.tree_category->addTopLevelItem(general_item);
+    ui.tree_category->addTopLevelItem(sessions_item);
+
+    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
+    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setText(0, tr("Manage"));
+
+    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
+    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setText(0, tr("View"));
+
+    sessions_item->addChild(desktop_manage_item);
+    sessions_item->addChild(desktop_view_item);
+
+    ComputerGroupDialogParent* parent_tab =
+        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, ui.widget);
+    ComputerGroupDialogGeneral* general_tab =
+        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+    ComputerGroupDialogDesktop* desktop_manage_tab =
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+    ComputerGroupDialogDesktop* desktop_view_tab =
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+
+    tabs_.append(general_tab);
+    tabs_.append(desktop_manage_tab);
+    tabs_.append(desktop_view_tab);
+    tabs_.append(parent_tab);
+
+    QSize min_size;
+
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
+        min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
+    }
+
+    ui.widget->setMinimumSize(min_size);
+    ui.widget->installEventFilter(this);
+
+    ui.tree_category->setCurrentItem(general_item);
+    ui.tree_category->expandAll();
+
     ui.edit_name->setFocus();
 }
 
@@ -212,6 +277,14 @@ bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
             return false;
 
         setPasswordChanged();
+    }
+    else if (object == ui.widget && event->type() == QEvent::Resize)
+    {
+        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        {
+            QWidget* tab = *it;
+            tab->resize(ui.widget->size());
+        }
     }
 
     return false;
@@ -389,7 +462,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
             ui.edit_password_repeat->clear();
 
             // Disable Advanced tab.
-            ui.tab_widget->setTabEnabled(2, false);
+            ui.tab_widget->setTabEnabled(3, false);
         }
         break;
 
@@ -399,7 +472,7 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
             ui.edit_password_repeat->setEnabled(true);
 
             // Enable Advanced tab.
-            ui.tab_widget->setTabEnabled(2, true);
+            ui.tab_widget->setTabEnabled(3, true);
         }
         break;
 
@@ -407,6 +480,12 @@ void AddressBookDialog::encryptionTypedChanged(int item_index)
             LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
             break;
     }
+}
+
+void AddressBookDialog::onTabChanged(QTreeWidgetItem* current)
+{
+    if (current)
+        showTab(current->type());
 }
 
 void AddressBookDialog::setPasswordChanged()
@@ -434,6 +513,18 @@ void AddressBookDialog::setPasswordChanged()
 void AddressBookDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+}
+
+void AddressBookDialog::showTab(int type)
+{
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        if (static_cast<ComputerGroupDialogTab*>(tab)->type() == type)
+            tab->show();
+        else
+            tab->hide();
+    }
 }
 
 } // namespace console

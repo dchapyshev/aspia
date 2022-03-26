@@ -55,6 +55,10 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以搭建自己的路由。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由。</translation>
     </message>
+    <message>
+        <source>Default Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -156,6 +160,10 @@
         <source>Block remote input</source>
         <translation>阻止遠端輸入</translation>
     </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">一般</translation>
+    </message>
 </context>
 <context>
     <name>ComputerDialogGeneral</name>
@@ -208,6 +216,127 @@
     <message>
         <source>Comment:</source>
         <translation>註解：</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">一般</translation>
+    </message>
+    <message>
+        <source>Default Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogDesktop</name>
+    <message>
+        <source>Codec</source>
+        <translation type="unfinished">編碼</translation>
+    </message>
+    <message>
+        <source>Color depth:</source>
+        <translation type="unfinished">色彩深度：</translation>
+    </message>
+    <message>
+        <source>Fast</source>
+        <translation type="unfinished">快速</translation>
+    </message>
+    <message>
+        <source>Best</source>
+        <translation type="unfinished">最佳</translation>
+    </message>
+    <message>
+        <source>Features</source>
+        <translation type="unfinished">功能</translation>
+    </message>
+    <message>
+        <source>Enable audio</source>
+        <translation type="unfinished">啟用音訊</translation>
+    </message>
+    <message>
+        <source>Enable clipboard</source>
+        <translation type="unfinished">啟用剪貼簿</translation>
+    </message>
+    <message>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished">顯示遠端游標形狀</translation>
+    </message>
+    <message>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished">顯示遠端游標位置</translation>
+    </message>
+    <message>
+        <source>Appearance</source>
+        <translation type="unfinished">視覺效果</translation>
+    </message>
+    <message>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished">停用桌面特效</translation>
+    </message>
+    <message>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished">停用桌布</translation>
+    </message>
+    <message>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished">停用字體平滑</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">其他</translation>
+    </message>
+    <message>
+        <source>Clear clipboard at disconnect</source>
+        <translation type="unfinished">在中斷連線時清除剪貼簿</translation>
+    </message>
+    <message>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished">在中斷連線時鎖定電腦</translation>
+    </message>
+    <message>
+        <source>Block remote input</source>
+        <translation type="unfinished">阻止遠端輸入</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">一般</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogGeneral</name>
+    <message>
+        <source>Name:</source>
+        <translation type="obsolete">名稱：</translation>
+    </message>
+    <message>
+        <source>Parent Group:</source>
+        <translation type="obsolete">父群組：</translation>
+    </message>
+    <message>
+        <source>Address / ID:</source>
+        <translation type="obsolete">位址 / ID：</translation>
+    </message>
+    <message>
+        <source>User Name:</source>
+        <translation type="unfinished">使用者名稱：</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished">密碼：</translation>
+    </message>
+    <message>
+        <source>Comment:</source>
+        <translation type="obsolete">註解：</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogParent</name>
+    <message>
+        <source>Select child item</source>
+        <translation type="unfinished">選擇子項目</translation>
     </message>
 </context>
 <context>
@@ -586,6 +715,22 @@
         <source>Router password cannot be empty.</source>
         <translation>路由器密碼不能為空。</translation>
     </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">一般</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="unfinished">工作階段</translation>
+    </message>
+    <message>
+        <source>Manage</source>
+        <translation type="unfinished">管理</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">檢視</translation>
+    </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
@@ -760,6 +905,80 @@
     <message>
         <source>Warning</source>
         <translation>警告</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">一般</translation>
+    </message>
+    <message>
+        <source>Sessions</source>
+        <translation type="unfinished">工作階段</translation>
+    </message>
+    <message>
+        <source>Manage</source>
+        <translation type="unfinished">管理</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">檢視</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogDesktop</name>
+    <message>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished">全彩 (32 bit)</translation>
+    </message>
+    <message>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished">高彩 (16 bit)</translation>
+    </message>
+    <message>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished">256 色 (8 bit)</translation>
+    </message>
+    <message>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished">64 色 (6 bit)</translation>
+    </message>
+    <message>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished">8 色 (3 bit)</translation>
+    </message>
+    <message>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished">壓縮率：%1</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogGeneral</name>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">名稱不能為空。</translation>
+    </message>
+    <message>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>An invalid computer address was entered.</source>
+        <translation type="obsolete">輸入的電腦位址無效。</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
     </message>
 </context>
 <context>

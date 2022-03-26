@@ -59,6 +59,16 @@ message Computer
     SessionConfig session_config  = 17;
 }
 
+message ComputerGroupConfig
+{
+    string username = 1;
+    string password = 2;
+
+    // Fields 3-20 are reserved.
+
+    SessionConfig session_config  = 21;
+}
+
 message ComputerGroup
 {
     int64 create_time = 1;
@@ -70,9 +80,14 @@ message ComputerGroup
     // List of child computer groups.
     repeated ComputerGroup computer_group = 4;
 
-    string name    = 5;
-    string comment = 6;
-    bool expanded  = 7;
+    string name         = 5;
+    string comment      = 6;
+    bool expanded       = 7;
+    bool inherit_config = 8;
+
+    // Fields 9-20 are reserved.
+
+    ComputerGroupConfig config = 21;
 }
 
 message Router

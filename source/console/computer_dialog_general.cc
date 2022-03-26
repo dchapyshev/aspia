@@ -124,8 +124,8 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     {
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-        ui.edit_name->setFocus();
-        ui.edit_name->selectAll();
+        ui.edit_username->setFocus();
+        ui.edit_username->selectAll();
         return false;
     }
 

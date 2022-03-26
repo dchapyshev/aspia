@@ -69,6 +69,11 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="242"/>
+        <source>Default Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -109,12 +114,12 @@
 <context>
     <name>ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="38"/>
+        <location filename="../computer_dialog_desktop.ui" line="48"/>
         <source>Codec</source>
         <translation>编码</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="213"/>
+        <location filename="../computer_dialog_desktop.ui" line="243"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
@@ -123,77 +128,83 @@
         <translation type="vanished">启用光标形状</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="49"/>
+        <location filename="../computer_dialog_desktop.ui" line="59"/>
         <source>Color depth:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="70"/>
+        <location filename="../computer_dialog_desktop.ui" line="80"/>
         <source>Fast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="96"/>
+        <location filename="../computer_dialog_desktop.ui" line="106"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="114"/>
+        <location filename="../computer_dialog_desktop.ui" line="124"/>
         <source>Features</source>
         <translation>特性</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="120"/>
+        <location filename="../computer_dialog_desktop.ui" line="130"/>
         <source>Enable audio</source>
         <translation>启用声音</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="127"/>
+        <location filename="../computer_dialog_desktop.ui" line="137"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="144"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <location filename="../computer_dialog_desktop.ui" line="151"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="187"/>
         <source>Appearance</source>
         <translation>视觉效果</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="163"/>
+        <location filename="../computer_dialog_desktop.ui" line="193"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="200"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="177"/>
+        <location filename="../computer_dialog_desktop.ui" line="207"/>
         <source>Disable font smoothing</source>
         <translation>禁用字体平滑</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="193"/>
+        <location filename="../computer_dialog_desktop.ui" line="175"/>
+        <location filename="../computer_dialog_desktop.ui" line="223"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="36"/>
+        <source>General</source>
+        <translation type="unfinished">常规</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="229"/>
         <source>Clear clipboard at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="206"/>
+        <location filename="../computer_dialog_desktop.ui" line="236"/>
         <source>Lock computer at disconnect</source>
         <translation>锁定计算机以断开连接</translation>
     </message>
@@ -248,18 +259,164 @@
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation type="unfinished">常规</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>名字：</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="34"/>
+        <location filename="../computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
         <translation>父级：</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="68"/>
+        <location filename="../computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
         <translation>描述：</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="91"/>
+        <source>Default Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="97"/>
+        <source>Inherit from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogDesktop</name>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="48"/>
+        <source>Codec</source>
+        <translation type="unfinished">编码</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="59"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="80"/>
+        <source>Fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="106"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="124"/>
+        <source>Features</source>
+        <translation type="unfinished">特性</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="130"/>
+        <source>Enable audio</source>
+        <translation type="unfinished">启用声音</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="137"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished">启用剪贴板</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="144"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="151"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="187"/>
+        <source>Appearance</source>
+        <translation type="unfinished">视觉效果</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="193"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished">禁用桌面效果</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="200"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished">禁用桌面壁纸</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="207"/>
+        <source>Disable font smoothing</source>
+        <translation type="unfinished">禁用字体平滑</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="175"/>
+        <location filename="../computer_group_dialog_desktop.ui" line="223"/>
+        <source>Other</source>
+        <translation type="unfinished">其它</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="36"/>
+        <source>General</source>
+        <translation type="unfinished">常规</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="229"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="236"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished">锁定计算机以断开连接</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="243"/>
+        <source>Block remote input</source>
+        <translation type="unfinished">阻止远程输入</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogGeneral</name>
+    <message>
+        <source>Name:</source>
+        <translation type="obsolete">名字：</translation>
+    </message>
+    <message>
+        <source>Parent Group:</source>
+        <translation type="obsolete">父级：</translation>
+    </message>
+    <message>
+        <source>Address / ID:</source>
+        <translation type="obsolete">地址 / ID：</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.ui" line="34"/>
+        <source>User Name:</source>
+        <translation type="unfinished">用户名：</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.ui" line="48"/>
+        <source>Password:</source>
+        <translation type="unfinished">密码：</translation>
+    </message>
+    <message>
+        <source>Comment:</source>
+        <translation type="obsolete">描述：</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogParent</name>
+    <message>
+        <location filename="../computer_group_dialog_parent.ui" line="20"/>
+        <source>Select child item</source>
+        <translation type="unfinished">选择子项</translation>
     </message>
 </context>
 <context>
@@ -644,91 +801,111 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="86"/>
+        <location filename="../address_book_dialog.cc" line="100"/>
         <source>Without Encryption</source>
         <translation>没有加密</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="88"/>
+        <location filename="../address_book_dialog.cc" line="102"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="117"/>
+        <location filename="../address_book_dialog.cc" line="131"/>
         <source>Double-click to change</source>
         <translation>双击可更改</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="100"/>
+        <location filename="../address_book_dialog.cc" line="114"/>
         <source>Address Book</source>
         <translation>通讯录</translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="215"/>
+        <source>General</source>
+        <translation type="unfinished">常规</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="219"/>
+        <source>Sessions</source>
+        <translation type="unfinished">会话</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="226"/>
+        <source>Manage</source>
+        <translation type="unfinished">管理</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="230"/>
+        <source>View</source>
+        <translation type="unfinished">查看</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="305"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名称太长。名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="311"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="245"/>
+        <location filename="../address_book_dialog.cc" line="318"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长。描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="271"/>
+        <location filename="../address_book_dialog.cc" line="344"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="277"/>
+        <location filename="../address_book_dialog.cc" line="350"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="285"/>
+        <location filename="../address_book_dialog.cc" line="358"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="288"/>
+        <location filename="../address_book_dialog.cc" line="361"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="292"/>
+        <location filename="../address_book_dialog.cc" line="365"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="295"/>
-        <location filename="../address_book_dialog.cc" line="436"/>
+        <location filename="../address_book_dialog.cc" line="368"/>
+        <location filename="../address_book_dialog.cc" line="515"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="330"/>
+        <location filename="../address_book_dialog.cc" line="403"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="341"/>
+        <location filename="../address_book_dialog.cc" line="414"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="350"/>
+        <location filename="../address_book_dialog.cc" line="423"/>
         <source>Router password cannot be empty.</source>
         <translation>路由器密码不能为空。</translation>
     </message>
@@ -923,29 +1100,103 @@
 </context>
 <context>
     <name>console::ComputerGroupDialog</name>
-    <message numerus="yes">
+    <message>
         <location filename="../computer_group_dialog.cc" line="76"/>
+        <source>General</source>
+        <translation type="unfinished">常规</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="80"/>
+        <source>Sessions</source>
+        <translation type="unfinished">会话</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="87"/>
+        <source>Manage</source>
+        <translation type="unfinished">管理</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="91"/>
+        <source>View</source>
+        <translation type="unfinished">查看</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../computer_group_dialog.cc" line="158"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名字太长，名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="84"/>
+        <location filename="../computer_group_dialog.cc" line="166"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="92"/>
+        <location filename="../computer_group_dialog.cc" line="174"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="120"/>
+        <location filename="../computer_group_dialog.cc" line="214"/>
         <source>Warning</source>
         <translation>警告</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogDesktop</name>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="85"/>
+        <source>True color (32 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="86"/>
+        <source>High color (16 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="87"/>
+        <source>256 colors (8 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="88"/>
+        <source>64 colors (6 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="89"/>
+        <source>8 colors (3 bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="257"/>
+        <source>Compression ratio: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogGeneral</name>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">名称不能为空。</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.cc" line="53"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
+    </message>
+    <message>
+        <source>An invalid computer address was entered.</source>
+        <translation type="obsolete">输入了无效的计算机地址。</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.cc" line="84"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
     </message>
 </context>
 <context>

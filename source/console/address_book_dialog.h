@@ -44,12 +44,15 @@ protected:
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void encryptionTypedChanged(int item_index);
+    void onTabChanged(QTreeWidgetItem* current);
 
 private:
     void setPasswordChanged();
     void showError(const QString& message);
+    void showTab(int type);
 
     Ui::AddressBookDialog ui;
+    QWidgetList tabs_;
 
     proto::address_book::File* file_;
     proto::address_book::Data* data_;

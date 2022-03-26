@@ -69,6 +69,11 @@
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.ui" line="242"/>
+        <source>Default Configuration</source>
+        <translation type="unfinished">Конфигурация по умолчанию</translation>
+    </message>
 </context>
 <context>
     <name>AddressBookTab</name>
@@ -109,17 +114,17 @@
 <context>
     <name>ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="38"/>
+        <location filename="../computer_dialog_desktop.ui" line="48"/>
         <source>Codec</source>
         <translation>Кодек</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="177"/>
+        <location filename="../computer_dialog_desktop.ui" line="207"/>
         <source>Disable font smoothing</source>
         <translation>Отключить сглаживание шрифтов</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="213"/>
+        <location filename="../computer_dialog_desktop.ui" line="243"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
@@ -128,72 +133,78 @@
         <translation type="vanished">Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="49"/>
+        <location filename="../computer_dialog_desktop.ui" line="59"/>
         <source>Color depth:</source>
         <translation>Глубина цвета:</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="70"/>
+        <location filename="../computer_dialog_desktop.ui" line="80"/>
         <source>Fast</source>
         <translation>Быстрее</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="96"/>
+        <location filename="../computer_dialog_desktop.ui" line="106"/>
         <source>Best</source>
         <translation>Сильнее</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="114"/>
+        <location filename="../computer_dialog_desktop.ui" line="124"/>
         <source>Features</source>
         <translation>Возможности</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="120"/>
+        <location filename="../computer_dialog_desktop.ui" line="130"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="127"/>
+        <location filename="../computer_dialog_desktop.ui" line="137"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="134"/>
+        <location filename="../computer_dialog_desktop.ui" line="144"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="141"/>
+        <location filename="../computer_dialog_desktop.ui" line="151"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="157"/>
+        <location filename="../computer_dialog_desktop.ui" line="187"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="163"/>
+        <location filename="../computer_dialog_desktop.ui" line="193"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="170"/>
+        <location filename="../computer_dialog_desktop.ui" line="200"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="193"/>
+        <location filename="../computer_dialog_desktop.ui" line="175"/>
+        <location filename="../computer_dialog_desktop.ui" line="223"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="199"/>
+        <location filename="../computer_dialog_desktop.ui" line="36"/>
+        <source>General</source>
+        <translation type="unfinished">Основные</translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog_desktop.ui" line="229"/>
         <source>Clear clipboard at disconnect</source>
         <translation>Очищать буфер обмена при отключении</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.ui" line="206"/>
+        <location filename="../computer_dialog_desktop.ui" line="236"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
@@ -248,18 +259,164 @@
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="27"/>
+        <source>General</source>
+        <translation>Основные</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="34"/>
+        <location filename="../computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
         <translation>Родительская группа:</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.ui" line="68"/>
+        <location filename="../computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
         <translation>Комментарий:</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="91"/>
+        <source>Default Configuration</source>
+        <translation>Конфигурация по умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.ui" line="97"/>
+        <source>Inherit from parent</source>
+        <translation>Наследовать от родителя</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogDesktop</name>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="48"/>
+        <source>Codec</source>
+        <translation>Кодек</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="59"/>
+        <source>Color depth:</source>
+        <translation>Глубина цвета:</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="80"/>
+        <source>Fast</source>
+        <translation>Быстрее</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="106"/>
+        <source>Best</source>
+        <translation>Сильнее</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="124"/>
+        <source>Features</source>
+        <translation>Возможности</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="130"/>
+        <source>Enable audio</source>
+        <translation>Включить звук</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="137"/>
+        <source>Enable clipboard</source>
+        <translation>Включить буфер обмена</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="144"/>
+        <source>Show shape of remote cursor</source>
+        <translation>Показывать форму удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="151"/>
+        <source>Show position of remote cursor</source>
+        <translation>Показывать положение удаленного курсора</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="187"/>
+        <source>Appearance</source>
+        <translation>Внешний вид</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="193"/>
+        <source>Disable desktop effects</source>
+        <translation>Отключить эффекты рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="200"/>
+        <source>Disable desktop wallpaper</source>
+        <translation>Отключить обои рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="207"/>
+        <source>Disable font smoothing</source>
+        <translation>Отключить сглаживание шрифтов</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="175"/>
+        <location filename="../computer_group_dialog_desktop.ui" line="223"/>
+        <source>Other</source>
+        <translation>Разное</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="36"/>
+        <source>General</source>
+        <translation type="unfinished">Основные</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="229"/>
+        <source>Clear clipboard at disconnect</source>
+        <translation>Очищать буфер обмена при отключении</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="236"/>
+        <source>Lock computer at disconnect</source>
+        <translation>Блокировать компьютер при отключении</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.ui" line="243"/>
+        <source>Block remote input</source>
+        <translation>Блокировать удаленный ввод</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogGeneral</name>
+    <message>
+        <source>Name:</source>
+        <translation type="obsolete">Имя:</translation>
+    </message>
+    <message>
+        <source>Parent Group:</source>
+        <translation type="obsolete">Родительская группа:</translation>
+    </message>
+    <message>
+        <source>Address / ID:</source>
+        <translation type="obsolete">Адрес / ID:</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.ui" line="34"/>
+        <source>User Name:</source>
+        <translation>Имя пользователя:</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.ui" line="48"/>
+        <source>Password:</source>
+        <translation>Пароль:</translation>
+    </message>
+    <message>
+        <source>Comment:</source>
+        <translation type="obsolete">Комментарий:</translation>
+    </message>
+</context>
+<context>
+    <name>ComputerGroupDialogParent</name>
+    <message>
+        <location filename="../computer_group_dialog_parent.ui" line="20"/>
+        <source>Select child item</source>
+        <translation>Выберите дочерний элемент</translation>
     </message>
 </context>
 <context>
@@ -644,27 +801,47 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="86"/>
+        <location filename="../address_book_dialog.cc" line="100"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="88"/>
+        <location filename="../address_book_dialog.cc" line="102"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="117"/>
+        <location filename="../address_book_dialog.cc" line="131"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="100"/>
+        <location filename="../address_book_dialog.cc" line="114"/>
         <source>Address Book</source>
         <translation>Адресная книга</translation>
     </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="215"/>
+        <source>General</source>
+        <translation type="unfinished">Основные</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="219"/>
+        <source>Sessions</source>
+        <translation type="unfinished">Сессии</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="226"/>
+        <source>Manage</source>
+        <translation type="unfinished">Управление</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="230"/>
+        <source>View</source>
+        <translation type="unfinished">Просмотр</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="305"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -673,12 +850,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="238"/>
+        <location filename="../address_book_dialog.cc" line="311"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="245"/>
+        <location filename="../address_book_dialog.cc" line="318"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -687,12 +864,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="271"/>
+        <location filename="../address_book_dialog.cc" line="344"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="277"/>
+        <location filename="../address_book_dialog.cc" line="350"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
@@ -701,12 +878,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="285"/>
+        <location filename="../address_book_dialog.cc" line="358"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="288"/>
+        <location filename="../address_book_dialog.cc" line="361"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
@@ -715,28 +892,28 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="292"/>
+        <location filename="../address_book_dialog.cc" line="365"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="295"/>
-        <location filename="../address_book_dialog.cc" line="436"/>
+        <location filename="../address_book_dialog.cc" line="368"/>
+        <location filename="../address_book_dialog.cc" line="515"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="330"/>
+        <location filename="../address_book_dialog.cc" line="403"/>
         <source>An invalid router address was entered.</source>
         <translation>Введен некорректный адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="341"/>
+        <location filename="../address_book_dialog.cc" line="414"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="350"/>
+        <location filename="../address_book_dialog.cc" line="423"/>
         <source>Router password cannot be empty.</source>
         <translation>Пароль маршутизатора не может быть пустым.</translation>
     </message>
@@ -935,8 +1112,28 @@
 </context>
 <context>
     <name>console::ComputerGroupDialog</name>
-    <message numerus="yes">
+    <message>
         <location filename="../computer_group_dialog.cc" line="76"/>
+        <source>General</source>
+        <translation>Основные</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="80"/>
+        <source>Sessions</source>
+        <translation>Сессии</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="87"/>
+        <source>Manage</source>
+        <translation>Управление</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="91"/>
+        <source>View</source>
+        <translation>Просмотр</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../computer_group_dialog.cc" line="158"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
@@ -945,12 +1142,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="84"/>
+        <location filename="../computer_group_dialog.cc" line="166"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="92"/>
+        <location filename="../computer_group_dialog.cc" line="174"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
@@ -959,7 +1156,77 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="120"/>
+        <location filename="../computer_group_dialog.cc" line="214"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogDesktop</name>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="85"/>
+        <source>True color (32 bit)</source>
+        <translation>True color (32 бита)</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="86"/>
+        <source>High color (16 bit)</source>
+        <translation>High color (16 бит)</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="87"/>
+        <source>256 colors (8 bit)</source>
+        <translation>256 цветов (8 бит)</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="88"/>
+        <source>64 colors (6 bit)</source>
+        <translation>64 цвета (6 бит)</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="89"/>
+        <source>8 colors (3 bit)</source>
+        <translation>8 цветов (3 бита)</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_desktop.cc" line="257"/>
+        <source>Compression ratio: %1</source>
+        <translation>Уровень сжатия: %1</translation>
+    </message>
+</context>
+<context>
+    <name>console::ComputerGroupDialogGeneral</name>
+    <message numerus="yes">
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Name can not be empty.</source>
+        <translation type="obsolete">Имя не может быть пустым.</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.cc" line="53"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="obsolete">
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>An invalid computer address was entered.</source>
+        <translation type="obsolete">Введен некорректный адрес компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog_general.cc" line="84"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>

@@ -19,6 +19,9 @@
 #include "console/computer_group_dialog.h"
 
 #include "base/logging.h"
+#include "console/computer_group_dialog_desktop.h"
+#include "console/computer_group_dialog_general.h"
+#include "console/computer_group_dialog_parent.h"
 
 #include <QAbstractButton>
 #include <QDateTime>
@@ -31,6 +34,14 @@ namespace {
 constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
+
+enum ItemType
+{
+    ITEM_TYPE_PARENT,
+    ITEM_TYPE_GENERAL,
+    ITEM_TYPE_DESKTOP_MANAGE,
+    ITEM_TYPE_DESKTOP_VIEW
+};
 
 } // namespace
 
@@ -50,9 +61,66 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);
 
+    connect(ui.checkbox_inherit_config, &QCheckBox::toggled,
+            this, &ComputerGroupDialog::onInheritConfigToggled);
+
+    connect(ui.tree_category, &QTreeWidget::currentItemChanged,
+            this, &ComputerGroupDialog::onTabChanged);
+
     ui.edit_parent_name->setText(parent_name);
     ui.edit_name->setText(QString::fromStdString(computer_group_->name()));
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
+
+    QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
+    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setText(0, tr("General"));
+
+    QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
+    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setText(0, tr("Sessions"));
+
+    ui.tree_category->addTopLevelItem(general_item);
+    ui.tree_category->addTopLevelItem(sessions_item);
+
+    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
+    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setText(0, tr("Manage"));
+
+    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
+    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setText(0, tr("View"));
+
+    sessions_item->addChild(desktop_manage_item);
+    sessions_item->addChild(desktop_view_item);
+
+    ComputerGroupDialogParent* parent_tab =
+        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, ui.widget);
+    ComputerGroupDialogGeneral* general_tab =
+        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+    ComputerGroupDialogDesktop* desktop_manage_tab =
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+    ComputerGroupDialogDesktop* desktop_view_tab =
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+
+    tabs_.append(general_tab);
+    tabs_.append(desktop_manage_tab);
+    tabs_.append(desktop_view_tab);
+    tabs_.append(parent_tab);
+
+    QSize min_size;
+
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        min_size.setWidth(std::max(tab->sizeHint().width(), min_size.width()));
+        min_size.setHeight(std::max(tab->minimumSizeHint().height(), min_size.height()));
+    }
+
+    ui.widget->setMinimumSize(min_size);
+    ui.widget->installEventFilter(this);
+
+    ui.tree_category->setCurrentItem(general_item);
+    ui.tree_category->expandAll();
 }
 
 ComputerGroupDialog::~ComputerGroupDialog()
@@ -64,6 +132,20 @@ void ComputerGroupDialog::closeEvent(QCloseEvent* event)
 {
     settings_.setComputerGroupDialogGeometry(saveGeometry());
     QDialog::closeEvent(event);
+}
+
+bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui.widget && event->type() == QEvent::Resize)
+    {
+        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        {
+            QWidget* tab = *it;
+            tab->resize(ui.widget->size());
+        }
+    }
+
+    return QDialog::eventFilter(watched, event);
 }
 
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
@@ -115,9 +197,33 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+void ComputerGroupDialog::onInheritConfigToggled(bool checked)
+{
+    ui.tree_category->setEnabled(!checked);
+    ui.widget->setEnabled(!checked);
+}
+
+void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)
+{
+    if (current)
+        showTab(current->type());
+}
+
 void ComputerGroupDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+}
+
+void ComputerGroupDialog::showTab(int type)
+{
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        if (static_cast<ComputerGroupDialogTab*>(tab)->type() == type)
+            tab->show();
+        else
+            tab->hide();
+    }
 }
 
 } // namespace console
