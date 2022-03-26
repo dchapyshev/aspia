@@ -28,12 +28,18 @@ static const UINT kMsgHaveWork = WM_USER + 1;
 
 MessagePumpForWin::MessagePumpForWin()
 {
+    LOG(LS_INFO) << "Ctor";
     bool succeeded = message_window_.create(
         std::bind(&MessagePumpForWin::onMessage,
                   this,
                   std::placeholders::_1, std::placeholders::_2,
                   std::placeholders::_3, std::placeholders::_4));
     DCHECK(succeeded);
+}
+
+MessagePumpForWin::~MessagePumpForWin()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 void MessagePumpForWin::run(Delegate* delegate)
@@ -101,6 +107,7 @@ void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
 
 void MessagePumpForWin::runWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher)
 {
+    LOG(LS_INFO) << "Pump with custom dispatcher: " << (dispatcher != nullptr ? "YES" : "NO");
     RunState state;
 
     state.delegate    = delegate;
@@ -138,6 +145,8 @@ bool MessagePumpForWin::onMessage(
 
 void MessagePumpForWin::doRunLoop()
 {
+    LOG(LS_INFO) << "Started";
+
     // IF this was just a simple PeekMessage() loop (servicing all possible work queues), then
     // Windows would try to achieve the following order according to MSDN documentation about
     // PeekMessage with no filter):
@@ -193,6 +202,8 @@ void MessagePumpForWin::doRunLoop()
 
         waitForWork(); // Wait (sleep) until we have work to do again.
     }
+
+    LOG(LS_INFO) << "Stopped";
 }
 
 void MessagePumpForWin::waitForWork()

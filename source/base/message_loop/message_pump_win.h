@@ -29,7 +29,7 @@ class MessagePumpForWin : public MessagePump
 {
 public:
     MessagePumpForWin();
-    ~MessagePumpForWin() override = default;
+    ~MessagePumpForWin() override;
 
     // MessagePump methods:
     void run(Delegate* delegate) override;
