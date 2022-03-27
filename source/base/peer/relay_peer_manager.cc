@@ -28,11 +28,13 @@ RelayPeerManager::RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Dele
     : task_runner_(std::move(task_runner)),
       delegate_(delegate)
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_ && delegate_);
 }
 
 RelayPeerManager::~RelayPeerManager()
 {
+    LOG(LS_INFO) << "Dtor";
     delegate_ = nullptr;
 }
 
