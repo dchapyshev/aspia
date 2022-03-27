@@ -169,11 +169,6 @@ void desktopAgentMain(int argc, const char* const* argv)
         desktop_agent->start(command_line->switchValue(u"channel_id"));
         message_loop->run();
     }
-    else if (command_line->hasSwitch(u"version"))
-    {
-        std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
-                  << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
-    }
     else
     {
         LOG(LS_ERROR) << "Parameter channel_id is not specified";

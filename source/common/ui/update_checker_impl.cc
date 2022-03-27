@@ -33,10 +33,13 @@ namespace common {
 UpdateCheckerImpl::UpdateCheckerImpl(QObject* parent)
     : QObject(parent)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-UpdateCheckerImpl::~UpdateCheckerImpl() = default;
+UpdateCheckerImpl::~UpdateCheckerImpl()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void UpdateCheckerImpl::setUpdateServer(const QString& update_server)
 {
@@ -59,11 +62,13 @@ void UpdateCheckerImpl::start()
     {
         if (reply->error())
         {
-            LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString();
+            LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString()
+                            << " (" << reply->error() << ")";
             emit finished(QByteArray());
         }
         else
         {
+            LOG(LS_INFO) << "Checking is finished";
             emit finished(reply->readAll());
         }
 
@@ -73,12 +78,14 @@ void UpdateCheckerImpl::start()
     base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
     QUrl url(update_server_);
 
-    url.setPath(QStringLiteral("/update.php"));
+    url.setPath(url.path() + QStringLiteral("/update.php"));
     url.setQuery(QUrlQuery(
         QString("package=%1&version=%2")
         .arg(package_name_, QString::fromStdString(current_version.toString(3)))));
 
-    network_manager_->get(QNetworkRequest(url));
+    LOG(LS_INFO) << "Start checking for updates. Url: " << url.toString();
+    QNetworkRequest request(url);
+    network_manager_->get(request);
 }
 
 } // namespace common
