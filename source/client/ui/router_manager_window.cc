@@ -90,8 +90,8 @@ public:
 
         const proto::Version& version = session.version();
         
-        setText(3, QString("%1.%2.%3")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()));
+        setText(3, QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
         setText(4, QString::fromStdString(session.computer_name()));
         setText(5, QString::fromStdString(session.os_name()));
     }
@@ -215,7 +215,7 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
                                .arg(peer_address_)
                                .arg(peer_port_)
-                               .arg(QString::fromStdString(peer_version.toString(3))));
+                               .arg(QString::fromStdString(peer_version.toString())));
     show();
     activateWindow();
 
@@ -626,8 +626,8 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
         add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));
         add_item(tr("Connect Time"), time);
         const proto::Version& version = session.version();
-        add_item(tr("Version"), QString("%1.%2.%3")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()));
+        add_item(tr("Version"), QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
         add_item(tr("Operating System"), QString::fromStdString(session.os_name()));
 
         proto::HostSessionData session_data;

@@ -166,9 +166,20 @@ execute_process(COMMAND git rev-parse HEAD
                 OUTPUT_VARIABLE GIT_COMMIT_HASH
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+# Get git commin count.
+execute_process(COMMAND git rev-list --count HEAD
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE GIT_COMMIT_COUNT
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 # Add git branch and commin hash to definitions.
 add_definitions(-DGIT_CURRENT_BRANCH=\"${GIT_CURRENT_BRANCH}\"
-                -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\")
+                -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"
+                -DGIT_COMMIT_COUNT=${GIT_COMMIT_COUNT})
+
+message(STATUS "Git branch: ${GIT_CURRENT_BRANCH}")
+message(STATUS "Git commit: ${GIT_COMMIT_HASH}")
+message(STATUS "Git commit count: ${GIT_COMMIT_COUNT}")
 
 add_subdirectory(base)
 add_subdirectory(client)
@@ -192,10 +203,10 @@ set(CPACK_PACKAGE_NAME "aspia")
 set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
 set(CPACK_PACKAGE_CONTACT "Dmitry Chapyshev <dmitry@aspia.ru>")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://aspia.org/")
-set(CPACK_PACKAGE_VERSION "2.4.0")
-set(CPACK_PACKAGE_VERSION_MAJOR "2")
-set(CPACK_PACKAGE_VERSION_MINOR "4")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION "${ASPIA_VERSION_MAJOR}.${ASPIA_VERSION_MINOR}.${ASPIA_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ASPIA_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ASPIA_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${ASPIA_VERSION_PATCH}")
 
 #--------------------------------------------------------------------------------------------------
 # Console

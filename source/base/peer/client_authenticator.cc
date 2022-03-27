@@ -435,6 +435,7 @@ void ClientAuthenticator::sendSessionResponse()
     version->set_major(ASPIA_VERSION_MAJOR);
     version->set_minor(ASPIA_VERSION_MINOR);
     version->set_patch(ASPIA_VERSION_PATCH);
+    version->set_revision(GIT_COMMIT_COUNT);
 
     response->set_os_name(SysInfo::operatingSystemName());
     response->set_computer_name(SysInfo::computerName());

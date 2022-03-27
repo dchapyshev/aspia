@@ -286,6 +286,10 @@ proto::Version Version::toProto() const
                 proto_version.set_patch(components_[i]);
                 break;
 
+            case 3:
+                proto_version.set_revision(components_[i]);
+                break;
+
             default:
                 break;
         }
@@ -297,7 +301,8 @@ proto::Version Version::toProto() const
 // static
 Version Version::fromProto(const proto::Version& proto_version)
 {
-    return Version(proto_version.major(), proto_version.minor(), proto_version.patch());
+    return Version(proto_version.major(), proto_version.minor(),
+                   proto_version.patch(), proto_version.revision());
 }
 
 bool operator==(const Version& v1, const Version& v2)
