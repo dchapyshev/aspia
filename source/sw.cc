@@ -16,8 +16,8 @@
 }*/
 
 void build(Solution &s) {
-    auto &aspia = s.addProject("aspia", "master");
-    aspia += Git("https://github.com/dchapyshev/aspia", "", "{v}");
+    auto &aspia = s.addProject("aspia", "2.4.0");
+    aspia += Git("https://github.com/dchapyshev/aspia", "v{v}");
 
     constexpr auto cppstd = cpp17;
 
@@ -154,6 +154,12 @@ void build(Solution &s) {
             base += "Xtst"_slib;
         }
         automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
+
+        base.Public += Definition("ASPIA_VERSION_MAJOR=" + base.Variables["PACKAGE_VERSION_MAJOR"].toString());
+        base.Public += Definition("ASPIA_VERSION_MINOR=" + base.Variables["PACKAGE_VERSION_MINOR"].toString());
+        base.Public += Definition("ASPIA_VERSION_PATCH=" + base.Variables["PACKAGE_VERSION_PATCH"].toString());
+        base.Public += Definition("GIT_COMMIT_HASH=\"\"");
+        base.Public += Definition("GIT_COMMIT_COUNT=0");
     }
 
     auto &relay = aspia.addExecutable("relay");
