@@ -23,7 +23,7 @@
 
 namespace host {
 
-void HOST_EXPORT hostServiceMain();
+int HOST_EXPORT hostServiceMain(int argc, wchar_t* argv[]);
 
 } // namespace host
 

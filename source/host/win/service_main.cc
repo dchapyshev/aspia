@@ -18,23 +18,122 @@
 
 #include "host/win/service_main.h"
 
+#include "base/command_line.h"
 #include "base/environment.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
+#include "base/files/base_paths.h"
 #include "base/win/mini_dump_writer.h"
+#include "base/win/service_controller.h"
 #include "base/win/session_info.h"
 #include "base/win/session_enumerator.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/win/service.h"
+#include "host/win/service_constants.h"
+
+#include <iostream>
 
 namespace host {
 
-void hostServiceMain()
+void startService()
 {
+    base::win::ServiceController controller =
+        base::win::ServiceController::open(host::kHostServiceName);
+    if (!controller.isValid())
+    {
+        std::cout << "Failed to access the service. Not enough rights or service not installed."
+            << std::endl;
+    }
+    else
+    {
+        if (!controller.start())
+        {
+            std::cout << "Failed to start the service." << std::endl;
+        }
+        else
+        {
+            std::cout << "The service started successfully." << std::endl;
+        }
+    }
+}
+
+void stopService()
+{
+    base::win::ServiceController controller =
+        base::win::ServiceController::open(host::kHostServiceName);
+    if (!controller.isValid())
+    {
+        std::cout << "Failed to access the service. Not enough rights or service not installed."
+            << std::endl;
+    }
+    else
+    {
+        if (!controller.stop())
+        {
+            std::cout << "Failed to stop the service." << std::endl;
+        }
+        else
+        {
+            std::cout << "The service has stopped successfully." << std::endl;
+        }
+    }
+}
+
+void installService()
+{
+    std::filesystem::path file_path;
+
+    if (!base::BasePaths::currentExecFile(&file_path))
+    {
+        std::cout << "Failed to get the path to the executable." << std::endl;
+    }
+    else
+    {
+        base::win::ServiceController controller = base::win::ServiceController::install(
+            host::kHostServiceName, host::kHostServiceDisplayName, file_path);
+        if (!controller.isValid())
+        {
+            std::cout << "Failed to install the service." << std::endl;
+        }
+        else
+        {
+            controller.setDescription(host::kHostServiceDescription);
+            std::cout << "The service has been successfully installed." << std::endl;
+        }
+    }
+}
+
+void removeService()
+{
+    if (base::win::ServiceController::isRunning(host::kHostServiceName))
+    {
+        stopService();
+    }
+
+    if (!base::win::ServiceController::remove(host::kHostServiceName))
+    {
+        std::cout << "Failed to remove the service." << std::endl;
+    }
+    else
+    {
+        std::cout << "The service was successfully deleted." << std::endl;
+    }
+}
+
+int hostServiceMain(int argc, wchar_t* argv[])
+{
+    (void)argc;
+    (void)argv;
+
     base::installFailureHandler(L"aspia_host_service");
 
     base::ScopedLogging scoped_logging;
+
+    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
+    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+
+    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
@@ -128,8 +227,46 @@ void hostServiceMain()
     else
     {
         LOG(LS_INFO) << "Integrity check passed successfully";
-        Service().exec();
+
+        if (command_line->hasSwitch(u"version"))
+        {
+            std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
+                      << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
+        }
+        else if (command_line->hasSwitch(u"install"))
+        {
+            installService();
+        }
+        else if (command_line->hasSwitch(u"remove"))
+        {
+            removeService();
+        }
+        else if (command_line->hasSwitch(u"start"))
+        {
+            startService();
+        }
+        else if (command_line->hasSwitch(u"stop"))
+        {
+            stopService();
+        }
+        else if (command_line->hasSwitch(u"help"))
+        {
+            std::cout << "aspia_host_service [switch]" << std::endl
+                << "Available switches:" << std::endl
+                << '\t' << "--install" << '\t' << "Install service" << std::endl
+                << '\t' << "--remove" << '\t' << "Remove service" << std::endl
+                << '\t' << "--start" << '\t' << "Start service" << std::endl
+                << '\t' << "--stop" << '\t' << "Stop service" << std::endl
+                << '\t' << "--version" << '\t' << "Show version information" << std::endl
+                << '\t' << "--help" << '\t' << "Show help" << std::endl;
+        }
+        else
+        {
+            Service().exec();
+        }
     }
+
+    return 0;
 }
 
 } // namespace host

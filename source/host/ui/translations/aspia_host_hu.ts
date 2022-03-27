@@ -211,6 +211,14 @@
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Aspia Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Application version: %1.%2.%3.%4.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

@@ -275,6 +275,16 @@
         <source>Export and import parameters can not be specified together.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../host_main.cc" line="276"/>
+        <source>Aspia Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="277"/>
+        <source>Application version: %1.%2.%3.%4.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

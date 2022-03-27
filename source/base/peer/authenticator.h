@@ -32,7 +32,7 @@ class Authenticator : public NetworkChannel::Listener
 {
 public:
     explicit Authenticator(std::shared_ptr<TaskRunner> task_runner);
-    virtual ~Authenticator() override = default;
+    virtual ~Authenticator() override;
 
     enum class State
     {

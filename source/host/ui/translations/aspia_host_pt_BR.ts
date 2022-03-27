@@ -231,6 +231,14 @@
         <source>Export and import parameters can not be specified together.</source>
         <translation>Os parâmetros de importação e exportação não podem ser especificados juntos.</translation>
     </message>
+    <message>
+        <source>Aspia Host</source>
+        <translation type="unfinished">Aspia Host</translation>
+    </message>
+    <message>
+        <source>Application version: %1.%2.%3.%4.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

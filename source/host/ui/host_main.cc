@@ -269,6 +269,18 @@ int hostMain(int argc, char* argv[])
 
         return application.exec();
     }
+    else if (command_line.hasSwitch(u"version"))
+    {
+        QMessageBox::information(
+            nullptr,
+            QApplication::translate("Host", "Aspia Host"),
+            QApplication::translate("Host", "Application version: %1.%2.%3.%4.")
+                .arg(ASPIA_VERSION_MAJOR)
+                .arg(ASPIA_VERSION_MINOR)
+                .arg(ASPIA_VERSION_PATCH)
+                .arg(GIT_COMMIT_COUNT),
+            QMessageBox::Ok);
+    }
     else if (command_line.hasSwitch(u"help"))
     {
         // TODO

@@ -18,8 +18,7 @@
 
 #include "host/win/service_main.h"
 
-int wmain()
+int wmain(int argc, wchar_t* argv[])
 {
-    host::hostServiceMain();
-    return 0;
+    return host::hostServiceMain(argc, argv);
 }

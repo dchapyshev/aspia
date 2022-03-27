@@ -283,6 +283,16 @@
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
+    <message>
+        <location filename="../host_main.cc" line="276"/>
+        <source>Aspia Host</source>
+        <translation type="unfinished">Aspia 主机</translation>
+    </message>
+    <message>
+        <location filename="../host_main.cc" line="277"/>
+        <source>Application version: %1.%2.%3.%4.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
