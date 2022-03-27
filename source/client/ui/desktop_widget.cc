@@ -531,9 +531,13 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
             if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
             {
                 DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
-                QWidget* root_widget = QApplication::activeWindow();
+                WId foreground_window = reinterpret_cast<WId>(GetForegroundWindow());
+                bool is_foreground = false;
 
-                if (root_widget && self && self->enable_key_sequenses_)
+                if (self && self->parentWidget()->window()->winId() == foreground_window)
+                    is_foreground = true;
+
+                if (is_foreground && self->enable_key_sequenses_)
                 {
                     flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
                     flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
