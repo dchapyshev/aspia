@@ -472,7 +472,7 @@
         <location filename="../ui/desktop_panel.ui" line="429"/>
         <location filename="../ui/desktop_panel.ui" line="432"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовый чат</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="220"/>

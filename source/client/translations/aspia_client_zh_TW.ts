@@ -106,6 +106,10 @@
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
+    <message>
+        <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ClientSettingsDialog</name>
