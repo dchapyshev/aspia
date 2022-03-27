@@ -40,11 +40,12 @@ RelayPeer::RelayPeer()
       socket_(io_context_),
       resolver_(io_context_)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 RelayPeer::~RelayPeer()
 {
+    LOG(LS_INFO) << "Dtor";
     delegate_ = nullptr;
 
     std::error_code ignored_code;

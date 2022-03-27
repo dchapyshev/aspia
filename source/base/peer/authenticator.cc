@@ -34,7 +34,12 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 Authenticator::Authenticator(std::shared_ptr<TaskRunner> task_runner)
     : timer_(WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
+}
+
+Authenticator::~Authenticator()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 void Authenticator::start(std::unique_ptr<NetworkChannel> channel, Callback callback)
