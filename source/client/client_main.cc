@@ -181,6 +181,28 @@ bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config)
+{
+    if (!value.isEmpty())
+    {
+        if (value == QLatin1String("0"))
+        {
+            config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CURSOR_POSITION));
+        }
+        else if (value == QLatin1String("1"))
+        {
+            config.set_flags(config.flags() | proto::CURSOR_POSITION);
+        }
+        else
+        {
+            onInvalidValue(QStringLiteral("cursor-position"), QStringLiteral("0, 1"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -407,6 +429,10 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Enable or disable cursor shape. Possible values: 0 or 1."),
         QStringLiteral("cursor-shape"));
 
+    QCommandLineOption cursor_position_option(QStringLiteral("cursor-position"),
+        QApplication::translate("Client", "Enable or disable cursor position. Possible values: 0 or 1."),
+        QStringLiteral("cursor-position"));
+
     QCommandLineOption clipboard_option(QStringLiteral("clipboard"),
         QApplication::translate("Client", "Enable or disable clipboard. Possible values: 0 or 1."),
         QStringLiteral("clipboard"));
@@ -449,6 +475,7 @@ int clientMain(int argc, char* argv[])
     parser.addOption(compress_ratio_option);
     parser.addOption(audio_option);
     parser.addOption(cursor_shape_option);
+    parser.addOption(cursor_position_option);
     parser.addOption(clipboard_option);
     parser.addOption(desktop_effects_option);
     parser.addOption(desktop_wallpaper_option);
@@ -515,6 +542,9 @@ int clientMain(int argc, char* argv[])
                 return 1;
 
             if (!parseCursorShapeValue(parser.value(cursor_shape_option), *desktop_config))
+                return 1;
+
+            if (!parseCursorPositionValue(parser.value(cursor_position_option), *desktop_config))
                 return 1;
 
             if (!parseClipboardValue(parser.value(clipboard_option), *desktop_config))
