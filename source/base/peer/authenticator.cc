@@ -219,8 +219,17 @@ bool Authenticator::onSessionKeyChanged()
             session_key_, decrypt_iv_);
     }
 
-    if (!encryptor || !decryptor)
+    if (!encryptor)
+    {
+        LOG(LS_ERROR) << "Invalid encryptor";
         return false;
+    }
+
+    if (!decryptor)
+    {
+        LOG(LS_ERROR) << "Invalid decryptor";
+        return false;
+    }
 
     channel_->setEncryptor(std::move(encryptor));
     channel_->setDecryptor(std::move(decryptor));
