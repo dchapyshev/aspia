@@ -37,6 +37,36 @@ namespace {
 
 constexpr size_t kIvSize = 12;
 
+const char* encryptionToString(uint32_t encryption)
+{
+    switch (encryption)
+    {
+        case proto::ENCRYPTION_AES256_GCM:
+            return "ENCRYPTION_AES256_GCM";
+
+        case proto::ENCRYPTION_CHACHA20_POLY1305:
+            return "ENCRYPTION_CHACHA20_POLY1305";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
+const char* identifyToString(proto::Identify identify)
+{
+    switch (identify)
+    {
+        case proto::IDENTIFY_ANONYMOUS:
+            return "IDENTIFY_ANONYMOUS";
+
+        case proto::IDENTIFY_SRP:
+            return "IDENTIFY_SRP";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
 } // namespace
 
 ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner)
@@ -251,8 +281,8 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Encryption: " << client_hello->encryption();
-    LOG(LS_INFO) << "Identify: " << client_hello->identify();
+    LOG(LS_INFO) << "Encryption: " << encryptionToString(client_hello->encryption());
+    LOG(LS_INFO) << "Identify: " << identifyToString(client_hello->identify());
 
     if (!(client_hello->encryption() & proto::ENCRYPTION_AES256_GCM) &&
         !(client_hello->encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
@@ -368,7 +398,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Username: " << user_name_;
+    LOG(LS_INFO) << "Username: '" << user_name_ << "'";
 
     do
     {
