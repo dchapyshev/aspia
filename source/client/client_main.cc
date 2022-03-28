@@ -485,7 +485,7 @@ int clientMain(int argc, char* argv[])
     parser.addOption(block_remote_input_option);
     parser.process(application);
 
-    QScopedPointer<client::ClientWindow> client_window;
+    std::unique_ptr<client::ClientWindow> client_window;
 
     if (parser.isSet(address_option))
     {

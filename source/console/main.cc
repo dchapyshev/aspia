@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         QApplication::translate("Console", "The file to open."));
     parser.process(application);
 
-    QScopedPointer<console::MainWindow> console_window;
+    std::unique_ptr<console::MainWindow> console_window;
     QStringList arguments = parser.positionalArguments();
 
     QString file_path;

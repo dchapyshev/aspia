@@ -38,7 +38,7 @@ public:
     ~AboutDialog() override;
 
 private:
-    QScopedPointer<Ui::AboutDialog> ui;
+    std::unique_ptr<Ui::AboutDialog> ui;
 
     DISALLOW_COPY_AND_ASSIGN(AboutDialog);
 };

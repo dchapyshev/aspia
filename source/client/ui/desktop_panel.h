@@ -106,7 +106,7 @@ private:
 
     DesktopSettings settings_;
 
-    QScopedPointer<QMenu> power_menu_;
+    std::unique_ptr<QMenu> power_menu_;
     QMenu* additional_menu_ = nullptr;
 
     QMenu* scale_menu_ = nullptr;

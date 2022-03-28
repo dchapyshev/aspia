@@ -313,8 +313,8 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
     QMenu menu;
 
-    QScopedPointer<QAction> copy_action;
-    QScopedPointer<QAction> delete_action;
+    std::unique_ptr<QAction> copy_action;
+    std::unique_ptr<QAction> delete_action;
 
     if (ui.list->selectionModel()->hasSelection())
     {
@@ -325,25 +325,25 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
         copy_action->setEnabled(transfer_allowed_ && transfer_enabled_);
 
-        menu.addAction(copy_action.data());
-        menu.addAction(delete_action.data());
+        menu.addAction(copy_action.get());
+        menu.addAction(delete_action.get());
         menu.addSeparator();
     }
 
-    QScopedPointer<QAction> add_folder_action(new QAction(
+    std::unique_ptr<QAction> add_folder_action(new QAction(
         QIcon(QStringLiteral(":/img/folder-plus.png")), tr("&Create Folder")));
 
-    menu.addAction(add_folder_action.data());
+    menu.addAction(add_folder_action.get());
 
     QAction* selected_action = menu.exec(ui.list->viewport()->mapToGlobal(point));
     if (!selected_action)
         return;
 
-    if (selected_action == delete_action.data())
+    if (selected_action == delete_action.get())
         removeSelected();
-    else if (selected_action == copy_action.data())
+    else if (selected_action == copy_action.get())
         sendSelected();
-    else if (selected_action == add_folder_action.data())
+    else if (selected_action == add_folder_action.get())
         addFolder();
 }
 
