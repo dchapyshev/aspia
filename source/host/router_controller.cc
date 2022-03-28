@@ -239,7 +239,11 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         if (connection_offer.error_code() == proto::ConnectionOffer::SUCCESS &&
             connection_offer.peer_role() == proto::ConnectionOffer::HOST)
         {
-            peer_manager_->addConnectionOffer(connection_offer.relay());
+            peer_manager_->addConnectionOffer(connection_offer);
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Invalid connection offer";
         }
     }
     else

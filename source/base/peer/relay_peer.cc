@@ -53,10 +53,14 @@ RelayPeer::~RelayPeer()
     socket_.close(ignored_code);
 }
 
-void RelayPeer::start(const proto::RelayCredentials& credentials, Delegate* delegate)
+void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
 {
     delegate_ = delegate;
+    connection_offer_ = offer;
+
     DCHECK(delegate_);
+
+    const proto::RelayCredentials& credentials = connection_offer_.relay();
 
     message_ = authenticationMessage(credentials.key(), credentials.secret());
 
@@ -138,8 +142,11 @@ void RelayPeer::onConnected()
             is_finished_ = true;
             if (delegate_)
             {
-                delegate_->onRelayConnectionReady(
-                    std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket_))));
+                std::unique_ptr<NetworkChannel> channel =
+                    std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket_)));
+                channel->setHostId(connection_offer_.host_data().host_id());
+
+                delegate_->onRelayConnectionReady(std::move(channel));
             }
             else
             {

@@ -20,10 +20,14 @@
 #define BASE_PEER_RELAY_PEER_H
 
 #include "base/macros_magic.h"
+#include "base/peer/host_id.h"
 #include "base/memory/byte_array.h"
 #include "proto/router_common.pb.h"
+#include "proto/router_peer.pb.h"
 
 #include <asio/ip/tcp.hpp>
+
+#include <optional>
 
 namespace base {
 
@@ -45,8 +49,9 @@ public:
         virtual void onRelayConnectionError() = 0;
     };
 
-    void start(const proto::RelayCredentials& credentials, Delegate* delegate);
+    void start(const proto::ConnectionOffer& offer, Delegate* delegate);
     bool isFinished() const { return is_finished_; }
+    const proto::ConnectionOffer& connectionOffer() const { return connection_offer_; }
 
 private:
     void onConnected();
@@ -55,6 +60,7 @@ private:
     static ByteArray authenticationMessage(const proto::RelayKey& key, const std::string& secret);
 
     Delegate* delegate_ = nullptr;
+    proto::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 
     uint32_t message_size_ = 0;

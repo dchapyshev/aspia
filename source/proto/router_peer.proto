@@ -61,6 +61,11 @@ message ConnectionRequest
     fixed64 host_id = 1;
 }
 
+message HostOfferData
+{
+    fixed64 host_id = 1; // ID to which the client will connect.
+}
+
 message ConnectionOffer
 {
     enum PeerRole
@@ -78,9 +83,10 @@ message ConnectionOffer
         KEY_POOL_EMPTY = 4;
     }
 
-    PeerRole peer_role     = 1;
-    ErrorCode error_code   = 2;
-    RelayCredentials relay = 3;
+    PeerRole peer_role      = 1;
+    ErrorCode error_code    = 2;
+    RelayCredentials relay  = 3;
+    HostOfferData host_data = 4;
 }
 
 message CheckHostStatus

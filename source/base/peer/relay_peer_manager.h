@@ -48,7 +48,7 @@ public:
     RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
     ~RelayPeerManager() override;
 
-    void addConnectionOffer(const proto::RelayCredentials& credentials);
+    void addConnectionOffer(const proto::ConnectionOffer& offer);
 
 protected:
     // RelayPeer::Delegate implementation.

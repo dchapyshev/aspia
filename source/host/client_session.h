@@ -80,6 +80,8 @@ public:
     void setSessionId(base::SessionId session_id);
     base::SessionId sessionId() const { return session_id_; }
 
+    base::HostId hostId() const { return channel_->hostId(); }
+
 protected:
     ClientSession(proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
 

@@ -304,13 +304,16 @@ void UserSessionManager::onSettingsChanged()
 
 void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
-    LOG(LS_INFO) << "Adding a new client connection (user: " << client_session->userName() << ")";
+    LOG(LS_INFO) << "Adding a new client connection (user: '" << client_session->userName()
+                 << "', host_id: '" << client_session->hostId() << "')";
 
     base::SessionId session_id = base::kInvalidSessionId;
 
     std::string username = client_session->userName();
     if (base::startsWith(username, "#"))
     {
+        LOG(LS_INFO) << "Connection with one time password";
+
         username.erase(username.begin());
 
         base::HostId host_id = base::kInvalidHostId;
@@ -320,21 +323,46 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
             return;
         }
 
+        LOG(LS_INFO) << "Find session ID by host ID...";
+
         for (const auto& session : sessions_)
         {
             if (session->hostId() == host_id)
             {
                 session_id = session->sessionId();
+
+                LOG(LS_INFO) << "Session with ID '" << session_id << "' found";
                 break;
             }
         }
 
-        LOG(LS_INFO) << "Connection by host id";
+        LOG(LS_INFO) << "Connection by host id: " << host_id;
     }
     else
     {
         LOG(LS_INFO) << "Connecting with a permanent username";
-        session_id = base::activeConsoleSessionId();
+
+        base::HostId host_id = client_session->hostId();
+        if (host_id == base::kInvalidHostId)
+        {
+            LOG(LS_INFO) << "Using CONSOLE session id";
+            session_id = base::activeConsoleSessionId();
+        }
+        else
+        {
+            LOG(LS_INFO) << "Find session ID by host ID...";
+
+            for (const auto& session : sessions_)
+            {
+                if (session->hostId() == host_id)
+                {
+                    session_id = session->sessionId();
+
+                    LOG(LS_INFO) << "Session with ID '" << session_id << "' found";
+                    break;
+                }
+            }
+        }
     }
 
     if (session_id == base::kInvalidSessionId)

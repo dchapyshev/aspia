@@ -182,7 +182,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         else
         {
             relay_peer_ = std::make_unique<base::RelayPeer>();
-            relay_peer_->start(connection_offer.relay(), this);
+            relay_peer_->start(connection_offer, this);
         }
     }
     else

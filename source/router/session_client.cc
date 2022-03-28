@@ -113,6 +113,9 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
                 {
                     offer->set_error_code(proto::ConnectionOffer::SUCCESS);
 
+                    proto::HostOfferData* offer_data = offer->mutable_host_data();
+                    offer_data->set_host_id(request.host_id());
+
                     proto::RelayCredentials* offer_credentials = offer->mutable_relay();
 
                     offer_credentials->set_host(relay->peerData()->first);
@@ -129,6 +132,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     }
 
     LOG(LS_INFO) << "Sending connection offer to client";
+    offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::ConnectionOffer::CLIENT);
     sendMessage(*message);
 }

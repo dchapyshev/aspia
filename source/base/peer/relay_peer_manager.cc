@@ -38,10 +38,10 @@ RelayPeerManager::~RelayPeerManager()
     delegate_ = nullptr;
 }
 
-void RelayPeerManager::addConnectionOffer(const proto::RelayCredentials& credentials)
+void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
 {
     pending_.emplace_back(std::make_unique<RelayPeer>());
-    pending_.back()->start(credentials, this);
+    pending_.back()->start(offer, this);
 }
 
 void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<NetworkChannel> channel)
