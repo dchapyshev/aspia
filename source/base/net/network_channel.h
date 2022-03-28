@@ -22,6 +22,7 @@
 #include "base/memory/byte_array.h"
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
+#include "base/peer/host_id.h"
 
 #include <asio/ip/tcp.hpp>
 #include <asio/high_resolution_timer.hpp>
@@ -157,6 +158,9 @@ public:
     int speedRx();
     int speedTx();
 
+    base::HostId hostId() const { return host_id_; }
+    void setHostId(base::HostId host_id) { host_id_ = host_id; }
+
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
     static std::string errorToString(ErrorCode error_code);
@@ -271,6 +275,8 @@ private:
     TimePoint begin_time_rx_;
     int64_t bytes_rx_ = 0;
     int speed_rx_ = 0;
+
+    base::HostId host_id_ = base::kInvalidHostId;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };
