@@ -82,7 +82,7 @@ void Client::start(const Config& config)
         status_window_proxy_->onStarted(config_.address_or_id);
 
         router_controller_ =
-            std::make_unique<RouterController>(config_.router_config.value(), io_task_runner_);
+            std::make_unique<RouterController>(*config_.router_config, io_task_runner_);
         router_controller_->connectTo(base::stringToHostId(config_.address_or_id), this);
     }
     else
@@ -238,7 +238,7 @@ void Client::onErrorOccurred(const RouterController::Error& error)
 
 void Client::startAuthentication()
 {
-    LOG(LS_INFO) << "Start authentication";
+    LOG(LS_INFO) << "Start authentication for '" << config_.username << "'";
 
     static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
@@ -266,7 +266,7 @@ void Client::startAuthentication()
 
             if (authenticator_->peerVersion() >= base::Version(2, 0, 0))
             {
-                LOG(LS_INFO) << "Using own keep alive";
+                LOG(LS_INFO) << "Using OWN keep alive";
 
                 // Versions 2.0.0+ support their own implementation keep alive.
                 channel_->setOwnKeepAlive(true);
