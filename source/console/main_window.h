@@ -107,8 +107,8 @@ private:
     Ui::ConsoleMainWindow ui;
     Mru mru_;
 
-    QScopedPointer<QSystemTrayIcon> tray_icon_;
-    QScopedPointer<QMenu> tray_menu_;
+    std::unique_ptr<QSystemTrayIcon> tray_icon_;
+    std::unique_ptr<QMenu> tray_menu_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
