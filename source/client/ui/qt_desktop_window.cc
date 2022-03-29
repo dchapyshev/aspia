@@ -43,6 +43,7 @@
 #include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
+#include <QPropertyAnimation>
 #include <QScreen>
 #include <QScrollArea>
 #include <QScrollBar>
@@ -111,6 +112,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(panel_, &DesktopPanel::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
     connect(panel_, &DesktopPanel::minimizeSession, this, &QtDesktopWindow::showMinimized);
     connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
+    connect(panel_, &DesktopPanel::showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
 
     connect(panel_, &DesktopPanel::screenSelected, this, [this](const proto::Screen& screen)
     {
@@ -416,8 +418,21 @@ void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRe
 
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
-    panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+    int panel_width = panel_->width();
+    int window_width = width();
+
+    QPoint new_pos;
+    new_pos.setX(((window_width * panel_pos_x_) / 100) - (panel_width / 2));
+    new_pos.setY(0);
+
+    if (new_pos.x() < 0)
+        new_pos.setX(0);
+    else if (new_pos.x() > (window_width - panel_width))
+        new_pos.setX(window_width - panel_width);
+
+    panel_->move(new_pos);
     scaleDesktop();
+
     QWidget::resizeEvent(event);
 }
 
@@ -482,11 +497,64 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
     {
         if (event->type() == QEvent::Resize)
         {
-            panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+            int panel_width = panel_->width();
+            int window_width = width();
+
+            QPoint new_pos;
+            new_pos.setX(((window_width * panel_pos_x_) / 100) - (panel_width / 2));
+            new_pos.setY(0);
+
+            if (new_pos.x() < 0)
+                new_pos.setX(0);
+            else if (new_pos.x() > (window_width - panel_width))
+                new_pos.setX(window_width - panel_width);
+
+            panel_->move(new_pos);
         }
         else if (event->type() == QEvent::Leave)
         {
             desktop_->setFocus();
+        }
+        else if (!panel_->isPanelHidden())
+        {
+            if (event->type() == QEvent::MouseButtonPress)
+            {
+                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+                if (mouse_event->button() == Qt::RightButton)
+                {
+                    start_panel_pos_.emplace(mouse_event->pos());
+                    return true;
+                }
+            }
+            else if (event->type() == QEvent::MouseButtonRelease)
+            {
+                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+                if (mouse_event->button() == Qt::RightButton)
+                {
+                    start_panel_pos_.reset();
+                    return true;
+                }
+            }
+            else if (event->type() == QEvent::MouseMove)
+            {
+                QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+                if ((mouse_event->buttons() & Qt::RightButton) && start_panel_pos_.has_value())
+                {
+                    QPoint diff = mouse_event->pos() - *start_panel_pos_;
+                    QPoint new_pos = QPoint(panel_->pos().x() + diff.x(), 0);
+                    int panel_width = panel_->width();
+                    int window_width = width();
+
+                    if (new_pos.x() < 0)
+                        new_pos.setX(0);
+                    else if (new_pos.x() > (window_width - panel_width))
+                        new_pos.setX(window_width - panel_width);
+
+                    panel_pos_x_ = ((new_pos.x() + (panel_width / 2)) * 100) / window_width;
+                    panel_->move(new_pos);
+                    return true;
+                }
+            }
         }
     }
 
@@ -743,6 +811,21 @@ void QtDesktopWindow::onPasteKeystrokes()
     {
         LOG(LS_WARNING) << "QApplication::clipboard failed";
     }
+}
+
+void QtDesktopWindow::onShowHidePanel()
+{
+    QSize start_panel_size = panel_->size();
+    QSize end_panel_size = panel_->sizeHint();
+
+    int start_x = ((width() * panel_pos_x_) / 100) - (start_panel_size.width() / 2);
+    int end_x = ((width() * panel_pos_x_) / 100) - (end_panel_size.width() / 2);
+
+    QPropertyAnimation* animation = new QPropertyAnimation(panel_, QByteArrayLiteral("geometry"));
+    animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
+    animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
+    animation->setDuration(150);
+    animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 } // namespace client

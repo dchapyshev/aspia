@@ -96,6 +96,7 @@ private slots:
     void onResizeTimer();
     void onScrollTimer();
     void onPasteKeystrokes();
+    void onShowHidePanel();
 
 private:
     const proto::SessionType session_type_;
@@ -120,6 +121,9 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
+
+    std::optional<QPoint> start_panel_pos_;
+    int panel_pos_x_ = 50;
 
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };

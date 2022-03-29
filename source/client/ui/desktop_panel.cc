@@ -25,7 +25,6 @@
 #include <QActionGroup>
 #include <QMenu>
 #include <QMessageBox>
-#include <QPropertyAnimation>
 #include <QTimer>
 #include <QToolButton>
 
@@ -311,10 +310,13 @@ void DesktopPanel::enterEvent(QEnterEvent* /* event */)
 
     if (allow_hide_)
     {
-        ui.toolbar->show();
-        ui.frame->hide();
+        if (ui.toolbar->isHidden())
+        {
+            ui.toolbar->show();
+            ui.frame->hide();
 
-        startAnimation();
+            emit showHidePanel();
+        }
     }
 }
 
@@ -334,7 +336,7 @@ void DesktopPanel::onHideTimer()
     ui.toolbar->hide();
     ui.frame->show();
 
-    startAnimation();
+    emit showHidePanel();
     adjustSize();
 }
 
@@ -641,22 +643,6 @@ void DesktopPanel::delayedHide()
 {
     if (!ui.action_pin->isChecked() && !hide_timer_->isActive())
         hide_timer_->start(std::chrono::seconds(1));
-}
-
-void DesktopPanel::startAnimation()
-{
-    QSize parent_size = parentWidget()->size();
-    QSize start_panel_size = size();
-    QSize end_panel_size = sizeHint();
-
-    int start_x = (parent_size.width() / 2) - (start_panel_size.width() / 2);
-    int end_x = (parent_size.width() / 2) - (end_panel_size.width() / 2);
-
-    QPropertyAnimation* animation = new QPropertyAnimation(this, QByteArrayLiteral("geometry"));
-    animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
-    animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
-    animation->setDuration(150);
-    animation->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 } // namespace client

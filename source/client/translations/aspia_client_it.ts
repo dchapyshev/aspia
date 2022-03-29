@@ -1601,56 +1601,56 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="223"/>
+        <location filename="../ui/desktop_panel.cc" line="222"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="225"/>
+        <location filename="../ui/desktop_panel.cc" line="224"/>
         <source>Monitor %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="244"/>
+        <location filename="../ui/desktop_panel.cc" line="243"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="376"/>
-        <location filename="../ui/desktop_panel.cc" line="387"/>
-        <location filename="../ui/desktop_panel.cc" line="398"/>
-        <location filename="../ui/desktop_panel.cc" line="409"/>
-        <location filename="../ui/desktop_panel.cc" line="420"/>
+        <location filename="../ui/desktop_panel.cc" line="378"/>
+        <location filename="../ui/desktop_panel.cc" line="389"/>
+        <location filename="../ui/desktop_panel.cc" line="400"/>
+        <location filename="../ui/desktop_panel.cc" line="411"/>
+        <location filename="../ui/desktop_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="377"/>
+        <location filename="../ui/desktop_panel.cc" line="379"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="388"/>
+        <location filename="../ui/desktop_panel.cc" line="390"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="399"/>
+        <location filename="../ui/desktop_panel.cc" line="401"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="410"/>
+        <location filename="../ui/desktop_panel.cc" line="412"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="421"/>
+        <location filename="../ui/desktop_panel.cc" line="423"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="494"/>
+        <location filename="../ui/desktop_panel.cc" line="496"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1907,34 +1907,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="238"/>
-        <location filename="../ui/qt_desktop_window.cc" line="246"/>
-        <location filename="../ui/qt_desktop_window.cc" line="657"/>
+        <location filename="../ui/qt_desktop_window.cc" line="240"/>
+        <location filename="../ui/qt_desktop_window.cc" line="248"/>
+        <location filename="../ui/qt_desktop_window.cc" line="725"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="239"/>
+        <location filename="../ui/qt_desktop_window.cc" line="241"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="247"/>
+        <location filename="../ui/qt_desktop_window.cc" line="249"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="635"/>
+        <location filename="../ui/qt_desktop_window.cc" line="703"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="637"/>
+        <location filename="../ui/qt_desktop_window.cc" line="705"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="657"/>
+        <location filename="../ui/qt_desktop_window.cc" line="725"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

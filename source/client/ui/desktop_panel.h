@@ -67,6 +67,7 @@ signals:
     void startStatistics();
     void minimizeSession();
     void closeSession();
+    void showHidePanel();
 
 protected:
     // QFrame implementation.
@@ -94,7 +95,6 @@ private:
     void updateScaleMenu();
     void updateSize();
     void delayedHide();
-    void startAnimation();
 
     Ui::DesktopPanel ui;
 
