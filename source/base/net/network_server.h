@@ -43,9 +43,13 @@ public:
         virtual void onNewConnection(std::unique_ptr<NetworkChannel> channel) = 0;
     };
 
-    void start(uint16_t port, Delegate* delegate);
+    void start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate);
     void stop();
+
+    std::u16string listenInterface() const;
     uint16_t port() const;
+
+    static bool isValidListenInterface(std::u16string_view interface);
 
 private:
     class Impl;

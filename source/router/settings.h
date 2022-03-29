@@ -34,6 +34,9 @@ public:
     void reset();
     void flush();
 
+    void setListenInterface(const std::u16string& interface);
+    std::u16string listenInterface() const;
+
     void setPort(uint16_t port);
     uint16_t port() const;
 

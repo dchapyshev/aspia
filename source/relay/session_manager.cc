@@ -96,11 +96,12 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 } // namespace
 
 SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
+                               const asio::ip::address& listen_address,
                                uint16_t port,
                                const std::chrono::minutes& idle_timeout)
     : task_runner_(std::move(task_runner)),
       acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
-                asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+                asio::ip::tcp::endpoint(listen_address, port)),
       idle_timeout_(idle_timeout),
       idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {

@@ -91,6 +91,13 @@ bool Server::start()
         return false;
     }
 
+    std::u16string listen_interface = settings.listenInterface();
+    if (!base::NetworkServer::isValidListenInterface(listen_interface))
+    {
+        LOG(LS_ERROR) << "Invalid listen interface address";
+        return false;
+    }
+
     uint16_t port = settings.port();
     if (!port)
     {
@@ -163,7 +170,7 @@ bool Server::start()
     relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
 
     server_ = std::make_unique<base::NetworkServer>();
-    server_->start(port, this);
+    server_->start(listen_interface, port, this);
 
     LOG(LS_INFO) << "Server started";
     return true;

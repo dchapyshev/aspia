@@ -91,6 +91,20 @@ base::ByteArray Settings::routerPublicKey() const
     return impl_.get<base::ByteArray>("RouterPublicKey");
 }
 
+void Settings::setListenInterface(const std::u16string& interface)
+{
+    impl_.set<std::u16string>("ListenInterface", interface);
+}
+
+std::u16string Settings::listenInterface() const
+{
+    std::u16string interface = impl_.get<std::u16string>("ListenInterface", u"0.0.0.0");
+    if (interface.empty())
+        return u"0.0.0.0";
+
+    return interface;
+}
+
 void Settings::setPeerAddress(const std::u16string& address)
 {
     impl_.set<std::u16string>("PeerAddress", address);

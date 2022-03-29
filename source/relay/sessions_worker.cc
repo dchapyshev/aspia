@@ -19,13 +19,16 @@
 #include "relay/sessions_worker.h"
 
 #include "base/logging.h"
+#include "base/strings/unicode.h"
 
 namespace relay {
 
-SessionsWorker::SessionsWorker(uint16_t peer_port,
+SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
+                               uint16_t peer_port,
                                const std::chrono::minutes& peer_idle_timeout,
                                std::unique_ptr<SharedPool> shared_pool)
-    : peer_port_(peer_port),
+    : listen_interface_(listen_interface),
+      peer_port_(peer_port),
       peer_idle_timeout_(peer_idle_timeout),
       shared_pool_(std::move(shared_pool)),
       thread_(std::make_unique<base::Thread>())
@@ -55,8 +58,11 @@ void SessionsWorker::onBeforeThreadRunning()
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
+    asio::ip::address listen_address =
+        asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface_));
+
     session_manager_ = std::make_unique<SessionManager>(
-        self_task_runner_, peer_port_, peer_idle_timeout_);
+        self_task_runner_, listen_address, peer_port_, peer_idle_timeout_);
     session_manager_->start(std::move(shared_pool_), this);
 }
 

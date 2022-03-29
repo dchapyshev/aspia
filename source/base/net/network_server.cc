@@ -24,6 +24,8 @@
 #include "base/net/network_channel.h"
 #include "base/strings/unicode.h"
 
+#include <asio/ip/address.hpp>
+
 namespace base {
 
 class NetworkServer::Impl : public base::enable_shared_from_this<Impl>
@@ -32,8 +34,10 @@ public:
     explicit Impl(asio::io_context& io_context);
     ~Impl();
 
-    void start(uint16_t port, Delegate* delegate);
+    void start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate);
     void stop();
+
+    std::u16string listenInterface() const;
     uint16_t port() const;
 
 private:
@@ -43,6 +47,8 @@ private:
     asio::io_context& io_context_;
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     Delegate* delegate_ = nullptr;
+
+    std::u16string listen_interface_;
     uint16_t port_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Impl);
@@ -60,14 +66,26 @@ NetworkServer::Impl::~Impl()
     DCHECK(!acceptor_);
 }
 
-void NetworkServer::Impl::start(uint16_t port, Delegate* delegate)
+void NetworkServer::Impl::start(
+    std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
+    listen_interface_ = listen_interface;
     port_ = port;
 
     DCHECK(delegate_);
 
-    asio::ip::tcp::endpoint endpoint(asio::ip::tcp::v4(), port);
+    asio::error_code error_code;
+    asio::ip::address listen_address =
+        asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Invalid listen address: " << listen_interface.data()
+                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        return;
+    }
+
+    asio::ip::tcp::endpoint endpoint(listen_address, port);
     acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_, endpoint);
 
     doAccept();
@@ -77,6 +95,11 @@ void NetworkServer::Impl::stop()
 {
     delegate_ = nullptr;
     acceptor_.reset();
+}
+
+std::u16string NetworkServer::Impl::listenInterface() const
+{
+    return listen_interface_;
 }
 
 uint16_t NetworkServer::Impl::port() const
@@ -125,9 +148,9 @@ NetworkServer::~NetworkServer()
     impl_->stop();
 }
 
-void NetworkServer::start(uint16_t port, Delegate* delegate)
+void NetworkServer::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
-    impl_->start(port, delegate);
+    impl_->start(listen_interface, port, delegate);
 }
 
 void NetworkServer::stop()
@@ -135,9 +158,29 @@ void NetworkServer::stop()
     impl_->stop();
 }
 
+std::u16string NetworkServer::listenInterface() const
+{
+    return impl_->listenInterface();
+}
+
 uint16_t NetworkServer::port() const
 {
     return impl_->port();
+}
+
+// static
+bool NetworkServer::isValidListenInterface(std::u16string_view interface)
+{
+    asio::error_code error_code;
+    asio::ip::make_address_v4(base::local8BitFromUtf16(interface), error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "Invalid interface address: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace base

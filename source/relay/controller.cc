@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/net/network_server.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_common.pb.h"
 #include "relay/settings.h"
@@ -73,11 +74,13 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Router public key: " << base::toHex(router_public_key_);
 
     // Peers settings.
+    listen_interface_ = settings.listenInterface();
     peer_address_ = settings.peerAddress();
     peer_port_ = settings.peerPort();
     peer_idle_timeout_ = settings.peerIdleTimeout();
     max_peer_count_ = settings.maxPeerCount();
 
+    LOG(LS_INFO) << "Listen interface: " << listen_interface_;
     LOG(LS_INFO) << "Peer address: " << peer_address_;
     LOG(LS_INFO) << "Peer port: " << peer_port_;
     LOG(LS_INFO) << "Peer idle timeout: " << peer_idle_timeout_.count();
@@ -108,6 +111,12 @@ bool Controller::start()
         return false;
     }
 
+    if (!base::NetworkServer::isValidListenInterface(listen_interface_))
+    {
+        LOG(LS_ERROR) << "Invalid listen interface";
+        return false;
+    }
+
     if (peer_address_.empty())
     {
         LOG(LS_ERROR) << "Empty peer address";
@@ -127,7 +136,7 @@ bool Controller::start()
     }
 
     sessions_worker_ = std::make_unique<SessionsWorker>(
-        peer_port_, peer_idle_timeout_, shared_pool_->share());
+        listen_interface_, peer_port_, peer_idle_timeout_, shared_pool_->share());
     sessions_worker_->start(task_runner_, this);
 
     connectToRouter();

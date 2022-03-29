@@ -62,6 +62,20 @@ void Settings::flush()
     impl_.flush();
 }
 
+void Settings::setListenInterface(const std::u16string& interface)
+{
+    impl_.set<std::u16string>("ListenInterface", interface);
+}
+
+std::u16string Settings::listenInterface() const
+{
+    std::u16string interface = impl_.get<std::u16string>("ListenInterface", u"0.0.0.0");
+    if (interface.empty())
+        return u"0.0.0.0";
+
+    return interface;
+}
+
 void Settings::setPort(uint16_t port)
 {
     impl_.set<uint16_t>("Port", port);

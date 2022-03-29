@@ -67,6 +67,7 @@ private:
     base::ByteArray router_public_key_;
 
     // Peers settings.
+    std::u16string listen_interface_;
     std::u16string peer_address_;
     uint16_t peer_port_ = 0;
     std::chrono::minutes peer_idle_timeout_;

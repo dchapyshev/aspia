@@ -46,6 +46,7 @@ public:
     };
 
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
+                   const asio::ip::address& listen_address,
                    uint16_t port,
                    const std::chrono::minutes& idle_timeout);
     ~SessionManager() override;
