@@ -171,7 +171,7 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 
     if (screen_id == kFullDesktopScreenId)
     {
-        current_screen_index_ = screen_id;
+        current_screen_index_ = -1;
         current_screen_id_ = screen_id;
         return true;
     }
@@ -214,7 +214,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
     DxgiDuplicatorController::Result result;
 
-    if (current_screen_index_ == kFullDesktopScreenId)
+    if (current_screen_index_ == -1)
     {
         result = controller_->duplicate(queue_.currentFrame(), cursor_.get());
     }
