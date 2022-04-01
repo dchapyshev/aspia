@@ -57,6 +57,7 @@ protected:
 private:
     base::local_shared_ptr<DxgiDuplicatorController> controller_;
 
+    ScreenId current_screen_index_ = kFullDesktopScreenId;
     ScreenId current_screen_id_ = kFullDesktopScreenId;
     FrameQueue<DxgiFrame> queue_;
     std::unique_ptr<DxgiCursor> cursor_;

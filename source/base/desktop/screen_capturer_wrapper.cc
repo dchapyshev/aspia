@@ -117,7 +117,11 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
             else
             {
                 LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
-                resizer_->setResolution(screen_id, resolution);
+                if (!resizer_->setResolution(screen_id, resolution))
+                {
+                    LOG(LS_WARNING) << "setResolution failed";
+                    return;
+                }
             }
         }
     }

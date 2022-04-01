@@ -34,7 +34,6 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     DCHECK(screen_list->screens.empty());
 
     ScreenCapturer::ScreenList gdi_screens;
-
     if (!ScreenCaptureUtils::screenList(&gdi_screens))
     {
         LOG(LS_WARNING) << "screenList failed";
@@ -46,8 +45,13 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     for (const auto& screen : gdi_screens.screens)
         max_screen_id = std::max(max_screen_id, screen.id);
 
-    for (const auto& device_name : device_names)
+    LOG(LS_INFO) << "Device names count: " << device_names.size()
+                 << ", GDI count: " << gdi_screens.screens.size()
+                 << ", max screen id: " << max_screen_id;
+
+    for (size_t device_index = 0; device_index < device_names.size(); ++device_index)
     {
+        const std::wstring& device_name = device_names[device_index];
         bool device_found = false;
 
         for (const auto& gdi_screen : gdi_screens.screens)
@@ -58,17 +62,23 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
             {
                 screen_list->screens.push_back(gdi_screen);
                 device_found = true;
-
                 break;
             }
         }
 
         if (!device_found)
         {
+            LOG(LS_WARNING) << "Device '" << device_name << "' NOT found in list ("
+                            << device_index << ")";
+
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
             screen_list->screens.push_back(
                 { max_screen_id, std::string(), Point(), Size(), Point(), false });
+        }
+        else
+        {
+            LOG(LS_INFO) << "Device '" << device_name << "' found in list (" << device_index << ")";
         }
     }
 
@@ -78,7 +88,6 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
 {
     ScreenCapturer::ScreenList screen_list;
-
     if (!screenListFromDeviceNames(device_names, &screen_list))
     {
         LOG(LS_WARNING) << "screenListFromDeviceNames failed";
@@ -90,10 +99,14 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
     for (size_t i = 0; i < screen_list.screens.size(); ++i)
     {
         if (screen_list.screens[i].id == id)
+        {
+            LOG(LS_INFO) << "Screen with ID " << id << " found ("
+                         << screen_list.screens[i].title << ")";
             return static_cast<int>(i);
+        }
     }
 
-    LOG(LS_WARNING) << "Screen with ID " << id << " not found";
+    LOG(LS_WARNING) << "Screen with ID " << id << " NOT found";
     return -1;
 }
 
@@ -158,12 +171,12 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 
     if (screen_id == kFullDesktopScreenId)
     {
+        current_screen_index_ = screen_id;
         current_screen_id_ = screen_id;
         return true;
     }
 
     std::vector<std::wstring> device_names;
-
     if (!controller_->deviceNames(&device_names))
     {
         LOG(LS_WARNING) << "deviceNames failed";
@@ -177,7 +190,8 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
         return false;
     }
 
-    current_screen_id_ = index;
+    current_screen_index_ = index;
+    current_screen_id_ = screen_id;
     return true;
 }
 
@@ -200,14 +214,14 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
     DxgiDuplicatorController::Result result;
 
-    if (current_screen_id_ == kFullDesktopScreenId)
+    if (current_screen_index_ == kFullDesktopScreenId)
     {
         result = controller_->duplicate(queue_.currentFrame(), cursor_.get());
     }
     else
     {
         result = controller_->duplicateMonitor(
-            queue_.currentFrame(), cursor_.get(), current_screen_id_);
+            queue_.currentFrame(), cursor_.get(), current_screen_index_);
     }
 
     using DuplicateResult = DxgiDuplicatorController::Result;
@@ -245,7 +259,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 
         case DuplicateResult::INVALID_MONITOR_ID:
         {
-            LOG(LS_ERROR) << "Invalid monitor id " << current_screen_id_;
+            LOG(LS_ERROR) << "Invalid monitor id " << current_screen_index_;
             *error = Error::PERMANENT;
             return nullptr;
         }
