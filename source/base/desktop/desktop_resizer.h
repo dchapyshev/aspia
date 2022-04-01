@@ -38,7 +38,7 @@ public:
     static std::unique_ptr<DesktopResizer> create();
 
     virtual std::vector<Size> supportedResolutions(ScreenId screen_id) = 0;
-    virtual void setResolution(ScreenId screen_id, const Size& resolution) = 0;
+    virtual bool setResolution(ScreenId screen_id, const Size& resolution) = 0;
     virtual void restoreResolution(ScreenId screen_id) = 0;
     virtual void restoreResulution() = 0;
 };

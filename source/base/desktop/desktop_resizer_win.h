@@ -33,7 +33,7 @@ public:
     ~DesktopResizerWin() override;
 
     std::vector<Size> supportedResolutions(ScreenId screen_id) override;
-    void setResolution(ScreenId screen_id, const Size& resolution) override;
+    bool setResolution(ScreenId screen_id, const Size& resolution) override;
     void restoreResolution(ScreenId screen_id) override;
     void restoreResulution() override;
 
