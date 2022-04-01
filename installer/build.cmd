@@ -45,7 +45,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-cn.mst" 2052
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-console-en-us.msi" "%1\console-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-console-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-console-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028,0
 
 echo "Creating MSI packages for Aspia Client"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension client.wxs
@@ -76,7 +76,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-cn.mst" 2052
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-client-en-us.msi" "%1\client-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-client-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-client-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028,0
 
 echo "Creating MSI packages for Aspia Host"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension host.wxs
@@ -107,7 +107,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-cn.mst" 2052
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs" "%1\aspia-host-en-us.msi" "%1\host-zh-tw.mst" 1028
 
-cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-host-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028
+cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%1\aspia-host-en-us.msi" Package 1033,1031,1043,1046,1049,1058,2052,1028,0
 
 echo "Creating MSI packages for Aspia Router"
 "%WIX%\bin\candle" -out "%1\\" -ext WixUtilExtension -ext WixUIExtension router.wxs
