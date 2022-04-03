@@ -23,6 +23,7 @@
 #include "base/strings/unicode.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 namespace console {
 
@@ -84,6 +85,18 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
 void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
                                             const proto::address_book::Computer& computer)
 {
+    bool inherit_creds = computer.inherit().credentials();
+
+    ui.groupbox_inherit_creds->setChecked(inherit_creds);
+    QTimer::singleShot(0, this, [this, inherit_creds]()
+    {
+        QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
+        for (const auto& widget : widgets)
+        {
+            widget->setEnabled(!inherit_creds);
+        }
+    });
+
     if (isHostId(QString::fromStdString(computer.address())))
     {
         ui.edit_address->setText(QString::fromStdString(computer.address()));
@@ -168,6 +181,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
         computer->set_port(address.port());
     }
 
+    computer->mutable_inherit()->set_credentials(ui.groupbox_inherit_creds->isChecked());
     computer->set_name(name.toStdString());
     computer->set_username(base::utf8FromUtf16(username));
     computer->set_password(base::utf8FromUtf16(password));

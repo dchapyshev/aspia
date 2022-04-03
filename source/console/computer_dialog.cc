@@ -102,10 +102,8 @@ ComputerDialog::ComputerDialog(QWidget* parent,
         new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
 
     general_tab->restoreSettings(parent_name, computer_);
-    desktop_manage_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_.session_config().desktop_manage());
-    desktop_view_tab->restoreSettings(
-        proto::SESSION_TYPE_DESKTOP_VIEW, computer_.session_config().desktop_view());
+    desktop_manage_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, computer_);
+    desktop_view_tab->restoreSettings(proto::SESSION_TYPE_DESKTOP_VIEW, computer_);
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
@@ -176,27 +174,19 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 
             if (type == ITEM_TYPE_GENERAL)
             {
-                ComputerDialogGeneral* general_tab =
-                    static_cast<ComputerDialogGeneral*>(tab);
-
+                ComputerDialogGeneral* general_tab = static_cast<ComputerDialogGeneral*>(tab);
                 if (!general_tab->saveSettings(&computer_))
                     return;
             }
             else if (type == ITEM_TYPE_DESKTOP_MANAGE)
             {
-                ComputerDialogDesktop* desktop_tab =
-                    static_cast<ComputerDialogDesktop*>(tab);
-
-                desktop_tab->saveSettings(
-                    computer_.mutable_session_config()->mutable_desktop_manage());
+                ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
+                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
             }
             else if (type == ITEM_TYPE_DESKTOP_VIEW)
             {
-                ComputerDialogDesktop* desktop_tab =
-                    static_cast<ComputerDialogDesktop*>(tab);
-
-                desktop_tab->saveSettings(
-                    computer_.mutable_session_config()->mutable_desktop_view());
+                ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
+                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW, &computer_);
             }
         }
 

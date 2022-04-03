@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "console/computer_dialog_tab.h"
-#include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_computer_dialog_desktop.h"
 
 namespace console {
@@ -35,8 +34,9 @@ public:
     ComputerDialogDesktop(int type, QWidget* parent);
     ~ComputerDialogDesktop() override = default;
 
-    void restoreSettings(proto::SessionType session_type, const proto::DesktopConfig& config);
-    void saveSettings(proto::DesktopConfig* config);
+    void restoreSettings(proto::SessionType session_type,
+        const proto::address_book::Computer& computer);
+    void saveSettings(proto::SessionType session_type, proto::address_book::Computer* computer);
 
 private slots:
     void onCodecChanged(int item_index);

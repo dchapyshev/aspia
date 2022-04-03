@@ -404,12 +404,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.ui" line="29"/>
+        <location filename="../computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
         <translation type="unfinished">Benutzername:</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.ui" line="43"/>
+        <location filename="../computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
         <translation type="unfinished">Kennwort:</translation>
     </message>
@@ -1042,32 +1042,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="93"/>
+        <location filename="../computer_dialog_desktop.cc" line="108"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="94"/>
+        <location filename="../computer_dialog_desktop.cc" line="109"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="95"/>
+        <location filename="../computer_dialog_desktop.cc" line="110"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="96"/>
+        <location filename="../computer_dialog_desktop.cc" line="111"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="97"/>
+        <location filename="../computer_dialog_desktop.cc" line="112"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="265"/>
+        <location filename="../computer_dialog_desktop.cc" line="295"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1075,7 +1075,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="116"/>
+        <location filename="../computer_dialog_general.cc" line="129"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -1083,17 +1083,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="124"/>
+        <location filename="../computer_dialog_general.cc" line="137"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="134"/>
+        <location filename="../computer_dialog_general.cc" line="147"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="144"/>
+        <location filename="../computer_dialog_general.cc" line="157"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -1101,12 +1101,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="161"/>
+        <location filename="../computer_dialog_general.cc" line="174"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="197"/>
+        <location filename="../computer_dialog_general.cc" line="211"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>

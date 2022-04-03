@@ -86,6 +86,11 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
     computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
     computer.set_port(DEFAULT_HOST_TCP_PORT);
 
+    proto::address_book::InheritConfig* inherit = computer.mutable_inherit();
+    inherit->set_credentials(false);
+    inherit->set_desktop_manage(true);
+    inherit->set_desktop_view(true);
+
     setDefaultDesktopManageConfig(computer.mutable_session_config()->mutable_desktop_manage());
     setDefaultDesktopViewConfig(computer.mutable_session_config()->mutable_desktop_view());
 
