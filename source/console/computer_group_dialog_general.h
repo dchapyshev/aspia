@@ -31,11 +31,11 @@ class ComputerGroupDialogGeneral : public ComputerGroupDialogTab
     Q_OBJECT
 
 public:
-    ComputerGroupDialogGeneral(int type, QWidget* parent);
-    ~ComputerGroupDialogGeneral() override = default;
+    ComputerGroupDialogGeneral(int type, bool is_root_group, QWidget* parent);
+    ~ComputerGroupDialogGeneral() override;
 
-    void restoreSettings(const proto::address_book::Computer& computer);
-    bool saveSettings(proto::address_book::Computer* computer);
+    void restoreSettings(const proto::address_book::ComputerGroupConfig& group_config);
+    bool saveSettings(proto::address_book::ComputerGroupConfig* group_config);
 
 private slots:
     void showPasswordButtonToggled(bool checked);

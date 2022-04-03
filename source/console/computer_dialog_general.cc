@@ -69,6 +69,15 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
         has_name_ = !text.isEmpty();
     });
 
+    connect(ui.groupbox_inherit_creds, &QGroupBox::toggled, this, [this](bool checked)
+    {
+        QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
+        for (const auto& widget : widgets)
+        {
+            widget->setEnabled(!checked);
+        }
+    });
+
     ui.edit_address->setFocus();
 }
 

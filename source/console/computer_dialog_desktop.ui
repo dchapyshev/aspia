@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
-    <height>374</height>
+    <width>277</width>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,14 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QCheckBox" name="checkbox_inherit_config">
+         <property name="text">
+          <string>Inherit configuration from parent</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupbox_codec">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>

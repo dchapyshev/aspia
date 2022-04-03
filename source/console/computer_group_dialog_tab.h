@@ -28,17 +28,20 @@ class ComputerGroupDialogTab : public QWidget
 public:
     virtual ~ComputerGroupDialogTab() override = default;
 
+    bool isRootGroup() const { return is_root_group_; }
     int type() const { return type_; }
 
 protected:
-    ComputerGroupDialogTab(int type, QWidget* parent)
+    ComputerGroupDialogTab(int type, bool is_root_group, QWidget* parent)
         : QWidget(parent),
+          is_root_group_(is_root_group),
           type_(type)
     {
         // Nothing
     }
 
 private:
+    const bool is_root_group_;
     const int type_;
 };
 

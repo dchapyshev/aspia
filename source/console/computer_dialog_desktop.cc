@@ -71,6 +71,14 @@ ComputerDialogDesktop::ComputerDialogDesktop(int type, QWidget* parent)
 
     connect(ui.slider_compress_ratio, &QSlider::valueChanged,
             this, &ComputerDialogDesktop::onCompressionRatioChanged);
+
+    connect(ui.checkbox_inherit_config, &QCheckBox::toggled, this, [this](bool checked)
+    {
+        ui.groupbox_codec->setEnabled(!checked);
+        ui.groupbox_features->setEnabled(!checked);
+        ui.groupbox_appearance->setEnabled(!checked);
+        ui.groupbox_other->setEnabled(!checked);
+    });
 }
 
 void ComputerDialogDesktop::restoreSettings(

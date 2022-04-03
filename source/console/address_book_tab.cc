@@ -26,6 +26,7 @@
 #include "base/strings/unicode.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
+#include "console/computer_factory.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
@@ -365,6 +366,17 @@ void AddressBookTab::addComputerGroup()
 
     std::unique_ptr<proto::address_book::ComputerGroup> computer_group =
         std::make_unique<proto::address_book::ComputerGroup>();
+    proto::address_book::ComputerGroupConfig* group_config = computer_group->mutable_config();
+
+    ComputerFactory::setDefaultDesktopManageConfig(
+        group_config->mutable_session_config()->mutable_desktop_manage());
+    ComputerFactory::setDefaultDesktopViewConfig(
+        group_config->mutable_session_config()->mutable_desktop_view());
+
+    proto::address_book::InheritConfig* inherit = group_config->mutable_inherit();
+    inherit->set_credentials(true);
+    inherit->set_desktop_manage(true);
+    inherit->set_desktop_view(true);
 
     ComputerGroupDialog dialog(this,
                                ComputerGroupDialog::CreateComputerGroup,
@@ -462,10 +474,26 @@ void AddressBookTab::modifyComputerGroup()
     if (!parent_item)
         return;
 
+    proto::address_book::ComputerGroup* computer_group = current_item->computerGroup();
+    if (!computer_group->has_config())
+    {
+        proto::address_book::ComputerGroupConfig* group_config = computer_group->mutable_config();
+
+        ComputerFactory::setDefaultDesktopManageConfig(
+            group_config->mutable_session_config()->mutable_desktop_manage());
+        ComputerFactory::setDefaultDesktopViewConfig(
+            group_config->mutable_session_config()->mutable_desktop_view());
+
+        proto::address_book::InheritConfig* inherit = group_config->mutable_inherit();
+        inherit->set_credentials(true);
+        inherit->set_desktop_manage(true);
+        inherit->set_desktop_view(true);
+    }
+
     ComputerGroupDialog dialog(this,
                                ComputerGroupDialog::ModifyComputerGroup,
                                parentName(parent_item),
-                               current_item->computerGroup());
+                               computer_group);
     if (dialog.exec() != QDialog::Accepted)
         return;
 

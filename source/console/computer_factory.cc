@@ -41,7 +41,9 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
-void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
+} // namespace
+
+void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
@@ -59,7 +61,7 @@ void setDefaultDesktopManageConfig(proto::DesktopConfig* config)
     serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
-void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
+void ComputerFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
 
@@ -75,8 +77,6 @@ void setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 
     serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
-
-} // namespace
 
 // static
 proto::address_book::Computer ComputerFactory::defaultComputer()

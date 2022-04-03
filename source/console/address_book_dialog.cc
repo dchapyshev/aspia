@@ -25,6 +25,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "base/strings/unicode.h"
+#include "console/computer_factory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
@@ -87,6 +88,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
       data_(data),
       key_(key)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &AddressBookDialog::buttonBoxClicked);
@@ -233,13 +235,30 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     sessions_item->addChild(desktop_view_item);
 
     ComputerGroupDialogParent* parent_tab =
-        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, ui.widget);
+        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, true, ui.widget);
     ComputerGroupDialogGeneral* general_tab =
-        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, true, ui.widget);
     ComputerGroupDialogDesktop* desktop_manage_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, true, ui.widget);
     ComputerGroupDialogDesktop* desktop_view_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, true, ui.widget);
+
+    if (!data_->root_group().has_config())
+    {
+        proto::address_book::ComputerGroupConfig* group_config =
+            data_->mutable_root_group()->mutable_config();
+
+        ComputerFactory::setDefaultDesktopManageConfig(
+            group_config->mutable_session_config()->mutable_desktop_manage());
+        ComputerFactory::setDefaultDesktopViewConfig(
+            group_config->mutable_session_config()->mutable_desktop_view());
+    }
+
+    general_tab->restoreSettings(data_->root_group().config());
+    desktop_manage_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_MANAGE, data_->root_group().config());
+    desktop_view_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
@@ -262,6 +281,11 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.tree_category->expandAll();
 
     ui.edit_name->setFocus();
+}
+
+AddressBookDialog::~AddressBookDialog()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
@@ -431,6 +455,37 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
         router->set_port(address.port());
         router->set_username(base::utf8FromUtf16(username));
         router->set_password(base::utf8FromUtf16(password));
+    }
+
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
+
+        if (type == ITEM_TYPE_GENERAL)
+        {
+            ComputerGroupDialogGeneral* general_tab =
+                static_cast<ComputerGroupDialogGeneral*>(tab);
+
+            if (!general_tab->saveSettings(data_->mutable_root_group()->mutable_config()))
+                return;
+        }
+        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+                data_->mutable_root_group()->mutable_config());
+        }
+        else if (type == ITEM_TYPE_DESKTOP_VIEW)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+                data_->mutable_root_group()->mutable_config());
+        }
     }
 
     file_->set_encryption_type(encryption_type);

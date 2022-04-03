@@ -45,7 +45,6 @@ protected:
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
-    void onInheritConfigToggled(bool checked);
     void onTabChanged(QTreeWidgetItem* current);
 
 private:

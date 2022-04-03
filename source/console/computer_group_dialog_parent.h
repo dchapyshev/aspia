@@ -30,7 +30,7 @@ class ComputerGroupDialogParent : public ComputerGroupDialogTab
     Q_OBJECT
 
 public:
-    ComputerGroupDialogParent(int type, QWidget* parent);
+    ComputerGroupDialogParent(int type, bool is_root_group, QWidget* parent);
     ~ComputerGroupDialogParent() override = default;
 
 private:

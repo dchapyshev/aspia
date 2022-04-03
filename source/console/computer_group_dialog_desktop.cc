@@ -61,9 +61,10 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 
 } // namespace
 
-ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, QWidget* parent)
-    : ComputerGroupDialogTab(type, parent)
+ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent)
+    : ComputerGroupDialogTab(type, is_root_group, parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -71,11 +72,48 @@ ComputerGroupDialogDesktop::ComputerGroupDialogDesktop(int type, QWidget* parent
 
     connect(ui.slider_compress_ratio, &QSlider::valueChanged,
             this, &ComputerGroupDialogDesktop::onCompressionRatioChanged);
+
+    if (is_root_group)
+    {
+        ui.checkbox_inherit_config->setVisible(false);
+    }
+    else
+    {
+        ui.checkbox_inherit_config->setVisible(true);
+
+        connect(ui.checkbox_inherit_config, &QCheckBox::toggled, this, [this](bool checked)
+        {
+            ui.groupbox_codec->setEnabled(!checked);
+            ui.groupbox_features->setEnabled(!checked);
+            ui.groupbox_appearance->setEnabled(!checked);
+            ui.groupbox_other->setEnabled(!checked);
+        });
+    }
+}
+
+ComputerGroupDialogDesktop::~ComputerGroupDialogDesktop()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 void ComputerGroupDialogDesktop::restoreSettings(
-    proto::SessionType session_type, const proto::DesktopConfig& config)
+    proto::SessionType session_type, const proto::address_book::ComputerGroupConfig& group_config)
 {
+    proto::DesktopConfig desktop_config;
+
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        ui.checkbox_inherit_config->setChecked(group_config.inherit().desktop_manage());
+        desktop_config = group_config.session_config().desktop_manage();
+    }
+    else
+    {
+        DCHECK_EQ(session_type, proto::SESSION_TYPE_DESKTOP_VIEW);
+
+        ui.checkbox_inherit_config->setChecked(group_config.inherit().desktop_view());
+        desktop_config = group_config.session_config().desktop_view();
+    }
+
     QComboBox* combo_codec = ui.combo_codec;
     combo_codec->addItem(QStringLiteral("VP9"), proto::VIDEO_ENCODING_VP9);
     combo_codec->addItem(QStringLiteral("VP8"), proto::VIDEO_ENCODING_VP8);
@@ -88,14 +126,14 @@ void ComputerGroupDialogDesktop::restoreSettings(
     combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
     combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
 
-    int current_codec = combo_codec->findData(config.video_encoding());
+    int current_codec = combo_codec->findData(desktop_config.video_encoding());
     if (current_codec == -1)
         current_codec = 0;
 
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    base::PixelFormat pixel_format = parsePixelFormat(config.pixel_format());
+    base::PixelFormat pixel_format = parsePixelFormat(desktop_config.pixel_format());
     ColorDepth color_depth;
 
     if (pixel_format.isEqual(base::PixelFormat::ARGB()))
@@ -115,27 +153,27 @@ void ComputerGroupDialogDesktop::restoreSettings(
     if (current_color_depth != -1)
         combo_color_depth->setCurrentIndex(current_color_depth);
 
-    ui.slider_compress_ratio->setValue(static_cast<int>(config.compress_ratio()));
-    onCompressionRatioChanged(static_cast<int>(config.compress_ratio()));
+    ui.slider_compress_ratio->setValue(static_cast<int>(desktop_config.compress_ratio()));
+    onCompressionRatioChanged(static_cast<int>(desktop_config.compress_ratio()));
 
-    if (config.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
+    if (desktop_config.audio_encoding() != proto::AUDIO_ENCODING_UNKNOWN)
         ui.checkbox_audio->setChecked(true);
 
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::LOCK_AT_DISCONNECT)
+        if (desktop_config.flags() & proto::LOCK_AT_DISCONNECT)
             ui.checkbox_lock_at_disconnect->setChecked(true);
 
-        if (config.flags() & proto::BLOCK_REMOTE_INPUT)
+        if (desktop_config.flags() & proto::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
-        if (config.flags() & proto::ENABLE_CURSOR_SHAPE)
+        if (desktop_config.flags() & proto::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config.flags() & proto::ENABLE_CLIPBOARD)
+        if (desktop_config.flags() & proto::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
 
-        if (config.flags() & proto::CLEAR_CLIPBOARD)
+        if (desktop_config.flags() & proto::CLEAR_CLIPBOARD)
             ui.checkbox_clear_clipboard->setChecked(true);
     }
     else
@@ -146,25 +184,40 @@ void ComputerGroupDialogDesktop::restoreSettings(
         ui.checkbox_clear_clipboard->hide();
     }
 
-    if (config.flags() & proto::CURSOR_POSITION)
+    if (desktop_config.flags() & proto::CURSOR_POSITION)
         ui.checkbox_cursor_position->setChecked(true);
 
-    if (config.flags() & proto::DISABLE_DESKTOP_EFFECTS)
+    if (desktop_config.flags() & proto::DISABLE_DESKTOP_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (config.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
+    if (desktop_config.flags() & proto::DISABLE_DESKTOP_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 
-    if (config.flags() & proto::DISABLE_FONT_SMOOTHING)
+    if (desktop_config.flags() & proto::DISABLE_FONT_SMOOTHING)
         ui.checkbox_font_smoothing->setChecked(true);
 }
 
-void ComputerGroupDialogDesktop::saveSettings(proto::DesktopConfig* config)
+void ComputerGroupDialogDesktop::saveSettings(
+    proto::SessionType session_type, proto::address_book::ComputerGroupConfig* group_config)
 {
+    proto::DesktopConfig* desktop_config;
+
+    if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        desktop_config = group_config->mutable_session_config()->mutable_desktop_manage();
+        group_config->mutable_inherit()->set_desktop_manage(ui.checkbox_inherit_config->isChecked());
+    }
+    else
+    {
+        DCHECK_EQ(session_type, proto::SESSION_TYPE_DESKTOP_VIEW);
+        desktop_config = group_config->mutable_session_config()->mutable_desktop_view();
+        group_config->mutable_inherit()->set_desktop_view(ui.checkbox_inherit_config->isChecked());
+    }
+
     proto::VideoEncoding video_encoding =
         static_cast<proto::VideoEncoding>(ui.combo_codec->currentData().toInt());
 
-    config->set_video_encoding(video_encoding);
+    desktop_config->set_video_encoding(video_encoding);
 
     if (video_encoding == proto::VIDEO_ENCODING_ZSTD)
     {
@@ -197,17 +250,17 @@ void ComputerGroupDialogDesktop::saveSettings(proto::DesktopConfig* config)
                 break;
         }
 
-        serializePixelFormat(pixel_format, config->mutable_pixel_format());
+        serializePixelFormat(pixel_format, desktop_config->mutable_pixel_format());
 
-        config->set_compress_ratio(static_cast<uint32_t>(ui.slider_compress_ratio->value()));
+        desktop_config->set_compress_ratio(static_cast<uint32_t>(ui.slider_compress_ratio->value()));
     }
 
     uint32_t flags = 0;
 
     if (ui.checkbox_audio->isChecked())
-        config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
+        desktop_config->set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
     else
-        config->set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
+        desktop_config->set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
         flags |= proto::ENABLE_CURSOR_SHAPE;
@@ -236,7 +289,7 @@ void ComputerGroupDialogDesktop::saveSettings(proto::DesktopConfig* config)
     if (ui.checkbox_clear_clipboard->isChecked())
         flags |= proto::CLEAR_CLIPBOARD;
 
-    config->set_flags(flags);
+    desktop_config->set_flags(flags);
 }
 
 void ComputerGroupDialogDesktop::onCodecChanged(int item_index)

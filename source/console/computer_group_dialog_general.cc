@@ -18,6 +18,7 @@
 
 #include "console/computer_group_dialog_general.h"
 
+#include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "base/strings/unicode.h"
@@ -26,24 +27,62 @@
 
 namespace console {
 
-ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, QWidget* parent)
-    : ComputerGroupDialogTab(type, parent)
+ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_group, QWidget* parent)
+    : ComputerGroupDialogTab(type, is_root_group, parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &ComputerGroupDialogGeneral::showPasswordButtonToggled);
 
+    if (is_root_group)
+    {
+        ui.groupbox_inherit_creds->setCheckable(false);
+        ui.groupbox_inherit_creds->setTitle(tr("Credentials"));
+    }
+    else
+    {
+        ui.groupbox_inherit_creds->setCheckable(true);
+        ui.groupbox_inherit_creds->setTitle(tr("Inherit from parent"));
+
+        connect(ui.groupbox_inherit_creds, &QGroupBox::toggled, this, [this](bool checked)
+        {
+            QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
+            for (const auto& widget : widgets)
+            {
+                widget->setEnabled(!checked);
+            }
+        });
+    }
+
     ui.edit_username->setFocus();
 }
 
-void ComputerGroupDialogGeneral::restoreSettings(const proto::address_book::Computer& computer)
+ComputerGroupDialogGeneral::~ComputerGroupDialogGeneral()
 {
-    ui.edit_username->setText(QString::fromStdString(computer.username()));
-    ui.edit_password->setText(QString::fromStdString(computer.password()));
+    LOG(LS_INFO) << "Dtor";
 }
 
-bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::Computer* computer)
+void ComputerGroupDialogGeneral::restoreSettings(
+    const proto::address_book::ComputerGroupConfig& group_config)
+{
+    ui.edit_username->setText(QString::fromStdString(group_config.username()));
+    ui.edit_password->setText(QString::fromStdString(group_config.password()));
+
+    if (!isRootGroup())
+    {
+        ui.groupbox_inherit_creds->setChecked(group_config.inherit().credentials());
+
+        QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
+        for (const auto& widget : widgets)
+        {
+            widget->setEnabled(!group_config.inherit().credentials());
+        }
+    }
+}
+
+bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroupConfig* group_config)
 {
     std::u16string username = ui.edit_username->text().toStdU16String();
     std::u16string password = ui.edit_password->text().toStdU16String();
@@ -57,8 +96,14 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::Computer* com
         return false;
     }
 
-    computer->set_username(base::utf8FromUtf16(username));
-    computer->set_password(base::utf8FromUtf16(password));
+    group_config->set_username(base::utf8FromUtf16(username));
+    group_config->set_password(base::utf8FromUtf16(password));
+
+    if (!isRootGroup())
+    {
+        group_config->mutable_inherit()->set_credentials(ui.groupbox_inherit_creds->isChecked());
+    }
+
     return true;
 }
 

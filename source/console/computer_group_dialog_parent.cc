@@ -20,8 +20,8 @@
 
 namespace console {
 
-ComputerGroupDialogParent::ComputerGroupDialogParent(int type, QWidget* parent)
-    : ComputerGroupDialogTab(type, parent)
+ComputerGroupDialogParent::ComputerGroupDialogParent(int type, bool is_root_group, QWidget* parent)
+    : ComputerGroupDialogTab(type, is_root_group, parent)
 {
     ui.setupUi(this);
 }

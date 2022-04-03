@@ -21,8 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "console/computer_group_dialog_tab.h"
-#include "proto/common.pb.h"
-#include "proto/desktop.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_computer_group_dialog_desktop.h"
 
 namespace console {
@@ -32,11 +31,13 @@ class ComputerGroupDialogDesktop : public ComputerGroupDialogTab
     Q_OBJECT
 
 public:
-    ComputerGroupDialogDesktop(int type, QWidget* parent);
-    ~ComputerGroupDialogDesktop() override = default;
+    ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent);
+    ~ComputerGroupDialogDesktop() override;
 
-    void restoreSettings(proto::SessionType session_type, const proto::DesktopConfig& config);
-    void saveSettings(proto::DesktopConfig* config);
+    void restoreSettings(proto::SessionType session_type,
+        const proto::address_book::ComputerGroupConfig& group_config);
+    void saveSettings(proto::SessionType session_type,
+        proto::address_book::ComputerGroupConfig* group_config);
 
 private slots:
     void onCodecChanged(int item_index);

@@ -92,13 +92,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QCheckBox" name="checkbox_inherit_config">
-         <property name="text">
-          <string>Inherit from parent</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QSplitter" name="splitter">
          <property name="styleSheet">
           <string notr="true">QSplitter::handle {

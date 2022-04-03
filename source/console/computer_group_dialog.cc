@@ -19,6 +19,7 @@
 #include "console/computer_group_dialog.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_memory.h"
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
@@ -61,9 +62,6 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);
 
-    connect(ui.checkbox_inherit_config, &QCheckBox::toggled,
-            this, &ComputerGroupDialog::onInheritConfigToggled);
-
     connect(ui.tree_category, &QTreeWidget::currentItemChanged,
             this, &ComputerGroupDialog::onTabChanged);
 
@@ -94,13 +92,19 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     sessions_item->addChild(desktop_view_item);
 
     ComputerGroupDialogParent* parent_tab =
-        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, ui.widget);
+        new ComputerGroupDialogParent(ITEM_TYPE_PARENT, false, ui.widget);
     ComputerGroupDialogGeneral* general_tab =
-        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
+        new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, false, ui.widget);
     ComputerGroupDialogDesktop* desktop_manage_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, false, ui.widget);
     ComputerGroupDialogDesktop* desktop_view_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, false, ui.widget);
+
+    general_tab->restoreSettings(computer_group_->config());
+    desktop_manage_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_MANAGE, computer_group_->config());
+    desktop_view_tab->restoreSettings(
+        proto::SESSION_TYPE_DESKTOP_VIEW, computer_group_->config());
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
@@ -126,6 +130,8 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 ComputerGroupDialog::~ComputerGroupDialog()
 {
     LOG(LS_INFO) << "Dtor";
+    base::memZero(computer_group_->mutable_config()->mutable_username());
+    base::memZero(computer_group_->mutable_config()->mutable_password());
 }
 
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)
@@ -178,6 +184,37 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
+        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+        {
+            QWidget* tab = *it;
+            int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
+
+            if (type == ITEM_TYPE_GENERAL)
+            {
+                ComputerGroupDialogGeneral* general_tab =
+                    static_cast<ComputerGroupDialogGeneral*>(tab);
+
+                if (!general_tab->saveSettings(computer_group_->mutable_config()))
+                    return;
+            }
+            else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+            {
+                ComputerGroupDialogDesktop* desktop_tab =
+                    static_cast<ComputerGroupDialogDesktop*>(tab);
+
+                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+                    computer_group_->mutable_config());
+            }
+            else if (type == ITEM_TYPE_DESKTOP_VIEW)
+            {
+                ComputerGroupDialogDesktop* desktop_tab =
+                    static_cast<ComputerGroupDialogDesktop*>(tab);
+
+                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+                    computer_group_->mutable_config());
+            }
+        }
+
         int64_t current_time = QDateTime::currentSecsSinceEpoch();
 
         if (mode_ == CreateComputerGroup)
@@ -195,12 +232,6 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
     }
 
     close();
-}
-
-void ComputerGroupDialog::onInheritConfigToggled(bool checked)
-{
-    ui.tree_category->setEnabled(!checked);
-    ui.widget->setEnabled(!checked);
 }
 
 void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)

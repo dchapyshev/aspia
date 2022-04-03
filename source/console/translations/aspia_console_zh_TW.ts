@@ -164,6 +164,10 @@
         <source>General</source>
         <translation type="unfinished">一般</translation>
     </message>
+    <message>
+        <source>Inherit configuration from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ComputerDialogGeneral</name>
@@ -190,6 +194,10 @@
     <message>
         <source>Comment:</source>
         <translation>註解：</translation>
+    </message>
+    <message>
+        <source>Inherit from parent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -223,10 +231,6 @@
     </message>
     <message>
         <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inherit from parent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -304,6 +308,10 @@
         <source>General</source>
         <translation type="unfinished">一般</translation>
     </message>
+    <message>
+        <source>Inherit configuration from parent</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ComputerGroupDialogGeneral</name>
@@ -330,6 +338,10 @@
     <message>
         <source>Comment:</source>
         <translation type="obsolete">註解：</translation>
+    </message>
+    <message>
+        <source>Inherit from parent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -979,6 +991,14 @@
     <message>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <source>Credentials</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inherit from parent</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
