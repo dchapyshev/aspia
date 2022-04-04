@@ -657,7 +657,7 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
     if (!current_item)
         return;
 
-    emit computerDoubleClicked(current_item->computer());
+    emit computerDoubleClicked(current_item->computerToConnect());
 }
 
 void AddressBookTab::showEvent(QShowEvent* event)
@@ -738,7 +738,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
                 if (!current_item)
                     break;
 
-                emit computerDoubleClicked(current_item->computer());
+                emit computerDoubleClicked(current_item->computerToConnect());
             }
         }
         break;

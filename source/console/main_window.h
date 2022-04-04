@@ -85,7 +85,7 @@ private slots:
     void onComputerActivated(bool activated);
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
     void onComputerContextMenu(ComputerItem* computer_item, const QPoint& point);
-    void onComputerDoubleClicked(proto::address_book::Computer* computer);
+    void onComputerDoubleClicked(const proto::address_book::Computer& computer);
     void onTabContextMenu(const QPoint& pos);
     void onLanguageChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);

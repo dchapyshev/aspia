@@ -60,7 +60,8 @@ void ComputerItem::updateItem()
 
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
     setText(COLUMN_INDEX_ADDRESS, address_title);
-    setText(COLUMN_INDEX_COMMENT, QString::fromStdString(computer_->comment()).replace('\n', ' '));
+    setText(COLUMN_INDEX_COMMENT, QString::fromStdString(
+        computer_->comment()).replace(QLatin1Char('\n'), QLatin1Char(' ')));
 
     QLocale system_locale = QLocale::system();
 
@@ -73,12 +74,52 @@ void ComputerItem::updateItem()
     setText(COLUMN_INDEX_MODIFIED, modify_time);
 }
 
+proto::address_book::Computer ComputerItem::computerToConnect()
+{
+    proto::address_book::Computer computer(*computer_);
+
+    if (!computer.has_inherit())
+    {
+        proto::address_book::InheritConfig* inherit = computer.mutable_inherit();
+        inherit->set_credentials(false);
+        inherit->set_desktop_manage(false);
+        inherit->set_desktop_view(false);
+    }
+
+    ComputerGroupItem* group_item = parentComputerGroupItem();
+    if (group_item)
+    {
+        proto::address_book::ComputerGroupConfig default_config = group_item->defaultConfig();
+        const proto::address_book::InheritConfig& inherit = computer.inherit();
+
+        if (inherit.credentials())
+        {
+            computer.set_username(default_config.username());
+            computer.set_password(default_config.password());
+        }
+
+        if (inherit.desktop_manage())
+        {
+            computer.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
+                default_config.session_config().desktop_manage());
+        }
+
+        if (inherit.desktop_view())
+        {
+            computer.mutable_session_config()->mutable_desktop_view()->CopyFrom(
+                default_config.session_config().desktop_view());
+        }
+    }
+
+    return computer;
+}
+
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()
 {
     return parent_group_item_;
 }
 
-bool ComputerItem::operator<(const QTreeWidgetItem &other) const
+bool ComputerItem::operator<(const QTreeWidgetItem& other) const
 {
     switch (treeWidget()->sortColumn())
     {

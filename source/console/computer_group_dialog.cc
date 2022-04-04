@@ -130,8 +130,6 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 ComputerGroupDialog::~ComputerGroupDialog()
 {
     LOG(LS_INFO) << "Dtor";
-    base::memZero(computer_group_->mutable_config()->mutable_username());
-    base::memZero(computer_group_->mutable_config()->mutable_password());
 }
 
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)

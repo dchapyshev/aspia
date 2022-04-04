@@ -18,6 +18,8 @@
 
 #include "console/computer_group_item.h"
 
+#include "console/computer_factory.h"
+
 #include <QApplication>
 
 namespace console {
@@ -148,6 +150,68 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
         list.push_back(new ComputerItem(computer_group_->mutable_computer(i), this));
 
     return list;
+}
+
+proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
+{
+    proto::address_book::ComputerGroupConfig result;
+    bool has_credentials = false;
+    bool has_desktop_manage = false;
+    bool has_desktop_view = false;
+
+    for (auto item = this; item != nullptr; item = dynamic_cast<ComputerGroupItem*>(item->parent()))
+    {
+        const proto::address_book::ComputerGroup* group = item->computer_group_;
+
+        if (!group->has_config())
+            continue;
+
+        const proto::address_book::ComputerGroupConfig& group_config = group->config();
+        const proto::address_book::InheritConfig& inherit = group_config.inherit();
+
+        if (!inherit.credentials() && !has_credentials)
+        {
+            result.set_username(group_config.username());
+            result.set_password(group_config.password());
+            has_credentials = true;
+        }
+
+        if (!inherit.desktop_manage() && !has_desktop_manage)
+        {
+            if (group_config.session_config().has_desktop_manage())
+            {
+                result.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
+                    group_config.session_config().desktop_manage());
+            }
+
+            has_desktop_manage = true;
+        }
+
+        if (!inherit.desktop_view() && !has_desktop_view)
+        {
+            if (group_config.session_config().has_desktop_view())
+            {
+                result.mutable_session_config()->mutable_desktop_view()->CopyFrom(
+                    group_config.session_config().desktop_view());
+            }
+
+            has_desktop_view = true;
+        }
+    }
+
+    if (!result.session_config().has_desktop_manage())
+    {
+        ComputerFactory::setDefaultDesktopManageConfig(
+            result.mutable_session_config()->mutable_desktop_manage());
+    }
+
+    if (!result.session_config().has_desktop_view())
+    {
+        ComputerFactory::setDefaultDesktopViewConfig(
+            result.mutable_session_config()->mutable_desktop_view());
+    }
+
+    return result;
 }
 
 } // namespace console

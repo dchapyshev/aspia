@@ -45,6 +45,7 @@ public:
     QList<QTreeWidgetItem*> ComputerList();
 
     proto::address_book::ComputerGroup* computerGroup() { return computer_group_; }
+    proto::address_book::ComputerGroupConfig defaultConfig();
 
 private:
     friend class ComputerGroupTree;

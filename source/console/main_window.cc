@@ -492,9 +492,9 @@ void MainWindow::onDesktopManageConnect()
         ComputerItem* computer_item = tab->currentComputer();
         if (computer_item)
         {
-            proto::address_book::Computer* computer = computer_item->computer();
-            computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
-            connectToComputer(*computer, tab->routerConfig());
+            proto::address_book::Computer computer = computer_item->computerToConnect();
+            computer.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+            connectToComputer(computer, tab->routerConfig());
         }
     }
 }
@@ -509,9 +509,9 @@ void MainWindow::onDesktopViewConnect()
         ComputerItem* computer_item = tab->currentComputer();
         if (computer_item)
         {
-            proto::address_book::Computer* computer = computer_item->computer();
-            computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
-            connectToComputer(*computer, tab->routerConfig());
+            proto::address_book::Computer computer = computer_item->computerToConnect();
+            computer.set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
+            connectToComputer(computer, tab->routerConfig());
         }
     }
 }
@@ -526,9 +526,9 @@ void MainWindow::onFileTransferConnect()
         ComputerItem* computer_item = tab->currentComputer();
         if (computer_item)
         {
-            proto::address_book::Computer* computer = computer_item->computer();
-            computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
-            connectToComputer(*computer, tab->routerConfig());
+            proto::address_book::Computer computer = computer_item->computerToConnect();
+            computer.set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+            connectToComputer(computer, tab->routerConfig());
         }
     }
 }
@@ -543,9 +543,9 @@ void MainWindow::onSystemInfoConnect()
         ComputerItem* computer_item = tab->currentComputer();
         if (computer_item)
         {
-            proto::address_book::Computer* computer = computer_item->computer();
-            computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
-            connectToComputer(*computer, tab->routerConfig());
+            proto::address_book::Computer computer = computer_item->computerToConnect();
+            computer.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+            connectToComputer(computer, tab->routerConfig());
         }
     }
 }
@@ -744,7 +744,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
     menu.exec(point);
 }
 
-void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
+void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& computer)
 {
     AddressBookTab* tab = currentAddressBookTab();
     if (!tab)
@@ -754,21 +754,23 @@ void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer
     if (!computer_item)
         return;
 
+    proto::address_book::Computer computer_to_connect(computer);
+
     if (ui.action_desktop_manage->isChecked())
     {
-        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
+        computer_to_connect.set_session_type(proto::SESSION_TYPE_DESKTOP_MANAGE);
     }
     else if (ui.action_desktop_view->isChecked())
     {
-        computer->set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
+        computer_to_connect.set_session_type(proto::SESSION_TYPE_DESKTOP_VIEW);
     }
     else if (ui.action_file_transfer->isChecked())
     {
-        computer->set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
+        computer_to_connect.set_session_type(proto::SESSION_TYPE_FILE_TRANSFER);
     }
     else if (ui.action_system_info->isChecked())
     {
-        computer->set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+        computer_to_connect.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
     }
     else
     {
@@ -776,7 +778,7 @@ void MainWindow::onComputerDoubleClicked(proto::address_book::Computer* computer
         return;
     }
 
-    connectToComputer(*computer, tab->routerConfig());
+    connectToComputer(computer_to_connect, tab->routerConfig());
 }
 
 void MainWindow::onTabContextMenu(const QPoint& pos)

@@ -24,6 +24,7 @@
 #include "base/strings/unicode.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 namespace console {
 
@@ -72,13 +73,17 @@ void ComputerGroupDialogGeneral::restoreSettings(
 
     if (!isRootGroup())
     {
-        ui.groupbox_inherit_creds->setChecked(group_config.inherit().credentials());
+        bool inherit_creds = group_config.inherit().credentials();
 
-        QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
-        for (const auto& widget : widgets)
+        ui.groupbox_inherit_creds->setChecked(inherit_creds);
+        QTimer::singleShot(0, this, [this, inherit_creds]()
         {
-            widget->setEnabled(!group_config.inherit().credentials());
-        }
+            QWidgetList widgets = ui.groupbox_inherit_creds->findChildren<QWidget*>();
+            for (const auto& widget : widgets)
+            {
+                widget->setEnabled(!inherit_creds);
+            }
+        });
     }
 }
 

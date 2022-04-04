@@ -437,7 +437,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="130"/>
+        <location filename="../computer_group_item.cc" line="133"/>
         <source>Root Group</source>
         <translation>Корінна група</translation>
     </message>
@@ -1148,7 +1148,7 @@
         <translation type="unfinished">Перегляд</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="164"/>
+        <location filename="../computer_group_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
@@ -1157,12 +1157,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="172"/>
+        <location filename="../computer_group_dialog.cc" line="170"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="180"/>
+        <location filename="../computer_group_dialog.cc" line="178"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
@@ -1171,7 +1171,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="245"/>
+        <location filename="../computer_group_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1216,17 +1216,17 @@
         <translation type="obsolete">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="42"/>
+        <location filename="../computer_group_dialog_general.cc" line="43"/>
         <source>Credentials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="47"/>
+        <location filename="../computer_group_dialog_general.cc" line="48"/>
         <source>Inherit from parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="92"/>
+        <location filename="../computer_group_dialog_general.cc" line="97"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1235,7 +1235,7 @@
         <translation type="obsolete">Введено невірну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="129"/>
+        <location filename="../computer_group_dialog_general.cc" line="134"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
@@ -1273,7 +1273,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="185"/>
-        <location filename="../main_window.cc" line="1232"/>
+        <location filename="../main_window.cc" line="1234"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1294,56 +1294,56 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="601"/>
-        <location filename="../main_window.cc" line="914"/>
-        <location filename="../main_window.cc" line="993"/>
+        <location filename="../main_window.cc" line="916"/>
+        <location filename="../main_window.cc" line="995"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="996"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="810"/>
+        <location filename="../main_window.cc" line="812"/>
         <source>Close other tabs</source>
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="819"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="818"/>
-        <location filename="../main_window.cc" line="823"/>
+        <location filename="../main_window.cc" line="820"/>
+        <location filename="../main_window.cc" line="825"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="915"/>
+        <location filename="../main_window.cc" line="917"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список нещодавніх адрес буде очищено. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="950"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="963"/>
+        <location filename="../main_window.cc" line="965"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1233"/>
+        <location filename="../main_window.cc" line="1235"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="473"/>
-        <location filename="../main_window.cc" line="1103"/>
+        <location filename="../main_window.cc" line="1105"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

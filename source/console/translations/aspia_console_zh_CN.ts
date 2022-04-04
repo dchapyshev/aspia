@@ -437,7 +437,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="130"/>
+        <location filename="../computer_group_item.cc" line="133"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
@@ -1136,26 +1136,26 @@
         <translation type="unfinished">查看</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="164"/>
+        <location filename="../computer_group_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名字太长，名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="172"/>
+        <location filename="../computer_group_dialog.cc" line="170"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="180"/>
+        <location filename="../computer_group_dialog.cc" line="178"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="245"/>
+        <location filename="../computer_group_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1200,17 +1200,17 @@
         <translation type="obsolete">名称不能为空。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="42"/>
+        <location filename="../computer_group_dialog_general.cc" line="43"/>
         <source>Credentials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="47"/>
+        <location filename="../computer_group_dialog_general.cc" line="48"/>
         <source>Inherit from parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="92"/>
+        <location filename="../computer_group_dialog_general.cc" line="97"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
@@ -1219,7 +1219,7 @@
         <translation type="obsolete">输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="129"/>
+        <location filename="../computer_group_dialog_general.cc" line="134"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
@@ -1257,7 +1257,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="185"/>
-        <location filename="../main_window.cc" line="1232"/>
+        <location filename="../main_window.cc" line="1234"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1288,56 +1288,56 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="601"/>
-        <location filename="../main_window.cc" line="914"/>
-        <location filename="../main_window.cc" line="993"/>
+        <location filename="../main_window.cc" line="916"/>
+        <location filename="../main_window.cc" line="995"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="996"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="810"/>
+        <location filename="../main_window.cc" line="812"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="819"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="818"/>
-        <location filename="../main_window.cc" line="823"/>
+        <location filename="../main_window.cc" line="820"/>
+        <location filename="../main_window.cc" line="825"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="915"/>
+        <location filename="../main_window.cc" line="917"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="950"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="963"/>
+        <location filename="../main_window.cc" line="965"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="473"/>
-        <location filename="../main_window.cc" line="1103"/>
+        <location filename="../main_window.cc" line="1105"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1233"/>
+        <location filename="../main_window.cc" line="1235"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>

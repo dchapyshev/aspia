@@ -74,7 +74,7 @@ signals:
     void computerActivated(bool activated);
     void computerGroupContextMenu(const QPoint& point, bool is_root);
     void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
-    void computerDoubleClicked(proto::address_book::Computer* computer);
+    void computerDoubleClicked(const proto::address_book::Computer& computer);
 
 protected:
     // ConsoleTab implementation.

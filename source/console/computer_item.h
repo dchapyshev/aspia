@@ -46,6 +46,8 @@ public:
     };
 
     proto::address_book::Computer* computer() { return computer_; }
+    proto::address_book::Computer computerToConnect();
+
     ComputerGroupItem* parentComputerGroupItem();
 
     // QTreeWidgetItem implementation.

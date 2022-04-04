@@ -429,7 +429,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="130"/>
+        <location filename="../computer_group_item.cc" line="133"/>
         <source>Root Group</source>
         <translation>Grupo Raíz</translation>
     </message>
@@ -1134,7 +1134,7 @@
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="164"/>
+        <location filename="../computer_group_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -1142,12 +1142,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="172"/>
+        <location filename="../computer_group_dialog.cc" line="170"/>
         <source>Name can not be empty.</source>
         <translation>El nombre no puede estar vacío.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="180"/>
+        <location filename="../computer_group_dialog.cc" line="178"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -1155,7 +1155,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="245"/>
+        <location filename="../computer_group_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -1207,17 +1207,17 @@
         <translation type="obsolete">El nombre no puede estar vacío.</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="42"/>
+        <location filename="../computer_group_dialog_general.cc" line="43"/>
         <source>Credentials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="47"/>
+        <location filename="../computer_group_dialog_general.cc" line="48"/>
         <source>Inherit from parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="92"/>
+        <location filename="../computer_group_dialog_general.cc" line="97"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">El nombre de usuario no puede estar vacío y solo puede contener caracteres alfabéticos, números y _, -, . caracteres.</translation>
     </message>
@@ -1233,7 +1233,7 @@
         <translation type="obsolete">Se ingresó una dirección de ordenador no válida.</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="129"/>
+        <location filename="../computer_group_dialog_general.cc" line="134"/>
         <source>Warning</source>
         <translation type="unfinished">Advertencia</translation>
     </message>
@@ -1271,7 +1271,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="185"/>
-        <location filename="../main_window.cc" line="1232"/>
+        <location filename="../main_window.cc" line="1234"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -1302,56 +1302,56 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="601"/>
-        <location filename="../main_window.cc" line="914"/>
-        <location filename="../main_window.cc" line="993"/>
+        <location filename="../main_window.cc" line="916"/>
+        <location filename="../main_window.cc" line="995"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="994"/>
+        <location filename="../main_window.cc" line="996"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>El Libro de Direcciones &quot;%1&quot; ha sido cambiado. ¿Guardar cambios?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="810"/>
+        <location filename="../main_window.cc" line="812"/>
         <source>Close other tabs</source>
         <translation>Cerrar otras pestañas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="819"/>
         <source>Close tab</source>
         <translation>Cerrar pestaña</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="818"/>
-        <location filename="../main_window.cc" line="823"/>
+        <location filename="../main_window.cc" line="820"/>
+        <location filename="../main_window.cc" line="825"/>
         <source>Pin tab</source>
         <translation>Pestaña Anclado</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="915"/>
+        <location filename="../main_window.cc" line="917"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Se borrará el libro de direcciones abierto recientemente. ¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="950"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="963"/>
+        <location filename="../main_window.cc" line="965"/>
         <source>Show</source>
         <translation>Mostrar</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="473"/>
-        <location filename="../main_window.cc" line="1103"/>
+        <location filename="../main_window.cc" line="1105"/>
         <source>Aspia Console</source>
         <translation>Consola Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1233"/>
+        <location filename="../main_window.cc" line="1235"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>La conexión por ID se especifica en las propiedades del ordenador, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
