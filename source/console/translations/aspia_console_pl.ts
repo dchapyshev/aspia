@@ -1230,28 +1230,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="80"/>
+        <location filename="../fast_connect_dialog.cc" line="93"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="81"/>
+        <location filename="../fast_connect_dialog.cc" line="94"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="205"/>
-        <location filename="../fast_connect_dialog.cc" line="225"/>
+        <location filename="../fast_connect_dialog.cc" line="218"/>
+        <location filename="../fast_connect_dialog.cc" line="238"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="206"/>
+        <location filename="../fast_connect_dialog.cc" line="219"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="226"/>
+        <location filename="../fast_connect_dialog.cc" line="239"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>

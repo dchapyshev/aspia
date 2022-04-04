@@ -51,6 +51,12 @@ public:
     bool showIconsInMenus() const;
     void setShowIconsInMenus(bool enable);
 
+    bool checkUpdates() const;
+    void setCheckUpdates(bool check);
+
+    QString updateServer() const;
+    void setUpdateServer(const QString& server);
+
 private:
     QSettings settings_;
 

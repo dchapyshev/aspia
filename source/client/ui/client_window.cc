@@ -30,10 +30,13 @@
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"
+#include "client/ui/update_settings_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/session_type.h"
+#include "common/ui/update_dialog.h"
+#include "common/ui/update_checker.h"
 
 #include <QActionGroup>
 #include <QDesktopServices>
@@ -83,6 +86,30 @@ ClientWindow::ClientWindow(QWidget* parent)
             this, &ClientWindow::sessionConfigButtonPressed);
 
     connect(ui.button_connect, &QPushButton::clicked, this, &ClientWindow::connectToHost);
+
+#if defined(OS_WIN)
+    connect(ui.action_check_for_updates, &QAction::triggered, this, &ClientWindow::onCheckUpdates);
+    connect(ui.action_update_settings, &QAction::triggered, this, [this]()
+    {
+        UpdateSettingsDialog(this).exec();
+    });
+
+    if (settings.checkUpdates())
+    {
+        common::UpdateChecker* checker = new common::UpdateChecker(this);
+
+        checker->setUpdateServer(settings.updateServer());
+        checker->setPackageName(QStringLiteral("client"));
+
+        connect(checker, &common::UpdateChecker::finished, this, &ClientWindow::onUpdateChecked);
+        connect(checker, &common::UpdateChecker::finished, checker, &common::UpdateChecker::deleteLater);
+
+        checker->start();
+    }
+#else
+    ui.action_check_for_updates->setVisible(false);
+    ui.action_update_settings->setVisible(false);
+#endif
 
     combo_address->setFocus();
 }
@@ -289,6 +316,27 @@ void ClientWindow::connectToHost()
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(config))
         session_window->close();
+}
+
+void ClientWindow::onCheckUpdates()
+{
+#if defined(OS_WIN)
+    common::UpdateDialog(Application::instance()->settings().updateServer(),
+                         QStringLiteral("client"),
+                         this).exec();
+#endif
+}
+
+void ClientWindow::onUpdateChecked(const QByteArray& result)
+{
+    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+    if (!update_info.isValid() || !update_info.hasUpdate())
+        return;
+
+    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+    if (update_info.version() > current_version)
+        common::UpdateDialog(update_info, this).exec();
 }
 
 void ClientWindow::createLanguageMenu(const QString& current_locale)

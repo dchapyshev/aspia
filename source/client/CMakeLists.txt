@@ -217,7 +217,10 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_video_adapters.h
     ui/sys_info_widget_video_adapters.ui
     ui/tree_to_html.cc
-    ui/tree_to_html.h)
+    ui/tree_to_html.h
+    ui/update_settings_dialog.cc
+    ui/update_settings_dialog.h
+    ui/update_settings_dialog.ui)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})

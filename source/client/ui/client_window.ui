@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>262</width>
-    <height>188</height>
+    <height>191</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -290,6 +290,9 @@ border-radius: 2px;
     </property>
     <addaction name="action_help"/>
     <addaction name="separator"/>
+    <addaction name="action_check_for_updates"/>
+    <addaction name="action_update_settings"/>
+    <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -355,6 +358,16 @@ border-radius: 2px;
    </property>
    <property name="text">
     <string>Show icons in menus</string>
+   </property>
+  </action>
+  <action name="action_check_for_updates">
+   <property name="text">
+    <string>Check for updates...</string>
+   </property>
+  </action>
+  <action name="action_update_settings">
+   <property name="text">
+    <string>Update Settings</string>
    </property>
   </action>
  </widget>

@@ -48,6 +48,8 @@ private slots:
     void sessionTypeChanged(int item_index);
     void sessionConfigButtonPressed();
     void connectToHost();
+    void onCheckUpdates();
+    void onUpdateChecked(const QByteArray& result);
 
 private:
     void createLanguageMenu(const QString& current_locale);

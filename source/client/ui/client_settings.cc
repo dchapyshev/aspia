@@ -18,6 +18,7 @@
 
 #include "client/ui/client_settings.h"
 
+#include "build/build_config.h"
 #include "client/config_factory.h"
 
 #include <QLocale>
@@ -32,6 +33,8 @@ const QString kSessionTypeParam = QStringLiteral("SessionType");
 const QString kDesktopManageConfigParam = QStringLiteral("DesktopManageConfig");
 const QString kDesktopViewConfigParam = QStringLiteral("DesktopViewConfig");
 const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
+const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
+const QString kUpdateServerParam = QStringLiteral("UpdateServer");
 
 } // namespace
 
@@ -135,6 +138,27 @@ bool ClientSettings::showIconsInMenus() const
 void ClientSettings::setShowIconsInMenus(bool enable)
 {
     settings_.setValue(kShowIconsInMenusParam, enable);
+}
+
+bool ClientSettings::checkUpdates() const
+{
+    return settings_.value(kCheckUpdatesParam, true).toBool();
+}
+
+void ClientSettings::setCheckUpdates(bool check)
+{
+    settings_.setValue(kCheckUpdatesParam, check);
+}
+
+QString ClientSettings::updateServer() const
+{
+    return settings_.value(
+        kUpdateServerParam, QString::fromStdU16String(DEFAULT_UPDATE_SERVER)).toString().toLower();
+}
+
+void ClientSettings::setUpdateServer(const QString& server)
+{
+    settings_.setValue(kUpdateServerParam, server.toLower());
 }
 
 } // namespace client

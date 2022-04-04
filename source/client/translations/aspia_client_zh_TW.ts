@@ -192,6 +192,14 @@
         <source>Show icons in menus</source>
         <translation>在選單顯示圖示</translation>
     </message>
+    <message>
+        <source>Check for updates...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DesktopConfigDialog</name>
@@ -1113,6 +1121,25 @@
     <message>
         <source>Refresh (F5)</source>
         <translation>重新整理（F5）</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateSettingsDialog</name>
+    <message>
+        <source>Update Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check for updates on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use custom update server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
