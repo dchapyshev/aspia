@@ -16,7 +16,8 @@ CREATE TABLE `packages` (
 
 INSERT INTO `packages` (`id`, `name`) VALUES
 (1, 'console'),
-(2, 'host');
+(2, 'host'),
+(3, 'client');
 
 CREATE TABLE `updates` (
   `id` int(11) NOT NULL,
