@@ -317,6 +317,11 @@ proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
     return current_item->computerGroup();
 }
 
+proto::address_book::ComputerGroup* AddressBookTab::rootComputerGroup()
+{
+    return data_.mutable_root_group();
+}
+
 AddressBookTab* AddressBookTab::duplicateTab() const
 {
     return new AddressBookTab(filePath(),
@@ -448,7 +453,7 @@ void AddressBookTab::copyComputer()
 
 void AddressBookTab::modifyAddressBook()
 {
-    ComputerGroupItem* root_item = rootComputerGroup();
+    ComputerGroupItem* root_item = rootComputerGroupItem();
     if (!root_item)
     {
         LOG(LS_WARNING) << "Invalid root item";
@@ -760,7 +765,7 @@ void AddressBookTab::retranslateUi()
 {
     ui.retranslateUi(this);
 
-    ComputerGroupItem* root_item = rootComputerGroup();
+    ComputerGroupItem* root_item = rootComputerGroupItem();
     if (root_item)
         root_item->updateItem();
 
@@ -888,7 +893,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     return true;
 }
 
-ComputerGroupItem* AddressBookTab::rootComputerGroup()
+ComputerGroupItem* AddressBookTab::rootComputerGroupItem()
 {
     ComputerGroupItem* root_item = nullptr;
 

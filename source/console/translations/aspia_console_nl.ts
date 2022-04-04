@@ -437,7 +437,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="133"/>
+        <location filename="../computer_group_item.cc" line="132"/>
         <source>Root Group</source>
         <translation>Hoofd Groep</translation>
     </message>
@@ -761,6 +761,21 @@
         <source>Session Type</source>
         <translation>Sessie Type</translation>
     </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="104"/>
+        <source>Default configuration from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="110"/>
+        <source>Use credentials from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="117"/>
+        <source>Use session parameters from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenAddressBookDialog</name>
@@ -964,59 +979,59 @@
         <translation>Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="534"/>
+        <location filename="../address_book_tab.cc" line="539"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Weet U zeker dat U de computer groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="538"/>
-        <location filename="../address_book_tab.cc" line="560"/>
+        <location filename="../address_book_tab.cc" line="543"/>
+        <location filename="../address_book_tab.cc" line="565"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="556"/>
+        <location filename="../address_book_tab.cc" line="561"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="861"/>
         <source>Save Address Book</source>
         <translation>Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="858"/>
+        <location filename="../address_book_tab.cc" line="863"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="868"/>
+        <location filename="../address_book_tab.cc" line="873"/>
         <source>Unable to create or open address book file.</source>
         <translation>Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="886"/>
         <source>Unable to write address book file.</source>
         <translation>Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="909"/>
+        <location filename="../address_book_tab.cc" line="914"/>
         <source>Root Group</source>
         <translation>Hoofd Groep</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="920"/>
-        <location filename="../address_book_tab.cc" line="934"/>
+        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="939"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="922"/>
+        <location filename="../address_book_tab.cc" line="927"/>
         <source>Could not open address book</source>
         <translation>Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="936"/>
+        <location filename="../address_book_tab.cc" line="941"/>
         <source>Failed to save address book</source>
         <translation>Kon adresboek niet opslaan</translation>
     </message>
@@ -1251,28 +1266,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="77"/>
+        <location filename="../fast_connect_dialog.cc" line="80"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="78"/>
+        <location filename="../fast_connect_dialog.cc" line="81"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>De lijst van ingevoerde addressen zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="185"/>
         <location filename="../fast_connect_dialog.cc" line="205"/>
+        <location filename="../fast_connect_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="186"/>
+        <location filename="../fast_connect_dialog.cc" line="206"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Verbinding maken met ID is ingesteld maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="206"/>
+        <location filename="../fast_connect_dialog.cc" line="226"/>
         <source>An invalid computer address was entered.</source>
         <translation>Er is een ongeldig computer adres ingevoerd.</translation>
     </message>

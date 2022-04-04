@@ -45,6 +45,7 @@ public:
     const QString& filePath() const { return file_path_; }
     ComputerItem* currentComputer() const;
     proto::address_book::ComputerGroup* currentComputerGroup() const;
+    proto::address_book::ComputerGroup* rootComputerGroup();
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
 
@@ -102,7 +103,7 @@ private:
     void restoreState(const QByteArray& state);
     void updateComputerList(ComputerGroupItem* computer_group);
     bool saveToFile(const QString& file_path);
-    ComputerGroupItem* rootComputerGroup();
+    ComputerGroupItem* rootComputerGroupItem();
 
     static QString parentName(ComputerGroupItem* item);
     static void showOpenError(QWidget* parent, const QString& message);

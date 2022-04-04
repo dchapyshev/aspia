@@ -32,14 +32,17 @@
 #include "console/application.h"
 
 #include <QMessageBox>
+#include <QTimer>
 
 namespace console {
 
 FastConnectDialog::FastConnectDialog(QWidget* parent,
                                      const QString& address_book_guid,
+                                     const proto::address_book::ComputerGroupConfig& default_config,
                                      const std::optional<client::RouterConfig>& router_config)
     : QDialog(parent),
       address_book_guid_(address_book_guid),
+      default_config_(default_config),
       router_config_(router_config)
 {
     LOG(LS_INFO) << "Ctor";
@@ -92,9 +95,20 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     connect(ui.button_session_config, &QPushButton::clicked,
             this, &FastConnectDialog::sessionConfigButtonPressed);
 
+    connect(ui.checkbox_use_session_params, &QCheckBox::toggled, this, [this]()
+    {
+        sessionTypeChanged(ui.combo_session_type->currentIndex());
+    });
+
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FastConnectDialog::onButtonBoxClicked);
 
     combo_address->setFocus();
+
+    QTimer::singleShot(0, this, [this]()
+    {
+        setFixedHeight(sizeHint().height());
+        adjustSize();
+    });
 }
 
 FastConnectDialog::~FastConnectDialog()
@@ -105,6 +119,12 @@ FastConnectDialog::~FastConnectDialog()
 
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
+    if (ui.checkbox_use_session_params->isChecked())
+    {
+        ui.button_session_config->setEnabled(false);
+        return;
+    }
+
     state_.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
@@ -220,6 +240,13 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     client_config.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
+
+    if (ui.checkbox_use_creds->isChecked())
+    {
+        client_config.username = base::utf16FromUtf8(default_config_.username());
+        client_config.password = base::utf16FromUtf8(default_config_.password());
+    }
+
     client_config.router_config = router_config_;
 
     int current_index = combo_address->findText(current_address);
@@ -239,15 +266,29 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         {
+            proto::DesktopConfig desktop_config;
+
+            if (ui.checkbox_use_session_params->isChecked())
+                desktop_config = default_config_.session_config().desktop_manage();
+            else
+                desktop_config = state_.desktop_manage_config;
+
             session_window = new client::QtDesktopWindow(
-                state_.session_type, state_.desktop_manage_config);
+                state_.session_type, desktop_config);
         }
         break;
 
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
+            proto::DesktopConfig desktop_config;
+
+            if (ui.checkbox_use_session_params->isChecked())
+                desktop_config = default_config_.session_config().desktop_view();
+            else
+                desktop_config = state_.desktop_view_config;
+
             session_window = new client::QtDesktopWindow(
-                state_.session_type, state_.desktop_view_config);
+                state_.session_type, desktop_config);
         }
         break;
 
@@ -283,8 +324,11 @@ void FastConnectDialog::readState()
     int session_type;
     QByteArray desktop_manage_config;
     QByteArray desktop_view_config;
+    bool creds_from_address_book = false;
+    bool session_params_from_address_book = false;
 
-    stream >> state_.history >> session_type >> desktop_manage_config >> desktop_view_config;
+    stream >> state_.history >> session_type >> desktop_manage_config >> desktop_view_config
+           >> creds_from_address_book >> session_params_from_address_book;
 
     if (session_type != 0)
         state_.session_type = static_cast<proto::SessionType>(session_type);
@@ -310,6 +354,9 @@ void FastConnectDialog::readState()
     {
         state_.desktop_view_config = client::ConfigFactory::defaultDesktopViewConfig();
     }
+
+    ui.checkbox_use_creds->setChecked(creds_from_address_book);
+    ui.checkbox_use_session_params->setChecked(session_params_from_address_book);
 }
 
 void FastConnectDialog::writeState()
@@ -322,11 +369,14 @@ void FastConnectDialog::writeState()
             QByteArray::fromStdString(state_.desktop_manage_config.SerializeAsString());
         QByteArray desktop_view_config =
             QByteArray::fromStdString(state_.desktop_view_config.SerializeAsString());
+        bool creds_from_address_book = ui.checkbox_use_creds->isChecked();
+        bool session_params_from_address_book = ui.checkbox_use_session_params->isChecked();
 
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_5_12);
 
-        stream << state_.history << session_type << desktop_manage_config << desktop_view_config;
+        stream << state_.history << session_type << desktop_manage_config << desktop_view_config
+               << creds_from_address_book << session_params_from_address_book;
     }
 
     Application::instance()->settings().setFastConnectConfig(address_book_guid_, buffer);

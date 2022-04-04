@@ -21,7 +21,7 @@
 
 #include "base/macros_magic.h"
 #include "client/client_config.h"
-#include "proto/desktop.pb.h"
+#include "proto/address_book.pb.h"
 #include "ui_fast_connect_dialog.h"
 
 #include <QDialog>
@@ -37,6 +37,7 @@ class FastConnectDialog : public QDialog
 public:
     FastConnectDialog(QWidget* parent,
                       const QString& address_book_guid,
+                      const proto::address_book::ComputerGroupConfig& default_config,
                       const std::optional<client::RouterConfig>& router_config);
     ~FastConnectDialog() override;
 
@@ -59,6 +60,7 @@ private:
 
     Ui::FastConnectDialog ui;
     QString address_book_guid_;
+    proto::address_book::ComputerGroupConfig default_config_;
     std::optional<client::RouterConfig> router_config_;
     State state_;
 

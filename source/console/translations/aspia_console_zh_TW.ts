@@ -610,6 +610,18 @@
         <source>Session Type</source>
         <translation>工作階段類型</translation>
     </message>
+    <message>
+        <source>Default configuration from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use credentials from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use session parameters from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenAddressBookDialog</name>

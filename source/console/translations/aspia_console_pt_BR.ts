@@ -437,7 +437,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="133"/>
+        <location filename="../computer_group_item.cc" line="132"/>
         <source>Root Group</source>
         <translation>Raiz do Grupo</translation>
     </message>
@@ -761,6 +761,21 @@
         <source>Session Type</source>
         <translation>Tipo da Sessão</translation>
     </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="104"/>
+        <source>Default configuration from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="110"/>
+        <source>Use credentials from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="117"/>
+        <source>Use session parameters from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenAddressBookDialog</name>
@@ -962,59 +977,59 @@
         <translation>O arquivo do catálogo de endereços está criptografado com um tipo de criptografia não compatível.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="534"/>
+        <location filename="../address_book_tab.cc" line="539"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Tem certeza que deseja excluir o grupo &quot;%1&quot; e todos os seus itens?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="538"/>
-        <location filename="../address_book_tab.cc" line="560"/>
+        <location filename="../address_book_tab.cc" line="543"/>
+        <location filename="../address_book_tab.cc" line="565"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="556"/>
+        <location filename="../address_book_tab.cc" line="561"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Tem certeza que deseja excluir o computador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="861"/>
         <source>Save Address Book</source>
         <translation>Salvar Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="858"/>
+        <location filename="../address_book_tab.cc" line="863"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Cátalog de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="868"/>
+        <location filename="../address_book_tab.cc" line="873"/>
         <source>Unable to create or open address book file.</source>
         <translation>Não foi possível criar ou abrir o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="886"/>
         <source>Unable to write address book file.</source>
         <translation>Não foi possível gravar o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="909"/>
+        <location filename="../address_book_tab.cc" line="914"/>
         <source>Root Group</source>
         <translation>Raiz do Grupo</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="920"/>
-        <location filename="../address_book_tab.cc" line="934"/>
+        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="939"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="922"/>
+        <location filename="../address_book_tab.cc" line="927"/>
         <source>Could not open address book</source>
         <translation>Não foi possível abrir o catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="936"/>
+        <location filename="../address_book_tab.cc" line="941"/>
         <source>Failed to save address book</source>
         <translation>Falha ao salvar o catálogo de endereços</translation>
     </message>
@@ -1249,28 +1264,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="77"/>
+        <location filename="../fast_connect_dialog.cc" line="80"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="78"/>
+        <location filename="../fast_connect_dialog.cc" line="81"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>A lista de endereços inseridos será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="185"/>
         <location filename="../fast_connect_dialog.cc" line="205"/>
+        <location filename="../fast_connect_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="186"/>
+        <location filename="../fast_connect_dialog.cc" line="206"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="206"/>
+        <location filename="../fast_connect_dialog.cc" line="226"/>
         <source>An invalid computer address was entered.</source>
         <translation>Foi inserido um endereço de computador inválido.</translation>
     </message>

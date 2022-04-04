@@ -437,7 +437,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="133"/>
+        <location filename="../computer_group_item.cc" line="132"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
@@ -761,6 +761,21 @@
         <source>Session Type</source>
         <translation>会话类型</translation>
     </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="104"/>
+        <source>Default configuration from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="110"/>
+        <source>Use credentials from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.ui" line="117"/>
+        <source>Use session parameters from address book</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenAddressBookDialog</name>
@@ -958,59 +973,59 @@
         <translation>通讯录文件使用不受支持的加密类型加密。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="534"/>
+        <location filename="../address_book_tab.cc" line="539"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="538"/>
-        <location filename="../address_book_tab.cc" line="560"/>
+        <location filename="../address_book_tab.cc" line="543"/>
+        <location filename="../address_book_tab.cc" line="565"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="556"/>
+        <location filename="../address_book_tab.cc" line="561"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="856"/>
+        <location filename="../address_book_tab.cc" line="861"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="858"/>
+        <location filename="../address_book_tab.cc" line="863"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="868"/>
+        <location filename="../address_book_tab.cc" line="873"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="881"/>
+        <location filename="../address_book_tab.cc" line="886"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="909"/>
+        <location filename="../address_book_tab.cc" line="914"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="920"/>
-        <location filename="../address_book_tab.cc" line="934"/>
+        <location filename="../address_book_tab.cc" line="925"/>
+        <location filename="../address_book_tab.cc" line="939"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="922"/>
+        <location filename="../address_book_tab.cc" line="927"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="936"/>
+        <location filename="../address_book_tab.cc" line="941"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -1227,28 +1242,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="77"/>
+        <location filename="../fast_connect_dialog.cc" line="80"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="78"/>
+        <location filename="../fast_connect_dialog.cc" line="81"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="185"/>
         <location filename="../fast_connect_dialog.cc" line="205"/>
+        <location filename="../fast_connect_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="186"/>
+        <location filename="../fast_connect_dialog.cc" line="206"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>已指定按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="206"/>
+        <location filename="../fast_connect_dialog.cc" line="226"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>

@@ -479,7 +479,7 @@ void MainWindow::onFastConnect()
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
-        FastConnectDialog(this, tab->addressBookGuid(), tab->routerConfig()).exec();
+        FastConnectDialog(this, tab->addressBookGuid(), tab->rootComputerGroup()->config(), tab->routerConfig()).exec();
 }
 
 void MainWindow::onDesktopManageConnect()
