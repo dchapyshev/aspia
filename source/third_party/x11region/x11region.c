@@ -252,7 +252,7 @@ miPrintRegion(rgn)
 
 #endif /* DEBUG */
 
-Bool
+Boolean
 miRegionsEqual(reg1, reg2)
     RegionPtr reg1;
     RegionPtr reg2;
@@ -277,7 +277,7 @@ miRegionsEqual(reg1, reg2)
     return TRUE;
 }
 
-Bool
+Boolean
 miValidRegion(reg)
     RegionPtr reg;
 {
@@ -405,7 +405,7 @@ miRegionUninit(pReg)
     xfreeData(pReg);
 }
 
-Bool
+Boolean
 miRegionBreak (pReg)
     RegionPtr pReg;
 {
@@ -415,7 +415,7 @@ miRegionBreak (pReg)
     return FALSE;
 }
 
-Bool
+Boolean
 miRectAlloc(
     register RegionPtr pRgn,
     int n)
@@ -456,7 +456,7 @@ miRectAlloc(
     return TRUE;
 }
 
-Bool
+Boolean
 miRegionCopy(dst, src)
     register RegionPtr dst;
     register RegionPtr src;
@@ -593,7 +593,7 @@ miCoalesce (
  *-----------------------------------------------------------------------
  */
 
-INLINE static Bool
+INLINE static Boolean
 miAppendNonO (
     register RegionPtr	pReg,
     register BoxPtr	r,
@@ -671,7 +671,7 @@ miAppendNonO (
  *-----------------------------------------------------------------------
  */
 
-typedef Bool (*OverlapProcPtr)(
+typedef Boolean (*OverlapProcPtr)(
     RegionPtr	pReg,
     BoxPtr	r1,
     BoxPtr   	r1End,
@@ -679,20 +679,20 @@ typedef Bool (*OverlapProcPtr)(
     BoxPtr   	r2End,
     short    	y1,
     short    	y2,
-    Bool	*pOverlap);
+    Boolean	*pOverlap);
 
-static Bool
+static Boolean
 miRegionOp(
     RegionPtr       newReg,		    /* Place to store result	     */
     RegionPtr       reg1,		    /* First region in operation     */
     RegionPtr       reg2,		    /* 2d region in operation        */
     OverlapProcPtr  overlapFunc,            /* Function to call for over-
 					     * lapping bands		     */
-    Bool	    appendNon1,		    /* Append non-overlapping bands  */
+    Boolean	    appendNon1,		    /* Append non-overlapping bands  */
 					    /* in region 1 ? */
-    Bool	    appendNon2,		    /* Append non-overlapping bands  */
+    Boolean	    appendNon2,		    /* Append non-overlapping bands  */
 					    /* in region 2 ? */
-    Bool	    *pOverlap)
+    Boolean	    *pOverlap)
 {
     register BoxPtr r1;			    /* Pointer into first region     */
     register BoxPtr r2;			    /* Pointer into 2d region	     */
@@ -975,7 +975,7 @@ miSetExtents (pReg)
  *-----------------------------------------------------------------------
  */
 /*ARGSUSED*/
-static Bool
+static Boolean
 miIntersectO (
     register RegionPtr	pReg,
     register BoxPtr	r1,
@@ -984,7 +984,7 @@ miIntersectO (
     BoxPtr  	  	r2End,
     short    	  	y1,
     short    	  	y2,
-    Bool		*pOverlap)
+    Boolean		*pOverlap)
 {
     register int  	x1;
     register int  	x2;
@@ -1023,7 +1023,7 @@ miIntersectO (
 }
 
 
-Bool
+Boolean
 miIntersect(newReg, reg1, reg2)
     register RegionPtr 	newReg;     /* destination Region */
     register RegionPtr 	reg1;
@@ -1073,7 +1073,7 @@ miIntersect(newReg, reg1, reg2)
     else
     {
 	/* General purpose intersection */
-	Bool overlap; /* result ignored */
+    Boolean overlap; /* result ignored */
 	if (!miRegionOp(newReg, reg1, reg2, miIntersectO, FALSE, FALSE,
 			&overlap))
 	    return FALSE;
@@ -1118,7 +1118,7 @@ miIntersect(newReg, reg1, reg2)
  *
  *-----------------------------------------------------------------------
  */
-static Bool
+static Boolean
 miUnionO (
     register RegionPtr	pReg,
     register BoxPtr	r1,
@@ -1127,7 +1127,7 @@ miUnionO (
 	     BoxPtr  	r2End,
 	     short	y1,
 	     short	y2,
-	     Bool	*pOverlap)
+         Boolean	*pOverlap)
 {
     register BoxPtr     pNextRect;
     register int        x1;     /* left and right side of current union */
@@ -1178,13 +1178,13 @@ miUnionO (
     return TRUE;
 }
 
-Bool 
+Boolean
 miUnion(newReg, reg1, reg2)
     RegionPtr		newReg;                  /* destination Region */
     register RegionPtr 	reg1;
     register RegionPtr	reg2;             /* source regions     */
 {
-    Bool overlap; /* result ignored */
+    Boolean overlap; /* result ignored */
 
     /* Return TRUE if some overlap between reg1, reg2 */
     good(reg1);
@@ -1277,14 +1277,14 @@ miUnion(newReg, reg1, reg2)
  *      dstrgn is modified if rgn has rectangles.
  *
  */
-Bool
+Boolean
 miRegionAppend(dstrgn, rgn)
     register RegionPtr dstrgn;
     register RegionPtr rgn;
 {
     int numRects, dnumRects, size;
     BoxPtr new, old;
-    Bool prepend;
+    Boolean prepend;
 
     if (REGION_NAR(rgn))
 	return miRegionBreak (dstrgn);
@@ -1463,10 +1463,10 @@ QuickSortRects(
  *-----------------------------------------------------------------------
  */
 
-Bool
+Boolean
 miRegionValidate(badreg, pOverlap)
     RegionPtr badreg;
-    Bool *pOverlap;
+    Boolean *pOverlap;
 {
     /* Descriptor for regions under construction  in Step 2. */
     typedef struct {
@@ -1486,7 +1486,7 @@ miRegionValidate(badreg, pOverlap)
     register BoxPtr	box;	    /* Current box in rects		    */
     register BoxPtr	riBox;      /* Last box in ri[j].reg		    */
     register RegionPtr  hreg;       /* ri[j_half].reg			    */
-    Bool		ret = TRUE;
+    Boolean		ret = TRUE;
 
     *pOverlap = FALSE;
     if (!badreg->data)
@@ -1720,7 +1720,7 @@ miRectsToRegion(nrects, prect, ctype)
     	pRgn->data = pData;
     	if (ctype != CT_YXBANDED)
     	{
-	    Bool overlap; /* result ignored */
+        Boolean overlap; /* result ignored */
 	    pRgn->extents.x1 = pRgn->extents.x2 = 0;
 	    miRegionValidate(pRgn, &overlap);
     	}
@@ -1755,7 +1755,7 @@ miRectsToRegion(nrects, prect, ctype)
  *-----------------------------------------------------------------------
  */
 /*ARGSUSED*/
-static Bool
+static Boolean
 miSubtractO (
     register RegionPtr	pReg,
     register BoxPtr	r1,
@@ -1764,7 +1764,7 @@ miSubtractO (
     BoxPtr  	  	r2End,
     register short  	y1,
              short  	y2,
-    Bool		*pOverlap)
+    Boolean		*pOverlap)
 {
     register BoxPtr	pNextRect;
     register int  	x1;
@@ -1879,13 +1879,13 @@ miSubtractO (
  *
  *-----------------------------------------------------------------------
  */
-Bool
+Boolean
 miSubtract(regD, regM, regS)
     register RegionPtr	regD;               
     register RegionPtr 	regM;
     register RegionPtr	regS;          
 {
-    Bool overlap; /* result ignored */
+    Boolean overlap; /* result ignored */
 
     good(regM);
     good(regS);
@@ -1944,7 +1944,7 @@ miSubtract(regD, regM, regS)
  *
  *-----------------------------------------------------------------------
  */
-Bool
+Boolean
 miInverse(newReg, reg1, invRect)
     RegionPtr 	  newReg;       /* Destination region */
     RegionPtr 	  reg1;         /* Region to invert */
@@ -1952,7 +1952,7 @@ miInverse(newReg, reg1, invRect)
 {
     RegionRec	  invReg;   	/* Quick and dirty region made from the
 				 * bounding box */
-    Bool	  overlap;	/* result ignored */
+    Boolean	  overlap;	/* result ignored */
 
     good(reg1);
     good(newReg);
@@ -2185,7 +2185,7 @@ miTranslateRegion(pReg, x, y)
     }
 }
 
-Bool
+Boolean
 miRegionDataCopy(
     register RegionPtr dst,
     register RegionPtr src)
@@ -2227,7 +2227,7 @@ miRegionReset(pReg, pBox)
     pReg->data = (RegDataPtr)NULL;
 }
 
-Bool
+Boolean
 miPointInRegion(pReg, x, y, box)
     register RegionPtr pReg;
     register int x, y;
@@ -2261,7 +2261,7 @@ miPointInRegion(pReg, x, y, box)
     return(FALSE);
 }
 
-Bool
+Boolean
 miRegionNotEmpty(pReg)
     RegionPtr pReg;
 {
@@ -2269,7 +2269,7 @@ miRegionNotEmpty(pReg)
     return(!REGION_NIL(pReg));
 }
 
-Bool
+Boolean
 miRegionBroken(RegionPtr pReg)
 {
     good(pReg);

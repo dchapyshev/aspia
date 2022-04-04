@@ -395,6 +395,18 @@ if (WIN32)
         desktop/win/cursor_unittest_resources.rc)
 endif()
 
+if (LINUX)
+    list(APPEND SOURCE_BASE_DESKTOP_X11
+        desktop/x11/shared_x_display.cc
+        desktop/x11/shared_x_display.h
+        desktop/x11/x_atom_cache.cc
+        desktop/x11/x_atom_cache.h
+        desktop/x11/x_error_trap.cc
+        desktop/x11/x_error_trap.h
+        desktop/x11/x_server_pixel_buffer.cc
+        desktop/x11/x_server_pixel_buffer.h)
+endif()
+
 list(APPEND SOURCE_BASE_FILES
     files/base_paths.cc
     files/base_paths.h
@@ -707,6 +719,7 @@ endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
+    source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
@@ -723,6 +736,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
     ${SOURCE_BASE_DESKTOP_WIN}
+    ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
     ${SOURCE_BASE_IPC}
     ${SOURCE_BASE_MAC}
