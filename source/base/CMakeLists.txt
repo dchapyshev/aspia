@@ -305,6 +305,8 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/region.h
     desktop/screen_capturer.cc
     desktop/screen_capturer.h
+    desktop/screen_capturer_helper.cc
+    desktop/screen_capturer_helper.h
     desktop/screen_capturer_wrapper.cc
     desktop/screen_capturer_wrapper.h
     desktop/shared_frame.cc
