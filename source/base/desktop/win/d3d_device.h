@@ -51,7 +51,7 @@ private:
     D3dDevice();
 
     // Initializes the D3dDevice from an IDXGIAdapter.
-    bool initialize(const Microsoft::WRL::ComPtr<IDXGIAdapter>& adapter);
+    bool initialize(int index, const Microsoft::WRL::ComPtr<IDXGIAdapter>& adapter);
 
     Microsoft::WRL::ComPtr<ID3D11Device> d3d_device_;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> context_;

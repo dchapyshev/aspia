@@ -19,12 +19,56 @@
 #include "base/desktop/win/d3d_device.h"
 
 #include "base/logging.h"
+#include "base/strings/string_number_conversions.h"
 
 #include <utility>
 
 #include <comdef.h>
 
 namespace base {
+
+namespace {
+
+std::string featureLevelToString(D3D_FEATURE_LEVEL feature_level)
+{
+    switch (feature_level)
+    {
+        case D3D_FEATURE_LEVEL_1_0_CORE:
+            return "D3D_FEATURE_LEVEL_1_0_CORE";
+
+        case D3D_FEATURE_LEVEL_9_1:
+            return "D3D_FEATURE_LEVEL_9_1";
+
+        case D3D_FEATURE_LEVEL_9_2:
+            return "D3D_FEATURE_LEVEL_9_2";
+
+        case D3D_FEATURE_LEVEL_9_3:
+            return "D3D_FEATURE_LEVEL_9_3";
+
+        case D3D_FEATURE_LEVEL_10_0:
+            return "D3D_FEATURE_LEVEL_10_0";
+
+        case D3D_FEATURE_LEVEL_10_1:
+            return "D3D_FEATURE_LEVEL_10_1";
+
+        case D3D_FEATURE_LEVEL_11_0:
+            return "D3D_FEATURE_LEVEL_11_0";
+
+        case D3D_FEATURE_LEVEL_11_1:
+            return "D3D_FEATURE_LEVEL_11_1";
+
+        case D3D_FEATURE_LEVEL_12_0:
+            return "D3D_FEATURE_LEVEL_12_0";
+
+        case D3D_FEATURE_LEVEL_12_1:
+            return "D3D_FEATURE_LEVEL_12_1";
+
+        default:
+            return numberToString(feature_level);
+    }
+}
+
+} // namespace
 
 using Microsoft::WRL::ComPtr;
 
@@ -35,7 +79,7 @@ D3dDevice::D3dDevice(D3dDevice&& other) = default;
 D3dDevice& D3dDevice::operator=(D3dDevice&& other) = default;
 D3dDevice::~D3dDevice() = default;
 
-bool D3dDevice::initialize(const ComPtr<IDXGIAdapter>& adapter)
+bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
 {
     dxgi_adapter_ = adapter;
     if (!dxgi_adapter_)
@@ -60,10 +104,23 @@ bool D3dDevice::initialize(const ComPtr<IDXGIAdapter>& adapter)
         return false;
     }
 
+    DXGI_ADAPTER_DESC adapter_description;
+    memset(&adapter_description, 0, sizeof(adapter_description));
+
+    if (SUCCEEDED(adapter->GetDesc(&adapter_description)))
+    {
+        LOG(LS_INFO) << "Adapter #" << index << ": '" << adapter_description.Description
+                     << "' (DirectX feature level: '" << featureLevelToString(feature_level) << "')";
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unable to get adapter description";
+    }
+
     if (feature_level < D3D_FEATURE_LEVEL_11_0)
     {
         LOG(LS_WARNING) << "D3D11CreateDevice returns an instance without DirectX 11 support, level "
-                        << feature_level << ". Following initialization may fail";
+                        << featureLevelToString(feature_level) << ". Following initialization may fail";
         // D3D_FEATURE_LEVEL_11_0 is not officially documented on MSDN to be a requirement of Dxgi
         // duplicator APIs.
         return false;
@@ -105,8 +162,15 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
         {
             D3dDevice device;
 
-            if (device.initialize(adapter))
+            if (device.initialize(i, adapter))
+            {
                 result.emplace_back(std::move(device));
+            }
+            else
+            {
+                LOG(LS_WARNING) << "Unable to initialize adapter #" << i;
+                return std::vector<D3dDevice>();
+            }
         }
         else if (error.Error() == DXGI_ERROR_NOT_FOUND)
         {
