@@ -72,7 +72,7 @@
     <message>
         <location filename="../address_book_dialog.ui" line="242"/>
         <source>Default Configuration</source>
-        <translation type="unfinished">Конфигурация по умолчанию</translation>
+        <translation>Конфигурация по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -196,12 +196,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished">Основные</translation>
+        <translation>Основные</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Наследовать конфигурацию от родителя</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="236"/>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="81"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished">Наследовать от родителя</translation>
+        <translation>Наследовать от родителя</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="93"/>
@@ -373,12 +373,12 @@
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished">Основные</translation>
+        <translation>Основные</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Наследовать конфигурацию от родителя</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="236"/>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../computer_group_dialog_general.ui" line="20"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished">Наследовать от родителя</translation>
+        <translation>Наследовать от родителя</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.ui" line="32"/>
@@ -842,22 +842,22 @@
     <message>
         <location filename="../address_book_dialog.cc" line="217"/>
         <source>General</source>
-        <translation type="unfinished">Основные</translation>
+        <translation>Основные</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="221"/>
         <source>Sessions</source>
-        <translation type="unfinished">Сессии</translation>
+        <translation>Сессии</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="228"/>
         <source>Manage</source>
-        <translation type="unfinished">Управление</translation>
+        <translation>Управление</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="232"/>
         <source>View</source>
-        <translation type="unfinished">Просмотр</translation>
+        <translation>Просмотр</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="329"/>
@@ -1230,12 +1230,12 @@
     <message>
         <location filename="../computer_group_dialog_general.cc" line="42"/>
         <source>Credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Данные для входа</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.cc" line="47"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished">Наследовать от родителя</translation>
+        <translation>Наследовать от родителя</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.cc" line="92"/>
