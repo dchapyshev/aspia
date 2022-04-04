@@ -30,6 +30,7 @@
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/application.h"
+#include "console/computer_factory.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -49,6 +50,18 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
     ui.setupUi(this);
     readState();
+
+    if (!default_config_.session_config().has_desktop_manage())
+    {
+        ComputerFactory::setDefaultDesktopManageConfig(
+            default_config_.mutable_session_config()->mutable_desktop_manage());
+    }
+
+    if (!default_config_.session_config().has_desktop_view())
+    {
+        ComputerFactory::setDefaultDesktopViewConfig(
+            default_config_.mutable_session_config()->mutable_desktop_view());
+    }
 
     QComboBox* combo_address = ui.combo_address;
 
