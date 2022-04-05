@@ -57,6 +57,9 @@ public:
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 
+    bool isOneTimePasswordChecked() const;
+    void setOneTimePasswordChecked(bool check);
+
 private:
     QSettings settings_;
 

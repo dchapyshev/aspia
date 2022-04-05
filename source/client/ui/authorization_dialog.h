@@ -48,6 +48,7 @@ protected:
 
 private slots:
     void onShowPasswordButtonToggled(bool checked);
+    void onOneTimePasswordToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

@@ -18,6 +18,7 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include "client/ui/client_settings.h"
 #include "qt_base/qt_logging.h"
 
 #include <QMessageBox>
@@ -31,20 +32,20 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    ClientSettings settings;
+
+    bool is_one_time_password_checked = settings.isOneTimePasswordChecked();
+    ui.checkbox_one_time_password->setChecked(is_one_time_password_checked);
+    onOneTimePasswordToggled(is_one_time_password_checked);
+
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::onShowPasswordButtonToggled);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
 
-    connect(ui.checkbox_one_time_password, &QCheckBox::toggled, this, [this](bool checked)
-    {
-        ui.label_username->setVisible(!checked);
-        ui.edit_username->setVisible(!checked);
-        ui.edit_username->clear();
-
-        fitSize();
-    });
+    connect(ui.checkbox_one_time_password, &QCheckBox::toggled,
+            this, &AuthorizationDialog::onOneTimePasswordToggled);
 
     fitSize();
 }
@@ -52,6 +53,9 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
 AuthorizationDialog::~AuthorizationDialog()
 {
     LOG(LS_INFO) << "Dtor";
+
+    ClientSettings settings;
+    settings.setOneTimePasswordChecked(ui.checkbox_one_time_password->isChecked());
 }
 
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
@@ -105,6 +109,15 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
     }
 
     ui.edit_password->setFocus();
+}
+
+void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
+{
+    ui.label_username->setVisible(!checked);
+    ui.edit_username->setVisible(!checked);
+    ui.edit_username->clear();
+
+    fitSize();
 }
 
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)

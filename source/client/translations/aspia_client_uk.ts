@@ -1661,18 +1661,18 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="119"/>
-        <location filename="../ui/authorization_dialog.cc" line="129"/>
+        <location filename="../ui/authorization_dialog.cc" line="132"/>
+        <location filename="../ui/authorization_dialog.cc" line="142"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="120"/>
+        <location filename="../ui/authorization_dialog.cc" line="133"/>
         <source>Username cannot be empty.</source>
         <translation>Ім&apos;я користувача не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="130"/>
+        <location filename="../ui/authorization_dialog.cc" line="143"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>

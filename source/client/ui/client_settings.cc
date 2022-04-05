@@ -35,6 +35,7 @@ const QString kDesktopViewConfigParam = QStringLiteral("DesktopViewConfig");
 const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
 const QString kUpdateServerParam = QStringLiteral("UpdateServer");
+const QString kOneTimePasswordCheckedParam = QStringLiteral("OneTimePasswordChecked");
 
 } // namespace
 
@@ -159,6 +160,16 @@ QString ClientSettings::updateServer() const
 void ClientSettings::setUpdateServer(const QString& server)
 {
     settings_.setValue(kUpdateServerParam, server.toLower());
+}
+
+bool ClientSettings::isOneTimePasswordChecked() const
+{
+    return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
+}
+
+void ClientSettings::setOneTimePasswordChecked(bool check)
+{
+    settings_.setValue(kOneTimePasswordCheckedParam, check);
 }
 
 } // namespace client
