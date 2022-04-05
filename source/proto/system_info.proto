@@ -470,6 +470,20 @@ message Licenses
     repeated License license = 1;
 }
 
+message Applications
+{
+    message Application
+    {
+        string name             = 1;
+        string version          = 2;
+        string publisher        = 3;
+        string install_date     = 4;
+        string install_location = 5;
+    }
+
+    repeated Application application = 1;
+}
+
 message SystemInfoRequest
 {
     string category = 1;
@@ -505,5 +519,6 @@ message SystemInfo
     Routes routes                    = 19;
     Connections connections          = 20;
     Licenses licenses                = 21;
+    Applications applications        = 22;
     SystemInfoFooter footer          = 128000;
 }

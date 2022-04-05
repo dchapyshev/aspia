@@ -36,6 +36,7 @@ extern const char kSystemInfo_Routes[];
 extern const char kSystemInfo_Connections[];
 extern const char kSystemInfo_NetworkShares[];
 extern const char kSystemInfo_Licenses[];
+extern const char kSystemInfo_Applications[];
 
 } // namespace common
 

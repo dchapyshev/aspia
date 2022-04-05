@@ -174,6 +174,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/statistics_dialog.ui
     ui/sys_info_widget.cc
     ui/sys_info_widget.h
+    ui/sys_info_widget_applications.cc
+    ui/sys_info_widget_applications.h
+    ui/sys_info_widget_applications.ui
     ui/sys_info_widget_connections.cc
     ui/sys_info_widget_connections.h
     ui/sys_info_widget_connections.ui

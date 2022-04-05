@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "client/client_system_info.h"
 #include "client/system_info_control_proxy.h"
+#include "client/ui/sys_info_widget_applications.h"
 #include "client/ui/sys_info_widget_connections.h"
 #include "client/ui/sys_info_widget_devices.h"
 #include "client/ui/sys_info_widget_drivers.h"
@@ -110,6 +111,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetRoutes(this));
     sys_info_widgets_.append(new SysInfoWidgetConnections(this));
     sys_info_widgets_.append(new SysInfoWidgetLicenses(this));
+    sys_info_widgets_.append(new SysInfoWidgetApplications(this));
 
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -182,6 +184,12 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     CategoryItem* software_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/operating-system.png"), tr("Software"));
 
+    CategoryItem* applications = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/applications.png"),
+        tr("Applications"),
+        common::kSystemInfo_Applications);
+
     CategoryItem* drivers = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
         QStringLiteral(":/img/graphic-card.png"),
@@ -212,6 +220,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
         tr("Licenses"),
         common::kSystemInfo_Licenses);
 
+    software_category->addChild(applications);
     software_category->addChild(drivers);
     software_category->addChild(services);
     software_category->addChild(env_vars);

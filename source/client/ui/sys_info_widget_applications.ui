@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SysInfoApplications</class>
+ <widget class="QWidget" name="SysInfoApplications">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>715</width>
+    <height>495</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTreeWidget" name="tree">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Publisher</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Install Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Install Location</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+  <action name="action_copy_row">
+   <property name="text">
+    <string>Copy Row</string>
+   </property>
+  </action>
+  <action name="action_copy_value">
+   <property name="text">
+    <string>Copy Value</string>
+   </property>
+  </action>
+  <action name="action_search_in_google">
+   <property name="text">
+    <string>Search in Google</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

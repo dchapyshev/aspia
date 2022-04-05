@@ -675,6 +675,41 @@
     </message>
 </context>
 <context>
+    <name>SysInfoApplications</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">名稱</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">版本</translation>
+    </message>
+    <message>
+        <source>Publisher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install Date</source>
+        <translation type="unfinished">安裝日期</translation>
+    </message>
+    <message>
+        <source>Install Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+    <message>
+        <source>Search in Google</source>
+        <translation type="unfinished">在 Google 搜尋</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoConnections</name>
     <message>
         <source>Process Name</source>
@@ -1724,6 +1759,10 @@
     </message>
     <message>
         <source>Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Applications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

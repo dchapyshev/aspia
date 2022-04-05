@@ -17,6 +17,7 @@
 #
 
 list(APPEND SOURCE_BASE
+    applications_reader.h
     base64.cc
     base64.h
     bitset.h
@@ -78,6 +79,7 @@ list(APPEND SOURCE_BASE
 
 if (WIN32)
     list(APPEND SOURCE_BASE
+        applications_reader_win.cc
         license_reader_win.cc
         power_controller_win.cc
         smbios_reader_win.cc
@@ -86,6 +88,7 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE
+        applications_reader_linux.cc
         license_reader_linux.cc
         power_controller_linux.cc
         smbios_reader_linux.cc
@@ -94,6 +97,7 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE
+        applications_reader_mac.cc
         license_reader_mac.cc
         power_controller_mac.mm
         smbios_reader_mac.mm

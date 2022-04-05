@@ -881,6 +881,49 @@
     </message>
 </context>
 <context>
+    <name>SysInfoApplications</name>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="54"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="59"/>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="64"/>
+        <source>Publisher</source>
+        <translation>Издатель</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="69"/>
+        <source>Install Date</source>
+        <translation>Дата установки</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="74"/>
+        <source>Install Location</source>
+        <translation>Место установки</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="82"/>
+        <source>Copy Row</source>
+        <translation>Копировать строку</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="87"/>
+        <source>Copy Value</source>
+        <translation>Копировать значение</translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_applications.ui" line="92"/>
+        <source>Search in Google</source>
+        <translation>Искать в Google</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoConnections</name>
     <message>
         <source>Parameter</source>
@@ -2205,112 +2248,117 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="132"/>
+        <location filename="../ui/qt_system_info_window.cc" line="134"/>
         <source>Summary</source>
         <translation>Сводка</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="140"/>
+        <location filename="../ui/qt_system_info_window.cc" line="142"/>
         <source>Hardware</source>
         <translation>Оборудование</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="145"/>
+        <location filename="../ui/qt_system_info_window.cc" line="147"/>
         <source>Devices</source>
         <translation>Устройства</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="151"/>
+        <location filename="../ui/qt_system_info_window.cc" line="153"/>
         <source>Video Adapters</source>
         <translation>Видеоадаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="157"/>
+        <location filename="../ui/qt_system_info_window.cc" line="159"/>
         <source>Monitors</source>
         <translation>Мониторы</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="163"/>
+        <location filename="../ui/qt_system_info_window.cc" line="165"/>
         <source>Printers</source>
         <translation>Принтеры</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="169"/>
+        <location filename="../ui/qt_system_info_window.cc" line="171"/>
         <source>Power Options</source>
         <translation>Параметры питания</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="183"/>
+        <location filename="../ui/qt_system_info_window.cc" line="185"/>
         <source>Software</source>
         <translation>Программное обеспечение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="188"/>
+        <location filename="../ui/qt_system_info_window.cc" line="190"/>
+        <source>Applications</source>
+        <translation>Приложения</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="196"/>
         <source>Drivers</source>
         <translation>Драйверы</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="194"/>
+        <location filename="../ui/qt_system_info_window.cc" line="202"/>
         <source>Services</source>
         <translation>Службы</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="200"/>
+        <location filename="../ui/qt_system_info_window.cc" line="208"/>
         <source>Environment Variables</source>
         <translation>Переменные окружения</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="206"/>
+        <location filename="../ui/qt_system_info_window.cc" line="214"/>
         <source>Event Logs</source>
         <translation>Журнал событий</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="212"/>
+        <location filename="../ui/qt_system_info_window.cc" line="220"/>
         <source>Licenses</source>
         <translation>Лицензии</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="226"/>
+        <location filename="../ui/qt_system_info_window.cc" line="235"/>
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="231"/>
+        <location filename="../ui/qt_system_info_window.cc" line="240"/>
         <source>Network Adapters</source>
         <translation>Сетевые адаптеры</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="237"/>
+        <location filename="../ui/qt_system_info_window.cc" line="246"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="243"/>
+        <location filename="../ui/qt_system_info_window.cc" line="252"/>
         <source>Connections</source>
         <translation>Подключения</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="249"/>
+        <location filename="../ui/qt_system_info_window.cc" line="258"/>
         <source>Network Shares</source>
         <translation>Сетевые ресурсы</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="275"/>
+        <location filename="../ui/qt_system_info_window.cc" line="284"/>
         <source>HTML File</source>
         <translation>HTML-файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="277"/>
+        <location filename="../ui/qt_system_info_window.cc" line="286"/>
         <source>HTML File (*.html)</source>
         <translation>HTML-файл (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="288"/>
+        <location filename="../ui/qt_system_info_window.cc" line="297"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="289"/>
+        <location filename="../ui/qt_system_info_window.cc" line="298"/>
         <source>Failed to save file: %1</source>
         <translation>Не удалось сохранить файл: %1</translation>
     </message>

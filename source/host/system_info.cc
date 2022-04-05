@@ -18,6 +18,7 @@
 
 #include "host/system_info.h"
 
+#include "base/applications_reader.h"
 #include "base/environment.h"
 #include "base/license_reader.h"
 #include "base/logging.h"
@@ -860,6 +861,11 @@ void fillLicensesInfo(proto::system_info::SystemInfo* system_info)
     base::readLicensesInformation(system_info->mutable_licenses());
 }
 
+void fillApplicationsInfo(proto::system_info::SystemInfo* system_info)
+{
+    base::readApplicationsInformation(system_info->mutable_applications());
+}
+
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
@@ -947,6 +953,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == common::kSystemInfo_Licenses)
     {
         fillLicensesInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_Applications)
+    {
+        fillApplicationsInfo(system_info);
     }
     else
     {
