@@ -202,6 +202,8 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     // If it has only one screen or an empty list is received.
     if (screen_list.screen_size() > 1)
     {
+        ui.action_monitors->setToolTip(tr("Monitor selection"));
+
         SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
         if (screen_list.current_screen() == -1)
         {
@@ -230,6 +232,10 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
             screens_group_->addAction(action);
             screens_menu_->addAction(action);
         }
+    }
+    else
+    {
+        ui.action_monitors->setToolTip(tr("Resolution selection"));
     }
 
     if (screen_list.resolution_size() > 0 && !is_full_screen)

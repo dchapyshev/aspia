@@ -1358,6 +1358,14 @@
         <source>Scale</source>
         <translation>縮放</translation>
     </message>
+    <message>
+        <source>Monitor selection</source>
+        <translation type="unfinished">選擇顯示器</translation>
+    </message>
+    <message>
+        <source>Resolution selection</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>client::FileListModel</name>
