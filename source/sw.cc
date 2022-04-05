@@ -149,9 +149,10 @@ void build(Solution &s) {
             base -= "net/route_enumerator.cc";
             base += "X11"_slib;
             base += "Xext"_slib;
-            //base += "Xdamage"_slib;
+            base += "Xdamage"_slib;
             base += "Xfixes"_slib;
             base += "Xtst"_slib;
+            base += "Xrandr"_slib;
         }
         automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 
