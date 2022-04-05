@@ -34,5 +34,6 @@ const char kSystemInfo_NetworkAdapters[] = "A27B3B0E-BF55-43B3-989B-40705DAF3290
 const char kSystemInfo_Routes[] = "224C9198-FF86-40B6-96FD-19938B952021";
 const char kSystemInfo_Connections[] = "E720729A-7C96-4603-A46B-91FBC95420D6";
 const char kSystemInfo_NetworkShares[] = "EC295A1A-6CBD-4334-9697-38E542687902";
+const char kSystemInfo_Licenses[] = "7D3320B3-E5A6-43AD-8768-09F9304CEFC7";
 
 } // namespace common

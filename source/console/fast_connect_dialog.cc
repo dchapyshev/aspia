@@ -27,6 +27,7 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
+#include "client/ui/qt_system_info_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/application.h"
@@ -78,6 +79,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
     add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
     add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)
@@ -307,6 +309,10 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             session_window = new client::QtFileManagerWindow();
+            break;
+
+        case proto::SESSION_TYPE_SYSTEM_INFO:
+            session_window = new client::QtSystemInfoWindow();
             break;
 
         default:
