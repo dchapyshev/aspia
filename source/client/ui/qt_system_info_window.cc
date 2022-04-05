@@ -26,6 +26,7 @@
 #include "client/ui/sys_info_widget_drivers.h"
 #include "client/ui/sys_info_widget_env_vars.h"
 #include "client/ui/sys_info_widget_event_logs.h"
+#include "client/ui/sys_info_widget_licenses.h"
 #include "client/ui/sys_info_widget_monitors.h"
 #include "client/ui/sys_info_widget_net_adapters.h"
 #include "client/ui/sys_info_widget_net_shares.h"
@@ -108,6 +109,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetEventLogs(this));
     sys_info_widgets_.append(new SysInfoWidgetRoutes(this));
     sys_info_widgets_.append(new SysInfoWidgetConnections(this));
+    sys_info_widgets_.append(new SysInfoWidgetLicenses(this));
 
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -204,10 +206,17 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
         tr("Event Logs"),
         common::kSystemInfo_EventLogs);
 
+    CategoryItem* licenses = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/license-key.png"),
+        tr("Licenses"),
+        common::kSystemInfo_Licenses);
+
     software_category->addChild(drivers);
     software_category->addChild(services);
     software_category->addChild(env_vars);
     software_category->addChild(event_logs);
+    software_category->addChild(licenses);
 
     //----------------------------------------------------------------------------------------------
     // NETWORK

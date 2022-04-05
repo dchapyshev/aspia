@@ -38,6 +38,7 @@ list(APPEND SOURCE_BASE
     environment.h
     guid.cc
     guid.h
+    license_reader.h
     location.cc
     location.h
     logging.cc
@@ -77,6 +78,7 @@ list(APPEND SOURCE_BASE
 
 if (WIN32)
     list(APPEND SOURCE_BASE
+        license_reader_win.cc
         power_controller_win.cc
         smbios_reader_win.cc
         sys_info_win.cc)
@@ -84,6 +86,7 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE
+        license_reader_linux.cc
         power_controller_linux.cc
         smbios_reader_linux.cc
         sys_info_linux.cc)
@@ -91,6 +94,7 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE
+        license_reader_mac.cc
         power_controller_mac.mm
         smbios_reader_mac.mm
         sys_info_mac.mm)

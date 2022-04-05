@@ -1063,6 +1063,34 @@
     </message>
 </context>
 <context>
+    <name>SysInfoLicenses</name>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.ui" line="45"/>
+        <source>Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.ui" line="50"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.ui" line="58"/>
+        <source>Copy Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.ui" line="63"/>
+        <source>Copy Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.ui" line="68"/>
+        <source>Copy Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SysInfoMonitors</name>
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="45"/>
@@ -2008,107 +2036,112 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="130"/>
+        <location filename="../ui/qt_system_info_window.cc" line="132"/>
         <source>Summary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="138"/>
+        <location filename="../ui/qt_system_info_window.cc" line="140"/>
         <source>Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="143"/>
+        <location filename="../ui/qt_system_info_window.cc" line="145"/>
         <source>Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="149"/>
+        <location filename="../ui/qt_system_info_window.cc" line="151"/>
         <source>Video Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="155"/>
+        <location filename="../ui/qt_system_info_window.cc" line="157"/>
         <source>Monitors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="161"/>
+        <location filename="../ui/qt_system_info_window.cc" line="163"/>
         <source>Printers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="167"/>
+        <location filename="../ui/qt_system_info_window.cc" line="169"/>
         <source>Power Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="181"/>
+        <location filename="../ui/qt_system_info_window.cc" line="183"/>
         <source>Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="186"/>
+        <location filename="../ui/qt_system_info_window.cc" line="188"/>
         <source>Drivers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="192"/>
+        <location filename="../ui/qt_system_info_window.cc" line="194"/>
         <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="198"/>
+        <location filename="../ui/qt_system_info_window.cc" line="200"/>
         <source>Environment Variables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="204"/>
+        <location filename="../ui/qt_system_info_window.cc" line="206"/>
         <source>Event Logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="217"/>
+        <location filename="../ui/qt_system_info_window.cc" line="212"/>
+        <source>Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_system_info_window.cc" line="226"/>
         <source>Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="222"/>
+        <location filename="../ui/qt_system_info_window.cc" line="231"/>
         <source>Network Adapters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="228"/>
+        <location filename="../ui/qt_system_info_window.cc" line="237"/>
         <source>Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="234"/>
+        <location filename="../ui/qt_system_info_window.cc" line="243"/>
         <source>Connections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="240"/>
+        <location filename="../ui/qt_system_info_window.cc" line="249"/>
         <source>Network Shares</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="266"/>
+        <location filename="../ui/qt_system_info_window.cc" line="275"/>
         <source>HTML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="268"/>
+        <location filename="../ui/qt_system_info_window.cc" line="277"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="279"/>
+        <location filename="../ui/qt_system_info_window.cc" line="288"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="280"/>
+        <location filename="../ui/qt_system_info_window.cc" line="289"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2728,6 +2761,44 @@
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
         <source>Audit Failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetLicenses</name>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="133"/>
+        <source>License Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="137"/>
+        <source>License Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="141"/>
+        <source>Organization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="145"/>
+        <source>Owner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="149"/>
+        <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="153"/>
+        <source>Product Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/sys_info_widget_licenses.cc" line="157"/>
+        <source>Unknown Field</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

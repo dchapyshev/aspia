@@ -189,6 +189,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_event_logs.cc
     ui/sys_info_widget_event_logs.h
     ui/sys_info_widget_event_logs.ui
+    ui/sys_info_widget_licenses.cc
+    ui/sys_info_widget_licenses.h
+    ui/sys_info_widget_licenses.ui
     ui/sys_info_widget_monitors.cc
     ui/sys_info_widget_monitors.h
     ui/sys_info_widget_monitors.ui

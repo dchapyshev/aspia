@@ -442,6 +442,34 @@ message Connections
     repeated Connection connection = 1;
 }
 
+message Licenses
+{
+    message License
+    {
+        message Field
+        {
+            enum Type
+            {
+                TYPE_UNKNOWN         = 0;
+                TYPE_OWNER           = 2;
+                TYPE_ORGANIZATION    = 3;
+                TYPE_PRODUCT_KEY     = 4;
+                TYPE_PRODUCT_ID      = 5;
+                TYPE_LICENSE_VERSION = 6;
+                TYPE_LICENSE_TYPE    = 7;
+            }
+
+            Type type    = 1;
+            string value = 2;
+        }
+
+        string product_name  = 1;
+        repeated Field field = 2;
+    }
+
+    repeated License license = 1;
+}
+
 message SystemInfoRequest
 {
     string category = 1;
@@ -476,5 +504,6 @@ message SystemInfo
     EventLogs event_logs             = 18;
     Routes routes                    = 19;
     Connections connections          = 20;
+    Licenses licenses                = 21;
     SystemInfoFooter footer          = 128000;
 }

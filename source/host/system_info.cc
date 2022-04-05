@@ -19,6 +19,7 @@
 #include "host/system_info.h"
 
 #include "base/environment.h"
+#include "base/license_reader.h"
 #include "base/logging.h"
 #include "base/smbios_parser.h"
 #include "base/smbios_reader.h"
@@ -854,6 +855,11 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
     }
 }
 
+void fillLicensesInfo(proto::system_info::SystemInfo* system_info)
+{
+    base::readLicensesInformation(system_info->mutable_licenses());
+}
+
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
@@ -937,6 +943,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == common::kSystemInfo_NetworkShares)
     {
         fillNetworkShares(system_info);
+    }
+    else if (category == common::kSystemInfo_Licenses)
+    {
+        fillLicensesInfo(system_info);
     }
     else
     {

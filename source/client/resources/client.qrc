@@ -55,6 +55,7 @@
         <file>warning.png</file>
         <file>information.png</file>
         <file>text-chat.png</file>
+        <file>license-key.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

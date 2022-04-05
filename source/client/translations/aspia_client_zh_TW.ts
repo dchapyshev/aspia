@@ -854,6 +854,29 @@
     </message>
 </context>
 <context>
+    <name>SysInfoLicenses</name>
+    <message>
+        <source>Parameter</source>
+        <translation type="unfinished">參數</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <source>Copy Name</source>
+        <translation type="unfinished">複製名稱</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoMonitors</name>
     <message>
         <source>Parameter</source>
@@ -1699,6 +1722,10 @@
         <source>Failed to save file: %1</source>
         <translation>無法儲存檔案：%1</translation>
     </message>
+    <message>
+        <source>Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>client::RouterManagerWindow</name>
@@ -2187,6 +2214,37 @@
     <message>
         <source>Unknown</source>
         <translation>未知</translation>
+    </message>
+</context>
+<context>
+    <name>client::SysInfoWidgetLicenses</name>
+    <message>
+        <source>License Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Organization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Product Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown Field</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
