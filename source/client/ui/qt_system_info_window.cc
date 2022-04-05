@@ -31,6 +31,7 @@
 #include "client/ui/sys_info_widget_monitors.h"
 #include "client/ui/sys_info_widget_net_adapters.h"
 #include "client/ui/sys_info_widget_net_shares.h"
+#include "client/ui/sys_info_widget_open_files.h"
 #include "client/ui/sys_info_widget_power_options.h"
 #include "client/ui/sys_info_widget_printers.h"
 #include "client/ui/sys_info_widget_routes.h"
@@ -112,6 +113,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetConnections(this));
     sys_info_widgets_.append(new SysInfoWidgetLicenses(this));
     sys_info_widgets_.append(new SysInfoWidgetApplications(this));
+    sys_info_widgets_.append(new SysInfoWidgetOpenFiles(this));
 
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -258,10 +260,17 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
         tr("Network Shares"),
         common::kSystemInfo_NetworkShares);
 
+    CategoryItem* open_files = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/folder-share.png"),
+        tr("Open Files"),
+        common::kSystemInfo_OpenFiles);
+
     network_category->addChild(network_adapters);
     network_category->addChild(routes);
     network_category->addChild(connections);
     network_category->addChild(network_shares);
+    network_category->addChild(open_files);
 
     //----------------------------------------------------------------------------------------------
     // TOP LEVEL CATEGORIES

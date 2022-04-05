@@ -484,6 +484,19 @@ message Applications
     repeated Application application = 1;
 }
 
+message OpenFiles
+{
+    message OpenFile
+    {
+        uint32 id         = 1;
+        string user_name  = 2;
+        uint32 lock_count = 3;
+        string file_path  = 4;
+    }
+
+    repeated OpenFile open_file = 1;
+}
+
 message SystemInfoRequest
 {
     string category = 1;
@@ -520,5 +533,6 @@ message SystemInfo
     Connections connections          = 20;
     Licenses licenses                = 21;
     Applications applications        = 22;
+    OpenFiles open_files             = 23;
     SystemInfoFooter footer          = 128000;
 }

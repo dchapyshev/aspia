@@ -28,6 +28,7 @@
 #include "base/net/adapter_enumerator.h"
 #include "base/net/connect_enumerator.h"
 #include "base/net/route_enumerator.h"
+#include "base/net/open_files_enumerator.h"
 #include "base/win/battery_enumerator.h"
 #include "base/win/device_enumerator.h"
 #include "base/win/drive_enumerator.h"
@@ -866,6 +867,20 @@ void fillApplicationsInfo(proto::system_info::SystemInfo* system_info)
     base::readApplicationsInformation(system_info->mutable_applications());
 }
 
+void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
+{
+    for (base::OpenFilesEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::OpenFiles::OpenFile* open_file =
+            system_info->mutable_open_files()->add_open_file();
+
+        open_file->set_id(enumerator.id());
+        open_file->set_user_name(enumerator.userName());
+        open_file->set_lock_count(enumerator.lockCount());
+        open_file->set_file_path(enumerator.filePath());
+    }
+}
+
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
@@ -957,6 +972,10 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == common::kSystemInfo_Applications)
     {
         fillApplicationsInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_OpenFiles)
+    {
+        fillOpenFilesInfo(system_info);
     }
     else
     {

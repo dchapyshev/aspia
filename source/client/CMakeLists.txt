@@ -204,6 +204,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_net_adapters.cc
     ui/sys_info_widget_net_adapters.h
     ui/sys_info_widget_net_adapters.ui
+    ui/sys_info_widget_open_files.cc
+    ui/sys_info_widget_open_files.h
+    ui/sys_info_widget_open_files.ui
     ui/sys_info_widget_power_options.cc
     ui/sys_info_widget_power_options.h
     ui/sys_info_widget_power_options.ui

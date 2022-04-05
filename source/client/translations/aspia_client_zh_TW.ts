@@ -981,6 +981,29 @@
     </message>
 </context>
 <context>
+    <name>SysInfoOpenFiles</name>
+    <message>
+        <source>User Name</source>
+        <translation type="unfinished">使用者名稱</translation>
+    </message>
+    <message>
+        <source>Lock Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+</context>
+<context>
     <name>SysInfoPowerOptions</name>
     <message>
         <source>Parameter</source>
@@ -1763,6 +1786,10 @@
     </message>
     <message>
         <source>Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

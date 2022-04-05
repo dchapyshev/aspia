@@ -527,6 +527,8 @@ list(APPEND SOURCE_BASE_NET
     net/network_channel_proxy.h
     net/network_server.cc
     net/network_server.h
+    net/open_files_enumerator.cc
+    net/open_files_enumerator.h
     net/tcp_keep_alive.cc
     net/tcp_keep_alive.h
     net/variable_size.cc
