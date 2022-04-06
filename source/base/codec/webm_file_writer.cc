@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/system_time.h"
 #include "base/codec/webm_file_muxer.h"
+#include "base/strings/unicode.h"
 #include "build/build_config.h"
 
 #include <iomanip>
@@ -150,6 +151,27 @@ void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
 
 bool WebmFileWriter::init()
 {
+    std::error_code error_code;
+    if (!std::filesystem::exists(path_, error_code))
+    {
+        LOG(LS_INFO) << "Path '" << path_ << "' not exists yet";
+
+        if (std::filesystem::create_directories(path_, error_code))
+        {
+            LOG(LS_INFO) << "Path created successfully";
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unable to create path: "
+                            << base::utf16FromLocal8Bit(error_code.message());
+            return false;
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "Path '" << path_ << "' already exists";
+    }
+
     SystemTime time = SystemTime::now();
     std::ostringstream file_name;
 
