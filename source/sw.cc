@@ -147,6 +147,7 @@ void build(Solution &s) {
             base -= "net/connect_enumerator.cc";
             base -= "net/firewall_manager.cc";
             base -= "net/route_enumerator.cc";
+            base -= "net/open_files_enumerator.cc";
             base += "X11"_slib;
             base += "Xext"_slib;
             base += "Xdamage"_slib;
