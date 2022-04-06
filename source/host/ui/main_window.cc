@@ -372,6 +372,25 @@ void MainWindow::onConnectConfirmationRequest(
         agent_proxy_->connectConfirmation(request.id(), accept);
 }
 
+void MainWindow::onVideoRecordingStateChanged(
+    const std::string& computer_name, const std::string& user_name, bool started)
+{
+    QString message;
+
+    if (started)
+    {
+        message = tr("User \"%1\" (%2) started screen recording.")
+            .arg(QString::fromStdString(user_name), QString::fromStdString(computer_name));
+    }
+    else
+    {
+        message = tr("User \"%1\" (%2) stopped screen recording.")
+            .arg(QString::fromStdString(user_name), QString::fromStdString(computer_name));
+    }
+
+    tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/main.ico"), 1200);
+}
+
 void MainWindow::onTextChat(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())

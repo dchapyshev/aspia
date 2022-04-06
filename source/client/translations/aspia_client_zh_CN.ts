@@ -502,6 +502,17 @@
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="440"/>
+        <source>Recording settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="449"/>
+        <location filename="../ui/desktop_panel.ui" line="452"/>
+        <source>Start recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
@@ -698,6 +709,24 @@
     <message>
         <source>Warning</source>
         <translation type="obsolete">警告</translation>
+    </message>
+</context>
+<context>
+    <name>RecordSettingsDialog</name>
+    <message>
+        <location filename="../ui/record_settings_dialog.ui" line="14"/>
+        <source>Recording Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/record_settings_dialog.ui" line="26"/>
+        <source>Automatically start recording sessions on connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/record_settings_dialog.ui" line="33"/>
+        <source>Write path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1859,68 +1888,78 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="205"/>
+        <location filename="../ui/desktop_panel.cc" line="206"/>
         <source>Monitor selection</source>
         <translation type="unfinished">监视器选择</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="224"/>
+        <location filename="../ui/desktop_panel.cc" line="225"/>
         <source>Monitor %1 (primary)</source>
         <translation>监视器%1（主）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="226"/>
+        <location filename="../ui/desktop_panel.cc" line="227"/>
         <source>Monitor %1</source>
         <translation>监视器 %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="238"/>
+        <location filename="../ui/desktop_panel.cc" line="239"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="249"/>
+        <location filename="../ui/desktop_panel.cc" line="250"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="384"/>
-        <location filename="../ui/desktop_panel.cc" line="395"/>
-        <location filename="../ui/desktop_panel.cc" line="406"/>
-        <location filename="../ui/desktop_panel.cc" line="417"/>
-        <location filename="../ui/desktop_panel.cc" line="428"/>
+        <location filename="../ui/desktop_panel.cc" line="402"/>
+        <location filename="../ui/desktop_panel.cc" line="413"/>
+        <location filename="../ui/desktop_panel.cc" line="424"/>
+        <location filename="../ui/desktop_panel.cc" line="435"/>
+        <location filename="../ui/desktop_panel.cc" line="446"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="385"/>
+        <location filename="../ui/desktop_panel.cc" line="403"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="396"/>
+        <location filename="../ui/desktop_panel.cc" line="414"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="407"/>
+        <location filename="../ui/desktop_panel.cc" line="425"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="418"/>
+        <location filename="../ui/desktop_panel.cc" line="436"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="429"/>
+        <location filename="../ui/desktop_panel.cc" line="447"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="502"/>
+        <location filename="../ui/desktop_panel.cc" line="525"/>
         <source>Scale</source>
         <translation>缩放</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="292"/>
+        <source>Stop recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="297"/>
+        <source>Start recording</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2175,34 +2214,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="240"/>
-        <location filename="../ui/qt_desktop_window.cc" line="248"/>
-        <location filename="../ui/qt_desktop_window.cc" line="725"/>
+        <location filename="../ui/qt_desktop_window.cc" line="253"/>
+        <location filename="../ui/qt_desktop_window.cc" line="261"/>
+        <location filename="../ui/qt_desktop_window.cc" line="744"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="241"/>
+        <location filename="../ui/qt_desktop_window.cc" line="254"/>
         <source>There are no supported video encodings.</source>
         <translation>没有支持的视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="249"/>
+        <location filename="../ui/qt_desktop_window.cc" line="262"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="703"/>
+        <location filename="../ui/qt_desktop_window.cc" line="722"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="705"/>
+        <location filename="../ui/qt_desktop_window.cc" line="724"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="725"/>
+        <location filename="../ui/qt_desktop_window.cc" line="744"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
@@ -2351,6 +2390,14 @@
         <location filename="../ui/qt_system_info_window.cc" line="307"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished">无法保存文件：%1</translation>
+    </message>
+</context>
+<context>
+    <name>client::RecordSettingsDialog</name>
+    <message>
+        <location filename="../ui/record_settings_dialog.cc" line="44"/>
+        <source>Choose path</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

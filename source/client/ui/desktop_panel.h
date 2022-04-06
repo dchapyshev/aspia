@@ -42,6 +42,7 @@ public:
     void enableRemoteUpdate(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);
+    void startRecording(bool enable);
 
     int scale() const { return scale_; }
     bool autoScrolling() const;
@@ -68,6 +69,7 @@ signals:
     void minimizeSession();
     void closeSession();
     void showHidePanel();
+    void recordingStateChanged(bool enable);
 
 protected:
     // QFrame implementation.
@@ -88,6 +90,7 @@ private slots:
     void onChangeScreenAction(QAction* action);
     void onMenuShow();
     void onMenuHide();
+    void onShowRecordSettings();
 
 private:
     void createAdditionalMenu(proto::SessionType session_type);
@@ -99,6 +102,7 @@ private:
     Ui::DesktopPanel ui;
 
     const proto::SessionType session_type_;
+    bool is_recording_started_ = false;
 
     QSize current_resolution_;
     int64_t current_screen_id_ = -1;

@@ -200,6 +200,19 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             session_window->close();
     });
 
+    connect(panel_, &DesktopPanel::recordingStateChanged, this, [this](bool enable)
+    {
+        std::filesystem::path file_path;
+
+        if (enable)
+        {
+            DesktopSettings settings;
+            file_path = settings.recordingPath().toStdU16String();
+        }
+
+        desktop_control_proxy_->setVideoRecording(enable, file_path);
+    });
+
     connect(desktop_, &DesktopWidget::sig_mouseEvent, this, &QtDesktopWindow::onMouseEvent);
     connect(desktop_, &DesktopWidget::sig_keyEvent, this, &QtDesktopWindow::onKeyEvent);
 
@@ -344,15 +357,21 @@ void QtDesktopWindow::setFrame(
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
 
-    bool resize = desktop_->desktopFrame() == nullptr;
+    bool has_old_frame = desktop_->desktopFrame() != nullptr;
 
     desktop_->setDesktopFrame(frame);
     scaleDesktop();
 
-    if (resize)
+    if (!has_old_frame)
     {
         LOG(LS_INFO) << "Resize window (first frame)";
         autosizeWindow();
+
+        // If the parameters indicate that it is necessary to record the connection session, then we
+        // start recording.
+        DesktopSettings settings;
+        if (settings.recordSessions())
+            panel_->startRecording(true);
     }
 }
 

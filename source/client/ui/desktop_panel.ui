@@ -435,6 +435,23 @@
     <bool>false</bool>
    </property>
   </action>
+  <action name="action_recording_settings">
+   <property name="text">
+    <string>Recording settings...</string>
+   </property>
+  </action>
+  <action name="action_start_recording">
+   <property name="icon">
+    <iconset resource="../resources/client.qrc">
+     <normaloff>:/img/control-record.png</normaloff>:/img/control-record.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start recording</string>
+   </property>
+   <property name="toolTip">
+    <string>Start recording</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../resources/client.qrc"/>

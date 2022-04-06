@@ -485,6 +485,35 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 
         sendMessage(base::serialize(*outgoing_message));
     }
+    else if (extension.name() == common::kVideoRecordingExtension)
+    {
+        proto::VideoRecording video_recording;
+
+        if (!video_recording.ParseFromString(extension.data()))
+        {
+            LOG(LS_WARNING) << "Unable to parse video recording extension data";
+            return;
+        }
+
+        bool started;
+
+        switch (video_recording.action())
+        {
+            case proto::VideoRecording::ACTION_STARTED:
+                started = true;
+            break;
+
+            case proto::VideoRecording::ACTION_STOPPED:
+                started = false;
+                break;
+
+            default:
+                LOG(LS_WARNING) << "Unknown video recording action: " << video_recording.action();
+                return;
+        }
+
+        delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
+    }
     else
     {
         LOG(LS_WARNING) << "Unknown extension: " << extension.name();

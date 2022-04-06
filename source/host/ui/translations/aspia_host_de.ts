@@ -799,13 +799,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="78"/>
-        <location filename="../main_window.cc" line="530"/>
+        <location filename="../main_window.cc" line="391"/>
+        <location filename="../main_window.cc" line="549"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="510"/>
+        <location filename="../main_window.cc" line="529"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
@@ -820,18 +821,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="623"/>
+        <location filename="../main_window.cc" line="382"/>
+        <source>User &quot;%1&quot; (%2) started screen recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="642"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="328"/>
-        <location filename="../main_window.cc" line="608"/>
+        <location filename="../main_window.cc" line="627"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="613"/>
+        <location filename="../main_window.cc" line="632"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -841,7 +847,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="618"/>
+        <location filename="../main_window.cc" line="637"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
@@ -851,17 +857,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="515"/>
+        <location filename="../main_window.cc" line="387"/>
+        <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="534"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="550"/>
+        <location filename="../main_window.cc" line="569"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="551"/>
+        <location filename="../main_window.cc" line="570"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>

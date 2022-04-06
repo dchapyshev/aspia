@@ -872,6 +872,21 @@ void UserSession::onClientSessionFinished()
     }
 }
 
+void UserSession::onClientSessionVideoRecording(
+    const std::string& computer_name, const std::string& user_name, bool started)
+{
+    proto::internal::ServiceToUi* outgoing_message =
+        messageFromArena<proto::internal::ServiceToUi>();
+
+    proto::internal::VideoRecordingState* video_recording_state =
+        outgoing_message->mutable_video_recording_state();
+    video_recording_state->set_computer_name(computer_name);
+    video_recording_state->set_user_name(user_name);
+    video_recording_state->set_started(started);
+
+    channel_->send(base::serialize(*outgoing_message));
+}
+
 void UserSession::onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat)
 {
     proto::internal::ServiceToUi* outgoing_message =

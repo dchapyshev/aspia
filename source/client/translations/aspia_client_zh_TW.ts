@@ -394,6 +394,14 @@
         <source>Text Chat</source>
         <translation>文字聊天</translation>
     </message>
+    <message>
+        <source>Recording settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
@@ -548,6 +556,21 @@
     <message>
         <source>Item:</source>
         <translation>項目：</translation>
+    </message>
+</context>
+<context>
+    <name>RecordSettingsDialog</name>
+    <message>
+        <source>Recording Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically start recording sessions on connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1447,6 +1470,14 @@
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Stop recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>client::FileListModel</name>
@@ -1790,6 +1821,13 @@
     </message>
     <message>
         <source>Open Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::RecordSettingsDialog</name>
+    <message>
+        <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -65,7 +65,7 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     config->rc_dropframe_thresh = 0;
 
     // We do not want variations in bandwidth.
-    config->rc_end_usage = VPX_VBR;
+    config->rc_end_usage = VPX_CBR;
     config->rc_undershoot_pct = 100;
     config->rc_overshoot_pct = 15;
 }
@@ -74,10 +74,14 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 
 WebmVideoEncoder::WebmVideoEncoder()
 {
+    LOG(LS_INFO) << "Ctor";
     memset(&config_, 0, sizeof(config_));
 }
 
-WebmVideoEncoder::~WebmVideoEncoder() = default;
+WebmVideoEncoder::~WebmVideoEncoder()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
 {
@@ -87,6 +91,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
 
     if (last_frame_size_ != frame.size())
     {
+        LOG(LS_INFO) << "Frame size changed from " << last_frame_size_ << " to " << frame.size();
         last_frame_size_ = frame.size();
 
         createImage();
@@ -128,6 +133,22 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
     {
         LOG(LS_WARNING) << "vpx_codec_encode failed";
         return false;
+    }
+
+    // Read the encoded data.
+    vpx_codec_iter_t iter = nullptr;
+
+    while (true)
+    {
+        const vpx_codec_cx_pkt_t* pkt = vpx_codec_get_cx_data(codec_.get(), &iter);
+        if (!pkt)
+            break;
+
+        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
+        {
+            packet->set_data(pkt->data.frame.buf, pkt->data.frame.sz);
+            break;
+        }
     }
 
     return true;
@@ -177,6 +198,8 @@ void WebmVideoEncoder::createImage()
 
 bool WebmVideoEncoder::createCodec()
 {
+    codec_.reset(new vpx_codec_ctx_t());
+
     // Configure the encoder.
     vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
@@ -205,7 +228,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed";
+        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -213,14 +236,14 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed";
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed";
+        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
         return false;
     }
 

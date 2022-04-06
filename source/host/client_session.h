@@ -22,7 +22,7 @@
 #include "base/session_id.h"
 #include "base/version.h"
 #include "base/net/network_channel.h"
-#include "proto/common.pb.h"
+#include "proto/desktop_extensions.pb.h"
 #include "proto/text_chat.pb.h"
 
 namespace base {
@@ -46,6 +46,8 @@ public:
 
         virtual void onClientSessionConfigured() = 0;
         virtual void onClientSessionFinished() = 0;
+        virtual void onClientSessionVideoRecording(
+            const std::string& computer_name, const std::string& user_name, bool started) = 0;
         virtual void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) = 0;
     };
 

@@ -111,6 +111,24 @@ void UserSessionWindowProxy::onConnectConfirmationRequest(
         window_->onConnectConfirmationRequest(request);
 }
 
+void UserSessionWindowProxy::onVideoRecordingStateChanged(
+    const std::string& computer_name, const std::string& user_name, bool started)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &UserSessionWindowProxy::onVideoRecordingStateChanged,
+            shared_from_this(),
+            computer_name,
+            user_name,
+            started));
+        return;
+    }
+
+    if (window_)
+        window_->onVideoRecordingStateChanged(computer_name, user_name, started);
+}
+
 void UserSessionWindowProxy::onTextChat(const proto::TextChat& text_chat)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

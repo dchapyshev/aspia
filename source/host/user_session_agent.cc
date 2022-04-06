@@ -130,6 +130,16 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     {
         window_proxy_->onTextChat(incoming_message->text_chat());
     }
+    else if (incoming_message->has_video_recording_state())
+    {
+        const proto::internal::VideoRecordingState& video_recording_state =
+            incoming_message->video_recording_state();
+
+        window_proxy_->onVideoRecordingStateChanged(
+            video_recording_state.computer_name(),
+            video_recording_state.user_name(),
+            video_recording_state.started());
+    }
     else
     {
         LOG(LS_ERROR) << "Unhandled message from service";

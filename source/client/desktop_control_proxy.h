@@ -24,6 +24,8 @@
 #include "proto/desktop_extensions.pb.h"
 #include "proto/system_info.pb.h"
 
+#include <filesystem>
+
 namespace base {
 class TaskRunner;
 } // namespace base
@@ -44,6 +46,7 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& desktop_config);
     void setCurrentScreen(const proto::Screen& screen);
     void setPreferredSize(int width, int height);
+    void setVideoRecording(bool enable, const std::filesystem::path& file_path);
     void onKeyEvent(const proto::KeyEvent& event);
     void onTextEvent(const proto::TextEvent& event);
     void onMouseEvent(const proto::MouseEvent& event);

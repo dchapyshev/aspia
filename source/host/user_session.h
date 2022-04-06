@@ -117,6 +117,8 @@ protected:
     // ClientSession::Delegate implementation.
     void onClientSessionConfigured() override;
     void onClientSessionFinished() override;
+    void onClientSessionVideoRecording(
+        const std::string& computer_name, const std::string& user_name, bool started) override;
     void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) override;
 
 private:

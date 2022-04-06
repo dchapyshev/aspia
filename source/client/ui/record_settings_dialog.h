@@ -16,41 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_SETTINGS_H
-#define CLIENT_UI_DESKTOP_SETTINGS_H
+#ifndef CLIENT_UI_RECORDING_SETTINGS_DIALOG_H
+#define CLIENT_UI_RECORDING_SETTINGS_DIALOG_H
 
-#include "base/macros_magic.h"
+#include "ui_record_settings_dialog.h"
 
-#include <QSettings>
+#include <QDialog>
+
+class QAbstractButton;
 
 namespace client {
 
-class DesktopSettings
+class RecordSettingsDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
-    DesktopSettings();
+    explicit RecordSettingsDialog(QWidget* parent = nullptr);
+    ~RecordSettingsDialog() override;
 
-    int scale() const;
-    void setScale(int value);
-
-    bool autoScrolling() const;
-    void setAutoScrolling(bool enable);
-
-    bool sendKeyCombinations() const;
-    void setSendKeyCombinations(bool enable);
-
-    QString recordingPath() const;
-    void setRecordingPath(const QString& path);
-
-    bool recordSessions() const;
-    void setRecordSessions(bool enable);
+private slots:
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    QSettings settings_;
-
-    DISALLOW_COPY_AND_ASSIGN(DesktopSettings);
+    Ui::RecordSettingsDialog ui;
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_DESKTOP_SETTINGS_H
+#endif // CLIENT_UI_RECORDING_SETTINGS_DIALOG_H

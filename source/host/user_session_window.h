@@ -34,6 +34,8 @@ public:
     virtual void onRouterStateChanged(const proto::internal::RouterState& state) = 0;
     virtual void onConnectConfirmationRequest(
         const proto::internal::ConnectConfirmationRequest& request) = 0;
+    virtual void onVideoRecordingStateChanged(
+        const std::string& computer_name, const std::string& user_name, bool started) = 0;
     virtual void onTextChat(const proto::TextChat& text_chat) = 0;
 };
 

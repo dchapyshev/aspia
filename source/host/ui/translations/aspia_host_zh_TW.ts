@@ -658,6 +658,14 @@
         <source>Connection error</source>
         <translation></translation>
     </message>
+    <message>
+        <source>User &quot;%1&quot; (%2) started screen recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>host::NotifierWindow</name>

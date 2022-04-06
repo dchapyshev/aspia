@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "client/ui/desktop_settings.h"
+#include "client/ui/record_settings_dialog.h"
 #include "client/ui/select_screen_action.h"
 
 #include <QActionGroup>
@@ -283,6 +284,23 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     updateSize();
 }
 
+void DesktopPanel::startRecording(bool enable)
+{
+    if (enable)
+    {
+        ui.action_start_recording->setIcon(QIcon(QStringLiteral(":/img/control-stop.png")));
+        ui.action_start_recording->setText(tr("Stop recording"));
+    }
+    else
+    {
+        ui.action_start_recording->setIcon(QIcon(QStringLiteral(":/img/control-record.png")));
+        ui.action_start_recording->setText(tr("Start recording"));
+    }
+
+    is_recording_started_ = enable;
+    emit recordingStateChanged(enable);
+}
+
 bool DesktopPanel::autoScrolling() const
 {
     return ui.action_autoscroll->isChecked();
@@ -483,6 +501,11 @@ void DesktopPanel::onMenuHide()
     });
 }
 
+void DesktopPanel::onShowRecordSettings()
+{
+    RecordSettingsDialog(this).exec();
+}
+
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
@@ -513,6 +536,10 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
+    additional_menu_->addSeparator();
+    additional_menu_->addAction(ui.action_recording_settings);
+    additional_menu_->addAction(ui.action_start_recording);
+    additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_statistics);
 
     // Set the menu for the button on the toolbar.
@@ -582,6 +609,12 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
+
+    connect(ui.action_recording_settings, &QAction::triggered, this, &DesktopPanel::onShowRecordSettings);
+    connect(ui.action_start_recording, &QAction::triggered, this, [this]()
+    {
+        startRecording(!is_recording_started_);
+    });
 }
 
 void DesktopPanel::showFullScreenButtons(bool show)

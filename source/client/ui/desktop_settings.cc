@@ -18,6 +18,8 @@
 
 #include "client/ui/desktop_settings.h"
 
+#include <QStandardPaths>
+
 namespace client {
 
 namespace {
@@ -25,6 +27,8 @@ namespace {
 const QString kScaleParam = QStringLiteral("Desktop/Scale");
 const QString kAutoScrollingParam = QStringLiteral("Desktop/AutoScrolling");
 const QString kSendKeyCombinationsParam = QStringLiteral("Desktop/SendKeyCombinations");
+const QString kRecordingPathParam = QStringLiteral("Desktop/RecordingPath");
+const QString kRecordSessionsParam = QStringLiteral("Desktop/RecordSessions");
 
 } // namespace
 
@@ -80,6 +84,28 @@ bool DesktopSettings::sendKeyCombinations() const
 void DesktopSettings::setSendKeyCombinations(bool enable)
 {
     settings_.setValue(kSendKeyCombinationsParam, enable);
+}
+
+QString DesktopSettings::recordingPath() const
+{
+    QString default_path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) +
+        QStringLiteral("/Aspia");
+    return settings_.value(kRecordingPathParam, default_path).toString();
+}
+
+void DesktopSettings::setRecordingPath(const QString& path)
+{
+    settings_.setValue(kRecordingPathParam, path);
+}
+
+bool DesktopSettings::recordSessions() const
+{
+    return settings_.value(kRecordSessionsParam, false).toBool();
+}
+
+void DesktopSettings::setRecordSessions(bool enable)
+{
+    settings_.setValue(kRecordSessionsParam, enable);
 }
 
 } // namespace client

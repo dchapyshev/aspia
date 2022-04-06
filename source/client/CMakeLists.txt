@@ -157,6 +157,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/qt_system_info_window.cc
     ui/qt_system_info_window.h
     ui/qt_system_info_window.ui
+    ui/record_settings_dialog.cc
+    ui/record_settings_dialog.h
+    ui/record_settings_dialog.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui

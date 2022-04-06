@@ -43,6 +43,8 @@ public:
     void onCredentialsChanged(const proto::internal::Credentials& credentials);
     void onRouterStateChanged(const proto::internal::RouterState& state);
     void onConnectConfirmationRequest(const proto::internal::ConnectConfirmationRequest& request);
+    void onVideoRecordingStateChanged(
+        const std::string& computer_name, const std::string& user_name, bool started);
     void onTextChat(const proto::TextChat& text_chat);
 
 private:

@@ -57,6 +57,8 @@
         <file>text-chat.png</file>
         <file>license-key.png</file>
         <file>applications.png</file>
+        <file>control-record.png</file>
+        <file>control-stop.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

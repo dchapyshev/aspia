@@ -86,6 +86,19 @@ void DesktopControlProxy::setPreferredSize(int width, int height)
         desktop_control_->setPreferredSize(width, height);
 }
 
+void DesktopControlProxy::setVideoRecording(bool enable, const std::filesystem::path& file_path)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::setVideoRecording, shared_from_this(), enable, file_path));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->setVideoRecording(enable, file_path);
+}
+
 void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
