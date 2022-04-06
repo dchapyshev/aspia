@@ -211,6 +211,7 @@ int hostMain(int argc, char* argv[])
     host::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     host::Application application(argc, argv);
+    host::Application::setQuitOnLastWindowClosed(false);
 
     if (!host::integrityCheck())
     {
@@ -318,8 +319,6 @@ int hostMain(int argc, char* argv[])
         else
         {
             LOG(LS_INFO) << "Application not running yet";
-
-            qApp->setQuitOnLastWindowClosed(false);
 
             host::MainWindow window;
             QObject::connect(&application, &host::Application::activated,
