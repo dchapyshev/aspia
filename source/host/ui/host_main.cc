@@ -319,6 +319,8 @@ int hostMain(int argc, char* argv[])
         {
             LOG(LS_INFO) << "Application not running yet";
 
+            qApp->setQuitOnLastWindowClosed(false);
+
             host::MainWindow window;
             QObject::connect(&application, &host::Application::activated,
                              &window, &host::MainWindow::activateHost);

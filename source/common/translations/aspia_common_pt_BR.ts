@@ -86,7 +86,7 @@
 <context>
     <name>TextChatIncomingMessage</name>
     <message>
-        <location filename="../ui/text_chat_incoming_message.ui" line="191"/>
+        <location filename="../ui/text_chat_incoming_message.ui" line="197"/>
         <source>Time</source>
         <translation>Horário</translation>
     </message>
@@ -100,26 +100,52 @@
     </message>
 </context>
 <context>
+    <name>TextChatStatusMessage</name>
+    <message>
+        <source>Time</source>
+        <translation type="obsolete">Horário</translation>
+    </message>
+</context>
+<context>
+    <name>TextChatWidget</name>
+    <message>
+        <location filename="../ui/text_chat_widget.ui" line="20"/>
+        <source>Aspia Chat</source>
+        <translation type="unfinished">Aspia Chat</translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.ui" line="179"/>
+        <source>Send message</source>
+        <translation type="unfinished">Enviar mensagem</translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.ui" line="225"/>
+        <source>Tools</source>
+        <translation type="unfinished">Ferramentas</translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.ui" line="248"/>
+        <source>···</source>
+        <translation type="unfinished">···</translation>
+    </message>
+</context>
+<context>
     <name>TextChatWindow</name>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation>Aspia Chat</translation>
+        <translation type="vanished">Aspia Chat</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="158"/>
         <source>Send message</source>
-        <translation>Enviar mensagem</translation>
+        <translation type="vanished">Enviar mensagem</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="204"/>
         <source>Tools</source>
-        <translation>Ferramentas</translation>
+        <translation type="vanished">Ferramentas</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="227"/>
         <source>···</source>
-        <translation>···</translation>
+        <translation type="vanished">···</translation>
     </message>
 </context>
 <context>
@@ -262,60 +288,114 @@
     </message>
 </context>
 <context>
-    <name>common::TextChatWindow</name>
+    <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="60"/>
+        <location filename="../ui/text_chat_widget.cc" line="61"/>
         <source>Save chat...</source>
-        <translation>Salvar conversa...</translation>
+        <translation type="unfinished">Salvar conversa...</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="61"/>
+        <location filename="../ui/text_chat_widget.cc" line="62"/>
         <source>Clear chat</source>
-        <translation>Apagar conversa</translation>
+        <translation type="unfinished">Apagar conversa</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="110"/>
+        <location filename="../ui/text_chat_widget.cc" line="112"/>
         <source>%1 is typing...</source>
-        <translation>%1 está digitando...</translation>
+        <translation type="unfinished">%1 está digitando...</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="114"/>
         <source>User %1 started a chat.</source>
-        <translation>Usuário %1 inicou uma conversa.</translation>
+        <translation type="obsolete">Usuário %1 inicou uma conversa.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="118"/>
         <source>User %1 finished a chat.</source>
-        <translation>Usuário %1 encerrou a conversa.</translation>
+        <translation type="obsolete">Usuário %1 encerrou a conversa.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="186"/>
-        <location filename="../ui/text_chat_window.cc" line="239"/>
+        <location filename="../ui/text_chat_widget.cc" line="118"/>
+        <source>User %1 has joined the chat (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.cc" line="125"/>
+        <source>User %1 has left the chat (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.cc" line="216"/>
+        <location filename="../ui/text_chat_widget.cc" line="269"/>
         <source>Warning</source>
-        <translation>Atenção</translation>
+        <translation type="unfinished">Atenção</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_window.cc" line="187"/>
+        <location filename="../ui/text_chat_widget.cc" line="217"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>A mensagem é muito longa. O mensagem pode ter no máximo %n caracteres.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="228"/>
+        <location filename="../ui/text_chat_widget.cc" line="258"/>
         <source>Save File</source>
-        <translation>Salvar Arquivo</translation>
+        <translation type="unfinished">Salvar Arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="230"/>
+        <location filename="../ui/text_chat_widget.cc" line="260"/>
         <source>TXT files (*.txt)</source>
-        <translation>Arquivos TXT (*.txt)</translation>
+        <translation type="unfinished">Arquivos TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="240"/>
+        <location filename="../ui/text_chat_widget.cc" line="270"/>
         <source>Could not open file for writing.</source>
-        <translation>Não foi possível abrir o arquivo para gravação.</translation>
+        <translation type="unfinished">Não foi possível abrir o arquivo para gravação.</translation>
+    </message>
+</context>
+<context>
+    <name>common::TextChatWindow</name>
+    <message>
+        <source>Save chat...</source>
+        <translation type="vanished">Salvar conversa...</translation>
+    </message>
+    <message>
+        <source>Clear chat</source>
+        <translation type="vanished">Apagar conversa</translation>
+    </message>
+    <message>
+        <source>%1 is typing...</source>
+        <translation type="vanished">%1 está digitando...</translation>
+    </message>
+    <message>
+        <source>User %1 started a chat.</source>
+        <translation type="vanished">Usuário %1 inicou uma conversa.</translation>
+    </message>
+    <message>
+        <source>User %1 finished a chat.</source>
+        <translation type="vanished">Usuário %1 encerrou a conversa.</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">Atenção</translation>
+    </message>
+    <message numerus="yes">
+        <source>The message is too long. The maximum message length is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>A mensagem é muito longa. O mensagem pode ter no máximo %n caracteres.</numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="vanished">Salvar Arquivo</translation>
+    </message>
+    <message>
+        <source>TXT files (*.txt)</source>
+        <translation type="vanished">Arquivos TXT (*.txt)</translation>
+    </message>
+    <message>
+        <source>Could not open file for writing.</source>
+        <translation type="vanished">Não foi possível abrir o arquivo para gravação.</translation>
     </message>
 </context>
 <context>

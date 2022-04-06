@@ -595,6 +595,14 @@
         <source>System Information</source>
         <translation>系統資訊</translation>
     </message>
+    <message>
+        <source>&amp;Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FastConnectDialog</name>

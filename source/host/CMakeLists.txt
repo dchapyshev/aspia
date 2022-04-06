@@ -27,6 +27,8 @@ list(APPEND SOURCE_HOST_CORE
     client_session_file_transfer.h
     client_session_system_info.cc
     client_session_system_info.h
+    client_session_text_chat.cc
+    client_session_text_chat.h
     desktop_agent_main.cc
     desktop_agent_main.h
     desktop_session.cc

@@ -96,9 +96,12 @@ list(APPEND SOURCE_COMMON_UI
     ui/text_chat_outgoing_message.cc
     ui/text_chat_outgoing_message.h
     ui/text_chat_outgoing_message.ui
-    ui/text_chat_window.cc
-    ui/text_chat_window.h
-    ui/text_chat_window.ui
+    ui/text_chat_status_message.cc
+    ui/text_chat_status_message.h
+    ui/text_chat_status_message.ui
+    ui/text_chat_widget.cc
+    ui/text_chat_widget.h
+    ui/text_chat_widget.ui
     ui/update_checker.cc
     ui/update_checker.h
     ui/update_checker_impl.cc

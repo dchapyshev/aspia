@@ -39,6 +39,7 @@ public:
     void setMouseLock(bool enable);
     void setKeyboardLock(bool enable);
     void setPause(bool enable);
+    void onTextChat(const proto::TextChat& text_chat);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -170,6 +171,18 @@ void UserSessionAgentProxy::Impl::setPause(bool enable)
         agent_->setPause(enable);
 }
 
+void UserSessionAgentProxy::Impl::onTextChat(const proto::TextChat& text_chat)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(&Impl::onTextChat, shared_from_this(), text_chat));
+        return;
+    }
+
+    if (agent_)
+        agent_->onTextChat(text_chat);
+}
+
 UserSessionAgentProxy::UserSessionAgentProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                              std::unique_ptr<UserSessionAgent> agent)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(agent)))
@@ -226,6 +239,11 @@ void UserSessionAgentProxy::setKeyboardLock(bool enable)
 void UserSessionAgentProxy::setPause(bool enable)
 {
     impl_->setPause(enable);
+}
+
+void UserSessionAgentProxy::onTextChat(const proto::TextChat& text_chat)
+{
+    impl_->onTextChat(text_chat);
 }
 
 } // namespace host

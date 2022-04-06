@@ -31,7 +31,8 @@ public:
     enum class Direction
     {
         INCOMING = 0,
-        OUTGOING = 1
+        OUTGOING = 1,
+        STATUS   = 2
     };
 
     explicit TextChatMessage(Direction direction, QWidget* parent = nullptr)

@@ -31,6 +31,7 @@
 #include "client/ui/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"
+#include "client/ui/qt_text_chat_window.h"
 #include "client/ui/statistics_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
@@ -187,6 +188,10 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                 session_window = new client::QtFileManagerWindow();
                 break;
 
+            case proto::SESSION_TYPE_TEXT_CHAT:
+                session_window = new client::QtTextChatWindow();
+                break;
+
             default:
                 NOTREACHED();
                 break;
@@ -243,6 +248,8 @@ void QtDesktopWindow::showWindow(
 
     show();
     activateWindow();
+
+    panel_->enableTextChat(peer_version_ >= base::Version(2, 4, 0));
 }
 
 void QtDesktopWindow::configRequired()
@@ -295,7 +302,6 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     panel_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
     panel_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
     panel_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
-    panel_->enableTextChat(base::contains(extensions_list, common::kTextChatExtension));
 }
 
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)

@@ -27,6 +27,7 @@
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"
+#include "client/ui/qt_text_chat_window.h"
 #include "qt_base/scoped_qt_logging.h"
 
 #if defined(OS_WIN)
@@ -406,7 +407,7 @@ int clientMain(int argc, char* argv[])
 
     QCommandLineOption session_type_option(QStringLiteral("session-type"),
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
-                                "desktop-view, file-transfer."),
+                                "desktop-view, file-transfer, system-info, text-chat."),
         QStringLiteral("desktop-manage"));
 
     QCommandLineOption codec_option(QStringLiteral("codec"),
@@ -517,10 +518,14 @@ int clientMain(int argc, char* argv[])
         {
             config.session_type = proto::SESSION_TYPE_SYSTEM_INFO;
         }
+        else if (session_type == QLatin1String("text-chat"))
+        {
+            config.session_type = proto::SESSION_TYPE_TEXT_CHAT;
+        }
         else
         {
             onInvalidValue(QStringLiteral("session-type"),
-                           QStringLiteral("desktop-manage, desktop-view, file-transfer, system-info"));
+                           QStringLiteral("desktop-manage, desktop-view, file-transfer, system-info, text-chat"));
             return 1;
         }
 
@@ -609,6 +614,10 @@ int clientMain(int argc, char* argv[])
 
             case proto::SESSION_TYPE_SYSTEM_INFO:
                 session_window = new client::QtSystemInfoWindow();
+                break;
+
+            case proto::SESSION_TYPE_TEXT_CHAT:
+                session_window = new client::QtTextChatWindow();
                 break;
 
             default:

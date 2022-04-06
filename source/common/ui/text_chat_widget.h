@@ -16,26 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_TEXT_CHAT_WINDOW_H
-#define COMMON_UI_TEXT_CHAT_WINDOW_H
+#ifndef COMMON_UI_TEXT_CHAT_WIDGET_H
+#define COMMON_UI_TEXT_CHAT_WIDGET_H
 
 #include "proto/text_chat.pb.h"
 
 #include <QWidget>
 
 namespace Ui {
-class TextChatWindow;
+class TextChatWidget;
 } // namespace Ui
 
 namespace common {
 
-class TextChatWindow : public QWidget
+class TextChatWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TextChatWindow(QWidget* parent = nullptr);
-    ~TextChatWindow() override;
+    explicit TextChatWidget(QWidget* parent = nullptr);
+    ~TextChatWidget() override;
 
     void readMessage(const proto::TextChatMessage& message);
     void readStatus(const proto::TextChatStatus& status);
@@ -43,24 +43,27 @@ public:
 signals:
     void sendMessage(const proto::TextChatMessage& message);
     void sendStatus(const proto::TextChatStatus& status);
+    void textChatClosed();
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     void addOutgoingMessage(time_t timestamp, const QString& message);
+    void addStatusMessage(const QString& message);
     void onSendMessage();
     void onSendStatus(proto::TextChatStatus::Status status);
     void onClearHistory();
     void onSaveChat();
     void onUpdateSize();
 
-    std::unique_ptr<Ui::TextChatWindow> ui;
+    std::unique_ptr<Ui::TextChatWidget> ui;
     std::string host_name_;
     QTimer* status_clear_timer_;
 };
 
 } // namespace common
 
-#endif // COMMON_UI_TEXT_CHAT_WINDOW_H
+#endif // COMMON_UI_TEXT_CHAT_WIDGET_H

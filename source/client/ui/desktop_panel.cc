@@ -92,6 +92,11 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
         emit startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
 
+    connect(ui.action_text_chat, &QAction::triggered, this, [this]()
+    {
+        emit startSession(proto::SESSION_TYPE_TEXT_CHAT);
+    });
+
     ui.frame->hide();
     showFullScreenButtons(false);
 

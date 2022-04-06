@@ -30,6 +30,7 @@
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"
+#include "client/ui/qt_text_chat_window.h"
 #include "client/ui/update_settings_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/about_dialog.h"
@@ -302,7 +303,7 @@ void ClientWindow::connectToHost()
             break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
-            // TODO: Implement me!
+            session_window = new client::QtTextChatWindow();
             break;
 
         default:
@@ -376,7 +377,7 @@ void ClientWindow::reloadSessionTypes()
     add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
     add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
     add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    //add_session(QStringLiteral(":/img/text_chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

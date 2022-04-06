@@ -488,258 +488,270 @@
         <translation>Tipo de &amp;Sessão</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="109"/>
+        <location filename="../main_window.ui" line="110"/>
         <source>&amp;Help</source>
         <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="120"/>
+        <location filename="../main_window.ui" line="121"/>
         <source>&amp;View</source>
         <translation>&amp;Visualizar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="124"/>
+        <location filename="../main_window.ui" line="125"/>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="142"/>
+        <location filename="../main_window.ui" line="143"/>
         <source>Tools</source>
         <translation>Ferramentas</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="157"/>
-        <location filename="../main_window.ui" line="454"/>
+        <location filename="../main_window.ui" line="158"/>
+        <location filename="../main_window.ui" line="456"/>
         <source>Tool Bar</source>
         <translation>Barra de Ferramentas</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="202"/>
+        <location filename="../main_window.ui" line="204"/>
         <source>&amp;New address book</source>
         <translation>&amp;Novo catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="205"/>
+        <location filename="../main_window.ui" line="207"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="214"/>
+        <location filename="../main_window.ui" line="216"/>
         <source>&amp;Open address book...</source>
         <translation>&amp;Abrir catálogo de endereços...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="217"/>
+        <location filename="../main_window.ui" line="219"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="229"/>
+        <location filename="../main_window.ui" line="231"/>
         <source>&amp;Save</source>
         <translation>&amp;Salvar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="232"/>
+        <location filename="../main_window.ui" line="234"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="240"/>
+        <location filename="../main_window.ui" line="242"/>
         <source>Save &amp;as...</source>
         <translation>Salvar &amp;como...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="243"/>
+        <location filename="../main_window.ui" line="245"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="251"/>
+        <location filename="../main_window.ui" line="253"/>
         <source>&amp;Close</source>
         <translation>&amp;Fechar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="254"/>
+        <location filename="../main_window.ui" line="256"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="263"/>
+        <location filename="../main_window.ui" line="265"/>
         <source>&amp;Exit</source>
         <translation>&amp;Sair</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="275"/>
+        <location filename="../main_window.ui" line="277"/>
         <source>Add Computer Group</source>
         <translation>Adicionar Grupo</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="287"/>
+        <location filename="../main_window.ui" line="289"/>
         <source>Modify Computer Group</source>
         <translation>Editar Grupo</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="299"/>
+        <location filename="../main_window.ui" line="301"/>
         <source>Delete Computer Group</source>
         <translation>Excluir Grupo</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="311"/>
+        <location filename="../main_window.ui" line="313"/>
         <source>Add Computer</source>
         <translation>Adicionar Computador</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="323"/>
+        <location filename="../main_window.ui" line="325"/>
         <source>Modify Computer</source>
         <translation>Editar Computador</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="335"/>
+        <location filename="../main_window.ui" line="337"/>
         <source>Delete Computer</source>
         <translation>Excluir Computador</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="350"/>
+        <location filename="../main_window.ui" line="352"/>
         <source>Desktop &amp;Manage</source>
         <translation>&amp;Controlar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="362"/>
+        <location filename="../main_window.ui" line="364"/>
         <source>Desktop &amp;View</source>
         <translation>&amp;Visualizar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="374"/>
+        <location filename="../main_window.ui" line="376"/>
         <source>&amp;File Transfer</source>
         <translation>Trans&amp;ferência de Arquivos</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="383"/>
+        <location filename="../main_window.ui" line="385"/>
         <source>&amp;Online Help...</source>
         <translation>Ajuda &amp;Online...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="386"/>
+        <location filename="../main_window.ui" line="388"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="395"/>
+        <location filename="../main_window.ui" line="397"/>
         <source>&amp;About</source>
         <translation>&amp;Sobre</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="407"/>
+        <location filename="../main_window.ui" line="409"/>
         <source>Address Book Properties</source>
         <translation>Propriedades do Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="416"/>
-        <location filename="../main_window.ui" line="419"/>
+        <location filename="../main_window.ui" line="418"/>
+        <location filename="../main_window.ui" line="421"/>
         <source>Desktop Manage</source>
         <translation>Controle da Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="428"/>
-        <location filename="../main_window.ui" line="431"/>
+        <location filename="../main_window.ui" line="430"/>
+        <location filename="../main_window.ui" line="433"/>
         <source>Desktop View</source>
         <translation>Visualizar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="440"/>
-        <location filename="../main_window.ui" line="443"/>
+        <location filename="../main_window.ui" line="442"/>
+        <location filename="../main_window.ui" line="445"/>
         <source>File Transfer</source>
         <translation>Transferência de Arquivos</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="465"/>
+        <location filename="../main_window.ui" line="467"/>
         <source>Status Bar</source>
         <translation>Barra de Status</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="477"/>
+        <location filename="../main_window.ui" line="479"/>
         <source>Fast Connect</source>
         <translation>Conexão Rápida</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="574"/>
+        <location filename="../main_window.ui" line="576"/>
         <source>Router Manage</source>
         <translation>Gerenciamento do Roteador</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="582"/>
+        <location filename="../main_window.ui" line="584"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="594"/>
+        <location filename="../main_window.ui" line="596"/>
         <source>&amp;System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="597"/>
-        <location filename="../main_window.ui" line="606"/>
-        <location filename="../main_window.ui" line="609"/>
+        <location filename="../main_window.ui" line="599"/>
+        <location filename="../main_window.ui" line="608"/>
+        <location filename="../main_window.ui" line="611"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="485"/>
+        <location filename="../main_window.ui" line="623"/>
+        <source>&amp;Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="626"/>
+        <location filename="../main_window.ui" line="635"/>
+        <location filename="../main_window.ui" line="638"/>
+        <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="487"/>
         <source>Show tray icon</source>
         <translation>Exibir ícone de bandeja</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="493"/>
+        <location filename="../main_window.ui" line="495"/>
         <source>Minimize to tray</source>
         <translation>Minimizar para a bandeja</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="498"/>
+        <location filename="../main_window.ui" line="500"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="510"/>
+        <location filename="../main_window.ui" line="512"/>
         <source>Save all</source>
         <translation>Salvar todos</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="513"/>
+        <location filename="../main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="521"/>
+        <location filename="../main_window.ui" line="523"/>
         <source>Close all</source>
         <translation>Fechar todos</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="524"/>
+        <location filename="../main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="529"/>
+        <location filename="../main_window.ui" line="531"/>
         <source>Check for updates...</source>
         <translation>Verificar atualizações...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="534"/>
+        <location filename="../main_window.ui" line="536"/>
         <source>Update Settings</source>
         <translation>Configurações de Atualizações</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="539"/>
+        <location filename="../main_window.ui" line="541"/>
         <source>Clear</source>
         <translation>Limpar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="550"/>
+        <location filename="../main_window.ui" line="552"/>
         <source>Remember latest</source>
         <translation>Lembrar do último</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="562"/>
+        <location filename="../main_window.ui" line="564"/>
         <source>Copy Computer</source>
         <translation>Copiar Computador</translation>
     </message>
@@ -1264,28 +1276,28 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="95"/>
+        <location filename="../fast_connect_dialog.cc" line="97"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="96"/>
+        <location filename="../fast_connect_dialog.cc" line="98"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>A lista de endereços inseridos será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="220"/>
-        <location filename="../fast_connect_dialog.cc" line="240"/>
+        <location filename="../fast_connect_dialog.cc" line="222"/>
+        <location filename="../fast_connect_dialog.cc" line="242"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="221"/>
+        <location filename="../fast_connect_dialog.cc" line="223"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="241"/>
+        <location filename="../fast_connect_dialog.cc" line="243"/>
         <source>An invalid computer address was entered.</source>
         <translation>Foi inserido um endereço de computador inválido.</translation>
     </message>
@@ -1293,88 +1305,88 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="185"/>
-        <location filename="../main_window.cc" line="1234"/>
+        <location filename="../main_window.cc" line="194"/>
+        <location filename="../main_window.cc" line="1267"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="186"/>
+        <location filename="../main_window.cc" line="195"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>O arquivo da lista de endereços fixada &quot;%1&quot; não foi encontrado. &lt;br/&gt; Este arquivo será desafixado.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="266"/>
+        <location filename="../main_window.cc" line="275"/>
         <source>Information</source>
         <translation>Informação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="267"/>
+        <location filename="../main_window.cc" line="276"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>O catálogo de endereços &quot;%1&quot; já está aberto.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="294"/>
+        <location filename="../main_window.cc" line="303"/>
         <source>Open Address Book</source>
         <translation>Abrir Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="296"/>
+        <location filename="../main_window.cc" line="305"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Catálogo de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="601"/>
-        <location filename="../main_window.cc" line="916"/>
-        <location filename="../main_window.cc" line="995"/>
+        <location filename="../main_window.cc" line="627"/>
+        <location filename="../main_window.cc" line="947"/>
+        <location filename="../main_window.cc" line="1026"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="996"/>
+        <location filename="../main_window.cc" line="628"/>
+        <location filename="../main_window.cc" line="1027"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="812"/>
+        <location filename="../main_window.cc" line="843"/>
         <source>Close other tabs</source>
         <translation>Fechar outras abas</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="819"/>
+        <location filename="../main_window.cc" line="850"/>
         <source>Close tab</source>
         <translation>Fechar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="820"/>
-        <location filename="../main_window.cc" line="825"/>
+        <location filename="../main_window.cc" line="851"/>
+        <location filename="../main_window.cc" line="856"/>
         <source>Pin tab</source>
         <translation>Fixar aba</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="917"/>
+        <location filename="../main_window.cc" line="948"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="950"/>
+        <location filename="../main_window.cc" line="981"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="965"/>
+        <location filename="../main_window.cc" line="996"/>
         <source>Show</source>
         <translation>Exibir</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="473"/>
-        <location filename="../main_window.cc" line="1105"/>
+        <location filename="../main_window.cc" line="482"/>
+        <location filename="../main_window.cc" line="1138"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1235"/>
+        <location filename="../main_window.cc" line="1268"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

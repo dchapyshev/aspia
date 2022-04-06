@@ -29,7 +29,6 @@ extern const char kPowerControlExtension[];
 extern const char kRemoteUpdateExtension[];
 extern const char kSystemInfoExtension[];
 extern const char kVideoRecordingExtension[];
-extern const char kTextChatExtension[];
 
 extern const char kSupportedExtensionsForManage[];
 extern const char kSupportedExtensionsForView[];

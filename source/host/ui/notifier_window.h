@@ -32,6 +32,8 @@ public:
     explicit NotifierWindow(QWidget* parent = nullptr);
     ~NotifierWindow() override;
 
+    std::vector<uint32_t> sessions(proto::SessionType session_type);
+
 public slots:
     void onClientListChanged(const UserSessionAgent::ClientList& clients);
     void onVoiceChat();

@@ -240,4 +240,12 @@ void UserSessionAgent::setPause(bool enable)
     ipc_channel_->send(base::serialize(*outgoing_message));
 }
 
+void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
+{
+    proto::internal::UiToService* outgoing_message =
+        messageFromArena<proto::internal::UiToService>();
+    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
+    ipc_channel_->send(base::serialize(*outgoing_message));
+}
+
 } // namespace host

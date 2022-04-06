@@ -44,6 +44,7 @@ public:
     void setMouseLock(bool enable);
     void setKeyboardLock(bool enable);
     void setPause(bool enable);
+    void onTextChat(const proto::TextChat& text_chat);
 
 private:
     class Impl;

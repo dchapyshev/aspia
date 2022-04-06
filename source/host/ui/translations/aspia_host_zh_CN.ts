@@ -805,80 +805,80 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="78"/>
-        <location filename="../main_window.cc" line="391"/>
-        <location filename="../main_window.cc" line="549"/>
+        <location filename="../main_window.cc" line="441"/>
+        <location filename="../main_window.cc" line="606"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="529"/>
+        <location filename="../main_window.cc" line="586"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="328"/>
         <source>Not available</source>
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="382"/>
+        <location filename="../main_window.cc" line="432"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="642"/>
+        <location filename="../main_window.cc" line="712"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="328"/>
-        <location filename="../main_window.cc" line="627"/>
+        <location filename="../main_window.cc" line="378"/>
+        <location filename="../main_window.cc" line="697"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="340"/>
+        <location filename="../main_window.cc" line="390"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="632"/>
+        <location filename="../main_window.cc" line="702"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="336"/>
+        <location filename="../main_window.cc" line="386"/>
         <source>Connected to a router %1</source>
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="637"/>
+        <location filename="../main_window.cc" line="707"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="332"/>
+        <location filename="../main_window.cc" line="382"/>
         <source>Connecting to a router %1...</source>
         <translation>正在连接到路由器 %1 ...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="387"/>
+        <location filename="../main_window.cc" line="437"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="534"/>
+        <location filename="../main_window.cc" line="591"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="569"/>
+        <location filename="../main_window.cc" line="626"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="570"/>
+        <location filename="../main_window.cc" line="627"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>
@@ -886,37 +886,37 @@
 <context>
     <name>host::NotifierWindow</name>
     <message>
-        <location filename="../notifier_window.cc" line="178"/>
+        <location filename="../notifier_window.cc" line="196"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="222"/>
+        <location filename="../notifier_window.cc" line="240"/>
         <source>Unlock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="227"/>
+        <location filename="../notifier_window.cc" line="245"/>
         <source>Lock mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="246"/>
+        <location filename="../notifier_window.cc" line="264"/>
         <source>Unlock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="251"/>
+        <location filename="../notifier_window.cc" line="269"/>
         <source>Lock keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="270"/>
+        <location filename="../notifier_window.cc" line="288"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="275"/>
+        <location filename="../notifier_window.cc" line="293"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -924,61 +924,61 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="134"/>
-        <location filename="../user_dialog.cc" line="146"/>
-        <location filename="../user_dialog.cc" line="161"/>
-        <location filename="../user_dialog.cc" line="172"/>
-        <location filename="../user_dialog.cc" line="194"/>
-        <location filename="../user_dialog.cc" line="210"/>
+        <location filename="../user_dialog.cc" line="135"/>
+        <location filename="../user_dialog.cc" line="147"/>
+        <location filename="../user_dialog.cc" line="162"/>
+        <location filename="../user_dialog.cc" line="173"/>
+        <location filename="../user_dialog.cc" line="195"/>
+        <location filename="../user_dialog.cc" line="211"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="135"/>
+        <location filename="../user_dialog.cc" line="136"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="147"/>
+        <location filename="../user_dialog.cc" line="148"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="162"/>
+        <location filename="../user_dialog.cc" line="163"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="173"/>
+        <location filename="../user_dialog.cc" line="174"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="184"/>
+        <location filename="../user_dialog.cc" line="185"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="187"/>
+        <location filename="../user_dialog.cc" line="188"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="191"/>
+        <location filename="../user_dialog.cc" line="192"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="211"/>
+        <location filename="../user_dialog.cc" line="212"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="265"/>
+        <location filename="../user_dialog.cc" line="266"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>

@@ -86,7 +86,7 @@
 <context>
     <name>TextChatIncomingMessage</name>
     <message>
-        <location filename="../ui/text_chat_incoming_message.ui" line="191"/>
+        <location filename="../ui/text_chat_incoming_message.ui" line="197"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,24 +100,24 @@
     </message>
 </context>
 <context>
-    <name>TextChatWindow</name>
+    <name>TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="20"/>
+        <location filename="../ui/text_chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="158"/>
+        <location filename="../ui/text_chat_widget.ui" line="179"/>
         <source>Send message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="204"/>
+        <location filename="../ui/text_chat_widget.ui" line="225"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.ui" line="227"/>
+        <location filename="../ui/text_chat_widget.ui" line="248"/>
         <source>···</source>
         <translation type="unfinished"></translation>
     </message>
@@ -262,40 +262,40 @@
     </message>
 </context>
 <context>
-    <name>common::TextChatWindow</name>
+    <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="60"/>
+        <location filename="../ui/text_chat_widget.cc" line="61"/>
         <source>Save chat...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="61"/>
+        <location filename="../ui/text_chat_widget.cc" line="62"/>
         <source>Clear chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="110"/>
+        <location filename="../ui/text_chat_widget.cc" line="112"/>
         <source>%1 is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="114"/>
-        <source>User %1 started a chat.</source>
+        <location filename="../ui/text_chat_widget.cc" line="118"/>
+        <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="118"/>
-        <source>User %1 finished a chat.</source>
+        <location filename="../ui/text_chat_widget.cc" line="125"/>
+        <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="186"/>
-        <location filename="../ui/text_chat_window.cc" line="239"/>
+        <location filename="../ui/text_chat_widget.cc" line="216"/>
+        <location filename="../ui/text_chat_widget.cc" line="269"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_window.cc" line="187"/>
+        <location filename="../ui/text_chat_widget.cc" line="217"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -304,17 +304,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="228"/>
+        <location filename="../ui/text_chat_widget.cc" line="258"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="230"/>
+        <location filename="../ui/text_chat_widget.cc" line="260"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_window.cc" line="240"/>
+        <location filename="../ui/text_chat_widget.cc" line="270"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

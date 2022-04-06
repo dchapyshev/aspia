@@ -37,7 +37,8 @@ class SessionTreeItem : public QTreeWidgetItem
 {
 public:
     SessionTreeItem(const UserSessionAgent::Client& client)
-        : id_(client.id)
+        : session_type_(client.session_type),
+          id_(client.id)
     {
         switch (client.session_type)
         {
@@ -69,10 +70,13 @@ public:
         setText(0, QString::fromStdString(client.computer_name));
     }
 
+    proto::SessionType sessionType() const { return session_type_; }
     uint32_t id() const { return id_; }
 
 private:
+    const proto::SessionType session_type_;
     const uint32_t id_;
+
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
@@ -154,6 +158,20 @@ NotifierWindow::NotifierWindow(QWidget* parent)
 NotifierWindow::~NotifierWindow()
 {
     LOG(LS_INFO) << "Dtor";
+}
+
+std::vector<uint32_t> NotifierWindow::sessions(proto::SessionType session_type)
+{
+    std::vector<uint32_t> result;
+
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        if (item->sessionType() == session_type)
+            result.push_back(item->id());
+    }
+
+    return result;
 }
 
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)

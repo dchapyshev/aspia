@@ -28,7 +28,6 @@ const char kPowerControlExtension[] = "power_control";
 const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
 const char kVideoRecordingExtension[] = "video_recording";
-const char kTextChatExtension[] = "text_chat";
 
 const char kSupportedExtensionsForManage[] =
     "select_screen;preferred_size;power_control;remote_update;system_info;video_recording";

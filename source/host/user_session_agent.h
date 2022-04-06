@@ -78,6 +78,7 @@ private:
     void setMouseLock(bool enable);
     void setKeyboardLock(bool enable);
     void setPause(bool enable);
+    void onTextChat(const proto::TextChat& text_chat);
 
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;

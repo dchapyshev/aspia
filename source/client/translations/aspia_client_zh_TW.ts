@@ -48,7 +48,7 @@
     </message>
     <message>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation>工作階段類型。可能的值：desktop-manage、desktop-view、file-transfer。</translation>
+        <translation type="vanished">工作階段類型。可能的值：desktop-manage、desktop-view、file-transfer。</translation>
     </message>
     <message>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
@@ -108,6 +108,10 @@
     </message>
     <message>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1228,6 +1232,49 @@
     </message>
 </context>
 <context>
+    <name>TextChatWindow</name>
+    <message>
+        <source>System Information</source>
+        <translation type="unfinished">系統訊息</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">儲存</translation>
+    </message>
+    <message>
+        <source>Save (Ctrl+S)</source>
+        <translation type="unfinished">儲存 (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">列印</translation>
+    </message>
+    <message>
+        <source>Print (Ctrl+P)</source>
+        <translation type="unfinished">列印 (Ctrl+P)</translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="unfinished">複製列</translation>
+    </message>
+    <message>
+        <source>Copy Name</source>
+        <translation type="unfinished">複製名稱</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="unfinished">複製值</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">重新整理</translation>
+    </message>
+    <message>
+        <source>Refresh (F5)</source>
+        <translation type="unfinished">重新整理（F5）</translation>
+    </message>
+</context>
+<context>
     <name>UpdateSettingsDialog</name>
     <message>
         <source>Update Settings</source>
@@ -2157,6 +2204,10 @@
     <message>
         <source>Unknown error.</source>
         <translation>未知錯誤。</translation>
+    </message>
+    <message>
+        <source>Text Chat</source>
+        <translation type="unfinished">文字聊天</translation>
     </message>
 </context>
 <context>

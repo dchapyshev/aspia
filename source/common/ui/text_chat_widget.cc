@@ -16,12 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/text_chat_window.h"
+#include "common/ui/text_chat_widget.h"
 
 #include "base/logging.h"
 #include "common/ui/text_chat_incoming_message.h"
 #include "common/ui/text_chat_outgoing_message.h"
-#include "ui_text_chat_window.h"
+#include "common/ui/text_chat_status_message.h"
+#include "ui_text_chat_widget.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -41,9 +42,9 @@ const int kMaxMessageLength = 2048;
 
 } // namespace
 
-TextChatWindow::TextChatWindow(QWidget* parent)
+TextChatWidget::TextChatWidget(QWidget* parent)
     : QWidget(parent),
-      ui(std::make_unique<Ui::TextChatWindow>()),
+      ui(std::make_unique<Ui::TextChatWidget>()),
       host_name_(QHostInfo::localHostName().toStdString()),
       status_clear_timer_(new QTimer(this))
 {
@@ -53,7 +54,7 @@ TextChatWindow::TextChatWindow(QWidget* parent)
     ui->list_messages->verticalScrollBar()->installEventFilter(this);
 
     connect(status_clear_timer_, &QTimer::timeout, ui->label_status, &QLabel::clear);
-    connect(ui->button_send, &QToolButton::clicked, this, &TextChatWindow::onSendMessage);
+    connect(ui->button_send, &QToolButton::clicked, this, &TextChatWidget::onSendMessage);
     connect(ui->button_tools, &QToolButton::clicked, this, [=]()
     {
         QMenu menu;
@@ -76,11 +77,13 @@ TextChatWindow::TextChatWindow(QWidget* parent)
             onSaveChat();
         }
     });
+
+    ui->edit_message->setFocus();
 }
 
-TextChatWindow::~TextChatWindow() = default;
+TextChatWidget::~TextChatWidget() = default;
 
-void TextChatWindow::readMessage(const proto::TextChatMessage& message)
+void TextChatWidget::readMessage(const proto::TextChatMessage& message)
 {
     QListWidget* list_messages = ui->list_messages;
     TextChatIncomingMessage* message_widget = new TextChatIncomingMessage(list_messages);
@@ -97,37 +100,41 @@ void TextChatWindow::readMessage(const proto::TextChatMessage& message)
     onUpdateSize();
 }
 
-void TextChatWindow::readStatus(const proto::TextChatStatus& status)
+void TextChatWidget::readStatus(const proto::TextChatStatus& status)
 {
     status_clear_timer_->stop();
 
     QString user_name = QString::fromStdString(status.source());
-    QString status_message;
 
     switch (status.status())
     {
         case proto::TextChatStatus::STATUS_TYPING:
-            status_message = tr("%1 is typing...").arg(user_name);
+            ui->label_status->setText(tr("%1 is typing...").arg(user_name));
             break;
 
         case proto::TextChatStatus::STATUS_STARTED:
-            status_message = tr("User %1 started a chat.").arg(user_name);
-            break;
+        {
+            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+            addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, time));
+        }
+        break;
 
         case proto::TextChatStatus::STATUS_STOPPED:
-            status_message = tr("User %1 finished a chat.").arg(user_name);
-            break;
+        {
+            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+            addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, time));
+        }
+        break;
 
         default:
             LOG(LS_WARNING) << "Unhandled status code: " << static_cast<int>(status.status());
             return;
     }
 
-    ui->label_status->setText(status_message);
-    status_clear_timer_->start(std::chrono::seconds(3));
+    status_clear_timer_->start(std::chrono::seconds(1));
 }
 
-bool TextChatWindow::eventFilter(QObject* object, QEvent* event)
+bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui->edit_message && event->type() == QEvent::KeyPress)
     {
@@ -152,12 +159,20 @@ bool TextChatWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void TextChatWindow::resizeEvent(QResizeEvent* /* event */)
+void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 {
     onUpdateSize();
 }
 
-void TextChatWindow::addOutgoingMessage(time_t timestamp, const QString& message)
+void TextChatWidget::closeEvent(QCloseEvent* event)
+{
+    onSendStatus(proto::TextChatStatus::STATUS_STOPPED);
+    emit textChatClosed();
+
+    QWidget::closeEvent(event);
+}
+
+void TextChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
     TextChatOutgoingMessage* message_widget = new TextChatOutgoingMessage(list_messages);
@@ -173,7 +188,22 @@ void TextChatWindow::addOutgoingMessage(time_t timestamp, const QString& message
     onUpdateSize();
 }
 
-void TextChatWindow::onSendMessage()
+void TextChatWidget::addStatusMessage(const QString& message)
+{
+    QListWidget* list_messages = ui->list_messages;
+    TextChatStatusMessage* message_widget = new TextChatStatusMessage(list_messages);
+
+    message_widget->setMessageText(message);
+
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
+
+    list_messages->addItem(item);
+    list_messages->setItemWidget(item, message_widget);
+
+    onUpdateSize();
+}
+
+void TextChatWidget::onSendMessage()
 {
     QLineEdit* edit_message = ui->edit_message;
     QString message = edit_message->text();
@@ -204,7 +234,7 @@ void TextChatWindow::onSendMessage()
     emit sendMessage(text_chat_message);
 }
 
-void TextChatWindow::onSendStatus(proto::TextChatStatus::Status status)
+void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
 {
     proto::TextChatStatus text_chat_status;
     text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
@@ -214,14 +244,14 @@ void TextChatWindow::onSendStatus(proto::TextChatStatus::Status status)
     emit sendStatus(text_chat_status);
 }
 
-void TextChatWindow::onClearHistory()
+void TextChatWidget::onClearHistory()
 {
     QListWidget* list_messages = ui->list_messages;
     for (int i = list_messages->count() - 1; i >= 0; --i)
         delete list_messages->item(i);
 }
 
-void TextChatWindow::onSaveChat()
+void TextChatWidget::onSaveChat()
 {
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -275,7 +305,7 @@ void TextChatWindow::onSaveChat()
     }
 }
 
-void TextChatWindow::onUpdateSize()
+void TextChatWidget::onUpdateSize()
 {
     QListWidget* list_messages = ui->list_messages;
     int count = list_messages->count();

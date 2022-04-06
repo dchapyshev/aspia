@@ -28,6 +28,7 @@
 
 namespace common {
 class StatusDialog;
+class TextChatWidget;
 } // namespace common
 
 namespace host {
@@ -74,6 +75,7 @@ private slots:
     void onAbout();
     void onExit();
     void onSettingsChanged();
+    void onKillSession(uint32_t session_id);
 
 private:
     void createLanguageMenu(const QString& current_locale);
@@ -86,6 +88,7 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
+    QPointer<common::TextChatWidget> text_chat_widget_;
 
     common::StatusDialog* status_dialog_ = nullptr;
     proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;

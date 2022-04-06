@@ -33,6 +33,8 @@ list(APPEND SOURCE_CLIENT_CORE
     client_proxy.h
     client_system_info.cc
     client_system_info.h
+    client_text_chat.cc
+    client_text_chat.h
     config_factory.cc
     config_factory.h
     desktop_control.h
@@ -89,7 +91,13 @@ list(APPEND SOURCE_CLIENT_CORE
     system_info_control_proxy.h
     system_info_window.h
     system_info_window_proxy.cc
-    system_info_window_proxy.h)
+    system_info_window_proxy.h
+    text_chat_control.h
+    text_chat_control_proxy.cc
+    text_chat_control_proxy.h
+    text_chat_window.h
+    text_chat_window_proxy.cc
+    text_chat_window_proxy.h)
 
 list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
@@ -157,6 +165,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/qt_system_info_window.cc
     ui/qt_system_info_window.h
     ui/qt_system_info_window.ui
+    ui/qt_text_chat_window.cc
+    ui/qt_text_chat_window.h
+    ui/qt_text_chat_window.ui
     ui/record_settings_dialog.cc
     ui/record_settings_dialog.h
     ui/record_settings_dialog.ui

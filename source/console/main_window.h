@@ -76,6 +76,7 @@ private slots:
     void onDesktopViewConnect();
     void onFileTransferConnect();
     void onSystemInfoConnect();
+    void onTextChatConnect();
 
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);

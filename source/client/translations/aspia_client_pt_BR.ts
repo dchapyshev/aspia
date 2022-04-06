@@ -27,108 +27,112 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="58"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="391"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer address.</source>
         <translation>Endereço do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="395"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Remote computer port.</source>
         <translation>Porta do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="400"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Name of user.</source>
         <translation>Usuário.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="404"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="408"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation>Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
+        <translation type="vanished">Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="413"/>
+        <location filename="../client_main.cc" line="409"/>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="414"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="417"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="421"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="425"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="429"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="433"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="441"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="56"/>
-        <location filename="../client_main.cc" line="579"/>
+        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="584"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -137,7 +141,7 @@
         <translation type="vanished">Tipo de sessão incorreta.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="580"/>
+        <location filename="../client_main.cc" line="585"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -1615,6 +1619,59 @@
     </message>
 </context>
 <context>
+    <name>TextChatWindow</name>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="14"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="42"/>
+        <source>Save</source>
+        <translation type="unfinished">Salvar</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="45"/>
+        <source>Save (Ctrl+S)</source>
+        <translation type="unfinished">Salvar (CTRL+S)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="57"/>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="60"/>
+        <source>Print (Ctrl+P)</source>
+        <translation type="unfinished">Imprimir (CTRL+P)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="68"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Copiar Linha</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="73"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Copiar Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="78"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Copiar Valor</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="87"/>
+        <source>Refresh</source>
+        <translation type="unfinished">Atualizar</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="90"/>
+        <source>Refresh (F5)</source>
+        <translation type="unfinished">Atualizar (F5)</translation>
+    </message>
+</context>
+<context>
     <name>UpdateSettingsDialog</name>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="14"/>
@@ -1799,23 +1856,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="148"/>
+        <location filename="../ui/client_window.cc" line="149"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="237"/>
-        <location filename="../ui/client_window.cc" line="254"/>
+        <location filename="../ui/client_window.cc" line="238"/>
+        <location filename="../ui/client_window.cc" line="255"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="238"/>
+        <location filename="../ui/client_window.cc" line="239"/>
         <source>An invalid computer address was entered.</source>
         <translation>Um endereço inválido do computador foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="255"/>
+        <location filename="../ui/client_window.cc" line="256"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -1856,76 +1913,76 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="206"/>
+        <location filename="../ui/desktop_panel.cc" line="211"/>
         <source>Monitor selection</source>
         <translation type="unfinished">Seleção do monitor</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="225"/>
+        <location filename="../ui/desktop_panel.cc" line="230"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (primário)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="227"/>
+        <location filename="../ui/desktop_panel.cc" line="232"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="239"/>
+        <location filename="../ui/desktop_panel.cc" line="244"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="250"/>
+        <location filename="../ui/desktop_panel.cc" line="255"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
-        <location filename="../ui/desktop_panel.cc" line="435"/>
-        <location filename="../ui/desktop_panel.cc" line="446"/>
+        <location filename="../ui/desktop_panel.cc" line="407"/>
+        <location filename="../ui/desktop_panel.cc" line="418"/>
+        <location filename="../ui/desktop_panel.cc" line="429"/>
+        <location filename="../ui/desktop_panel.cc" line="440"/>
+        <location filename="../ui/desktop_panel.cc" line="451"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="403"/>
+        <location filename="../ui/desktop_panel.cc" line="408"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
+        <location filename="../ui/desktop_panel.cc" line="419"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
+        <location filename="../ui/desktop_panel.cc" line="430"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="436"/>
+        <location filename="../ui/desktop_panel.cc" line="441"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="447"/>
+        <location filename="../ui/desktop_panel.cc" line="452"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="525"/>
+        <location filename="../ui/desktop_panel.cc" line="530"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="292"/>
+        <location filename="../ui/desktop_panel.cc" line="297"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="297"/>
+        <location filename="../ui/desktop_panel.cc" line="302"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2182,34 +2239,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="253"/>
-        <location filename="../ui/qt_desktop_window.cc" line="261"/>
-        <location filename="../ui/qt_desktop_window.cc" line="744"/>
+        <location filename="../ui/qt_desktop_window.cc" line="260"/>
+        <location filename="../ui/qt_desktop_window.cc" line="268"/>
+        <location filename="../ui/qt_desktop_window.cc" line="750"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="254"/>
+        <location filename="../ui/qt_desktop_window.cc" line="261"/>
         <source>There are no supported video encodings.</source>
         <translation>Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="262"/>
+        <location filename="../ui/qt_desktop_window.cc" line="269"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="722"/>
+        <location filename="../ui/qt_desktop_window.cc" line="728"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="724"/>
+        <location filename="../ui/qt_desktop_window.cc" line="730"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="744"/>
+        <location filename="../ui/qt_desktop_window.cc" line="750"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
@@ -2689,103 +2746,108 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="254"/>
+        <location filename="../ui/session_window.cc" line="216"/>
+        <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="258"/>
         <source>Violation of the communication protocol.</source>
         <translation>Violação do protocolo de comunicação.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="258"/>
+        <location filename="../ui/session_window.cc" line="262"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Erro de criptografia (falha na criptografia ou descriptografia da mensagem).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="262"/>
+        <location filename="../ui/session_window.cc" line="266"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Ocorreu um erro com a rede (por exemplo, o cabo de rede foi desconectado acidentalmente).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="270"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>A conexão foi recusada pelo host (ou expirou).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="270"/>
+        <location filename="../ui/session_window.cc" line="274"/>
         <source>Remote host closed the connection.</source>
         <translation>O host remoto fechou a conexão.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="274"/>
+        <location filename="../ui/session_window.cc" line="278"/>
         <source>Host address was not found.</source>
         <translation>O endereço do host não foi encontrado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="278"/>
+        <location filename="../ui/session_window.cc" line="282"/>
         <source>Socket operation timed out.</source>
         <translation>A operação atingiu o tempo limite.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="282"/>
+        <location filename="../ui/session_window.cc" line="286"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>O endereço especificado já está em uso e foi definido como exclusivo.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="286"/>
+        <location filename="../ui/session_window.cc" line="290"/>
         <source>Address specified does not belong to the host.</source>
         <translation>O endereço especificado não pertence ao host.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="296"/>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="300"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>An unknown error occurred.</source>
         <translation>Ocorreu um erro desconhecido.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="312"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Authentication successfully completed.</source>
         <translation>Autenticação concluída com sucesso.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="316"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Network authentication error.</source>
         <translation>Erro de autenticação de rede.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Violação do protocolo de troca de dados.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>Wrong user name or password.</source>
         <translation>Usuário ou senha incorretos.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>O tipo de sessão especificado não é permitido para o usuário.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="347"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>No host with the specified ID was found.</source>
         <translation>Nenhum host com o ID especificado foi encontrado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="351"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Não há relés disponíveis ou o pool de chaves está vazio.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="355"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Falha ao conectar ao servidor de retransmissão.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="359"/>
+        <location filename="../ui/session_window.cc" line="363"/>
         <source>Access is denied.</source>
         <translation>Acesso negado.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="363"/>
+        <location filename="../ui/session_window.cc" line="367"/>
         <source>Unknown error.</source>
         <translation>Erro desconhecido.</translation>
     </message>

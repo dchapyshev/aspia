@@ -48,7 +48,7 @@ public:
         virtual void onClientSessionFinished() = 0;
         virtual void onClientSessionVideoRecording(
             const std::string& computer_name, const std::string& user_name, bool started) = 0;
-        virtual void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) = 0;
+        virtual void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) = 0;
     };
 
     enum class State

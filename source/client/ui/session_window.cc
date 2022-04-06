@@ -212,6 +212,10 @@ void SessionWindow::setClientTitle(const Config& config)
             session_name = tr("System Information");
             break;
 
+        case proto::SESSION_TYPE_TEXT_CHAT:
+            session_name = tr("Text Chat");
+            break;
+
         default:
             NOTREACHED();
             break;

@@ -26,7 +26,7 @@
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
-#include "common/ui/text_chat_window.h"
+#include "common/ui/text_chat_widget.h"
 #include "host/user_session_agent.h"
 #include "host/user_session_agent_proxy.h"
 #include "host/user_session_window_proxy.h"
@@ -212,18 +212,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, this, [=](uint32_t id)
-        {
-            if (agent_proxy_)
-            {
-                LOG(LS_INFO) << "Killing session with ID: " << id;
-                agent_proxy_->killClient(id);
-            }
-            else
-            {
-                LOG(LS_WARNING) << "No agent proxy";
-            }
-        });
+        connect(notifier_, &NotifierWindow::killSession, this, &MainWindow::onKillSession);
 
         connect(notifier_, &NotifierWindow::voiceChat, this, [=](bool enable)
         {
@@ -264,6 +253,67 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
 
     notifier_->onClientListChanged(clients);
+
+    int text_chat_clients = 0;
+    for (const auto& client : clients)
+    {
+        if (client.session_type == proto::SESSION_TYPE_TEXT_CHAT)
+            ++text_chat_clients;
+    }
+
+    if (text_chat_clients > 0)
+    {
+        LOG(LS_INFO) << "Text chat clients: " << text_chat_clients;
+
+        if (text_chat_widget_)
+        {
+            LOG(LS_INFO) << "Text chat widget already exists";
+        }
+        else
+        {
+            LOG(LS_INFO) << "Create text chat widget";
+
+            text_chat_widget_ = new common::TextChatWidget();
+
+            connect(text_chat_widget_, &common::TextChatWidget::sendMessage,
+                    this, [this](const proto::TextChatMessage& message)
+            {
+                if (agent_proxy_)
+                {
+                    proto::TextChat text_chat;
+                    text_chat.mutable_chat_message()->CopyFrom(message);
+                    agent_proxy_->onTextChat(text_chat);
+                }
+            });
+
+            connect(text_chat_widget_, &common::TextChatWidget::sendStatus,
+                    this, [this](const proto::TextChatStatus& status)
+            {
+                if (agent_proxy_)
+                {
+                    proto::TextChat text_chat;
+                    text_chat.mutable_chat_status()->CopyFrom(status);
+                    agent_proxy_->onTextChat(text_chat);
+                }
+            });
+
+            connect(text_chat_widget_, &common::TextChatWidget::textChatClosed, this, [this]()
+            {
+                std::vector<uint32_t> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
+                for (const auto& session : sessions)
+                    onKillSession(session);
+            });
+
+            text_chat_widget_->setAttribute(Qt::WA_DeleteOnClose);
+            text_chat_widget_->show();
+            text_chat_widget_->activateWindow();
+        }
+    }
+    else
+    {
+        if (text_chat_widget_)
+            text_chat_widget_->close();
+    }
 }
 
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
@@ -395,11 +445,18 @@ void MainWindow::onTextChat(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
     {
-        // TODO
+        if (text_chat_widget_)
+        {
+            text_chat_widget_->readMessage(text_chat.chat_message());
+
+            if (QApplication::applicationState() != Qt::ApplicationActive)
+                text_chat_widget_->activateWindow();
+        }
     }
     else if (text_chat.has_chat_status())
     {
-        // TODO
+        if (text_chat_widget_)
+            text_chat_widget_->readStatus(text_chat.chat_status());
     }
     else
     {
@@ -595,6 +652,19 @@ void MainWindow::onSettingsChanged()
 {
     SystemSettings settings;
     ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
+}
+
+void MainWindow::onKillSession(uint32_t session_id)
+{
+    if (agent_proxy_)
+    {
+        LOG(LS_INFO) << "Killing session with ID: " << session_id;
+        agent_proxy_->killClient(session_id);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No agent proxy";
+    }
 }
 
 void MainWindow::createLanguageMenu(const QString& current_locale)

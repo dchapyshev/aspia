@@ -27,108 +27,112 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="58"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="391"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer address.</source>
         <translation>Адреса віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="395"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Remote computer port.</source>
         <translation>Порт віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="400"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Name of user.</source>
         <translation>Ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="404"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="408"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
-        <translation>Тип підключення. Можливі варіанти: керування робочим столом, перегляд робочого столу, передача файлів.</translation>
+        <translation type="vanished">Тип підключення. Можливі варіанти: керування робочим столом, перегляд робочого столу, передача файлів.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="413"/>
+        <location filename="../client_main.cc" line="409"/>
+        <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="414"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="417"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="421"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="425"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="429"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="433"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="441"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="56"/>
-        <location filename="../client_main.cc" line="579"/>
+        <location filename="../client_main.cc" line="57"/>
+        <location filename="../client_main.cc" line="584"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -137,7 +141,7 @@
         <translation type="vanished">Обрано не правильний вид підключення.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="580"/>
+        <location filename="../client_main.cc" line="585"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
@@ -1647,6 +1651,59 @@
     </message>
 </context>
 <context>
+    <name>TextChatWindow</name>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="14"/>
+        <source>System Information</source>
+        <translation type="unfinished">Системна інформація</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="42"/>
+        <source>Save</source>
+        <translation type="unfinished">Зберегти</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="45"/>
+        <source>Save (Ctrl+S)</source>
+        <translation type="unfinished">Зберегти (Ctrl+S)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="57"/>
+        <source>Print</source>
+        <translation type="unfinished">Друкувати</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="60"/>
+        <source>Print (Ctrl+P)</source>
+        <translation type="unfinished">Друкувати (Ctrl+P)</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="68"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="73"/>
+        <source>Copy Name</source>
+        <translation type="unfinished">Копіювати ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="78"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="87"/>
+        <source>Refresh</source>
+        <translation type="unfinished">Оновити</translation>
+    </message>
+    <message>
+        <location filename="../ui/qt_text_chat_window.ui" line="90"/>
+        <source>Refresh (F5)</source>
+        <translation type="unfinished">Оновити (F5)</translation>
+    </message>
+</context>
+<context>
     <name>UpdateSettingsDialog</name>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="14"/>
@@ -1831,23 +1888,23 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="148"/>
+        <location filename="../ui/client_window.cc" line="149"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Клієнт Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="237"/>
-        <location filename="../ui/client_window.cc" line="254"/>
+        <location filename="../ui/client_window.cc" line="238"/>
+        <location filename="../ui/client_window.cc" line="255"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="238"/>
+        <location filename="../ui/client_window.cc" line="239"/>
         <source>An invalid computer address was entered.</source>
         <translation>Було введено не коректну адресу комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="255"/>
+        <location filename="../ui/client_window.cc" line="256"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
@@ -1888,76 +1945,76 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="206"/>
+        <location filename="../ui/desktop_panel.cc" line="211"/>
         <source>Monitor selection</source>
         <translation type="unfinished">Вибір монітора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="225"/>
+        <location filename="../ui/desktop_panel.cc" line="230"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монітор %1 (основний)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="227"/>
+        <location filename="../ui/desktop_panel.cc" line="232"/>
         <source>Monitor %1</source>
         <translation>Монітор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="239"/>
+        <location filename="../ui/desktop_panel.cc" line="244"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="250"/>
+        <location filename="../ui/desktop_panel.cc" line="255"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="402"/>
-        <location filename="../ui/desktop_panel.cc" line="413"/>
-        <location filename="../ui/desktop_panel.cc" line="424"/>
-        <location filename="../ui/desktop_panel.cc" line="435"/>
-        <location filename="../ui/desktop_panel.cc" line="446"/>
+        <location filename="../ui/desktop_panel.cc" line="407"/>
+        <location filename="../ui/desktop_panel.cc" line="418"/>
+        <location filename="../ui/desktop_panel.cc" line="429"/>
+        <location filename="../ui/desktop_panel.cc" line="440"/>
+        <location filename="../ui/desktop_panel.cc" line="451"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="403"/>
+        <location filename="../ui/desktop_panel.cc" line="408"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
+        <location filename="../ui/desktop_panel.cc" line="419"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
+        <location filename="../ui/desktop_panel.cc" line="430"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="436"/>
+        <location filename="../ui/desktop_panel.cc" line="441"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="447"/>
+        <location filename="../ui/desktop_panel.cc" line="452"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="525"/>
+        <location filename="../ui/desktop_panel.cc" line="530"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="292"/>
+        <location filename="../ui/desktop_panel.cc" line="297"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="297"/>
+        <location filename="../ui/desktop_panel.cc" line="302"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2214,34 +2271,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="253"/>
-        <location filename="../ui/qt_desktop_window.cc" line="261"/>
-        <location filename="../ui/qt_desktop_window.cc" line="744"/>
+        <location filename="../ui/qt_desktop_window.cc" line="260"/>
+        <location filename="../ui/qt_desktop_window.cc" line="268"/>
+        <location filename="../ui/qt_desktop_window.cc" line="750"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="254"/>
+        <location filename="../ui/qt_desktop_window.cc" line="261"/>
         <source>There are no supported video encodings.</source>
         <translation>Немає підтримуваних типів кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="262"/>
+        <location filename="../ui/qt_desktop_window.cc" line="269"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="722"/>
+        <location filename="../ui/qt_desktop_window.cc" line="728"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="724"/>
+        <location filename="../ui/qt_desktop_window.cc" line="730"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="744"/>
+        <location filename="../ui/qt_desktop_window.cc" line="750"/>
         <source>Could not save image</source>
         <translation>Неможливо зберегти зображення</translation>
     </message>
@@ -2723,103 +2780,108 @@
         <translation type="unfinished">Системна інформація</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="254"/>
+        <location filename="../ui/session_window.cc" line="216"/>
+        <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/session_window.cc" line="258"/>
         <source>Violation of the communication protocol.</source>
         <translation>Порушення протоколу зв&apos;язку.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="258"/>
+        <location filename="../ui/session_window.cc" line="262"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Помилка шифрування (не вдалося зашифрувати або розшифрувати повідомлення).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="262"/>
+        <location filename="../ui/session_window.cc" line="266"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="266"/>
+        <location filename="../ui/session_window.cc" line="270"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="270"/>
+        <location filename="../ui/session_window.cc" line="274"/>
         <source>Remote host closed the connection.</source>
         <translation>Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="274"/>
+        <location filename="../ui/session_window.cc" line="278"/>
         <source>Host address was not found.</source>
         <translation>Адресу хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="278"/>
+        <location filename="../ui/session_window.cc" line="282"/>
         <source>Socket operation timed out.</source>
         <translation>Вийшов час операції сокета.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="282"/>
+        <location filename="../ui/session_window.cc" line="286"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="286"/>
+        <location filename="../ui/session_window.cc" line="290"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Введена адреса не належить хосту.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="296"/>
-        <location filename="../ui/session_window.cc" line="332"/>
+        <location filename="../ui/session_window.cc" line="300"/>
+        <location filename="../ui/session_window.cc" line="336"/>
         <source>An unknown error occurred.</source>
         <translation>Виникла невідома помилка.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="312"/>
+        <location filename="../ui/session_window.cc" line="316"/>
         <source>Authentication successfully completed.</source>
         <translation>Аутентифікацію завершено успішно.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="316"/>
+        <location filename="../ui/session_window.cc" line="320"/>
         <source>Network authentication error.</source>
         <translation>Помилка аутентифікації мережі.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="320"/>
+        <location filename="../ui/session_window.cc" line="324"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>Порушення в протоколі передачі даних.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="324"/>
+        <location filename="../ui/session_window.cc" line="328"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="328"/>
+        <location filename="../ui/session_window.cc" line="332"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Обраний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="347"/>
+        <location filename="../ui/session_window.cc" line="351"/>
         <source>No host with the specified ID was found.</source>
         <translation>Не було знайдено хоста з вказаним ID.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="351"/>
+        <location filename="../ui/session_window.cc" line="355"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Немає доступних ретрансляторів або ключовий пул порожній.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="355"/>
+        <location filename="../ui/session_window.cc" line="359"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не вдалось підключитись до сервера ретрансляції.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="359"/>
+        <location filename="../ui/session_window.cc" line="363"/>
         <source>Access is denied.</source>
         <translation>Доступ заборонено.</translation>
     </message>
     <message>
-        <location filename="../ui/session_window.cc" line="363"/>
+        <location filename="../ui/session_window.cc" line="367"/>
         <source>Unknown error.</source>
         <translation>Невідома помилка.</translation>
     </message>

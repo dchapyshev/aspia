@@ -119,7 +119,7 @@ protected:
     void onClientSessionFinished() override;
     void onClientSessionVideoRecording(
         const std::string& computer_name, const std::string& user_name, bool started) override;
-    void onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat) override;
+    void onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat) override;
 
 private:
     void onSessionDettached(const base::Location& location);
@@ -132,6 +132,8 @@ private:
     void sendHostIdRequest(const base::Location& location);
     void addNewClientSession(std::unique_ptr<ClientSession> client_session);
     void setState(const base::Location& location, State state);
+    void onTextChatSessionStarted(uint32_t id);
+    void onTextChatSessionFinished(uint32_t id);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;
@@ -166,6 +168,7 @@ private:
     ClientSessionList desktop_clients_;
     ClientSessionList file_transfer_clients_;
     ClientSessionList system_info_clients_;
+    ClientSessionList text_chat_clients_;
 
     std::unique_ptr<DesktopSessionManager> desktop_session_;
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>397</width>
-    <height>125</height>
+    <height>66</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -96,7 +96,7 @@ border-radius: 3px;
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>40</height>
+             <height>0</height>
             </size>
            </property>
           </spacer>
@@ -130,6 +130,9 @@ font-family: Verdana;
            <property name="text">
             <string notr="true">Source</string>
            </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
+           </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
@@ -151,6 +154,9 @@ font-family: Verdana;
            </property>
            <property name="text">
             <string notr="true">Message</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

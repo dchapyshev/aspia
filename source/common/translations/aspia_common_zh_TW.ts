@@ -84,22 +84,48 @@
     </message>
 </context>
 <context>
-    <name>TextChatWindow</name>
+    <name>TextChatStatusMessage</name>
+    <message>
+        <source>Time</source>
+        <translation type="obsolete">時間</translation>
+    </message>
+</context>
+<context>
+    <name>TextChatWidget</name>
     <message>
         <source>Aspia Chat</source>
-        <translation>Aspia Chat</translation>
+        <translation type="unfinished">Aspia Chat</translation>
     </message>
     <message>
         <source>Send message</source>
-        <translation>傳送訊息</translation>
+        <translation type="unfinished">傳送訊息</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation>工具</translation>
+        <translation type="unfinished">工具</translation>
     </message>
     <message>
         <source>···</source>
-        <translation>···</translation>
+        <translation type="unfinished">···</translation>
+    </message>
+</context>
+<context>
+    <name>TextChatWindow</name>
+    <message>
+        <source>Aspia Chat</source>
+        <translation type="vanished">Aspia Chat</translation>
+    </message>
+    <message>
+        <source>Send message</source>
+        <translation type="vanished">傳送訊息</translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation type="vanished">工具</translation>
+    </message>
+    <message>
+        <source>···</source>
+        <translation type="vanished">···</translation>
     </message>
 </context>
 <context>
@@ -216,48 +242,101 @@
     </message>
 </context>
 <context>
-    <name>common::TextChatWindow</name>
+    <name>common::TextChatWidget</name>
     <message>
         <source>Save chat...</source>
-        <translation>儲存聊天...</translation>
+        <translation type="unfinished">儲存聊天...</translation>
     </message>
     <message>
         <source>Clear chat</source>
-        <translation>清除聊天</translation>
+        <translation type="unfinished">清除聊天</translation>
     </message>
     <message>
         <source>%1 is typing...</source>
-        <translation>%1 正在輸入...</translation>
+        <translation type="unfinished">%1 正在輸入...</translation>
     </message>
     <message>
         <source>User %1 started a chat.</source>
-        <translation>使用者 %1 開始了一個聊天。</translation>
+        <translation type="obsolete">使用者 %1 開始了一個聊天。</translation>
     </message>
     <message>
         <source>User %1 finished a chat.</source>
-        <translation>使用者 %1 結束了一個聊天。</translation>
+        <translation type="obsolete">使用者 %1 結束了一個聊天。</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="unfinished">警告</translation>
     </message>
     <message numerus="yes">
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>訊息太長。最大訊息長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
         <source>Save File</source>
-        <translation>儲存檔案</translation>
+        <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
         <source>TXT files (*.txt)</source>
-        <translation>TXT 檔案 (*.txt)</translation>
+        <translation type="unfinished">TXT 檔案 (*.txt)</translation>
     </message>
     <message>
         <source>Could not open file for writing.</source>
-        <translation>無法開啟檔案進行寫入。</translation>
+        <translation type="unfinished">無法開啟檔案進行寫入。</translation>
+    </message>
+    <message>
+        <source>User %1 has joined the chat (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User %1 has left the chat (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>common::TextChatWindow</name>
+    <message>
+        <source>Save chat...</source>
+        <translation type="vanished">儲存聊天...</translation>
+    </message>
+    <message>
+        <source>Clear chat</source>
+        <translation type="vanished">清除聊天</translation>
+    </message>
+    <message>
+        <source>%1 is typing...</source>
+        <translation type="vanished">%1 正在輸入...</translation>
+    </message>
+    <message>
+        <source>User %1 started a chat.</source>
+        <translation type="vanished">使用者 %1 開始了一個聊天。</translation>
+    </message>
+    <message>
+        <source>User %1 finished a chat.</source>
+        <translation type="vanished">使用者 %1 結束了一個聊天。</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="vanished">警告</translation>
+    </message>
+    <message numerus="yes">
+        <source>The message is too long. The maximum message length is %n characters.</source>
+        <translation type="vanished">
+            <numerusform>訊息太長。最大訊息長度為 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="vanished">儲存檔案</translation>
+    </message>
+    <message>
+        <source>TXT files (*.txt)</source>
+        <translation type="vanished">TXT 檔案 (*.txt)</translation>
+    </message>
+    <message>
+        <source>Could not open file for writing.</source>
+        <translation type="vanished">無法開啟檔案進行寫入。</translation>
     </message>
 </context>
 <context>

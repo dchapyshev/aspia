@@ -24,6 +24,7 @@
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"
+#include "client/ui/qt_text_chat_window.h"
 #include "client/ui/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
@@ -129,6 +130,9 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_system_info_connect, &QAction::triggered,
             this, &MainWindow::onSystemInfoConnect);
 
+    connect(ui.action_text_chat_connect, &QAction::triggered,
+            this, &MainWindow::onTextChatConnect);
+
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
         Application* instance = Application::instance();
@@ -149,6 +153,7 @@ MainWindow::MainWindow(const QString& file_path)
     session_type_group->addAction(ui.action_desktop_view);
     session_type_group->addAction(ui.action_file_transfer);
     session_type_group->addAction(ui.action_system_info);
+    session_type_group->addAction(ui.action_text_chat);
 
     switch (settings.sessionType())
     {
@@ -166,6 +171,10 @@ MainWindow::MainWindow(const QString& file_path)
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
             ui.action_system_info->setChecked(true);
+            break;
+
+        case proto::SESSION_TYPE_TEXT_CHAT:
+            ui.action_text_chat->setChecked(true);
             break;
 
         default:
@@ -550,6 +559,23 @@ void MainWindow::onSystemInfoConnect()
     }
 }
 
+void MainWindow::onTextChatConnect()
+{
+    LOG(LS_INFO) << "Connect to text chat session";
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+    {
+        ComputerItem* computer_item = tab->currentComputer();
+        if (computer_item)
+        {
+            proto::address_book::Computer computer = computer_item->computerToConnect();
+            computer.set_session_type(proto::SESSION_TYPE_TEXT_CHAT);
+            connectToComputer(computer, tab->routerConfig());
+        }
+    }
+}
+
 void MainWindow::onCurrentTabChanged(int index)
 {
     LOG(LS_INFO) << "Current tab changed to: " << index;
@@ -730,6 +756,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
         menu.addAction(ui.action_desktop_manage_connect);
         menu.addAction(ui.action_desktop_view_connect);
         menu.addAction(ui.action_file_transfer_connect);
+        menu.addAction(ui.action_text_chat_connect);
         menu.addAction(ui.action_system_info_connect);
         menu.addSeparator();
         menu.addAction(ui.action_modify_computer);
@@ -771,6 +798,10 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
     else if (ui.action_system_info->isChecked())
     {
         computer_to_connect.set_session_type(proto::SESSION_TYPE_SYSTEM_INFO);
+    }
+    else if (ui.action_text_chat->isChecked())
+    {
+        computer_to_connect.set_session_type(proto::SESSION_TYPE_TEXT_CHAT);
     }
     else
     {
@@ -1034,6 +1065,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
         settings.setSessionType(proto::SESSION_TYPE_FILE_TRANSFER);
     else if (ui.action_system_info->isChecked())
         settings.setSessionType(proto::SESSION_TYPE_SYSTEM_INFO);
+    else if (ui.action_text_chat->isChecked())
+        settings.setSessionType(proto::SESSION_TYPE_TEXT_CHAT);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -1272,6 +1305,10 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
             session_window = new client::QtSystemInfoWindow();
+            break;
+
+        case proto::SESSION_TYPE_TEXT_CHAT:
+            session_window = new client::QtTextChatWindow();
             break;
 
         default:

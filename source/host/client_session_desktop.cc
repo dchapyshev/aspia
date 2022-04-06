@@ -347,18 +347,6 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
         preferred_size_.set(preferred_size.width(), preferred_size.height());
         desktop_session_proxy_->captureScreen();
     }
-    else if (extension.name() == common::kTextChatExtension)
-    {
-        std::unique_ptr<proto::TextChat> text_chat = std::make_unique<proto::TextChat>();
-
-        if (!text_chat->ParseFromString(extension.data()))
-        {
-            LOG(LS_ERROR) << "Unable to parse text chat extension data";
-            return;
-        }
-
-        delegate_->onClientSessionTextChat(std::move(text_chat));
-    }
     else if (extension.name() == common::kPowerControlExtension)
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)

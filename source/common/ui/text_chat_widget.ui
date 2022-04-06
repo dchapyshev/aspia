@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextChatWindow</class>
- <widget class="QWidget" name="TextChatWindow">
+ <class>TextChatWidget</class>
+ <widget class="QWidget" name="TextChatWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>423</height>
+    <width>450</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -24,7 +24,7 @@
 background: white;
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -38,33 +38,51 @@ background: white;
     <number>0</number>
    </property>
    <item>
-    <widget class="QListWidget" name="list_messages">
-     <property name="styleSheet">
-      <string notr="true">#list_messages {
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QListWidget" name="list_messages">
+        <property name="styleSheet">
+         <string notr="true">#list_messages {
 border: 0;
 }</string>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::NoSelection</enum>
-     </property>
-     <property name="verticalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-     <property name="horizontalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_status">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">#label_status {
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+        <property name="verticalScrollMode">
+         <enum>QAbstractItemView::ScrollPerPixel</enum>
+        </property>
+        <property name="horizontalScrollMode">
+         <enum>QAbstractItemView::ScrollPerPixel</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_status">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#label_status {
 color: gray;
 font-style: italic;
 font-size: 10px;
@@ -75,10 +93,13 @@ border-right: 0;
 border-bottom: 1px solid #CDCDCD;
 padding: 2px;
 }</string>
-     </property>
-     <property name="text">
-      <string notr="true">Status</string>
-     </property>
+        </property>
+        <property name="text">
+         <string notr="true"> </string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -181,7 +202,7 @@ border-radius: 2px;
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources/common.qrc">
+            <iconset resource="../../client/resources/client.qrc">
              <normaloff>:/img/text-chat.png</normaloff>:/img/text-chat.png</iconset>
            </property>
           </widget>
@@ -237,7 +258,7 @@ border-radius: 2px;
   </layout>
  </widget>
  <resources>
-  <include location="../resources/common.qrc"/>
+  <include location="../../client/resources/client.qrc"/>
  </resources>
  <connections/>
 </ui>

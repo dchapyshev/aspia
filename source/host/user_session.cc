@@ -32,6 +32,7 @@
 #include "base/win/session_info.h"
 #include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
+#include "host/client_session_text_chat.h"
 #include "host/desktop_session_proxy.h"
 
 namespace host {
@@ -207,6 +208,8 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         send_connection_list(desktop_clients_);
         send_connection_list(file_transfer_clients_);
         send_connection_list(system_info_clients_);
+        send_connection_list(text_chat_clients_);
+
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
     }
@@ -320,7 +323,8 @@ base::User UserSession::user() const
 
 size_t UserSession::clientsCount() const
 {
-    return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size();
+    return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size() +
+           text_chat_clients_.size();
 }
 
 void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
@@ -656,6 +660,15 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             }
         }
     }
+    else if (incoming_message->has_text_chat())
+    {
+        for (const auto& client : text_chat_clients_)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+            text_chat_session->sendTextChat(incoming_message->text_chat());
+        }
+    }
     else
     {
         LOG(LS_WARNING) << "Unhandled message from UI";
@@ -839,6 +852,9 @@ void UserSession::onClientSessionFinished()
                 LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
                              << " finished. Delete it";
 
+                if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+                    onTextChatSessionFinished(client_session->id());
+
                 // Notification of the UI about disconnecting the client.
                 sendDisconnectEvent(client_session->id());
 
@@ -860,6 +876,7 @@ void UserSession::onClientSessionFinished()
     delete_finished(&desktop_clients_);
     delete_finished(&file_transfer_clients_);
     delete_finished(&system_info_clients_);
+    delete_finished(&text_chat_clients_);
 
     if (desktop_clients_.empty())
     {
@@ -887,12 +904,23 @@ void UserSession::onClientSessionVideoRecording(
     channel_->send(base::serialize(*outgoing_message));
 }
 
-void UserSession::onClientSessionTextChat(std::unique_ptr<proto::TextChat> text_chat)
+void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat)
 {
+    for (const auto& client : text_chat_clients_)
+    {
+        if (client->id() != id)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+            text_chat_session->sendTextChat(text_chat);
+        }
+    }
+
     proto::internal::ServiceToUi* outgoing_message =
         messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->set_allocated_text_chat(text_chat.release());
+    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
     channel_->send(base::serialize(*outgoing_message));
+
 }
 
 void UserSession::onSessionDettached(const base::Location& location)
@@ -922,6 +950,10 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     // Stop all file transfer clients.
     for (const auto& client : file_transfer_clients_)
+        client->stop();
+
+    // Stop all text chat clients.
+    for (const auto& client : text_chat_clients_)
         client->stop();
 
     setState(FROM_HERE, State::DETTACHED);
@@ -1080,6 +1112,7 @@ void UserSession::killClientSession(uint32_t id)
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&file_transfer_clients_, id);
     stop_by_id(&system_info_clients_, id);
+    stop_by_id(&text_chat_clients_, id);
 }
 
 void UserSession::sendRouterState(const base::Location& location)
@@ -1157,6 +1190,13 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         }
         break;
 
+        case proto::SESSION_TYPE_TEXT_CHAT:
+        {
+            LOG(LS_INFO) << "New text chat session";
+            text_chat_clients_.emplace_back(std::move(client_session));
+        }
+        break;
+
         default:
         {
             NOTREACHED();
@@ -1170,6 +1210,9 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
     // Notify the UI of a new connection.
     sendConnectEvent(*client_session_ptr);
+
+    if (client_session_ptr->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+        onTextChatSessionStarted(client_session_ptr->id());
 }
 
 void UserSession::setState(const base::Location& location, State state)
@@ -1177,6 +1220,73 @@ void UserSession::setState(const base::Location& location, State state)
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
                  << " (from: " << location.toString() << ")";
     state_ = state;
+}
+
+void UserSession::onTextChatSessionStarted(uint32_t id)
+{
+    proto::TextChat text_chat;
+
+    for (const auto& client : text_chat_clients_)
+    {
+        if (client->id() == id)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+
+            proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+            text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
+            text_chat_status->set_source(text_chat_session->computerName());
+
+            break;
+        }
+    }
+
+    for (const auto& client : text_chat_clients_)
+    {
+        ClientSessionTextChat* text_chat_session =
+            static_cast<ClientSessionTextChat*>(client.get());
+        text_chat_session->sendTextChat(text_chat);
+    }
+
+    proto::internal::ServiceToUi* outgoing_message =
+        messageFromArena<proto::internal::ServiceToUi>();
+    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
+    channel_->send(base::serialize(*outgoing_message));
+}
+
+void UserSession::onTextChatSessionFinished(uint32_t id)
+{
+    proto::TextChat text_chat;
+
+    for (const auto& client : text_chat_clients_)
+    {
+        if (client->id() == id)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+
+            proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+            text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
+            text_chat_status->set_source(text_chat_session->computerName());
+
+            break;
+        }
+    }
+
+    for (const auto& client : text_chat_clients_)
+    {
+        if (client->id() != id)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+            text_chat_session->sendTextChat(text_chat);
+        }
+    }
+
+    proto::internal::ServiceToUi* outgoing_message =
+        messageFromArena<proto::internal::ServiceToUi>();
+    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
+    channel_->send(base::serialize(*outgoing_message));
 }
 
 } // namespace host
