@@ -12,11 +12,13 @@ Currently supported
 - Remote desktop view
 - File transfer
 - System information
+- Text chat
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
 - NAT traversal
 - Audio support
+- Video recording
 - Client and Console for Windows, MacOSX and Linux
 - Host for Windows only
 
