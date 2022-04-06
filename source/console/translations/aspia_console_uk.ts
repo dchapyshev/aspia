@@ -843,47 +843,47 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="102"/>
+        <location filename="../address_book_dialog.cc" line="106"/>
         <source>Without Encryption</source>
         <translation>Без шифрування</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="104"/>
+        <location filename="../address_book_dialog.cc" line="108"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="133"/>
+        <location filename="../address_book_dialog.cc" line="137"/>
         <source>Double-click to change</source>
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="116"/>
+        <location filename="../address_book_dialog.cc" line="120"/>
         <source>Address Book</source>
         <translation>Адресна книга</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="217"/>
+        <location filename="../address_book_dialog.cc" line="221"/>
         <source>General</source>
         <translation type="unfinished">Основні</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="221"/>
+        <location filename="../address_book_dialog.cc" line="225"/>
         <source>Sessions</source>
         <translation type="unfinished">Сесії</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="228"/>
+        <location filename="../address_book_dialog.cc" line="232"/>
         <source>Manage</source>
         <translation type="unfinished">Керування</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="236"/>
         <source>View</source>
         <translation type="unfinished">Перегляд</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="329"/>
+        <location filename="../address_book_dialog.cc" line="340"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символ.</numerusform>
@@ -892,12 +892,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="335"/>
+        <location filename="../address_book_dialog.cc" line="346"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="342"/>
+        <location filename="../address_book_dialog.cc" line="353"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символ.</numerusform>
@@ -906,12 +906,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="368"/>
+        <location filename="../address_book_dialog.cc" line="379"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="374"/>
+        <location filename="../address_book_dialog.cc" line="385"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
@@ -920,12 +920,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="382"/>
+        <location filename="../address_book_dialog.cc" line="393"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="385"/>
+        <location filename="../address_book_dialog.cc" line="396"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
@@ -934,28 +934,28 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="389"/>
+        <location filename="../address_book_dialog.cc" line="400"/>
         <source>Do you want to enter a different password?</source>
         <translation>Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="392"/>
-        <location filename="../address_book_dialog.cc" line="570"/>
+        <location filename="../address_book_dialog.cc" line="403"/>
+        <location filename="../address_book_dialog.cc" line="581"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="427"/>
+        <location filename="../address_book_dialog.cc" line="438"/>
         <source>An invalid router address was entered.</source>
         <translation>Введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="438"/>
+        <location filename="../address_book_dialog.cc" line="449"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="447"/>
+        <location filename="../address_book_dialog.cc" line="458"/>
         <source>Router password cannot be empty.</source>
         <translation>Пароль маршрутизатора не може бути порожнім.</translation>
     </message>

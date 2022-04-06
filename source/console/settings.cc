@@ -46,6 +46,7 @@ const QString kComputerDialogGeometryParam = QStringLiteral("ComputerDialogGeome
 const QString kComputerDialogStateParam = QStringLiteral("ComputerDialogState");
 const QString kComputerGroupDialogGeometryParam = QStringLiteral("ComputerGroupDialogGeometry");
 const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
+const QString kAddressBookDialogGeometryParam = QStringLiteral("AddressBookDialogGeometry");
 
 } // namespace
 
@@ -266,6 +267,16 @@ bool Settings::showIconsInMenus() const
 void Settings::setShowIconsInMenus(bool enable)
 {
     settings_.setValue(kShowIconsInMenusParam, enable);
+}
+
+QByteArray Settings::addressBookDialogGeometry() const
+{
+    return settings_.value(kAddressBookDialogGeometryParam).toByteArray();
+}
+
+void Settings::setAddressBookDialogGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(kAddressBookDialogGeometryParam, geometry);
 }
 
 } // namespace console

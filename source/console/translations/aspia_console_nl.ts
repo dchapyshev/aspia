@@ -844,48 +844,48 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="102"/>
+        <location filename="../address_book_dialog.cc" line="106"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="104"/>
+        <location filename="../address_book_dialog.cc" line="108"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translatorcomment>Why are we translating this?</translatorcomment>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="133"/>
+        <location filename="../address_book_dialog.cc" line="137"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="116"/>
+        <location filename="../address_book_dialog.cc" line="120"/>
         <source>Address Book</source>
         <translation>Adresboek</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="217"/>
+        <location filename="../address_book_dialog.cc" line="221"/>
         <source>General</source>
         <translation type="unfinished">Basis</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="221"/>
+        <location filename="../address_book_dialog.cc" line="225"/>
         <source>Sessions</source>
         <translation type="unfinished">Sessies</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="228"/>
+        <location filename="../address_book_dialog.cc" line="232"/>
         <source>Manage</source>
         <translation type="unfinished">Beheren</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="236"/>
         <source>View</source>
         <translation type="unfinished">Weergave</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="329"/>
+        <location filename="../address_book_dialog.cc" line="340"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -893,12 +893,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="335"/>
+        <location filename="../address_book_dialog.cc" line="346"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="342"/>
+        <location filename="../address_book_dialog.cc" line="353"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -906,12 +906,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="368"/>
+        <location filename="../address_book_dialog.cc" line="379"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="374"/>
+        <location filename="../address_book_dialog.cc" line="385"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakter zijn.</numerusform>
@@ -919,12 +919,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="382"/>
+        <location filename="../address_book_dialog.cc" line="393"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="385"/>
+        <location filename="../address_book_dialog.cc" line="396"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
@@ -932,28 +932,28 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="389"/>
+        <location filename="../address_book_dialog.cc" line="400"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="392"/>
-        <location filename="../address_book_dialog.cc" line="570"/>
+        <location filename="../address_book_dialog.cc" line="403"/>
+        <location filename="../address_book_dialog.cc" line="581"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="427"/>
+        <location filename="../address_book_dialog.cc" line="438"/>
         <source>An invalid router address was entered.</source>
         <translation>Er is een ongeldig router adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="438"/>
+        <location filename="../address_book_dialog.cc" line="449"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="447"/>
+        <location filename="../address_book_dialog.cc" line="458"/>
         <source>Router password cannot be empty.</source>
         <translation>Router wachtwoord mag niet leeg zijn.</translation>
     </message>

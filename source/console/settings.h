@@ -92,6 +92,9 @@ public:
     bool showIconsInMenus() const;
     void setShowIconsInMenus(bool enable);
 
+    QByteArray addressBookDialogGeometry() const;
+    void setAddressBookDialogGeometry(const QByteArray& geometry);
+
 private:
     QSettings settings_;
 

@@ -29,6 +29,7 @@
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
+#include "console/settings.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -90,6 +91,9 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 {
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
+
+    Settings settings;
+    restoreGeometry(settings.addressBookDialogGeometry());
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &AddressBookDialog::buttonBoxClicked);
 
@@ -312,6 +316,13 @@ bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
     }
 
     return false;
+}
+
+void AddressBookDialog::closeEvent(QCloseEvent* event)
+{
+    Settings settings;
+    settings.setAddressBookDialogGeometry(saveGeometry());
+    QDialog::closeEvent(event);
 }
 
 void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
