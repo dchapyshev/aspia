@@ -134,14 +134,14 @@ FastConnectDialog::~FastConnectDialog()
 
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
+    state_.session_type = static_cast<proto::SessionType>(
+        ui.combo_session_type->itemData(item_index).toInt());
+
     if (ui.checkbox_use_session_params->isChecked())
     {
         ui.button_session_config->setEnabled(false);
         return;
     }
-
-    state_.session_type = static_cast<proto::SessionType>(
-        ui.combo_session_type->itemData(item_index).toInt());
 
     switch (state_.session_type)
     {
@@ -340,7 +340,7 @@ void FastConnectDialog::readState()
     QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
     stream.setVersion(QDataStream::Qt_5_12);
 
-    int session_type;
+    int session_type = 0;
     QByteArray desktop_manage_config;
     QByteArray desktop_view_config;
     bool creds_from_address_book = false;
