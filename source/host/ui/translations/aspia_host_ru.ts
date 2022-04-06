@@ -268,28 +268,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="221"/>
-        <location filename="../host_main.cc" line="240"/>
+        <location filename="../host_main.cc" line="222"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="222"/>
+        <location filename="../host_main.cc" line="223"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="241"/>
+        <location filename="../host_main.cc" line="242"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="276"/>
+        <location filename="../host_main.cc" line="277"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="277"/>
+        <location filename="../host_main.cc" line="278"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Версия приложения: %1.%2.%3.%4.</translation>
     </message>
@@ -809,14 +809,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="78"/>
-        <location filename="../main_window.cc" line="441"/>
-        <location filename="../main_window.cc" line="606"/>
+        <location filename="../main_window.cc" line="437"/>
+        <location filename="../main_window.cc" line="596"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="586"/>
+        <location filename="../main_window.cc" line="578"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -831,18 +831,18 @@
         <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="432"/>
+        <location filename="../main_window.cc" line="428"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Пользователь &quot;%1&quot; (%2) начал запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="712"/>
+        <location filename="../main_window.cc" line="696"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="378"/>
-        <location filename="../main_window.cc" line="697"/>
+        <location filename="../main_window.cc" line="681"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -852,12 +852,12 @@
         <translation>Не удалось подключиться к маршрутизатору %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="437"/>
+        <location filename="../main_window.cc" line="433"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="702"/>
+        <location filename="../main_window.cc" line="686"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
@@ -867,22 +867,22 @@
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="707"/>
+        <location filename="../main_window.cc" line="691"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="591"/>
+        <location filename="../main_window.cc" line="583"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="626"/>
+        <location filename="../main_window.cc" line="612"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="627"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>

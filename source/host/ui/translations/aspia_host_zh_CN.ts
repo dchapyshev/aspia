@@ -268,28 +268,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="221"/>
-        <location filename="../host_main.cc" line="240"/>
+        <location filename="../host_main.cc" line="222"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="222"/>
+        <location filename="../host_main.cc" line="223"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="241"/>
+        <location filename="../host_main.cc" line="242"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="276"/>
+        <location filename="../host_main.cc" line="277"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="277"/>
+        <location filename="../host_main.cc" line="278"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -805,14 +805,14 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="78"/>
-        <location filename="../main_window.cc" line="441"/>
-        <location filename="../main_window.cc" line="606"/>
+        <location filename="../main_window.cc" line="437"/>
+        <location filename="../main_window.cc" line="596"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="586"/>
+        <location filename="../main_window.cc" line="578"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
@@ -822,18 +822,18 @@
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="432"/>
+        <location filename="../main_window.cc" line="428"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="712"/>
+        <location filename="../main_window.cc" line="696"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="378"/>
-        <location filename="../main_window.cc" line="697"/>
+        <location filename="../main_window.cc" line="681"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
@@ -843,7 +843,7 @@
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="702"/>
+        <location filename="../main_window.cc" line="686"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
@@ -853,7 +853,7 @@
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="707"/>
+        <location filename="../main_window.cc" line="691"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
@@ -863,22 +863,22 @@
         <translation>正在连接到路由器 %1 ...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="437"/>
+        <location filename="../main_window.cc" line="433"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="591"/>
+        <location filename="../main_window.cc" line="583"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="626"/>
+        <location filename="../main_window.cc" line="612"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="627"/>
+        <location filename="../main_window.cc" line="613"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>

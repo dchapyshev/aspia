@@ -411,12 +411,8 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 void MainWindow::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
-    QApplication::setQuitOnLastWindowClosed(false);
-
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
-
-    QApplication::setQuitOnLastWindowClosed(true);
 
     if (agent_proxy_)
         agent_proxy_->connectConfirmation(request.id(), accept);
@@ -556,8 +552,6 @@ void MainWindow::onSettings()
 
     LOG(LS_INFO) << "Settings dialog open";
 
-    QApplication::setQuitOnLastWindowClosed(false);
-
     SystemSettings settings;
     if (settings.passwordProtection())
     {
@@ -573,8 +567,6 @@ void MainWindow::onSettings()
         ConfigDialog(this).exec();
         onSettingsChanged();
     }
-
-    QApplication::setQuitOnLastWindowClosed(true);
 
     LOG(LS_INFO) << "Settings dialog close";
 }
@@ -601,11 +593,7 @@ void MainWindow::onHelp()
 void MainWindow::onAbout()
 {
     LOG(LS_INFO) << "About dialog open";
-
-    QApplication::setQuitOnLastWindowClosed(false);
     common::AboutDialog(tr("Aspia Host"), this).exec();
-    QApplication::setQuitOnLastWindowClosed(true);
-
     LOG(LS_INFO) << "About dialog close";
 }
 
@@ -619,8 +607,6 @@ void MainWindow::onExit()
         return;
     }
 
-    QApplication::setQuitOnLastWindowClosed(false);
-
     int button = QMessageBox::question(
         this,
         tr("Confirmation"),
@@ -629,8 +615,6 @@ void MainWindow::onExit()
            "application?"),
         QMessageBox::Yes,
         QMessageBox::No);
-
-    QApplication::setQuitOnLastWindowClosed(true);
 
     if (button == QMessageBox::Yes)
     {
