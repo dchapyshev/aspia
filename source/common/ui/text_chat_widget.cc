@@ -291,15 +291,23 @@ void TextChatWidget::onSaveChat()
             stream << incoming_message_widget->messageText() << Qt::endl;
             stream << Qt::endl;
         }
-        else
+        else if (message_widget->direction() == TextChatMessage::Direction::OUTGOING)
         {
-            DCHECK_EQ(message_widget->direction(), TextChatMessage::Direction::OUTGOING);
-
             TextChatOutgoingMessage* outgoing_message_widget =
                 static_cast<TextChatOutgoingMessage*>(message_widget);
 
             stream << "[" << outgoing_message_widget->messageTime() << "] " << Qt::endl;
             stream << outgoing_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+        else
+        {
+            DCHECK_EQ(message_widget->direction(), TextChatMessage::Direction::STATUS);
+
+            TextChatStatusMessage* status_message_widget =
+                static_cast<TextChatStatusMessage*>(message_widget);
+
+            stream << status_message_widget->messageText() << Qt::endl;
             stream << Qt::endl;
         }
     }
