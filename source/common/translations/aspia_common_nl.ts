@@ -264,38 +264,38 @@
 <context>
     <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="61"/>
+        <location filename="../ui/text_chat_widget.cc" line="62"/>
         <source>Save chat...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="62"/>
+        <location filename="../ui/text_chat_widget.cc" line="63"/>
         <source>Clear chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="112"/>
+        <location filename="../ui/text_chat_widget.cc" line="116"/>
         <source>%1 is typing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="118"/>
+        <location filename="../ui/text_chat_widget.cc" line="122"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="125"/>
+        <location filename="../ui/text_chat_widget.cc" line="129"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="214"/>
-        <location filename="../ui/text_chat_widget.cc" line="267"/>
+        <location filename="../ui/text_chat_widget.cc" line="218"/>
+        <location filename="../ui/text_chat_widget.cc" line="271"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="215"/>
+        <location filename="../ui/text_chat_widget.cc" line="219"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -303,17 +303,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="256"/>
+        <location filename="../ui/text_chat_widget.cc" line="260"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="258"/>
+        <location filename="../ui/text_chat_widget.cc" line="262"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="268"/>
+        <location filename="../ui/text_chat_widget.cc" line="272"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

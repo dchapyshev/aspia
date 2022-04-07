@@ -286,12 +286,12 @@
 <context>
     <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="61"/>
+        <location filename="../ui/text_chat_widget.cc" line="62"/>
         <source>Save chat...</source>
         <translation>Сохранить чат...</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="62"/>
+        <location filename="../ui/text_chat_widget.cc" line="63"/>
         <source>Clear chat</source>
         <translation>Очистить чат</translation>
     </message>
@@ -300,7 +300,7 @@
         <translation type="vanished">Текстовый чат запущен (%1)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="112"/>
+        <location filename="../ui/text_chat_widget.cc" line="116"/>
         <source>%1 is typing...</source>
         <translation>%1 печатает...</translation>
     </message>
@@ -313,23 +313,23 @@
         <translation type="obsolete">Пользователь %1 завершил чат.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="118"/>
+        <location filename="../ui/text_chat_widget.cc" line="122"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Пользователь %1 вошел в чат (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="125"/>
+        <location filename="../ui/text_chat_widget.cc" line="129"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Пользователь %1 покинул чат (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="214"/>
-        <location filename="../ui/text_chat_widget.cc" line="267"/>
+        <location filename="../ui/text_chat_widget.cc" line="218"/>
+        <location filename="../ui/text_chat_widget.cc" line="271"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="215"/>
+        <location filename="../ui/text_chat_widget.cc" line="219"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Введенное сообщение слишком длинное. Максимальная длина сообщения %n символ.</numerusform>
@@ -338,17 +338,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="256"/>
+        <location filename="../ui/text_chat_widget.cc" line="260"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="258"/>
+        <location filename="../ui/text_chat_widget.cc" line="262"/>
         <source>TXT files (*.txt)</source>
         <translation>Файлы TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="268"/>
+        <location filename="../ui/text_chat_widget.cc" line="272"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
