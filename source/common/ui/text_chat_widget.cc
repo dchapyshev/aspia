@@ -48,6 +48,7 @@ TextChatWidget::TextChatWidget(QWidget* parent)
       host_name_(QHostInfo::localHostName().toStdString()),
       status_clear_timer_(new QTimer(this))
 {
+    LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
     ui->edit_message->installEventFilter(this);
     ui->list_messages->horizontalScrollBar()->installEventFilter(this);
@@ -81,7 +82,10 @@ TextChatWidget::TextChatWidget(QWidget* parent)
     ui->edit_message->setFocus();
 }
 
-TextChatWidget::~TextChatWidget() = default;
+TextChatWidget::~TextChatWidget()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void TextChatWidget::readMessage(const proto::TextChatMessage& message)
 {

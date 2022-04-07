@@ -311,8 +311,13 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
     else
     {
+        LOG(LS_INFO) << "No text chat clients";
+
         if (text_chat_widget_)
+        {
+            LOG(LS_INFO) << "Close text chat window";
             text_chat_widget_->close();
+        }
     }
 }
 
