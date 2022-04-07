@@ -175,7 +175,7 @@ bool WebmFileWriter::init()
     SystemTime time = SystemTime::now();
     std::ostringstream file_name;
 
-    file_name << name_.c_str() << '-'
+    file_name << base::utf8FromUtf16(name_.c_str()) << '-'
               << std::setfill('0')
               << std::setw(4) << time.year()
               << std::setw(2) << time.month()
@@ -190,7 +190,7 @@ bool WebmFileWriter::init()
               << ".webm";
 
     std::filesystem::path file_path(path_);
-    file_path.append(file_name.str());
+    file_path.append(base::utf16FromUtf8(file_name.str()));
 
     LOG(LS_INFO) << "New video file: " << file_path;
 
