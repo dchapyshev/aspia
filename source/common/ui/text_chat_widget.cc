@@ -166,9 +166,7 @@ void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 
 void TextChatWidget::closeEvent(QCloseEvent* event)
 {
-    onSendStatus(proto::TextChatStatus::STATUS_STOPPED);
     emit textChatClosed();
-
     QWidget::closeEvent(event);
 }
 

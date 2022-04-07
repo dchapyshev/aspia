@@ -289,13 +289,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="216"/>
-        <location filename="../ui/text_chat_widget.cc" line="269"/>
+        <location filename="../ui/text_chat_widget.cc" line="214"/>
+        <location filename="../ui/text_chat_widget.cc" line="267"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="217"/>
+        <location filename="../ui/text_chat_widget.cc" line="215"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -303,17 +303,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="258"/>
+        <location filename="../ui/text_chat_widget.cc" line="256"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="260"/>
+        <location filename="../ui/text_chat_widget.cc" line="258"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="270"/>
+        <location filename="../ui/text_chat_widget.cc" line="268"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
