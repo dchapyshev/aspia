@@ -180,8 +180,17 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     {
         ui.tree->clear();
 
+        bool has_desktop_manage = false;
+        bool has_desktop_view = false;
+
         for (const auto& client : clients)
         {
+            if (client.session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
+                has_desktop_manage = true;
+
+            if (client.session_type == proto::SESSION_TYPE_DESKTOP_VIEW)
+                has_desktop_view = true;
+
             SessionTreeItem* tree_item = new SessionTreeItem(client);
 
             tree_item->setTextAlignment(0, Qt::AlignLeft | Qt::AlignVCenter);
@@ -201,6 +210,10 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
             ui.tree->setItemWidget(tree_item, 1, stop_button);
         }
+
+        ui.button_lock_keyboard->setVisible(has_desktop_manage);
+        ui.button_lock_mouse->setVisible(has_desktop_manage);
+        ui.button_pause->setVisible(has_desktop_manage || has_desktop_view);
 
         ui.tree->resizeColumnToContents(1);
 
