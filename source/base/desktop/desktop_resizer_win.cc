@@ -103,7 +103,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
         memset(&candidate_mode, 0, sizeof(candidate_mode));
         candidate_mode.dmSize = sizeof(candidate_mode);
 
-        if (!EnumDisplaySettingsExW(device.DeviceName, i, &candidate_mode, EDS_ROTATEDMODE))
+        if (!EnumDisplaySettingsExW(device.DeviceName, i, &candidate_mode, 0))
             break;
 
         updateBestModeForResolution(current_mode, candidate_mode);
