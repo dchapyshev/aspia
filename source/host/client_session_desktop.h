@@ -70,6 +70,12 @@ protected:
 private:
     void readExtension(const proto::DesktopExtension& extension);
     void readConfig(const proto::DesktopConfig& config);
+    void readSelectScreenExtension(const std::string& data);
+    void readPreferredSizeExtension(const std::string& data);
+    void readPowerControlExtension(const std::string& data);
+    void readRemoteUpdateExtension(const std::string& data);
+    void readSystemInfoExtension(const std::string& data);
+    void readVideoRecordingExtension(const std::string& data);
 
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<base::ScaleReducer> scale_reducer_;

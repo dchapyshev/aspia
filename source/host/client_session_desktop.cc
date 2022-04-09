@@ -310,199 +310,27 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
 {
     if (extension.name() == common::kSelectScreenExtension)
     {
-        LOG(LS_INFO) << "Select screen request";
-
-        proto::Screen screen;
-
-        if (!screen.ParseFromString(extension.data()))
-        {
-            LOG(LS_ERROR) << "Unable to parse select screen extension data";
-            return;
-        }
-
-        desktop_session_proxy_->selectScreen(screen);
-        preferred_size_ = base::Size();
+        readSelectScreenExtension(extension.data());
     }
     else if (extension.name() == common::kPreferredSizeExtension)
     {
-        proto::PreferredSize preferred_size;
-
-        if (!preferred_size.ParseFromString(extension.data()))
-        {
-            LOG(LS_ERROR) << "Unable to parse preferred size extension data";
-            return;
-        }
-
-        static const int kMaxScreenSize = std::numeric_limits<int16_t>::max();
-
-        if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
-            preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
-        {
-            LOG(LS_ERROR) << "Invalid preferred size: "
-                          << preferred_size.width() << "x" << preferred_size.height();
-            return;
-        }
-
-        LOG(LS_INFO) << "Preferred size changed: "
-                     << preferred_size.width() << "x" << preferred_size.height();
-
-        preferred_size_.set(preferred_size.width(), preferred_size.height());
-        desktop_session_proxy_->captureScreen();
+        readPreferredSizeExtension(extension.data());
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
-        if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            LOG(LS_WARNING) << "Power management is only accessible from a desktop manage session";
-            return;
-        }
-
-        proto::PowerControl power_control;
-
-        if (!power_control.ParseFromString(extension.data()))
-        {
-            LOG(LS_ERROR) << "Unable to parse power control extension data";
-            return;
-        }
-
-        switch (power_control.action())
-        {
-            case proto::PowerControl::ACTION_SHUTDOWN:
-            {
-                LOG(LS_INFO) << "SHUTDOWN command";
-
-                if (!base::PowerController::shutdown())
-                {
-                    LOG(LS_WARNING) << "Unable to shutdown";
-                }
-            }
-            break;
-
-            case proto::PowerControl::ACTION_REBOOT:
-            {
-                LOG(LS_INFO) << "REBOOT command";
-
-                if (!base::PowerController::reboot())
-                {
-                    LOG(LS_WARNING) << "Unable to reboot";
-                }
-            }
-            break;
-
-            case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
-            {
-                LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
-
-                if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
-                {
-                    LOG(LS_INFO) << "Service added successfully to start in safe mode";
-
-                    if (base::win::SafeModeUtil::setSafeMode(true))
-                    {
-                        LOG(LS_INFO) << "Safe Mode boot enabled successfully";
-
-                        if (!base::PowerController::reboot())
-                        {
-                            LOG(LS_WARNING) << "Unable to reboot";
-                        }
-                    }
-                    else
-                    {
-                        LOG(LS_WARNING) << "Failed to enable boot in Safe Mode";
-                    }
-                }
-                else
-                {
-                    LOG(LS_WARNING) << "Failed to add service to start in safe mode";
-                }
-            }
-            break;
-
-            case proto::PowerControl::ACTION_LOGOFF:
-            {
-                LOG(LS_INFO) << "LOGOFF command";
-                desktop_session_proxy_->control(proto::internal::DesktopControl::LOGOFF);
-            }
-            break;
-
-            case proto::PowerControl::ACTION_LOCK:
-            {
-                LOG(LS_INFO) << "LOCK command";
-                desktop_session_proxy_->control(proto::internal::DesktopControl::LOCK);
-            }
-            break;
-
-            default:
-                LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
-                break;
-        }
+        readPowerControlExtension(extension.data());
     }
     else if (extension.name() == common::kRemoteUpdateExtension)
     {
-        LOG(LS_INFO) << "Remote update requested";
-
-        if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            launchUpdater(sessionId());
-        }
-        else
-        {
-            LOG(LS_WARNING) << "Update can only be launched from a desktop manage session";
-        }
+        readRemoteUpdateExtension(extension.data());
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {
-        proto::system_info::SystemInfoRequest* system_info_request =
-            messageFromArena<proto::system_info::SystemInfoRequest>();
-
-        if (!extension.data().empty())
-        {
-            if (!system_info_request->ParseFromString(extension.data()))
-            {
-                LOG(LS_WARNING) << "Unable to parse system info request";
-            }
-        }
-
-        proto::system_info::SystemInfo* system_info =
-            messageFromArena<proto::system_info::SystemInfo>();
-
-        createSystemInfo(*system_info_request, system_info);
-
-        proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
-        proto::DesktopExtension* desktop_extension = outgoing_message->mutable_extension();
-        desktop_extension->set_name(common::kSystemInfoExtension);
-        desktop_extension->set_data(system_info->SerializeAsString());
-
-        sendMessage(base::serialize(*outgoing_message));
+        readSystemInfoExtension(extension.data());
     }
     else if (extension.name() == common::kVideoRecordingExtension)
     {
-        proto::VideoRecording video_recording;
-
-        if (!video_recording.ParseFromString(extension.data()))
-        {
-            LOG(LS_WARNING) << "Unable to parse video recording extension data";
-            return;
-        }
-
-        bool started;
-
-        switch (video_recording.action())
-        {
-            case proto::VideoRecording::ACTION_STARTED:
-                started = true;
-            break;
-
-            case proto::VideoRecording::ACTION_STOPPED:
-                started = false;
-                break;
-
-            default:
-                LOG(LS_WARNING) << "Unknown video recording action: " << video_recording.action();
-                return;
-        }
-
-        delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
+        readVideoRecordingExtension(extension.data());
     }
     else
     {
@@ -588,6 +416,208 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     LOG(LS_INFO) << "Cursor position: " << desktop_session_config_.cursor_position;
 
     delegate_->onClientSessionConfigured();
+}
+
+void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
+{
+    LOG(LS_INFO) << "Select screen request";
+
+    proto::Screen screen;
+
+    if (!screen.ParseFromString(data))
+    {
+        LOG(LS_ERROR) << "Unable to parse select screen extension data";
+        return;
+    }
+
+    desktop_session_proxy_->selectScreen(screen);
+    preferred_size_ = base::Size();
+}
+
+void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
+{
+    proto::PreferredSize preferred_size;
+
+    if (!preferred_size.ParseFromString(data))
+    {
+        LOG(LS_ERROR) << "Unable to parse preferred size extension data";
+        return;
+    }
+
+    static const int kMaxScreenSize = std::numeric_limits<int16_t>::max();
+
+    if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
+        preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
+    {
+        LOG(LS_ERROR) << "Invalid preferred size: "
+                      << preferred_size.width() << "x" << preferred_size.height();
+        return;
+    }
+
+    LOG(LS_INFO) << "Preferred size changed: "
+                 << preferred_size.width() << "x" << preferred_size.height();
+
+    preferred_size_.set(preferred_size.width(), preferred_size.height());
+    desktop_session_proxy_->captureScreen();
+}
+
+void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
+{
+    if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        LOG(LS_WARNING) << "Power management is only accessible from a desktop manage session";
+        return;
+    }
+
+    proto::PowerControl power_control;
+
+    if (!power_control.ParseFromString(data))
+    {
+        LOG(LS_ERROR) << "Unable to parse power control extension data";
+        return;
+    }
+
+    switch (power_control.action())
+    {
+        case proto::PowerControl::ACTION_SHUTDOWN:
+        {
+            LOG(LS_INFO) << "SHUTDOWN command";
+
+            if (!base::PowerController::shutdown())
+            {
+                LOG(LS_WARNING) << "Unable to shutdown";
+            }
+        }
+        break;
+
+        case proto::PowerControl::ACTION_REBOOT:
+        {
+            LOG(LS_INFO) << "REBOOT command";
+
+            if (!base::PowerController::reboot())
+            {
+                LOG(LS_WARNING) << "Unable to reboot";
+            }
+        }
+        break;
+
+        case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
+        {
+            LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
+
+            if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
+            {
+                LOG(LS_INFO) << "Service added successfully to start in safe mode";
+
+                if (base::win::SafeModeUtil::setSafeMode(true))
+                {
+                    LOG(LS_INFO) << "Safe Mode boot enabled successfully";
+
+                    if (!base::PowerController::reboot())
+                    {
+                        LOG(LS_WARNING) << "Unable to reboot";
+                    }
+                }
+                else
+                {
+                    LOG(LS_WARNING) << "Failed to enable boot in Safe Mode";
+                }
+            }
+            else
+            {
+                LOG(LS_WARNING) << "Failed to add service to start in safe mode";
+            }
+        }
+        break;
+
+        case proto::PowerControl::ACTION_LOGOFF:
+        {
+            LOG(LS_INFO) << "LOGOFF command";
+            desktop_session_proxy_->control(proto::internal::DesktopControl::LOGOFF);
+        }
+        break;
+
+        case proto::PowerControl::ACTION_LOCK:
+        {
+            LOG(LS_INFO) << "LOCK command";
+            desktop_session_proxy_->control(proto::internal::DesktopControl::LOCK);
+        }
+        break;
+
+        default:
+            LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
+            break;
+    }
+}
+
+void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
+{
+    LOG(LS_INFO) << "Remote update requested";
+
+    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        launchUpdater(sessionId());
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Update can only be launched from a desktop manage session";
+    }
+}
+
+void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
+{
+    proto::system_info::SystemInfoRequest* system_info_request =
+        messageFromArena<proto::system_info::SystemInfoRequest>();
+
+    if (!data.empty())
+    {
+        if (!system_info_request->ParseFromString(data))
+        {
+            LOG(LS_WARNING) << "Unable to parse system info request";
+        }
+    }
+
+    proto::system_info::SystemInfo* system_info =
+        messageFromArena<proto::system_info::SystemInfo>();
+
+    createSystemInfo(*system_info_request, system_info);
+
+    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
+    proto::DesktopExtension* desktop_extension = outgoing_message->mutable_extension();
+    desktop_extension->set_name(common::kSystemInfoExtension);
+    desktop_extension->set_data(system_info->SerializeAsString());
+
+    sendMessage(base::serialize(*outgoing_message));
+}
+
+void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
+{
+    proto::VideoRecording video_recording;
+
+    if (!video_recording.ParseFromString(data))
+    {
+        LOG(LS_WARNING) << "Unable to parse video recording extension data";
+        return;
+    }
+
+    bool started;
+
+    switch (video_recording.action())
+    {
+        case proto::VideoRecording::ACTION_STARTED:
+            started = true;
+        break;
+
+        case proto::VideoRecording::ACTION_STOPPED:
+            started = false;
+            break;
+
+        default:
+            LOG(LS_WARNING) << "Unknown video recording action: " << video_recording.action();
+            return;
+    }
+
+    delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
 }
 
 } // namespace host
