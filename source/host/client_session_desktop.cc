@@ -182,8 +182,10 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 {
     proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
 
-    if (frame && video_encoder_ && scale_reducer_)
+    if (frame && video_encoder_)
     {
+        DCHECK(scale_reducer_);
+
         if (source_size_ != frame->size())
         {
             // Every time we change the resolution, we have to reset the preferred size.

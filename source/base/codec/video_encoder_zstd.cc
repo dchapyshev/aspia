@@ -116,6 +116,8 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 
     if (packet->has_format())
     {
+        LOG(LS_INFO) << "Has packet format";
+
         serializePixelFormat(target_format_, packet->mutable_format()->mutable_pixel_format());
         updated_region_ = Region(Rect::makeSize(frame->size()));
     }
@@ -126,6 +128,8 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 
     if (!translator_)
     {
+        LOG(LS_INFO) << "Pixel translator not created yet";
+
         translator_ = PixelTranslator::create(PixelFormat::ARGB(), target_format_);
         if (!translator_)
         {
@@ -145,6 +149,9 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 
     if (translate_buffer_size_ < data_size)
     {
+        LOG(LS_INFO) << "Translate buffer too small. Resize from " << translate_buffer_size_
+                     << " to " << data_size;
+
         translate_buffer_.reset(static_cast<uint8_t*>(base::alignedAlloc(data_size, 32)));
         translate_buffer_size_ = data_size;
     }
