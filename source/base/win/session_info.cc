@@ -89,6 +89,8 @@ const char* SessionInfo::connectStateToString(ConnectState connect_state)
             return "DOWN";
         case ConnectState::INIT:
             return "INIT";
+        default:
+            return "UNKNOWN";
     }
 }
 
