@@ -19,21 +19,17 @@
 #ifndef HOST_DESKTOP_SESSION_IPC_H
 #define HOST_DESKTOP_SESSION_IPC_H
 
-#include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session.h"
 
 namespace host {
 
 class DesktopSessionIpc
-    : public base::ProtobufArena,
-      public DesktopSession,
+    : public DesktopSession,
       public base::IpcChannel::Listener
 {
 public:
-    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
-                      std::shared_ptr<base::TaskRunner> task_runner,
-                      Delegate* delegate);
+    DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel, Delegate* delegate);
     ~DesktopSessionIpc() override;
 
     // DesktopSession implementation.
@@ -70,6 +66,9 @@ private:
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
     Delegate* delegate_;
+
+    std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
+    std::unique_ptr<proto::internal::DesktopToService> incoming_message_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionIpc);
 };

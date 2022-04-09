@@ -805,80 +805,80 @@
     <name>host::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="78"/>
-        <location filename="../main_window.cc" line="442"/>
-        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="441"/>
+        <location filename="../main_window.cc" line="600"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="583"/>
+        <location filename="../main_window.cc" line="153"/>
+        <location filename="../main_window.cc" line="582"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="333"/>
+        <location filename="../main_window.cc" line="332"/>
         <source>Not available</source>
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="433"/>
+        <location filename="../main_window.cc" line="432"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="701"/>
+        <location filename="../main_window.cc" line="700"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="383"/>
-        <location filename="../main_window.cc" line="686"/>
+        <location filename="../main_window.cc" line="382"/>
+        <location filename="../main_window.cc" line="685"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="394"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="691"/>
+        <location filename="../main_window.cc" line="690"/>
         <source>Connecting to a router...</source>
         <translation>正在连接到路由器...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="391"/>
+        <location filename="../main_window.cc" line="390"/>
         <source>Connected to a router %1</source>
         <translation>已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="696"/>
+        <location filename="../main_window.cc" line="695"/>
         <source>Connected to a router</source>
         <translation>已连接到路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="387"/>
+        <location filename="../main_window.cc" line="386"/>
         <source>Connecting to a router %1...</source>
         <translation>正在连接到路由器 %1 ...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="438"/>
+        <location filename="../main_window.cc" line="437"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="588"/>
+        <location filename="../main_window.cc" line="587"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="616"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="618"/>
+        <location filename="../main_window.cc" line="617"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
     </message>

@@ -19,7 +19,6 @@
 #ifndef HOST_ROUTER_CONTROLLER_H
 #define HOST_ROUTER_CONTROLLER_H
 
-#include "base/protobuf_arena.h"
 #include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
 #include "base/peer/host_id.h"
@@ -33,8 +32,7 @@ class ClientAuthenticator;
 namespace host {
 
 class RouterController
-    : public base::ProtobufArena,
-      public base::NetworkChannel::Listener,
+    : public base::NetworkChannel::Listener,
       public base::RelayPeerManager::Delegate
 {
 public:

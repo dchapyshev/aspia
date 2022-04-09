@@ -19,7 +19,6 @@
 #ifndef HOST_USER_SESSION_AGENT_H
 #define HOST_USER_SESSION_AGENT_H
 
-#include "base/protobuf_arena.h"
 #include "base/ipc/ipc_channel.h"
 #include "proto/host_internal.pb.h"
 
@@ -28,9 +27,7 @@ namespace host {
 class UserSessionAgentProxy;
 class UserSessionWindowProxy;
 
-class UserSessionAgent
-    : public base::ProtobufArena,
-      public base::IpcChannel::Listener
+class UserSessionAgent : public base::IpcChannel::Listener
 {
 public:
     enum class Status
@@ -57,8 +54,7 @@ public:
 
     using ClientList = std::vector<Client>;
 
-    UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
-                     std::shared_ptr<base::TaskRunner> task_runner);
+    explicit UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy);
     ~UserSessionAgent() override;
 
     void start();
@@ -82,6 +78,9 @@ private:
 
     std::shared_ptr<UserSessionWindowProxy> window_proxy_;
     std::unique_ptr<base::IpcChannel> ipc_channel_;
+
+    proto::internal::ServiceToUi incoming_message_;
+    proto::internal::UiToService outgoing_message_;
 
     ClientList clients_;
 

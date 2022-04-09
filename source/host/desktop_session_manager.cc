@@ -154,7 +154,7 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
         task_runner_->deleteSoon(std::move(server_));
     }
 
-    session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), task_runner_, this);
+    session_ = std::make_unique<DesktopSessionIpc>(std::move(channel), this);
 
     setState(FROM_HERE, State::ATTACHED);
     session_proxy_->attachAndStart(session_.get());

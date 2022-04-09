@@ -19,7 +19,6 @@
 #ifndef HOST_USER_SESSION_H
 #define HOST_USER_SESSION_H
 
-#include "base/protobuf_arena.h"
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"
@@ -39,8 +38,7 @@ class ScopedTaskRunner;
 namespace host {
 
 class UserSession
-    : public base::ProtobufArena,
-      public base::IpcChannel::Listener,
+    : public base::IpcChannel::Listener,
       public DesktopSession::Delegate,
       public UnconfirmedClientSession::Delegate,
       public ClientSession::Delegate
@@ -174,6 +172,9 @@ private:
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
 
     Delegate* delegate_ = nullptr;
+
+    proto::internal::UiToService incoming_message_;
+    proto::internal::ServiceToUi outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(UserSession);
 };

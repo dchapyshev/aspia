@@ -24,10 +24,8 @@
 
 namespace host {
 
-UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy,
-                                   std::shared_ptr<base::TaskRunner> task_runner)
-    : base::ProtobufArena(std::move(task_runner)),
-      window_proxy_(std::move(window_proxy))
+UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy)
+    : window_proxy_(std::move(window_proxy))
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(window_proxy_);
@@ -76,36 +74,35 @@ void UserSessionAgent::onDisconnected()
 
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::internal::ServiceToUi* incoming_message =
-        messageFromArena<proto::internal::ServiceToUi>();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from service";
         return;
     }
 
-    if (incoming_message->has_connect_confirmation_request())
+    if (incoming_message_.has_connect_confirmation_request())
     {
         LOG(LS_INFO) << "Connect confirmation request received";
 
         window_proxy_->onConnectConfirmationRequest(
-            incoming_message->connect_confirmation_request());
+            incoming_message_.connect_confirmation_request());
     }
-    else if (incoming_message->has_connect_event())
+    else if (incoming_message_.has_connect_event())
     {
         LOG(LS_INFO) << "Connect event received";
 
-        clients_.emplace_back(incoming_message->connect_event());
+        clients_.emplace_back(incoming_message_.connect_event());
         window_proxy_->onClientListChanged(clients_);
     }
-    else if (incoming_message->has_disconnect_event())
+    else if (incoming_message_.has_disconnect_event())
     {
         LOG(LS_INFO) << "Disconnect event received";
 
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
-            if (it->id == incoming_message->disconnect_event().id())
+            if (it->id == incoming_message_.disconnect_event().id())
             {
                 clients_.erase(it);
                 break;
@@ -114,26 +111,26 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 
         window_proxy_->onClientListChanged(clients_);
     }
-    else if (incoming_message->has_credentials())
+    else if (incoming_message_.has_credentials())
     {
         LOG(LS_INFO) << "Credentials received";
 
-        window_proxy_->onCredentialsChanged(incoming_message->credentials());
+        window_proxy_->onCredentialsChanged(incoming_message_.credentials());
     }
-    else if (incoming_message->has_router_state())
+    else if (incoming_message_.has_router_state())
     {
         LOG(LS_INFO) << "Router state received";
 
-        window_proxy_->onRouterStateChanged(incoming_message->router_state());
+        window_proxy_->onRouterStateChanged(incoming_message_.router_state());
     }
-    else if (incoming_message->has_text_chat())
+    else if (incoming_message_.has_text_chat())
     {
-        window_proxy_->onTextChat(incoming_message->text_chat());
+        window_proxy_->onTextChat(incoming_message_.text_chat());
     }
-    else if (incoming_message->has_video_recording_state())
+    else if (incoming_message_.has_video_recording_state())
     {
         const proto::internal::VideoRecordingState& video_recording_state =
-            incoming_message->video_recording_state();
+            incoming_message_.video_recording_state();
 
         window_proxy_->onVideoRecordingStateChanged(
             video_recording_state.computer_name(),
@@ -150,102 +147,94 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
 {
     LOG(LS_INFO) << "Update credentials request: " << request_type;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    outgoing_message->mutable_credentials_request()->set_type(request_type);
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_credentials_request()->set_type(request_type);
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::killClient(uint32_t id)
 {
     LOG(LS_INFO) << "Kill client request: " << id;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    proto::internal::ServiceControl* control = outgoing_message->mutable_control();
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
     control->set_code(proto::internal::ServiceControl::CODE_KILL);
     control->set_unsigned_integer(id);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
 {
     LOG(LS_INFO) << "Connect confirmation (id: " << id << " accept: " << accept << ")";
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
+    outgoing_message_.Clear();
     proto::internal::ConnectConfirmation* confirmation =
-        outgoing_message->mutable_connect_confirmation();
+        outgoing_message_.mutable_connect_confirmation();
     confirmation->set_id(id);
     confirmation->set_accept_connection(accept);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::setVoiceChat(bool enable)
 {
     LOG(LS_INFO) << "Voice chat: " << enable;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    proto::internal::ServiceControl* control = outgoing_message->mutable_control();
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
     control->set_code(proto::internal::ServiceControl::CODE_VOICE_CHAT);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::setMouseLock(bool enable)
 {
     LOG(LS_INFO) << "Mouse lock: " << enable;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    proto::internal::ServiceControl* control = outgoing_message->mutable_control();
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::setKeyboardLock(bool enable)
 {
     LOG(LS_INFO) << "Keyboard lock: " << enable;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    proto::internal::ServiceControl* control = outgoing_message->mutable_control();
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::setPause(bool enable)
 {
     LOG(LS_INFO) << "Pause: " << enable;
 
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    proto::internal::ServiceControl* control = outgoing_message->mutable_control();
+    outgoing_message_.Clear();
+    proto::internal::ServiceControl* control = outgoing_message_.mutable_control();
 
     control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
 {
-    proto::internal::UiToService* outgoing_message =
-        messageFromArena<proto::internal::UiToService>();
-    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

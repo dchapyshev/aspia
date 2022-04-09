@@ -130,8 +130,7 @@ void MainWindow::connectToService()
     {
         agent_proxy_ = std::make_unique<UserSessionAgentProxy>(
             qt_base::Application::ioTaskRunner(),
-            std::make_unique<UserSessionAgent>(
-                window_proxy_, qt_base::Application::ioTaskRunner()));
+            std::make_unique<UserSessionAgent>(window_proxy_));
 
         LOG(LS_INFO) << "Connecting to service";
         agent_proxy_->start();

@@ -62,8 +62,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
                          std::unique_ptr<base::IpcChannel> channel,
                          Delegate* delegate)
-    : base::ProtobufArena(task_runner),
-      task_runner_(task_runner),
+    : task_runner_(task_runner),
       scoped_task_runner_(std::make_unique<base::ScopedTaskRunner>(task_runner)),
       channel_(std::move(channel)),
       ui_attach_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
@@ -363,10 +362,9 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
         {
             LOG(LS_INFO) << "New unconfirmed client session";
 
-            proto::internal::ServiceToUi* outgoing_message =
-                messageFromArena<proto::internal::ServiceToUi>();
+            outgoing_message_.Clear();
             proto::internal::ConnectConfirmationRequest* request =
-                outgoing_message->mutable_connect_confirmation_request();
+                outgoing_message_.mutable_connect_confirmation_request();
 
             request->set_id(client_session->id());
             request->set_session_type(client_session->sessionType());
@@ -383,7 +381,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
             if (channel_)
             {
                 LOG(LS_INFO) << "Sending connect request to UI process";
-                channel_->send(base::serialize(*outgoing_message));
+                channel_->send(base::serialize(outgoing_message_));
             }
             else
             {
@@ -552,19 +550,18 @@ void UserSession::onDisconnected()
 
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::internal::UiToService* incoming_message =
-        messageFromArena<proto::internal::UiToService>();
+    incoming_message_.Clear();
 
-    if (!base::parse(buffer, incoming_message))
+    if (!base::parse(buffer, &incoming_message_))
     {
         LOG(LS_ERROR) << "Invalid message from UI";
         return;
     }
 
-    if (incoming_message->has_credentials_request())
+    if (incoming_message_.has_credentials_request())
     {
         proto::internal::CredentialsRequest::Type type =
-            incoming_message->credentials_request().type();
+            incoming_message_.credentials_request().type();
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
@@ -579,19 +576,19 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
         sendCredentials(FROM_HERE);
     }
-    else if (incoming_message->has_connect_confirmation())
+    else if (incoming_message_.has_connect_confirmation())
     {
         proto::internal::ConnectConfirmation connect_confirmation =
-            incoming_message->connect_confirmation();
+            incoming_message_.connect_confirmation();
 
         if (connect_confirmation.accept_connection())
             onUnconfirmedSessionAccept(connect_confirmation.id());
         else
             onUnconfirmedSessionReject(connect_confirmation.id());
     }
-    else if (incoming_message->has_control())
+    else if (incoming_message_.has_control())
     {
-        const proto::internal::ServiceControl& control = incoming_message->control();
+        const proto::internal::ServiceControl& control = incoming_message_.control();
 
         switch (control.code())
         {
@@ -660,13 +657,13 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             }
         }
     }
-    else if (incoming_message->has_text_chat())
+    else if (incoming_message_.has_text_chat())
     {
         for (const auto& client : text_chat_clients_)
         {
             ClientSessionTextChat* text_chat_session =
                 static_cast<ClientSessionTextChat*>(client.get());
-            text_chat_session->sendTextChat(incoming_message->text_chat());
+            text_chat_session->sendTextChat(incoming_message_.text_chat());
         }
     }
     else
@@ -892,16 +889,15 @@ void UserSession::onClientSessionFinished()
 void UserSession::onClientSessionVideoRecording(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
+    outgoing_message_.Clear();
 
     proto::internal::VideoRecordingState* video_recording_state =
-        outgoing_message->mutable_video_recording_state();
+        outgoing_message_.mutable_video_recording_state();
     video_recording_state->set_computer_name(computer_name);
     video_recording_state->set_user_name(user_name);
     video_recording_state->set_started(started);
 
-    channel_->send(base::serialize(*outgoing_message));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat)
@@ -916,10 +912,9 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
         }
     }
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    channel_->send(base::serialize(outgoing_message_));
 
 }
 
@@ -1005,15 +1000,14 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
 
     LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id();
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    proto::internal::ConnectEvent* event = outgoing_message->mutable_connect_event();
+    outgoing_message_.Clear();
+    proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
 
     event->set_computer_name(client_session.computerName());
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.id());
 
-    channel_->send(base::serialize(*outgoing_message));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::sendDisconnectEvent(uint32_t session_id)
@@ -1026,10 +1020,9 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 
     LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id;
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->mutable_disconnect_event()->set_id(session_id);
-    channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_disconnect_event()->set_id(session_id);
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::updateCredentials(const base::Location& location)
@@ -1083,14 +1076,13 @@ void UserSession::sendCredentials(const base::Location& location)
         return;
     }
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
+    outgoing_message_.Clear();
 
-    proto::internal::Credentials* credentials = outgoing_message->mutable_credentials();
+    proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
     credentials->set_host_id(host_id_);
     credentials->set_password(password_);
 
-    channel_->send(base::serialize(*outgoing_message));
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::killClientSession(uint32_t id)
@@ -1128,10 +1120,9 @@ void UserSession::sendRouterState(const base::Location& location)
     LOG(LS_INFO) << "Router: " << router_state_.host_name() << ":" << router_state_.host_port();
     LOG(LS_INFO) << "New state: " << routerStateToString(router_state_.state());
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->mutable_router_state()->CopyFrom(router_state_);
-    channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_router_state()->CopyFrom(router_state_);
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::sendHostIdRequest(const base::Location& location)
@@ -1248,10 +1239,9 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
         text_chat_session->sendTextChat(text_chat);
     }
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::onTextChatSessionFinished(uint32_t id)
@@ -1283,10 +1273,9 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
         }
     }
 
-    proto::internal::ServiceToUi* outgoing_message =
-        messageFromArena<proto::internal::ServiceToUi>();
-    outgoing_message->mutable_text_chat()->CopyFrom(text_chat);
-    channel_->send(base::serialize(*outgoing_message));
+    outgoing_message_.Clear();
+    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    channel_->send(base::serialize(outgoing_message_));
 }
 
 } // namespace host

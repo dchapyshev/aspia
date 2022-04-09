@@ -48,8 +48,6 @@ list(APPEND SOURCE_BASE
     power_controller.h
     process_handle.cc
     process_handle.h
-    protobuf_arena.cc
-    protobuf_arena.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     scoped_logging.h

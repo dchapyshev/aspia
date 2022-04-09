@@ -20,7 +20,6 @@
 #define HOST_CLIENT_SESSION_DESKTOP_H
 
 #include "base/macros_magic.h"
-#include "base/protobuf_arena.h"
 #include "base/desktop/geometry.h"
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
@@ -40,8 +39,7 @@ namespace host {
 class DesktopSessionProxy;
 
 class ClientSessionDesktop
-    : public base::ProtobufArena,
-      public ClientSession
+    : public ClientSession
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type,
@@ -85,6 +83,9 @@ private:
     DesktopSession::Config desktop_session_config_;
     base::Size source_size_;
     base::Size preferred_size_;
+
+    std::unique_ptr<proto::ClientToHost> incoming_message_;
+    std::unique_ptr<proto::HostToClient> outgoing_message_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktop);
 };

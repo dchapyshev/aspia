@@ -56,14 +56,12 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::NetworkChannel> channel,
-                                           std::shared_ptr<base::TaskRunner> task_runner)
-    : base::ProtobufArena(std::move(task_runner)),
-      ClientSession(session_type, std::move(channel))
+                                           std::shared_ptr<base::TaskRunner> /*task_runner */)
+    : ClientSession(session_type, std::move(channel)),
+      incoming_message_(std::make_unique<proto::ClientToHost>()),
+      outgoing_message_(std::make_unique<proto::HostToClient>())
 {
     LOG(LS_INFO) << "Ctor";
-
-    setArenaStartSize(1 * 1024 * 1024); // 1 MB
-    setArenaMaxSize(3 * 1024 * 1024); // 3 MB
 }
 
 ClientSessionDesktop::~ClientSessionDesktop()
@@ -80,15 +78,15 @@ void ClientSessionDesktop::setDesktopSessionProxy(
 
 void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 {
-    proto::ClientToHost* incoming_message = messageFromArena<proto::ClientToHost>();
+    incoming_message_->Clear();
 
-    if (!base::parse(buffer, incoming_message))
+    if (!base::parse(buffer, incoming_message_.get()))
     {
         LOG(LS_ERROR) << "Invalid message from client";
         return;
     }
 
-    if (incoming_message->has_mouse_event())
+    if (incoming_message_->has_mouse_event())
     {
         if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
             return;
@@ -96,7 +94,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
         if (!scale_reducer_)
             return;
 
-        const proto::MouseEvent& mouse_event = incoming_message->mouse_event();
+        const proto::MouseEvent& mouse_event = incoming_message_->mouse_event();
 
         int pos_x = static_cast<int>(
             static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
@@ -110,28 +108,28 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 
         desktop_session_proxy_->injectMouseEvent(out_mouse_event);
     }
-    else if (incoming_message->has_key_event())
+    else if (incoming_message_->has_key_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-            desktop_session_proxy_->injectKeyEvent(incoming_message->key_event());
+            desktop_session_proxy_->injectKeyEvent(incoming_message_->key_event());
     }
-    else if (incoming_message->has_text_event())
+    else if (incoming_message_->has_text_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-            desktop_session_proxy_->injectTextEvent(incoming_message->text_event());
+            desktop_session_proxy_->injectTextEvent(incoming_message_->text_event());
     }
-    else if (incoming_message->has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
         if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-            desktop_session_proxy_->injectClipboardEvent(incoming_message->clipboard_event());
+            desktop_session_proxy_->injectClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incoming_message->has_extension())
+    else if (incoming_message_->has_extension())
     {
-        readExtension(incoming_message->extension());
+        readExtension(incoming_message_->extension());
     }
-    else if (incoming_message->has_config())
+    else if (incoming_message_->has_config())
     {
-        readConfig(incoming_message->config());
+        readConfig(incoming_message_->config());
     }
     else
     {
@@ -161,8 +159,7 @@ void ClientSessionDesktop::onStarted()
     }
 
     // Create a configuration request.
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
-    proto::DesktopConfigRequest* request = outgoing_message->mutable_config_request();
+    proto::DesktopConfigRequest* request = outgoing_message_->mutable_config_request();
 
     // Add supported extensions and video encodings.
     request->set_extensions(extensions);
@@ -175,12 +172,12 @@ void ClientSessionDesktop::onStarted()
     LOG(LS_INFO) << "Supported audio encodings: " << request->audio_encodings();
 
     // Send the request.
-    sendMessage(base::serialize(*outgoing_message));
+    sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
+    outgoing_message_->Clear();
 
     if (frame && video_encoder_)
     {
@@ -213,7 +210,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             return;
         }
 
-        proto::VideoPacket* packet = outgoing_message->mutable_video_packet();
+        proto::VideoPacket* packet = outgoing_message_->mutable_video_packet();
 
         // Encode the frame into a video packet.
         video_encoder_->encode(scaled_frame, packet);
@@ -242,12 +239,12 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
     if (cursor && cursor_encoder_)
     {
-        if (!cursor_encoder_->encode(*cursor, outgoing_message->mutable_cursor_shape()))
-            outgoing_message->clear_cursor_shape();
+        if (!cursor_encoder_->encode(*cursor, outgoing_message_->mutable_cursor_shape()))
+            outgoing_message_->clear_cursor_shape();
     }
 
-    if (outgoing_message->has_video_packet() || outgoing_message->has_cursor_shape())
-        sendMessage(base::serialize(*outgoing_message));
+    if (outgoing_message_->has_video_packet() || outgoing_message_->has_cursor_shape())
+        sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
@@ -255,12 +252,12 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     if (!audio_encoder_)
         return;
 
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
+    outgoing_message_->Clear();
 
-    if (!audio_encoder_->encode(audio_packet, outgoing_message->mutable_audio_packet()))
+    if (!audio_encoder_->encode(audio_packet, outgoing_message_->mutable_audio_packet()))
         return;
 
-    sendMessage(base::serialize(*outgoing_message));
+    sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
@@ -268,37 +265,37 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     if (!desktop_session_config_.cursor_position)
         return;
 
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
+    outgoing_message_->Clear();
 
     int pos_x = static_cast<int>(
         static_cast<double>(cursor_position.x()) * scale_reducer_->scaleFactorX() / 100.0);
     int pos_y = static_cast<int>(
         static_cast<double>(cursor_position.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-    proto::CursorPosition* position = outgoing_message->mutable_cursor_position();
+    proto::CursorPosition* position = outgoing_message_->mutable_cursor_position();
     position->set_x(pos_x);
     position->set_y(pos_y);
 
-    sendMessage(base::serialize(*outgoing_message));
+    sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
-    proto::DesktopExtension* extension = outgoing_message->mutable_extension();
+    outgoing_message_->Clear();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(base::serialize(*outgoing_message));
+    sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
-        outgoing_message->mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(base::serialize(*outgoing_message));
+        outgoing_message_->Clear();
+        outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(base::serialize(*outgoing_message_));
     }
     else
     {
@@ -566,28 +563,25 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
 
 void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 {
-    proto::system_info::SystemInfoRequest* system_info_request =
-        messageFromArena<proto::system_info::SystemInfoRequest>();
+    proto::system_info::SystemInfoRequest system_info_request;
 
     if (!data.empty())
     {
-        if (!system_info_request->ParseFromString(data))
+        if (!system_info_request.ParseFromString(data))
         {
             LOG(LS_WARNING) << "Unable to parse system info request";
         }
     }
 
-    proto::system_info::SystemInfo* system_info =
-        messageFromArena<proto::system_info::SystemInfo>();
+    proto::system_info::SystemInfo system_info;
+    createSystemInfo(system_info_request, &system_info);
 
-    createSystemInfo(*system_info_request, system_info);
-
-    proto::HostToClient* outgoing_message = messageFromArena<proto::HostToClient>();
-    proto::DesktopExtension* desktop_extension = outgoing_message->mutable_extension();
+    outgoing_message_->Clear();
+    proto::DesktopExtension* desktop_extension = outgoing_message_->mutable_extension();
     desktop_extension->set_name(common::kSystemInfoExtension);
-    desktop_extension->set_data(system_info->SerializeAsString());
+    desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendMessage(base::serialize(*outgoing_message));
+    sendMessage(base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
