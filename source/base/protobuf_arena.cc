@@ -27,6 +27,8 @@ ProtobufArena::ProtobufArena(std::shared_ptr<TaskRunner> task_runner)
     : cleanup_timer_(std::make_unique<WaitableTimer>(
           WaitableTimer::Type::REPEATED, std::move(task_runner)))
 {
+    LOG(LS_INFO) << "Ctor";
+
     cleanup_timer_->start(std::chrono::seconds(60), [this]()
     {
         if (arena_.SpaceUsed() >= arena_start_block_size_)
@@ -36,7 +38,10 @@ ProtobufArena::ProtobufArena(std::shared_ptr<TaskRunner> task_runner)
     reset();
 }
 
-ProtobufArena::~ProtobufArena() = default;
+ProtobufArena::~ProtobufArena()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void ProtobufArena::setArenaStartSize(size_t size)
 {
@@ -50,6 +55,9 @@ void ProtobufArena::setArenaMaxSize(size_t size)
 
 void ProtobufArena::reset()
 {
+    LOG(LS_INFO) << "Reset arena (start size: " << arena_start_block_size_
+                 << " max size: " << arena_max_block_size_ << ")";
+
     google::protobuf::ArenaOptions options;
     options.start_block_size = arena_start_block_size_;
     options.max_block_size = arena_max_block_size_;
