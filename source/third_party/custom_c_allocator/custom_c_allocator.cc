@@ -20,14 +20,14 @@
 
 #include <cstdlib>
 
-#if defined(USE_TBB_ALLOCATOR)
-#include <tbb/scalable_allocator.h>
+#if defined(USE_MIMALLOC)
+#include <mimalloc.h>
 #endif
 
 void* custom_c_malloc(size_t size)
 {
-#if defined(USE_TBB_ALLOCATOR)
-    return scalable_malloc(size);
+#if defined(USE_MIMALLOC)
+    return mi_malloc(size);
 #else
     return malloc(size);
 #endif
@@ -35,8 +35,8 @@ void* custom_c_malloc(size_t size)
 
 void custom_c_free(void* ptr)
 {
-#if defined(USE_TBB_ALLOCATOR)
-    scalable_free(ptr);
+#if defined(USE_MIMALLOC)
+    mi_free(ptr);
 #else
     free(ptr);
 #endif
@@ -44,8 +44,8 @@ void custom_c_free(void* ptr)
 
 void* custom_c_realloc(void* ptr, size_t size)
 {
-#if defined(USE_TBB_ALLOCATOR)
-    return scalable_realloc(ptr, size);
+#if defined(USE_MIMALLOC)
+    return mi_realloc(ptr, size);
 #else
     return realloc(ptr, size);
 #endif

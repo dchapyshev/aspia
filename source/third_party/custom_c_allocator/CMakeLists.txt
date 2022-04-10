@@ -21,5 +21,5 @@ list(APPEND SOURCE_CUSTOM_C_ALLOCATOR custom_c_allocator.cc custom_c_allocator.h
 source_group("" FILES ${SOURCE_CUSTOM_C_ALLOCATOR})
 
 add_library(custom_c_allocator STATIC ${SOURCE_CUSTOM_C_ALLOCATOR})
-target_link_libraries(custom_c_allocator ${TBB_LIBS})
+target_link_libraries(custom_c_allocator mimalloc-static)
 set_target_properties(custom_c_allocator PROPERTIES FOLDER third_party)

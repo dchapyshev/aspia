@@ -27,8 +27,8 @@ list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 add_definitions(-DUSE_PCG_GENERATOR)
 
-if (TBB_FOUND)
-    add_definitions(-DUSE_TBB_ALLOCATOR)
+if (mimalloc_FOUND)
+    add_definitions(-DUSE_MIMALLOC)
 endif()
 
 if (WIN32)
@@ -98,12 +98,12 @@ set(THIRD_PARTY_LIBS
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
+    mimalloc-static
     modp_b64
     libwebm
     unofficial::libvpx::libvpx
     x11region
-    yuv
-    ${TBB_LIBS})
+    yuv)
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 

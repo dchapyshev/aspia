@@ -16,118 +16,103 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#if defined(USE_TBB_ALLOCATOR)
+#if defined(USE_MIMALLOC)
 
-#include <tbb/scalable_allocator.h>
+#include <new>
+#include <mimalloc.h>
 
 void* operator new(size_t size)
 {
-    void* ptr = scalable_malloc(size);
-    if (!ptr)
-        throw std::bad_alloc{};
-
-    return ptr;
+    return mi_new(size);
 }
 
 void operator delete(void* ptr) noexcept
 {
-    scalable_free(ptr);
+    mi_free(ptr);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new(size_t size, std::nothrow_t const&) noexcept
 {
-    return scalable_malloc(size);
+    return mi_new_nothrow(size);
 }
 
 void operator delete(void* ptr, std::nothrow_t const&) noexcept
 {
-    scalable_free(ptr);
+    mi_free(ptr);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new[](size_t size)
 {
-    void* ptr = scalable_malloc(size);
-    if (!ptr)
-        throw std::bad_alloc{};
-
-    return ptr;
+    return mi_new(size);
 }
 
 void operator delete[](void* ptr) noexcept
 {
-    scalable_free(ptr);
+    mi_free(ptr);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new[](size_t size, std::nothrow_t const&) noexcept
 {
-    return scalable_malloc(size);
+    return mi_new_nothrow(size);
 }
 
 void operator delete[](void* ptr, std::nothrow_t const&) noexcept
 {
-    scalable_free(ptr);
+    mi_free(ptr);
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new(size_t size, std::align_val_t align)
 {
-    void* ptr = scalable_aligned_malloc(size, static_cast<size_t>(align));
-    if (!ptr)
-        throw std::bad_alloc{};
-
-    return ptr;
+    return mi_new_aligned(size, static_cast<size_t>(align));
 }
 
-void operator delete(void* ptr, std::align_val_t /* align */) noexcept
+void operator delete(void* ptr, std::align_val_t align) noexcept
 {
-    scalable_aligned_free(ptr);
+    mi_free_aligned(ptr, static_cast<size_t>(align));
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new(size_t size, std::align_val_t align, std::nothrow_t const&) noexcept
 {
-    return scalable_aligned_malloc(size, static_cast<size_t>(align));
+    return mi_new_aligned_nothrow(size, static_cast<size_t>(align));
 }
 
-void operator delete(void* ptr, std::align_val_t /* align */, std::nothrow_t const&) noexcept
+void operator delete(void* ptr, std::align_val_t align, std::nothrow_t const&) noexcept
 {
-    scalable_aligned_free(ptr);
+    mi_free_aligned(ptr, static_cast<size_t>(align));
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new[](size_t size, std::align_val_t align)
 {
-    void* ptr = scalable_aligned_malloc(size, static_cast<size_t>(align));
-    if (!ptr)
-        throw std::bad_alloc{};
-
-    return ptr;
+    return mi_new_aligned(size, static_cast<size_t>(align));
 }
 
-void operator delete[](void* ptr, std::align_val_t /* align */) noexcept
+void operator delete[](void* ptr, std::align_val_t align) noexcept
 {
-    scalable_aligned_free(ptr);
+    mi_free_aligned(ptr, static_cast<size_t>(align));
 }
 
 //--------------------------------------------------------------------------------------------------
 
 void* operator new[](size_t size, std::align_val_t align, std::nothrow_t const&) noexcept
 {
-    return scalable_aligned_malloc(size, static_cast<size_t>(align));
+    return mi_new_aligned_nothrow(size, static_cast<size_t>(align));
 }
 
-void operator delete[](void* ptr, std::align_val_t /* align */, std::nothrow_t const&) noexcept
+void operator delete[](void* ptr, std::align_val_t align, std::nothrow_t const&) noexcept
 {
-    scalable_aligned_free(ptr);
+    mi_free_aligned(ptr, static_cast<size_t>(align));
 }
 
-#endif // defined(USE_TBB_ALLOCATOR)
+#endif // defined(USE_MIMALLOC)
