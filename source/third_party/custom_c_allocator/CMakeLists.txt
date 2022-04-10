@@ -16,10 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_TBB_C_ALLOCATOR tbb_c_allocator.cc tbb_c_allocator.h)
+list(APPEND SOURCE_CUSTOM_C_ALLOCATOR custom_c_allocator.cc custom_c_allocator.h)
 
-source_group("" FILES ${SOURCE_TBB_C_ALLOCATOR})
+source_group("" FILES ${SOURCE_CUSTOM_C_ALLOCATOR})
 
-add_library(tbb_c_allocator STATIC ${SOURCE_TBB_C_ALLOCATOR})
-target_link_libraries(tbb_c_allocator ${TBB_LIBS})
-set_target_properties(tbb_c_allocator PROPERTIES FOLDER third_party)
+add_library(custom_c_allocator STATIC ${SOURCE_CUSTOM_C_ALLOCATOR})
+target_link_libraries(custom_c_allocator ${TBB_LIBS})
+set_target_properties(custom_c_allocator PROPERTIES FOLDER third_party)

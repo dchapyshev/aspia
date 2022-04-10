@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef THIRD_PARTY_TBB_C_ALLOCATOR_TBB_C_ALLOCATOR_H
-#define THIRD_PARTY_TBB_C_ALLOCATOR_TBB_C_ALLOCATOR_H
+#ifndef THIRD_PARTY_CUSTOM_C_ALLOCATOR_CUSTOM_C_ALLOCATOR_H
+#define THIRD_PARTY_CUSTOM_C_ALLOCATOR_CUSTOM_C_ALLOCATOR_H
 
 #include <stddef.h>
 
@@ -25,12 +25,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
-void* tbb_c_malloc(size_t size);
-void tbb_c_free(void* ptr);
-void* tbb_c_realloc(void* ptr, size_t size);
+void* custom_c_malloc(size_t size);
+void custom_c_free(void* ptr);
+void* custom_c_realloc(void* ptr, size_t size);
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
 
-#endif // THIRD_PARTY_TBB_C_ALLOCATOR_TBB_C_ALLOCATOR_H
+#endif // THIRD_PARTY_CUSTOM_C_ALLOCATOR_CUSTOM_C_ALLOCATOR_H

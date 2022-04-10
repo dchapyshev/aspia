@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "third_party/tbb_c_allocator/tbb_c_allocator.h"
+#include "third_party/custom_c_allocator/custom_c_allocator.h"
 
 #include <cstdlib>
 
@@ -24,7 +24,7 @@
 #include <tbb/scalable_allocator.h>
 #endif
 
-void* tbb_c_malloc(size_t size)
+void* custom_c_malloc(size_t size)
 {
 #if defined(USE_TBB_ALLOCATOR)
     return scalable_malloc(size);
@@ -33,7 +33,7 @@ void* tbb_c_malloc(size_t size)
 #endif
 }
 
-void tbb_c_free(void* ptr)
+void custom_c_free(void* ptr)
 {
 #if defined(USE_TBB_ALLOCATOR)
     scalable_free(ptr);
@@ -42,7 +42,7 @@ void tbb_c_free(void* ptr)
 #endif
 }
 
-void* tbb_c_realloc(void* ptr, size_t size)
+void* custom_c_realloc(void* ptr, size_t size)
 {
 #if defined(USE_TBB_ALLOCATOR)
     return scalable_realloc(ptr, size);
