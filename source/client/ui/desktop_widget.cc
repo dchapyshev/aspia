@@ -473,7 +473,9 @@ void DesktopWidget::enableKeyHooks(bool enable)
         keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
     else
         keyboard_hook_.reset();
-#endif // defined(OS_WIN)
+#else
+    Q_UNUSED(enable)
+#endif
 }
 
 void DesktopWidget::releaseMouseButtons()
