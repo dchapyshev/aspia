@@ -59,15 +59,6 @@ bool ClientSessionTextChat::hasUser() const
 void ClientSessionTextChat::setHasUser(bool enable)
 {
     has_user_ = enable;
-
-    if (has_user_)
-    {
-        sendStatus(proto::TextChatStatus::STATUS_USER_CONNECTED);
-    }
-    else
-    {
-        sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
-    }
 }
 
 void ClientSessionTextChat::onMessageReceived(const base::ByteArray& buffer)

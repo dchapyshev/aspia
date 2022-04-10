@@ -167,7 +167,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
 
-        setTextChatHasUser(true);
+        onTextChatHasUser(FROM_HERE, true);
     }
     else
     {
@@ -214,7 +214,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
 
-        setTextChatHasUser(true);
+        onTextChatHasUser(FROM_HERE, true);
     }
     else
     {
@@ -963,7 +963,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     for (const auto& client : file_transfer_clients_)
         client->stop();
 
-    setTextChatHasUser(false);
+    onTextChatHasUser(FROM_HERE, false);
 
     setState(FROM_HERE, State::DETTACHED);
 
@@ -1217,7 +1217,18 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
     sendConnectEvent(*client_session_ptr);
 
     if (client_session_ptr->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
+    {
         onTextChatSessionStarted(client_session_ptr->id());
+
+        bool has_user = channel_ != nullptr;
+        for (const auto& client : text_chat_clients_)
+        {
+            ClientSessionTextChat* text_chat_client =
+                static_cast<ClientSessionTextChat*>(client.get());
+
+            text_chat_client->setHasUser(has_user);
+        }
+    }
 }
 
 void UserSession::setState(const base::Location& location, State state)
@@ -1227,14 +1238,21 @@ void UserSession::setState(const base::Location& location, State state)
     state_ = state;
 }
 
-void UserSession::setTextChatHasUser(bool has_user)
+void UserSession::onTextChatHasUser(const base::Location& location, bool has_user)
 {
+    LOG(LS_INFO) << "User state changed: " << has_user << " (from: " << location.toString() << ")";
+
     for (const auto& client : text_chat_clients_)
     {
         ClientSessionTextChat* text_chat_client =
             static_cast<ClientSessionTextChat*>(client.get());
 
+        proto::TextChatStatus::Status status = proto::TextChatStatus::STATUS_USER_CONNECTED;
+        if (!has_user)
+            status = proto::TextChatStatus::STATUS_USER_DISCONNECTED;
+
         text_chat_client->setHasUser(has_user);
+        text_chat_client->sendStatus(status);
     }
 }
 
