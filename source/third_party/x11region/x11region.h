@@ -84,7 +84,7 @@ SOFTWARE.
 #define TRUE  1
 #endif
 
-typedef int Boolean;
+typedef int OwnBoolean;
 
 typedef struct _Box {
     short x1, y1, x2, y2;
@@ -265,24 +265,24 @@ extern RegionPtr miRegionCreate(BoxPtr rect, int size);
 extern void miRegionInit(RegionPtr pReg, BoxPtr rect, int size);
 extern void miRegionDestroy(RegionPtr pReg);
 extern void miRegionUninit(RegionPtr pReg);
-extern Boolean miRegionCopy(RegionPtr dst, RegionPtr src);
-extern Boolean miIntersect(RegionPtr newReg, RegionPtr reg1, RegionPtr reg2);
-extern Boolean miUnion(RegionPtr newReg, RegionPtr reg1, RegionPtr reg2);
-extern Boolean miRegionAppend(RegionPtr dstrgn, RegionPtr rgn);
-extern Boolean miRegionValidate(RegionPtr badreg, Boolean * pOverlap);
+extern OwnBoolean miRegionCopy(RegionPtr dst, RegionPtr src);
+extern OwnBoolean miIntersect(RegionPtr newReg, RegionPtr reg1, RegionPtr reg2);
+extern OwnBoolean miUnion(RegionPtr newReg, RegionPtr reg1, RegionPtr reg2);
+extern OwnBoolean miRegionAppend(RegionPtr dstrgn, RegionPtr rgn);
+extern OwnBoolean miRegionValidate(RegionPtr badreg, OwnBoolean * pOverlap);
 extern RegionPtr miRectsToRegion(int nrects, xRectanglePtr prect, int ctype);
-extern Boolean miSubtract(RegionPtr regD, RegionPtr regM, RegionPtr regS);
-extern Boolean miInverse(RegionPtr newReg, RegionPtr reg1, BoxPtr invRect);
+extern OwnBoolean miSubtract(RegionPtr regD, RegionPtr regM, RegionPtr regS);
+extern OwnBoolean miInverse(RegionPtr newReg, RegionPtr reg1, BoxPtr invRect);
 extern int miRectIn(RegionPtr region, BoxPtr prect);
 extern void miTranslateRegion(RegionPtr pReg, int x, int y);
 extern void miRegionReset(RegionPtr pReg, BoxPtr pBox);
-extern Boolean miRegionBreak(RegionPtr pReg);
-extern Boolean miPointInRegion(RegionPtr pReg, int x, int y, BoxPtr box);
-extern Boolean miRegionNotEmpty(RegionPtr pReg);
+extern OwnBoolean miRegionBreak(RegionPtr pReg);
+extern OwnBoolean miPointInRegion(RegionPtr pReg, int x, int y, BoxPtr box);
+extern OwnBoolean miRegionNotEmpty(RegionPtr pReg);
 extern void miRegionEmpty(RegionPtr pReg);
 extern BoxPtr miRegionExtents(RegionPtr pReg);
-extern Boolean miRegionsEqual(RegionPtr reg1, RegionPtr reg2);
-extern Boolean miValidRegion(RegionPtr reg);
+extern OwnBoolean miRegionsEqual(RegionPtr reg1, RegionPtr reg2);
+extern OwnBoolean miValidRegion(RegionPtr reg);
 
 #ifdef DEBUG
 extern int miPrintRegion(RegionPtr rgn);
