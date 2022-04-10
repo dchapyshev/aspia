@@ -130,6 +130,7 @@ private:
     void sendHostIdRequest(const base::Location& location);
     void addNewClientSession(std::unique_ptr<ClientSession> client_session);
     void setState(const base::Location& location, State state);
+    void setTextChatHasUser(bool has_user);
     void onTextChatSessionStarted(uint32_t id);
     void onTextChatSessionFinished(uint32_t id);
 

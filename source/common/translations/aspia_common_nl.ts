@@ -289,13 +289,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="218"/>
-        <location filename="../ui/text_chat_widget.cc" line="271"/>
+        <location filename="../ui/text_chat_widget.cc" line="136"/>
+        <source>User %1 is logged in (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.cc" line="143"/>
+        <source>User %1 is not logged in (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/text_chat_widget.cc" line="232"/>
+        <location filename="../ui/text_chat_widget.cc" line="285"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="219"/>
+        <location filename="../ui/text_chat_widget.cc" line="233"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -303,17 +313,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="260"/>
+        <location filename="../ui/text_chat_widget.cc" line="274"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="262"/>
+        <location filename="../ui/text_chat_widget.cc" line="276"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="272"/>
+        <location filename="../ui/text_chat_widget.cc" line="286"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

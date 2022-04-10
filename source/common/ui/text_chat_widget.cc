@@ -130,6 +130,20 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
         }
         break;
 
+        case proto::TextChatStatus::STATUS_USER_CONNECTED:
+        {
+            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+            addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, time));
+        }
+        break;
+
+        case proto::TextChatStatus::STATUS_USER_DISCONNECTED:
+        {
+            QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+            addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, time));
+        }
+        break;
+
         default:
             LOG(LS_WARNING) << "Unhandled status code: " << static_cast<int>(status.status());
             return;

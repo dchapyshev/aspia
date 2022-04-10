@@ -31,6 +31,10 @@ public:
     ~ClientSessionTextChat() override;
 
     void sendTextChat(const proto::TextChat& text_chat);
+    void sendStatus(proto::TextChatStatus::Status status);
+
+    bool hasUser() const;
+    void setHasUser(bool enable);
 
 protected:
     // net::Listener implementation.
@@ -41,6 +45,8 @@ protected:
     void onStarted() override;
 
 private:
+    bool has_user_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(ClientSessionTextChat);
 };
 

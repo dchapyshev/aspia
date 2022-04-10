@@ -19,6 +19,7 @@
 #include "host/client_session_text_chat.h"
 
 #include "base/logging.h"
+#include "base/sys_info.h"
 #include "proto/text_chat.pb.h"
 
 namespace host {
@@ -39,6 +40,36 @@ void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
     sendMessage(base::serialize(text_chat));
 }
 
+void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
+{
+    proto::TextChat text_chat;
+    proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+
+    text_chat_status->set_status(status);
+    text_chat_status->set_source(base::SysInfo::computerName());
+
+    sendTextChat(text_chat);
+}
+
+bool ClientSessionTextChat::hasUser() const
+{
+    return has_user_;
+}
+
+void ClientSessionTextChat::setHasUser(bool enable)
+{
+    has_user_ = enable;
+
+    if (has_user_)
+    {
+        sendStatus(proto::TextChatStatus::STATUS_USER_CONNECTED);
+    }
+    else
+    {
+        sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
+    }
+}
+
 void ClientSessionTextChat::onMessageReceived(const base::ByteArray& buffer)
 {
     proto::TextChat text_chat;
@@ -49,7 +80,15 @@ void ClientSessionTextChat::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    delegate_->onClientSessionTextChat(id(), text_chat);
+    if (hasUser())
+    {
+        delegate_->onClientSessionTextChat(id(), text_chat);
+    }
+    else
+    {
+        if (text_chat.has_chat_message())
+            sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
+    }
 }
 
 void ClientSessionTextChat::onMessageWritten(size_t /* pending */)

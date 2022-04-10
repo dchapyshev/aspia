@@ -166,6 +166,8 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
+
+        setTextChatHasUser(true);
     }
     else
     {
@@ -211,6 +213,8 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
         sendRouterState(FROM_HERE);
         sendCredentials(FROM_HERE);
+
+        setTextChatHasUser(true);
     }
     else
     {
@@ -889,6 +893,12 @@ void UserSession::onClientSessionFinished()
 void UserSession::onClientSessionVideoRecording(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "IPC channel not exists";
+        return;
+    }
+
     outgoing_message_.Clear();
 
     proto::internal::VideoRecordingState* video_recording_state =
@@ -902,6 +912,12 @@ void UserSession::onClientSessionVideoRecording(
 
 void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat)
 {
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "IPC channel not exists";
+        return;
+    }
+
     for (const auto& client : text_chat_clients_)
     {
         if (client->id() != id)
@@ -947,9 +963,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     for (const auto& client : file_transfer_clients_)
         client->stop();
 
-    // Stop all text chat clients.
-    for (const auto& client : text_chat_clients_)
-        client->stop();
+    setTextChatHasUser(false);
 
     setState(FROM_HERE, State::DETTACHED);
 
@@ -1213,20 +1227,35 @@ void UserSession::setState(const base::Location& location, State state)
     state_ = state;
 }
 
+void UserSession::setTextChatHasUser(bool has_user)
+{
+    for (const auto& client : text_chat_clients_)
+    {
+        ClientSessionTextChat* text_chat_client =
+            static_cast<ClientSessionTextChat*>(client.get());
+
+        text_chat_client->setHasUser(has_user);
+    }
+}
+
 void UserSession::onTextChatSessionStarted(uint32_t id)
 {
-    proto::TextChat text_chat;
+    outgoing_message_.Clear();
 
     for (const auto& client : text_chat_clients_)
     {
         if (client->id() == id)
         {
-            ClientSessionTextChat* text_chat_session =
+            ClientSessionTextChat* text_chat_client =
                 static_cast<ClientSessionTextChat*>(client.get());
 
-            proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+            if (!channel_)
+                text_chat_client->sendStatus(proto::TextChatStatus::STATUS_USER_DISCONNECTED);
+
+            proto::TextChatStatus* text_chat_status =
+                 outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STARTED);
-            text_chat_status->set_source(text_chat_session->computerName());
+            text_chat_status->set_source(text_chat_client->computerName());
 
             break;
         }
@@ -1234,19 +1263,26 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 
     for (const auto& client : text_chat_clients_)
     {
-        ClientSessionTextChat* text_chat_session =
-            static_cast<ClientSessionTextChat*>(client.get());
-        text_chat_session->sendTextChat(text_chat);
+        if (client->id() != id)
+        {
+            ClientSessionTextChat* text_chat_session =
+                static_cast<ClientSessionTextChat*>(client.get());
+            text_chat_session->sendTextChat(outgoing_message_.text_chat());
+        }
     }
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "IPC channel not exists";
+        return;
+    }
+
     channel_->send(base::serialize(outgoing_message_));
 }
 
 void UserSession::onTextChatSessionFinished(uint32_t id)
 {
-    proto::TextChat text_chat;
+    outgoing_message_.Clear();
 
     for (const auto& client : text_chat_clients_)
     {
@@ -1255,7 +1291,8 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
             ClientSessionTextChat* text_chat_session =
                 static_cast<ClientSessionTextChat*>(client.get());
 
-            proto::TextChatStatus* text_chat_status = text_chat.mutable_chat_status();
+            proto::TextChatStatus* text_chat_status =
+                outgoing_message_.mutable_text_chat()->mutable_chat_status();
             text_chat_status->set_status(proto::TextChatStatus::STATUS_STOPPED);
             text_chat_status->set_source(text_chat_session->computerName());
 
@@ -1269,12 +1306,16 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
         {
             ClientSessionTextChat* text_chat_session =
                 static_cast<ClientSessionTextChat*>(client.get());
-            text_chat_session->sendTextChat(text_chat);
+            text_chat_session->sendTextChat(outgoing_message_.text_chat());
         }
     }
 
-    outgoing_message_.Clear();
-    outgoing_message_.mutable_text_chat()->CopyFrom(text_chat);
+    if (!channel_)
+    {
+        LOG(LS_INFO) << "IPC channel not exists";
+        return;
+    }
+
     channel_->send(base::serialize(outgoing_message_));
 }
 

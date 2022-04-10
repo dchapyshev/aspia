@@ -26,10 +26,12 @@ message TextChatStatus
 {
     enum Status
     {
-        STATUS_UNKNOWN   = 0;
-        STATUS_STARTED   = 1;
-        STATUS_STOPPED   = 2;
-        STATUS_TYPING    = 3;
+        STATUS_UNKNOWN           = 0;
+        STATUS_STARTED           = 1;
+        STATUS_STOPPED           = 2;
+        STATUS_TYPING            = 3;
+        STATUS_USER_DISCONNECTED = 4;
+        STATUS_USER_CONNECTED    = 5;
     }
 
     int64 timestamp = 1;

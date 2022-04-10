@@ -293,6 +293,14 @@
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>User %1 is logged in (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User %1 is not logged in (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>common::TextChatWindow</name>
