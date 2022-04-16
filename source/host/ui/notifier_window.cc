@@ -137,7 +137,12 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     setAttribute(Qt::WA_TranslucentBackground);
 
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
-            this, &NotifierWindow::updateWindowPosition);
+            this, [this]()
+    {
+        // The taskbar does not move instantly.
+        QTimer::singleShot(
+            std::chrono::milliseconds(500), this, &NotifierWindow::updateWindowPosition);
+    });
 
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]
