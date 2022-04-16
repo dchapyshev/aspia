@@ -173,7 +173,7 @@ if (NOT GIT_COMMIT_COUNT GREATER 0)
     set(GIT_COMMIT_COUNT 0)
 endif()
 
-# Add git branch and commin hash to definitions.
+# Add git branch and commit hash to definitions.
 add_definitions(-DGIT_CURRENT_BRANCH=\"${GIT_CURRENT_BRANCH}\"
                 -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"
                 -DGIT_COMMIT_COUNT=${GIT_COMMIT_COUNT})
