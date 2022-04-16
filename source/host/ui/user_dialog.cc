@@ -35,6 +35,10 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     if (user.isValid())
     {
         ui.checkbox_disable_user->setChecked(!(user.flags & base::User::ENABLED));

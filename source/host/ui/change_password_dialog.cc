@@ -23,6 +23,7 @@
 
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QTimer>
 
 namespace host {
@@ -33,6 +34,10 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
 {
     LOG(LS_INFO) << "ChangePasswordDialog Ctor (" << static_cast<int>(mode) << ")";
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     if (mode == Mode::CREATE_NEW_PASSWORD)
     {

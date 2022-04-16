@@ -23,6 +23,7 @@
 #include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
 
+#include <QPushButton>
 #include <QTimer>
 
 namespace client {
@@ -74,6 +75,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
       config_(config)
 {
     ui->setupUi(this);
+
+    QPushButton* cancel_button = ui->button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     ConfigFactory::fixupDesktopConfig(&config_);
 

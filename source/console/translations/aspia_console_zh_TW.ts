@@ -763,6 +763,10 @@
         <source>View</source>
         <translation type="unfinished">檢視</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
@@ -856,6 +860,10 @@
     <message>
         <source>View</source>
         <translation>檢視</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -954,6 +962,10 @@
         <source>View</source>
         <translation type="unfinished">檢視</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>console::ComputerGroupDialogDesktop</name>
@@ -1043,6 +1055,10 @@
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>console::MainWindow</name>
@@ -1128,6 +1144,10 @@
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>console::StatusBar</name>
@@ -1142,6 +1162,13 @@
         <translation>
             <numerusform>%n 個子電腦</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>console::UpdateSettingsDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

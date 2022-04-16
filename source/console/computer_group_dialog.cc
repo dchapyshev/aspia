@@ -57,6 +57,10 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     restoreGeometry(settings_.computerGroupDialogGeometry());
 
     connect(ui.button_box, &QDialogButtonBox::clicked,

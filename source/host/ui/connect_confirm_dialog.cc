@@ -21,6 +21,7 @@
 #include "common/ui/session_type.h"
 
 #include <QAbstractButton>
+#include <QPushButton>
 #include <QScreen>
 #include <QTimer>
 
@@ -34,6 +35,14 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
 {
     ui.setupUi(this);
     setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    QPushButton* yes_button = ui.button_box->button(QDialogButtonBox::StandardButton::Yes);
+    if (yes_button)
+        yes_button->setText(tr("Yes"));
+
+    QPushButton* no_button = ui.button_box->button(QDialogButtonBox::StandardButton::No);
+    if (no_button)
+        no_button->setText(tr("No"));
 
     connect(timer_, &QTimer::timeout, this, &ConnectConfirmDialog::onTimeout);
     connect(ui.button_box, &QDialogButtonBox::clicked,

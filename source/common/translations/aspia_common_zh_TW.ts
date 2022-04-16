@@ -240,6 +240,17 @@
         <source>An error occurred while downloading the update: %1</source>
         <translation>下載更新時發生錯誤：%1</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>common::StatusDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>common::TextChatWidget</name>

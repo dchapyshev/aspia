@@ -23,6 +23,7 @@
 
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QTimer>
 
 namespace host {
@@ -32,6 +33,10 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
 {
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);

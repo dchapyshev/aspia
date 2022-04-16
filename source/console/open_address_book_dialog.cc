@@ -29,6 +29,11 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
 {
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     setFixedHeight(sizeHint().height());
 
     connect(ui.button_show_password, &QPushButton::toggled,

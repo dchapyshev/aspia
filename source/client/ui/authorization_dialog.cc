@@ -32,6 +32,10 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     ClientSettings settings;
 
     bool is_one_time_password_checked = settings.isOneTimePasswordChecked();

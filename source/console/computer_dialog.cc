@@ -54,6 +54,10 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     client::ConfigFactory::fixupDesktopConfig(
         computer_.mutable_session_config()->mutable_desktop_manage());
     client::ConfigFactory::fixupDesktopConfig(

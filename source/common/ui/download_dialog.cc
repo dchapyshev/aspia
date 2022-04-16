@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QFile>
+#include <QPushButton>
 #include <QMessageBox>
 #include <QNetworkReply>
 
@@ -31,6 +32,10 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
       file_(file)
 {
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {

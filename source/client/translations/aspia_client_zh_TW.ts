@@ -1401,6 +1401,10 @@
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>client::ClientSettingsDialog</name>
@@ -1419,6 +1423,10 @@
     <message>
         <source>Warning</source>
         <translation>警告</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1465,6 +1473,10 @@
     <message>
         <source>Compression ratio: %1</source>
         <translation>壓縮率：%1</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1654,6 +1666,10 @@
         <source>Abort</source>
         <translation>中止</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>client::FileTransferDialog</name>
@@ -1724,6 +1740,10 @@
     <message>
         <source>Unknown error type while copying files</source>
         <translation>複製檔案時出現未知錯誤類型</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1875,6 +1895,10 @@
     <name>client::RecordSettingsDialog</name>
     <message>
         <source>Choose path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2030,6 +2054,13 @@
     </message>
 </context>
 <context>
+    <name>client::RouterStatusDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::RouterUserDialog</name>
     <message>
         <source>Warning</source>
@@ -2082,6 +2113,10 @@
     <message>
         <source>Client</source>
         <translation>客戶端</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2993,6 +3028,13 @@
     <message>
         <source>Driver Provider</source>
         <translation>驅動程式提供者</translation>
+    </message>
+</context>
+<context>
+    <name>client::UpdateSettingsDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

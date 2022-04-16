@@ -23,6 +23,7 @@
 #include "client/router_config_storage.h"
 
 #include <QMessageBox>
+#include <QPushButton>
 #include <QTimer>
 
 namespace client {
@@ -31,6 +32,10 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     RouterConfigStorage config_storage;
     RouterConfig config = config_storage.routerConfig();

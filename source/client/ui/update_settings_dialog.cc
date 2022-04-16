@@ -22,6 +22,8 @@
 #include "build/build_config.h"
 #include "client/ui/client_settings.h"
 
+#include <QPushButton>
+
 namespace client {
 
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
@@ -29,6 +31,10 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 {
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     ClientSettings settings;
 

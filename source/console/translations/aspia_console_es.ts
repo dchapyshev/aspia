@@ -437,17 +437,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="61"/>
+        <location filename="../main.cc" line="56"/>
         <source>Aspia Console</source>
         <translation>Aspia Consola</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="64"/>
+        <location filename="../main.cc" line="59"/>
         <source>file</source>
         <translation>archivo</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="65"/>
+        <location filename="../main.cc" line="60"/>
         <source>The file to open.</source>
         <translation>El archivo para abrir.</translation>
     </message>
@@ -835,47 +835,52 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../address_book_dialog.cc" line="106"/>
+        <location filename="../address_book_dialog.cc" line="110"/>
         <source>Without Encryption</source>
         <translation>Sin cifrado</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="108"/>
+        <location filename="../address_book_dialog.cc" line="112"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="137"/>
+        <location filename="../address_book_dialog.cc" line="141"/>
         <source>Double-click to change</source>
         <translation>Haga doble clic para cambiar</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="120"/>
+        <location filename="../address_book_dialog.cc" line="124"/>
         <source>Address Book</source>
         <translation>Libro de Direcciones</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="221"/>
+        <location filename="../address_book_dialog.cc" line="97"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="225"/>
         <source>General</source>
         <translation type="unfinished">General</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="225"/>
+        <location filename="../address_book_dialog.cc" line="229"/>
         <source>Sessions</source>
         <translation type="unfinished">Sesiones</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="232"/>
+        <location filename="../address_book_dialog.cc" line="236"/>
         <source>Manage</source>
         <translation type="unfinished">Administrar</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="236"/>
+        <location filename="../address_book_dialog.cc" line="240"/>
         <source>View</source>
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="340"/>
+        <location filename="../address_book_dialog.cc" line="344"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -883,12 +888,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="346"/>
+        <location filename="../address_book_dialog.cc" line="350"/>
         <source>Name can not be empty.</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="353"/>
+        <location filename="../address_book_dialog.cc" line="357"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -896,12 +901,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="379"/>
+        <location filename="../address_book_dialog.cc" line="383"/>
         <source>The passwords you entered do not match.</source>
         <translation>Las contraseñas no coinciden.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="385"/>
+        <location filename="../address_book_dialog.cc" line="389"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracter.</numerusform>
@@ -909,12 +914,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="393"/>
+        <location filename="../address_book_dialog.cc" line="397"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="396"/>
+        <location filename="../address_book_dialog.cc" line="400"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
@@ -922,28 +927,28 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="400"/>
+        <location filename="../address_book_dialog.cc" line="404"/>
         <source>Do you want to enter a different password?</source>
         <translation>¿Quieres ingresar una contraseña diferente?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="403"/>
-        <location filename="../address_book_dialog.cc" line="581"/>
+        <location filename="../address_book_dialog.cc" line="407"/>
+        <location filename="../address_book_dialog.cc" line="585"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="438"/>
+        <location filename="../address_book_dialog.cc" line="442"/>
         <source>An invalid router address was entered.</source>
         <translation>Se ingresó una dirección de ruta no válida.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="449"/>
+        <location filename="../address_book_dialog.cc" line="453"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>El nombre de usuario no puede estar vacío y solo puede contener caracteres alfabéticos, números y _, -, . caracteres.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="458"/>
+        <location filename="../address_book_dialog.cc" line="462"/>
         <source>Router password cannot be empty.</source>
         <translation>Contraseña de la Ruta no puede estar vacío.</translation>
     </message>
@@ -1041,27 +1046,32 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../computer_dialog.cc" line="64"/>
+        <location filename="../computer_dialog.cc" line="59"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_dialog.cc" line="68"/>
         <source>(copy)</source>
         <translation>(copiar)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="75"/>
+        <location filename="../computer_dialog.cc" line="79"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="79"/>
+        <location filename="../computer_dialog.cc" line="83"/>
         <source>Sessions</source>
         <translation>Sesiones</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="86"/>
+        <location filename="../computer_dialog.cc" line="90"/>
         <source>Manage</source>
         <translation>Administrar</translation>
     </message>
     <message>
-        <location filename="../computer_dialog.cc" line="90"/>
+        <location filename="../computer_dialog.cc" line="94"/>
         <source>View</source>
         <translation>Ver</translation>
     </message>
@@ -1141,27 +1151,32 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../computer_group_dialog.cc" line="74"/>
+        <location filename="../computer_group_dialog.cc" line="62"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../computer_group_dialog.cc" line="78"/>
         <source>General</source>
         <translation type="unfinished">General</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="78"/>
+        <location filename="../computer_group_dialog.cc" line="82"/>
         <source>Sessions</source>
         <translation type="unfinished">Sesiones</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="85"/>
+        <location filename="../computer_group_dialog.cc" line="89"/>
         <source>Manage</source>
         <translation type="unfinished">Administrar</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="89"/>
+        <location filename="../computer_group_dialog.cc" line="93"/>
         <source>View</source>
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="162"/>
+        <location filename="../computer_group_dialog.cc" line="166"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -1169,12 +1184,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="170"/>
+        <location filename="../computer_group_dialog.cc" line="174"/>
         <source>Name can not be empty.</source>
         <translation>El nombre no puede estar vacío.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="178"/>
+        <location filename="../computer_group_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -1182,7 +1197,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="243"/>
+        <location filename="../computer_group_dialog.cc" line="247"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -1268,28 +1283,33 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="97"/>
+        <location filename="../fast_connect_dialog.cc" line="57"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="102"/>
         <source>Confirmation</source>
         <translation>Confirmación</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="98"/>
+        <location filename="../fast_connect_dialog.cc" line="103"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>Se borrará la lista de direcciones ingresadas. ¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="222"/>
-        <location filename="../fast_connect_dialog.cc" line="242"/>
+        <location filename="../fast_connect_dialog.cc" line="227"/>
+        <location filename="../fast_connect_dialog.cc" line="247"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="223"/>
+        <location filename="../fast_connect_dialog.cc" line="228"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Se especifica la conexión por ID, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="243"/>
+        <location filename="../fast_connect_dialog.cc" line="248"/>
         <source>An invalid computer address was entered.</source>
         <translation>Se ingresó una dirección de ordenador no válida.</translation>
     </message>
@@ -1394,12 +1414,17 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="43"/>
+        <location filename="../open_address_book_dialog.cc" line="35"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../open_address_book_dialog.cc" line="48"/>
         <source>Without Encryption</source>
         <translation>Sin cifrado</translation>
     </message>
     <message>
-        <location filename="../open_address_book_dialog.cc" line="47"/>
+        <location filename="../open_address_book_dialog.cc" line="52"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
@@ -1421,6 +1446,14 @@
             <numerusform>%n ordenador secundario</numerusform>
             <numerusform>%n ordenadores secundarios</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>console::UpdateSettingsDialog</name>
+    <message>
+        <location filename="../update_settings_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

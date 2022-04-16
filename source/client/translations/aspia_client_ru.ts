@@ -32,22 +32,22 @@
         <translation>Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="392"/>
+        <location filename="../client_main.cc" line="387"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="396"/>
+        <location filename="../client_main.cc" line="391"/>
         <source>Remote computer port.</source>
         <translation>Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="401"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="405"/>
+        <location filename="../client_main.cc" line="400"/>
         <source>Password of user.</source>
         <translation>Пароль пользователя.</translation>
     </message>
@@ -60,83 +60,83 @@
         <translation type="vanished">Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="409"/>
+        <location filename="../client_main.cc" line="404"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="409"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Тип кодека. Возможные значения: vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="413"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Глубина цвета. Возможные значения: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="417"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Уровень сжатия. Возможные значения: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="426"/>
+        <location filename="../client_main.cc" line="421"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Включить или отключить звук. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="430"/>
+        <location filename="../client_main.cc" line="425"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="434"/>
+        <location filename="../client_main.cc" line="429"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Включить или отключить положение курсора. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="438"/>
+        <location filename="../client_main.cc" line="433"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="442"/>
+        <location filename="../client_main.cc" line="437"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="446"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="450"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Включить или отключить сглаживание шрифтов. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="454"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Очищать буфер обмена при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="458"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="462"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="466"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="584"/>
+        <location filename="../client_main.cc" line="579"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -149,7 +149,7 @@
         <translation type="vanished">Введен некорректный тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="585"/>
+        <location filename="../client_main.cc" line="580"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -1890,18 +1890,23 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="132"/>
-        <location filename="../ui/authorization_dialog.cc" line="142"/>
+        <location filename="../ui/authorization_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/authorization_dialog.cc" line="136"/>
+        <location filename="../ui/authorization_dialog.cc" line="146"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="133"/>
+        <location filename="../ui/authorization_dialog.cc" line="137"/>
         <source>Username cannot be empty.</source>
         <translation>Имя пользователя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="143"/>
+        <location filename="../ui/authorization_dialog.cc" line="147"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
@@ -1909,22 +1914,27 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="94"/>
+        <location filename="../ui/client_settings_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="99"/>
         <source>An invalid router address was entered.</source>
         <translation>Введен некорректный адрес машрутизатора.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="105"/>
+        <location filename="../ui/client_settings_dialog.cc" line="110"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и должно содержать только буквы алфавита, цифры и символы _, -, .</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="114"/>
+        <location filename="../ui/client_settings_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="138"/>
+        <location filename="../ui/client_settings_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1956,32 +1966,37 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="99"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="81"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="104"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="100"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="105"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="101"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="106"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="102"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="107"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="103"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="108"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="199"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="204"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -2189,37 +2204,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="70"/>
+        <location filename="../ui/file_remove_dialog.cc" line="44"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="74"/>
         <source>Deleting: %1</source>
         <translation>Удаление: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="86"/>
+        <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="91"/>
+        <location filename="../ui/file_remove_dialog.cc" line="95"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="98"/>
+        <location filename="../ui/file_remove_dialog.cc" line="102"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_remove_dialog.cc" line="110"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="109"/>
+        <location filename="../ui/file_remove_dialog.cc" line="113"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="112"/>
+        <location filename="../ui/file_remove_dialog.cc" line="116"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -2227,87 +2247,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="75"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="43"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="79"/>
         <source>Current Task: Copying items.</source>
         <translation>Текущая задача: копирование элементов.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="82"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="86"/>
         <source>From: %1</source>
         <translation>Из: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="87"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="91"/>
         <source>To: %1</source>
         <translation>В: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="117"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="121"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="120"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="127"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="126"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="130"/>
         <source>Replace All</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="129"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="198"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="202"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Текущая задача: Отмена передачи файлов.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="212"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="216"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Произошла ошибка при построении очереди файлов для копирования</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="217"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="221"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="225"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="229"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="232"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="236"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="239"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="243"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="246"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="250"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="253"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="257"/>
         <source>Unknown error type while copying files</source>
         <translation>Неизвестный тип ошибки при копировании файлов</translation>
     </message>
@@ -2503,7 +2528,12 @@
 <context>
     <name>client::RecordSettingsDialog</name>
     <message>
-        <location filename="../ui/record_settings_dialog.cc" line="44"/>
+        <location filename="../ui/record_settings_dialog.cc" line="36"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/record_settings_dialog.cc" line="48"/>
         <source>Choose path</source>
         <translation>Выбор пути</translation>
     </message>
@@ -2705,34 +2735,47 @@
     </message>
 </context>
 <context>
+    <name>client::RouterStatusDialog</name>
+    <message>
+        <location filename="../ui/router_status_dialog.cc" line="33"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+</context>
+<context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="127"/>
-        <location filename="../ui/router_user_dialog.cc" line="142"/>
-        <location filename="../ui/router_user_dialog.cc" line="155"/>
-        <location filename="../ui/router_user_dialog.cc" line="169"/>
-        <location filename="../ui/router_user_dialog.cc" line="192"/>
-        <location filename="../ui/router_user_dialog.cc" line="216"/>
+        <location filename="../ui/router_user_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="132"/>
+        <location filename="../ui/router_user_dialog.cc" line="147"/>
+        <location filename="../ui/router_user_dialog.cc" line="160"/>
+        <location filename="../ui/router_user_dialog.cc" line="174"/>
+        <location filename="../ui/router_user_dialog.cc" line="197"/>
+        <location filename="../ui/router_user_dialog.cc" line="221"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="128"/>
+        <location filename="../ui/router_user_dialog.cc" line="133"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="143"/>
+        <location filename="../ui/router_user_dialog.cc" line="148"/>
         <source>The username you entered already exists.</source>
         <translation>Имя пользователя, которое вы ввели уже существует.</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="156"/>
+        <location filename="../ui/router_user_dialog.cc" line="161"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="170"/>
+        <location filename="../ui/router_user_dialog.cc" line="175"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть пустым и не должен быть длиннее %n символа.</numerusform>
@@ -2741,12 +2784,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="182"/>
+        <location filename="../ui/router_user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="185"/>
+        <location filename="../ui/router_user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль должен содержать символы в нижнем и верхнем регистре, цифры и не может быть короче %n символа.</numerusform>
@@ -2755,27 +2798,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="189"/>
+        <location filename="../ui/router_user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_user_dialog.cc" line="222"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="265"/>
+        <location filename="../ui/router_user_dialog.cc" line="270"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="289"/>
+        <location filename="../ui/router_user_dialog.cc" line="294"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="293"/>
+        <location filename="../ui/router_user_dialog.cc" line="298"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
@@ -4773,6 +4816,14 @@
     <message>
         <source>bps</source>
         <translation type="vanished">бит/c</translation>
+    </message>
+</context>
+<context>
+    <name>client::UpdateSettingsDialog</name>
+    <message>
+        <location filename="../ui/update_settings_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
     </message>
 </context>
 </TS>

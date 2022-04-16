@@ -32,22 +32,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="392"/>
+        <location filename="../client_main.cc" line="387"/>
         <source>Remote computer address.</source>
         <translation>远程计算机地址。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="396"/>
+        <location filename="../client_main.cc" line="391"/>
         <source>Remote computer port.</source>
         <translation>远程计算机端口。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="401"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Name of user.</source>
         <translation>用户名。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="405"/>
+        <location filename="../client_main.cc" line="400"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,83 +56,83 @@
         <translation type="vanished">会话类型。 可能的值：桌面管理，桌面视图，文件传输。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="409"/>
+        <location filename="../client_main.cc" line="404"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="409"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="413"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="417"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="426"/>
+        <location filename="../client_main.cc" line="421"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="430"/>
+        <location filename="../client_main.cc" line="425"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="434"/>
+        <location filename="../client_main.cc" line="429"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="438"/>
+        <location filename="../client_main.cc" line="433"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="442"/>
+        <location filename="../client_main.cc" line="437"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="446"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="450"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="454"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="458"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="462"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="466"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="584"/>
+        <location filename="../client_main.cc" line="579"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -141,7 +141,7 @@
         <translation type="vanished">输入了错误的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="585"/>
+        <location filename="../client_main.cc" line="580"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -1846,18 +1846,23 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="132"/>
-        <location filename="../ui/authorization_dialog.cc" line="142"/>
+        <location filename="../ui/authorization_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/authorization_dialog.cc" line="136"/>
+        <location filename="../ui/authorization_dialog.cc" line="146"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="133"/>
+        <location filename="../ui/authorization_dialog.cc" line="137"/>
         <source>Username cannot be empty.</source>
         <translation>用户名不能为空。</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="143"/>
+        <location filename="../ui/authorization_dialog.cc" line="147"/>
         <source>Password cannot be empty.</source>
         <translation>密码不能为空。</translation>
     </message>
@@ -1865,22 +1870,27 @@
 <context>
     <name>client::ClientSettingsDialog</name>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="94"/>
+        <location filename="../ui/client_settings_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_settings_dialog.cc" line="99"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="105"/>
+        <location filename="../ui/client_settings_dialog.cc" line="110"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-，.。 字符。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="114"/>
+        <location filename="../ui/client_settings_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
         <translation>密码不能为空。</translation>
     </message>
     <message>
-        <location filename="../ui/client_settings_dialog.cc" line="138"/>
+        <location filename="../ui/client_settings_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1912,32 +1922,37 @@
 <context>
     <name>client::DesktopConfigDialog</name>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="99"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="81"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_config_dialog.cc" line="104"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="100"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="105"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="101"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="106"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="102"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="107"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="103"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="108"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_config_dialog.cc" line="199"/>
+        <location filename="../ui/desktop_config_dialog.cc" line="204"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2145,37 +2160,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="70"/>
+        <location filename="../ui/file_remove_dialog.cc" line="44"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_remove_dialog.cc" line="74"/>
         <source>Deleting: %1</source>
         <translation>正在删除: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="86"/>
+        <location filename="../ui/file_remove_dialog.cc" line="90"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>检索文件列表时出错：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="91"/>
+        <location filename="../ui/file_remove_dialog.cc" line="95"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>删除失败 &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="98"/>
+        <location filename="../ui/file_remove_dialog.cc" line="102"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_remove_dialog.cc" line="110"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="109"/>
+        <location filename="../ui/file_remove_dialog.cc" line="113"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="112"/>
+        <location filename="../ui/file_remove_dialog.cc" line="116"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
@@ -2183,87 +2203,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="75"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="43"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer_dialog.cc" line="79"/>
         <source>Current Task: Copying items.</source>
         <translation>当前任务：正在复制项目。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="82"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="86"/>
         <source>From: %1</source>
         <translation>从: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="87"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="91"/>
         <source>To: %1</source>
         <translation>到: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="117"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="121"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="120"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="127"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="126"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="130"/>
         <source>Replace All</source>
         <translation>替换所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="129"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="198"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="202"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>当前任务：取消文件传输。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="212"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="216"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>生成用于复制的文件队列时出错</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="217"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="221"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>创建目录失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="225"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="229"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>未能创建文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="232"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="236"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>无法打开文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="239"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="243"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>无法写入文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="246"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="250"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>读取文件失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="253"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="257"/>
         <source>Unknown error type while copying files</source>
         <translation>复制文件时出现未知错误类型</translation>
     </message>
@@ -2452,7 +2477,12 @@
 <context>
     <name>client::RecordSettingsDialog</name>
     <message>
-        <location filename="../ui/record_settings_dialog.cc" line="44"/>
+        <location filename="../ui/record_settings_dialog.cc" line="36"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/record_settings_dialog.cc" line="48"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2654,73 +2684,86 @@
     </message>
 </context>
 <context>
+    <name>client::RouterStatusDialog</name>
+    <message>
+        <location filename="../ui/router_status_dialog.cc" line="33"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="127"/>
-        <location filename="../ui/router_user_dialog.cc" line="142"/>
-        <location filename="../ui/router_user_dialog.cc" line="155"/>
-        <location filename="../ui/router_user_dialog.cc" line="169"/>
-        <location filename="../ui/router_user_dialog.cc" line="192"/>
-        <location filename="../ui/router_user_dialog.cc" line="216"/>
+        <location filename="../ui/router_user_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="132"/>
+        <location filename="../ui/router_user_dialog.cc" line="147"/>
+        <location filename="../ui/router_user_dialog.cc" line="160"/>
+        <location filename="../ui/router_user_dialog.cc" line="174"/>
+        <location filename="../ui/router_user_dialog.cc" line="197"/>
+        <location filename="../ui/router_user_dialog.cc" line="221"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="128"/>
+        <location filename="../ui/router_user_dialog.cc" line="133"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="143"/>
+        <location filename="../ui/router_user_dialog.cc" line="148"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="156"/>
+        <location filename="../ui/router_user_dialog.cc" line="161"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="170"/>
+        <location filename="../ui/router_user_dialog.cc" line="175"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="182"/>
+        <location filename="../ui/router_user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="185"/>
+        <location filename="../ui/router_user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="189"/>
+        <location filename="../ui/router_user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="217"/>
+        <location filename="../ui/router_user_dialog.cc" line="222"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="265"/>
+        <location filename="../ui/router_user_dialog.cc" line="270"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="289"/>
+        <location filename="../ui/router_user_dialog.cc" line="294"/>
         <source>Administrator</source>
         <translation>管理员</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="293"/>
+        <location filename="../ui/router_user_dialog.cc" line="298"/>
         <source>Client</source>
         <translation>客户端</translation>
     </message>
@@ -4478,6 +4521,14 @@
     <message>
         <source>bps</source>
         <translation type="vanished">bps</translation>
+    </message>
+</context>
+<context>
+    <name>client::UpdateSettingsDialog</name>
+    <message>
+        <location filename="../ui/update_settings_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

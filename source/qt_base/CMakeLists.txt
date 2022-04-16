@@ -40,11 +40,3 @@ target_link_libraries(aspia_qt_base
 set_property(TARGET aspia_qt_base PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_qt_base PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_qt_base PROPERTY AUTORCC ON)
-
-if(Qt5LinguistTools_FOUND)
-    # Get the list of Qt translation files.
-    file(GLOB QT_QM_FILES ${Qt5_DIR}/../../qt5/translations/*.qm)
-    add_qt_translations(aspia_qt_base QRC_FILE "qt_translations.qrc" QM_FILES ${QT_QM_FILES})
-else()
-    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
-endif()

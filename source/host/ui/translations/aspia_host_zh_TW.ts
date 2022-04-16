@@ -394,6 +394,10 @@
         <source>New password cannot be empty.</source>
         <translation>新密碼不能為空。</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>host::CheckPasswordDialog</name>
@@ -404,6 +408,10 @@
     <message>
         <source>You entered an incorrect password.</source>
         <translation>您輸入了不正確的舊密碼。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -580,6 +588,14 @@
         <source>The service could not be stopped.</source>
         <translation>無法停止服務。</translation>
     </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>host::ConnectConfirmDialog</name>
@@ -602,6 +618,14 @@
         <translation>
             <numerusform>此連線將在 %n 秒後自動被拒絕。</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -743,6 +767,10 @@
     <message>
         <source>Double-click to change</source>
         <translation>點選兩次以修改</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

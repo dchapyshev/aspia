@@ -19,6 +19,7 @@
 #include "client/ui/router_status_dialog.h"
 
 #include <QAbstractButton>
+#include <QPushButton>
 
 namespace client {
 
@@ -26,6 +27,10 @@ RouterStatusDialog::RouterStatusDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {

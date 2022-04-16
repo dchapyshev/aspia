@@ -39,6 +39,10 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
 
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_current_item->font());

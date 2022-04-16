@@ -92,6 +92,10 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     Settings settings;
     restoreGeometry(settings.addressBookDialogGeometry());
 

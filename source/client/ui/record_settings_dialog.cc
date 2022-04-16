@@ -31,6 +31,10 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     DesktopSettings settings;
     ui.checkbox_autostart->setChecked(settings.recordSessions());
     ui.edit_dir->setText(settings.recordingPath());

@@ -51,6 +51,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+    QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::StandardButton::Apply);
+    if (apply_button)
+        apply_button->setText(tr("Apply"));
+
     //---------------------------------------------------------------------------------------------
     // General Tab
     //---------------------------------------------------------------------------------------------

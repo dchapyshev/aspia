@@ -251,14 +251,27 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="51"/>
+        <location filename="../ui/download_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/download_dialog.cc" line="56"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="52"/>
+        <location filename="../ui/download_dialog.cc" line="57"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Виникла помилка під час завантаження оновлення: %1</translation>
+    </message>
+</context>
+<context>
+    <name>common::StatusDialog</name>
+    <message>
+        <location filename="../ui/status_dialog.cc" line="37"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

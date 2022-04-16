@@ -38,6 +38,10 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     ui.progress_total->setRange(0, 0);
     ui.progress_current->setRange(0, 0);
 

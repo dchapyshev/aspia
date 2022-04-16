@@ -22,6 +22,7 @@
 #include "base/strings/string_util.h"
 
 #include <QAbstractButton>
+#include <QPushButton>
 #include <QMessageBox>
 
 namespace client {
@@ -34,6 +35,10 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
       users_(users)
 {
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
 
     if (user_.isValid())
     {

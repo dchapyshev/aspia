@@ -51,6 +51,11 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     LOG(LS_INFO) << "Ctor";
 
     ui.setupUi(this);
+
+    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
+    if (cancel_button)
+        cancel_button->setText(tr("Cancel"));
+
     readState();
 
     if (!default_config_.session_config().has_desktop_manage())
