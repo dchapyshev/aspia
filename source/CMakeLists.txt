@@ -168,6 +168,11 @@ execute_process(COMMAND git rev-list --count HEAD
                 OUTPUT_VARIABLE GIT_COMMIT_COUNT
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+if (NOT GIT_COMMIT_COUNT GREATER 0)
+    message(STATUS "Failed to determine the number of commits")
+    set(GIT_COMMIT_COUNT 0)
+endif()
+
 # Add git branch and commin hash to definitions.
 add_definitions(-DGIT_CURRENT_BRANCH=\"${GIT_CURRENT_BRANCH}\"
                 -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"
