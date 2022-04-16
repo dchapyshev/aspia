@@ -2145,37 +2145,37 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="97"/>
+        <location filename="../ui/file_remove_dialog.cc" line="70"/>
         <source>Deleting: %1</source>
         <translation>Verwijderen: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="127"/>
+        <location filename="../ui/file_remove_dialog.cc" line="86"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="132"/>
+        <location filename="../ui/file_remove_dialog.cc" line="91"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="139"/>
+        <location filename="../ui/file_remove_dialog.cc" line="98"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="147"/>
+        <location filename="../ui/file_remove_dialog.cc" line="106"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="150"/>
+        <location filename="../ui/file_remove_dialog.cc" line="109"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="153"/>
+        <location filename="../ui/file_remove_dialog.cc" line="112"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
@@ -2183,87 +2183,87 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="75"/>
         <source>Current Task: Copying items.</source>
         <translation>Huidige taak: Items kopieren.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="119"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="82"/>
         <source>From: %1</source>
         <translation>Van: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="87"/>
         <source>To: %1</source>
         <translation>Naar: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="156"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="105"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="168"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="117"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="171"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="120"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="174"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
         <source>Replace</source>
         <translation>Vervangen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="177"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="126"/>
         <source>Replace All</source>
         <translation>Alles vervangen</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="180"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="129"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="256"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="198"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Huidige taak: bestands overdracht afbreken.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="270"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="212"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Er is een fout opgetreden bij het maken van de bestands lijst voor kopieren</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="275"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="217"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="283"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="225"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="290"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="232"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="239"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="246"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="253"/>
         <source>Unknown error type while copying files</source>
         <translation>Onbekend probleem bij het kopieren van bestanden</translation>
     </message>

@@ -29,14 +29,6 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-// Removed completely in qt6.
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-#include <QWinTaskbarButton>
-#include <QWinTaskbarProgress>
-#endif // defined(OS_WIN)
-#endif
-
 namespace client {
 
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
@@ -49,31 +41,12 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-    QWinTaskbarButton* button = new QWinTaskbarButton(this);
-
-    button->setWindow(parent->windowHandle());
-
-    taskbar_progress_ = button->progress();
-    if (taskbar_progress_)
-        taskbar_progress_->show();
-#endif
-#endif
-
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_current_item->font());
 }
 
 FileRemoveDialog::~FileRemoveDialog()
 {
     remover_window_proxy_->dettach();
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-    if (taskbar_progress_)
-        taskbar_progress_->hide();
-#endif
-#endif
 }
 
 void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
@@ -100,26 +73,12 @@ void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentag
 
     ui.label_current_item->setText(elided_text);
     ui.progress->setValue(percentage);
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-    if (taskbar_progress_)
-        taskbar_progress_->setValue(percentage);
-#endif
-#endif
 }
 
 void FileRemoveDialog::errorOccurred(const std::string& path,
                                      proto::FileError error_code,
                                      uint32_t available_actions)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-    if (taskbar_progress_)
-        taskbar_progress_->pause();
-#endif
-#endif
-
     QString message;
 
     if (path.empty())
@@ -173,13 +132,6 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
     });
 
     dialog->exec();
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if defined(OS_WIN)
-    if (taskbar_progress_)
-        taskbar_progress_->resume();
-#endif
-#endif
 }
 
 void FileRemoveDialog::closeEvent(QCloseEvent* event)
