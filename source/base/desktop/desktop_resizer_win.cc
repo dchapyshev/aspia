@@ -60,20 +60,22 @@ public:
     explicit Screen(ScreenId screen_id);
     ~Screen() = default;
 
-    const std::wstring& deviceName() const;
-    const Size& currentResolution() const;
-    bool modeForResolution(const Size& resolution, DEVMODEW* mode);
     std::vector<Size> supportedResolutions() const;
+    bool setResolution(const Size& resolution);
+    void restoreResolution();
 
 private:
+    bool modeForResolution(const Size& resolution, DEVMODEW* mode);
     void updateBestModeForResolution(const DEVMODEW& current_mode, const DEVMODEW& candidate_mode);
 
+    const ScreenId screen_id_;
     std::wstring name_;
     Size current_resolution_;
     std::map<Size, DEVMODEW> best_mode_;
 };
 
 DesktopResizerWin::Screen::Screen(ScreenId screen_id)
+    : screen_id_(screen_id)
 {
     DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
@@ -110,14 +112,52 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     }
 }
 
-const std::wstring& DesktopResizerWin::Screen::deviceName() const
+std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
-    return name_;
+    std::vector<Size> result;
+
+    for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
+        result.push_back(it->first);
+
+    return result;
 }
 
-const Size& DesktopResizerWin::Screen::currentResolution() const
+bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
 {
-    return current_resolution_;
+    if (current_resolution_ == resolution)
+    {
+        LOG(LS_INFO) << "Screen #" << screen_id_ << " already has specified resolution ("
+                     << resolution << ")";
+        return false;
+    }
+
+    DEVMODEW mode;
+    if (!modeForResolution(resolution, &mode))
+    {
+        LOG(LS_WARNING) << "Specified mode " << resolution << " for screen "
+                        << screen_id_ << " not found";
+        return false;
+    }
+
+    LONG result = ChangeDisplaySettingsExW(name_.c_str(), &mode, nullptr, 0, nullptr);
+    if (result != DISP_CHANGE_SUCCESSFUL)
+    {
+        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+        return false;
+    }
+
+    current_resolution_ = resolution;
+    return true;
+}
+
+void DesktopResizerWin::Screen::restoreResolution()
+{
+    // Restore the display mode based on the registry configuration.
+    LONG result = ChangeDisplaySettingsExW(name_.c_str(), nullptr, nullptr, 0, nullptr);
+    if (result != DISP_CHANGE_SUCCESSFUL)
+    {
+        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+    }
 }
 
 bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMODEW* mode)
@@ -130,16 +170,6 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
 
     *mode = result->second;
     return true;
-}
-
-std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
-{
-    std::vector<Size> result;
-
-    for (auto it = best_mode_.begin(); it != best_mode_.end(); ++it)
-        result.push_back(it->first);
-
-    return result;
 }
 
 void DesktopResizerWin::Screen::updateBestModeForResolution(
@@ -240,30 +270,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
         return false;
     }
 
-    Screen* selected_screen = screen->second.get();
-    if (selected_screen->currentResolution() == resolution)
-    {
-        LOG(LS_INFO) << "Screen already has specified resolution (" << resolution << ")";
-        return false;
-    }
-
-    DEVMODEW mode;
-    if (!selected_screen->modeForResolution(resolution, &mode))
-    {
-        LOG(LS_WARNING) << "Specified mode " << resolution << " for screen "
-                        << screen_id << " not found";
-        return false;
-    }
-
-    LONG result = ChangeDisplaySettingsExW(selected_screen->deviceName().c_str(),
-                                           &mode, nullptr, 0, nullptr);
-    if (result != DISP_CHANGE_SUCCESSFUL)
-    {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
-        return false;
-    }
-
-    return true;
+    return screen->second->setResolution(resolution);
 }
 
 void DesktopResizerWin::restoreResolution(ScreenId screen_id)
@@ -275,15 +282,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
         return;
     }
 
-    Screen* selected_screen = screen->second.get();
-
-    // Restore the display mode based on the registry configuration.
-    LONG result = ChangeDisplaySettingsExW(selected_screen->deviceName().c_str(), nullptr, nullptr,
-                                           0, nullptr);
-    if (result != DISP_CHANGE_SUCCESSFUL)
-    {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
-    }
+    screen->second->restoreResolution();
 }
 
 void DesktopResizerWin::restoreResulution()
