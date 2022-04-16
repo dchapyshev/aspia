@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
+<?include version.wxi ?>
+
  <!-- Variables -->
 <?define ProductName="Aspia Router"?>
-<?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.5.0"?>
 <?define InstallLocation="Aspia Router"?>
-<?define SourceFiles="..\..\build\Release"?>
 <?define ServiceName="aspia-router"?>
 <?define ServiceDisplayName="Aspia Router Service"?>
 <?define ServiceDescription="Assigns identifiers to peers and routes traffic to bypass NAT."?>

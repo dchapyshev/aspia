@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+    <?define Manufacturer="Dmitry Chapyshev"?>
+    <?define Version="2.5.0"?>
+    <?define SourceFiles="..\..\build\Release"?>
+</Include>

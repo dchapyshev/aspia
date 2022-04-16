@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
+<?include version.wxi ?>
+
  <!-- Variables -->
 <?define ProductName="Aspia Relay"?>
-<?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.5.0"?>
 <?define InstallLocation="Aspia Relay"?>
-<?define SourceFiles="..\..\build\Release"?>
 <?define ServiceName="aspia-relay"?>
 <?define ServiceDisplayName="Aspia Relay Service"?>
 <?define ServiceDescription="Proxies user traffic to bypass NAT."?>

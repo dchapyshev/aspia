@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
+<?include version.wxi ?>
+
  <!-- Variables -->
 <?define ProductName="Aspia Host"?>
-<?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.5.0"?>
 <?define InstallLocation="Aspia Host"?>
-<?define SourceFiles="..\..\build\Release"?>
 <?define ServiceName="aspia-host-service"?>
 <?define ServiceDisplayName="Aspia Host Service"?>
 <?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>

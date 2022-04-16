@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
+<?include version.wxi ?>
+
 <!-- Variables -->
 <?define ProductName="Aspia Client"?>
-<?define Manufacturer="Dmitry Chapyshev"?>
-<?define Version="2.5.0"?>
 <?define InstallLocation="Aspia Client"?>
-<?define SourceFiles="..\..\build\Release"?>
 <?define Executable="aspia_client.exe"?>
 
 <!-- Product description -->
