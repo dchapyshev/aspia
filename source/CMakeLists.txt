@@ -88,10 +88,6 @@ if (WIN32)
         Qt5::QWindowsPrinterSupportPlugin)
 endif()
 
-if (TBB_FOUND)
-    set(TBB_LIBS TBB::tbb TBB::tbbmalloc)
-endif()
-
 set(THIRD_PARTY_LIBS
     protobuf::libprotobuf-lite
     zstd::libzstd_static
@@ -160,13 +156,13 @@ execute_process(COMMAND git rev-parse --abbrev-ref HEAD
                 OUTPUT_VARIABLE GIT_CURRENT_BRANCH
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-# Get git commin hash.
+# Get git commit hash.
 execute_process(COMMAND git rev-parse HEAD
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 OUTPUT_VARIABLE GIT_COMMIT_HASH
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-# Get git commin count.
+# Get git commit count.
 execute_process(COMMAND git rev-list --count HEAD
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 OUTPUT_VARIABLE GIT_COMMIT_COUNT
