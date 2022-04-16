@@ -141,7 +141,7 @@ void ClientWindow::onSettings()
 
 void ClientWindow::onHelp()
 {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
+    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 void ClientWindow::onAbout()
@@ -322,9 +322,7 @@ void ClientWindow::connectToHost()
 void ClientWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
-    common::UpdateDialog(Application::instance()->settings().updateServer(),
-                         QStringLiteral("client"),
-                         this).exec();
+    common::UpdateDialog(Application::instance()->settings().updateServer(), "client", this).exec();
 #endif
 }
 

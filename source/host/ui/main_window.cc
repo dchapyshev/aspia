@@ -591,7 +591,7 @@ void MainWindow::onShowHide()
 
 void MainWindow::onHelp()
 {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
+    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 void MainWindow::onAbout()

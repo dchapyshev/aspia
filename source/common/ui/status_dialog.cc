@@ -18,6 +18,7 @@
 
 #include "common/ui/status_dialog.h"
 
+#include "base/logging.h"
 #include "ui_status_dialog.h"
 
 #include <QAbstractButton>
@@ -30,11 +31,12 @@ StatusDialog::StatusDialog(QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::StatusDialog>())
 {
+    LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
 
-    QPushButton* cancel_button = ui->buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    QPushButton* close_button = ui->buttonbox->button(QDialogButtonBox::StandardButton::Close);
+    if (close_button)
+        close_button->setText(tr("Close"));
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
@@ -43,7 +45,10 @@ StatusDialog::StatusDialog(QWidget* parent)
     });
 }
 
-StatusDialog::~StatusDialog() = default;
+StatusDialog::~StatusDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void StatusDialog::addMessage(const QString& message)
 {

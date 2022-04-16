@@ -465,14 +465,14 @@ void MainWindow::onDeleteComputerGroup()
 
 void MainWindow::onOnlineHelp()
 {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/help")));
+    QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
     common::UpdateDialog(Application::instance()->settings().updateServer(),
-                         QStringLiteral("console"),
+                         "console",
                          this).exec();
 #endif
 }

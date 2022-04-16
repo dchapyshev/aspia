@@ -9,27 +9,24 @@
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="61"/>
         <source>General</source>
-        <translation>Основное</translation>
+        <translation type="vanished">Основное</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="88"/>
         <source>License</source>
-        <translation>Лицензия</translation>
+        <translation type="vanished">Лицензия</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="105"/>
         <source>Service Information</source>
-        <translation>Сервисная информация</translation>
+        <translation type="vanished">Сервисная информация</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="120"/>
+        <location filename="../ui/about_dialog.ui" line="78"/>
         <source>Donate!</source>
         <translation>Поддержать!</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="144"/>
+        <location filename="../ui/about_dialog.ui" line="102"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -190,84 +187,78 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="103"/>
+        <location filename="../ui/about_dialog.cc" line="102"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="107"/>
+        <location filename="../ui/about_dialog.cc" line="106"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="108"/>
+        <location filename="../ui/about_dialog.cc" line="107"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="113"/>
+        <location filename="../ui/about_dialog.cc" line="112"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="119"/>
+        <location filename="../ui/about_dialog.cc" line="118"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="122"/>
+        <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="124"/>
+        <location filename="../ui/about_dialog.cc" line="123"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="126"/>
+        <location filename="../ui/about_dialog.cc" line="125"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="143"/>
         <source>Path: %1</source>
-        <translation>Путь: %1</translation>
+        <translation type="vanished">Путь: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="144"/>
         <source>Compilation date: %1</source>
-        <translation>Дата компиляции: %1</translation>
+        <translation type="vanished">Дата компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="145"/>
         <source>Compilation time: %1</source>
-        <translation>Время компиляции: %1</translation>
+        <translation type="vanished">Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
         <source>Git branch: %1</source>
-        <translation>Ветка Git: %1</translation>
+        <translation type="vanished">Ветка Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="149"/>
         <source>Git commit: %1</source>
-        <translation>Коммит Git: %1</translation>
+        <translation type="vanished">Коммит Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="154"/>
         <source>%1 version: %2</source>
-        <translation>Версия %1: %2</translation>
+        <translation type="vanished">Версия %1: %2</translation>
     </message>
 </context>
 <context>

@@ -13,7 +13,4 @@
     <file>text-chat.png</file>
     <file>user-24x24.png</file>
   </qresource>
-  <qresource prefix="/txt">
-    <file>license.txt</file>
-  </qresource>
 </RCC>

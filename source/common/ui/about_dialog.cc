@@ -23,7 +23,6 @@
 #include "ui_about_dialog.h"
 
 #include <QDesktopServices>
-#include <QFile>
 
 #include <asio/version.hpp>
 #include <google/protobuf/stubs/common.h>
@@ -138,53 +137,9 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     ui->text_edit->setHtml(html);
 
-    QListWidget* list = ui->list_service;
-
-    list->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
-    list->addItem(tr("Compilation date: %1").arg(__DATE__));
-    list->addItem(tr("Compilation time: %1").arg(__TIME__));
-
-#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    list->addItem(tr("Git branch: %1").arg(GIT_CURRENT_BRANCH));
-    list->addItem(tr("Git commit: %1").arg(GIT_COMMIT_HASH));
-#endif
-
-    auto add_version = [list](const char* name, const QString& version)
-    {
-        list->addItem(tr("%1 version: %2").arg(name, version));
-    };
-
-    add_version("asio", QString("%1.%2.%3")
-        .arg(ASIO_VERSION / 100000).arg(ASIO_VERSION / 100 % 1000).arg(ASIO_VERSION % 100));
-
-#if !defined(OS_WIN)
-    UVersionInfo icu_version;
-    u_getVersion(icu_version);
-
-    char icu_version_string[64];
-    u_versionToString(icu_version, icu_version_string);
-    add_version("icu", icu_version_string);
-#endif
-
-    add_version("libvpx", vpx_codec_version_str());
-    add_version("libyuv", QString::number(LIBYUV_VERSION));
-    add_version("openssl", OpenSSL_version(OPENSSL_VERSION));
-
-    QString protobuf_version =
-        QString::fromStdString(google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION));
-    add_version("protobuf", protobuf_version);
-
-    add_version("qt", qVersion());
-    add_version("rapidjson", RAPIDJSON_VERSION_STRING);
-    add_version("zstd", ZSTD_versionString());
-
-    QFile file(QStringLiteral(":/txt/license.txt"));
-    if (file.open(QFile::ReadOnly))
-        ui->edit_license->setPlainText(file.readAll());
-
     connect(ui->push_button_donate, &QPushButton::clicked, this, []()
     {
-        QDesktopServices::openUrl(QUrl(QStringLiteral("https://aspia.org/donate")));
+        QDesktopServices::openUrl(QUrl("https://aspia.org/donate"));
     });
 
     connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);
