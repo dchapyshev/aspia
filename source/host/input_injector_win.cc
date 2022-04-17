@@ -229,7 +229,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
                     ((event.y() + screen_offset_.y()) * 65535) / (full_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
-    DWORD wheel_movement = 0;
+    DWORD mouse_data = 0;
 
     if (pos != last_mouse_pos_)
     {
@@ -269,15 +269,31 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
             flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
+    prev = (last_mouse_mask_ & proto::MouseEvent::BACK_BUTTON) != 0;
+    curr = (mask & proto::MouseEvent::BACK_BUTTON) != 0;
+    if (curr != prev)
+    {
+        flags |= (curr ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP);
+        mouse_data = XBUTTON1;
+    }
+
+    prev = (last_mouse_mask_ & proto::MouseEvent::FORWARD_BUTTON) != 0;
+    curr = (mask & proto::MouseEvent::FORWARD_BUTTON) != 0;
+    if (curr != prev)
+    {
+        flags |= (curr ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP);
+        mouse_data = XBUTTON2;
+    }
+
     if (mask & proto::MouseEvent::WHEEL_UP)
     {
         flags |= MOUSEEVENTF_WHEEL;
-        wheel_movement = static_cast<DWORD>(WHEEL_DELTA);
+        mouse_data = static_cast<DWORD>(WHEEL_DELTA);
     }
     else if (mask & proto::MouseEvent::WHEEL_DOWN)
     {
         flags |= MOUSEEVENTF_WHEEL;
-        wheel_movement = static_cast<DWORD>(-WHEEL_DELTA);
+        mouse_data = static_cast<DWORD>(-WHEEL_DELTA);
     }
 
     INPUT input;
@@ -286,7 +302,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
     input.type = INPUT_MOUSE;
     input.mi.dx = pos.x();
     input.mi.dy = pos.y();
-    input.mi.mouseData = wheel_movement;
+    input.mi.mouseData = mouse_data;
     input.mi.dwFlags = flags;
 
     // Do the mouse event.

@@ -46,12 +46,14 @@ message MouseEvent
 {
     enum ButtonMask
     {
-        EMPTY         = 0;
-        LEFT_BUTTON   = 1;
-        MIDDLE_BUTTON = 2;
-        RIGHT_BUTTON  = 4;
-        WHEEL_UP      = 8;
-        WHEEL_DOWN    = 16;
+        EMPTY          = 0;
+        LEFT_BUTTON    = 1;
+        MIDDLE_BUTTON  = 2;
+        RIGHT_BUTTON   = 4;
+        WHEEL_UP       = 8;
+        WHEEL_DOWN     = 16;
+        BACK_BUTTON    = 32;
+        FORWARD_BUTTON = 64;
     }
 
     uint32 mask = 1; // Button mask.

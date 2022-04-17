@@ -200,6 +200,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
 
         if (buttons & Qt::RightButton)
             mask |= proto::MouseEvent::RIGHT_BUTTON;
+
+        if (buttons & Qt::BackButton)
+            mask |= proto::MouseEvent::BACK_BUTTON;
+
+        if (buttons & Qt::ForwardButton)
+            mask |= proto::MouseEvent::FORWARD_BUTTON;
     }
 
     int wheel_steps = 0;
