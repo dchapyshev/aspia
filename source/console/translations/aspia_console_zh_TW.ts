@@ -603,6 +603,10 @@
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
 </context>
 <context>
     <name>FastConnectDialog</name>

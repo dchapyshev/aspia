@@ -478,6 +478,9 @@
    <property name="text">
     <string>Fast Connect</string>
    </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
   </action>
   <action name="action_show_tray_icon">
    <property name="checkable">

@@ -654,96 +654,101 @@
         <translation>Conexión rápida</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="576"/>
+        <location filename="../main_window.ui" line="482"/>
+        <source>F8</source>
+        <translation type="unfinished">F8</translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="579"/>
         <source>Router Manage</source>
         <translation>Administrar Ruta</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="584"/>
+        <location filename="../main_window.ui" line="587"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="596"/>
+        <location filename="../main_window.ui" line="599"/>
         <source>&amp;System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="599"/>
-        <location filename="../main_window.ui" line="608"/>
+        <location filename="../main_window.ui" line="602"/>
         <location filename="../main_window.ui" line="611"/>
+        <location filename="../main_window.ui" line="614"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="623"/>
+        <location filename="../main_window.ui" line="626"/>
         <source>&amp;Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="626"/>
-        <location filename="../main_window.ui" line="635"/>
+        <location filename="../main_window.ui" line="629"/>
         <location filename="../main_window.ui" line="638"/>
+        <location filename="../main_window.ui" line="641"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="487"/>
+        <location filename="../main_window.ui" line="490"/>
         <source>Show tray icon</source>
         <translation>Mostrar icono de bandeja</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="495"/>
+        <location filename="../main_window.ui" line="498"/>
         <source>Minimize to tray</source>
         <translation>Minimizar a la bandeja</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="500"/>
+        <location filename="../main_window.ui" line="503"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="512"/>
+        <location filename="../main_window.ui" line="515"/>
         <source>Save all</source>
         <translation>Guardar todo</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="515"/>
+        <location filename="../main_window.ui" line="518"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="523"/>
+        <location filename="../main_window.ui" line="526"/>
         <source>Close all</source>
         <translation>Cerrar todo</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="526"/>
+        <location filename="../main_window.ui" line="529"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="531"/>
+        <location filename="../main_window.ui" line="534"/>
         <source>Check for updates...</source>
         <translation>Buscar actualizaciones...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="536"/>
+        <location filename="../main_window.ui" line="539"/>
         <source>Update Settings</source>
         <translation>Ajustes de actualización</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="541"/>
+        <location filename="../main_window.ui" line="544"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="552"/>
+        <location filename="../main_window.ui" line="555"/>
         <source>Remember latest</source>
         <translation>Recuerda lo último</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="564"/>
+        <location filename="../main_window.ui" line="567"/>
         <source>Copy Computer</source>
         <translation>Copiar Ordenador</translation>
     </message>
