@@ -15,12 +15,13 @@ Windows
    2.4. **English language pack** (required for vcpkg).
 
 3. Download and install [CMake](https://cmake.org/download) (version >= 3.17.0).
-4. Download and install [vcpkg](https://github.com/dchapyshev/vcpkg) (forked from Microsoft repository).
-5. In vcpkg, you need to install the following libraries (use triplet x86-windows-static in all cases):
+4. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
+5. In vcpkg, you need to install the following libraries (use triplet **x86-windows-static** in all cases):
 * asio
 * gtest
 * libvpx
 * libyuv
+* mimalloc
 * openssl
 * opus
 * protobuf
@@ -88,12 +89,13 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * gcc
 * g++
 * qtcreator
-2. In vcpkg, you need to install the following libraries (use triplet x64-linux in all cases):
+2. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
 * asio
 * gtest
 * icu
 * libvpx
 * libyuv
+* mimalloc
 * openssl
 * opus
 * protobuf
