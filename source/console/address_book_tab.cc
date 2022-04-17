@@ -136,6 +136,8 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     restore_child(group_item);
 
+    ui.tree_group->sortItems(0, Qt::AscendingOrder);
+
     connect(ui.tree_group, &ComputerGroupTree::itemSelectionChanged, this, [this]()
     {
         if (ui.tree_group->dragging())
@@ -394,6 +396,7 @@ void AddressBookTab::addComputerGroup()
 
     ComputerGroupItem* item = parent_item->addChildComputerGroup(computer_group_released);
     ui.tree_group->setCurrentItem(item);
+    ui.tree_group->sortItems(0, Qt::AscendingOrder);
     setChanged(true);
 }
 
@@ -631,6 +634,7 @@ void AddressBookTab::onGroupItemDropped()
     if (!current_item)
         return;
 
+    ui.tree_group->sortItems(0, Qt::AscendingOrder);
     updateComputerList(current_item);
     setChanged(true);
 }
