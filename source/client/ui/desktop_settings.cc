@@ -29,6 +29,7 @@ const QString kAutoScrollingParam = QStringLiteral("Desktop/AutoScrolling");
 const QString kSendKeyCombinationsParam = QStringLiteral("Desktop/SendKeyCombinations");
 const QString kRecordingPathParam = QStringLiteral("Desktop/RecordingPath");
 const QString kRecordSessionsParam = QStringLiteral("Desktop/RecordSessions");
+const QString kToolBarPinnedParam = QStringLiteral("Desktop/ToolBarPinned");
 
 } // namespace
 
@@ -106,6 +107,16 @@ bool DesktopSettings::recordSessions() const
 void DesktopSettings::setRecordSessions(bool enable)
 {
     settings_.setValue(kRecordSessionsParam, enable);
+}
+
+bool DesktopSettings::isToolBarPinned() const
+{
+    return settings_.value(kToolBarPinnedParam, false).toBool();
+}
+
+void DesktopSettings::setToolBarPinned(bool enable)
+{
+    settings_.setValue(kToolBarPinnedParam, enable);
 }
 
 } // namespace client

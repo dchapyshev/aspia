@@ -97,10 +97,16 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
         emit startSession(proto::SESSION_TYPE_TEXT_CHAT);
     });
 
-    ui.frame->hide();
-    showFullScreenButtons(false);
+    bool is_pinned = settings_.isToolBarPinned();
 
-    hide_timer_->start(0);
+    ui.action_pin->setChecked(is_pinned);
+    ui.toolbar->setVisible(is_pinned);
+    ui.frame->setVisible(!is_pinned);
+
+    if (!is_pinned)
+        hide_timer_->start(0);
+
+    showFullScreenButtons(false);
     adjustSize();
 }
 
@@ -108,6 +114,7 @@ DesktopPanel::~DesktopPanel()
 {
     settings_.setScale(scale_);
     settings_.setAutoScrolling(ui.action_autoscroll->isChecked());
+    settings_.setToolBarPinned(ui.action_pin->isChecked());
 
     // Save the parameter only for desktop management.
     if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)

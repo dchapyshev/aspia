@@ -45,6 +45,9 @@ public:
     bool recordSessions() const;
     void setRecordSessions(bool enable);
 
+    bool isToolBarPinned() const;
+    void setToolBarPinned(bool enable);
+
 private:
     QSettings settings_;
 
