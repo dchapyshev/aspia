@@ -50,6 +50,7 @@ protected:
     // QDialog implementation.
     void closeEvent(QCloseEvent* event) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
     void onTabChanged(QTreeWidgetItem* current);
@@ -57,6 +58,7 @@ private slots:
 
 private:
     void showTab(int type);
+    bool saveChanges();
 
     Ui::ComputerDialog ui;
     QWidgetList tabs_;

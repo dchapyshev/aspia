@@ -282,9 +282,13 @@
 <context>
     <name>common::StatusDialog</name>
     <message>
-        <location filename="../ui/status_dialog.cc" line="37"/>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="vanished">Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/status_dialog.cc" line="39"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>

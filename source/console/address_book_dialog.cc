@@ -329,6 +329,20 @@ void AddressBookDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+void AddressBookDialog::keyPressEvent(QKeyEvent* event)
+{
+    if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
+    {
+        if (saveChanges())
+        {
+            accept();
+            close();
+        }
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
 void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) != QDialogButtonBox::Ok)
@@ -338,178 +352,8 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QString name = ui.edit_name->text();
-    if (name.length() > kMaxNameLength)
-    {
-        showError(tr("Too long name. The maximum length of the name is %n characters.",
-                     "", kMaxNameLength));
+    if (!saveChanges())
         return;
-    }
-    else if (name.length() < kMinNameLength)
-    {
-        showError(tr("Name can not be empty."));
-        return;
-    }
-
-    QString comment = ui.edit_comment->toPlainText();
-    if (comment.length() > kMaxCommentLength)
-    {
-        showError(tr("Too long comment. The maximum length of the comment is %n characters.",
-                     "", kMaxCommentLength));
-        return;
-    }
-
-    proto::address_book::EncryptionType encryption_type =
-        static_cast<proto::address_book::EncryptionType>(
-            ui.combo_encryption->currentData().toInt());
-
-    switch (encryption_type)
-    {
-        case proto::address_book::ENCRYPTION_TYPE_NONE:
-        {
-            file_->mutable_hashing_salt()->clear();
-        }
-        break;
-
-        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
-        {
-            if (password_changed_)
-            {
-                QString password = ui.edit_password->text();
-                QString password_repeat = ui.edit_password_repeat->text();
-
-                if (password != password_repeat)
-                {
-                    showError(tr("The passwords you entered do not match."));
-                    return;
-                }
-
-                if (password.length() < kMinPasswordLength || password.length() > kMaxPasswordLength)
-                {
-                    showError(tr("Password can not be empty and should not exceed %n characters.",
-                                 "", kMaxPasswordLength));
-                    return;
-                }
-
-                if (!isSafePassword(password))
-                {
-                    QString unsafe =
-                        tr("Password you entered does not meet the security requirements!");
-
-                    QString safe =
-                        tr("The password must contain lowercase and uppercase characters, "
-                           "numbers and should not be shorter than %n characters.",
-                           "", kSafePasswordLength);
-
-                    QString question = tr("Do you want to enter a different password?");
-
-                    if (QMessageBox::warning(this,
-                                             tr("Warning"),
-                                             QString("<b>%1</b><br/>%2<br/>%3")
-                                                 .arg(unsafe, safe, question),
-                                             QMessageBox::Yes,
-                                             QMessageBox::No) == QMessageBox::Yes)
-                    {
-                        ui.edit_password->clear();
-                        ui.edit_password_repeat->clear();
-                        ui.edit_password->setFocus();
-                        return;
-                    }
-                }
-
-                // Generate salt, which is added after each iteration of the hashing.
-                // New salt is generated each time the password is changed.
-                file_->set_hashing_salt(base::Random::string(kHashingSaltSize));
-
-                // Now generate a key for encryption/decryption.
-                *key_ = base::PasswordHash::hash(
-                    base::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
-            }
-        }
-        break;
-
-        default:
-            LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
-            return;
-    }
-
-    if (ui.checkbox_use_router->isChecked())
-    {
-        base::Address address = base::Address::fromString(
-            ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
-        if (!address.isValid())
-        {
-            showError(tr("An invalid router address was entered."));
-            ui.edit_router_address->setFocus();
-            ui.edit_router_address->selectAll();
-            return;
-        }
-
-        std::u16string username = ui.edit_router_username->text().toStdU16String();
-        std::u16string password = ui.edit_router_password->text().toStdU16String();
-
-        if (!base::User::isValidUserName(username))
-        {
-            showError(tr("The user name can not be empty and can contain only"
-                         " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-            ui.edit_router_username->setFocus();
-            ui.edit_router_username->selectAll();
-            return;
-        }
-
-        if (!base::User::isValidPassword(password))
-        {
-            showError(tr("Router password cannot be empty."));
-            ui.edit_router_password->setFocus();
-            ui.edit_router_password->selectAll();
-            return;
-        }
-
-        proto::address_book::Router* router = data_->mutable_router();
-        router->set_address(base::utf8FromUtf16(address.host()));
-        router->set_port(address.port());
-        router->set_username(base::utf8FromUtf16(username));
-        router->set_password(base::utf8FromUtf16(password));
-    }
-
-    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
-    {
-        QWidget* tab = *it;
-        int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
-
-        if (type == ITEM_TYPE_GENERAL)
-        {
-            ComputerGroupDialogGeneral* general_tab =
-                static_cast<ComputerGroupDialogGeneral*>(tab);
-
-            if (!general_tab->saveSettings(data_->mutable_root_group()->mutable_config()))
-                return;
-        }
-        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
-        {
-            ComputerGroupDialogDesktop* desktop_tab =
-                static_cast<ComputerGroupDialogDesktop*>(tab);
-
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
-                data_->mutable_root_group()->mutable_config());
-        }
-        else if (type == ITEM_TYPE_DESKTOP_VIEW)
-        {
-            ComputerGroupDialogDesktop* desktop_tab =
-                static_cast<ComputerGroupDialogDesktop*>(tab);
-
-            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
-                data_->mutable_root_group()->mutable_config());
-        }
-    }
-
-    file_->set_encryption_type(encryption_type);
-    data_->mutable_root_group()->set_name(name.toStdString());
-    data_->mutable_root_group()->set_comment(comment.toStdString());
-    data_->set_enable_router(ui.checkbox_use_router->isChecked());
-
-    if (data_->guid().empty())
-        data_->set_guid(base::Guid::create().toStdString());
 
     accept();
     close();
@@ -595,6 +439,184 @@ void AddressBookDialog::showTab(int type)
         else
             tab->hide();
     }
+}
+
+bool AddressBookDialog::saveChanges()
+{
+    QString name = ui.edit_name->text();
+    if (name.length() > kMaxNameLength)
+    {
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", kMaxNameLength));
+        return false;
+    }
+    else if (name.length() < kMinNameLength)
+    {
+        showError(tr("Name can not be empty."));
+        return false;
+    }
+
+    QString comment = ui.edit_comment->toPlainText();
+    if (comment.length() > kMaxCommentLength)
+    {
+        showError(tr("Too long comment. The maximum length of the comment is %n characters.",
+                     "", kMaxCommentLength));
+        return false;
+    }
+
+    proto::address_book::EncryptionType encryption_type =
+        static_cast<proto::address_book::EncryptionType>(
+            ui.combo_encryption->currentData().toInt());
+
+    switch (encryption_type)
+    {
+        case proto::address_book::ENCRYPTION_TYPE_NONE:
+        {
+            file_->mutable_hashing_salt()->clear();
+        }
+        break;
+
+        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
+        {
+            if (password_changed_)
+            {
+                QString password = ui.edit_password->text();
+                QString password_repeat = ui.edit_password_repeat->text();
+
+                if (password != password_repeat)
+                {
+                    showError(tr("The passwords you entered do not match."));
+                    return false;
+                }
+
+                if (password.length() < kMinPasswordLength || password.length() > kMaxPasswordLength)
+                {
+                    showError(tr("Password can not be empty and should not exceed %n characters.",
+                                 "", kMaxPasswordLength));
+                    return false;
+                }
+
+                if (!isSafePassword(password))
+                {
+                    QString unsafe =
+                        tr("Password you entered does not meet the security requirements!");
+
+                    QString safe =
+                        tr("The password must contain lowercase and uppercase characters, "
+                           "numbers and should not be shorter than %n characters.",
+                           "", kSafePasswordLength);
+
+                    QString question = tr("Do you want to enter a different password?");
+
+                    if (QMessageBox::warning(this,
+                                             tr("Warning"),
+                                             QString("<b>%1</b><br/>%2<br/>%3")
+                                                 .arg(unsafe, safe, question),
+                                             QMessageBox::Yes,
+                                             QMessageBox::No) == QMessageBox::Yes)
+                    {
+                        ui.edit_password->clear();
+                        ui.edit_password_repeat->clear();
+                        ui.edit_password->setFocus();
+                        return false;
+                    }
+                }
+
+                // Generate salt, which is added after each iteration of the hashing.
+                // New salt is generated each time the password is changed.
+                file_->set_hashing_salt(base::Random::string(kHashingSaltSize));
+
+                // Now generate a key for encryption/decryption.
+                *key_ = base::PasswordHash::hash(
+                    base::PasswordHash::SCRYPT, password.toStdString(), file_->hashing_salt());
+            }
+        }
+        break;
+
+        default:
+            LOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
+            return false;
+    }
+
+    if (ui.checkbox_use_router->isChecked())
+    {
+        base::Address address = base::Address::fromString(
+            ui.edit_router_address->text().toStdU16String(), DEFAULT_ROUTER_TCP_PORT);
+        if (!address.isValid())
+        {
+            showError(tr("An invalid router address was entered."));
+            ui.edit_router_address->setFocus();
+            ui.edit_router_address->selectAll();
+            return false;
+        }
+
+        std::u16string username = ui.edit_router_username->text().toStdU16String();
+        std::u16string password = ui.edit_router_password->text().toStdU16String();
+
+        if (!base::User::isValidUserName(username))
+        {
+            showError(tr("The user name can not be empty and can contain only"
+                         " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
+            ui.edit_router_username->setFocus();
+            ui.edit_router_username->selectAll();
+            return false;
+        }
+
+        if (!base::User::isValidPassword(password))
+        {
+            showError(tr("Router password cannot be empty."));
+            ui.edit_router_password->setFocus();
+            ui.edit_router_password->selectAll();
+            return false;
+        }
+
+        proto::address_book::Router* router = data_->mutable_router();
+        router->set_address(base::utf8FromUtf16(address.host()));
+        router->set_port(address.port());
+        router->set_username(base::utf8FromUtf16(username));
+        router->set_password(base::utf8FromUtf16(password));
+    }
+
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
+
+        if (type == ITEM_TYPE_GENERAL)
+        {
+            ComputerGroupDialogGeneral* general_tab =
+                static_cast<ComputerGroupDialogGeneral*>(tab);
+
+            if (!general_tab->saveSettings(data_->mutable_root_group()->mutable_config()))
+                return false;
+        }
+        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+                data_->mutable_root_group()->mutable_config());
+        }
+        else if (type == ITEM_TYPE_DESKTOP_VIEW)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+                data_->mutable_root_group()->mutable_config());
+        }
+    }
+
+    file_->set_encryption_type(encryption_type);
+    data_->mutable_root_group()->set_name(name.toStdString());
+    data_->mutable_root_group()->set_comment(comment.toStdString());
+    data_->set_enable_router(ui.checkbox_use_router->isChecked());
+
+    if (data_->guid().empty())
+        data_->set_guid(base::Guid::create().toStdString());
+
+    return true;
 }
 
 } // namespace console

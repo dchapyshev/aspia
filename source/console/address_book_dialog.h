@@ -41,6 +41,7 @@ protected:
     // QDialog implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
@@ -51,6 +52,7 @@ private:
     void setPasswordChanged();
     void showError(const QString& message);
     void showTab(int type);
+    bool saveChanges();
 
     Ui::AddressBookDialog ui;
     QWidgetList tabs_;

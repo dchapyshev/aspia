@@ -248,8 +248,8 @@
 <context>
     <name>common::StatusDialog</name>
     <message>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <source>Close</source>
+        <translation type="unfinished">關閉</translation>
     </message>
 </context>
 <context>

@@ -880,7 +880,7 @@
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="344"/>
+        <location filename="../address_book_dialog.cc" line="449"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -888,12 +888,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="350"/>
+        <location filename="../address_book_dialog.cc" line="455"/>
         <source>Name can not be empty.</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="357"/>
+        <location filename="../address_book_dialog.cc" line="462"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -901,12 +901,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="383"/>
+        <location filename="../address_book_dialog.cc" line="488"/>
         <source>The passwords you entered do not match.</source>
         <translation>Las contraseñas no coinciden.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="389"/>
+        <location filename="../address_book_dialog.cc" line="494"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>La contraseña no puede estar vacía y no debe exceder los %n caracter.</numerusform>
@@ -914,12 +914,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="397"/>
+        <location filename="../address_book_dialog.cc" line="502"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>¡La contraseña que ingresó no cumple con los requisitos de seguridad!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="400"/>
+        <location filename="../address_book_dialog.cc" line="505"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La contraseña debe contener caracteres en minúsculas, mayúsculas, números y no debe tener menos de %n caracter.</numerusform>
@@ -927,28 +927,28 @@
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="404"/>
+        <location filename="../address_book_dialog.cc" line="509"/>
         <source>Do you want to enter a different password?</source>
         <translation>¿Quieres ingresar una contraseña diferente?</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="407"/>
-        <location filename="../address_book_dialog.cc" line="585"/>
+        <location filename="../address_book_dialog.cc" line="429"/>
+        <location filename="../address_book_dialog.cc" line="512"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="442"/>
+        <location filename="../address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
         <translation>Se ingresó una dirección de ruta no válida.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="453"/>
+        <location filename="../address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>El nombre de usuario no puede estar vacío y solo puede contener caracteres alfabéticos, números y _, -, . caracteres.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="462"/>
+        <location filename="../address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
         <translation>Contraseña de la Ruta no puede estar vacío.</translation>
     </message>
@@ -1176,7 +1176,7 @@
         <translation type="unfinished">Ver</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="166"/>
+        <location filename="../computer_group_dialog.cc" line="218"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nombre demasiado largo. La longitud máxima del nombre es %n caracter.</numerusform>
@@ -1184,12 +1184,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="174"/>
+        <location filename="../computer_group_dialog.cc" line="226"/>
         <source>Name can not be empty.</source>
         <translation>El nombre no puede estar vacío.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="182"/>
+        <location filename="../computer_group_dialog.cc" line="234"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentario demasiado largo. La longitud máxima del comentario es de %n caracter.</numerusform>
@@ -1197,7 +1197,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="247"/>
+        <location filename="../computer_group_dialog.cc" line="198"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>

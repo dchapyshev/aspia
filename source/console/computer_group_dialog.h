@@ -42,6 +42,7 @@ protected:
     // QDialog implementation.
     void closeEvent(QCloseEvent* event) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
@@ -50,6 +51,7 @@ private slots:
 private:
     void showError(const QString& message);
     void showTab(int type);
+    bool saveChanges();
 
     Ui::ComputerGroupDialog ui;
 

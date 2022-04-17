@@ -161,6 +161,20 @@ bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+void ComputerDialog::keyPressEvent(QKeyEvent* event)
+{
+    if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
+    {
+        if (saveChanges())
+        {
+            accept();
+            close();
+        }
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
 void ComputerDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
@@ -171,35 +185,8 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
-        {
-            QWidget* tab = *it;
-            int type = static_cast<ComputerDialogTab*>(tab)->type();
-
-            if (type == ITEM_TYPE_GENERAL)
-            {
-                ComputerDialogGeneral* general_tab = static_cast<ComputerDialogGeneral*>(tab);
-                if (!general_tab->saveSettings(&computer_))
-                    return;
-            }
-            else if (type == ITEM_TYPE_DESKTOP_MANAGE)
-            {
-                ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
-            }
-            else if (type == ITEM_TYPE_DESKTOP_VIEW)
-            {
-                ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW, &computer_);
-            }
-        }
-
-        int64_t current_time = QDateTime::currentSecsSinceEpoch();
-
-        if (mode_ == Mode::CREATE || mode_ == Mode::COPY)
-            computer_.set_create_time(current_time);
-
-        computer_.set_modify_time(current_time);
+        if (!saveChanges())
+            return;
 
         accept();
     }
@@ -221,6 +208,40 @@ void ComputerDialog::showTab(int type)
         else
             tab->hide();
     }
+}
+
+bool ComputerDialog::saveChanges()
+{
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        int type = static_cast<ComputerDialogTab*>(tab)->type();
+
+        if (type == ITEM_TYPE_GENERAL)
+        {
+            ComputerDialogGeneral* general_tab = static_cast<ComputerDialogGeneral*>(tab);
+            if (!general_tab->saveSettings(&computer_))
+                return false;
+        }
+        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        {
+            ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
+        }
+        else if (type == ITEM_TYPE_DESKTOP_VIEW)
+        {
+            ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW, &computer_);
+        }
+    }
+
+    int64_t current_time = QDateTime::currentSecsSinceEpoch();
+
+    if (mode_ == Mode::CREATE || mode_ == Mode::COPY)
+        computer_.set_create_time(current_time);
+
+    computer_.set_modify_time(current_time);
+    return true;
 }
 
 } // namespace console

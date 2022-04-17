@@ -888,71 +888,71 @@
         <translation type="unfinished">查看</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="344"/>
+        <location filename="../address_book_dialog.cc" line="449"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名称太长。名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="350"/>
+        <location filename="../address_book_dialog.cc" line="455"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="357"/>
+        <location filename="../address_book_dialog.cc" line="462"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长。描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="383"/>
+        <location filename="../address_book_dialog.cc" line="488"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="389"/>
+        <location filename="../address_book_dialog.cc" line="494"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="397"/>
+        <location filename="../address_book_dialog.cc" line="502"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../address_book_dialog.cc" line="400"/>
+        <location filename="../address_book_dialog.cc" line="505"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="404"/>
+        <location filename="../address_book_dialog.cc" line="509"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="407"/>
-        <location filename="../address_book_dialog.cc" line="585"/>
+        <location filename="../address_book_dialog.cc" line="429"/>
+        <location filename="../address_book_dialog.cc" line="512"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="442"/>
+        <location filename="../address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="453"/>
+        <location filename="../address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="462"/>
+        <location filename="../address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
         <translation>路由器密码不能为空。</translation>
     </message>
@@ -1178,26 +1178,26 @@
         <translation type="unfinished">查看</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="166"/>
+        <location filename="../computer_group_dialog.cc" line="218"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名字太长，名称的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="174"/>
+        <location filename="../computer_group_dialog.cc" line="226"/>
         <source>Name can not be empty.</source>
         <translation>名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="182"/>
+        <location filename="../computer_group_dialog.cc" line="234"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="247"/>
+        <location filename="../computer_group_dialog.cc" line="198"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>

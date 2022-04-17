@@ -224,9 +224,9 @@
 <context>
     <name>common::StatusDialog</name>
     <message>
-        <location filename="../ui/status_dialog.cc" line="37"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/status_dialog.cc" line="39"/>
+        <source>Close</source>
+        <translation type="unfinished">Fechar</translation>
     </message>
 </context>
 <context>

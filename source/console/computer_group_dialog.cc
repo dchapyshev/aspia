@@ -156,75 +156,26 @@ bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+void ComputerGroupDialog::keyPressEvent(QKeyEvent* event)
+{
+    if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
+    {
+        if (saveChanges())
+        {
+            accept();
+            close();
+        }
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        QString name = ui.edit_name->text();
-        if (name.length() > kMaxNameLength)
-        {
-            showError(tr("Too long name. The maximum length of the name is %n characters.",
-                         "", kMaxNameLength));
-            ui.edit_name->setFocus();
-            ui.edit_name->selectAll();
+        if (!saveChanges())
             return;
-        }
-        else if (name.length() < kMinNameLength)
-        {
-            showError(tr("Name can not be empty."));
-            ui.edit_name->setFocus();
-            return;
-        }
-
-        QString comment = ui.edit_comment->toPlainText();
-        if (comment.length() > kMaxCommentLength)
-        {
-            showError(tr("Too long comment. The maximum length of the comment is %n characters.",
-                         "", kMaxCommentLength));
-            ui.edit_comment->setFocus();
-            ui.edit_comment->selectAll();
-            return;
-        }
-
-        for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
-        {
-            QWidget* tab = *it;
-            int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
-
-            if (type == ITEM_TYPE_GENERAL)
-            {
-                ComputerGroupDialogGeneral* general_tab =
-                    static_cast<ComputerGroupDialogGeneral*>(tab);
-
-                if (!general_tab->saveSettings(computer_group_->mutable_config()))
-                    return;
-            }
-            else if (type == ITEM_TYPE_DESKTOP_MANAGE)
-            {
-                ComputerGroupDialogDesktop* desktop_tab =
-                    static_cast<ComputerGroupDialogDesktop*>(tab);
-
-                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
-                    computer_group_->mutable_config());
-            }
-            else if (type == ITEM_TYPE_DESKTOP_VIEW)
-            {
-                ComputerGroupDialogDesktop* desktop_tab =
-                    static_cast<ComputerGroupDialogDesktop*>(tab);
-
-                desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
-                    computer_group_->mutable_config());
-            }
-        }
-
-        int64_t current_time = QDateTime::currentSecsSinceEpoch();
-
-        if (mode_ == CreateComputerGroup)
-            computer_group_->set_create_time(current_time);
-
-        computer_group_->set_modify_time(current_time);
-        computer_group_->set_name(name.toStdString());
-        computer_group_->set_comment(comment.toStdString());
 
         accept();
     }
@@ -257,6 +208,77 @@ void ComputerGroupDialog::showTab(int type)
         else
             tab->hide();
     }
+}
+
+bool ComputerGroupDialog::saveChanges()
+{
+    QString name = ui.edit_name->text();
+    if (name.length() > kMaxNameLength)
+    {
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", kMaxNameLength));
+        ui.edit_name->setFocus();
+        ui.edit_name->selectAll();
+        return false;
+    }
+    else if (name.length() < kMinNameLength)
+    {
+        showError(tr("Name can not be empty."));
+        ui.edit_name->setFocus();
+        return false;
+    }
+
+    QString comment = ui.edit_comment->toPlainText();
+    if (comment.length() > kMaxCommentLength)
+    {
+        showError(tr("Too long comment. The maximum length of the comment is %n characters.",
+                     "", kMaxCommentLength));
+        ui.edit_comment->setFocus();
+        ui.edit_comment->selectAll();
+        return false;
+    }
+
+    for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
+    {
+        QWidget* tab = *it;
+        int type = static_cast<ComputerGroupDialogTab*>(tab)->type();
+
+        if (type == ITEM_TYPE_GENERAL)
+        {
+            ComputerGroupDialogGeneral* general_tab =
+                static_cast<ComputerGroupDialogGeneral*>(tab);
+
+            if (!general_tab->saveSettings(computer_group_->mutable_config()))
+                return false;
+        }
+        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_MANAGE,
+                computer_group_->mutable_config());
+        }
+        else if (type == ITEM_TYPE_DESKTOP_VIEW)
+        {
+            ComputerGroupDialogDesktop* desktop_tab =
+                static_cast<ComputerGroupDialogDesktop*>(tab);
+
+            desktop_tab->saveSettings(proto::SESSION_TYPE_DESKTOP_VIEW,
+                computer_group_->mutable_config());
+        }
+    }
+
+    int64_t current_time = QDateTime::currentSecsSinceEpoch();
+
+    if (mode_ == CreateComputerGroup)
+        computer_group_->set_create_time(current_time);
+
+    computer_group_->set_modify_time(current_time);
+    computer_group_->set_name(name.toStdString());
+    computer_group_->set_comment(comment.toStdString());
+
+    return true;
 }
 
 } // namespace console
