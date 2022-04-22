@@ -22,6 +22,7 @@
 #include "client/ui/task_manager_settings.h"
 
 #include <QAction>
+#include <QActionGroup>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>

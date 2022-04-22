@@ -88,7 +88,7 @@ std::chrono::milliseconds TaskManagerSettings::updateSpeed() const
 
 void TaskManagerSettings::setUpdateSpeed(const std::chrono::milliseconds& speed)
 {
-    settings_.setValue(kUpdateSpeedParam, speed.count());
+    settings_.setValue(kUpdateSpeedParam, (int)speed.count());
 }
 
 } // namespace client
