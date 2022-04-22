@@ -248,10 +248,6 @@ void build(Solution &s) {
         qt_base.Public += base;
         qt_base.Public += "org.sw.demo.qtproject.qt.base.widgets" QT_VERSION ""_dep;
         automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, qt_base);
-        if (QT_VERSION_NUMBER == 5)
-            qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations.qrc");
-        else
-            qt_translations_rcc("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, aspia, qt_base, "qt_translations6.qrc");
     }
 
     //
