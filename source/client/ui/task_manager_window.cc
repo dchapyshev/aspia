@@ -427,6 +427,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
         ui.tree_processes->setColumnHidden(PROC_COL_MEM_PEAK_WORKING_SET, true);
         ui.tree_processes->setColumnHidden(PROC_COL_MEM_WORKING_SET_DELTA, true);
         ui.tree_processes->setColumnHidden(PROC_COL_THREAD_COUNT, true);
+        ui.tree_processes->setColumnHidden(PROC_COL_IMAGE_PATH, true);
 
         ui.tree_processes->setColumnWidth(PROC_COL_NAME, 160);
         ui.tree_processes->setColumnWidth(PROC_COL_PROCESS_ID, 80);

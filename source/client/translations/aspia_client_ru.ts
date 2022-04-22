@@ -5286,39 +5286,39 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="906"/>
+        <location filename="../ui/task_manager_window.cc" line="907"/>
         <source>Processes: %1</source>
         <translation>Процессов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="672"/>
-        <location filename="../ui/task_manager_window.cc" line="702"/>
-        <location filename="../ui/task_manager_window.cc" line="719"/>
+        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <location filename="../ui/task_manager_window.cc" line="720"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="921"/>
+        <location filename="../ui/task_manager_window.cc" line="922"/>
         <source>Update Speed</source>
         <translation>Скорость обновления</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <location filename="../ui/task_manager_window.cc" line="674"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
         <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <location filename="../ui/task_manager_window.cc" line="704"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="720"/>
+        <location filename="../ui/task_manager_window.cc" line="721"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="916"/>
+        <location filename="../ui/task_manager_window.cc" line="917"/>
         <source>Physical memory: %1%</source>
         <translation>Физическая память: %1%</translation>
     </message>
@@ -5327,7 +5327,7 @@
         <translation type="vanished">Процессов: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="911"/>
+        <location filename="../ui/task_manager_window.cc" line="912"/>
         <source>CPU loading: %1%</source>
         <translation>Загрузка ЦП: %1%</translation>
     </message>

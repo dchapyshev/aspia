@@ -4960,44 +4960,44 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="921"/>
+        <location filename="../ui/task_manager_window.cc" line="922"/>
         <source>Update Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="672"/>
-        <location filename="../ui/task_manager_window.cc" line="702"/>
-        <location filename="../ui/task_manager_window.cc" line="719"/>
+        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <location filename="../ui/task_manager_window.cc" line="720"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <location filename="../ui/task_manager_window.cc" line="674"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <location filename="../ui/task_manager_window.cc" line="704"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="720"/>
+        <location filename="../ui/task_manager_window.cc" line="721"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="906"/>
+        <location filename="../ui/task_manager_window.cc" line="907"/>
         <source>Processes: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="916"/>
+        <location filename="../ui/task_manager_window.cc" line="917"/>
         <source>Physical memory: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="911"/>
+        <location filename="../ui/task_manager_window.cc" line="912"/>
         <source>CPU loading: %1%</source>
         <translation type="unfinished"></translation>
     </message>
