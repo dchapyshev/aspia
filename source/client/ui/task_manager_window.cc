@@ -444,7 +444,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     if (service_state.isEmpty())
     {
         ui.tree_services->setColumnHidden(SERV_COL_DESCRIPTION, true);
-        ui.tree_services->setColumnWidth(SERV_COL_NAME, 200);
+        ui.tree_services->setColumnWidth(SERV_COL_NAME, 270);
     }
     else
     {
