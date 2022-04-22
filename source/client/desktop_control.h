@@ -22,6 +22,7 @@
 #include "proto/desktop.pb.h"
 #include "proto/desktop_extensions.pb.h"
 #include "proto/system_info.pb.h"
+#include "proto/task_manager.pb.h"
 
 #include <filesystem>
 
@@ -43,6 +44,7 @@ public:
     virtual void onPowerControl(proto::PowerControl::Action action) = 0;
     virtual void onRemoteUpdate() = 0;
     virtual void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) = 0;
+    virtual void onTaskManager(const proto::task_manager::ClientToHost& message) = 0;
     virtual void onMetricsRequest() = 0;
 };
 

@@ -65,6 +65,7 @@ public:
     void onPowerControl(proto::PowerControl::Action action) override;
     void onRemoteUpdate() override;
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request) override;
+    void onTaskManager(const proto::task_manager::ClientToHost& message) override;
     void onMetricsRequest() override;
 
 protected:

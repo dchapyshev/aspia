@@ -327,6 +327,16 @@ void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequ
     sendMessage(*outgoing_message_);
 }
 
+void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& message)
+{
+    outgoing_message_->Clear();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    extension->set_name(common::kTaskManagerExtension);
+    extension->set_data(message.SerializeAsString());
+
+    sendMessage(*outgoing_message_);
+}
+
 void ClientDesktop::onMetricsRequest()
 {
     TimePoint current_time = Clock::now();
@@ -581,7 +591,19 @@ void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 
 void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
 {
-    if (extension.name() == common::kSelectScreenExtension)
+    if (extension.name() == common::kTaskManagerExtension)
+    {
+        proto::task_manager::HostToClient message;
+
+        if (!message.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse task manager extension data";
+            return;
+        }
+
+        desktop_window_proxy_->setTaskManager(message);
+    }
+    else if (extension.name() == common::kSelectScreenExtension)
     {
         proto::ScreenList screen_list;
 

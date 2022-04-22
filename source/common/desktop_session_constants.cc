@@ -28,9 +28,10 @@ const char kPowerControlExtension[] = "power_control";
 const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
 const char kVideoRecordingExtension[] = "video_recording";
+const char kTaskManagerExtension[] = "task_manager";
 
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording";
+    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;task_manager";
 
 const char kSupportedExtensionsForView[] =
     "select_screen;preferred_size;system_info;video_recording";

@@ -239,6 +239,11 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_video_adapters.cc
     ui/sys_info_widget_video_adapters.h
     ui/sys_info_widget_video_adapters.ui
+    ui/task_manager_settings.cc
+    ui/task_manager_settings.h
+    ui/task_manager_window.cc
+    ui/task_manager_window.h
+    ui/task_manager_window.ui
     ui/tree_to_html.cc
     ui/tree_to_html.h
     ui/update_settings_dialog.cc

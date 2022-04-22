@@ -411,6 +411,24 @@ bool ServiceController::start()
         return false;
     }
 
+    SERVICE_STATUS status;
+    if (QueryServiceStatus(service_, &status))
+    {
+        bool is_started = status.dwCurrentState == SERVICE_RUNNING;
+        int number_of_attempts = 0;
+
+        while (!is_started && number_of_attempts < 15)
+        {
+            Sleep(250);
+
+            if (!QueryServiceStatus(service_, &status))
+                break;
+
+            is_started = status.dwCurrentState == SERVICE_RUNNING;
+            ++number_of_attempts;
+        }
+    }
+
     return true;
 }
 

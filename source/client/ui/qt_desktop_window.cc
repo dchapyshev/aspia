@@ -33,6 +33,7 @@
 #include "client/ui/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "client/ui/statistics_dialog.h"
+#include "client/ui/task_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
 
@@ -145,6 +146,24 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         }
 
         system_info_->start(nullptr);
+    });
+
+    connect(panel_, &DesktopPanel::startTaskManager, this, [this]()
+    {
+        if (!task_manager_)
+        {
+            task_manager_ = new TaskManagerWindow();
+            task_manager_->setAttribute(Qt::WA_DeleteOnClose);
+
+            connect(task_manager_, &TaskManagerWindow::sig_sendMessage,
+                    this, [this](const proto::task_manager::ClientToHost& message)
+            {
+                desktop_control_proxy_->onTaskManager(message);
+            });
+        }
+
+        task_manager_->show();
+        task_manager_->activateWindow();
     });
 
     connect(panel_, &DesktopPanel::startStatistics, this, [this]()
@@ -302,6 +321,7 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     panel_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
     panel_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
     panel_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
+    panel_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
 }
 
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
@@ -332,6 +352,12 @@ void QtDesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system
 {
     if (system_info_)
         system_info_->setSystemInfo(system_info);
+}
+
+void QtDesktopWindow::setTaskManager(const proto::task_manager::HostToClient& message)
+{
+    if (task_manager_)
+        task_manager_->readMessage(message);
 }
 
 void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
@@ -486,6 +512,9 @@ void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (system_info_)
         system_info_->close();
+
+    if (task_manager_)
+        task_manager_->close();
 }
 
 bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)

@@ -51,6 +51,8 @@ list(APPEND SOURCE_HOST_CORE
     input_injector.h
     integrity_check.cc
     integrity_check.h
+    process_monitor.cc
+    process_monitor.h
     router_controller.cc
     router_controller.h
     server.cc
@@ -59,6 +61,8 @@ list(APPEND SOURCE_HOST_CORE
     system_info.h
     system_settings.cc
     system_settings.h
+    task_manager.cc
+    task_manager.h
     unconfirmed_client_session.cc
     unconfirmed_client_session.h
     user_session.cc

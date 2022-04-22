@@ -133,6 +133,39 @@ std::u16string SessionInfo::userName16() const
     return reinterpret_cast<const char16_t*>(info_->UserName);
 }
 
+std::string SessionInfo::clientName() const
+{
+    return utf8FromUtf16(clientName16());
+}
+
+std::u16string SessionInfo::clientName16() const
+{
+    if (!isValid())
+        return std::u16string();
+
+    LPWSTR client_name = nullptr;
+    DWORD size = 0;
+
+    if (!WTSQuerySessionInformationW(
+        WTS_CURRENT_SERVER_HANDLE, sessionId(), WTSClientName, &client_name, &size))
+    {
+        LOG(LS_WARNING) << "WTSQuerySessionInformationW() failed: " << ::GetLastError();
+        return std::u16string();
+    }
+
+    if (!client_name)
+    {
+        LOG(LS_WARNING) << "Invalid client name";
+        return std::u16string();
+    }
+
+    std::u16string result;
+    result.assign(reinterpret_cast<const char16_t*>(client_name));
+
+    WTSFreeMemory(client_name);
+    return result;
+}
+
 int64_t SessionInfo::connectTime() const
 {
     if (!isValid())

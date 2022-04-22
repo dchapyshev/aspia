@@ -365,163 +365,169 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="126"/>
+        <location filename="../ui/desktop_panel.ui" line="127"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="138"/>
+        <location filename="../ui/desktop_panel.ui" line="139"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="150"/>
+        <location filename="../ui/desktop_panel.ui" line="151"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="165"/>
+        <location filename="../ui/desktop_panel.ui" line="166"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="180"/>
+        <location filename="../ui/desktop_panel.ui" line="181"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="191"/>
+        <location filename="../ui/desktop_panel.ui" line="192"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="246"/>
+        <location filename="../ui/desktop_panel.ui" line="247"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="257"/>
+        <location filename="../ui/desktop_panel.ui" line="258"/>
         <source>Send key combinations</source>
         <translation>Отправлять комбинации клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="266"/>
-        <location filename="../ui/desktop_panel.ui" line="269"/>
+        <location filename="../ui/desktop_panel.ui" line="267"/>
+        <location filename="../ui/desktop_panel.ui" line="270"/>
         <source>Power control</source>
         <translation>Управление питанием</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="277"/>
+        <location filename="../ui/desktop_panel.ui" line="278"/>
         <source>Shutdown</source>
         <translation>Выключение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="282"/>
+        <location filename="../ui/desktop_panel.ui" line="283"/>
         <source>Reboot</source>
         <translation>Перезагрузка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="287"/>
+        <location filename="../ui/desktop_panel.ui" line="288"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="292"/>
+        <location filename="../ui/desktop_panel.ui" line="293"/>
         <source>Lock</source>
         <translation>Блокировка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="301"/>
+        <location filename="../ui/desktop_panel.ui" line="302"/>
         <source>Remote Update</source>
         <translation>Удаленное обновление</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="313"/>
+        <location filename="../ui/desktop_panel.ui" line="314"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="325"/>
+        <location filename="../ui/desktop_panel.ui" line="326"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="328"/>
+        <location filename="../ui/desktop_panel.ui" line="329"/>
         <source>Close session</source>
         <translation>Закрыть сессию</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="387"/>
+        <location filename="../ui/desktop_panel.ui" line="388"/>
         <source>Fit window</source>
         <translation>По размеру окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="396"/>
+        <location filename="../ui/desktop_panel.ui" line="397"/>
         <source>Minimize</source>
         <translation>Свернуть</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="399"/>
+        <location filename="../ui/desktop_panel.ui" line="400"/>
         <source>Minimize window</source>
         <translation>Свернуть окно</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="404"/>
-        <location filename="../ui/desktop_panel.ui" line="407"/>
+        <location filename="../ui/desktop_panel.ui" line="405"/>
+        <location filename="../ui/desktop_panel.ui" line="408"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="412"/>
+        <location filename="../ui/desktop_panel.ui" line="413"/>
         <source>Reboot (Safe mode)</source>
         <translation>Перезагрузка (безопасный режим)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="415"/>
+        <location filename="../ui/desktop_panel.ui" line="416"/>
         <source>Reboot in safe mode</source>
         <translation>Перезагрузка в безопасном режиме</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="420"/>
+        <location filename="../ui/desktop_panel.ui" line="421"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>Вставить буфер обмена как нажатия клавиш</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="429"/>
-        <location filename="../ui/desktop_panel.ui" line="432"/>
+        <location filename="../ui/desktop_panel.ui" line="430"/>
+        <location filename="../ui/desktop_panel.ui" line="433"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="440"/>
+        <location filename="../ui/desktop_panel.ui" line="441"/>
         <source>Recording settings...</source>
         <translation>Параметры записи...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="449"/>
-        <location filename="../ui/desktop_panel.ui" line="452"/>
+        <location filename="../ui/desktop_panel.ui" line="450"/>
+        <location filename="../ui/desktop_panel.ui" line="453"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="220"/>
-        <location filename="../ui/desktop_panel.ui" line="223"/>
-        <location filename="../ui/desktop_panel.ui" line="226"/>
+        <location filename="../ui/desktop_panel.ui" line="462"/>
+        <location filename="../ui/desktop_panel.ui" line="465"/>
+        <source>Task Manager</source>
+        <translation>Диспетчер задач</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="221"/>
+        <location filename="../ui/desktop_panel.ui" line="224"/>
+        <location filename="../ui/desktop_panel.ui" line="227"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="238"/>
+        <location filename="../ui/desktop_panel.ui" line="239"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="203"/>
+        <location filename="../ui/desktop_panel.ui" line="204"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
@@ -744,6 +750,47 @@
     </message>
 </context>
 <context>
+    <name>ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="87"/>
+        <source>System Idle Process</source>
+        <translation>Бездействие системы</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="89"/>
+        <source>Unknown Process</source>
+        <translation>Неизвестный процесс</translation>
+    </message>
+    <message>
+        <source>SYSTEM</source>
+        <translation type="vanished">система</translation>
+    </message>
+    <message>
+        <source>%1 KB</source>
+        <translation type="vanished">%1 КБ</translation>
+    </message>
+</context>
+<context>
     <name>RecordSettingsDialog</name>
     <message>
         <location filename="../ui/record_settings_dialog.ui" line="14"/>
@@ -897,6 +944,75 @@
         <location filename="../ui/router_user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation>Разрешенные типы сессий:</translation>
+    </message>
+</context>
+<context>
+    <name>ServiceItem</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="197"/>
+        <source>Continue Pending</source>
+        <translation>Возобновление</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="200"/>
+        <source>Pause Pending</source>
+        <translation>Приостановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="203"/>
+        <source>Paused</source>
+        <translation>Простановлено</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="206"/>
+        <source>Running</source>
+        <translation>Запущено</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="209"/>
+        <source>Start Pending</source>
+        <translation>Запуск</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="212"/>
+        <source>Stop Pending</source>
+        <translation>Остановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="215"/>
+        <source>Stopped</source>
+        <translation>Остановлено</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="218"/>
+        <location filename="../ui/task_manager_window.cc" line="243"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="228"/>
+        <source>Auto Start</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="231"/>
+        <source>Demand Start</source>
+        <translation>По требованию</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="234"/>
+        <source>Disabled</source>
+        <translation>Отключено</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="237"/>
+        <source>Boot Start</source>
+        <translation>При загрузке</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="240"/>
+        <source>System Start</source>
+        <translation>При старте системы</translation>
     </message>
 </context>
 <context>
@@ -1695,6 +1811,218 @@
     </message>
 </context>
 <context>
+    <name>TaskManagerWindow</name>
+    <message>
+        <source>System Information</source>
+        <translation type="obsolete">Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="37"/>
+        <source>Processes</source>
+        <translation>Процессы</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="65"/>
+        <location filename="../ui/task_manager_window.ui" line="188"/>
+        <location filename="../ui/task_manager_window.ui" line="237"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="80"/>
+        <source>User Name</source>
+        <translation>Имя пользователя</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="85"/>
+        <source>CPU</source>
+        <translation>ЦП</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="obsolete">Память</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="70"/>
+        <source>Process ID</source>
+        <translation>ID процесса</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="14"/>
+        <source>Task Manager</source>
+        <translation>Диспетчер задач</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="75"/>
+        <source>Session ID</source>
+        <translation>Код сеанса</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="90"/>
+        <source>Memory (private working set)</source>
+        <translation>Память (частный рабочий набор)</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="98"/>
+        <source>Memory (working set)</source>
+        <translation>Память (рабочий набор)</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="106"/>
+        <source>Memory (peak working set)</source>
+        <translation>Память (пиковый рабочий набор)</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="114"/>
+        <source>Memory (working set delta)</source>
+        <translation>Память (дельта рабочего набора)</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="122"/>
+        <source>Threads</source>
+        <translation>Потоков</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="127"/>
+        <source>Image Path</source>
+        <translation>Путь к образу</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="153"/>
+        <location filename="../ui/task_manager_window.ui" line="308"/>
+        <source>End Task</source>
+        <translation>Завершить задачу</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="163"/>
+        <source>Services</source>
+        <translation>Службы</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="198"/>
+        <source>Startup type</source>
+        <translation>Тип запуска</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="203"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="293"/>
+        <location filename="../ui/task_manager_window.ui" line="328"/>
+        <source>Logoff</source>
+        <translation>Завершение сеанса</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="313"/>
+        <source>Start</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="318"/>
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="365"/>
+        <source>Disabled</source>
+        <translatorcomment>Update speed</translatorcomment>
+        <translation>Отключено</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="193"/>
+        <location filename="../ui/task_manager_window.ui" line="247"/>
+        <source>Status</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="336"/>
+        <source>High</source>
+        <translatorcomment>Update speed</translatorcomment>
+        <translation>Высокая</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="344"/>
+        <source>Medium</source>
+        <translatorcomment>Update speed</translatorcomment>
+        <translation>Нормальная</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="352"/>
+        <source>Low</source>
+        <translatorcomment>Update speed</translatorcomment>
+        <translation>Низкая</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="357"/>
+        <source>Update</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="212"/>
+        <source>Users</source>
+        <translation>Пользователи</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="242"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="252"/>
+        <source>Client name</source>
+        <translation>Имя клиента</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="257"/>
+        <source>Session name</source>
+        <translation>Имя сессии</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="283"/>
+        <location filename="../ui/task_manager_window.ui" line="323"/>
+        <source>Disconnect</source>
+        <translation>Отключить</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">Сохранить</translation>
+    </message>
+    <message>
+        <source>Save (Ctrl+S)</source>
+        <translation type="obsolete">Сохранить (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="obsolete">Печать</translation>
+    </message>
+    <message>
+        <source>Print (Ctrl+P)</source>
+        <translation type="obsolete">Печать (Ctrl+P)</translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="obsolete">Копировать строку</translation>
+    </message>
+    <message>
+        <source>Copy Name</source>
+        <translation type="obsolete">Копировать имя</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="obsolete">Копировать значение</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="obsolete">Обновить</translation>
+    </message>
+    <message>
+        <source>Refresh (F5)</source>
+        <translation type="obsolete">Обновить (F5)</translation>
+    </message>
+</context>
+<context>
     <name>TextChatWindow</name>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="14"/>
@@ -1768,6 +2096,69 @@
         <location filename="../ui/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
         <translation>Сервер:</translation>
+    </message>
+</context>
+<context>
+    <name>UserItem</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="271"/>
+        <source>&lt;no user&gt;</source>
+        <translation>&lt;нет&gt;</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="306"/>
+        <source>Active</source>
+        <translation>Активен</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="309"/>
+        <source>Connected</source>
+        <translation>Подключен</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="312"/>
+        <source>Connect Query</source>
+        <translation>Подключение</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="315"/>
+        <source>Shadow</source>
+        <translation>Теневой</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="318"/>
+        <source>Disconnected</source>
+        <translation>Отключен</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="321"/>
+        <source>Idle</source>
+        <translation>Простой</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="324"/>
+        <source>Listen</source>
+        <translation>Прослушивание</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="327"/>
+        <source>Reset</source>
+        <translation>Сброс</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="330"/>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="333"/>
+        <source>Init</source>
+        <translation>Инициализация</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="336"/>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
     </message>
 </context>
 <context>
@@ -2004,76 +2395,76 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="218"/>
+        <location filename="../ui/desktop_panel.cc" line="226"/>
         <source>Monitor selection</source>
         <translation>Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="237"/>
+        <location filename="../ui/desktop_panel.cc" line="245"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="239"/>
+        <location filename="../ui/desktop_panel.cc" line="247"/>
         <source>Monitor %1</source>
         <translation>Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="259"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="262"/>
+        <location filename="../ui/desktop_panel.cc" line="270"/>
         <source>Resolution</source>
         <translation>Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
-        <location filename="../ui/desktop_panel.cc" line="436"/>
-        <location filename="../ui/desktop_panel.cc" line="447"/>
-        <location filename="../ui/desktop_panel.cc" line="458"/>
+        <location filename="../ui/desktop_panel.cc" line="422"/>
+        <location filename="../ui/desktop_panel.cc" line="433"/>
+        <location filename="../ui/desktop_panel.cc" line="444"/>
+        <location filename="../ui/desktop_panel.cc" line="455"/>
+        <location filename="../ui/desktop_panel.cc" line="466"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="415"/>
+        <location filename="../ui/desktop_panel.cc" line="423"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="426"/>
+        <location filename="../ui/desktop_panel.cc" line="434"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="437"/>
+        <location filename="../ui/desktop_panel.cc" line="445"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="448"/>
+        <location filename="../ui/desktop_panel.cc" line="456"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="459"/>
+        <location filename="../ui/desktop_panel.cc" line="467"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="537"/>
+        <location filename="../ui/desktop_panel.cc" line="545"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="304"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="309"/>
+        <location filename="../ui/desktop_panel.cc" line="317"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
@@ -2345,36 +2736,71 @@
     </message>
 </context>
 <context>
+    <name>client::ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">ТБ</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">ГБ</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">МБ</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">кБ</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">Б</translation>
+    </message>
+    <message>
+        <source>System Idle Process</source>
+        <translation type="obsolete">Бездействие системы</translation>
+    </message>
+    <message>
+        <source>SYSTEM</source>
+        <translation type="obsolete">система</translation>
+    </message>
+    <message>
+        <source>%1 KB</source>
+        <translation type="obsolete">%1 КБ</translation>
+    </message>
+</context>
+<context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="260"/>
-        <location filename="../ui/qt_desktop_window.cc" line="268"/>
-        <location filename="../ui/qt_desktop_window.cc" line="750"/>
+        <location filename="../ui/qt_desktop_window.cc" line="279"/>
+        <location filename="../ui/qt_desktop_window.cc" line="287"/>
+        <location filename="../ui/qt_desktop_window.cc" line="779"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="261"/>
+        <location filename="../ui/qt_desktop_window.cc" line="280"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="269"/>
+        <location filename="../ui/qt_desktop_window.cc" line="288"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="728"/>
+        <location filename="../ui/qt_desktop_window.cc" line="757"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="730"/>
+        <location filename="../ui/qt_desktop_window.cc" line="759"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="750"/>
+        <location filename="../ui/qt_desktop_window.cc" line="779"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -2829,6 +3255,45 @@
         <location filename="../ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
         <translation>Весь рабочий стол</translation>
+    </message>
+</context>
+<context>
+    <name>client::ServiceItem</name>
+    <message>
+        <source>Continue Pending</source>
+        <translation type="obsolete">Возобновление</translation>
+    </message>
+    <message>
+        <source>Pause Pending</source>
+        <translation type="obsolete">Приостановка</translation>
+    </message>
+    <message>
+        <source>Start Pending</source>
+        <translation type="obsolete">Запуск</translation>
+    </message>
+    <message>
+        <source>Stop Pending</source>
+        <translation type="obsolete">Остановка</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Неизвестно</translation>
+    </message>
+    <message>
+        <source>Auto Start</source>
+        <translation type="obsolete">Автоматически</translation>
+    </message>
+    <message>
+        <source>Demand Start</source>
+        <translation type="obsolete">По требованию</translation>
+    </message>
+    <message>
+        <source>Boot Start</source>
+        <translation type="obsolete">При загрузке</translation>
+    </message>
+    <message>
+        <source>System Start</source>
+        <translation type="obsolete">При старте системы</translation>
     </message>
 </context>
 <context>
@@ -4819,11 +5284,107 @@
     </message>
 </context>
 <context>
+    <name>client::TaskManagerWindow</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="906"/>
+        <source>Processes: %1</source>
+        <translation>Процессов: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="672"/>
+        <location filename="../ui/task_manager_window.cc" line="702"/>
+        <location filename="../ui/task_manager_window.cc" line="719"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="921"/>
+        <source>Update Speed</source>
+        <translation>Скорость обновления</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <source>Are you really want to end &quot;%1&quot; process?</source>
+        <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
+        <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="720"/>
+        <source>Are you really want to end user &quot;%1&quot; session?</source>
+        <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="916"/>
+        <source>Physical memory: %1%</source>
+        <translation>Физическая память: %1%</translation>
+    </message>
+    <message>
+        <source>Processes: %1 (%2)</source>
+        <translation type="vanished">Процессов: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="911"/>
+        <source>CPU loading: %1%</source>
+        <translation>Загрузка ЦП: %1%</translation>
+    </message>
+    <message>
+        <source>Memory: %1%</source>
+        <translation type="vanished">Память: %1%</translation>
+    </message>
+</context>
+<context>
     <name>client::UpdateSettingsDialog</name>
     <message>
         <location filename="../ui/update_settings_dialog.cc" line="37"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>client::UserItem</name>
+    <message>
+        <source>Active</source>
+        <translation type="obsolete">Активен</translation>
+    </message>
+    <message>
+        <source>Connected</source>
+        <translation type="obsolete">Подключен</translation>
+    </message>
+    <message>
+        <source>Connect Query</source>
+        <translation type="obsolete">Подключение</translation>
+    </message>
+    <message>
+        <source>Shadow</source>
+        <translation type="obsolete">Теневой</translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation type="obsolete">Отключен</translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="obsolete">Простой</translation>
+    </message>
+    <message>
+        <source>Listen</source>
+        <translation type="obsolete">Прослушивание</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="obsolete">Сброс</translation>
+    </message>
+    <message>
+        <source>Init</source>
+        <translation type="obsolete">Инициализация</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Неизвестно</translation>
     </message>
 </context>
 </TS>

@@ -120,6 +120,19 @@ void DesktopWindowProxy::setSystemInfo(const proto::system_info::SystemInfo& sys
         desktop_window_->setSystemInfo(system_info);
 }
 
+void DesktopWindowProxy::setTaskManager(const proto::task_manager::HostToClient& message)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&DesktopWindowProxy::setTaskManager, shared_from_this(), message));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setTaskManager(message);
+}
+
 void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

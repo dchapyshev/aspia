@@ -71,6 +71,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
     connect(ui.action_update, &QAction::triggered, this, &DesktopPanel::startRemoteUpdate);
     connect(ui.action_system_info, &QAction::triggered, this, &DesktopPanel::startSystemInfo);
+    connect(ui.action_task_manager, &QAction::triggered, this, &DesktopPanel::startTaskManager);
     connect(ui.action_statistics, &QAction::triggered, this, &DesktopPanel::startStatistics);
     connect(ui.action_minimize, &QAction::triggered, this, &DesktopPanel::minimizeSession);
     connect(ui.action_close, &QAction::triggered, this, &DesktopPanel::closeSession);
@@ -181,6 +182,13 @@ void DesktopPanel::enableRemoteUpdate(bool enable)
 {
     ui.action_update->setVisible(enable);
     ui.action_update->setEnabled(enable);
+    updateSize();
+}
+
+void DesktopPanel::enableTaskManager(bool enable)
+{
+    ui.action_task_manager->setVisible(enable);
+    ui.action_task_manager->setEnabled(enable);
     updateSize();
 }
 

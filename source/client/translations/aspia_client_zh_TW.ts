@@ -406,6 +406,10 @@
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Task Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
@@ -563,6 +567,37 @@
     </message>
 </context>
 <context>
+    <name>ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+    <message>
+        <source>System Idle Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecordSettingsDialog</name>
     <message>
         <source>Recording Settings</source>
@@ -684,6 +719,61 @@
     <message>
         <source>Allowed Session Types:</source>
         <translation>允許的工作階段類型：</translation>
+    </message>
+</context>
+<context>
+    <name>ServiceItem</name>
+    <message>
+        <source>Continue Pending</source>
+        <translation type="unfinished">繼續延遲</translation>
+    </message>
+    <message>
+        <source>Pause Pending</source>
+        <translation type="unfinished">延遲暫停</translation>
+    </message>
+    <message>
+        <source>Paused</source>
+        <translation type="unfinished">已暫停</translation>
+    </message>
+    <message>
+        <source>Running</source>
+        <translation type="unfinished">正在執行</translation>
+    </message>
+    <message>
+        <source>Start Pending</source>
+        <translation type="unfinished">延遲啟動</translation>
+    </message>
+    <message>
+        <source>Stop Pending</source>
+        <translation type="unfinished">延遲停止</translation>
+    </message>
+    <message>
+        <source>Stopped</source>
+        <translation type="unfinished">已停止</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">未知</translation>
+    </message>
+    <message>
+        <source>Auto Start</source>
+        <translation type="unfinished">自動啟動</translation>
+    </message>
+    <message>
+        <source>Demand Start</source>
+        <translation type="unfinished">依需求啟動</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished">已停用</translation>
+    </message>
+    <message>
+        <source>Boot Start</source>
+        <translation type="unfinished">由 OS loader 啟動 (Boot Start)</translation>
+    </message>
+    <message>
+        <source>System Start</source>
+        <translation type="unfinished">系統初始化期間啟動 (System Start)</translation>
     </message>
 </context>
 <context>
@@ -1232,6 +1322,177 @@
     </message>
 </context>
 <context>
+    <name>TaskManagerWindow</name>
+    <message>
+        <source>System Information</source>
+        <translation type="obsolete">系統訊息</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">名稱</translation>
+    </message>
+    <message>
+        <source>User Name</source>
+        <translation type="unfinished">使用者名稱</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="obsolete">記憶體</translation>
+    </message>
+    <message>
+        <source>End Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">儲存</translation>
+    </message>
+    <message>
+        <source>Save (Ctrl+S)</source>
+        <translation type="obsolete">儲存 (Ctrl+S)</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="obsolete">列印</translation>
+    </message>
+    <message>
+        <source>Print (Ctrl+P)</source>
+        <translation type="obsolete">列印 (Ctrl+P)</translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="obsolete">複製列</translation>
+    </message>
+    <message>
+        <source>Copy Name</source>
+        <translation type="obsolete">複製名稱</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="obsolete">複製值</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="obsolete">重新整理</translation>
+    </message>
+    <message>
+        <source>Refresh (F5)</source>
+        <translation type="obsolete">重新整理（F5）</translation>
+    </message>
+    <message>
+        <source>Process ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
+        <translation type="unfinished">服務</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished">描述</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished">狀態</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="unfinished">使用者</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Client name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation type="unfinished">中斷連線</translation>
+    </message>
+    <message>
+        <source>Memory (private working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory (working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory (peak working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory (working set delta)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Task Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Startup type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="unfinished">執行緒數</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logoff</source>
+        <translation type="unfinished">登出</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">高</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished">低</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished">已停用</translation>
+    </message>
+</context>
+<context>
     <name>TextChatWindow</name>
     <message>
         <source>System Information</source>
@@ -1290,6 +1551,57 @@
     </message>
     <message>
         <source>Server:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserItem</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">未知</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect Query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shadow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Listen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Init</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;no user&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1747,6 +2059,29 @@
     </message>
 </context>
 <context>
+    <name>client::ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+</context>
+<context>
     <name>client::QtDesktopWindow</name>
     <message>
         <source>Warning</source>
@@ -2124,6 +2459,61 @@
     <message>
         <source>Full Desktop</source>
         <translation>全螢幕</translation>
+    </message>
+</context>
+<context>
+    <name>client::ServiceItem</name>
+    <message>
+        <source>Continue Pending</source>
+        <translation type="obsolete">繼續延遲</translation>
+    </message>
+    <message>
+        <source>Pause Pending</source>
+        <translation type="obsolete">延遲暫停</translation>
+    </message>
+    <message>
+        <source>Paused</source>
+        <translation type="obsolete">已暫停</translation>
+    </message>
+    <message>
+        <source>Running</source>
+        <translation type="obsolete">正在執行</translation>
+    </message>
+    <message>
+        <source>Start Pending</source>
+        <translation type="obsolete">延遲啟動</translation>
+    </message>
+    <message>
+        <source>Stop Pending</source>
+        <translation type="obsolete">延遲停止</translation>
+    </message>
+    <message>
+        <source>Stopped</source>
+        <translation type="obsolete">已停止</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">未知</translation>
+    </message>
+    <message>
+        <source>Auto Start</source>
+        <translation type="obsolete">自動啟動</translation>
+    </message>
+    <message>
+        <source>Demand Start</source>
+        <translation type="obsolete">依需求啟動</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="obsolete">已停用</translation>
+    </message>
+    <message>
+        <source>Boot Start</source>
+        <translation type="obsolete">由 OS loader 啟動 (Boot Start)</translation>
+    </message>
+    <message>
+        <source>System Start</source>
+        <translation type="obsolete">系統初始化期間啟動 (System Start)</translation>
     </message>
 </context>
 <context>
@@ -3031,10 +3421,52 @@
     </message>
 </context>
 <context>
+    <name>client::TaskManagerWindow</name>
+    <message>
+        <source>CPU loading: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Confirmation</source>
+        <translation type="unfinished">確認</translation>
+    </message>
+    <message>
+        <source>Are you really want to end &quot;%1&quot; process?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you really want to end user &quot;%1&quot; session?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physical memory: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::UpdateSettingsDialog</name>
     <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::UserItem</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">未知</translation>
     </message>
 </context>
 </TS>

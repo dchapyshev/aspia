@@ -40,6 +40,10 @@ namespace system_info {
 class SystemInfo;
 } // namespace system_info
 
+namespace task_manager {
+class HostToClient;
+} // namespace task_manager
+
 } // namespace proto
 
 namespace client {
@@ -90,6 +94,7 @@ public:
     virtual void setScreenList(const proto::ScreenList& screen_list) = 0;
     virtual void setCursorPosition(const proto::CursorPosition& cursor_position) = 0;
     virtual void setSystemInfo(const proto::system_info::SystemInfo& system_info) = 0;
+    virtual void setTaskManager(const proto::task_manager::HostToClient& message) = 0;
     virtual void setMetrics(const Metrics& metrics) = 0;
 
     virtual std::unique_ptr<FrameFactory> frameFactory() = 0;

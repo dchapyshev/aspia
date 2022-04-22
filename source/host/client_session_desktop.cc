@@ -34,6 +34,7 @@
 #include "host/win/updater_launcher.h"
 #include "host/win/service_constants.h"
 #include "proto/desktop_internal.pb.h"
+#include "proto/task_manager.pb.h"
 #include "proto/text_chat.pb.h"
 
 namespace host {
@@ -175,6 +176,17 @@ void ClientSessionDesktop::onStarted()
     sendMessage(base::serialize(*outgoing_message_));
 }
 
+void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
+{
+    outgoing_message_->Clear();
+
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    extension->set_name(common::kTaskManagerExtension);
+    extension->set_data(message.SerializeAsString());
+
+    sendMessage(base::serialize(*outgoing_message_));
+}
+
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     outgoing_message_->Clear();
@@ -305,7 +317,11 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
 
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
 {
-    if (extension.name() == common::kSelectScreenExtension)
+    if (extension.name() == common::kTaskManagerExtension)
+    {
+        readTaskManagerExtension(extension.data());
+    }
+    else if (extension.name() == common::kSelectScreenExtension)
     {
         readSelectScreenExtension(extension.data());
     }
@@ -612,6 +628,22 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
     }
 
     delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
+}
+
+void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
+{
+    proto::task_manager::ClientToHost message;
+
+    if (!message.ParseFromString(data))
+    {
+        LOG(LS_WARNING) << "Unable to parse task manager extension data";
+        return;
+    }
+
+    if (!task_manager_)
+        task_manager_ = std::make_unique<TaskManager>(this);
+
+    task_manager_->readMessage(message);
 }
 
 } // namespace host

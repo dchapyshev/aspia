@@ -62,6 +62,9 @@ public:
     std::string userName() const;
     std::u16string userName16() const;
 
+    std::string clientName() const;
+    std::u16string clientName16() const;
+
     int64_t connectTime() const;
     int64_t disconnectTime() const;
     int64_t lastInputTime() const;

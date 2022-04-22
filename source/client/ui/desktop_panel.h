@@ -40,6 +40,7 @@ public:
     void enableSystemInfo(bool enable);
     void enableTextChat(bool enable);
     void enableRemoteUpdate(bool enable);
+    void enableTaskManager(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);
     void startRecording(bool enable);
@@ -65,6 +66,7 @@ signals:
     void powerControl(proto::PowerControl::Action action);
     void startRemoteUpdate();
     void startSystemInfo();
+    void startTaskManager();
     void startStatistics();
     void minimizeSession();
     void closeSession();

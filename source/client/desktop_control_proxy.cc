@@ -177,6 +177,19 @@ void DesktopControlProxy::onSystemInfoRequest(const proto::system_info::SystemIn
         desktop_control_->onSystemInfoRequest(request);
 }
 
+void DesktopControlProxy::onTaskManager(const proto::task_manager::ClientToHost& message)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::onTaskManager, shared_from_this(), message));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->onTaskManager(message);
+}
+
 void DesktopControlProxy::onMetricsRequest()
 {
     if (!io_task_runner_->belongsToCurrentThread())

@@ -357,164 +357,170 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="126"/>
+        <location filename="../ui/desktop_panel.ui" line="127"/>
         <source>Lock toolbar</source>
         <translation>Bloquear barra de ferramentas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="138"/>
+        <location filename="../ui/desktop_panel.ui" line="139"/>
         <source>Session configuration</source>
         <translation>Configuração da sessão</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="150"/>
+        <location filename="../ui/desktop_panel.ui" line="151"/>
         <source>Monitor selection</source>
         <translation>Seleção do monitor</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="165"/>
+        <location filename="../ui/desktop_panel.ui" line="166"/>
         <source>Automatic window size</source>
         <translation>Tamanho da janela automático</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="180"/>
+        <location filename="../ui/desktop_panel.ui" line="181"/>
         <source>Switch to full screen mode or back</source>
         <translation>Trocar para o modo de tela cheia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="191"/>
+        <location filename="../ui/desktop_panel.ui" line="192"/>
         <source>Automatic scrolling</source>
         <translation>Rolagem automática</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="203"/>
+        <location filename="../ui/desktop_panel.ui" line="204"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Enviar CTRL+ALT+DEL</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="215"/>
+        <location filename="../ui/desktop_panel.ui" line="216"/>
         <source>Advanced menu</source>
         <translation>Menu avançado</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="220"/>
-        <location filename="../ui/desktop_panel.ui" line="223"/>
-        <location filename="../ui/desktop_panel.ui" line="226"/>
+        <location filename="../ui/desktop_panel.ui" line="221"/>
+        <location filename="../ui/desktop_panel.ui" line="224"/>
+        <location filename="../ui/desktop_panel.ui" line="227"/>
         <source>Save screenshot...</source>
         <translation>Salvar captura de tela...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="238"/>
+        <location filename="../ui/desktop_panel.ui" line="239"/>
         <source>File transfer</source>
         <translation>Transferência de arquivos</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="246"/>
+        <location filename="../ui/desktop_panel.ui" line="247"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="257"/>
+        <location filename="../ui/desktop_panel.ui" line="258"/>
         <source>Send key combinations</source>
         <translation>Enviar combinação de teclas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="266"/>
-        <location filename="../ui/desktop_panel.ui" line="269"/>
+        <location filename="../ui/desktop_panel.ui" line="267"/>
+        <location filename="../ui/desktop_panel.ui" line="270"/>
         <source>Power control</source>
         <translation>Controle de energia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="277"/>
+        <location filename="../ui/desktop_panel.ui" line="278"/>
         <source>Shutdown</source>
         <translation>Desligar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="282"/>
+        <location filename="../ui/desktop_panel.ui" line="283"/>
         <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="287"/>
+        <location filename="../ui/desktop_panel.ui" line="288"/>
         <source>Logoff</source>
         <translation>Logoff</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="292"/>
+        <location filename="../ui/desktop_panel.ui" line="293"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="301"/>
+        <location filename="../ui/desktop_panel.ui" line="302"/>
         <source>Remote Update</source>
         <translation>Atualização remota</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="313"/>
+        <location filename="../ui/desktop_panel.ui" line="314"/>
         <source>System Information</source>
         <translation>Informações do Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="325"/>
+        <location filename="../ui/desktop_panel.ui" line="326"/>
         <source>Close</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="328"/>
+        <location filename="../ui/desktop_panel.ui" line="329"/>
         <source>Close session</source>
         <translation>Fechar sessão</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="387"/>
+        <location filename="../ui/desktop_panel.ui" line="388"/>
         <source>Fit window</source>
         <translation>Ajustar a janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="396"/>
+        <location filename="../ui/desktop_panel.ui" line="397"/>
         <source>Minimize</source>
         <translation>Minimizar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="399"/>
+        <location filename="../ui/desktop_panel.ui" line="400"/>
         <source>Minimize window</source>
         <translation>Minimizar janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="404"/>
-        <location filename="../ui/desktop_panel.ui" line="407"/>
+        <location filename="../ui/desktop_panel.ui" line="405"/>
+        <location filename="../ui/desktop_panel.ui" line="408"/>
         <source>Statistics</source>
         <translation>Estatísticas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="412"/>
+        <location filename="../ui/desktop_panel.ui" line="413"/>
         <source>Reboot (Safe mode)</source>
         <translation>Reiniciar (Modo seguro)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="415"/>
+        <location filename="../ui/desktop_panel.ui" line="416"/>
         <source>Reboot in safe mode</source>
         <translation>Reiniciar no modo seguro</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="420"/>
+        <location filename="../ui/desktop_panel.ui" line="421"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="429"/>
-        <location filename="../ui/desktop_panel.ui" line="432"/>
+        <location filename="../ui/desktop_panel.ui" line="430"/>
+        <location filename="../ui/desktop_panel.ui" line="433"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="440"/>
+        <location filename="../ui/desktop_panel.ui" line="441"/>
         <source>Recording settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="449"/>
-        <location filename="../ui/desktop_panel.ui" line="452"/>
+        <location filename="../ui/desktop_panel.ui" line="450"/>
+        <location filename="../ui/desktop_panel.ui" line="453"/>
         <source>Start recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="462"/>
+        <location filename="../ui/desktop_panel.ui" line="465"/>
+        <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -716,6 +722,39 @@
     </message>
 </context>
 <context>
+    <name>ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="87"/>
+        <source>System Idle Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="89"/>
+        <source>Unknown Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecordSettingsDialog</name>
     <message>
         <location filename="../ui/record_settings_dialog.ui" line="14"/>
@@ -869,6 +908,75 @@
         <location filename="../ui/router_user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation>Tipos de sessões Permitidas:</translation>
+    </message>
+</context>
+<context>
+    <name>ServiceItem</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="197"/>
+        <source>Continue Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="200"/>
+        <source>Pause Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="203"/>
+        <source>Paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="206"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="209"/>
+        <source>Start Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="212"/>
+        <source>Stop Pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="215"/>
+        <source>Stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="218"/>
+        <location filename="../ui/task_manager_window.cc" line="243"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="228"/>
+        <source>Auto Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="231"/>
+        <source>Demand Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="234"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="237"/>
+        <source>Boot Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="240"/>
+        <source>System Start</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1619,6 +1727,210 @@
     </message>
 </context>
 <context>
+    <name>TaskManagerWindow</name>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="37"/>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="65"/>
+        <location filename="../ui/task_manager_window.ui" line="188"/>
+        <location filename="../ui/task_manager_window.ui" line="237"/>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="80"/>
+        <source>User Name</source>
+        <translation type="unfinished">Usuário</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="85"/>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="obsolete">Memória</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="70"/>
+        <source>Process ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="14"/>
+        <source>Task Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="75"/>
+        <source>Session ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="90"/>
+        <source>Memory (private working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="98"/>
+        <source>Memory (working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="106"/>
+        <source>Memory (peak working set)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="114"/>
+        <source>Memory (working set delta)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="122"/>
+        <source>Threads</source>
+        <translation type="unfinished">Threads</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="127"/>
+        <source>Image Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="153"/>
+        <location filename="../ui/task_manager_window.ui" line="308"/>
+        <source>End Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="163"/>
+        <source>Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="198"/>
+        <source>Startup type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="203"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="293"/>
+        <location filename="../ui/task_manager_window.ui" line="328"/>
+        <source>Logoff</source>
+        <translation type="unfinished">Logoff</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="313"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="318"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="365"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="193"/>
+        <location filename="../ui/task_manager_window.ui" line="247"/>
+        <source>Status</source>
+        <translation type="unfinished">Status</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="336"/>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="344"/>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="352"/>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="357"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="212"/>
+        <source>Users</source>
+        <translation type="unfinished">Usuários</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="242"/>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="252"/>
+        <source>Client name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="257"/>
+        <source>Session name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.ui" line="283"/>
+        <location filename="../ui/task_manager_window.ui" line="323"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">Desconectar</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">Salvar</translation>
+    </message>
+    <message>
+        <source>Save (Ctrl+S)</source>
+        <translation type="obsolete">Salvar (CTRL+S)</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="obsolete">Imprimir</translation>
+    </message>
+    <message>
+        <source>Print (Ctrl+P)</source>
+        <translation type="obsolete">Imprimir (CTRL+P)</translation>
+    </message>
+    <message>
+        <source>Copy Row</source>
+        <translation type="obsolete">Copiar Linha</translation>
+    </message>
+    <message>
+        <source>Copy Name</source>
+        <translation type="obsolete">Copiar Nome</translation>
+    </message>
+    <message>
+        <source>Copy Value</source>
+        <translation type="obsolete">Copiar Valor</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="obsolete">Atualizar</translation>
+    </message>
+    <message>
+        <source>Refresh (F5)</source>
+        <translation type="obsolete">Atualizar (F5)</translation>
+    </message>
+</context>
+<context>
     <name>TextChatWindow</name>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="14"/>
@@ -1691,6 +2003,69 @@
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserItem</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="271"/>
+        <source>&lt;no user&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="306"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="309"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="312"/>
+        <source>Connect Query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="315"/>
+        <source>Shadow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="318"/>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="321"/>
+        <source>Idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="324"/>
+        <source>Listen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="327"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="330"/>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="333"/>
+        <source>Init</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="336"/>
+        <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1928,76 +2303,76 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="218"/>
+        <location filename="../ui/desktop_panel.cc" line="226"/>
         <source>Monitor selection</source>
         <translation type="unfinished">Seleção do monitor</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="237"/>
+        <location filename="../ui/desktop_panel.cc" line="245"/>
         <source>Monitor %1 (primary)</source>
         <translation>Monitor %1 (primário)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="239"/>
+        <location filename="../ui/desktop_panel.cc" line="247"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="251"/>
+        <location filename="../ui/desktop_panel.cc" line="259"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="262"/>
+        <location filename="../ui/desktop_panel.cc" line="270"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="414"/>
-        <location filename="../ui/desktop_panel.cc" line="425"/>
-        <location filename="../ui/desktop_panel.cc" line="436"/>
-        <location filename="../ui/desktop_panel.cc" line="447"/>
-        <location filename="../ui/desktop_panel.cc" line="458"/>
+        <location filename="../ui/desktop_panel.cc" line="422"/>
+        <location filename="../ui/desktop_panel.cc" line="433"/>
+        <location filename="../ui/desktop_panel.cc" line="444"/>
+        <location filename="../ui/desktop_panel.cc" line="455"/>
+        <location filename="../ui/desktop_panel.cc" line="466"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="415"/>
+        <location filename="../ui/desktop_panel.cc" line="423"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="426"/>
+        <location filename="../ui/desktop_panel.cc" line="434"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="437"/>
+        <location filename="../ui/desktop_panel.cc" line="445"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="448"/>
+        <location filename="../ui/desktop_panel.cc" line="456"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="459"/>
+        <location filename="../ui/desktop_panel.cc" line="467"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="537"/>
+        <location filename="../ui/desktop_panel.cc" line="545"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="304"/>
+        <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="309"/>
+        <location filename="../ui/desktop_panel.cc" line="317"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2262,36 +2637,59 @@
     </message>
 </context>
 <context>
+    <name>client::ProcessItem</name>
+    <message>
+        <source>TB</source>
+        <translation type="obsolete">TB</translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="obsolete">GB</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="obsolete">MB</translation>
+    </message>
+    <message>
+        <source>kB</source>
+        <translation type="obsolete">kB</translation>
+    </message>
+    <message>
+        <source>B</source>
+        <translation type="obsolete">B</translation>
+    </message>
+</context>
+<context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="260"/>
-        <location filename="../ui/qt_desktop_window.cc" line="268"/>
-        <location filename="../ui/qt_desktop_window.cc" line="750"/>
+        <location filename="../ui/qt_desktop_window.cc" line="279"/>
+        <location filename="../ui/qt_desktop_window.cc" line="287"/>
+        <location filename="../ui/qt_desktop_window.cc" line="779"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="261"/>
+        <location filename="../ui/qt_desktop_window.cc" line="280"/>
         <source>There are no supported video encodings.</source>
         <translation>Não há codificações de vídeo compatíveis.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="269"/>
+        <location filename="../ui/qt_desktop_window.cc" line="288"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="728"/>
+        <location filename="../ui/qt_desktop_window.cc" line="757"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="730"/>
+        <location filename="../ui/qt_desktop_window.cc" line="759"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="750"/>
+        <location filename="../ui/qt_desktop_window.cc" line="779"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
@@ -4447,6 +4845,51 @@
             <numerusform>%n dia</numerusform>
             <numerusform>%n dias</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>client::TaskManagerWindow</name>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="921"/>
+        <source>Update Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="672"/>
+        <location filename="../ui/task_manager_window.cc" line="702"/>
+        <location filename="../ui/task_manager_window.cc" line="719"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Confirmação</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="673"/>
+        <source>Are you really want to end &quot;%1&quot; process?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="703"/>
+        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="720"/>
+        <source>Are you really want to end user &quot;%1&quot; session?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="906"/>
+        <source>Processes: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="916"/>
+        <source>Physical memory: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="911"/>
+        <source>CPU loading: %1%</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

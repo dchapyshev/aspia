@@ -42,6 +42,7 @@ class DesktopPanel;
 class DesktopWindowProxy;
 class QtSystemInfoWindow;
 class StatisticsDialog;
+class TaskManagerWindow;
 
 class QtDesktopWindow :
     public SessionWindow,
@@ -67,6 +68,7 @@ public:
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setCursorPosition(const proto::CursorPosition& cursor_position) override;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
+    void setTaskManager(const proto::task_manager::HostToClient& message) override;
     void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
@@ -113,6 +115,7 @@ private:
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<QtSystemInfoWindow> system_info_;
+    QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
 
     QTimer* resize_timer_ = nullptr;

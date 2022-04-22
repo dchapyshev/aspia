@@ -24,6 +24,7 @@
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
+#include "host/task_manager.h"
 
 namespace base {
 class AudioEncoder;
@@ -39,7 +40,8 @@ namespace host {
 class DesktopSessionProxy;
 
 class ClientSessionDesktop
-    : public ClientSession
+    : public ClientSession,
+      public TaskManager::Delegate
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type,
@@ -65,6 +67,9 @@ protected:
     // ClientSession implementation.
     void onStarted() override;
 
+    // TaskManager::Delegate implementation.
+    void onTaskManagerMessage(const proto::task_manager::HostToClient& message) override;
+
 private:
     void readExtension(const proto::DesktopExtension& extension);
     void readConfig(const proto::DesktopConfig& config);
@@ -74,12 +79,14 @@ private:
     void readRemoteUpdateExtension(const std::string& data);
     void readSystemInfoExtension(const std::string& data);
     void readVideoRecordingExtension(const std::string& data);
+    void readTaskManagerExtension(const std::string& data);
 
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<base::ScaleReducer> scale_reducer_;
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
+    std::unique_ptr<TaskManager> task_manager_;
     DesktopSession::Config desktop_session_config_;
     base::Size source_size_;
     base::Size preferred_size_;
