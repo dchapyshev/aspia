@@ -494,6 +494,7 @@ void NetworkChannel::doWrite()
 
         if (target_data_size > kMaxMessageSize)
         {
+            LOG(LS_ERROR) << "Too big outgoing message: " << target_data_size;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -590,6 +591,7 @@ void NetworkChannel::onReadSize(const std::error_code& error_code, size_t bytes_
 
         if (message_size > kMaxMessageSize)
         {
+            LOG(LS_ERROR) << "Too big incoming message: " << message_size;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -687,6 +689,7 @@ void NetworkChannel::onReadServiceHeader(const std::error_code& error_code, size
     ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
     if (header->length > kMaxMessageSize)
     {
+        LOG(LS_INFO) << "Too big service message: " << header->length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
