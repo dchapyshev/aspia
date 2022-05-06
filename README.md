@@ -22,6 +22,7 @@ Currently supported
 - Video recording
 - Client and Console for Windows, MacOSX and Linux
 - Host for Windows only
+- Router/Relay for Windows and Linux
 
 System requirements
 -------------------
