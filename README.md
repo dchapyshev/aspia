@@ -16,7 +16,7 @@ Currently supported
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
-- NAT traversal
+- NAT traversal (with using Aspia Router and Aspia Relay)
 - Audio support
 - Video recording
 - Client and Console for Windows, MacOSX and Linux
