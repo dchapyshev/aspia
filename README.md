@@ -2,7 +2,7 @@ Aspia
 =====
 Remote desktop and file transfer tool.
 
-With Aspia, you can create your own NAT traversal infrastructure (using Router and Relay servers) or use direct connections. Aspia supports many features. Among them, detailed information about the system, audio, text chat.
+With Aspia, you can create your own NAT traversal infrastructure (using Router and Relay servers) with connection by ID or use direct connections. Aspia supports many features. Among them, detailed information about the system, audio, text chat.
 
 |Build Status|
 |:--:|
