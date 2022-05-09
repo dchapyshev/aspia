@@ -26,6 +26,8 @@ namespace base {
 bool isValidIpV4Address(std::u16string_view address);
 bool isValidIpV6Address(std::u16string_view address);
 
+bool isIpInRange(std::u16string_view ip, std::u16string_view network, std::u16string_view mask);
+
 } // namespace base
 
 #endif // BASE_NET_IP_UTIL_H

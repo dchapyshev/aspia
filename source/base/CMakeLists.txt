@@ -544,7 +544,8 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS
-    net/address_unittest.cc)
+    net/address_unittest.cc
+    net/ip_util_unittest.cc)
 
 list(APPEND SOURCE_BASE_PEER
     peer/authenticator.cc

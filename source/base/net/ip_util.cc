@@ -31,6 +31,20 @@
 
 namespace base {
 
+namespace {
+
+bool ipv4FromString(std::u16string_view str, uint32_t* ip)
+{
+    struct sockaddr_in sa;
+    if (inet_pton(AF_INET, base::local8BitFromUtf16(str).c_str(), &(sa.sin_addr)) != 1)
+        return false;
+
+    *ip = htonl(sa.sin_addr.S_un.S_addr);
+    return true;
+}
+
+} // namespace
+
 bool isValidIpV4Address(std::u16string_view address)
 {
     struct sockaddr_in sa;
@@ -41,6 +55,29 @@ bool isValidIpV6Address(std::u16string_view address)
 {
     struct sockaddr_in6 sa;
     return inet_pton(AF_INET6, base::local8BitFromUtf16(address).c_str(), &(sa.sin6_addr)) != 0;
+}
+
+bool isIpInRange(std::u16string_view ip, std::u16string_view network, std::u16string_view mask)
+{
+    uint32_t ip_addr = 0;
+    if (!ipv4FromString(ip, &ip_addr))
+        return false;
+
+    uint32_t network_addr = 0;
+    if (!ipv4FromString(network, &network_addr))
+        return false;
+
+    uint32_t mask_addr = 0;
+    if (!ipv4FromString(mask, &mask_addr))
+        return false;
+
+    uint32_t lower_addr = (network_addr & mask_addr);
+    uint32_t upper_addr = (lower_addr | (~mask_addr));
+
+    if (ip_addr >= lower_addr && ip_addr <= upper_addr)
+        return true;
+
+    return false;
 }
 
 } // namespace base
