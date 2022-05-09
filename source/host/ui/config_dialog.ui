@@ -115,6 +115,27 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
+           <widget class="QCheckBox" name="checkbox_auto_update">
+            <property name="text">
+             <string>Automatic checking and installation of updates</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_update_check_freq">
+              <property name="text">
+               <string>Check for updates:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="combobox_update_check_freq"/>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QCheckBox" name="checkbox_use_custom_server">
             <property name="text">
              <string>Use custom update server</string>
@@ -124,7 +145,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="label_update_server">
               <property name="text">
                <string>Server:</string>
               </property>

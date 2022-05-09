@@ -382,4 +382,34 @@ void SystemSettings::setApplicationShutdownDisabled(bool value)
     settings_.set("ApplicationShutdownDisabled", value);
 }
 
+bool SystemSettings::isAutoUpdateEnabled() const
+{
+    return settings_.get<bool>("AutoUpdateEnabled", true);
+}
+
+void SystemSettings::setAutoUpdateEnabled(bool enable)
+{
+    settings_.set("AutoUpdateEnabled", enable);
+}
+
+int SystemSettings::updateCheckFrequency() const
+{
+    return settings_.get<int>("UpdateCheckFrequency", 7);
+}
+
+void SystemSettings::setUpdateCheckFrequency(int days)
+{
+    settings_.set("UpdateCheckFrequency", days);
+}
+
+int64_t SystemSettings::lastUpdateCheck() const
+{
+    return settings_.get<int64_t>("LastUpdateCheck");
+}
+
+void SystemSettings::setLastUpdateCheck(int64_t timepoint)
+{
+    settings_.set("LastUpdateCheck", timepoint);
+}
+
 } // namespace host

@@ -28,6 +28,7 @@
 namespace base {
 class FilePathWatcher;
 class TaskRunner;
+class WaitableTimer;
 } // namespace base
 
 namespace host {
@@ -71,8 +72,10 @@ private:
     void reloadUserList();
     void connectToRouter();
     void disconnectFromRouter();
+    void checkForUpdates();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
+    std::unique_ptr<base::WaitableTimer> update_timer_;
 
     std::unique_ptr<base::FilePathWatcher> settings_watcher_;
     SystemSettings settings_;

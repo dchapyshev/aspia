@@ -73,6 +73,39 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 
+    ui.combobox_update_check_freq->addItem(tr("Once a day"), 1);
+    ui.combobox_update_check_freq->addItem(tr("Once a week"), 7);
+    ui.combobox_update_check_freq->addItem(tr("Once a month"), 30);
+
+    connect(ui.checkbox_auto_update, &QCheckBox::toggled, this, [this](bool checked)
+    {
+        setConfigChanged(true);
+
+        ui.label_update_check_freq->setEnabled(checked);
+        ui.combobox_update_check_freq->setEnabled(checked);
+    });
+
+    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, this, [this](bool checked)
+    {
+        setConfigChanged(true);
+
+        ui.label_update_server->setEnabled(checked);
+        ui.edit_update_server->setEnabled(checked);
+
+        if (!checked)
+            ui.edit_update_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
+    });
+
+    connect(ui.edit_update_server, &QLineEdit::textEdited,
+            this, &ConfigDialog::onConfigChanged);
+
+    connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
+    {
+        common::UpdateDialog(QString::fromStdU16String(SystemSettings().updateServer()),
+                             QStringLiteral("host"),
+                             this).exec();
+    });
+
     //---------------------------------------------------------------------------------------------
     // Security Tab
     //---------------------------------------------------------------------------------------------
@@ -191,30 +224,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_add, &QPushButton::clicked, this, &ConfigDialog::onAddUser);
     connect(ui.button_modify, &QPushButton::clicked, this, &ConfigDialog::onModifyUser);
     connect(ui.button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
-
-    //---------------------------------------------------------------------------------------------
-    // Update Tab
-    //---------------------------------------------------------------------------------------------
-
-    connect(ui.checkbox_use_custom_server, &QCheckBox::toggled, this, [this](bool checked)
-    {
-        setConfigChanged(true);
-
-        ui.edit_update_server->setEnabled(checked);
-
-        if (!checked)
-            ui.edit_update_server->setText(QString::fromStdU16String(DEFAULT_UPDATE_SERVER));
-    });
-
-    connect(ui.edit_update_server, &QLineEdit::textEdited,
-            this, &ConfigDialog::onConfigChanged);
-
-    connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
-    {
-        common::UpdateDialog(QString::fromStdU16String(SystemSettings().updateServer()),
-                             QStringLiteral("host"),
-                             this).exec();
-    });
 
     //---------------------------------------------------------------------------------------------
     // Advanced Tab
@@ -626,6 +635,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setApplicationShutdownDisabled(ui.checkbox_disable_shutdown->isChecked());
         settings.setTcpPort(static_cast<uint16_t>(ui.spinbox_port->value()));
         settings.setUserList(*user_list);
+        settings.setAutoUpdateEnabled(ui.checkbox_auto_update->isChecked());
+        settings.setUpdateCheckFrequency(ui.combobox_update_check_freq->currentData().toInt());
         settings.setUpdateServer(ui.edit_update_server->text().toStdU16String());
         settings.setPreferredVideoCapturer(ui.combo_video_capturer->currentData().toUInt());
 
@@ -694,13 +705,19 @@ void ConfigDialog::reloadAll()
 {
     SystemSettings settings;
 
+    ui.checkbox_auto_update->setChecked(settings.isAutoUpdateEnabled());
+
+    int item_index = ui.combobox_update_check_freq->findData(settings.updateCheckFrequency());
+    if (item_index != -1)
+        ui.combobox_update_check_freq->setCurrentIndex(item_index);
+
     bool enable_one_time_pass = settings.oneTimePassword();
     ui.checkbox_onetime_password->setChecked(enable_one_time_pass);
     onOneTimeStateChanged(enable_one_time_pass ? Qt::Checked : Qt::Unchecked);
 
     std::chrono::minutes onetime_pass_change =
         std::chrono::duration_cast<std::chrono::minutes>(settings.oneTimePasswordExpire());
-    int item_index = ui.combobox_onetime_pass_change->findData(onetime_pass_change.count());
+    item_index = ui.combobox_onetime_pass_change->findData(onetime_pass_change.count());
     if (item_index != -1)
         ui.combobox_onetime_pass_change->setCurrentIndex(item_index);
 

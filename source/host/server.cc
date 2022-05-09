@@ -20,11 +20,13 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
+#include "base/waitable_timer.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
 #include "base/net/network_channel.h"
 #include "base/net/firewall_manager.h"
 #include "host/client_session.h"
+#include "host/win/updater_launcher.h"
 
 namespace host {
 
@@ -82,6 +84,10 @@ void Server::start()
     {
         LOG(LS_WARNING) << "Configuration file does not exist";
     }
+
+    update_timer_ = std::make_unique<base::WaitableTimer>(
+        base::WaitableTimer::Type::REPEATED, task_runner_);
+    update_timer_->start(std::chrono::minutes(5), std::bind(&Server::checkForUpdates, this));
 
     settings_watcher_ = std::make_unique<base::FilePathWatcher>(task_runner_);
     settings_watcher_->watch(settings_file, false,
@@ -413,6 +419,40 @@ void Server::disconnectFromRouter()
     {
         LOG(LS_INFO) << "No router controller";
     }
+}
+
+void Server::checkForUpdates()
+{
+    int64_t last_timepoint = settings_.lastUpdateCheck();
+    int64_t current_timepoint = std::time(nullptr);
+
+    LOG(LS_INFO) << "Last timepoint: " << last_timepoint << ", current: " << current_timepoint;
+
+    int64_t time_diff = current_timepoint - last_timepoint;
+    if (time_diff <= 0)
+    {
+        settings_.setLastUpdateCheck(current_timepoint);
+        return;
+    }
+
+    static const int64_t kSecondsPerMinute = 60;
+    static const int64_t kMinutesPerHour = 60;
+    static const int64_t kHoursPerDay = 24;
+
+    int64_t days = time_diff / kSecondsPerMinute / kMinutesPerHour / kHoursPerDay;
+    if (days < 1)
+        return;
+
+    if (days < settings_.updateCheckFrequency())
+    {
+        LOG(LS_INFO) << "Not enough time has elapsed since the previous check for updates";
+        return;
+    }
+
+    settings_.setLastUpdateCheck(current_timepoint);
+
+    LOG(LS_INFO) << "Start checking for updates";
+    launchSilentUpdater();
 }
 
 } // namespace host

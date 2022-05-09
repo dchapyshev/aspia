@@ -108,6 +108,15 @@ public:
     bool isApplicationShutdownDisabled() const;
     void setApplicationShutdownDisabled(bool value);
 
+    bool isAutoUpdateEnabled() const;
+    void setAutoUpdateEnabled(bool enable);
+
+    int updateCheckFrequency() const;
+    void setUpdateCheckFrequency(int days);
+
+    int64_t lastUpdateCheck() const;
+    void setLastUpdateCheck(int64_t timepoint);
+
 private:
     base::JsonSettings settings_;
 

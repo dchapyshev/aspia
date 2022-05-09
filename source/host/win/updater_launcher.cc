@@ -165,4 +165,22 @@ bool launchUpdater(base::SessionId session_id)
     return createProcessWithToken(user_token, command_line);
 }
 
+bool launchSilentUpdater()
+{
+    std::filesystem::path file_path;
+    if (!base::BasePaths::currentExecDir(&file_path))
+    {
+        LOG(LS_WARNING) << "currentExecDir failed";
+        return false;
+    }
+
+    file_path.append("aspia_host.exe");
+
+    base::CommandLine command_line(file_path);
+    command_line.appendSwitch(u"silent-update");
+
+    // TODO
+    return true;
+}
+
 } // namespace host

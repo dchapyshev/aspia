@@ -25,6 +25,8 @@ namespace host {
 
 bool launchUpdater(base::SessionId session_id);
 
+bool launchSilentUpdater();
+
 } // namespace host
 
 #endif // HOST_WIN_UPDATER_LAUNCHER_H

@@ -209,6 +209,14 @@
         <source>Export settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatic checking and installation of updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check for updates:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConnectConfirmDialog</name>
@@ -618,6 +626,18 @@
     </message>
     <message>
         <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once a day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once a week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
