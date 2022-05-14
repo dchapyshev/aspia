@@ -1439,8 +1439,7 @@
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="64"/>
         <source>Lock Count</source>
-        <translatorcomment>Не понятен контекст</translatorcomment>
-        <translation>Lock Count</translation>
+        <translation>Блокувань</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="54"/>
@@ -2791,8 +2790,7 @@
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="173"/>
         <source>Power Options</source>
-        <translatorcomment>Варианты питания?</translatorcomment>
-        <translation>Варіанти живлення</translation>
+        <translation>Параметри живлення</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="187"/>
