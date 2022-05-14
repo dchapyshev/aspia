@@ -6,22 +6,22 @@
     <message>
         <location filename="../change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити пароль</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.ui" line="22"/>
         <source>Old password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Старий пароль:</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.ui" line="39"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий пароль:</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.ui" line="56"/>
         <source>New password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий пароль (ще раз):</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../check_password_dialog.ui" line="14"/>
         <source>Password Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Захист за допомогою пароля</translation>
     </message>
     <message>
         <location filename="../check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування захищено паролем.Введіть пароль для перегляду і зміни налаштувань.</translation>
     </message>
     <message>
         <location filename="../check_password_dialog.ui" line="36"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
 </context>
 <context>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../config_dialog.ui" line="271"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити пароль</translation>
     </message>
     <message>
         <source>Import</source>
@@ -82,98 +82,98 @@
     <message>
         <location filename="../config_dialog.ui" line="246"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Безпека</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="252"/>
         <source>Password Protection of Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Захист налаштувань за допомогою пароля</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="288"/>
         <source>One-time Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Одноразовий пароль</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="294"/>
         <source>Enable one-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути одноразовий пароль</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="303"/>
         <source>Change password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити пароль:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="323"/>
         <source>Characters count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість символів:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="313"/>
         <source>Characters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Символи:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="30"/>
         <source>Common</source>
-        <translation type="unfinished"></translation>
+        <translation>Загальне</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="38"/>
         <source>Incoming port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Вхідний порт:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="196"/>
         <location filename="../config_dialog.ui" line="385"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="391"/>
         <source>Disable Aspia shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Не закривати Aspia</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="215"/>
         <source>Import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт налаштувань</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="120"/>
         <source>Automatic checking and installation of updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматична первірка і встановлення оновлень</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="129"/>
         <source>Check for updates:</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірити оновлення:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="222"/>
         <source>Export settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт налаштувань</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="345"/>
         <source>Connection Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердження підключення</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="351"/>
         <source>Require confirmation when connected to a computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимагати підтвердження при підключенні до комп&apos;ютера</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="360"/>
         <source>Automatic confirmation of connection via:</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматичне підтвердження підключення через:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="370"/>
         <source>If there is no active user:</source>
-        <translation type="unfinished"></translation>
+        <translation>Якщо немає активного користувача:</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="415"/>
@@ -198,7 +198,7 @@
     <message>
         <location filename="../config_dialog.ui" line="466"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../config_dialog.ui" line="483"/>
@@ -272,7 +272,7 @@
     <message>
         <location filename="../connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердження підключення</translation>
     </message>
 </context>
 <context>
@@ -296,12 +296,12 @@
     <message>
         <location filename="../host_main.cc" line="272"/>
         <source>Aspia Host</source>
-        <translation type="unfinished">Хост Aspia</translation>
+        <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../host_main.cc" line="273"/>
         <source>Application version: %1.%2.%3.%4.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія додатку: %1.%2.%3.%4.</translation>
     </message>
 </context>
 <context>
@@ -334,7 +334,7 @@
     <message>
         <location filename="../main_window.ui" line="341"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="345"/>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../main_window.ui" line="409"/>
         <source>Show icons in menus</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати значки в меню</translation>
     </message>
 </context>
 <context>
@@ -382,32 +382,33 @@
     <message>
         <location filename="../notifier_window.ui" line="349"/>
         <source>Voice chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосовий чат</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="363"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="377"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати мишу</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="391"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="405"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../notifier_window.ui" line="419"/>
         <source>Disconnect all</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>отключить все?</translatorcomment>
+        <translation>Відключити все</translation>
     </message>
 </context>
 <context>
@@ -439,7 +440,7 @@
     <message>
         <location filename="../settings_util.cc" line="85"/>
         <source>Source settings file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вихідний файл налаштувань відсутній.</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="113"/>
@@ -449,7 +450,7 @@
     <message>
         <location filename="../settings_util.cc" line="130"/>
         <source>The existing settings will be overwritten. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточні налаштування будуть перезаписані. Продовжити?</translation>
     </message>
     <message>
         <location filename="../settings_util.cc" line="153"/>
@@ -495,7 +496,7 @@
     <message>
         <location filename="../change_password_dialog.cc" line="40"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="89"/>
@@ -505,33 +506,33 @@
         <location filename="../change_password_dialog.cc" line="140"/>
         <location filename="../change_password_dialog.cc" line="150"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="90"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви повинні ввести старий пароль.</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="130"/>
         <source>You entered an incorrect old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви ввели невірний старий пароль.</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="141"/>
         <source>New password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../change_password_dialog.cc" line="101"/>
         <location filename="../change_password_dialog.cc" line="151"/>
         <source>The passwords entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введені паролі не співпадають.</translation>
     </message>
 </context>
 <context>
@@ -539,17 +540,17 @@
     <message>
         <location filename="../check_password_dialog.cc" line="39"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмнити</translation>
     </message>
     <message>
         <location filename="../check_password_dialog.cc" line="67"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../check_password_dialog.cc" line="68"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви ввели невірний пароль.</translation>
     </message>
 </context>
 <context>
@@ -616,108 +617,109 @@
     <message>
         <location filename="../config_dialog.cc" line="56"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="59"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Примінити</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="76"/>
         <source>Once a day</source>
-        <translation type="unfinished"></translation>
+        <translation>Щодня</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="77"/>
         <source>Once a week</source>
-        <translation type="unfinished"></translation>
+        <translation>Щотижня</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="78"/>
         <source>Once a month</source>
-        <translation type="unfinished"></translation>
+        <translation>Щомісяця</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="126"/>
         <source>On reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>При перезавантаженні</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="127"/>
         <source>Every 5 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="128"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="129"/>
         <source>Every 1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожну годину</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="130"/>
         <source>Every 6 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожні 6 годин</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="131"/>
         <source>Every 12 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожні 12 годин</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="132"/>
         <source>Every 24 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожні 24 години</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="143"/>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Буквы или письма?</translatorcomment>
+        <translation>Букви</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="162"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Ніколи</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="163"/>
         <source>15 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>15 секунд</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="164"/>
         <source>30 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>30 секунд</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="165"/>
         <source>45 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>45 секунд</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="166"/>
         <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>60 секунд</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="174"/>
         <source>Accept connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Прийняти підключення</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="176"/>
         <source>Reject connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Відхилити підключення</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="461"/>
         <location filename="../config_dialog.cc" line="497"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сталася помилка під час обробки пароля.</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="599"/>
@@ -770,7 +772,7 @@
     <message>
         <location filename="../config_dialog.cc" line="855"/>
         <source>Current service state: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний стан служби: %1</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="778"/>
@@ -781,12 +783,12 @@
     <message>
         <location filename="../config_dialog.cc" line="140"/>
         <source>Letters and digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Букви і цифри</translation>
     </message>
     <message>
         <location filename="../config_dialog.cc" line="145"/>
         <source>Digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифри</translation>
     </message>
     <message>
         <source>Current state: %1</source>
@@ -824,39 +826,39 @@
     <message>
         <location filename="../connect_confirm_dialog.cc" line="41"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../connect_confirm_dialog.cc" line="45"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../connect_confirm_dialog.cc" line="67"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 (%2) намагається підключитися до вашого комп&apos;ютера з типом сесії %3.</translation>
     </message>
     <message>
         <location filename="../connect_confirm_dialog.cc" line="69"/>
         <source>Allow the connection?</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити підключення?</translation>
     </message>
     <message numerus="yes">
         <location filename="../connect_confirm_dialog.cc" line="129"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Підключення буде прийнято автоматично через %n секунду.</numerusform>
+            <numerusform>Підключення буде прийнято автоматично через %n секунди.</numerusform>
+            <numerusform>Підключення буде прийнято автоматично через %n секунд.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../connect_confirm_dialog.cc" line="134"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Підключення буде відхилено автоматично через %n секунду.</numerusform>
+            <numerusform>Підключення буде відхилено автоматично через %n секунди.</numerusform>
+            <numerusform>Підключення буде відхилено автоматично через %n секунд.</numerusform>
         </translation>
     </message>
 </context>
@@ -888,7 +890,7 @@
     <message>
         <location filename="../main_window.cc" line="432"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 (%2) почав запис екрану.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="700"/>
@@ -924,7 +926,7 @@
     <message>
         <location filename="../main_window.cc" line="437"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 (%2) закінчив запис екрану.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="587"/>
@@ -952,32 +954,32 @@
     <message>
         <location filename="../notifier_window.cc" line="258"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокувати мишу</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="263"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати мишу</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="282"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="287"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="306"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити</translation>
     </message>
     <message>
         <location filename="../notifier_window.cc" line="311"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
 </context>
 <context>
@@ -985,7 +987,7 @@
     <message>
         <location filename="../user_dialog.cc" line="40"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../user_dialog.cc" line="139"/>

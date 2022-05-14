@@ -67,12 +67,12 @@
     <message>
         <location filename="../address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.ui" line="242"/>
         <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартні налаштування</translation>
     </message>
 </context>
 <context>
@@ -135,17 +135,17 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="66"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Глибина кольору:</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="87"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидше</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="113"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Якісніше</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="131"/>
@@ -165,12 +165,12 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="151"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="158"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати позицію віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="194"/>
@@ -196,17 +196,17 @@
     <message>
         <location filename="../computer_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Унаслідувати налаштування від батьківського</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="236"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити буфер обміну при відє&apos;днанні</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.ui" line="243"/>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../computer_dialog_general.ui" line="81"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Унаслідувати від батьківського</translation>
     </message>
     <message>
         <location filename="../computer_dialog_general.ui" line="93"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.ui" line="37"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../computer_group_dialog.ui" line="91"/>
         <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартні налаштування</translation>
     </message>
 </context>
 <context>
@@ -298,98 +298,98 @@
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="55"/>
         <source>Codec</source>
-        <translation type="unfinished">Кодек</translation>
+        <translation>Кодек</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="66"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Глибина кольору:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="87"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидше</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="113"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Якісніше</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="131"/>
         <source>Features</source>
-        <translation type="unfinished">Додатково</translation>
+        <translation>Додатково</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="137"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Увімкнути аудіо</translation>
+        <translation>Увімкнути аудіо</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="144"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Включити буфер обміну</translation>
+        <translation>Включити буфер обміну</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="151"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="158"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати позицію віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="194"/>
         <source>Appearance</source>
-        <translation type="unfinished">Вигляд</translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="200"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Відключити ефекти робочого стола</translation>
+        <translation>Відключити ефекти робочого стола</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="207"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Відключити шпалери робочого стола</translation>
+        <translation>Відключити шпалери робочого стола</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="214"/>
         <source>Disable font smoothing</source>
-        <translation type="unfinished">Відключити згладжування шрифтів</translation>
+        <translation>Відключити згладжування шрифтів</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="182"/>
         <location filename="../computer_group_dialog_desktop.ui" line="230"/>
         <source>Other</source>
-        <translation type="unfinished">Інше</translation>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="36"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="42"/>
         <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Унаслідувати налаштування від батьківського</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="236"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити буфер обміну при відє&apos;днанні</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="243"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Заблокувати комп&apos;ютер після від&apos;єднання</translation>
+        <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.ui" line="250"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Блокувати віддалений ввід</translation>
+        <translation>Блокувати віддалений ввід</translation>
     </message>
 </context>
 <context>
@@ -409,17 +409,17 @@
     <message>
         <location filename="../computer_group_dialog_general.ui" line="20"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Унаслідувати від батьківського</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation type="unfinished">Ім&apos;я користувача:</translation>
+        <translation>Ім&apos;я користувача:</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <source>Comment:</source>
@@ -431,7 +431,7 @@
     <message>
         <location filename="../computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished">Обрати дочірній елемент</translation>
+        <translation>Обрати дочірній елемент</translation>
     </message>
 </context>
 <context>
@@ -664,7 +664,7 @@
     <message>
         <location filename="../main_window.ui" line="482"/>
         <source>F8</source>
-        <translation type="unfinished">F8</translation>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="579"/>
@@ -674,31 +674,31 @@
     <message>
         <location filename="../main_window.ui" line="587"/>
         <source>Show icons in menus</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати значки в меню</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="599"/>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Інформація про систему</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="602"/>
         <location filename="../main_window.ui" line="611"/>
         <location filename="../main_window.ui" line="614"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="626"/>
         <source>&amp;Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовий &amp;чат</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="629"/>
         <location filename="../main_window.ui" line="638"/>
         <location filename="../main_window.ui" line="641"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовий чат</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="490"/>
@@ -781,17 +781,17 @@
     <message>
         <location filename="../fast_connect_dialog.ui" line="104"/>
         <source>Default configuration from address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартні налаштування з адресної книги</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="110"/>
         <source>Use credentials from address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати облікові дані з адресної книги</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.ui" line="117"/>
         <source>Use session parameters from address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати параметри сесії з адресної книги</translation>
     </message>
 </context>
 <context>
@@ -870,27 +870,27 @@
     <message>
         <location filename="../address_book_dialog.cc" line="97"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="225"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="229"/>
         <source>Sessions</source>
-        <translation type="unfinished">Сесії</translation>
+        <translation>Сесії</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="236"/>
         <source>Manage</source>
-        <translation type="unfinished">Керування</translation>
+        <translation>Керування</translation>
     </message>
     <message>
         <location filename="../address_book_dialog.cc" line="240"/>
         <source>View</source>
-        <translation type="unfinished">Перегляд</translation>
+        <translation>Перегляд</translation>
     </message>
     <message numerus="yes">
         <location filename="../address_book_dialog.cc" line="449"/>
@@ -1065,7 +1065,7 @@
     <message>
         <location filename="../computer_dialog.cc" line="59"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../computer_dialog.cc" line="68"/>
@@ -1098,32 +1098,32 @@
     <message>
         <location filename="../computer_dialog_desktop.cc" line="108"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>True color (32 біти)</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.cc" line="109"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>High color (16 біт)</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.cc" line="110"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>256 кольорів (8 біт)</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.cc" line="111"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 кольори (6 біт)</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.cc" line="112"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
         <location filename="../computer_dialog_desktop.cc" line="295"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиснення: %1</translation>
     </message>
 </context>
 <context>
@@ -1172,27 +1172,27 @@
     <message>
         <location filename="../computer_group_dialog.cc" line="62"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="78"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="82"/>
         <source>Sessions</source>
-        <translation type="unfinished">Сесії</translation>
+        <translation>Сесії</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="89"/>
         <source>Manage</source>
-        <translation type="unfinished">Керування</translation>
+        <translation>Керування</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog.cc" line="93"/>
         <source>View</source>
-        <translation type="unfinished">Перегляд</translation>
+        <translation>Перегляд</translation>
     </message>
     <message numerus="yes">
         <location filename="../computer_group_dialog.cc" line="218"/>
@@ -1228,32 +1228,32 @@
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="123"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>True color (32 біти)</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="124"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>High color (16 біт)</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="125"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>256 кольорів (8 біт)</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="126"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 кольори (6 біт)</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="127"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_desktop.cc" line="310"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиснення: %1</translation>
     </message>
 </context>
 <context>
@@ -1265,17 +1265,17 @@
     <message>
         <location filename="../computer_group_dialog_general.cc" line="43"/>
         <source>Credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Облікові дані</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.cc" line="48"/>
         <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation>Унаслідувати від батьківського</translation>
     </message>
     <message>
         <location filename="../computer_group_dialog_general.cc" line="97"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я користувача не може бути порожнім і може використовувати тільки символи алфавіту, цифри і знаки _, ., -.</translation>
     </message>
     <message>
         <source>An invalid computer address was entered.</source>
@@ -1284,7 +1284,7 @@
     <message>
         <location filename="../computer_group_dialog_general.cc" line="134"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
 </context>
 <context>
@@ -1292,7 +1292,7 @@
     <message>
         <location filename="../fast_connect_dialog.cc" line="57"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../fast_connect_dialog.cc" line="102"/>
@@ -1423,7 +1423,7 @@
     <message>
         <location filename="../open_address_book_dialog.cc" line="35"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../open_address_book_dialog.cc" line="48"/>
@@ -1462,7 +1462,7 @@
     <message>
         <location filename="../update_settings_dialog.cc" line="37"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
 </context>
 </TS>

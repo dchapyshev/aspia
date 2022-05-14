@@ -64,12 +64,12 @@
     <message>
         <location filename="../ui/session_type.cc" line="39"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../ui/session_type.cc" line="42"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Тесктовий чат</translation>
     </message>
 </context>
 <context>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../ui/text_chat_incoming_message.ui" line="197"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -93,7 +93,7 @@
     <message>
         <location filename="../ui/text_chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -101,22 +101,22 @@
     <message>
         <location filename="../ui/text_chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Чат Aspia</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.ui" line="179"/>
         <source>Send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Відправити повідомлення</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.ui" line="225"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Інструменти</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.ui" line="248"/>
         <source>···</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
@@ -236,7 +236,7 @@
     <message>
         <location filename="../ui/download_dialog.cc" line="38"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/download_dialog.cc" line="56"/>
@@ -254,7 +254,7 @@
     <message>
         <location filename="../ui/status_dialog.cc" line="39"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
 </context>
 <context>
@@ -262,67 +262,67 @@
     <message>
         <location filename="../ui/text_chat_widget.cc" line="62"/>
         <source>Save chat...</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти чат...</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="63"/>
         <source>Clear chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити чат</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="116"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 набирає текст...</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="122"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 долучається до чату (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="129"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 залишає чат (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="136"/>
         <source>User %1 is logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 в системі (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="143"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 не в системі (%2)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="232"/>
         <location filename="../ui/text_chat_widget.cc" line="285"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/text_chat_widget.cc" line="233"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символ.</numerusform>
+            <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символи.</numerusform>
+            <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="274"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="276"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>TXT файли (*.txt)</translation>
     </message>
     <message>
         <location filename="../ui/text_chat_widget.cc" line="286"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо відкрити файл для запису.</translation>
     </message>
 </context>
 <context>

@@ -29,7 +29,7 @@
     <message>
         <location filename="../client_main.cc" line="58"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="387"/>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../client_main.cc" line="400"/>
         <source>Password of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль користувача.</translation>
     </message>
     <message>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer.</source>
@@ -58,72 +58,72 @@
     <message>
         <location filename="../client_main.cc" line="404"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип сесії. Можливі значення: керування робочим столом, перегляд робочого столу, передавання файлів, інформація про систему, текстовий чат.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="409"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
-        <translation type="unfinished"></translation>
+        <translation>Кодек. можливі значення:  vp8, vp9, zstd.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="413"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
-        <translation type="unfinished"></translation>
+        <translation>Глибина кольору. Можливі значення: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="417"/>
         <source>Compression ratio. Possible values: 1-22.</source>
-        <translation type="unfinished"></translation>
+        <translation>Стисннення. Можливі значення: 1-22.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="421"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути чи вимкнути звук. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="425"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути розмір курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="429"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути позицію курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="433"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути буфер обміну. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="437"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути ефекти робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="441"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути шпалери робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="445"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути або вимкнути згладжування шрифтів. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="449"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Очищати буфер обміну при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="453"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати комп&apos;ютер при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="457"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="461"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../client_main.cc" line="580"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
-        <translation type="unfinished">Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
+        <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -209,22 +209,22 @@
     <message>
         <location filename="../ui/client_window.ui" line="300"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="360"/>
         <source>Show icons in menus</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати значки в меню</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="365"/>
         <source>Check for updates...</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірити оновлення...</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="370"/>
         <source>Update Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити налаштування</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="304"/>
@@ -286,17 +286,17 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="43"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Глибина кольору:</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="64"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидше</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="84"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Якісніше</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="102"/>
@@ -316,12 +316,12 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="122"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="129"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати позицію віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="145"/>
@@ -346,7 +346,7 @@
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="187"/>
         <source>Clear clipboard at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Очитстити буфер обміну при від&apos;єднанні</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.ui" line="194"/>
@@ -471,40 +471,40 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="413"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезавантажити (Безпечний режим)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="416"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезавантажити в безпечний режим</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="421"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставити із буферу у вигляді натиснутих клавіш</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="430"/>
         <location filename="../ui/desktop_panel.ui" line="433"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовий чат</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="441"/>
         <source>Recording settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування запису...</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="450"/>
         <location filename="../ui/desktop_panel.ui" line="453"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати запис</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="462"/>
         <location filename="../ui/desktop_panel.ui" line="465"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Дипетчер завдань</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="221"/>
@@ -744,14 +744,14 @@
         <translation type="obsolete">Б</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="87"/>
+        <location filename="../ui/task_manager_window.cc" line="88"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Процес простою системи</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="89"/>
+        <location filename="../ui/task_manager_window.cc" line="90"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий процес</translation>
     </message>
 </context>
 <context>
@@ -759,17 +759,17 @@
     <message>
         <location filename="../ui/record_settings_dialog.ui" line="14"/>
         <source>Recording Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштування запису</translation>
     </message>
     <message>
         <location filename="../ui/record_settings_dialog.ui" line="26"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматично починати запис сесій при підключенні</translation>
     </message>
     <message>
         <location filename="../ui/record_settings_dialog.ui" line="33"/>
         <source>Write path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях для записів:</translation>
     </message>
 </context>
 <context>
@@ -913,70 +913,70 @@
 <context>
     <name>ServiceItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="197"/>
+        <location filename="../ui/task_manager_window.cc" line="198"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="200"/>
+        <location filename="../ui/task_manager_window.cc" line="201"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="203"/>
+        <location filename="../ui/task_manager_window.cc" line="204"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="206"/>
+        <location filename="../ui/task_manager_window.cc" line="207"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконується</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="209"/>
+        <location filename="../ui/task_manager_window.cc" line="210"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати очікування</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="212"/>
+        <location filename="../ui/task_manager_window.cc" line="213"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Припинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="215"/>
+        <location filename="../ui/task_manager_window.cc" line="216"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="218"/>
-        <location filename="../ui/task_manager_window.cc" line="243"/>
+        <location filename="../ui/task_manager_window.cc" line="219"/>
+        <location filename="../ui/task_manager_window.cc" line="244"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="228"/>
+        <location filename="../ui/task_manager_window.cc" line="229"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="231"/>
+        <location filename="../ui/task_manager_window.cc" line="232"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запуск вручну</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="234"/>
+        <location filename="../ui/task_manager_window.cc" line="235"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="237"/>
+        <location filename="../ui/task_manager_window.cc" line="238"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати при увімкненні</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="240"/>
+        <location filename="../ui/task_manager_window.cc" line="241"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати разом із системою</translation>
     </message>
 </context>
 <context>
@@ -1002,42 +1002,42 @@
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="54"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="59"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="64"/>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Видавець</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="69"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата встановлення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="74"/>
         <source>Install Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Місце встановлення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="82"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="87"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_applications.ui" line="92"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>Шукати за допомогою Google</translation>
     </message>
 </context>
 <context>
@@ -1053,42 +1053,42 @@
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="54"/>
         <source>Process Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я процесу</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="59"/>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Протокол</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="64"/>
         <source>Local Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальна адреса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="69"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальний порт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="74"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалена адреса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="79"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалений порт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="84"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="92"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1097,7 +1097,7 @@
     <message>
         <location filename="../ui/sys_info_widget_connections.ui" line="97"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1113,37 +1113,37 @@
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="54"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="59"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія драйвера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="64"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата драйвера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="69"/>
         <source>Driver Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Видавець драйвера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="74"/>
         <source>Device ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID пристрою</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="82"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="92"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>Шукати за допомогою Google</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1152,7 +1152,7 @@
     <message>
         <location filename="../ui/sys_info_widget_devices.ui" line="87"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1168,37 +1168,37 @@
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="54"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я на екрані</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="59"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="64"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="69"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="74"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип запуску</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="79"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконуваний файл</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="87"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1207,7 +1207,7 @@
     <message>
         <location filename="../ui/sys_info_widget_drivers.ui" line="92"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1219,27 +1219,27 @@
     <message>
         <location filename="../ui/sys_info_widget_env_vars.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_env_vars.ui" line="56"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_env_vars.ui" line="64"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_env_vars.ui" line="69"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_env_vars.ui" line="74"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1259,53 +1259,53 @@
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="130"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Рівень</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="125"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередня</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="60"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступна</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="83"/>
         <source>Events type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип події</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="135"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Категорія</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID події</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Джерело</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="150"/>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../ui/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1322,27 +1322,27 @@
     <message>
         <location filename="../ui/sys_info_widget_licenses.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1350,27 +1350,27 @@
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1378,27 +1378,27 @@
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1406,27 +1406,27 @@
     <message>
         <location filename="../ui/sys_info_widget_net_shares.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1434,27 +1434,28 @@
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="59"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім&apos;я користувача</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="64"/>
         <source>Lock Count</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Не понятен контекст</translatorcomment>
+        <translation>Lock Count</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="54"/>
         <source>File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях до файла</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="72"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_open_files.ui" line="77"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1462,27 +1463,27 @@
     <message>
         <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1490,27 +1491,27 @@
     <message>
         <location filename="../ui/sys_info_widget_printers.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1549,27 +1550,27 @@
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="54"/>
         <source>Destonation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ціль</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="59"/>
         <source>Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>Маска</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="64"/>
         <source>Gateway</source>
-        <translation type="unfinished">Шлюз</translation>
+        <translation>Шлюз</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="69"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Метрика</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="77"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1578,7 +1579,7 @@
     <message>
         <location filename="../ui/sys_info_widget_routes.ui" line="82"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1594,42 +1595,42 @@
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="54"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я на екрані</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="59"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="64"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="69"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="74"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип запуску</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="79"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Обліковий запис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="84"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконуваний файл</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="92"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <source>Copy Name</source>
@@ -1638,7 +1639,7 @@
     <message>
         <location filename="../ui/sys_info_widget_services.ui" line="97"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1646,27 +1647,27 @@
     <message>
         <location filename="../ui/sys_info_widget_summary.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1674,27 +1675,27 @@
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -1767,24 +1768,24 @@
     <message>
         <location filename="../ui/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Процеси</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="65"/>
         <location filename="../ui/task_manager_window.ui" line="188"/>
         <location filename="../ui/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;яІм&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім&apos;я користувача</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="85"/>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>ЦП</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -1793,141 +1794,142 @@
     <message>
         <location filename="../ui/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID процесу</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Дипетчер завдань</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID сесії</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ять (приватний робочий набір)</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ять (робочий набір)</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ять (пік робочого набору)</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ять (дельта робочого набору)</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation type="unfinished">Потоки</translation>
+        <translation>Потоки</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>путь к картинке или образу?</translatorcomment>
+        <translation>Шлях</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="153"/>
         <location filename="../ui/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершити завдання</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервіси</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип запуску</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="203"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="293"/>
         <location filename="../ui/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished">Вийти</translation>
+        <translation>Вийти</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="313"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустити</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="318"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинити</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="193"/>
         <location filename="../ui/task_manager_window.ui" line="247"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="336"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Високий</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="344"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Середній</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="352"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Низький</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="357"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="212"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="242"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я клієнта</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я сесії</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.ui" line="283"/>
         <location filename="../ui/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1971,52 +1973,52 @@
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished">Системна інформація</translation>
+        <translation>Системна інформація</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished">Зберегти (Ctrl+S)</translation>
+        <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation type="unfinished">Друкувати</translation>
+        <translation>Друкувати</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished">Друкувати (Ctrl+P)</translation>
+        <translation>Друкувати (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../ui/qt_text_chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Оновити (F5)</translation>
+        <translation>Оновити (F5)</translation>
     </message>
 </context>
 <context>
@@ -2024,85 +2026,86 @@
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити налаштування</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевіряти оновлення при запуску</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати інший сервер для оновлення</translation>
     </message>
     <message>
         <location filename="../ui/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер:</translation>
     </message>
 </context>
 <context>
     <name>UserItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="271"/>
+        <location filename="../ui/task_manager_window.cc" line="272"/>
         <source>&lt;no user&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;відсутній користувач&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="306"/>
+        <location filename="../ui/task_manager_window.cc" line="307"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Активно</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="309"/>
+        <location filename="../ui/task_manager_window.cc" line="310"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="312"/>
+        <location filename="../ui/task_manager_window.cc" line="313"/>
         <source>Connect Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Запит на підключення</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="315"/>
+        <location filename="../ui/task_manager_window.cc" line="316"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>Тіньове</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="318"/>
+        <location filename="../ui/task_manager_window.cc" line="319"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="321"/>
+        <location filename="../ui/task_manager_window.cc" line="322"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Не активний</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="324"/>
+        <location filename="../ui/task_manager_window.cc" line="325"/>
         <source>Listen</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Слушает?</translatorcomment>
+        <translation>Очікує</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="327"/>
+        <location filename="../ui/task_manager_window.cc" line="328"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинути</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="330"/>
+        <location filename="../ui/task_manager_window.cc" line="331"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Припинено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="333"/>
+        <location filename="../ui/task_manager_window.cc" line="334"/>
         <source>Init</source>
-        <translation type="unfinished"></translation>
+        <translation>Ініціалізація</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="336"/>
+        <location filename="../ui/task_manager_window.cc" line="337"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий</translation>
     </message>
 </context>
 <context>
@@ -2227,7 +2230,7 @@
     <message>
         <location filename="../ui/authorization_dialog.cc" line="37"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/authorization_dialog.cc" line="136"/>
@@ -2251,7 +2254,7 @@
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="38"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/client_settings_dialog.cc" line="99"/>
@@ -2279,7 +2282,7 @@
     <message>
         <location filename="../ui/client_window.cc" line="149"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Клієнт Aspia</translation>
+        <translation>Клієнт Aspia</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="238"/>
@@ -2303,37 +2306,37 @@
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="104"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>True color (32 біти)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="105"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>High color (16 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="106"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>256 кольорів (8 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="107"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 кольори (6 біт)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="108"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 кольорів (3 біти)</translation>
     </message>
     <message>
         <location filename="../ui/desktop_config_dialog.cc" line="204"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Стискання: %1</translation>
     </message>
 </context>
 <context>
@@ -2341,7 +2344,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="226"/>
         <source>Monitor selection</source>
-        <translation type="unfinished">Вибір монітора</translation>
+        <translation>Вибір монітора</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="245"/>
@@ -2356,12 +2359,12 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="259"/>
         <source>Resolution selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибір роздільної здатності</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="270"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Роздільна здатність</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="422"/>
@@ -2385,7 +2388,7 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="445"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви певні, що бажаєте перезавантажити віддалений комп&apos;ютер в Безпечний Режим?</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="456"/>
@@ -2405,12 +2408,12 @@
     <message>
         <location filename="../ui/desktop_panel.cc" line="312"/>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинити запис</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="317"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати запис</translation>
     </message>
 </context>
 <context>
@@ -2541,7 +2544,7 @@
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="44"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/file_remove_dialog.cc" line="74"/>
@@ -2584,7 +2587,7 @@
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="43"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/file_transfer_dialog.cc" line="79"/>
@@ -2758,122 +2761,123 @@
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="136"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Загальне</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="144"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Обладнання</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="149"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрої</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="155"/>
         <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Відео адаптери</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="161"/>
         <source>Monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>Монітори</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="167"/>
         <source>Printers</source>
-        <translation type="unfinished">Принтери</translation>
+        <translation>Принтери</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="173"/>
         <source>Power Options</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Варианты питания?</translatorcomment>
+        <translation>Варіанти живлення</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="187"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Програмне забезпечення</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="192"/>
         <source>Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Програми</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="198"/>
         <source>Drivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Драйвери</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="204"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервіси</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="210"/>
         <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінні середовища</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="216"/>
         <source>Event Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнали подій</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="222"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Ліцензії</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="237"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережа</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="242"/>
         <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережеві адаптери</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="248"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрути</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="254"/>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="260"/>
         <source>Network Shares</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережеві ресурси</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="266"/>
         <source>Open Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкриті файли</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="293"/>
         <source>HTML File</source>
-        <translation type="unfinished">Файл HTML</translation>
+        <translation>Файл HTML</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="295"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished">Файл HTML (*.html)</translation>
+        <translation>Файл HTML (*.html)</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="306"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="307"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished">Не вдалося зберегти файл: %1</translation>
+        <translation>Не вдалося зберегти файл: %1</translation>
     </message>
 </context>
 <context>
@@ -2881,12 +2885,12 @@
     <message>
         <location filename="../ui/record_settings_dialog.cc" line="36"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/record_settings_dialog.cc" line="48"/>
         <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <translation>Обрати шлях</translation>
     </message>
 </context>
 <context>
@@ -3090,7 +3094,7 @@
     <message>
         <location filename="../ui/router_status_dialog.cc" line="33"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
 </context>
 <context>
@@ -3098,7 +3102,7 @@
     <message>
         <location filename="../ui/router_user_dialog.cc" line="41"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
     <message>
         <location filename="../ui/router_user_dialog.cc" line="132"/>
@@ -3222,12 +3226,12 @@
     <message>
         <location filename="../ui/session_window.cc" line="212"/>
         <source>System Information</source>
-        <translation type="unfinished">Системна інформація</translation>
+        <translation>Системна інформація</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="216"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовий чат</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="258"/>
@@ -3602,32 +3606,32 @@
     <message>
         <location filename="../ui/sys_info_widget.cc" line="100"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="105"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="110"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="115"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation>кБ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="120"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/sys_info_widget.cc" line="136"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n секунда</numerusform>
             <numerusform>%n секунди</numerusform>
             <numerusform>%n секунд</numerusform>
@@ -3636,7 +3640,7 @@
     <message numerus="yes">
         <location filename="../ui/sys_info_widget.cc" line="137"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n хвилина</numerusform>
             <numerusform>%n хвилини</numerusform>
             <numerusform>%n хвилин</numerusform>
@@ -3645,7 +3649,7 @@
     <message numerus="yes">
         <location filename="../ui/sys_info_widget.cc" line="138"/>
         <source>%n hours</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n година</numerusform>
             <numerusform>%n години</numerusform>
             <numerusform>%n годин</numerusform>
@@ -3654,7 +3658,7 @@
     <message numerus="yes">
         <location filename="../ui/sys_info_widget.cc" line="162"/>
         <source>%n days</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n день</numerusform>
             <numerusform>%n дні</numerusform>
             <numerusform>%n днів</numerusform>
@@ -3663,22 +3667,22 @@
     <message>
         <location filename="../ui/sys_info_widget.cc" line="183"/>
         <source>Gbps</source>
-        <translation type="unfinished">Гб/с</translation>
+        <translation>Гб/с</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="188"/>
         <source>Mbps</source>
-        <translation type="unfinished">Мб/с</translation>
+        <translation>Мб/с</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="193"/>
         <source>Kbps</source>
-        <translation type="unfinished">Кб/с</translation>
+        <translation>Кб/с</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget.cc" line="198"/>
         <source>bps</source>
-        <translation type="unfinished">б/с</translation>
+        <translation>б/с</translation>
     </message>
 </context>
 <context>
@@ -3686,68 +3690,68 @@
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="129"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="132"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="135"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконується</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="141"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="144"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Припинити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="147"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="150"/>
         <location filename="../ui/sys_info_widget_drivers.cc" line="176"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="161"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="164"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запуск вручну</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="167"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="170"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати при увімкненні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_drivers.cc" line="173"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати разом із системою</translation>
     </message>
 </context>
 <context>
@@ -3755,52 +3759,52 @@
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="66"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Додаток</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="68"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Безпека</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="70"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Система</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="315"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="300"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="190"/>
         <source>Page %1/%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Сторінка %1/%2</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="303"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="306"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="309"/>
         <source>Audit Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудит успіху</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_event_logs.cc" line="312"/>
         <source>Audit Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудит відмов</translation>
     </message>
 </context>
 <context>
@@ -3808,37 +3812,37 @@
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="133"/>
         <source>License Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип ліцензії</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="137"/>
         <source>License Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія ліцензії</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="141"/>
         <source>Organization</source>
-        <translation type="unfinished"></translation>
+        <translation>Організація</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="145"/>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Власник</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="149"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID продукту</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ продукту</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_licenses.cc" line="157"/>
         <source>Unknown Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідоме поле</translation>
     </message>
 </context>
 <context>
@@ -3846,103 +3850,103 @@
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="148"/>
         <source>Monitor Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я монітора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="151"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я виробника</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID монітора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="157"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="161"/>
         <source>EDID Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія EDID</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="173"/>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Гамма</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="187"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Діагональ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="237"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Гц</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="167"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата виробництва</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="168"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Тиждень %1/%2</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="177"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір зображення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="178"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1х%2 см</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="192"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Роздільна здатність</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="199"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Горизонтальна частота</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="200"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 кГц</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="206"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Вертикальна частота</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 Гц</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота пікселів</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="212"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 МГц</translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="215"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна частота пікселів</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
@@ -3952,7 +3956,7 @@
         <location filename="../ui/sys_info_widget_monitors.cc" line="224"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="225"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="220"/>
@@ -3962,37 +3966,37 @@
         <location filename="../ui/sys_info_widget_monitors.cc" line="224"/>
         <location filename="../ui/sys_info_widget_monitors.cc" line="225"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="228"/>
         <source>Supported Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримувані функції</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="241"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримувані відео режими</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="217"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип вхідного сигналу</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="284"/>
         <source>Digital</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровий</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="287"/>
         <source>Analog</source>
-        <translation type="unfinished"></translation>
+        <translation>Аналоговий</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_monitors.cc" line="290"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий</translation>
     </message>
 </context>
 <context>
@@ -4000,67 +4004,67 @@
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="133"/>
         <source>Adapter Name</source>
-        <translation type="unfinished">Ім&apos;я адаптера</translation>
+        <translation>Ім&apos;я адаптера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="136"/>
         <source>Interface Type</source>
-        <translation type="unfinished">Тип інтерфейса</translation>
+        <translation>Тип інтерфейса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="139"/>
         <source>Connection Speed</source>
-        <translation type="unfinished">Швидкість з&apos;єднання</translation>
+        <translation>Швидкість з&apos;єднання</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="142"/>
         <source>MAC Address</source>
-        <translation type="unfinished">MAC адреса</translation>
+        <translation>MAC адреса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished">DHCP включено</translation>
+        <translation>DHCP включено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="144"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished">DHCP сервер #%1</translation>
+        <translation>DHCP сервер #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="149"/>
         <source>DHCP Server</source>
-        <translation type="unfinished">DHCP сервер</translation>
+        <translation>DHCP сервер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
         <source>Address #%1</source>
-        <translation type="unfinished">Адреса #%1</translation>
+        <translation>Адреса #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="161"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished">Шлюз #%1</translation>
+        <translation>Шлюз #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_adapters.cc" line="169"/>
         <source>Gateway</source>
-        <translation type="unfinished">Шлюз</translation>
+        <translation>Шлюз</translation>
     </message>
 </context>
 <context>
@@ -4068,32 +4072,32 @@
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="128"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="131"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="134"/>
         <source>Local Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальний шлях</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="136"/>
         <source>Current Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточні використання</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="139"/>
         <source>Not limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Необмежено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_net_shares.cc" line="140"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимум користувачів</translation>
     </message>
 </context>
 <context>
@@ -4101,111 +4105,111 @@
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="140"/>
         <source>Power Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Джерело живлення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="142"/>
         <source>Battery Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус акумулятора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="148"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Відсоток живлення акумулятора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="154"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Повний заряд акумулятора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
         <source>%1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 с</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Залишилося заряду акумулятора</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="172"/>
         <source>Device Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім&apos;я пристрою</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="175"/>
         <source>Manufacturer</source>
-        <translation type="unfinished">Виробник</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="178"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата виробництва</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="181"/>
         <source>Unique Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Унікальний ID</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="184"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="187"/>
         <source>Tempareture</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="190"/>
         <source>Design Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Проектна ємність</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="190"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="196"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="202"/>
         <source>%1 mWh</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 мВт-г</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="193"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="196"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Ємність повного заряду</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="199"/>
         <source>Depreciation</source>
-        <translation type="unfinished"></translation>
+        <translation>Амортизація</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="202"/>
         <source>Current Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточна ємність</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="205"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Вольтаж</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="205"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 мВ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="293"/>
         <source>Charging</source>
-        <translation type="unfinished"></translation>
+        <translation>Заряджається</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="211"/>
@@ -4213,64 +4217,64 @@
         <location filename="../ui/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="220"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="214"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="290"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>Критичний</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="217"/>
         <source>Discharging</source>
-        <translation type="unfinished"></translation>
+        <translation>Розряджається</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="220"/>
         <source>Power OnLine</source>
-        <translation type="unfinished"></translation>
+        <translation>Живлення під&apos;єданно</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="224"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="229"/>
         <source>Battery #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Акумулятор #%1</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="267"/>
         <source>DC Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>акумулятор постійного струму</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="270"/>
         <source>AC Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Лінія змінного струму</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="273"/>
         <location filename="../ui/sys_info_widget_power_options.cc" line="299"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="284"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Високий</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="287"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Низький</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="296"/>
         <source>No Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Акумулятор відсутній</translation>
     </message>
 </context>
 <context>
@@ -4278,44 +4282,44 @@
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
         <source>Default</source>
-        <translation type="unfinished">За замовчанням</translation>
+        <translation>За замовчанням</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
         <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="132"/>
         <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="135"/>
         <source>Port</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
         <source>Driver</source>
-        <translation type="unfinished">Драйвер</translation>
+        <translation>Драйвер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="140"/>
         <source>Shared</source>
-        <translation type="unfinished">Спільне користування</translation>
+        <translation>Спільне користування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="143"/>
         <source>Share Name</source>
-        <translation type="unfinished">Спільне ім&apos;я</translation>
+        <translation>Спільне ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_printers.cc" line="145"/>
         <source>Jobs Count</source>
-        <translation type="unfinished">Лічильник завдань</translation>
+        <translation>Лічильник завдань</translation>
     </message>
 </context>
 <context>
@@ -4323,68 +4327,68 @@
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="131"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="137"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="140"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконується</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="143"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Почати очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="146"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Припинити очікування</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="149"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="152"/>
         <location filename="../ui/sys_info_widget_services.cc" line="178"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="163"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запуск вручну</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="169"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="172"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати при увімкненні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_services.cc" line="175"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати разом із системою</translation>
     </message>
 </context>
 <context>
@@ -4393,156 +4397,156 @@
         <location filename="../ui/sys_info_widget_summary.cc" line="129"/>
         <location filename="../ui/sys_info_widget_summary.cc" line="152"/>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="132"/>
         <source>Domain</source>
-        <translation type="unfinished">Домен</translation>
+        <translation>Домен</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="135"/>
         <source>Workgroup</source>
-        <translation type="unfinished">Робоча група</translation>
+        <translation>Робоча група</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="138"/>
         <source>Uptime</source>
-        <translation type="unfinished">Час роботи</translation>
+        <translation>Час роботи</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="142"/>
         <source>Computer</source>
-        <translation type="unfinished">Комп&apos;ютер</translation>
+        <translation>Комп&apos;ютер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="155"/>
         <location filename="../ui/sys_info_widget_summary.cc" line="227"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="158"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="161"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ліцензійний ключ</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="164"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата встановлення</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="169"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="179"/>
         <location filename="../ui/sys_info_widget_summary.cc" line="251"/>
         <source>Manufacturer</source>
-        <translation type="unfinished">Виробник</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="182"/>
         <location filename="../ui/sys_info_widget_summary.cc" line="197"/>
         <source>Model</source>
-        <translation type="unfinished">Модель</translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="187"/>
         <source>Motherboard</source>
-        <translation type="unfinished">Материнська плата</translation>
+        <translation>Материнська плата</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="200"/>
         <location filename="../ui/sys_info_widget_summary.cc" line="224"/>
         <source>Vendor</source>
-        <translation type="unfinished">Вендор</translation>
+        <translation>Вендор</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="203"/>
         <source>Packages</source>
-        <translation type="unfinished">Пакети</translation>
+        <translation>Пакети</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="206"/>
         <source>Cores</source>
-        <translation type="unfinished">Ядра</translation>
+        <translation>Ядра</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="209"/>
         <source>Threads</source>
-        <translation type="unfinished">Потоки</translation>
+        <translation>Потоки</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="214"/>
         <source>Processor</source>
-        <translation type="unfinished">Процесор</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="230"/>
         <source>Date</source>
-        <translation type="unfinished">Дата</translation>
+        <translation>Дата</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="254"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
         <source>Speed</source>
-        <translation type="unfinished">Швидкість</translation>
+        <translation>Швидкість</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 МГц</translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="260"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
         <source>Form Factor</source>
-        <translation type="unfinished">Форм фактор</translation>
+        <translation>Форм фактор</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="266"/>
         <source>Part Number</source>
-        <translation type="unfinished">Партномер</translation>
+        <translation>Партномер</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
         <source>Installed</source>
-        <translation type="unfinished">Встановлено</translation>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="270"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="280"/>
         <source>Memory</source>
-        <translation type="unfinished">Пам&apos;ять</translation>
+        <translation>Пам&apos;ять</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="309"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished">%1 (%2 вільно)</translation>
+        <translation>%1 (%2 вільно)</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_summary.cc" line="319"/>
         <source>Logical Drives</source>
-        <translation type="unfinished">Логічні диски</translation>
+        <translation>Логічні диски</translation>
     </message>
     <message>
         <source>Adapter Name</source>
@@ -4630,52 +4634,52 @@
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="126"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="129"/>
         <source>Adapter String</source>
-        <translation type="unfinished"></translation>
+        <translation>Строка адаптера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="132"/>
         <source>BIOS String</source>
-        <translation type="unfinished"></translation>
+        <translation>Строка BIOS</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="135"/>
         <source>Chip Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип чіпу</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="138"/>
         <source>DAC Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип ЦАП</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
         <source>Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір пам&apos;яті</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="141"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 байт</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="144"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата драйвера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="147"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія драйвера</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Driver Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Постачальник драйвера</translation>
     </message>
 </context>
 <context>
@@ -4960,46 +4964,46 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="922"/>
+        <location filename="../ui/task_manager_window.cc" line="923"/>
         <source>Update Speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/task_manager_window.cc" line="673"/>
-        <location filename="../ui/task_manager_window.cc" line="703"/>
-        <location filename="../ui/task_manager_window.cc" line="720"/>
-        <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Швидкість оновлення</translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.cc" line="674"/>
-        <source>Are you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/task_manager_window.cc" line="704"/>
-        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/task_manager_window.cc" line="721"/>
+        <source>Confirmation</source>
+        <translation>Підтвердження</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="675"/>
+        <source>Are you really want to end &quot;%1&quot; process?</source>
+        <translation>Ви впевнені, що хочете завершити процес &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="705"/>
+        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
+        <translation>Ви впевнені, що хочете від&apos;єднати користувача &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="722"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете змусити &quot;%1&quot; вийти із системи?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="907"/>
+        <location filename="../ui/task_manager_window.cc" line="908"/>
         <source>Processes: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Процеси: %1</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="917"/>
+        <location filename="../ui/task_manager_window.cc" line="918"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Фізична пам&apos;ять: %1%</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="912"/>
+        <location filename="../ui/task_manager_window.cc" line="913"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантаженість ЦП: %1%</translation>
     </message>
 </context>
 <context>
@@ -5007,7 +5011,7 @@
     <message>
         <location filename="../ui/update_settings_dialog.cc" line="37"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмінити</translation>
     </message>
 </context>
 </TS>
