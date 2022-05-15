@@ -21,21 +21,62 @@
 
 #include "host/input_injector.h"
 
+#include <memory>
+#include <set>
+
+#include <X11/X.h>
+#include <X11/Xlib.h>
+
 namespace host {
 
 class InputInjectorX11 : public InputInjector
 {
 public:
-    InputInjectorX11();
     ~InputInjectorX11();
+
+    static std::unique_ptr<InputInjectorX11> create();
 
     // InputInjector implementation.
     void setScreenOffset(const base::Point& offset) override;
     void setBlockInput(bool enable) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
+    void injectTextEvent(const proto::TextEvent& event) override;
     void injectMouseEvent(const proto::MouseEvent& event) override;
 
 private:
+    InputInjectorX11();
+    bool init();
+
+    // Compensates for global button mappings and resets the XTest device mapping.
+    void initMouseButtonMap();
+
+    void setLockStates(bool caps, bool num);
+    bool isLockKey(int keycode);
+    bool isAutoRepeatEnabled();
+    void setAutoRepeatEnabled(bool enable);
+    void releasePressedKeys();
+
+    // X11 graphics context.
+    Display* display_ = nullptr;
+    Window root_window_ = BadValue;
+
+    base::Point screen_offset_;
+
+    base::Point last_mouse_pos_;
+    bool left_button_pressed_ = false;
+    bool right_button_pressed_ = false;
+    bool middle_button_pressed_ = false;
+    bool back_button_pressed_ = false;
+    bool forward_button_pressed_ = false;
+
+    // Number of buttons we support.
+    // Left, Right, Middle, VScroll Up/Down, HScroll Left/Right, back, forward.
+    static const int kNumPointerButtons = 9;
+
+    int pointer_button_map_[kNumPointerButtons];
+
+    std::set<int> pressed_keys_;
+
     DISALLOW_COPY_AND_ASSIGN(InputInjectorX11);
 };
 
