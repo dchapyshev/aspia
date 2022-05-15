@@ -211,10 +211,14 @@ else()
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
 
+if (WIN32)
+    set(HOST_PLATFORM_LIBS Qt5::WinMain)
+endif()
+
 add_executable(aspia_host ui/host_entry_point.cc ui/host.rc)
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host aspia_host_core Qt5::WinMain)
+target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
 
 add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
 set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
