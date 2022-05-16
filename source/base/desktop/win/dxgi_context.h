@@ -53,7 +53,7 @@ struct DxgiAdapterContext final
 struct DxgiFrameContext final
 {
 public:
-    explicit DxgiFrameContext(base::local_shared_ptr<DxgiDuplicatorController>& controller);
+    explicit DxgiFrameContext(base::local_shared_ptr<DxgiDuplicatorController> controller);
 
     // Unregister this Context instance from DxgiDuplicatorController during destructing.
     ~DxgiFrameContext();
