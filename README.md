@@ -6,7 +6,7 @@ With Aspia, you can create your own NAT traversal infrastructure (using Router a
 
 |Build Status|
 |:--:|
-|![Build status](https://github.com/dchapyshev/aspia/workflows/sw/badge.svg)|
+|[![Build status](https://github.com/dchapyshev/aspia/workflows/sw/badge.svg)](https://github.com/dchapyshev/aspia/actions)|
 
 Currently supported
 -------------------
