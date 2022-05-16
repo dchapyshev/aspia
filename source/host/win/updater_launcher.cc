@@ -111,7 +111,8 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
     if (!CreateProcessAsUserW(token,
                               nullptr,
-                              base::asWritableWide(command_line.commandLineString()),
+                              const_cast<wchar_t*>(
+                                  reinterpret_cast<const wchar_t*>(command_line.commandLineString().c_str())),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -179,7 +180,33 @@ bool launchSilentUpdater()
     base::CommandLine command_line(file_path);
     command_line.appendSwitch(u"silent-update");
 
-    // TODO
+    STARTUPINFOW startup_info;
+    memset(&startup_info, 0, sizeof(startup_info));
+
+    startup_info.cb = sizeof(startup_info);
+    startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
+
+    PROCESS_INFORMATION process_info;
+    memset(&process_info, 0, sizeof(process_info));
+
+    if (!CreateProcessW(nullptr,
+                        const_cast<wchar_t*>(
+                            reinterpret_cast<const wchar_t*>(command_line.commandLineString().c_str())),
+                        nullptr,
+                        nullptr,
+                        FALSE,
+                        CREATE_UNICODE_ENVIRONMENT,
+                        nullptr,
+                        nullptr,
+                        &startup_info,
+                        &process_info))
+    {
+        PLOG(LS_WARNING) << "CreateProcessW failed";
+        return false;
+    }
+
+    base::win::ScopedHandle thread_deleter(process_info.hThread);
+    base::win::ScopedHandle process_deleter(process_info.hProcess);
     return true;
 }
 
