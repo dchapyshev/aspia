@@ -39,7 +39,13 @@ bool ipv4FromString(std::u16string_view str, uint32_t* ip)
     if (inet_pton(AF_INET, base::local8BitFromUtf16(str).c_str(), &(sa.sin_addr)) != 1)
         return false;
 
-    *ip = htonl(sa.sin_addr.S_un.S_addr);
+#if defined(OS_WIN)
+    *ip = sa.sin_addr.S_un.S_addr;
+#else
+    *ip = sa.sin_addr.s_addr;
+#endif
+
+    *ip = htonl(*ip);
     return true;
 }
 
