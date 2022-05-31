@@ -53,5 +53,5 @@ jobs:
         ./sw -static build source
     - uses: actions/upload-artifact@v1
       with:
-        name: sw
+        name: sw-macos
         path: .sw/out
