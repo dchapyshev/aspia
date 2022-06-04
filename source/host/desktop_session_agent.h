@@ -19,6 +19,7 @@
 #ifndef HOST_DESKTOP_SESSION_AGENT_H
 #define HOST_DESKTOP_SESSION_AGENT_H
 
+#include "build/build_config.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/shared_memory_factory.h"
@@ -27,15 +28,19 @@
 #include "proto/desktop_internal.pb.h"
 
 namespace base {
+
 class AudioCapturerWrapper;
 class CaptureScheduler;
 class TaskRunner;
 class Thread;
 class SharedFrame;
 
+#if defined(OS_WIN)
 namespace win {
 class MessageWindow;
 } // namespace win
+#endif // defined(OS_WIN)
+
 } // namespace base
 
 namespace host {
@@ -83,14 +88,19 @@ private:
     void setEnabled(bool enable);
     void captureBegin();
     void captureEnd(const std::chrono::milliseconds& update_interval);
+
+#if defined(OS_WIN)
     bool onWindowsMessage(UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result);
+#endif // defined(OS_WIN)
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
 
     bool is_session_enabled_ = false;
 
+#if defined(OS_WIN)
     base::Thread ui_thread_;
     std::unique_ptr<base::win::MessageWindow> message_window_;
+#endif // defined(OS_WIN)
 
     std::unique_ptr<base::IpcChannel> channel_;
     std::unique_ptr<common::ClipboardMonitor> clipboard_monitor_;

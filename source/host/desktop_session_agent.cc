@@ -22,15 +22,22 @@
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/capture_scheduler.h"
-#include "base/desktop/desktop_environment_win.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/desktop/shared_frame.h"
 #include "base/ipc/shared_memory.h"
 #include "base/threading/thread.h"
+#include "host/system_settings.h"
+
+#if defined(OS_WIN)
+#include "base/desktop/desktop_environment_win.h"
 #include "base/win/message_window.h"
 #include "host/input_injector_win.h"
-#include "host/system_settings.h"
+#endif // defined(OS_WIN)
+
+#if defined(OS_LINUX)
+#include "host/input_injector_x11.h"
+#endif // defined(OS_LINUX)
 
 namespace host {
 
@@ -66,6 +73,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 {
     LOG(LS_INFO) << "Ctor";
 
+#if defined(OS_WIN)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
@@ -76,19 +84,25 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     {
         PLOG(LS_WARNING) << "SetPriorityClass failed";
     }
+#endif // defined(OS_WIN)
 
     SystemSettings settings;
     preferred_video_capturer_ =
         static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
     LOG(LS_INFO) << "Preferred video capturer: " << static_cast<int>(preferred_video_capturer_);
 
+#if defined(OS_WIN)
     ui_thread_.start(base::MessageLoop::Type::WIN, this);
+#endif // defined(OS_WIN)
 }
 
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
+
+#if defined(OS_WIN)
     ui_thread_.stop();
+#endif // defined(OS_WIN)
 }
 
 void DesktopSessionAgent::start(std::u16string_view channel_id)
@@ -383,6 +397,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";
 
+#if defined(OS_WIN)
     message_window_ = std::make_unique<base::win::MessageWindow>();
     if (!message_window_->create(std::bind(&DesktopSessionAgent::onWindowsMessage,
                                            this,
@@ -392,6 +407,7 @@ void DesktopSessionAgent::onBeforeThreadRunning()
         LOG(LS_ERROR) << "Couldn't create window.";
         return;
     }
+#endif // defined(OS_WIN)
 }
 
 void DesktopSessionAgent::onAfterThreadRunning()
@@ -419,7 +435,13 @@ void DesktopSessionAgent::setEnabled(bool enable)
     is_session_enabled_ = enable;
     if (enable)
     {
+#if defined(OS_WIN)
         input_injector_ = std::make_unique<InputInjectorWin>();
+#elif defined(OS_LINUX)
+        input_injector_ = InputInjectorX11::create();
+#else
+        LOG(LS_WARNING) << "Input injector not supported for platform";
+#endif
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
         // thread. Create a separate thread.
@@ -515,6 +537,7 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
     }
 }
 
+#if defined(OS_WIN)
 bool DesktopSessionAgent::onWindowsMessage(
     UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& result)
 {
@@ -543,5 +566,6 @@ bool DesktopSessionAgent::onWindowsMessage(
 
     return false;
 }
+#endif // defined(OS_WIN)
 
 } // namespace host
