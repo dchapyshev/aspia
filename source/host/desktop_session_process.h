@@ -19,8 +19,13 @@
 #ifndef HOST_DESKTOP_SESSION_PROCESS_H
 #define HOST_DESKTOP_SESSION_PROCESS_H
 
+#include "build/build_config.h"
+#include "base/macros_magic.h"
 #include "base/session_id.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_object.h"
+#endif // defined(OS_WIN)
 
 #include <filesystem>
 #include <memory>
@@ -44,10 +49,16 @@ public:
     void kill();
 
 private:
+#if defined(OS_WIN)
     DesktopSessionProcess(base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread);
+#else
+    DesktopSessionProcess();
+#endif
 
+#if defined(OS_WIN)
     base::win::ScopedHandle process_;
     base::win::ScopedHandle thread_;
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProcess);
 };

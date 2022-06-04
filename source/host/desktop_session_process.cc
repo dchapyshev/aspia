@@ -21,14 +21,22 @@
 #include "base/command_line.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+
+#if defined(OS_WIN)
 #include "base/win/scoped_impersonator.h"
 
 #include <UserEnv.h>
+#endif // defined(OS_WIN)
 
 namespace host {
 
 namespace {
 
+#if defined(OS_LINUX)
+const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent";
+#endif
+
+#if defined(OS_WIN)
 // Name of the default session desktop.
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent.exe";
@@ -188,9 +196,11 @@ bool startProcessWithToken(HANDLE token,
     DestroyEnvironmentBlock(environment);
     return true;
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
+#if defined(OS_WIN)
 DesktopSessionProcess::DesktopSessionProcess(
     base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread)
     : process_(std::move(process)),
@@ -198,6 +208,9 @@ DesktopSessionProcess::DesktopSessionProcess(
 {
     // Nothing
 }
+#else
+DesktopSessionProcess::DesktopSessionProcess() = default;
+#endif
 
 DesktopSessionProcess::~DesktopSessionProcess() = default;
 
@@ -208,6 +221,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);
 
+#if defined(OS_WIN)
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
@@ -226,6 +240,10 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     return std::unique_ptr<DesktopSessionProcess>(
         new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
+#else
+    NOTIMPLEMENTED();
+    return std::unique_ptr<DesktopSessionProcess>();
+#endif
 }
 
 // static
@@ -244,6 +262,7 @@ std::filesystem::path DesktopSessionProcess::filePath()
 
 void DesktopSessionProcess::kill()
 {
+#if defined(OS_WIN)
     if (!process_.isValid())
     {
         LOG(LS_WARNING) << "Invalid process handle";
@@ -254,6 +273,9 @@ void DesktopSessionProcess::kill()
     {
         PLOG(LS_WARNING) << "TerminateProcess failed";
     }
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 } // namespace host
