@@ -19,6 +19,7 @@
 #ifndef HOST_USER_SESSION_H
 #define HOST_USER_SESSION_H
 
+#include "build/build_config.h"
 #include "base/session_id.h"
 #include "base/waitable_timer.h"
 #include "base/ipc/ipc_channel.h"

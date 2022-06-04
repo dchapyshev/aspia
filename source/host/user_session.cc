@@ -28,12 +28,15 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "base/win/session_enumerator.h"
-#include "base/win/session_info.h"
-#include "base/win/session_status.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_text_chat.h"
 #include "host/desktop_session_proxy.h"
+
+#if defined(OS_WIN)
+#include "base/win/session_enumerator.h"
+#include "base/win/session_info.h"
+#include "base/win/session_status.h"
+#endif // defined(OS_WIN)
 
 namespace host {
 
@@ -73,6 +76,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 {
     type_ = UserSession::Type::CONSOLE;
 
+#if defined(OS_WIN)
     base::SessionId console_session_id = base::activeConsoleSessionId();
     if (console_session_id == base::kInvalidSessionId)
     {
@@ -81,6 +85,9 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
     if (session_id_ != console_session_id)
         type_ = UserSession::Type::RDP;
+#else
+    type_ = UserSession::Type::CONSOLE;
+#endif
 
     LOG(LS_INFO) << "Ctor (session ID: " << session_id_
                  << " type: " << typeToString(type_) << ")";
@@ -230,6 +237,7 @@ std::optional<std::string> UserSession::sessionName() const
                  << " type: " << typeToString(type_)
                  << " state: " << stateToString(state_) << ")";
 
+#if defined(OS_WIN)
     if (type_ == Type::CONSOLE)
     {
         LOG(LS_INFO) << "Session name for console session is empty string";
@@ -299,6 +307,9 @@ std::optional<std::string> UserSession::sessionName() const
 
     LOG(LS_INFO) << "Session name for RDP session: " << session_name;
     return std::move(session_name);
+#else
+    return std::string();
+#endif
 }
 
 base::User UserSession::user() const
@@ -402,7 +413,14 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 
 void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event: " << base::win::sessionStatusToString(status)
+    std::string status_str;
+#if defined(OS_WIN)
+    status_str = base::win::sessionStatusToString(status);
+#else
+    status_str = base::numberToString(static_cast<int>(status));
+#endif
+
+    LOG(LS_INFO) << "Session event: " << status_str
                  << " (event ID: " << session_id << " current ID: " << session_id_
                  << " type: " << typeToString(type_)
                  << " state: " << stateToString(state_) << ")";
