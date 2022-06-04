@@ -18,23 +18,28 @@
 
 #include "host/client_session_file_transfer.h"
 
+#include "build/build_config.h"
 #include "base/logging.h"
 #include "base/net/network_channel_proxy.h"
 #include "base/threading/thread.h"
-#include "base/win/scoped_impersonator.h"
-#include "base/win/scoped_object.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
 #include "common/file_task_producer_proxy.h"
 #include "common/file_worker.h"
 #include "proto/file_transfer.pb.h"
 
+#if defined(OS_WIN)
+#include "base/win/scoped_impersonator.h"
+#include "base/win/scoped_object.h"
+
 #include <WtsApi32.h>
+#endif // defined(OS_WIN)
 
 namespace host {
 
 namespace {
 
+#if defined(OS_WIN)
 bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle user_token;
@@ -89,6 +94,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
 
     return true;
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -114,10 +120,13 @@ protected:
 private:
     base::Thread thread_;
     const base::SessionId session_id_;
-    std::unique_ptr<base::win::ScopedImpersonator> impersonator_;
     std::shared_ptr<base::NetworkChannelProxy> channel_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> producer_proxy_;
     std::unique_ptr<common::FileWorker> impl_;
+
+#if defined(OS_WIN)
+    std::unique_ptr<base::win::ScopedImpersonator> impersonator_;
+#endif // defined(OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(Worker);
 };
@@ -163,6 +172,7 @@ void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "After thread running";
 
+#if defined(OS_WIN)
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id_, &user_token))
     {
@@ -176,6 +186,7 @@ void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
         LOG(LS_WARNING) << "loggedOnUser failed";
         return;
     }
+#endif // defined(OS_WIN)
 
     producer_proxy_ = std::make_shared<common::FileTaskProducerProxy>(this);
     impl_ = std::make_unique<common::FileWorker>(thread_.taskRunner());
@@ -196,7 +207,10 @@ void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
     }
 
     impl_.reset();
+
+#if defined(OS_WIN)
     impersonator_.reset();
+#endif // defined(OS_WIN)
 }
 
 void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileTask> task)
