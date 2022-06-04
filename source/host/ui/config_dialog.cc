@@ -23,8 +23,6 @@
 #include "base/desktop/screen_capturer.h"
 #include "base/files/base_paths.h"
 #include "base/net/address.h"
-#include "base/win/service_controller.h"
-#include "base/win/windows_version.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
 #include "host/ui/change_password_dialog.h"
@@ -36,6 +34,11 @@
 #include "host/win/service_constants.h"
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
+
+#if defined(OS_WIN)
+#include "base/win/service_controller.h"
+#include "base/win/windows_version.h"
+#endif // defined(OS_WIN)
 
 #include <QFileDialog>
 #include <QMenu>
@@ -717,7 +720,7 @@ void ConfigDialog::reloadAll()
 
     std::chrono::minutes onetime_pass_change =
         std::chrono::duration_cast<std::chrono::minutes>(settings.oneTimePasswordExpire());
-    item_index = ui.combobox_onetime_pass_change->findData(onetime_pass_change.count());
+    item_index = ui.combobox_onetime_pass_change->findData(static_cast<int>(onetime_pass_change.count()));
     if (item_index != -1)
         ui.combobox_onetime_pass_change->setCurrentIndex(item_index);
 
@@ -734,7 +737,7 @@ void ConfigDialog::reloadAll()
 
     std::chrono::seconds auto_conn_confirm =
         std::chrono::duration_cast<std::chrono::seconds>(settings.autoConnConfirmInterval());
-    item_index = ui.combobox_conn_confirm_auto->findData(auto_conn_confirm.count());
+    item_index = ui.combobox_conn_confirm_auto->findData(static_cast<int>(auto_conn_confirm.count()));
     if (item_index != -1)
         ui.combobox_conn_confirm_auto->setCurrentIndex(item_index);
 
@@ -805,6 +808,7 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
 
 void ConfigDialog::reloadServiceStatus()
 {
+#if defined(OS_WIN)
     ui.button_service_install_remove->setEnabled(true);
     ui.button_service_start_stop->setEnabled(true);
 
@@ -853,19 +857,22 @@ void ConfigDialog::reloadServiceStatus()
     }
 
     ui.label_service_status->setText(tr("Current service state: %1").arg(state));
+#endif // defined(OS_WIN)
 }
 
 bool ConfigDialog::isServiceStarted()
 {
+#if defined(OS_WIN)
     base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
-
+#endif // defined(OS_WIN)
     return false;
 }
 
 bool ConfigDialog::installService()
 {
+#if defined(OS_WIN)
     std::filesystem::path service_file_path;
 
     if (!base::BasePaths::currentExecDir(&service_file_path))
@@ -890,10 +897,14 @@ bool ConfigDialog::installService()
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool ConfigDialog::removeService()
 {
+#if defined(OS_WIN)
     if (!base::win::ServiceController::remove(kHostServiceName))
     {
         QMessageBox::warning(this,
@@ -904,10 +915,14 @@ bool ConfigDialog::removeService()
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool ConfigDialog::startService()
 {
+#if defined(OS_WIN)
     base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
@@ -930,10 +945,14 @@ bool ConfigDialog::startService()
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool ConfigDialog::stopService()
 {
+#if defined(OS_WIN)
     base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
@@ -956,6 +975,9 @@ bool ConfigDialog::stopService()
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool ConfigDialog::restartService()

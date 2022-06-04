@@ -19,6 +19,7 @@
 #ifndef HOST_UI_CONFIG_DIALOG_H
 #define HOST_UI_CONFIG_DIALOG_H
 
+#include "build/build_config.h"
 #include "base/peer/user_list.h"
 #include "qt_base/locale_loader.h"
 #include "ui_config_dialog.h"
