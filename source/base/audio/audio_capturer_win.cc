@@ -358,9 +358,4 @@ bool AudioCapturer::isSupported()
     return true;
 }
 
-std::unique_ptr<AudioCapturer> AudioCapturer::create()
-{
-    return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
-}
-
 } // namespace base

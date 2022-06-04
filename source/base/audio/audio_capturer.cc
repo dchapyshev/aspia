@@ -18,6 +18,11 @@
 
 #include "base/audio/audio_capturer.h"
 
+#if defined(OS_WIN)
+#include "base/audio/audio_capturer_win.h"
+#endif // defined(OS_WIN)
+
+#include "base/logging.h"
 #include "proto/desktop.pb.h"
 
 namespace base {
@@ -36,6 +41,16 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
         default:
             return false;
     }
+}
+
+std::unique_ptr<AudioCapturer> AudioCapturer::create()
+{
+#if defined(OS_WIN)
+    return std::unique_ptr<AudioCapturer>(new AudioCapturerWin());
+#else
+    NOTIMPLEMENTED();
+    return nullptr;
+#endif
 }
 
 } // namespace base
