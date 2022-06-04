@@ -20,6 +20,7 @@
 
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
+#include "base/win/session_info.h"
 #include "base/logging.h"
 
 #include <Windows.h>
@@ -162,7 +163,23 @@ bool PowerController::reboot()
 // static
 bool PowerController::logoff()
 {
-    if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, FALSE))
+    DWORD session_id = base::kInvalidSessionId;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+    }
+
+    if (session_id != kInvalidSessionId)
+    {
+        base::win::SessionInfo session_info(session_id);
+        if (session_info.connectState() != base::win::SessionInfo::ConnectState::ACTIVE)
+        {
+            LOG(LS_INFO) << "User session not in active state. Logoff not required";
+            return true;
+        }
+    }
+
+    if (!WTSLogoffSession(WTS_CURRENT_SERVER_HANDLE, session_id, FALSE))
     {
         PLOG(LS_WARNING) << "WTSLogoffSession failed";
         return false;
