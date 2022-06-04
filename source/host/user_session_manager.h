@@ -19,6 +19,7 @@
 #ifndef HOST_USER_SESSION_MANAGER_H
 #define HOST_USER_SESSION_MANAGER_H
 
+#include "build/build_config.h"
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
 #include "base/win/session_status.h"

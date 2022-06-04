@@ -27,20 +27,24 @@
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
-#include "base/win/scoped_impersonator.h"
-#include "base/win/scoped_object.h"
-#include "base/win/session_enumerator.h"
-#include "base/win/session_info.h"
 #include "host/client_session.h"
 #include "host/user_session.h"
 #include "host/user_session_constants.h"
 
+#if defined(OS_WIN)
+#include "base/win/scoped_impersonator.h"
+#include "base/win/scoped_object.h"
+#include "base/win/session_enumerator.h"
+#include "base/win/session_info.h"
+
 #include <UserEnv.h>
+#endif // defined(OS_WIN)
 
 namespace host {
 
 namespace {
 
+#if defined(OS_WIN)
 const wchar_t kExecutableNameForUi[] = L"aspia_host.exe";
 
 // Name of the default session desktop.
@@ -164,6 +168,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
     return true;
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -206,6 +211,7 @@ bool UserSessionManager::start(Delegate* delegate)
         return false;
     }
 
+#if defined(OS_WIN)
     for (base::win::SessionEnumerator session; !session.isAtEnd(); session.advance())
     {
         base::SessionId session_id = session.sessionId();
@@ -233,6 +239,9 @@ bool UserSessionManager::start(Delegate* delegate)
         // Start UI process in user session.
         startSessionProcess(FROM_HERE, session.sessionId());
     }
+#else
+    startSessionProcess(FROM_HERE, 0);
+#endif
 
     LOG(LS_INFO) << "User session manager is started";
     return true;
@@ -346,7 +355,12 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         if (host_id == base::kInvalidHostId)
         {
             LOG(LS_INFO) << "Using CONSOLE session id";
+
+#if defined(OS_WIN)
             session_id = base::activeConsoleSessionId();
+#else
+            session_id = 0;
+#endif
         }
         else
         {
@@ -379,6 +393,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
         {
             if (session->state() == UserSession::State::DETTACHED)
             {
+#if defined(OS_WIN)
                 base::win::SessionInfo session_info(session_id);
                 if (!session_info.isValid())
                 {
@@ -399,6 +414,9 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
                         LOG(LS_INFO) << "No connected UI. Connection rejected";
                         return;
                 }
+#else
+                session->restart(nullptr);
+#endif
             }
 
             session->onClientSession(std::move(client_session));
@@ -431,6 +449,7 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
 {
     LOG(LS_INFO) << "New IPC connection";
 
+#if defined(OS_WIN)
     std::filesystem::path reference_path;
     if (!base::BasePaths::currentExecDir(&reference_path))
     {
@@ -454,6 +473,9 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
     }
 
     addUserSession(session_id, std::move(channel));
+#else
+    addUserSession(0, std::move(channel));
+#endif
 }
 
 void UserSessionManager::onErrorOccurred()
@@ -510,6 +532,7 @@ void UserSessionManager::startSessionProcess(
     LOG(LS_INFO) << "Starting UI process for session ID: " << session_id
                  << " (from: " << location.toString() << ")";
 
+#if defined(OS_WIN)
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_WARNING) << "Invalid session ID";
@@ -550,6 +573,9 @@ void UserSessionManager::startSessionProcess(
         LOG(LS_WARNING) << "Failed to start process with user token ("
                         << command_line.commandLineString() << ")";
     }
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 void UserSessionManager::addUserSession(
