@@ -24,9 +24,12 @@
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
 #include "base/net/network_channel.h"
-#include "base/net/firewall_manager.h"
 #include "host/client_session.h"
 #include "host/win/updater_launcher.h"
+
+#if defined(OS_WIN)
+#include "base/net/firewall_manager.h"
+#endif // defined(OS_WIN)
 
 namespace host {
 
@@ -129,6 +132,7 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
 
 void Server::setPowerEvent(uint32_t power_event)
 {
+#if defined(OS_WIN)
     LOG(LS_INFO) << "Power event: " << power_event;
 
     switch (power_event)
@@ -153,6 +157,7 @@ void Server::setPowerEvent(uint32_t power_event)
             // Ignore other events.
             break;
     }
+#endif // defined(OS_WIN)
 }
 
 void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
@@ -261,6 +266,7 @@ void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
 
 void Server::addFirewallRules()
 {
+#if defined(OS_WIN)
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
@@ -284,10 +290,12 @@ void Server::addFirewallRules()
     }
 
     LOG(LS_INFO) << "Rule is added to the firewall (TCP " << tcp_port << ")";
+#endif // defined(OS_WIN)
 }
 
 void Server::deleteFirewallRules()
 {
+#if defined(OS_WIN)
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
@@ -304,6 +312,7 @@ void Server::deleteFirewallRules()
 
     LOG(LS_INFO) << "Delete firewall rule";
     firewall.deleteRuleByName(kFirewallRuleName);
+#endif // defined(OS_WIN)
 }
 
 void Server::updateConfiguration(const std::filesystem::path& path, bool error)
@@ -423,6 +432,7 @@ void Server::disconnectFromRouter()
 
 void Server::checkForUpdates()
 {
+#if defined(OS_WIN)
     int64_t last_timepoint = settings_.lastUpdateCheck();
     int64_t current_timepoint = std::time(nullptr);
 
@@ -453,6 +463,7 @@ void Server::checkForUpdates()
 
     LOG(LS_INFO) << "Start checking for updates";
     launchSilentUpdater();
+#endif // defined(OS_WIN)
 }
 
 } // namespace host

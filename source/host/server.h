@@ -19,6 +19,7 @@
 #ifndef HOST_SERVER_H
 #define HOST_SERVER_H
 
+#include "build/build_config.h"
 #include "base/net/network_server.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "host/router_controller.h"
