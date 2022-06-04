@@ -97,6 +97,7 @@ int hostMain(int argc, char* argv[])
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+    LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << command_line.commandLineString();
     LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
                  << " (version: " << base::SysInfo::operatingSystemVersion()

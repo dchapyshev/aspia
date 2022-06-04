@@ -381,6 +381,7 @@ int clientMain(int argc, char* argv[])
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+    LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
     QCommandLineOption address_option(QStringLiteral("address"),
