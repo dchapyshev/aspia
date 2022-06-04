@@ -19,10 +19,24 @@
 #ifndef HOST_HOST_EXPORT_H
 #define HOST_HOST_EXPORT_H
 
+#include "build/build_config.h"
+
+#if defined(OS_WIN)
+
 #if defined(HOST_IMPLEMENTATION)
 #define HOST_EXPORT __declspec(dllexport)
 #else
 #define HOST_EXPORT __declspec(dllimport)
 #endif // defined(HOST_IMPLEMENTATION)
+
+#else
+
+#if defined(HOST_IMPLEMENTATION)
+#define HOST_EXPORT __attribute__((visibility("default")))
+#else
+#define HOST_EXPORT
+#endif
+
+#endif
 
 #endif // HOST_HOST_EXPORT_H
