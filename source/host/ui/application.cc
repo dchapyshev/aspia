@@ -18,6 +18,7 @@
 
 #include "host/ui/application.h"
 
+#include "build/build_config.h"
 #include "build/version.h"
 #include "qt_base/qt_logging.h"
 
@@ -63,6 +64,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
 bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result)
 #endif
 {
+#if defined(OS_WIN)
     MSG* native_message = reinterpret_cast<MSG*>(message);
 
     if (native_message->message == WM_QUERYENDSESSION || native_message->message == WM_ENDSESSION)
@@ -70,7 +72,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
         *result = TRUE;
         return true;
     }
-
+#endif // defined(OS_WIN)
     return false;
 }
 
