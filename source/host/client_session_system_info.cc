@@ -20,7 +20,10 @@
 
 #include "base/logging.h"
 #include "base/net/network_channel_proxy.h"
+
+#if defined(OS_WIN)
 #include "host/system_info.h"
+#endif // defined(OS_WIN)
 
 namespace host {
 
@@ -37,6 +40,7 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
 
 void ClientSessionSystemInfo::onMessageReceived(const base::ByteArray& buffer)
 {
+#if defined(OS_WIN)
     proto::system_info::SystemInfoRequest request;
 
     if (!base::parse(buffer, &request))
@@ -49,6 +53,7 @@ void ClientSessionSystemInfo::onMessageReceived(const base::ByteArray& buffer)
     createSystemInfo(request, &system_info);
 
     sendMessage(base::serialize(system_info));
+#endif // defined(OS_WIN)
 }
 
 void ClientSessionSystemInfo::onMessageWritten(size_t /* pending */)
