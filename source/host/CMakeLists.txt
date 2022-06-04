@@ -51,18 +51,12 @@ list(APPEND SOURCE_HOST_CORE
     input_injector.h
     integrity_check.cc
     integrity_check.h
-    process_monitor.cc
-    process_monitor.h
     router_controller.cc
     router_controller.h
     server.cc
     server.h
-    system_info.cc
-    system_info.h
     system_settings.cc
     system_settings.h
-    task_manager.cc
-    task_manager.h
     unconfirmed_client_session.cc
     unconfirmed_client_session.h
     user_session.cc
@@ -83,7 +77,13 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE
         host_core.rc
         input_injector_win.cc
-        input_injector_win.h)
+        input_injector_win.h
+        process_monitor.cc
+        process_monitor.h
+        system_info.cc
+        system_info.h
+        task_manager.cc
+        task_manager.h)
 endif()
 
 if (LINUX)
@@ -215,15 +215,28 @@ if (WIN32)
     set(HOST_PLATFORM_LIBS Qt5::WinMain)
 endif()
 
+if (LINUX)
+    set(HOST_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ${XDAMAGE_LIB} ${XRANDR_LIB} ${XTST_LIB} ${XI_LIB} ICU::uc ICU::dt)
+endif()
+
+# Aspia Host (GUI)
 add_executable(aspia_host ui/host_entry_point.cc ui/host.rc)
-set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
-set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+if (WIN32)
+    set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
 target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
 
+# Aspia Host Service
 add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
-set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_host_service aspia_host_core)
+if (WIN32)
+    set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+target_link_libraries(aspia_host_service aspia_host_core ${HOST_PLATFORM_LIBS})
 
+# Aspia Desktop Agent
 add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
+if (WIN32)
 set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-target_link_libraries(aspia_desktop_agent aspia_host_core)
+endif()
+target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})

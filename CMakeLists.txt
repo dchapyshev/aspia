@@ -73,6 +73,18 @@ endif()
 if (LINUX)
     find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)
     message(STATUS "XFixes library: ${XFIXES_LIB}")
+
+    find_library(XDAMAGE_LIB NAMES libXdamage Xdamage REQUIRED)
+    message(STATUS "XDamage library: ${XDAMAGE_LIB}")
+
+    find_library(XRANDR_LIB NAMES libXrandr Xrandr REQUIRED)
+    message(STATUS "XRandr library: ${XRANDR_LIB}")
+
+    find_library(XTST_LIB NAMES libXtst Xtst REQUIRED)
+    message(STATUS "XTst library: ${XTST_LIB}")
+
+    find_library(XI_LIB NAMES libXi Xi REQUIRED)
+    message(STATUS "Xi library: ${XI_LIB}")
 endif()
 
 if (APPLE)
