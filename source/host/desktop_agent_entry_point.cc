@@ -16,8 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "build/build_config.h"
 #include "host/desktop_agent_main.h"
 
+#if defined(OS_WIN)
 #include <Windows.h>
 
 int WINAPI wWinMain(HINSTANCE /* hInstance */,
@@ -28,3 +30,13 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     desktopAgentMain(0, nullptr); // On Windows ignores arguments.
     return 0;
 }
+
+#else
+
+int main(int argc, char *argv[])
+{
+    desktopAgentMain(argc, argv);
+    return 0;
+}
+
+#endif
