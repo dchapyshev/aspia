@@ -45,6 +45,7 @@ namespace {
 
 bool waitForValidInputDesktop()
 {
+#if defined(OS_WIN)
     int max_attempt_count = 600;
 
     do
@@ -72,6 +73,7 @@ bool waitForValidInputDesktop()
         LOG(LS_WARNING) << "Exceeded the number of attempts";
         return false;
     }
+#endif // defined(OS_WIN)
 
     return true;
 }
@@ -283,7 +285,13 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"config"))
     {
-        if (base::win::isProcessElevated())
+#if defined(OS_WIN)
+        if (!base::win::isProcessElevated())
+        {
+            LOG(LS_INFO) << "Process not eleavated";
+        }
+        else
+#endif // defined(OS_WIN)
         {
             host::SystemSettings settings;
             if (settings.passwordProtection())
@@ -298,10 +306,6 @@ int hostMain(int argc, char* argv[])
             {
                 host::ConfigDialog().exec();
             }
-        }
-        else
-        {
-            LOG(LS_INFO) << "Process not eleavated";
         }
     }
     else
