@@ -22,7 +22,6 @@
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/strings/unicode.h"
-#include "base/win/process_util.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
@@ -45,6 +44,8 @@
 #include <QUrl>
 
 #if defined(Q_OS_WIN)
+#include "base/win/process_util.h"
+
 #include <QWinEventNotifier>
 #include <qt_windows.h>
 #include <shellapi.h>

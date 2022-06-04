@@ -19,6 +19,7 @@
 #ifndef HOST_UI_MAIN_WINDOW_H
 #define HOST_UI_MAIN_WINDOW_H
 
+#include "build/build_config.h"
 #include "host/user_session_window.h"
 #include "ui_main_window.h"
 
