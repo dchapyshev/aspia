@@ -19,12 +19,16 @@
 #ifndef HOST_CLIENT_SESSION_DESKTOP_H
 #define HOST_CLIENT_SESSION_DESKTOP_H
 
+#include "build/build_config.h"
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/memory/local_memory.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
+
+#if defined(OS_WIN)
 #include "host/task_manager.h"
+#endif // defined(OS_WIN)
 
 namespace base {
 class AudioEncoder;
@@ -40,8 +44,10 @@ namespace host {
 class DesktopSessionProxy;
 
 class ClientSessionDesktop
-    : public ClientSession,
-      public TaskManager::Delegate
+    : public ClientSession
+#if defined(OS_WIN)
+      , public TaskManager::Delegate
+#endif // defined(OS_WIN)
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type,
@@ -67,8 +73,10 @@ protected:
     // ClientSession implementation.
     void onStarted() override;
 
+#if defined(OS_WIN)
     // TaskManager::Delegate implementation.
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message) override;
+#endif // defined(OS_WIN)
 
 private:
     void readExtension(const proto::DesktopExtension& extension);
@@ -86,10 +94,13 @@ private:
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
-    std::unique_ptr<TaskManager> task_manager_;
     DesktopSession::Config desktop_session_config_;
     base::Size source_size_;
     base::Size preferred_size_;
+
+#if defined(OS_WIN)
+    std::unique_ptr<TaskManager> task_manager_;
+#endif // defined(OS_WIN)
 
     std::unique_ptr<proto::ClientToHost> incoming_message_;
     std::unique_ptr<proto::HostToClient> outgoing_message_;

@@ -27,15 +27,18 @@
 #include "base/codec/video_encoder_zstd.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
-#include "base/win/safe_mode_util.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
-#include "host/system_info.h"
-#include "host/win/updater_launcher.h"
 #include "host/win/service_constants.h"
 #include "proto/desktop_internal.pb.h"
 #include "proto/task_manager.pb.h"
 #include "proto/text_chat.pb.h"
+
+#if defined(OS_WIN)
+#include "base/win/safe_mode_util.h"
+#include "host/system_info.h"
+#include "host/win/updater_launcher.h"
+#endif // defined(OS_WIN)
 
 namespace host {
 
@@ -176,6 +179,7 @@ void ClientSessionDesktop::onStarted()
     sendMessage(base::serialize(*outgoing_message_));
 }
 
+#if defined(OS_WIN)
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     outgoing_message_->Clear();
@@ -186,6 +190,7 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
 
     sendMessage(base::serialize(*outgoing_message_));
 }
+#endif // defined(OS_WIN)
 
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
@@ -516,6 +521,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
         case proto::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
+#if defined(OS_WIN)
             LOG(LS_INFO) << "REBOOT_SAFE_MODE command";
 
             if (base::win::SafeModeUtil::setSafeModeService(kHostServiceName, true))
@@ -540,6 +546,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
             {
                 LOG(LS_WARNING) << "Failed to add service to start in safe mode";
             }
+#endif // defined(OS_WIN)
         }
         break;
 
@@ -565,6 +572,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
 void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 {
+#if defined(OS_WIN)
     LOG(LS_INFO) << "Remote update requested";
 
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -575,10 +583,12 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
     {
         LOG(LS_WARNING) << "Update can only be launched from a desktop manage session";
     }
+#endif // defined(OS_WIN)
 }
 
 void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 {
+#if defined(OS_WIN)
     proto::system_info::SystemInfoRequest system_info_request;
 
     if (!data.empty())
@@ -598,6 +608,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     desktop_extension->set_data(system_info.SerializeAsString());
 
     sendMessage(base::serialize(*outgoing_message_));
+#endif // defined(OS_WIN)
 }
 
 void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
@@ -632,6 +643,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 
 void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 {
+#if defined(OS_WIN)
     proto::task_manager::ClientToHost message;
 
     if (!message.ParseFromString(data))
@@ -644,6 +656,7 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
         task_manager_ = std::make_unique<TaskManager>(this);
 
     task_manager_->readMessage(message);
+#endif // defined(OS_WIN)
 }
 
 } // namespace host
