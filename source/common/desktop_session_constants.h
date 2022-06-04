@@ -19,16 +19,18 @@
 #ifndef COMMON_DESKTOP_SESSION_CONSTANTS_H
 #define COMMON_DESKTOP_SESSION_CONSTANTS_H
 
+#include "build/build_config.h"
+
 #include <cstdint>
 
 namespace common {
 
 extern const char kSelectScreenExtension[];
 extern const char kPreferredSizeExtension[];
+extern const char kVideoRecordingExtension[];
 extern const char kPowerControlExtension[];
 extern const char kRemoteUpdateExtension[];
 extern const char kSystemInfoExtension[];
-extern const char kVideoRecordingExtension[];
 extern const char kTaskManagerExtension[];
 
 extern const char kSupportedExtensionsForManage[];
