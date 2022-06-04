@@ -90,6 +90,8 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
 
     D3D_FEATURE_LEVEL feature_level;
 
+    LOG(LS_INFO) << "Try to create adapter #" << index;
+
     // Default feature levels contain D3D 9.1 through D3D 11.0.
     _com_error error = D3D11CreateDevice(
         adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr,
@@ -103,6 +105,8 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
                         << error.Error();
         return false;
     }
+
+    LOG(LS_INFO) << "Adapter #" << index << " is created";
 
     DXGI_ADAPTER_DESC adapter_description;
     memset(&adapter_description, 0, sizeof(adapter_description));
@@ -160,11 +164,56 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
         error = factory->EnumAdapters(static_cast<UINT>(i), adapter.GetAddressOf());
         if (error.Error() == S_OK)
         {
+            bool adapter_used = false;
+
+            for (UINT j = 0;; ++j)
+            {
+                ComPtr<IDXGIOutput> output;
+
+                HRESULT hr = adapter->EnumOutputs(j, output.GetAddressOf());
+                if (hr == DXGI_ERROR_NOT_FOUND)
+                    break;
+
+                if (FAILED(hr))
+                {
+                    LOG(LS_INFO) << "Unable to get outputs for adapter #" << i;
+                    break;
+                }
+
+                DXGI_OUTPUT_DESC desc;
+                hr = output->GetDesc(&desc);
+                if (hr != S_OK)
+                {
+                    LOG(LS_INFO) << "Unable to get output " << j << " description for adapter #" << i;
+                }
+                else
+                {
+                    if (!desc.AttachedToDesktop)
+                    {
+                        LOG(LS_INFO) << "Output " << j << " not attached to desktop for adapter #" << i;
+                    }
+                    else
+                    {
+                        adapter_used = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!adapter_used)
+            {
+                LOG(LS_INFO) << "Adapter #" << i << " not used";
+                continue;
+            }
+
             D3dDevice device;
+
+            LOG(LS_INFO) << "Try to initialize adapter #" << i;
 
             if (device.initialize(i, adapter))
             {
                 result.emplace_back(std::move(device));
+                LOG(LS_INFO) << "Adapter #" << i << " is initialized";
             }
             else
             {
@@ -174,6 +223,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
         }
         else if (error.Error() == DXGI_ERROR_NOT_FOUND)
         {
+            LOG(LS_INFO) << "No more devices";
             break;
         }
         else
