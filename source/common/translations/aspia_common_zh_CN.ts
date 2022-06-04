@@ -333,62 +333,62 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../ui/update_dialog.cc" line="55"/>
+        <location filename="../ui/update_dialog.cc" line="57"/>
         <source>Receiving information...</source>
         <translation>正在接收信息...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="106"/>
+        <location filename="../ui/update_dialog.cc" line="111"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>取消检查更新。请稍候。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="125"/>
+        <location filename="../ui/update_dialog.cc" line="130"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="126"/>
+        <location filename="../ui/update_dialog.cc" line="131"/>
         <source>Error retrieving update information.</source>
         <translation>检索更新信息时出错。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="147"/>
+        <location filename="../ui/update_dialog.cc" line="152"/>
         <source>No updates available.</source>
         <translation>没有可用的更新。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="157"/>
+        <location filename="../ui/update_dialog.cc" line="162"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>将下载更新。下载完成后，应用程序将自动关闭。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="159"/>
+        <location filename="../ui/update_dialog.cc" line="164"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>将终止所有会话。更新完成后才能建立连接。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="161"/>
+        <location filename="../ui/update_dialog.cc" line="166"/>
         <source>All unsaved data will be lost.</source>
         <translation>所有未保存的数据都将丢失。</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="162"/>
+        <location filename="../ui/update_dialog.cc" line="167"/>
         <source>Continue?</source>
         <translation>继续吗？</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="165"/>
+        <location filename="../ui/update_dialog.cc" line="170"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="175"/>
+        <location filename="../ui/update_dialog.cc" line="180"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="176"/>
+        <location filename="../ui/update_dialog.cc" line="181"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>安装更新时出错：%1</translation>
     </message>

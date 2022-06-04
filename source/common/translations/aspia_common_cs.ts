@@ -300,62 +300,62 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../ui/update_dialog.cc" line="55"/>
+        <location filename="../ui/update_dialog.cc" line="57"/>
         <source>Receiving information...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="106"/>
+        <location filename="../ui/update_dialog.cc" line="111"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="125"/>
+        <location filename="../ui/update_dialog.cc" line="130"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="126"/>
+        <location filename="../ui/update_dialog.cc" line="131"/>
         <source>Error retrieving update information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="147"/>
+        <location filename="../ui/update_dialog.cc" line="152"/>
         <source>No updates available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="157"/>
+        <location filename="../ui/update_dialog.cc" line="162"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="159"/>
+        <location filename="../ui/update_dialog.cc" line="164"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="161"/>
+        <location filename="../ui/update_dialog.cc" line="166"/>
         <source>All unsaved data will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="162"/>
+        <location filename="../ui/update_dialog.cc" line="167"/>
         <source>Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="165"/>
+        <location filename="../ui/update_dialog.cc" line="170"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="175"/>
+        <location filename="../ui/update_dialog.cc" line="180"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="176"/>
+        <location filename="../ui/update_dialog.cc" line="181"/>
         <source>An error occurred while installing the update: %1</source>
         <translation type="unfinished"></translation>
     </message>

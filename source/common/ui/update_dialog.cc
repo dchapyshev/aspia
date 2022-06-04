@@ -18,6 +18,7 @@
 
 #include "common/ui/update_dialog.h"
 
+#include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "common/ui/download_dialog.h"
@@ -50,6 +51,7 @@ UpdateDialog::UpdateDialog(const QString& update_server,
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>())
 {
+    LOG(LS_INFO) << "Ctor";
     initialize();
 
     ui->label_available->setText(tr("Receiving information..."));
@@ -78,7 +80,10 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     ui->button_update->setEnabled(true);
 }
 
-UpdateDialog::~UpdateDialog() = default;
+UpdateDialog::~UpdateDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
