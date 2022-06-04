@@ -18,24 +18,30 @@
 
 #include "host/desktop_agent_main.h"
 
+#include "build/build_config.h"
 #include "base/command_line.h"
 #include "base/environment.h"
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/message_loop/message_loop.h"
-#include "base/win/mini_dump_writer.h"
-#include "base/win/session_info.h"
 #include "build/version.h"
 #include "host/desktop_session_agent.h"
+
+#if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
+#include "base/win/session_info.h"
 
 #include <dxgi.h>
 #include <d3d11.h>
 #include <comdef.h>
 #include <wrl/client.h>
+#endif // defined(OS_WIN)
 
 void desktopAgentMain(int argc, const char* const* argv)
 {
+#if defined(OS_WIN)
     base::installFailureHandler(L"aspia_desktop_agent");
+#endif // defined(OS_WIN)
 
     base::ScopedLogging scoped_logging;
 
@@ -57,6 +63,7 @@ void desktopAgentMain(int argc, const char* const* argv)
                  << " cores: " << base::SysInfo::processorCores()
                  << " threads: " << base::SysInfo::processorThreads() << ")";
 
+#if defined(OS_WIN)
     MEMORYSTATUSEX memory_status;
     memset(&memory_status, 0, sizeof(memory_status));
     memory_status.dwLength = sizeof(memory_status);
@@ -157,6 +164,7 @@ void desktopAgentMain(int argc, const char* const* argv)
         LOG(LS_INFO) << variable.first << ": " << variable.second;
     }
     LOG(LS_INFO) << "#####################################################";
+#endif // defined(OS_WIN)
 
     if (command_line->hasSwitch(u"channel_id"))
     {
