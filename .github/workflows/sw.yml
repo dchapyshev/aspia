@@ -38,3 +38,20 @@ jobs:
         name: sw-linux
         path: .sw/out
 
+  macos:
+    runs-on: macos-12
+    steps:
+    - uses: actions/checkout@v1
+    - uses: egorpugin/sw-action@master
+    - name: install
+      run: brew install flex bison gcc
+    - name: build
+      run: |
+        export PATH="/usr/local/opt/flex/bin:$PATH"
+        export PATH="/usr/local/opt/bison/bin:$PATH"
+        export PATH="/usr/local/opt/gcc/bin:$PATH"
+        ./sw -static build source
+    - uses: actions/upload-artifact@v1
+      with:
+        name: sw-macos
+        path: .sw/out

@@ -88,6 +88,7 @@ void build(Solution &s) {
     };
 
     auto &protocol = aspia.addStaticLibrary("proto");
+    protocol += cppstd;
     protocol += "proto/.*\\.proto"_rr;
     for (const auto &[p, _] : protocol[FileRegex(protocol.SourceDir / "proto", ".*\\.proto", false)]) {
         ProtobufData d;
@@ -99,11 +100,14 @@ void build(Solution &s) {
 
     auto &base = aspia.addStaticLibrary("base");
     {
+        base += cppstd;
+        base -= "third_party/.*"_rr;
         base += "third_party/modp_b64/.*\\.[hc]"_rr;
         base += "third_party/x11region/.*\\.[hc]"_rr;
-        base -= "third_party/xdg_user_dirs/.*"_rr;
         if (base.getBuildSettings().TargetOS.Type == OSType::Linux)
             base += "third_party/xdg_user_dirs/.*"_rr;
+        if (base.getBuildSettings().TargetOS.isApple())
+            base += "third_party/portaudio/.*"_rr;
         base += "third_party/custom_c_allocator/.*"_rr;
         base -= "build/.*"_rr;
         setup_target(base, "base", false);
@@ -148,12 +152,23 @@ void build(Solution &s) {
             base -= "net/firewall_manager.cc";
             base -= "net/route_enumerator.cc";
             base -= "net/open_files_enumerator.cc";
+        }
+        if (base.getBuildSettings().TargetOS.Type == OSType::Linux) {
             base += "X11"_slib;
             base += "Xext"_slib;
             base += "Xdamage"_slib;
             base += "Xfixes"_slib;
             base += "Xtst"_slib;
             base += "Xrandr"_slib;
+        }
+        if (base.getBuildSettings().TargetOS.isApple()) {
+            base.Protected += "AudioToolbox"_framework;
+            base.Protected += "CoreAudio"_framework;
+            // for shared build
+            base.Protected += "AppKit"_framework;
+            base.Protected += "CoreFoundation"_framework;
+            base.Protected += "CoreGraphics"_framework;
+            base.Protected += "Foundation"_framework;
         }
         automoc("org.sw.demo.qtproject.qt.base.tools.moc" QT_VERSION ""_dep, base);
 
@@ -280,6 +295,9 @@ void build(Solution &s) {
             t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.hardwareintegration.client.wayland_egl" QT_VERSION ""_dep;
             t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.shellintegration.xdg" QT_VERSION ""_dep;
             t.Public += "org.sw.demo.qtproject.qt.wayland.plugins.decorations.bradient" QT_VERSION ""_dep;
+        }
+        if (t.getBuildSettings().TargetOS.Type == OSType::Macos) {
+            t.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.cocoa" QT_VERSION ""_dep;
         }
         return t;
     };
