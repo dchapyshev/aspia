@@ -445,17 +445,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="57"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="59"/>
+        <location filename="../main.cc" line="60"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="60"/>
+        <location filename="../main.cc" line="61"/>
         <source>The file to open.</source>
         <translation>要打开的文件。</translation>
     </message>
@@ -947,17 +947,27 @@
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="547"/>
+        <location filename="../address_book_dialog.cc" line="516"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="517"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="550"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="558"/>
+        <location filename="../address_book_dialog.cc" line="561"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="567"/>
+        <location filename="../address_book_dialog.cc" line="570"/>
         <source>Router password cannot be empty.</source>
         <translation>路由器密码不能为空。</translation>
     </message>
@@ -1001,53 +1011,65 @@
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="546"/>
-        <location filename="../address_book_tab.cc" line="568"/>
+        <location filename="../address_book_tab.cc" line="572"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="564"/>
+        <location filename="../address_book_tab.cc" line="550"/>
+        <location filename="../address_book_tab.cc" line="576"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="551"/>
+        <location filename="../address_book_tab.cc" line="577"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="568"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="865"/>
+        <location filename="../address_book_tab.cc" line="873"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="867"/>
+        <location filename="../address_book_tab.cc" line="875"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="877"/>
+        <location filename="../address_book_tab.cc" line="885"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="890"/>
+        <location filename="../address_book_tab.cc" line="898"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="918"/>
+        <location filename="../address_book_tab.cc" line="926"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="929"/>
-        <location filename="../address_book_tab.cc" line="943"/>
+        <location filename="../address_book_tab.cc" line="937"/>
+        <location filename="../address_book_tab.cc" line="951"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="931"/>
+        <location filename="../address_book_tab.cc" line="939"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="945"/>
+        <location filename="../address_book_tab.cc" line="953"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -1279,28 +1301,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="102"/>
+        <location filename="../fast_connect_dialog.cc" line="101"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="103"/>
+        <location filename="../fast_connect_dialog.cc" line="102"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="227"/>
-        <location filename="../fast_connect_dialog.cc" line="247"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="229"/>
+        <location filename="../fast_connect_dialog.cc" line="249"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="228"/>
+        <location filename="../fast_connect_dialog.cc" line="230"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>已指定按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="248"/>
+        <location filename="../fast_connect_dialog.cc" line="250"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
@@ -1309,7 +1341,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="194"/>
-        <location filename="../main_window.cc" line="1267"/>
+        <location filename="../main_window.cc" line="1278"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1340,56 +1372,76 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="627"/>
-        <location filename="../main_window.cc" line="947"/>
-        <location filename="../main_window.cc" line="1026"/>
+        <location filename="../main_window.cc" line="951"/>
+        <location filename="../main_window.cc" line="1033"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="628"/>
-        <location filename="../main_window.cc" line="1027"/>
+        <location filename="../main_window.cc" line="1034"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="843"/>
+        <location filename="../main_window.cc" line="632"/>
+        <location filename="../main_window.cc" line="955"/>
+        <location filename="../main_window.cc" line="1038"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="633"/>
+        <location filename="../main_window.cc" line="956"/>
+        <location filename="../main_window.cc" line="1039"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="634"/>
+        <location filename="../main_window.cc" line="1040"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="847"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="850"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="851"/>
-        <location filename="../main_window.cc" line="856"/>
+        <location filename="../main_window.cc" line="855"/>
+        <location filename="../main_window.cc" line="860"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="952"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="981"/>
+        <location filename="../main_window.cc" line="988"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="996"/>
+        <location filename="../main_window.cc" line="1003"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="482"/>
-        <location filename="../main_window.cc" line="1138"/>
+        <location filename="../main_window.cc" line="1149"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1268"/>
+        <location filename="../main_window.cc" line="1279"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>

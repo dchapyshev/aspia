@@ -471,12 +471,22 @@
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="180"/>
+        <location filename="../ui/update_dialog.cc" line="175"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="176"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="184"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="185"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>

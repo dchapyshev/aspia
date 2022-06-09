@@ -465,12 +465,22 @@
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="180"/>
+        <location filename="../ui/update_dialog.cc" line="175"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="176"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/update_dialog.cc" line="184"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="185"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Ocorreu um erro ao instalar a atualização:%1</translation>
     </message>

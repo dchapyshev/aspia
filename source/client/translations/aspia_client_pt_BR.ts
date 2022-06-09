@@ -32,22 +32,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="387"/>
+        <location filename="../client_main.cc" line="388"/>
         <source>Remote computer address.</source>
         <translation>Endereço do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="391"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer port.</source>
         <translation>Porta do computador remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="396"/>
+        <location filename="../client_main.cc" line="397"/>
         <source>Name of user.</source>
         <translation>Usuário.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="400"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,83 +56,83 @@
         <translation type="vanished">Tipo de sessão. Opções disponíveis: controle da área de trabalho, visualização da área de trabalho e transferência de arquivos.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="404"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="409"/>
+        <location filename="../client_main.cc" line="410"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="413"/>
+        <location filename="../client_main.cc" line="414"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="417"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="421"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="425"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="429"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="433"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="441"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="579"/>
+        <location filename="../client_main.cc" line="580"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -141,7 +141,7 @@
         <translation type="vanished">Tipo de sessão incorreta.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="580"/>
+        <location filename="../client_main.cc" line="581"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>
@@ -2329,10 +2329,10 @@
     </message>
     <message>
         <location filename="../ui/desktop_panel.cc" line="422"/>
-        <location filename="../ui/desktop_panel.cc" line="433"/>
-        <location filename="../ui/desktop_panel.cc" line="444"/>
-        <location filename="../ui/desktop_panel.cc" line="455"/>
-        <location filename="../ui/desktop_panel.cc" line="466"/>
+        <location filename="../ui/desktop_panel.cc" line="437"/>
+        <location filename="../ui/desktop_panel.cc" line="452"/>
+        <location filename="../ui/desktop_panel.cc" line="467"/>
+        <location filename="../ui/desktop_panel.cc" line="482"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
@@ -2342,27 +2342,45 @@
         <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="434"/>
+        <location filename="../ui/desktop_panel.cc" line="426"/>
+        <location filename="../ui/desktop_panel.cc" line="441"/>
+        <location filename="../ui/desktop_panel.cc" line="456"/>
+        <location filename="../ui/desktop_panel.cc" line="471"/>
+        <location filename="../ui/desktop_panel.cc" line="486"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="427"/>
+        <location filename="../ui/desktop_panel.cc" line="442"/>
+        <location filename="../ui/desktop_panel.cc" line="457"/>
+        <location filename="../ui/desktop_panel.cc" line="472"/>
+        <location filename="../ui/desktop_panel.cc" line="487"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.cc" line="438"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="445"/>
+        <location filename="../ui/desktop_panel.cc" line="453"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="456"/>
+        <location filename="../ui/desktop_panel.cc" line="468"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="467"/>
+        <location filename="../ui/desktop_panel.cc" line="483"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="545"/>
+        <location filename="../ui/desktop_panel.cc" line="565"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -2433,71 +2451,81 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="429"/>
+        <location filename="../ui/file_panel.cc" line="435"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="92"/>
+        <location filename="../ui/file_panel.cc" line="93"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Falha ao obter a lista de drives: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="107"/>
+        <location filename="../ui/file_panel.cc" line="108"/>
         <source>Failed to get list of files: %1</source>
         <translation>Falha ao obter a lista de arquivos: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="131"/>
+        <location filename="../ui/file_panel.cc" line="132"/>
         <source>Failed to create directory: %1</source>
         <translation>Falha ao criar o diretório: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="142"/>
+        <location filename="../ui/file_panel.cc" line="143"/>
         <source>Failed to rename item: %1</source>
         <translation>Falha ao renomear item: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="258"/>
+        <location filename="../ui/file_panel.cc" line="259"/>
         <source>%1 object(s) selected</source>
         <translation>%1 objeto(s) selecionado(s)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="277"/>
-        <location filename="../ui/file_panel.cc" line="295"/>
+        <location filename="../ui/file_panel.cc" line="278"/>
+        <location filename="../ui/file_panel.cc" line="296"/>
         <source>Folder name can not be empty.</source>
         <translation>O nome da pasta deve ser inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="283"/>
-        <location filename="../ui/file_panel.cc" line="301"/>
+        <location filename="../ui/file_panel.cc" line="284"/>
+        <location filename="../ui/file_panel.cc" line="302"/>
         <source>Name contains invalid characters.</source>
         <translation>O nome contém caracteres inválidos.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="322"/>
+        <location filename="../ui/file_panel.cc" line="323"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Enviar	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="324"/>
+        <location filename="../ui/file_panel.cc" line="325"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Excluir	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="334"/>
+        <location filename="../ui/file_panel.cc" line="335"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Criar Pasta</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="395"/>
+        <location filename="../ui/file_panel.cc" line="396"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="396"/>
+        <location filename="../ui/file_panel.cc" line="397"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Você tem certeza que deseja excluir os itens selecionados?</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.cc" line="400"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/file_panel.cc" line="401"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
     </message>
 </context>
 <context>
@@ -2843,12 +2871,12 @@
 <context>
     <name>client::RecordSettingsDialog</name>
     <message>
-        <location filename="../ui/record_settings_dialog.cc" line="36"/>
+        <location filename="../ui/record_settings_dialog.cc" line="35"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/record_settings_dialog.cc" line="48"/>
+        <location filename="../ui/record_settings_dialog.cc" line="47"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2977,7 +3005,7 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="395"/>
         <location filename="../ui/router_manager_window.cc" line="438"/>
-        <location filename="../ui/router_manager_window.cc" line="570"/>
+        <location filename="../ui/router_manager_window.cc" line="578"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -2993,58 +3021,72 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="467"/>
-        <location filename="../ui/router_manager_window.cc" line="488"/>
-        <location filename="../ui/router_manager_window.cc" line="575"/>
+        <location filename="../ui/router_manager_window.cc" line="493"/>
+        <location filename="../ui/router_manager_window.cc" line="583"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="489"/>
+        <location filename="../ui/router_manager_window.cc" line="472"/>
+        <location filename="../ui/router_manager_window.cc" line="497"/>
+        <location filename="../ui/router_manager_window.cc" line="588"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="473"/>
+        <location filename="../ui/router_manager_window.cc" line="498"/>
+        <location filename="../ui/router_manager_window.cc" line="589"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="494"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Tem certeza de que deseja desconectar de todos os hosts?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="570"/>
+        <location filename="../ui/router_manager_window.cc" line="578"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Você não pode excluir um usuário do sistema.</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="576"/>
+        <location filename="../ui/router_manager_window.cc" line="584"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Tem certeza de que deseja excluir o usuário &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="625"/>
+        <location filename="../ui/router_manager_window.cc" line="637"/>
         <source>Computer Name</source>
         <translation>Nome do computador</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="626"/>
+        <location filename="../ui/router_manager_window.cc" line="638"/>
         <source>IP Address</source>
         <translation>Endereço IP</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="627"/>
+        <location filename="../ui/router_manager_window.cc" line="639"/>
         <source>Connect Time</source>
         <translation>Tempo de conexão</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="629"/>
+        <location filename="../ui/router_manager_window.cc" line="641"/>
         <source>Version</source>
         <translation>Versão</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="631"/>
+        <location filename="../ui/router_manager_window.cc" line="643"/>
         <source>Operating System</source>
         <translation>Sistema Operacional</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="637"/>
+        <location filename="../ui/router_manager_window.cc" line="649"/>
         <source>Host IDs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="644"/>
+        <location filename="../ui/router_manager_window.cc" line="656"/>
         <source>ID #%1</source>
         <translation></translation>
     </message>
@@ -3070,7 +3112,7 @@
         <location filename="../ui/router_user_dialog.cc" line="160"/>
         <location filename="../ui/router_user_dialog.cc" line="174"/>
         <location filename="../ui/router_user_dialog.cc" line="197"/>
-        <location filename="../ui/router_user_dialog.cc" line="221"/>
+        <location filename="../ui/router_user_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -3116,22 +3158,32 @@
         <translation>Você desejar inserir uma senha diferente?</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="222"/>
+        <location filename="../ui/router_user_dialog.cc" line="201"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="202"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_user_dialog.cc" line="226"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erro interno desconhecido ao criar ou editar usuário.</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="270"/>
+        <location filename="../ui/router_user_dialog.cc" line="274"/>
         <source>Double-click to change</source>
         <translation>Clique duas vezes para alterar</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="294"/>
+        <location filename="../ui/router_user_dialog.cc" line="298"/>
         <source>Administrator</source>
         <translation>Administrador</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="298"/>
+        <location filename="../ui/router_user_dialog.cc" line="302"/>
         <source>Client</source>
         <translation>Cliente</translation>
     </message>
@@ -4850,14 +4902,14 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="923"/>
+        <location filename="../ui/task_manager_window.cc" line="938"/>
         <source>Update Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/task_manager_window.cc" line="674"/>
-        <location filename="../ui/task_manager_window.cc" line="704"/>
-        <location filename="../ui/task_manager_window.cc" line="721"/>
+        <location filename="../ui/task_manager_window.cc" line="709"/>
+        <location filename="../ui/task_manager_window.cc" line="731"/>
         <source>Confirmation</source>
         <translation type="unfinished">Confirmação</translation>
     </message>
@@ -4867,27 +4919,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="705"/>
+        <location filename="../ui/task_manager_window.cc" line="679"/>
+        <location filename="../ui/task_manager_window.cc" line="714"/>
+        <location filename="../ui/task_manager_window.cc" line="736"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="680"/>
+        <location filename="../ui/task_manager_window.cc" line="715"/>
+        <location filename="../ui/task_manager_window.cc" line="737"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/task_manager_window.cc" line="710"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="722"/>
+        <location filename="../ui/task_manager_window.cc" line="732"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="908"/>
+        <location filename="../ui/task_manager_window.cc" line="923"/>
         <source>Processes: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="918"/>
+        <location filename="../ui/task_manager_window.cc" line="933"/>
         <source>Physical memory: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="913"/>
+        <location filename="../ui/task_manager_window.cc" line="928"/>
         <source>CPU loading: %1%</source>
         <translation type="unfinished"></translation>
     </message>

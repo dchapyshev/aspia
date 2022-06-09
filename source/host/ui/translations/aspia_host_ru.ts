@@ -413,46 +413,56 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../settings_util.cc" line="41"/>
-        <location filename="../settings_util.cc" line="61"/>
+        <location filename="../settings_util.cc" line="42"/>
+        <location filename="../settings_util.cc" line="62"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="42"/>
+        <location filename="../settings_util.cc" line="43"/>
         <source>The configuration was successfully imported.</source>
         <translation>Конфигурация успешно импортирована.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="62"/>
+        <location filename="../settings_util.cc" line="63"/>
         <source>The configuration was successfully exported.</source>
         <translation>Конфигурация успешно экспортирована.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="84"/>
-        <location filename="../settings_util.cc" line="112"/>
-        <location filename="../settings_util.cc" line="129"/>
-        <location filename="../settings_util.cc" line="152"/>
+        <location filename="../settings_util.cc" line="85"/>
+        <location filename="../settings_util.cc" line="113"/>
+        <location filename="../settings_util.cc" line="130"/>
+        <location filename="../settings_util.cc" line="158"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="85"/>
+        <location filename="../settings_util.cc" line="86"/>
         <source>Source settings file does not exist.</source>
         <translation>Исходный файл настроек не существует.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="113"/>
+        <location filename="../settings_util.cc" line="114"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>Не удалось прочитать исходный файл: файл поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="130"/>
+        <location filename="../settings_util.cc" line="131"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation>Существующие настройки будут перезаписаны. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../settings_util.cc" line="153"/>
+        <location filename="../settings_util.cc" line="134"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="135"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../settings_util.cc" line="159"/>
         <source>Unable to write the target file.</source>
         <translation>Не удалось записать файл назначения.</translation>
     </message>
@@ -556,8 +566,8 @@
     <name>host::ConfigDialog</name>
     <message>
         <location filename="../config_dialog.cc" line="384"/>
-        <location filename="../config_dialog.cc" line="531"/>
-        <location filename="../config_dialog.cc" line="584"/>
+        <location filename="../config_dialog.cc" line="535"/>
+        <location filename="../config_dialog.cc" line="592"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
@@ -567,7 +577,7 @@
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="517"/>
+        <location filename="../config_dialog.cc" line="521"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
@@ -577,39 +587,39 @@
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="517"/>
-        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="521"/>
+        <location filename="../config_dialog.cc" line="555"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="526"/>
-        <location filename="../config_dialog.cc" line="579"/>
+        <location filename="../config_dialog.cc" line="530"/>
+        <location filename="../config_dialog.cc" line="587"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="555"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="566"/>
+        <location filename="../config_dialog.cc" line="574"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="463"/>
-        <location filename="../config_dialog.cc" line="499"/>
-        <location filename="../config_dialog.cc" line="569"/>
-        <location filename="../config_dialog.cc" line="601"/>
-        <location filename="../config_dialog.cc" line="614"/>
-        <location filename="../config_dialog.cc" line="888"/>
-        <location filename="../config_dialog.cc" line="911"/>
-        <location filename="../config_dialog.cc" line="930"/>
-        <location filename="../config_dialog.cc" line="940"/>
-        <location filename="../config_dialog.cc" line="960"/>
-        <location filename="../config_dialog.cc" line="970"/>
+        <location filename="../config_dialog.cc" line="467"/>
+        <location filename="../config_dialog.cc" line="503"/>
+        <location filename="../config_dialog.cc" line="577"/>
+        <location filename="../config_dialog.cc" line="613"/>
+        <location filename="../config_dialog.cc" line="626"/>
+        <location filename="../config_dialog.cc" line="900"/>
+        <location filename="../config_dialog.cc" line="923"/>
+        <location filename="../config_dialog.cc" line="942"/>
+        <location filename="../config_dialog.cc" line="952"/>
+        <location filename="../config_dialog.cc" line="972"/>
+        <location filename="../config_dialog.cc" line="982"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -624,62 +634,62 @@
         <translation>Цифры</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="464"/>
-        <location filename="../config_dialog.cc" line="500"/>
+        <location filename="../config_dialog.cc" line="468"/>
+        <location filename="../config_dialog.cc" line="504"/>
         <source>An error occurred while processing the password.</source>
         <translation>Возникла ошибка при обработке пароля.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="602"/>
+        <location filename="../config_dialog.cc" line="614"/>
         <source>Incorrect router address entered.</source>
         <translation>Введен некорректный адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="615"/>
+        <location filename="../config_dialog.cc" line="627"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введен некорректный публичный ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="786"/>
-        <location filename="../config_dialog.cc" line="819"/>
+        <location filename="../config_dialog.cc" line="798"/>
+        <location filename="../config_dialog.cc" line="831"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="828"/>
+        <location filename="../config_dialog.cc" line="840"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="829"/>
+        <location filename="../config_dialog.cc" line="841"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="834"/>
+        <location filename="../config_dialog.cc" line="846"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="835"/>
-        <location filename="../config_dialog.cc" line="842"/>
-        <location filename="../config_dialog.cc" line="855"/>
+        <location filename="../config_dialog.cc" line="847"/>
+        <location filename="../config_dialog.cc" line="854"/>
+        <location filename="../config_dialog.cc" line="867"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="841"/>
+        <location filename="../config_dialog.cc" line="853"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="852"/>
+        <location filename="../config_dialog.cc" line="864"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="781"/>
-        <location filename="../config_dialog.cc" line="854"/>
+        <location filename="../config_dialog.cc" line="793"/>
+        <location filename="../config_dialog.cc" line="866"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
@@ -784,7 +794,21 @@
         <translation>Отклонять подключение</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="859"/>
+        <location filename="../config_dialog.cc" line="389"/>
+        <location filename="../config_dialog.cc" line="539"/>
+        <location filename="../config_dialog.cc" line="596"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="390"/>
+        <location filename="../config_dialog.cc" line="540"/>
+        <location filename="../config_dialog.cc" line="597"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../config_dialog.cc" line="871"/>
         <source>Current service state: %1</source>
         <translation>Текущее состояние службы: %1</translation>
     </message>
@@ -793,28 +817,28 @@
         <translation type="vanished">Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="889"/>
+        <location filename="../config_dialog.cc" line="901"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="912"/>
+        <location filename="../config_dialog.cc" line="924"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="931"/>
-        <location filename="../config_dialog.cc" line="961"/>
+        <location filename="../config_dialog.cc" line="943"/>
+        <location filename="../config_dialog.cc" line="973"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="941"/>
+        <location filename="../config_dialog.cc" line="953"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="971"/>
+        <location filename="../config_dialog.cc" line="983"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
@@ -891,13 +915,23 @@
         <translation>Пользователь &quot;%1&quot; (%2) начал запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="701"/>
+        <location filename="../main_window.cc" line="622"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="623"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="702"/>
         <source>Connection error</source>
         <translation>Ошибка подключения</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="383"/>
-        <location filename="../main_window.cc" line="686"/>
+        <location filename="../main_window.cc" line="687"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор отключен</translation>
     </message>
@@ -912,7 +946,7 @@
         <translation>Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="691"/>
+        <location filename="../main_window.cc" line="692"/>
         <source>Connecting to a router...</source>
         <translation>Подключение к маршрутизатору...</translation>
     </message>
@@ -922,7 +956,7 @@
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="696"/>
+        <location filename="../main_window.cc" line="697"/>
         <source>Connected to a router</source>
         <translation>Подключено к маршрутизатору</translation>
     </message>
@@ -932,12 +966,12 @@
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="616"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="618"/>
+        <location filename="../main_window.cc" line="617"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Если вы выйдите из Aspia, то вы не сможете подключиться к этому компьютеру пока вы снова не включите компьютер или Aspia вручную. Вы действительно хотите выйти из приложения?</translation>
     </message>
@@ -993,7 +1027,7 @@
         <location filename="../user_dialog.cc" line="166"/>
         <location filename="../user_dialog.cc" line="177"/>
         <location filename="../user_dialog.cc" line="199"/>
-        <location filename="../user_dialog.cc" line="215"/>
+        <location filename="../user_dialog.cc" line="219"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1041,12 +1075,22 @@
         <translation>Вы хотите ввести другой пароль?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="216"/>
+        <location filename="../user_dialog.cc" line="203"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="204"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../user_dialog.cc" line="220"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Неизвестная внутренняя ошибка при создании или изменении пользователя.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="270"/>
+        <location filename="../user_dialog.cc" line="274"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчок для изменения</translation>
     </message>

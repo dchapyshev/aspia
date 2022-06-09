@@ -449,17 +449,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="56"/>
+        <location filename="../main.cc" line="57"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="59"/>
+        <location filename="../main.cc" line="60"/>
         <source>file</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../main.cc" line="60"/>
+        <location filename="../main.cc" line="61"/>
         <source>The file to open.</source>
         <translation>Файл для открытия.</translation>
     </message>
@@ -668,7 +668,7 @@
     <message>
         <location filename="../main_window.ui" line="482"/>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="579"/>
@@ -959,17 +959,27 @@
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="547"/>
+        <location filename="../address_book_dialog.cc" line="516"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="517"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../address_book_dialog.cc" line="550"/>
         <source>An invalid router address was entered.</source>
         <translation>Введен некорректный адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="558"/>
+        <location filename="../address_book_dialog.cc" line="561"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../address_book_dialog.cc" line="567"/>
+        <location filename="../address_book_dialog.cc" line="570"/>
         <source>Router password cannot be empty.</source>
         <translation>Пароль маршутизатора не может быть пустым.</translation>
     </message>
@@ -1013,53 +1023,65 @@
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="546"/>
-        <location filename="../address_book_tab.cc" line="568"/>
+        <location filename="../address_book_tab.cc" line="572"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="564"/>
+        <location filename="../address_book_tab.cc" line="550"/>
+        <location filename="../address_book_tab.cc" line="576"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="551"/>
+        <location filename="../address_book_tab.cc" line="577"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../address_book_tab.cc" line="568"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="865"/>
+        <location filename="../address_book_tab.cc" line="873"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="867"/>
+        <location filename="../address_book_tab.cc" line="875"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="877"/>
+        <location filename="../address_book_tab.cc" line="885"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="890"/>
+        <location filename="../address_book_tab.cc" line="898"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="918"/>
+        <location filename="../address_book_tab.cc" line="926"/>
         <source>Root Group</source>
         <translation>Корневая группа</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="929"/>
-        <location filename="../address_book_tab.cc" line="943"/>
+        <location filename="../address_book_tab.cc" line="937"/>
+        <location filename="../address_book_tab.cc" line="951"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="931"/>
+        <location filename="../address_book_tab.cc" line="939"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="945"/>
+        <location filename="../address_book_tab.cc" line="953"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1315,28 +1337,38 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="102"/>
+        <location filename="../fast_connect_dialog.cc" line="101"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="103"/>
+        <location filename="../fast_connect_dialog.cc" line="102"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>Список введенных адреснов будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="227"/>
-        <location filename="../fast_connect_dialog.cc" line="247"/>
+        <location filename="../fast_connect_dialog.cc" line="105"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="106"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../fast_connect_dialog.cc" line="229"/>
+        <location filename="../fast_connect_dialog.cc" line="249"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="228"/>
+        <location filename="../fast_connect_dialog.cc" line="230"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Указано подключение по ID, но маршрутизатор не настроен. Проверьте параметры маршрутизатора в свойствах адресной книги.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="248"/>
+        <location filename="../fast_connect_dialog.cc" line="250"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
@@ -1345,7 +1377,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="194"/>
-        <location filename="../main_window.cc" line="1267"/>
+        <location filename="../main_window.cc" line="1278"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1366,56 +1398,76 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="627"/>
-        <location filename="../main_window.cc" line="947"/>
-        <location filename="../main_window.cc" line="1026"/>
+        <location filename="../main_window.cc" line="951"/>
+        <location filename="../main_window.cc" line="1033"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="628"/>
-        <location filename="../main_window.cc" line="1027"/>
+        <location filename="../main_window.cc" line="1034"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="843"/>
+        <location filename="../main_window.cc" line="632"/>
+        <location filename="../main_window.cc" line="955"/>
+        <location filename="../main_window.cc" line="1038"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="633"/>
+        <location filename="../main_window.cc" line="956"/>
+        <location filename="../main_window.cc" line="1039"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="634"/>
+        <location filename="../main_window.cc" line="1040"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="847"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="850"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="851"/>
-        <location filename="../main_window.cc" line="856"/>
+        <location filename="../main_window.cc" line="855"/>
+        <location filename="../main_window.cc" line="860"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="948"/>
+        <location filename="../main_window.cc" line="952"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="981"/>
+        <location filename="../main_window.cc" line="988"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="996"/>
+        <location filename="../main_window.cc" line="1003"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1268"/>
+        <location filename="../main_window.cc" line="1279"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В свойствах компьютера указано подключение по ID, но маршутизатор не настроен. Проверьте параметры маршрутизатора в свойствах адресной книги.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="482"/>
-        <location filename="../main_window.cc" line="1138"/>
+        <location filename="../main_window.cc" line="1149"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>

@@ -408,5 +408,13 @@
         <source>An error occurred while installing the update: %1</source>
         <translation>安裝更新時發生錯誤：%1</translation>
     </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -1849,6 +1849,14 @@
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
 </context>
 <context>
     <name>client::FileListModel</name>
@@ -1946,6 +1954,14 @@
     <message>
         <source>Warning</source>
         <translation>警告</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
     </message>
 </context>
 <context>
@@ -2387,6 +2403,14 @@
         <source>ID #%1</source>
         <translation>ID #%1</translation>
     </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
 </context>
 <context>
     <name>client::RouterStatusDialog</name>
@@ -2452,6 +2476,14 @@
     <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
     </message>
 </context>
 <context>
@@ -3453,6 +3485,14 @@
     <message>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
     </message>
 </context>
 <context>
