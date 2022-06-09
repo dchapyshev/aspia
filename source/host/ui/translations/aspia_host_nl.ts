@@ -846,27 +846,27 @@
 <context>
     <name>host::ConnectConfirmDialog</name>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="41"/>
+        <location filename="../connect_confirm_dialog.cc" line="44"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="45"/>
+        <location filename="../connect_confirm_dialog.cc" line="48"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="67"/>
+        <location filename="../connect_confirm_dialog.cc" line="70"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../connect_confirm_dialog.cc" line="69"/>
+        <location filename="../connect_confirm_dialog.cc" line="72"/>
         <source>Allow the connection?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="129"/>
+        <location filename="../connect_confirm_dialog.cc" line="137"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -874,7 +874,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../connect_confirm_dialog.cc" line="134"/>
+        <location filename="../connect_confirm_dialog.cc" line="142"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>

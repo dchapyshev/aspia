@@ -18,6 +18,7 @@
 
 #include "host/ui/connect_confirm_dialog.h"
 
+#include "base/logging.h"
 #include "common/ui/session_type.h"
 
 #include <QAbstractButton>
@@ -33,6 +34,8 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
       timer_(new QTimer(this)),
       auto_accept_(request.timeout() > 0)
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
     setWindowFlag(Qt::WindowStaysOnTopHint);
 
@@ -83,17 +86,22 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
     });
 }
 
-ConnectConfirmDialog::~ConnectConfirmDialog() = default;
+ConnectConfirmDialog::~ConnectConfirmDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Yes)
     {
+        LOG(LS_INFO) << "'Yes' button clicked";
         accept();
     }
     else
     {
+        LOG(LS_INFO) << "'No' button clicked";
         reject();
     }
 
