@@ -195,11 +195,15 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 QString question = tr("Do you want to enter a different password?");
 
-                if (QMessageBox::warning(this,
-                                         tr("Warning"),
-                                         QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                         QMessageBox::Yes,
-                                         QMessageBox::No) == QMessageBox::Yes)
+                QMessageBox message_box(QMessageBox::Warning,
+                    tr("Warning"),
+                    QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                    QMessageBox::Yes | QMessageBox::No,
+                    this);
+                message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+                message_box.button(QMessageBox::No)->setText(tr("No"));
+
+                if (message_box.exec() == QMessageBox::Yes)
                 {
                     ui.edit_password->clear();
                     ui.edit_password_repeat->clear();

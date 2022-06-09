@@ -166,12 +166,16 @@ void UpdateDialog::onUpdateNow()
     QString message3 = tr("All unsaved data will be lost.");
     QString question = tr("Continue?");
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                                  .arg(message1).arg(message2).arg(message3).arg(question),
-                              QMessageBox::Yes,
-                              QMessageBox::No) == QMessageBox::Yes)
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
+                                .arg(message1).arg(message2).arg(message3).arg(question),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::Yes)
     {
         QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
         if (!file.open())

@@ -26,6 +26,7 @@
 #include "client/ui/file_list_model.h"
 #include "common/file_platform_util.h"
 
+#include <QAbstractButton>
 #include <QAction>
 #include <QLineEdit>
 #include <QKeyEvent>
@@ -391,10 +392,15 @@ void FilePanel::removeSelected()
     if (items.empty())
         return;
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to delete the selected items?"),
-                              QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to delete the selected items?"),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() != QMessageBox::Yes)
     {
         return;
     }

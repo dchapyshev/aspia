@@ -670,11 +670,16 @@ void TaskManagerWindow::onEndProcess()
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
     if (current_item)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you really want to end \"%1\" process?")
-                                      .arg(current_item->text(PROC_COL_NAME)),
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you really want to end \"%1\" process?")
+                                    .arg(current_item->text(PROC_COL_NAME)),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             sendEndProcessRequest(current_item->processId());
         }
@@ -700,11 +705,16 @@ void TaskManagerWindow::onDisconnectUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you really want to disconnect user \"%1\" session?")
-                                      .arg(current_item->text(USER_COL_NAME)),
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you really want to disconnect user \"%1\" session?")
+                                    .arg(current_item->text(USER_COL_NAME)),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             sendUserRequest(
                 current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_DISCONNECT);
@@ -717,11 +727,16 @@ void TaskManagerWindow::onLogoffUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you really want to end user \"%1\" session?")
-                                      .arg(current_item->text(USER_COL_NAME)),
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you really want to end user \"%1\" session?")
+                                    .arg(current_item->text(USER_COL_NAME)),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             sendUserRequest(
                 current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_LOGOFF);

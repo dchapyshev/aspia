@@ -463,11 +463,16 @@ void RouterManagerWindow::disconnectHost()
     if (!tree_item)
         return;
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to disconnect session \"%1\"?")
-                              .arg(QString::fromStdString(tree_item->session.computer_name())),
-                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to disconnect session \"%1\"?")
+                                .arg(QString::fromStdString(tree_item->session.computer_name())),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::No)
     {
         return;
     }
@@ -484,13 +489,16 @@ void RouterManagerWindow::disconnectAllHosts()
     if (!router_proxy_)
         return;
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to disconnect all hosts?"),
-                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
-    {
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to disconnect all hosts?"),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::No)
         return;
-    }
 
     beforeRequest();
 
@@ -571,12 +579,16 @@ void RouterManagerWindow::deleteUser()
         return;
     }
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to delete user \"%1\"?")
-                              .arg(tree_item->text(0)),
-                              QMessageBox::Yes,
-                              QMessageBox::No) == QMessageBox::Yes)
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to delete user \"%1\"?")
+                                .arg(tree_item->text(0)),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::Yes)
     {
         if (router_proxy_)
         {

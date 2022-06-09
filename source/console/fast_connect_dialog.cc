@@ -97,13 +97,15 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
     connect(ui.button_clear, &QPushButton::clicked, this, [this]()
     {
-        int ret = QMessageBox::question(
-            this,
-            tr("Confirmation"),
-            tr("The list of entered addresses will be cleared. Continue?"),
-            QMessageBox::Yes | QMessageBox::No);
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("The list of entered addresses will be cleared. Continue?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
 
-        if (ret == QMessageBox::Yes)
+        if (message_box.exec() == QMessageBox::Yes)
         {
             ui.combo_address->clear();
             state_.history.clear();

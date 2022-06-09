@@ -21,7 +21,6 @@
 #include "client/ui/desktop_settings.h"
 
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QTimer>
 
 namespace client {

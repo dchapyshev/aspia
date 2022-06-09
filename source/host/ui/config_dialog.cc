@@ -380,12 +380,16 @@ void ConfigDialog::onDeleteUser()
     if (!user_item)
         return;
 
-    if (QMessageBox::question(this,
-                              tr("Confirmation"),
-                              tr("Are you sure you want to delete user \"%1\"?")
-                                  .arg(user_item->text(0)),
-                              QMessageBox::Yes,
-                              QMessageBox::No) == QMessageBox::Yes)
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to delete user \"%1\"?")
+                                .arg(user_item->text(0)),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::Yes)
     {
         delete user_item;
         setConfigChanged(true);
@@ -527,11 +531,15 @@ void ConfigDialog::onImport()
                    "For the changes to take effect, you must restart the service. "
                    "Restart the service now?");
 
-            if (QMessageBox::question(this,
-                                      tr("Confirmation"),
-                                      message,
-                                      QMessageBox::Yes,
-                                      QMessageBox::No) == QMessageBox::Yes)
+            QMessageBox message_box(QMessageBox::Question,
+                                    tr("Confirmation"),
+                                    message,
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    this);
+            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+            message_box.button(QMessageBox::No)->setText(tr("No"));
+
+            if (message_box.exec() == QMessageBox::Yes)
             {
                 restartService();
             }
@@ -580,11 +588,15 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                    "For the changes to take effect, you must restart the service. "
                    "Restart the service now?");
 
-            if (QMessageBox::question(this,
-                                      tr("Confirmation"),
-                                      message,
-                                      QMessageBox::Yes,
-                                      QMessageBox::No) == QMessageBox::Yes)
+            QMessageBox message_box(QMessageBox::Question,
+                                    tr("Confirmation"),
+                                    message,
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    this);
+            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+            message_box.button(QMessageBox::No)->setText(tr("No"));
+
+            if (message_box.exec() == QMessageBox::Yes)
             {
                 service_restart_required = true;
             }

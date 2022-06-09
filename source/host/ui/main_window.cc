@@ -612,16 +612,17 @@ void MainWindow::onExit()
         return;
     }
 
-    int button = QMessageBox::question(
-        this,
+    QMessageBox message_box(QMessageBox::Question,
         tr("Confirmation"),
         tr("If you exit from Aspia, it will not be possible to connect to this computer until "
            "you turn on the computer or Aspia again manually. Do you really want to exit the "
            "application?"),
-        QMessageBox::Yes,
-        QMessageBox::No);
+        QMessageBox::Yes | QMessageBox::No,
+        this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
 
-    if (button == QMessageBox::Yes)
+    if (message_box.exec() == QMessageBox::Yes)
     {
         if (!notifier_)
         {

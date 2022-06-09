@@ -418,55 +418,75 @@ void DesktopPanel::onPowerControl(QAction* action)
 {
     if (action == ui.action_shutdown)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you sure you want to shutdown the remote computer?"),
-                                  QMessageBox::Yes,
-                                  QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you sure you want to shutdown the remote computer?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_SHUTDOWN);
         }
     }
     else if (action == ui.action_reboot)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you sure you want to reboot the remote computer?"),
-                                  QMessageBox::Yes,
-                                  QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you sure you want to reboot the remote computer?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_REBOOT);
         }
     }
     else if (action == ui.action_reboot_safe_mode)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
-                                  QMessageBox::Yes,
-                                  QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
         }
     }
     else if (action == ui.action_logoff)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you sure you want to end the user session on the remote computer?"),
-                                  QMessageBox::Yes,
-                                  QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you sure you want to end the user session on the remote computer?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_LOGOFF);
         }
     }
     else if (action == ui.action_lock)
     {
-        if (QMessageBox::question(this,
-                                  tr("Confirmation"),
-                                  tr("Are you sure you want to lock the user session on the remote computer?"),
-                                  QMessageBox::Yes,
-                                  QMessageBox::No) == QMessageBox::Yes)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Are you sure you want to lock the user session on the remote computer?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             emit powerControl(proto::PowerControl::ACTION_LOCK);
         }

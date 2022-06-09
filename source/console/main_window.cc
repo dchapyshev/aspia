@@ -623,13 +623,17 @@ void MainWindow::onCloseTab(int index)
 
     if (tab->isChanged())
     {
-        int ret = QMessageBox(QMessageBox::Question,
-                              tr("Confirmation"),
-                              tr("Address book \"%1\" has been changed. Save changes?")
-                              .arg(tab->addressBookName()),
-                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                              this).exec();
-        switch (ret)
+        QMessageBox message_box(QMessageBox::Question,
+                                tr("Confirmation"),
+                                tr("Address book \"%1\" has been changed. Save changes?")
+                                    .arg(tab->addressBookName()),
+                                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                                this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+        message_box.button(QMessageBox::Cancel)->setText(tr("Cancel"));
+
+        switch (message_box.exec())
         {
             case QMessageBox::Yes:
                 tab->save();
@@ -942,13 +946,16 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
     if (action == ui.action_clear_mru ||
         (action == ui.action_remember_last && !action->isChecked()))
     {
-        int ret = QMessageBox(
+        QMessageBox message_box(
             QMessageBox::Question,
             tr("Confirmation"),
             tr("The list of recently opened address books will be cleared. Continue?"),
             QMessageBox::Yes | QMessageBox::No,
-            this).exec();
-        if (ret == QMessageBox::Yes)
+            this);
+        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+        message_box.button(QMessageBox::No)->setText(tr("No"));
+
+        if (message_box.exec() == QMessageBox::Yes)
         {
             mru_.clearRecentOpen();
             rebuildMruMenu();
@@ -1022,13 +1029,17 @@ void MainWindow::closeEvent(QCloseEvent* event)
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab && tab->isChanged())
         {
-            int ret = QMessageBox(QMessageBox::Question,
-                                  tr("Confirmation"),
-                                  tr("Address book \"%1\" has been changed. Save changes?")
-                                  .arg(tab->addressBookName()),
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                  this).exec();
-            switch (ret)
+            QMessageBox message_box(QMessageBox::Question,
+                                    tr("Confirmation"),
+                                    tr("Address book \"%1\" has been changed. Save changes?")
+                                        .arg(tab->addressBookName()),
+                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                                    this);
+            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+            message_box.button(QMessageBox::No)->setText(tr("No"));
+            message_box.button(QMessageBox::Cancel)->setText(tr("Cancel"));
+
+            switch (message_box.exec())
             {
                 case QMessageBox::Yes:
                     tab->save();

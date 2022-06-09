@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "host/system_settings.h"
 
+#include <QAbstractButton>
 #include <QMessageBox>
 
 namespace host {
@@ -125,10 +126,15 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     {
         if (!silent)
         {
-            if (QMessageBox::warning(parent,
-                                     tr("Warning"),
-                                     tr("The existing settings will be overwritten. Continue?"),
-                                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+            QMessageBox message_box(QMessageBox::Warning,
+                tr("Warning"),
+                tr("The existing settings will be overwritten. Continue?"),
+                QMessageBox::Yes | QMessageBox::No,
+                parent);
+            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+            message_box.button(QMessageBox::No)->setText(tr("No"));
+
+            if (message_box.exec() == QMessageBox::No)
             {
                 LOG(LS_INFO) << "Copy settings canceled by user";
                 return false;
