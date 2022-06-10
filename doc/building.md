@@ -47,6 +47,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 1. Install the following packages in your package manager (**packages must be installed before installing vcpkg and its packages**):
 * ninja-build
 * autoconf
+* autoconf-archive
 * autopoint
 * python
 * bison
