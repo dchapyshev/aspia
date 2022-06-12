@@ -285,8 +285,6 @@ if(Qt5LinguistTools_FOUND)
 
     create_translation(TS_CLIENT_CORE_UPDATE ${CLIENT_CORE_TR_SOURCES} ${CLIENT_CORE_TS_FILES})
     add_custom_target(aspia_client_ts_update DEPENDS ${TS_CLIENT_CORE_UPDATE})
-else()
-    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
 endif()
 
 if (WIN32)

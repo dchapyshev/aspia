@@ -31,6 +31,11 @@ if (mimalloc_FOUND)
     add_definitions(-DUSE_MIMALLOC)
 endif()
 
+if(NOT Qt5LinguistTools_FOUND)
+    message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
+    add_definitions(-DI18L_DISABLED)
+endif()
+
 if (WIN32)
     # Target version.
     add_definitions(-DNTDDI_VERSION=0x06010000

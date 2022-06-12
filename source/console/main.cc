@@ -29,10 +29,12 @@
 
 int main(int argc, char *argv[])
 {
+#if !defined(I18L_DISABLED)
     Q_INIT_RESOURCE(client);
     Q_INIT_RESOURCE(client_translations);
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
+#endif
 
 #if defined(OS_WIN)
     base::installFailureHandler(L"aspia_console");
