@@ -65,15 +65,22 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
       database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
 {
+    LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
 }
 
-Server::~Server() = default;
+Server::~Server()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 bool Server::start()
 {
     if (server_)
+    {
+        LOG(LS_WARNING) << "Server already started";
         return false;
+    }
 
     std::unique_ptr<Database> database = database_factory_->openDatabase();
     if (!database)

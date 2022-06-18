@@ -62,6 +62,8 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       shared_pool_(std::make_unique<SharedPool>(this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     Settings settings;
 
     // Router settings.
@@ -87,7 +89,10 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
 }
 
-Controller::~Controller() = default;
+Controller::~Controller()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 bool Controller::start()
 {

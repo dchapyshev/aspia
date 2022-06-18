@@ -28,10 +28,13 @@ namespace router {
 Service::Service()
     : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-Service::~Service() = default;
+Service::~Service()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void Service::onStart()
 {
@@ -43,6 +46,7 @@ void Service::onStart()
     server_ = std::make_unique<Server>(task_runner); 
     if (!server_->start())
     {
+        LOG(LS_WARNING) << "Unable to start server. Service not started";
         task_runner->postQuit();
         return;
     }
