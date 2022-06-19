@@ -31,7 +31,7 @@
 #include "host/ui/user_tree_item.h"
 #include "host/ui/user_settings.h"
 #include "host/ui/settings_util.h"
-#include "host/win/service_constants.h"
+#include "host/service_constants.h"
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
 

@@ -116,6 +116,8 @@ ServiceThread* ServiceThread::self = nullptr;
 ServiceThread::ServiceThread(Service* service)
     : service_(service)
 {
+    LOG(LS_INFO) << "Ctor";
+
     DCHECK(!self);
     self = this;
 
@@ -127,6 +129,8 @@ ServiceThread::ServiceThread(Service* service)
 
 ServiceThread::~ServiceThread()
 {
+    LOG(LS_INFO) << "Dtor";
+
     setStatus(SERVICE_STOPPED);
 
     thread_.stop();
@@ -319,13 +323,18 @@ Service::Service(std::u16string_view name, MessageLoop::Type type)
     : type_(type),
       name_(name)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-Service::~Service() = default;
+Service::~Service()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void Service::exec()
 {
+    LOG(LS_INFO) << "Begin";
+
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
     CHECK(crypto_initializer->isSucceeded());
@@ -367,6 +376,8 @@ void Service::exec()
 
     service_thread.reset();
     message_loop_.reset();
+
+    LOG(LS_INFO) << "End";
 }
 
 } // namespace base
