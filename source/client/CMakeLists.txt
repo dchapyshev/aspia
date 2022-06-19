@@ -70,6 +70,12 @@ list(APPEND SOURCE_CLIENT_CORE
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
+    online_checker.cc
+    online_checker.h
+    online_checker_direct.cc
+    online_checker_direct.h
+    online_checker_router.cc
+    online_checker_router.h
     router.cc
     router.h
     router_proxy.cc
