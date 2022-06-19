@@ -20,7 +20,7 @@
 
 #include "base/files/base_paths.h"
 #include "base/win/service_controller.h"
-#include "relay/win/service_constants.h"
+#include "relay/service_constants.h"
 
 #include <filesystem>
 #include <iostream>

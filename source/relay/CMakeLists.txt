@@ -22,6 +22,10 @@ list(APPEND SOURCE_RELAY
     main.cc
     pending_session.cc
     pending_session.h
+    service.cc
+    service.h
+    service_constants.cc
+    service_constants.h
     session.cc
     session.h
     session_key.cc
@@ -38,10 +42,6 @@ list(APPEND SOURCE_RELAY
 if (WIN32)
     list(APPEND SOURCE_RELAY_WIN
         win/relay.rc
-        win/service.cc
-        win/service.h
-        win/service_constants.cc
-        win/service_constants.h
         win/service_util.cc
         win/service_util.h)
 endif()

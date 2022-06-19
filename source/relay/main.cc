@@ -24,7 +24,7 @@
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "relay/win/service.h"
+#include "relay/service.h"
 #include "relay/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"

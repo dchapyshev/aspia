@@ -16,38 +16,48 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "relay/win/service.h"
+#include "router/service.h"
 
 #include "base/logging.h"
-#include "relay/controller.h"
-#include "relay/win/service_constants.h"
+#include "base/message_loop/message_pump_asio.h"
+#include "router/server.h"
+#include "router/service_constants.h"
 
-namespace relay {
+namespace router {
 
 Service::Service()
     : base::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-Service::~Service() = default;
+Service::~Service()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 void Service::onStart()
 {
-    LOG(LS_INFO) << "Starting service...";
+    LOG(LS_INFO) << "Service start...";
 
-    controller_ = std::make_unique<Controller>(taskRunner());
-    controller_->start();
+    std::shared_ptr<base::TaskRunner> task_runner = taskRunner();
+    DCHECK(task_runner);
+
+    server_ = std::make_unique<Server>(task_runner); 
+    if (!server_->start())
+    {
+        LOG(LS_WARNING) << "Unable to start server. Service not started";
+        task_runner->postQuit();
+        return;
+    }
 
     LOG(LS_INFO) << "Service started";
 }
 
 void Service::onStop()
 {
-    LOG(LS_INFO) << "Stopping service...";
-
-    controller_.reset();
-
+    LOG(LS_INFO) << "Service stop...";
+    server_.reset();
     LOG(LS_INFO) << "Service stopped";
 }
 
@@ -62,4 +72,4 @@ void Service::onPowerEvent(uint32_t /* event */)
     // Nothing
 }
 
-} // namespace relay
+} // namespace router

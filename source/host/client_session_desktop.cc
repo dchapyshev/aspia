@@ -29,7 +29,7 @@
 #include "base/desktop/screen_capturer.h"
 #include "common/desktop_session_constants.h"
 #include "host/desktop_session_proxy.h"
-#include "host/win/service_constants.h"
+#include "host/service_constants.h"
 #include "proto/desktop_internal.pb.h"
 #include "proto/task_manager.pb.h"
 #include "proto/text_chat.pb.h"

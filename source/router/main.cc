@@ -29,7 +29,7 @@
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "router/win/service.h"
+#include "router/service.h"
 #include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"

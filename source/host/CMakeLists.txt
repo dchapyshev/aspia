@@ -55,6 +55,10 @@ list(APPEND SOURCE_HOST_CORE
     router_controller.h
     server.cc
     server.h
+    service.cc
+    service.h
+    service_constants.cc
+    service_constants.h
     system_settings.cc
     system_settings.h
     unconfirmed_client_session.cc
@@ -136,10 +140,6 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
         win/sas_injector.cc
         win/sas_injector.h
-        win/service.cc
-        win/service.h
-        win/service_constants.cc
-        win/service_constants.h
         win/service_main.cc
         win/service_main.h
         win/updater_launcher.cc

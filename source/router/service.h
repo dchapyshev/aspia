@@ -16,16 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_WIN_SERVICE_CONSTANTS_H
-#define ROUTER_WIN_SERVICE_CONSTANTS_H
+#ifndef ROUTER_SERVICE_H
+#define ROUTER_SERVICE_H
+
+#include "base/service.h"
 
 namespace router {
 
-extern const char16_t kServiceFileName[];
-extern const char16_t kServiceName[];
-extern const char16_t kServiceDisplayName[];
-extern const char16_t kServiceDescription[];
+class Server;
+
+class Service : public base::Service
+{
+public:
+    Service();
+    ~Service() override;
+
+protected:
+    // base::Service implementation.
+    void onStart() override;
+    void onStop() override;
+    void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
+    void onPowerEvent(uint32_t event) override;
+
+private:
+    std::unique_ptr<Server> server_;
+
+    DISALLOW_COPY_AND_ASSIGN(Service);
+};
 
 } // namespace router
 
-#endif // ROUTER_WIN_SERVICE_CONSTANTS_H
+#endif // ROUTER_SERVICE_H

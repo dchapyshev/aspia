@@ -26,6 +26,10 @@ list(APPEND SOURCE_ROUTER
     main.cc
     server.cc
     server.h
+    service.cc
+    service.h
+    service_constants.cc
+    service_constants.h
     session.cc
     session.h
     session_admin.cc
@@ -46,10 +50,6 @@ list(APPEND SOURCE_ROUTER
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN
         win/router.rc
-        win/service.cc
-        win/service.h
-        win/service_constants.cc
-        win/service_constants.h
         win/service_util.cc
         win/service_util.h)
 endif()

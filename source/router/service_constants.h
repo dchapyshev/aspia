@@ -16,16 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "relay/win/service_constants.h"
+#ifndef ROUTER_SERVICE_CONSTANTS_H
+#define ROUTER_SERVICE_CONSTANTS_H
 
-namespace relay {
+namespace router {
 
-const char16_t kServiceFileName[] = u"aspia_relay.exe";
+extern const char16_t kServiceFileName[];
+extern const char16_t kServiceName[];
+extern const char16_t kServiceDisplayName[];
+extern const char16_t kServiceDescription[];
 
-const char16_t kServiceName[] = u"aspia-relay";
+} // namespace router
 
-const char16_t kServiceDisplayName[] = u"Aspia Relay Service";
-
-const char16_t kServiceDescription[] = u"Proxies user traffic to bypass NAT.";
-
-} // namespace relay
+#endif // ROUTER_SERVICE_CONSTANTS_H

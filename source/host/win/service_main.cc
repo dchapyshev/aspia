@@ -29,8 +29,8 @@
 #include "base/win/session_enumerator.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
-#include "host/win/service.h"
-#include "host/win/service_constants.h"
+#include "host/service.h"
+#include "host/service_constants.h"
 
 #include <iostream>
 

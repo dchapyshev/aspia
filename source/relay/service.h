@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef RELAY_WIN_SERVICE_H
-#define RELAY_WIN_SERVICE_H
+#ifndef RELAY_SERVICE_H
+#define RELAY_SERVICE_H
 
 #include "base/service.h"
 
@@ -32,7 +32,7 @@ public:
     ~Service() override;
 
 protected:
-    // base::win::Service implementation.
+    // base::Service implementation.
     void onStart() override;
     void onStop() override;
     void onSessionEvent(base::win::SessionStatus event, base::SessionId session_id) override;
@@ -46,4 +46,4 @@ private:
 
 } // namespace relay
 
-#endif // RELAY_WIN_SERVICE_H
+#endif // RELAY_SERVICE_H

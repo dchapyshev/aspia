@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_constants.h"
+#include "router/service_constants.h"
 
-namespace host {
+namespace router {
 
-const char16_t kHostServiceFileName[] = u"aspia_host_service.exe";
+const char16_t kServiceFileName[] = u"aspia_router.exe";
 
-const char16_t kHostServiceName[] = u"aspia-host-service";
+const char16_t kServiceName[] = u"aspia-router";
 
-const char16_t kHostServiceDisplayName[] = u"Aspia Host Service";
+const char16_t kServiceDisplayName[] = u"Aspia Router Service";
 
-const char16_t kHostServiceDescription[] =
-    u"Accepts incoming remote desktop connections to this computer.";
+const char16_t kServiceDescription[] =
+    u"Assigns identifiers to peers and routes traffic to bypass NAT.";
 
-} // namespace host
+} // namespace router

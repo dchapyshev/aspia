@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service.h"
+#include "host/service.h"
 
 #include "base/logging.h"
 #include "base/strings/string_printf.h"
 #include "base/win/safe_mode_util.h"
 #include "base/win/session_status.h"
-#include "host/win/service_constants.h"
+#include "host/service_constants.h"
 #include "host/server.h"
 
 #include <Windows.h>

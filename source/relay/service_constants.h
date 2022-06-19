@@ -16,34 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_SERVICE_H
-#define HOST_SERVICE_H
+#ifndef RELAY_SERVICE_CONSTANTS_H
+#define RELAY_SERVICE_CONSTANTS_H
 
-#include "base/service.h"
+namespace relay {
 
-namespace host {
+extern const char16_t kServiceFileName[];
+extern const char16_t kServiceName[];
+extern const char16_t kServiceDisplayName[];
+extern const char16_t kServiceDescription[];
 
-class Server;
+} // namespace relay
 
-class Service : public base::Service
-{
-public:
-    Service();
-    ~Service() override;
-
-protected:
-    // base::win::Service implementation.
-    void onStart() override;
-    void onStop() override;
-    void onSessionEvent(base::win::SessionStatus status, base::SessionId session_id) override;
-    void onPowerEvent(uint32_t event) override;
-
-private:
-    std::unique_ptr<Server> server_;
-
-    DISALLOW_COPY_AND_ASSIGN(Service);
-};
-
-} // namespace host
-
-#endif // HOST_SERVICE_H
+#endif // RELAY_SERVICE_CONSTANTS_H
