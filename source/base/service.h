@@ -21,7 +21,10 @@
 
 #include "base/message_loop/message_loop.h"
 #include "base/session_id.h"
+
+#if defined(OS_WIN)
 #include "base/win/session_status.h"
+#endif // defined(OS_WIN)
 
 namespace base {
 
@@ -46,8 +49,11 @@ protected:
 
     virtual void onStart() = 0;
     virtual void onStop() = 0;
+
+#if defined(OS_WIN)
     virtual void onSessionEvent(win::SessionStatus event, SessionId session_id) = 0;
     virtual void onPowerEvent(uint32_t event) = 0;
+#endif // defined(OS_WIN)
 
 private:
     MessageLoop::Type type_;

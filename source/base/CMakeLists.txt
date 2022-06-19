@@ -53,7 +53,6 @@ list(APPEND SOURCE_BASE
     scoped_logging.h
     scoped_task_runner.cc
     scoped_task_runner.h
-    service.cc
     service.h
     session_id.cc
     session_id.h
@@ -83,6 +82,7 @@ if (WIN32)
         license_reader_win.cc
         power_controller_win.cc
         smbios_reader_win.cc
+        service_win.cc
         sys_info_win.cc)
 endif()
 
@@ -92,6 +92,7 @@ if (LINUX)
         license_reader_linux.cc
         power_controller_linux.cc
         smbios_reader_linux.cc
+        service_posix.cc
         sys_info_linux.cc)
 endif()
 
@@ -101,6 +102,7 @@ if (APPLE)
         license_reader_mac.cc
         power_controller_mac.mm
         smbios_reader_mac.mm
+        service_posix.cc
         sys_info_mac.mm)
 endif()
 
