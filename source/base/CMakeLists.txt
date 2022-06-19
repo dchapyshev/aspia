@@ -53,6 +53,8 @@ list(APPEND SOURCE_BASE
     scoped_logging.h
     scoped_task_runner.cc
     scoped_task_runner.h
+    service.cc
+    service.h
     session_id.cc
     session_id.h
     smbios.h
@@ -677,8 +679,6 @@ if (WIN32)
         win/scoped_wts_memory.h
         win/security_helpers.cc
         win/security_helpers.h
-        win/service.cc
-        win/service.h
         win/service_controller.cc
         win/service_controller.h
         win/service_enumerator.cc

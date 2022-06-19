@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_SERVICE_H
-#define BASE_WIN_SERVICE_H
+#ifndef BASE_SERVICE_H
+#define BASE_SERVICE_H
 
 #include "base/message_loop/message_loop.h"
 #include "base/session_id.h"
 #include "base/win/session_status.h"
 
-namespace base::win {
+namespace base {
 
 namespace {
 class ServiceThread;
@@ -46,7 +46,7 @@ protected:
 
     virtual void onStart() = 0;
     virtual void onStop() = 0;
-    virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
+    virtual void onSessionEvent(win::SessionStatus event, SessionId session_id) = 0;
     virtual void onPowerEvent(uint32_t event) = 0;
 
 private:
@@ -58,6 +58,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Service);
 };
 
-} // namespace base::win
+} // namespace base
 
-#endif // BASE_WIN_SERVICE_H
+#endif // BASE_SERVICE_H

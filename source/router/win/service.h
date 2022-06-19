@@ -19,13 +19,13 @@
 #ifndef ROUTER_WIN_SERVICE_H
 #define ROUTER_WIN_SERVICE_H
 
-#include "base/win/service.h"
+#include "base/service.h"
 
 namespace router {
 
 class Server;
 
-class Service : public base::win::Service
+class Service : public base::Service
 {
 public:
     Service();

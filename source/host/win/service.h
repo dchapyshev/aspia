@@ -19,13 +19,13 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
-#include "base/win/service.h"
+#include "base/service.h"
 
 namespace host {
 
 class Server;
 
-class Service : public base::win::Service
+class Service : public base::Service
 {
 public:
     Service();

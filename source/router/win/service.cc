@@ -26,7 +26,7 @@
 namespace router {
 
 Service::Service()
-    : base::win::Service(kServiceName, base::MessageLoop::Type::ASIO)
+    : base::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
     LOG(LS_INFO) << "Ctor";
 }

@@ -68,7 +68,7 @@ std::string powerEventToString(uint32_t event)
 } // namespace
 
 Service::Service()
-    : base::win::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
+    : base::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     LOG(LS_INFO) << "Ctor";
 }

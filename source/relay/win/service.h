@@ -19,13 +19,13 @@
 #ifndef RELAY_WIN_SERVICE_H
 #define RELAY_WIN_SERVICE_H
 
-#include "base/win/service.h"
+#include "base/service.h"
 
 namespace relay {
 
 class Controller;
 
-class Service : public base::win::Service
+class Service : public base::Service
 {
 public:
     Service();

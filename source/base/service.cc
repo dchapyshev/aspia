@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/service.h"
+#include "base/service.h"
 
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
@@ -28,7 +28,7 @@
 
 #include <sddl.h>
 
-namespace base::win {
+namespace base {
 
 namespace {
 
@@ -277,7 +277,7 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (!self)
                 return NO_ERROR;
 
-            SessionStatus session_status = static_cast<SessionStatus>(event_type);
+            win::SessionStatus session_status = static_cast<win::SessionStatus>(event_type);
             SessionId session_id =
                 reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId;
 
@@ -330,11 +330,11 @@ void Service::exec()
         std::make_unique<ScopedCryptoInitializer>();
     CHECK(crypto_initializer->isSucceeded());
 
-    std::unique_ptr<ScopedCOMInitializer> com_initializer =
-        std::make_unique<ScopedCOMInitializer>();
+    std::unique_ptr<win::ScopedCOMInitializer> com_initializer =
+        std::make_unique<win::ScopedCOMInitializer>();
     CHECK(com_initializer->isSucceeded());
 
-    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+    win::initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     message_loop_ = std::make_unique<MessageLoop>(type_);
     task_runner_ = message_loop_->taskRunner();
@@ -369,4 +369,4 @@ void Service::exec()
     message_loop_.reset();
 }
 
-} // namespace base::win
+} // namespace base
