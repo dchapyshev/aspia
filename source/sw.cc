@@ -186,7 +186,10 @@ void build(Solution &s) {
         relay += "relay/.*"_r;
         if (relay.getBuildSettings().TargetOS.Type == OSType::Windows) {
             relay += "relay/win/.*"_rr;
-        } else if (relay.getBuildSettings().TargetOS.Type == OSType::Linux) {
+        } else {
+            relay -= "relay/service.cc";
+        }
+        if (relay.getBuildSettings().TargetOS.Type == OSType::Linux) {
             relay += "relay/linux/.*"_rr;
         }
         relay += base;
@@ -199,7 +202,10 @@ void build(Solution &s) {
         router += "router/.*"_r;
         if (router.getBuildSettings().TargetOS.Type == OSType::Windows) {
             router += "router/win/.*"_rr;
-        } else if (router.getBuildSettings().TargetOS.Type == OSType::Linux) {
+        } else {
+            router -= "router/service.cc";
+        }
+        if (router.getBuildSettings().TargetOS.Type == OSType::Linux) {
             router += "router/linux/.*"_rr;
         }
         router += base;
