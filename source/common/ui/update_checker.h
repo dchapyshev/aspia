@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "common/ui/update_info.h"
 
+#include <QObject>
 #include <QPointer>
 
 class QThread;
