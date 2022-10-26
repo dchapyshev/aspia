@@ -8,6 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: egorpugin/sw-action@master
+    - run: ./sw build org.sw.demo.perl.perl
     - name: build
       run: ./sw build source -static
     #- name: test
