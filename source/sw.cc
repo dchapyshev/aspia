@@ -337,6 +337,10 @@ void build(Solution &s) {
             core += "d3d11.lib"_slib;
         }
         qt_progs_and_tr2(core);
+        if (core.getBuildSettings().TargetOS.Type == OSType::Windows) {
+            core.Public += "org.sw.demo.qtproject.qt.base.plugins.platforms.windows" QT_VERSION ""_dep;
+            core.Public += "org.sw.demo.qtproject.qt.base.plugins.styles.windowsvista" QT_VERSION ""_dep;
+        }
 
         setup_exe(host);
         host += "host/ui/host_entry_point.cc";
