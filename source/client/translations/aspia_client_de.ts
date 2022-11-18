@@ -32,108 +32,108 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="388"/>
+        <location filename="../client_main.cc" line="390"/>
         <source>Remote computer address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="392"/>
+        <location filename="../client_main.cc" line="394"/>
         <source>Remote computer port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="397"/>
+        <location filename="../client_main.cc" line="399"/>
         <source>Name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="401"/>
+        <location filename="../client_main.cc" line="403"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="405"/>
+        <location filename="../client_main.cc" line="407"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="410"/>
+        <location filename="../client_main.cc" line="412"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="416"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="420"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="424"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="426"/>
+        <location filename="../client_main.cc" line="428"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="430"/>
+        <location filename="../client_main.cc" line="432"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="434"/>
+        <location filename="../client_main.cc" line="436"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="438"/>
+        <location filename="../client_main.cc" line="440"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="442"/>
+        <location filename="../client_main.cc" line="444"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="446"/>
+        <location filename="../client_main.cc" line="448"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="450"/>
+        <location filename="../client_main.cc" line="452"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="454"/>
+        <location filename="../client_main.cc" line="456"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="458"/>
+        <location filename="../client_main.cc" line="460"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="462"/>
+        <location filename="../client_main.cc" line="464"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="580"/>
+        <location filename="../client_main.cc" line="582"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="581"/>
+        <location filename="../client_main.cc" line="583"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>
