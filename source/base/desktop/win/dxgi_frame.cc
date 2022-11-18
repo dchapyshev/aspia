@@ -26,8 +26,8 @@ namespace base {
 
 DxgiFrame::DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
                      SharedMemoryFactory* shared_memory_factory)
-    : context_(std::move(controller)),
-      shared_memory_factory_(shared_memory_factory)
+    : shared_memory_factory_(shared_memory_factory),
+      context_(std::move(controller))
 {
     LOG(LS_INFO) << "Ctor "
                  << (shared_memory_factory_ ? "WITH" : "WITHOUT")

@@ -44,8 +44,15 @@ public:
 
     ~DxgiAdapterDuplicator();
 
+    enum class ErrorCode
+    {
+        SUCCESS,
+        CRITICAL_ERROR,
+        GENERIC_ERROR
+    };
+
     // Initializes the DxgiAdapterDuplicator from a D3dDevice.
-    bool initialize();
+    ErrorCode initialize();
 
     // Sequentially calls Duplicate function of all the DxgiOutputDuplicator instances owned by
     // this instance, and writes into |target|.
@@ -81,7 +88,7 @@ public:
     void translateRect(const Point& position);
 
 private:
-    bool doInitialize();
+    ErrorCode doInitialize();
 
     const D3dDevice device_;
     std::vector<DxgiOutputDuplicator> duplicators_;

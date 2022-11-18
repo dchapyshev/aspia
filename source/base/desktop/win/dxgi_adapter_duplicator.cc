@@ -51,16 +51,15 @@ DxgiAdapterDuplicator::~DxgiAdapterDuplicator()
     LOG(LS_INFO) << "Dtor";
 }
 
-bool DxgiAdapterDuplicator::initialize()
+DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::initialize()
 {
-    if (doInitialize())
-        return true;
-
-    duplicators_.clear();
-    return false;
+    ErrorCode error_code = doInitialize();
+    if (error_code != ErrorCode::SUCCESS)
+        duplicators_.clear();
+    return error_code;
 }
 
-bool DxgiAdapterDuplicator::doInitialize()
+DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
 {
     for (int i = 0;; ++i)
     {
@@ -98,14 +97,14 @@ bool DxgiAdapterDuplicator::doInitialize()
                 {
                     LOG(LS_WARNING) << "Failed to convert IDXGIOutput to IDXGIOutput1, this "
                                        "usually means the system does not support DirectX 11";
-                    continue;
+                    return ErrorCode::CRITICAL_ERROR;
                 }
 
                 DxgiOutputDuplicator duplicator(device_, output1, desc);
                 if (!duplicator.initialize())
                 {
                     LOG(LS_WARNING) << "Failed to initialize DxgiOutputDuplicator on output " << i;
-                    continue;
+                    return ErrorCode::CRITICAL_ERROR;
                 }
 
                 duplicators_.push_back(std::move(duplicator));
@@ -133,7 +132,7 @@ bool DxgiAdapterDuplicator::doInitialize()
         LOG(LS_WARNING) << "Cannot initialize any DxgiOutputDuplicator instance";
     }
 
-    return !duplicators_.empty();
+    return !duplicators_.empty() ? ErrorCode::SUCCESS : ErrorCode::GENERIC_ERROR;
 }
 
 void DxgiAdapterDuplicator::setup(Context* context)

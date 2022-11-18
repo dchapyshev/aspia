@@ -48,6 +48,7 @@ public:
     ~DxgiDuplicatorController();
 
     using Context = DxgiFrameContext;
+    using ErrorCode = DxgiAdapterDuplicator::ErrorCode;
 
     // A collection of D3d information we are interested on, which may impact capturer performance
     // or reliability.

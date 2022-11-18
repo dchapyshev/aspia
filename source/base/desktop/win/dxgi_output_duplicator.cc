@@ -162,10 +162,17 @@ bool DxgiOutputDuplicator::duplicateOutput()
 
     if (desc_.ModeDesc.Format != DXGI_FORMAT_B8G8R8A8_UNORM)
     {
-        LOG(LS_ERROR) << "IDXGIDuplicateOutput does not use RGBA (8 bit) "
-                         "format, which is required by downstream components, format is "
-                      << desc_.ModeDesc.Format;
-        return false;
+        if (desc_.ModeDesc.Format == DXGI_FORMAT_R16G16B16A16_FLOAT)
+        {
+            LOG(LS_INFO) << "HDR display detected";
+        }
+        else
+        {
+            LOG(LS_ERROR) << "IDXGIDuplicateOutput does not use RGBA (8 bit) "
+                             "format, which is required by downstream components, format is "
+                          << desc_.ModeDesc.Format;
+            return false;
+        }
     }
 
     if (static_cast<int>(desc_.ModeDesc.Width) != desktop_rect_.width() ||

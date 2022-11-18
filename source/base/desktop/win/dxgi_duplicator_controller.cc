@@ -270,9 +270,17 @@ bool DxgiDuplicatorController::doInitialize()
         // IDXGOutputDuplication. But they should not impact others from taking effect, so we
         // should continually try other adapters. This usually happens when a non-official virtual
         // adapter is installed on the system.
-        if (!duplicator.initialize())
+        DxgiAdapterDuplicator::ErrorCode error_code = duplicator.initialize();
+        if (error_code != ErrorCode::SUCCESS)
         {
             LOG(LS_WARNING) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
+
+            if (error_code == ErrorCode::CRITICAL_ERROR)
+            {
+                LOG(LS_ERROR) << "Adapter duplicator has critical error. DXGI initialization failed";
+                return false;
+            }
+
             continue;
         }
 

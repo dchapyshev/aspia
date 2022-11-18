@@ -70,6 +70,12 @@ bool DxgiTexture::copyFrom(const DXGI_OUTDUPL_FRAME_INFO& frame_info, IDXGIResou
     D3D11_TEXTURE2D_DESC desc = { 0 };
     texture->GetDesc(&desc);
 
+    if (desc.Format != DXGI_FORMAT_B8G8R8A8_UNORM)
+    {
+        LOG(LS_ERROR) << "Texture with unsupported format: " << desc.Format;
+        return false;
+    }
+
     desktop_size_.set(static_cast<int32_t>(desc.Width), static_cast<int32_t>(desc.Height));
 
     return copyFromTexture(frame_info, texture.Get());
