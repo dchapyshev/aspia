@@ -9,24 +9,26 @@
         <translation>关于</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation type="vanished">常规</translation>
+        <translation>常规</translation>
     </message>
     <message>
         <source>License</source>
         <translation type="vanished">许可证</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.ui" line="88"/>
         <source>Service Information</source>
-        <translation type="vanished">服务模块信息</translation>
+        <translation>服务模块信息</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="78"/>
+        <location filename="../ui/about_dialog.ui" line="103"/>
         <source>Donate!</source>
         <translation>捐赠！</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.ui" line="102"/>
+        <location filename="../ui/about_dialog.ui" line="127"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -165,70 +167,84 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="102"/>
+        <location filename="../ui/about_dialog.cc" line="106"/>
         <source>Version: %1</source>
         <translation>版本： %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="106"/>
+        <location filename="../ui/about_dialog.cc" line="110"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia是根据以下版本发布的免费软件GNU通用公共许可证3。</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="107"/>
+        <location filename="../ui/about_dialog.cc" line="111"/>
         <source>You can get a copy of license here:</source>
         <translation>您可以在此处获取许可证副本：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="112"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>您还可以在这里获得GNU GPL许可证的翻译：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Links:</source>
         <translation>链接：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Home page:</source>
         <translation>主页：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>GitHub page:</source>
         <translation>GitHub页面：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="121"/>
+        <location filename="../ui/about_dialog.cc" line="125"/>
         <source>Developers:</source>
         <translation>开发人员：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="123"/>
+        <location filename="../ui/about_dialog.cc" line="127"/>
         <source>Translators:</source>
         <translation>翻译成员：</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="125"/>
+        <location filename="../ui/about_dialog.cc" line="129"/>
         <source>Third-party components:</source>
         <translation>第三方组件：</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.cc" line="146"/>
         <source>Path: %1</source>
-        <translation type="vanished">路径： %1</translation>
+        <translation>路径： %1</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.cc" line="147"/>
         <source>Compilation date: %1</source>
-        <translation type="vanished">编译日期：%1</translation>
+        <translation>编译日期：%1</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.cc" line="148"/>
         <source>Compilation time: %1</source>
-        <translation type="vanished">编译时间： %1</translation>
+        <translation>编译时间： %1</translation>
     </message>
     <message>
+        <location filename="../ui/about_dialog.cc" line="151"/>
+        <source>Git branch: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="152"/>
+        <source>Git commit: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="157"/>
         <source>%1 version: %2</source>
-        <translation type="vanished">%1 版本： %2</translation>
+        <translation>%1 版本： %2</translation>
     </message>
 </context>
 <context>

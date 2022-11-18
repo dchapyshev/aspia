@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>General</source>
-        <translation type="vanished">一般</translation>
+        <translation>一般</translation>
     </message>
     <message>
         <source>License</source>
@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Service Information</source>
-        <translation type="vanished">服務詳細資訊</translation>
+        <translation>服務詳細資訊</translation>
     </message>
     <message>
         <source>Donate!</source>
@@ -207,27 +207,27 @@
     </message>
     <message>
         <source>Path: %1</source>
-        <translation type="vanished">路徑：%1</translation>
+        <translation>路徑：%1</translation>
     </message>
     <message>
         <source>Compilation date: %1</source>
-        <translation type="vanished">編譯日期：%1</translation>
+        <translation>編譯日期：%1</translation>
     </message>
     <message>
         <source>Compilation time: %1</source>
-        <translation type="vanished">編譯時間：%1</translation>
+        <translation>編譯時間：%1</translation>
     </message>
     <message>
         <source>Git branch: %1</source>
-        <translation type="vanished">Git 分支：%1</translation>
+        <translation>Git 分支：%1</translation>
     </message>
     <message>
         <source>Git commit: %1</source>
-        <translation type="vanished">Git 認可:%1</translation>
+        <translation>Git 認可:%1</translation>
     </message>
     <message>
         <source>%1 version: %2</source>
-        <translation type="vanished">%1 版本：%2</translation>
+        <translation>%1 版本：%2</translation>
     </message>
 </context>
 <context>
