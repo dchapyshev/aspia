@@ -58,6 +58,10 @@ public:
                           Encrypted encrypted = Encrypted::NO);
 
 private:
+    void createBackup();
+    static bool hasBackup(const std::filesystem::path& path);
+    static bool restoreBackup(const std::filesystem::path& path);
+
     const Encrypted encrypted_;
     std::filesystem::path path_;
 

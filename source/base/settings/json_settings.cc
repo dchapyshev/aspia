@@ -154,6 +154,8 @@ bool JsonSettings::flush()
     if (!isChanged())
         return true;
 
+    createBackup();
+
     if (writeFile(path_, map(), encrypted_))
     {
         setChanged(false);
@@ -219,69 +221,124 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
 {
     map.clear();
 
-    std::error_code ignored_code;
-    std::filesystem::file_status status = std::filesystem::status(file, ignored_code);
+    bool result = false;
 
-    if (!std::filesystem::exists(status))
+    for (int i = 0; i < 3; ++i)
     {
-        // The absence of a configuration file is normal case.
-        return true;
-    }
+        std::error_code ignored_code;
+        std::filesystem::file_status status = std::filesystem::status(file, ignored_code);
 
-    if (!std::filesystem::is_regular_file(status))
-    {
-        LOG(LS_ERROR) << "Specified configuration file is not a file: '" << file << "'";
-        return false;
-    }
-
-    if (std::filesystem::is_empty(file, ignored_code))
-    {
-        // The configuration file may be empty.
-        return true;
-    }
-
-    static const uintmax_t kMaxFileSize = 5 * 1024 * 2024; // 5 Mb.
-
-    uintmax_t file_size = std::filesystem::file_size(file, ignored_code);
-    if (file_size > kMaxFileSize)
-    {
-        LOG(LS_ERROR) << "Too big settings file: '" << file << "' (" << file_size << " bytes)";
-        return false;
-    }
-
-    std::string buffer;
-    if (!base::readFile(file, &buffer))
-    {
-        LOG(LS_ERROR) << "Failed to read config file: '" << file << "'";
-        return false;
-    }
-
-    if (encrypted == Encrypted::YES)
-    {
-        std::string decrypted;
-        if (!OSCrypt::decryptString(buffer, &decrypted))
+        if (!std::filesystem::exists(status))
         {
-            LOG(LS_ERROR) << "Failed to decrypt config file: '" << file << "'";
+            if (hasBackup(file))
+            {
+                // Restore corrupted config.
+                if (!restoreBackup(file))
+                    return false;
+
+                continue;
+            }
+
+            // The absence of a configuration file is normal case.
+            return true;
+        }
+
+        if (!std::filesystem::is_regular_file(status))
+        {
+            LOG(LS_ERROR) << "Specified configuration file is not a file: '" << file << "'";
             return false;
         }
 
-        buffer.swap(decrypted);
+        if (std::filesystem::is_empty(file, ignored_code))
+        {
+            if (hasBackup(file))
+            {
+                // Restore corrupted config.
+                if (!restoreBackup(file))
+                    return false;
+
+                continue;
+            }
+
+            // The configuration file may be empty.
+            return true;
+        }
+
+        static const uintmax_t kMaxFileSize = 5 * 1024 * 2024; // 5 Mb.
+
+        uintmax_t file_size = std::filesystem::file_size(file, ignored_code);
+        if (file_size > kMaxFileSize)
+        {
+            LOG(LS_ERROR) << "Too big settings file: '" << file << "' (" << file_size << " bytes)";
+
+            if (hasBackup(file))
+            {
+                // Restore corrupted config.
+                if (!restoreBackup(file))
+                    return false;
+
+                continue;
+            }
+
+            return false;
+        }
+
+        std::string buffer;
+        if (!base::readFile(file, &buffer))
+        {
+            LOG(LS_ERROR) << "Failed to read config file: '" << file << "'";
+            return false;
+        }
+
+        if (encrypted == Encrypted::YES)
+        {
+            std::string decrypted;
+            if (!OSCrypt::decryptString(buffer, &decrypted))
+            {
+                LOG(LS_ERROR) << "Failed to decrypt config file: '" << file << "'";
+
+                if (hasBackup(file))
+                {
+                    // Restore corrupted config.
+                    if (!restoreBackup(file))
+                        return false;
+
+                    continue;
+                }
+
+                return false;
+            }
+
+            buffer.swap(decrypted);
+        }
+
+        rapidjson::StringStream stream(buffer.data());
+        rapidjson::Document doc;
+        doc.ParseStream(stream);
+
+        if (doc.HasParseError())
+        {
+            LOG(LS_ERROR) << "The configuration file is damaged: '"
+                          << file << "' (" << doc.GetParseError() << ")";
+
+            if (hasBackup(file))
+            {
+                // Restore corrupted config.
+                if (!restoreBackup(file))
+                    return false;
+
+                continue;
+            }
+
+            return false;
+        }
+
+        std::vector<std::string_view> segments;
+        parseObject(doc, &segments, &map);
+        result = true;
     }
 
-    rapidjson::StringStream stream(buffer.data());
-    rapidjson::Document doc;
-    doc.ParseStream(stream);
-
-    if (doc.HasParseError())
-    {
-        LOG(LS_ERROR) << "The configuration file is damaged: '"
-                      << file << "' (" << doc.GetParseError() << ")";
-        return false;
-    }
-
-    std::vector<std::string_view> segments;
-    parseObject(doc, &segments, &map);
-    return true;
+    return result;
 }
 
 // static
@@ -378,6 +435,73 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
             LOG(LS_ERROR) << "Failed to write config file";
             return false;
         }
+    }
+
+    return true;
+}
+
+void JsonSettings::createBackup()
+{
+    std::error_code error_code;
+
+    if (!std::filesystem::exists(path_, error_code))
+    {
+        // Source config now exists yet.
+        return;
+    }
+
+    std::filesystem::path backup_path = path_;
+    backup_path.replace_extension("backup");
+
+    if (std::filesystem::exists(backup_path, error_code))
+    {
+        if (!std::filesystem::remove(backup_path, error_code))
+        {
+            LOG(LS_ERROR) << "Unable to remove old backup file: " << backup_path
+                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+            return;
+        }
+    }
+
+    if (!std::filesystem::copy_file(path_, backup_path, error_code))
+    {
+        LOG(LS_ERROR) << "Unable to create backup file for: " << path_
+                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+    }
+}
+
+// static
+bool JsonSettings::hasBackup(const std::filesystem::path& path)
+{
+    std::filesystem::path backup_path = path;
+    backup_path.replace_extension("backup");
+
+    std::error_code ignored_code;
+    return std::filesystem::exists(backup_path, ignored_code);
+}
+
+// static
+bool JsonSettings::restoreBackup(const std::filesystem::path& path)
+{
+    std::error_code error_code;
+    if (std::filesystem::exists(path, error_code))
+    {
+        if (!std::filesystem::remove(path, error_code))
+        {
+            LOG(LS_ERROR) << "Unable to remove currupted file: " << path
+                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+            return false;
+        }
+    }
+
+    std::filesystem::path backup_path = path;
+    backup_path.replace_extension("backup");
+
+    if (!std::filesystem::copy_file(backup_path, path, error_code))
+    {
+        LOG(LS_ERROR) << "Unable to restore backup file for: " << path
+                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        return false;
     }
 
     return true;
