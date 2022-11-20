@@ -22,7 +22,6 @@
 #include "base/stl_util.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
-#include "base/net/network_channel.h"
 #include "router/database.h"
 #include "router/server.h"
 
