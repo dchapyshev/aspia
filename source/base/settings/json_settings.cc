@@ -99,7 +99,7 @@ JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
     if (path_.empty())
         return;
 
-    readFile(path_, map());
+    sync();
 }
 
 JsonSettings::JsonSettings(Scope scope,
@@ -112,13 +112,12 @@ JsonSettings::JsonSettings(Scope scope,
     if (path_.empty())
         return;
 
-    readFile(path_, map(), encrypted_);
+    sync();
 }
 
 JsonSettings::~JsonSettings()
 {
-    if (isChanged())
-        writeFile(path_, constMap(), encrypted_);
+    flush();
 }
 
 bool JsonSettings::isWritable() const
@@ -146,12 +145,22 @@ bool JsonSettings::isWritable() const
 
 void JsonSettings::sync()
 {
-    readFile(path_, map());
+    readFile(path_, map(), encrypted_);
+    setChanged(false);
 }
 
 bool JsonSettings::flush()
 {
-    return writeFile(path_, map());
+    if (!isChanged())
+        return true;
+
+    if (writeFile(path_, map(), encrypted_))
+    {
+        setChanged(false);
+        return true;
+    }
+
+    return false;
 }
 
 // static

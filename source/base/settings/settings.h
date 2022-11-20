@@ -86,7 +86,7 @@ public:
     void set(std::string_view key, const T& value)
     {
         map_.insert_or_assign(std::string(key), Converter<T>::set_value(value));
-        is_changed_ = true;
+        setChanged(true);
     }
 
     Array getArray(std::string_view key) const;
@@ -100,7 +100,9 @@ public:
     const Map& constMap() const { return map_; }
     Map& map() { return map_; }
 
+protected:
     bool isChanged() const { return is_changed_; }
+    void setChanged(bool is_changed) { is_changed_ = is_changed; }
 
 private:
     bool is_changed_ = false;

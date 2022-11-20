@@ -95,7 +95,7 @@ void Settings::setGroup(std::string_view key, const Settings& group)
     for (auto it = array_map.cbegin(); it != array_map.cend(); ++it)
         map_.insert_or_assign(strCat({ key, kSeparator, it->first }), it->second);
 
-    is_changed_ = true;
+    setChanged(true);
 }
 
 void Settings::remove(std::string_view key)
@@ -110,7 +110,7 @@ void Settings::remove(std::string_view key)
             ++it;
     }
 
-    is_changed_ = true;
+    setChanged(true);
 }
 
 } // namespace base
