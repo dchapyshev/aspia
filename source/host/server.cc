@@ -75,13 +75,6 @@ void Server::start()
     std::filesystem::path settings_file = settings_.filePath();
     LOG(LS_INFO) << "Configuration file path: " << settings_file;
 
-    // If the configuration file does not already exist, then you need to create it.
-    // Otherwise, change tracking (settings_watcher_) will not work.
-    if (!settings_.flush())
-    {
-        LOG(LS_WARNING) << "Unable to write configuration file to disk";
-    }
-
     std::error_code ignored_code;
     if (!std::filesystem::exists(settings_file, ignored_code))
     {
@@ -118,7 +111,8 @@ void Server::start()
 
 void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Session event";
+    LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
+                 << " session_id: " << session_id << ")";
 
     if (user_session_manager_)
     {
