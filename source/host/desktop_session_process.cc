@@ -193,7 +193,11 @@ bool startProcessWithToken(HANDLE token,
     thread->reset(process_info.hThread);
     process->reset(process_info.hProcess);
 
-    DestroyEnvironmentBlock(environment);
+    if (!DestroyEnvironmentBlock(environment))
+    {
+        PLOG(LS_WARNING) << "DestroyEnvironmentBlock";
+    }
+
     return true;
 }
 #endif // defined(OS_WIN)

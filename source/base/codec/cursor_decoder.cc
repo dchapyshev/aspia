@@ -80,7 +80,8 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
         ret = ZSTD_decompressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret)
+                          << " (" << ret << ")";
             return ByteArray();
         }
     }

@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
@@ -58,7 +57,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 
     if (!GetLogicalProcessorInformation(info, &returned_length))
     {
-        DPLOG(LS_ERROR) << "GetLogicalProcessorInformation failed";
+        PLOG(LS_ERROR) << "GetLogicalProcessorInformation failed";
         return 0;
     }
 

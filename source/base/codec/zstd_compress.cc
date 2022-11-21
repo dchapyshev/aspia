@@ -68,7 +68,8 @@ T compressT(const T& source, int compress_level)
         ret = ZSTD_compressStream(stream.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret)
+                          << " (" << ret << ")";
             return T();
         }
     }
@@ -120,7 +121,8 @@ T decompressT(const T& source)
         ret = ZSTD_decompressStream(stream.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret)
+                          << " (" << ret << ")";
             return T();
         }
     }

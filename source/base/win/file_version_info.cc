@@ -115,7 +115,10 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
     std::vector<uint8_t> data(length, 0);
 
     if (!GetFileVersionInfoW(path, dummy, length, data.data()))
+    {
+        PLOG(LS_WARNING) << "GetFileVersionInfoW failed";
         return nullptr;
+    }
 
     const LanguageAndCodePage* translate = GetTranslate(data.data());
     if (!translate)

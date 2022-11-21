@@ -110,7 +110,10 @@ bool createPrivilegedToken(ScopedHandle* token_out)
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &privileged_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     // Get the LUID for the SE_TCB_NAME privilege.
     TOKEN_PRIVILEGES state;

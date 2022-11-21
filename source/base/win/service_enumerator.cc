@@ -27,7 +27,10 @@ ServiceEnumerator::ServiceEnumerator(Type type)
 {
     manager_handle_.reset(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ENUMERATE_SERVICE));
     if (!manager_handle_.isValid())
+    {
+        PLOG(LS_WARNING) << "OpenSCManagerW failed";
         return;
+    }
 
     DWORD bytes_needed = 0;
     DWORD resume_handle = 0;

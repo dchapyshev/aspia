@@ -151,7 +151,7 @@ bool Thread::setPriority(Priority priority)
 {
     if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
     {
-        DPLOG(LS_ERROR) << "Unable to set thread priority";
+        PLOG(LS_ERROR) << "Unable to set thread priority";
         return false;
     }
 

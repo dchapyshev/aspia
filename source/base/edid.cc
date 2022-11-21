@@ -142,16 +142,16 @@ std::unique_ptr<Edid> Edid::create(std::unique_ptr<uint8_t[]> data, size_t data_
                 return std::unique_ptr<Edid>(new Edid(std::move(data), data_size));
             }
 
-            DLOG(LS_WARNING) << "Invalid EDID checksum: " << checksum;
+            LOG(LS_WARNING) << "Invalid EDID checksum: " << checksum;
         }
         else
         {
-            DLOG(LS_WARNING) << "Invalid EDID header: " << edid->header;
+            LOG(LS_WARNING) << "Invalid EDID header: " << edid->header;
         }
     }
     else
     {
-        DLOG(LS_WARNING) << "Invalid EDID data";
+        LOG(LS_WARNING) << "Invalid EDID data";
     }
 
     return nullptr;
@@ -170,7 +170,7 @@ int Edid::weekOfManufacture() const
 
     if (week < kMinWeekOfManufacture || week > kMaxWeekOfManufacture)
     {
-        DLOG(LS_WARNING) << "Wrong week field value: " << week;
+        LOG(LS_WARNING) << "Wrong week field value: " << week;
         return 0;
     }
 

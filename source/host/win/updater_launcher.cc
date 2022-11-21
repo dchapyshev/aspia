@@ -130,7 +130,11 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
     base::win::ScopedHandle thread_deleter(process_info.hThread);
     base::win::ScopedHandle process_deleter(process_info.hProcess);
 
-    DestroyEnvironmentBlock(environment);
+    if (!DestroyEnvironmentBlock(environment))
+    {
+        PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+    }
+
     return true;
 }
 

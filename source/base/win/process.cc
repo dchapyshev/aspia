@@ -36,7 +36,10 @@ bool createToken(const wchar_t* privilege_name, win::ScopedHandle* token_out)
 
     win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     // Get the LUID for the privilege.
     TOKEN_PRIVILEGES state;
@@ -81,11 +84,17 @@ Process::Process(std::shared_ptr<TaskRunner> task_runner, ProcessId process_id)
     // We need SE_DEBUG_NAME privilege to open the process.
     ScopedHandle privileged_token;
     if (!createToken(SE_DEBUG_NAME, &privileged_token))
+    {
+        LOG(LS_WARNING) << "createToken failed";
         return;
+    }
 
     ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
+    {
+        LOG(LS_WARNING) << "loggedOnUser failed";
         return;
+    }
 
     ScopedHandle process(OpenProcess(PROCESS_ALL_ACCESS, TRUE, process_id));
     if (!process.isValid())
@@ -164,7 +173,10 @@ SessionId Process::sessionId() const
     DWORD session_id;
 
     if (!ProcessIdToSessionId(processId(), &session_id))
+    {
+        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
         return kInvalidSessionId;
+    }
 
     return session_id;
 }
@@ -190,7 +202,10 @@ void Process::kill()
         return;
     }
 
-    TerminateProcess(process_, 0);
+    if (!TerminateProcess(process_, 0))
+    {
+        LOG(LS_WARNING) << "TerminateProcess failed";
+    }
 }
 
 void Process::terminate()
@@ -203,7 +218,10 @@ void Process::terminate()
 
     ProcessId process_id = processId();
 
-    EnumWindows(terminateEnumProc, static_cast<LPARAM>(process_id));
+    if (!EnumWindows(terminateEnumProc, static_cast<LPARAM>(process_id)))
+    {
+        PLOG(LS_WARNING) << "EnumWindows failed";
+    }
 
     if (!thread_.isValid())
     {
@@ -232,7 +250,10 @@ void Process::terminate()
     }
     else
     {
-        PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0);
+        if (!PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0))
+        {
+            PLOG(LS_WARNING) << "PostThreadMessageW failed";
+        }
     }
 }
 

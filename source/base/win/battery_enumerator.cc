@@ -80,7 +80,10 @@ BatteryEnumerator::BatteryEnumerator()
     const DWORD flags = DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
     device_info_.reset(SetupDiGetClassDevsW(&GUID_DEVCLASS_BATTERY, nullptr, nullptr, flags));
     if (!device_info_.isValid())
+    {
+        PLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
         return;
+    }
 }
 
 BatteryEnumerator::~BatteryEnumerator() = default;

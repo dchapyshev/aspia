@@ -43,7 +43,7 @@ PrinterEnumerator::PrinterEnumerator()
     if (!EnumPrintersW(flags, nullptr, 2, info_buffer_.data(), bytes_needed,
                        &bytes_needed, &count))
     {
-        DPLOG(LS_ERROR) << "EnumPrintersW failed";
+        PLOG(LS_ERROR) << "EnumPrintersW failed";
         info_buffer_.clear();
         return;
     }

@@ -18,6 +18,7 @@
 
 #include "router/user_list_db.h"
 
+#include "base/logging.h"
 #include "router/database.h"
 #include "router/database_factory.h"
 
@@ -36,7 +37,10 @@ std::unique_ptr<UserListDb> UserListDb::open(const DatabaseFactory& factory)
 {
     std::unique_ptr<Database> db = factory.openDatabase();
     if (!db)
+    {
+        LOG(LS_WARNING) << "Unable to open database";
         return nullptr;
+    }
 
     return std::unique_ptr<UserListDb>(new UserListDb(std::move(db)));
 }

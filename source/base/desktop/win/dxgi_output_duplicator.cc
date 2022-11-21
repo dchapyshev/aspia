@@ -199,7 +199,7 @@ bool DxgiOutputDuplicator::releaseFrame()
     _com_error error = duplication_->ReleaseFrame();
     if (error.Error() != S_OK)
     {
-        LOG(LS_ERROR) << "Failed to release frame from IDXGIOutputDuplication, error"
+        LOG(LS_ERROR) << "Failed to release frame from IDXGIOutputDuplication, error "
                       << error.ErrorMessage() << ", code " << error.Error();
         return false;
     }

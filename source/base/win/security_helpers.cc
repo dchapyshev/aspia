@@ -174,7 +174,10 @@ bool userSidString(std::wstring* user_sid)
     // Get the current token.
     ScopedHandle token;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
+    {
+        PLOG(LS_WARNING) << "OpenProcessToken failed";
         return false;
+    }
 
     DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
     std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
@@ -182,7 +185,10 @@ bool userSidString(std::wstring* user_sid)
     TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
 
     if (!GetTokenInformation(token, TokenUser, user, size, &size))
+    {
+        PLOG(LS_WARNING) << "GetTokenInformation failed";
         return false;
+    }
 
     if (!user->User.Sid)
         return false;
@@ -191,7 +197,10 @@ bool userSidString(std::wstring* user_sid)
     ScopedLocal<wchar_t*> sid_string;
 
     if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
+    {
+        PLOG(LS_WARNING) << "ConvertSidToStringSidW failed";
         return false;
+    }
 
     user_sid->assign(sid_string);
     return true;

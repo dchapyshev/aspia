@@ -66,7 +66,10 @@ bool createPrivilegedToken(win::ScopedHandle* token_out)
 
     win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     // Get the LUID for the SE_SHUTDOWN_NAME privilege.
     TOKEN_PRIVILEGES state;
@@ -100,15 +103,24 @@ bool PowerController::shutdown()
 
     win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
+    {
+        LOG(LS_WARNING) << "createPrivilegedToken failed";
         return false;
+    }
 
     win::ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
+    {
+        LOG(LS_WARNING) << "loggedOnUser failed";
         return false;
+    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
@@ -134,15 +146,24 @@ bool PowerController::reboot()
 
     win::ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
+    {
+        LOG(LS_WARNING) << "copyProcessToken failed";
         return false;
+    }
 
     win::ScopedHandle privileged_token;
     if (!createPrivilegedToken(&privileged_token))
+    {
+        LOG(LS_WARNING) << "createPrivilegedToken failed";
         return false;
+    }
 
     win::ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
+    {
+        LOG(LS_WARNING) << "loggedOnUser failed";
         return false;
+    }
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 

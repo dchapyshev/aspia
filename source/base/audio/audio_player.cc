@@ -24,16 +24,25 @@
 
 namespace base {
 
-AudioPlayer::AudioPlayer() = default;
+AudioPlayer::AudioPlayer()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 
-AudioPlayer::~AudioPlayer() = default;
+AudioPlayer::~AudioPlayer()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 // static
 std::unique_ptr<AudioPlayer> AudioPlayer::create()
 {
     std::unique_ptr<AudioPlayer> player(new AudioPlayer());
     if (!player->init())
+    {
+        LOG(LS_WARNING) << "Unable to initialize audio player";
         return nullptr;
+    }
 
     return player;
 }

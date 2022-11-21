@@ -147,7 +147,10 @@ wchar_t* loadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t*
                                       nullptr,
                                       DONT_RESOLVE_DLL_REFERENCES | LOAD_LIBRARY_AS_DATAFILE);
     if (!module)
+    {
+        PLOG(LS_WARNING) << "LoadLibraryExW failed";
         return nullptr;
+    }
 
     DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE |
                   FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_MAX_WIDTH_MASK;

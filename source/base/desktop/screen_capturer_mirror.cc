@@ -100,7 +100,10 @@ bool ScreenCapturerMirror::screenList(ScreenList* screens)
 bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
+    {
+        LOG(LS_ERROR) << "Invalid screen id passed: " << screen_id;
         return false;
+    }
 
     reset();
 
@@ -222,7 +225,10 @@ void ScreenCapturerMirror::updateExcludeRegion()
 
     ScreenList screen_list;
     if (!ScreenCaptureUtils::screenList(&screen_list))
+    {
+        LOG(LS_ERROR) << "Unable to get screen list";
         return;
+    }
 
     for (const auto& screen : screen_list.screens)
     {

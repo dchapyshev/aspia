@@ -92,7 +92,7 @@ uint64_t DriveEnumerator::DriveInfo::totalSpace() const
 
     if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, &total_space, nullptr))
     {
-        DPLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
+        PLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
         return 0;
     }
 
@@ -105,7 +105,7 @@ uint64_t DriveEnumerator::DriveInfo::freeSpace() const
 
     if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, nullptr, &free_space))
     {
-        DPLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
+        PLOG(LS_ERROR) << "GetDiskFreeSpaceExW failed";
         return 0;
     }
 
@@ -121,7 +121,7 @@ std::string DriveEnumerator::DriveInfo::fileSystem() const
                                nullptr, nullptr, nullptr,
                                fs, std::size(fs)))
     {
-        DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
+        PLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return std::string();
     }
 
@@ -137,7 +137,7 @@ std::string DriveEnumerator::DriveInfo::volumeName() const
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
     {
-        DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
+        PLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return std::string();
     }
 
@@ -150,7 +150,7 @@ std::string DriveEnumerator::DriveInfo::volumeSerial() const
 
     if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
     {
-        DPLOG(LS_ERROR) << "GetVolumeInformationW failed";
+        PLOG(LS_ERROR) << "GetVolumeInformationW failed";
         return std::string();
     }
 

@@ -79,7 +79,7 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
         if (error.Error() != S_OK || !output)
         {
             LOG(LS_WARNING) << "IDXGIAdapter::EnumOutputs returns an unexpected result "
-                            << error.ErrorMessage() << " with error code"
+                            << error.ErrorMessage() << " with error code "
                             << error.Error();
             continue;
         }

@@ -219,6 +219,12 @@ std::string userNameByHandle(HANDLE process)
         token_user = reinterpret_cast<TOKEN_USER*>(token_user_buffer.get());
     }
 
+    if (!token_user)
+    {
+        LOG(LS_WARNING) << "Invalid user token buffer";
+        return std::string();
+    }
+
     if (!GetTokenInformation(token, TokenUser, token_user, length, &length))
     {
         PLOG(LS_WARNING) << "GetTokenInformation failed";

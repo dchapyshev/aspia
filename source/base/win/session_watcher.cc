@@ -47,6 +47,7 @@ bool SessionWatcher::start(Delegate* delegate)
                                   std::placeholders::_1, std::placeholders::_2,
                                   std::placeholders::_3, std::placeholders::_4)))
     {
+        LOG(LS_ERROR) << "Unable to create window";
         return false;
     }
 
@@ -65,7 +66,11 @@ void SessionWatcher::stop()
     if (!window_)
         return;
 
-    WTSUnRegisterSessionNotification(window_->hwnd());
+    if (!WTSUnRegisterSessionNotification(window_->hwnd()))
+    {
+        PLOG(LS_ERROR) << "WTSUnRegisterSessionNotification failed";
+    }
+
     window_.reset();
     delegate_ = nullptr;
 }

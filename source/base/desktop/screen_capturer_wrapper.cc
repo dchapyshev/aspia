@@ -267,19 +267,37 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_m
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     if (environment_)
+    {
         environment_->setWallpaper(enable);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Desktop environment not initialized";
+    }
 }
 
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
     if (environment_)
+    {
         environment_->setEffects(enable);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Desktop environment not initialized";
+    }
 }
 
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
     if (environment_)
+    {
         environment_->setFontSmoothing(enable);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Desktop environment not initialized";
+    }
 }
 
 void ScreenCapturerWrapper::enableCursorPosition(bool enable)
@@ -423,7 +441,13 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         desktop_.setThreadDesktop(std::move(input_desktop));
 
         if (environment_)
+        {
             environment_->onDesktopChanged();
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Desktop environment not initialized";
+        }
     }
 #endif // defined(OS_WIN)
 }

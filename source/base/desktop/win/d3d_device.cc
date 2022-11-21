@@ -151,7 +151,8 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
                                           reinterpret_cast<void**>(factory.GetAddressOf()));
     if (error.Error() != S_OK || !factory)
     {
-        LOG(LS_WARNING) << "Cannot create IDXGIFactory1";
+        LOG(LS_WARNING) << "Cannot create IDXGIFactory1. Error "
+                        << error.ErrorMessage() << " with code " << error.Error();
         return std::vector<D3dDevice>();
     }
 

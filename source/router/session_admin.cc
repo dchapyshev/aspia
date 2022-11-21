@@ -226,7 +226,10 @@ proto::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::User& user)
     }
 
     if (!database->modifyUser(new_user))
+    {
+        LOG(LS_ERROR) << "modifyUser failed";
         return proto::UserResult::INTERNAL_ERROR;
+    }
 
     return proto::UserResult::SUCCESS;
 }
@@ -245,7 +248,10 @@ proto::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::User& user)
     LOG(LS_INFO) << "User remove request: " << entry_id;
 
     if (!database->removeUser(entry_id))
+    {
+        LOG(LS_ERROR) << "removeUser failed";
         return proto::UserResult::INTERNAL_ERROR;
+    }
 
     return proto::UserResult::SUCCESS;
 }

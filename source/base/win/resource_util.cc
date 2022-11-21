@@ -39,16 +39,25 @@ bool resourceFromModule(HMODULE module,
 
     HRSRC hres_info = FindResourceW(module, MAKEINTRESOURCEW(resource_id), resource_type);
     if (hres_info == nullptr)
+    {
+        PLOG(LS_WARNING) << "FindResourceW failed";
         return false;
+    }
 
     DWORD data_size = SizeofResource(module, hres_info);
     HGLOBAL hres = LoadResource(module, hres_info);
     if (!hres)
+    {
+        PLOG(LS_WARNING) << "LoadResource failed";
         return false;
+    }
 
     void* resource = LockResource(hres);
     if (!resource)
+    {
+        PLOG(LS_WARNING) << "LockResource failed";
         return false;
+    }
 
     *data = resource;
     *length = static_cast<size_t>(data_size);

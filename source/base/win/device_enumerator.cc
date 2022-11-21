@@ -46,7 +46,7 @@ DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
     device_info_.reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
     if (!device_info_.isValid())
     {
-        DPLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
+        PLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
@@ -63,8 +63,8 @@ bool DeviceEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
-                             << SystemError(error_code).toString();
+            LOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
+                            << SystemError(error_code).toString();
         }
 
         return true;
@@ -90,7 +90,7 @@ std::string DeviceEnumerator::friendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::string();
     }
 
@@ -109,7 +109,7 @@ std::string DeviceEnumerator::description() const
                                            ARRAYSIZE(description),
                                            nullptr))
     {
-        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::string();
     }
 
@@ -128,7 +128,7 @@ std::wstring DeviceEnumerator::driverKeyPath() const
                                            ARRAYSIZE(driver),
                                            nullptr))
     {
-        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
+        PLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW failed";
         return std::wstring();
     }
 
@@ -212,7 +212,7 @@ std::string DeviceEnumerator::deviceID() const
                                      ARRAYSIZE(device_id),
                                      nullptr))
     {
-        DPLOG(LS_WARNING) << "SetupDiGetDeviceInstanceIdW failed";
+        PLOG(LS_WARNING) << "SetupDiGetDeviceInstanceIdW failed";
         return std::string();
     }
 

@@ -107,7 +107,8 @@ bool CursorEncoder::compressCursor(
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
+            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret)
+                          << " (" << ret << ")";
             return false;
         }
     }
@@ -115,7 +116,8 @@ bool CursorEncoder::compressCursor(
     ret = ZSTD_endStream(stream_.get(), &output);
     if (ZSTD_isError(ret))
     {
-        LOG(LS_WARNING) << "ZSTD_endStream failed: " << ZSTD_getErrorName(ret) << " (" << ret << ")";
+        LOG(LS_WARNING) << "ZSTD_endStream failed: " << ZSTD_getErrorName(ret)
+                        << " (" << ret << ")";
         return false;
     }
 

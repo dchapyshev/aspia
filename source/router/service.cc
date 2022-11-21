@@ -19,7 +19,6 @@
 #include "router/service.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "router/server.h"
 #include "router/service_constants.h"
 
