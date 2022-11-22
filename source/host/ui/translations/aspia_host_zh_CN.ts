@@ -278,28 +278,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="220"/>
-        <location filename="../host_main.cc" line="239"/>
+        <location filename="../host_main.cc" line="222"/>
+        <location filename="../host_main.cc" line="241"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="221"/>
+        <location filename="../host_main.cc" line="223"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="240"/>
+        <location filename="../host_main.cc" line="242"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="275"/>
+        <location filename="../host_main.cc" line="277"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="276"/>
+        <location filename="../host_main.cc" line="278"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation type="unfinished"></translation>
     </message>
