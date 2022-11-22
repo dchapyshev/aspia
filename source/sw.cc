@@ -130,6 +130,7 @@ void build(Solution &s) {
         base.Public += "org.sw.demo.webmproject.vpx"_dep;
         base.Public += "org.sw.demo.webmproject.webm"_dep;
         base.Public += "org.sw.demo.xiph.opus"_dep;
+        base.Public += "org.sw.demo.sqlite3"_dep;
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
             base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
             base +=
@@ -209,7 +210,6 @@ void build(Solution &s) {
             router += "router/linux/.*"_rr;
         }
         router += base;
-        router += "org.sw.demo.sqlite3"_dep;
     }
 
     auto qt_progs = [](auto &t, const String &name_override = {}, const path &path_override = {}) {
