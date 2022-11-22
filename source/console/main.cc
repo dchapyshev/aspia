@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    console::Application::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
     console::Application application(argc, argv);
 

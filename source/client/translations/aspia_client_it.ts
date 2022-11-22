@@ -32,108 +32,108 @@
         <translation>Valore non valido per &quot;%1&quot;. Possibili valori: &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="390"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer address.</source>
         <translation>Indirizzo computer remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="394"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Remote computer port.</source>
         <translation>Porta computer remoto.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="399"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Name of user.</source>
         <translation>Nome dell&apos;utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="403"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Password of user.</source>
         <translation>Password dell&apos;utente.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="407"/>
+        <location filename="../client_main.cc" line="409"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Tipo sessione. Possibili valori: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="412"/>
+        <location filename="../client_main.cc" line="414"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Tipo di codec. Possibili valori:  vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="416"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Profondità colore. Possibili valori: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="420"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Rapporto compressione. Possibili valori: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="424"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita audio. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="428"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita dimensione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="432"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita posizione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="436"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita appunti. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="440"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita effetti desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="444"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilita sfondo desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="448"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Abilita o disabilità smussatura cartatteri. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="452"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Azzera appunti alla disconnessione. Possibili valori: 0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="456"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Blocca computre alla disconnessione. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="460"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Blocca input remoto. Possibili valori: 0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="464"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="582"/>
+        <location filename="../client_main.cc" line="584"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="583"/>
+        <location filename="../client_main.cc" line="585"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>E&apos; stato inserito l&apos;ID di un host, ma non esiste un router configurato.E&apos; necessario configurare il router prima di connetersi.</translation>
     </message>

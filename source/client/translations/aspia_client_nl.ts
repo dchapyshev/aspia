@@ -32,22 +32,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="390"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer address.</source>
         <translation>Adres van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="394"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Remote computer port.</source>
         <translation>Poort van computer op afstand</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="399"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Name of user.</source>
         <translation>Naam van de gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="403"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,83 +56,83 @@
         <translation type="vanished">Sessie type. Mogelijke waarden: desktop-manage, desktop-view, file-transfer.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="407"/>
+        <location filename="../client_main.cc" line="409"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="412"/>
+        <location filename="../client_main.cc" line="414"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="416"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="420"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="424"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="428"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="432"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="436"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="440"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="444"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="448"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="452"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="456"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="460"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="464"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="582"/>
+        <location filename="../client_main.cc" line="584"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -141,7 +141,7 @@
         <translation type="vanished">Ongeldig sessie type ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="583"/>
+        <location filename="../client_main.cc" line="585"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">Er is een host ID ingevoerd, maar de router was niet geconfigureerd. Configureer de router voor het maken van een verbinding.</translation>
     </message>

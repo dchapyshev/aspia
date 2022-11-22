@@ -189,82 +189,127 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="106"/>
+        <location filename="../ui/about_dialog.cc" line="107"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="110"/>
+        <location filename="../ui/about_dialog.cc" line="111"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="111"/>
+        <location filename="../ui/about_dialog.cc" line="112"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="117"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="120"/>
+        <location filename="../ui/about_dialog.cc" line="121"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="121"/>
+        <location filename="../ui/about_dialog.cc" line="122"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="122"/>
+        <location filename="../ui/about_dialog.cc" line="123"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="125"/>
+        <location filename="../ui/about_dialog.cc" line="126"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="127"/>
+        <location filename="../ui/about_dialog.cc" line="128"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="129"/>
+        <location filename="../ui/about_dialog.cc" line="130"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="146"/>
+        <location filename="../ui/about_dialog.cc" line="147"/>
         <source>Path: %1</source>
         <translation>Путь: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="147"/>
+        <location filename="../ui/about_dialog.cc" line="148"/>
         <source>Compilation date: %1</source>
         <translation>Дата компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="148"/>
+        <location filename="../ui/about_dialog.cc" line="149"/>
         <source>Compilation time: %1</source>
         <translation>Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="151"/>
+        <location filename="../ui/about_dialog.cc" line="152"/>
         <source>Git branch: %1</source>
         <translation>Ветка Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="152"/>
+        <location filename="../ui/about_dialog.cc" line="153"/>
         <source>Git commit: %1</source>
         <translation>Коммит Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="157"/>
+        <location filename="../ui/about_dialog.cc" line="164"/>
+        <source>Display &apos;%1&apos;</source>
+        <translation>Экран &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="165"/>
+        <source>Pixel ratio: %1</source>
+        <translation>Соотношение пикселей: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="166"/>
+        <source>Logical DPI: %1x%2</source>
+        <translation>Логический DPI: %1x%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="169"/>
+        <source>Physical DPI: %1x%2</source>
+        <translation>Физический DPI: %1x%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="174"/>
+        <source>Size: %1x%2</source>
+        <translation>Размер: %1x%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="177"/>
+        <source>Available size: %1x%2</source>
+        <translation>Доступный размер: %1x%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="181"/>
+        <source>Virtual size: %1x%2</source>
+        <translation>Виртуальный размер: %1x%2</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="184"/>
+        <source>Depth: %1</source>
+        <translation>Глубина цвета: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="185"/>
+        <source>Refresh rate: %1</source>
+        <translation>Частота обновления: %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_dialog.cc" line="190"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>

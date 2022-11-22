@@ -32,22 +32,22 @@
         <translation>Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="390"/>
+        <location filename="../client_main.cc" line="392"/>
         <source>Remote computer address.</source>
         <translation>Адреса віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="394"/>
+        <location filename="../client_main.cc" line="396"/>
         <source>Remote computer port.</source>
         <translation>Порт віддаленого комп&apos;ютера.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="399"/>
+        <location filename="../client_main.cc" line="401"/>
         <source>Name of user.</source>
         <translation>Ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="403"/>
+        <location filename="../client_main.cc" line="405"/>
         <source>Password of user.</source>
         <translation>Пароль користувача.</translation>
     </message>
@@ -56,83 +56,83 @@
         <translation type="vanished">Тип підключення. Можливі варіанти: керування робочим столом, перегляд робочого столу, передача файлів.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="407"/>
+        <location filename="../client_main.cc" line="409"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation>Тип сесії. Можливі значення: керування робочим столом, перегляд робочого столу, передавання файлів, інформація про систему, текстовий чат.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="412"/>
+        <location filename="../client_main.cc" line="414"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>Кодек. можливі значення:  vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="416"/>
+        <location filename="../client_main.cc" line="418"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>Глибина кольору. Можливі значення: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="420"/>
+        <location filename="../client_main.cc" line="422"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>Стисннення. Можливі значення: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="424"/>
+        <location filename="../client_main.cc" line="426"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Увімкнути чи вимкнути звук. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="428"/>
+        <location filename="../client_main.cc" line="430"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути розмір курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="432"/>
+        <location filename="../client_main.cc" line="434"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути позицію курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="436"/>
+        <location filename="../client_main.cc" line="438"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути буфер обміну. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="440"/>
+        <location filename="../client_main.cc" line="442"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути ефекти робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="444"/>
+        <location filename="../client_main.cc" line="446"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути шпалери робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="448"/>
+        <location filename="../client_main.cc" line="450"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>Увімкнути або вимкнути згладжування шрифтів. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="452"/>
+        <location filename="../client_main.cc" line="454"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>Очищати буфер обміну при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="456"/>
+        <location filename="../client_main.cc" line="458"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Блокувати комп&apos;ютер при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="460"/>
+        <location filename="../client_main.cc" line="462"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="464"/>
+        <location filename="../client_main.cc" line="466"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="582"/>
+        <location filename="../client_main.cc" line="584"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -141,7 +141,7 @@
         <translation type="vanished">Обрано не правильний вид підключення.</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="583"/>
+        <location filename="../client_main.cc" line="585"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Було введено ID хоста, але маршрутизатор не налаштовано.Перед підключенням необхідно налаштувати маршрутизатор.</translation>
     </message>

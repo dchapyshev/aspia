@@ -375,6 +375,8 @@ int clientMain(int argc, char* argv[])
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    client::Application::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
     client::Application application(argc, argv);
 

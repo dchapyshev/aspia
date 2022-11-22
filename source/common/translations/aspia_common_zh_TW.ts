@@ -229,6 +229,42 @@
         <source>%1 version: %2</source>
         <translation>%1 版本：%2</translation>
     </message>
+    <message>
+        <source>Display &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixel ratio: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logical DPI: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Physical DPI: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Depth: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh rate: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available size: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual size: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>common::DownloadDialog</name>
