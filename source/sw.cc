@@ -227,11 +227,8 @@ void build(Solution &s) {
 
     auto qt_progs_and_tr = [&qt_progs](auto &t, const String &name_override = {}, const path &path_override = {}) {
         auto name = name_override.empty() ? t.getPackage().getPath().back() : name_override;
-
-        qt_progs(t, name_override, path_override);
-
-        // trs
         qt_tr("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, t);
+        qt_progs(t, name_override, path_override); // after tr
         t.configureFile(t.SourceDir / path_override / ("translations/" + name + "_translations.qrc"),
             t.BinaryDir / (name + "_translations.qrc"), ConfigureFlags::CopyOnly);
         rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t,
@@ -240,9 +237,8 @@ void build(Solution &s) {
     };
 
     auto qt_progs_and_tr2 = [&qt_progs2](auto &t) {
-        qt_progs2(t);
-        // trs
         qt_tr("org.sw.demo.qtproject.qt" QT_VERSION ""_dep, t);
+        qt_progs2(t); // after tr
         t.configureFile(t.SourceDir / "ui/translations.qrc",
             t.BinaryDir / "translations.qrc", ConfigureFlags::CopyOnly);
         rcc("org.sw.demo.qtproject.qt.base.tools.rcc" QT_VERSION ""_dep, t,
