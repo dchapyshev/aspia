@@ -14,7 +14,7 @@ jobs:
     #- name: test
       #run: ./sw test source
     - name: Upload Binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: sw-windows
         path: .sw/out
@@ -34,7 +34,7 @@ jobs:
     - uses: egorpugin/sw-action@master
     - run: ./sw -static build source -compiler gcc
     - name: Upload Binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: sw-linux
         path: .sw/out
@@ -51,8 +51,14 @@ jobs:
         export PATH="/usr/local/opt/flex/bin:$PATH"
         export PATH="/usr/local/opt/bison/bin:$PATH"
         export PATH="/usr/local/opt/gcc/bin:$PATH"
+        ./sw -static build source -k 20
+    - name: build
+      run: |
+        export PATH="/usr/local/opt/flex/bin:$PATH"
+        export PATH="/usr/local/opt/bison/bin:$PATH"
+        export PATH="/usr/local/opt/gcc/bin:$PATH"
         ./sw -static build source
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v3
       with:
         name: sw-macos
         path: .sw/out
