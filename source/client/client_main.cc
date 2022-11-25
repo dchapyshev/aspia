@@ -371,7 +371,10 @@ int clientMain(int argc, char* argv[])
     base::installFailureHandler(L"aspia_client");
 #endif
 
-    qt_base::ScopedQtLogging scoped_logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    qt_base::ScopedQtLogging scoped_logging(logging_settings);
 
     client::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     client::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

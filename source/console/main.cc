@@ -40,7 +40,10 @@ int main(int argc, char *argv[])
     base::installFailureHandler(L"aspia_console");
 #endif
 
-    qt_base::ScopedQtLogging scoped_logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    qt_base::ScopedQtLogging scoped_logging(logging_settings);
 
     console::Application::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     console::Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

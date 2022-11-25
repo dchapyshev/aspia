@@ -89,7 +89,10 @@ int hostMain(int argc, char* argv[])
     base::installFailureHandler(L"aspia_host");
 #endif
 
-    qt_base::ScopedQtLogging scoped_logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    qt_base::ScopedQtLogging scoped_logging(logging_settings);
     base::CommandLine command_line(argc, argv);
 
     LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;

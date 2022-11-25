@@ -128,7 +128,10 @@ int hostServiceMain(int argc, wchar_t* argv[])
 
     base::installFailureHandler(L"aspia_host_service");
 
-    base::ScopedLogging scoped_logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();

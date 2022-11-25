@@ -43,7 +43,10 @@ void desktopAgentMain(int argc, const char* const* argv)
     base::installFailureHandler(L"aspia_desktop_agent");
 #endif // defined(OS_WIN)
 
-    base::ScopedLogging scoped_logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
