@@ -234,12 +234,22 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
                 break;
 
             case proto::internal::DesktopControl::LOGOFF:
-                base::PowerController::logoff();
-                break;
+            {
+                if (!base::PowerController::logoff())
+                {
+                    LOG(LS_WARNING) << "base::PowerController::logoff failed";
+                }
+            }
+            break;
 
             case proto::internal::DesktopControl::LOCK:
-                base::PowerController::lock();
-                break;
+            {
+                if (!base::PowerController::lock())
+                {
+                    LOG(LS_WARNING) << "base::PowerController::lock failed";
+                }
+            }
+            break;
 
             default:
                 NOTREACHED();
@@ -494,7 +504,11 @@ void DesktopSessionAgent::setEnabled(bool enable)
         {
             LOG(LS_INFO) << "Enabled locking of user session when disconnected";
 
-            base::PowerController::lock();
+            if (!base::PowerController::lock())
+            {
+                LOG(LS_WARNING) << "base::PowerController::lock failed";
+            }
+
             lock_at_disconnect_ = false;
         }
 
