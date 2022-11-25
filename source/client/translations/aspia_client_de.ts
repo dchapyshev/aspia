@@ -499,6 +499,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="479"/>
+        <source>Pause video when minimizing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_panel.ui" line="490"/>
+        <source>Pause audio when minimizing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/desktop_panel.ui" line="221"/>
         <location filename="../ui/desktop_panel.ui" line="224"/>
         <location filename="../ui/desktop_panel.ui" line="227"/>
@@ -2184,94 +2194,94 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="226"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
         <source>Monitor selection</source>
         <translation type="unfinished">Bildschirmauswahl</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
+        <location filename="../ui/desktop_panel.cc" line="265"/>
         <source>Monitor %1 (primary)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="247"/>
+        <location filename="../ui/desktop_panel.cc" line="267"/>
         <source>Monitor %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="259"/>
+        <location filename="../ui/desktop_panel.cc" line="279"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="270"/>
+        <location filename="../ui/desktop_panel.cc" line="290"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="422"/>
-        <location filename="../ui/desktop_panel.cc" line="437"/>
         <location filename="../ui/desktop_panel.cc" line="452"/>
         <location filename="../ui/desktop_panel.cc" line="467"/>
         <location filename="../ui/desktop_panel.cc" line="482"/>
+        <location filename="../ui/desktop_panel.cc" line="497"/>
+        <location filename="../ui/desktop_panel.cc" line="512"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="453"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="426"/>
-        <location filename="../ui/desktop_panel.cc" line="441"/>
         <location filename="../ui/desktop_panel.cc" line="456"/>
         <location filename="../ui/desktop_panel.cc" line="471"/>
         <location filename="../ui/desktop_panel.cc" line="486"/>
+        <location filename="../ui/desktop_panel.cc" line="501"/>
+        <location filename="../ui/desktop_panel.cc" line="516"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="427"/>
-        <location filename="../ui/desktop_panel.cc" line="442"/>
         <location filename="../ui/desktop_panel.cc" line="457"/>
         <location filename="../ui/desktop_panel.cc" line="472"/>
         <location filename="../ui/desktop_panel.cc" line="487"/>
+        <location filename="../ui/desktop_panel.cc" line="502"/>
+        <location filename="../ui/desktop_panel.cc" line="517"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="438"/>
+        <location filename="../ui/desktop_panel.cc" line="468"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="453"/>
+        <location filename="../ui/desktop_panel.cc" line="483"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="468"/>
+        <location filename="../ui/desktop_panel.cc" line="498"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="483"/>
+        <location filename="../ui/desktop_panel.cc" line="513"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="565"/>
+        <location filename="../ui/desktop_panel.cc" line="595"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="317"/>
+        <location filename="../ui/desktop_panel.cc" line="337"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2571,34 +2581,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="279"/>
-        <location filename="../ui/qt_desktop_window.cc" line="287"/>
-        <location filename="../ui/qt_desktop_window.cc" line="779"/>
+        <location filename="../ui/qt_desktop_window.cc" line="291"/>
+        <location filename="../ui/qt_desktop_window.cc" line="299"/>
+        <location filename="../ui/qt_desktop_window.cc" line="835"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="280"/>
+        <location filename="../ui/qt_desktop_window.cc" line="292"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="288"/>
+        <location filename="../ui/qt_desktop_window.cc" line="300"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="757"/>
+        <location filename="../ui/qt_desktop_window.cc" line="813"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="759"/>
+        <location filename="../ui/qt_desktop_window.cc" line="815"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="779"/>
+        <location filename="../ui/qt_desktop_window.cc" line="835"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

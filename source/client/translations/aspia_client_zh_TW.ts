@@ -410,6 +410,14 @@
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Pause video when minimizing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause audio when minimizing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileError</name>
