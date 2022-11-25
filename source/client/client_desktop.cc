@@ -450,7 +450,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
             video_size.height() <= 0 || video_size.height() >= kMaxValue)
         {
-            LOG(LS_ERROR) << "Wrong video frame size";
+            LOG(LS_ERROR) << "Wrong video frame size: "
+                          << video_size.width() << "x" << video_size.height();
             return;
         }
 
@@ -462,7 +463,8 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
             if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
                 screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
             {
-                LOG(LS_ERROR) << "Wrong screen size";
+                LOG(LS_ERROR) << "Wrong screen size: "
+                              << screen_size.width() << "x" << screen_size.height();
                 return;
             }
         }
@@ -471,6 +473,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 
         LOG(LS_INFO) << "New video size: " << video_size.width() << "x" << video_size.height();
         LOG(LS_INFO) << "New screen size: " << screen_size.width() << "x" << screen_size.height();
+        LOG(LS_INFO) << "New video capturer: " << video_capturer_type_;
 
         desktop_frame_ = desktop_window_proxy_->allocateFrame(video_size);
         desktop_window_proxy_->setFrame(screen_size, desktop_frame_);
@@ -620,7 +623,15 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
         for (int i = 0; i < screen_list.screen_size(); ++i)
         {
             const proto::Screen& screen = screen_list.screen(i);
-            LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id() << ", title=" << screen.title();
+            const proto::Point& dpi = screen.dpi();
+            const proto::Point& position = screen.position();
+            const proto::Resolution& resolution = screen.resolution();
+
+            LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
+                         << " title=" << screen.title()
+                         << " dpi=" << dpi.x() << "x" << dpi.y()
+                         << " pos=" << position.x() << "x" << position.y()
+                         << " res=" << resolution.width() << "x" << resolution.height();
         }
 
         desktop_window_proxy_->setScreenList(screen_list);
