@@ -58,7 +58,7 @@ jobs:
         export PATH="/usr/local/opt/flex/bin:$PATH"
         export PATH="/usr/local/opt/bison/bin:$PATH"
         export PATH="/usr/local/opt/gcc/bin:$PATH"
-        ./sw -static build source -j 1
+        ./sw -static build source -j 1 --trace
     - uses: actions/upload-artifact@v3
       with:
         name: sw-macos
