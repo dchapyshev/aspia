@@ -186,7 +186,10 @@ bool startProcessWithToken(HANDLE token,
                               &process_info))
     {
         PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
-        DestroyEnvironmentBlock(environment);
+        if (!DestroyEnvironmentBlock(environment))
+        {
+            PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+        }
         return false;
     }
 
@@ -195,7 +198,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_WARNING) << "DestroyEnvironmentBlock";
+        PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -210,18 +213,36 @@ DesktopSessionProcess::DesktopSessionProcess(
     : process_(std::move(process)),
       thread_(std::move(thread))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 #else
-DesktopSessionProcess::DesktopSessionProcess() = default;
+DesktopSessionProcess::DesktopSessionProcess()
+{
+    LOG(LS_INFO) << "Ctor";
+}
 #endif
 
-DesktopSessionProcess::~DesktopSessionProcess() = default;
+DesktopSessionProcess::~DesktopSessionProcess()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 // static
 std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     base::SessionId session_id, std::u16string_view channel_id)
 {
+    if (session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_WARNING) << "An attempt was detected to start a process in a INVALID session";
+        return nullptr;
+    }
+
+    if (session_id == base::kServiceSessionId)
+    {
+        LOG(LS_WARNING) << "An attempt was detected to start a process in a SERVICES session";
+        return nullptr;
+    }
+
     base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);
 

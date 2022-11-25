@@ -153,7 +153,10 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
                               &process_info))
     {
         PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
-        DestroyEnvironmentBlock(environment);
+        if (!DestroyEnvironmentBlock(environment))
+        {
+            PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+        }
         return false;
     }
 
@@ -162,9 +165,20 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
         PLOG(LS_WARNING) << "SetPriorityClass failed";
     }
 
-    CloseHandle(process_info.hThread);
-    CloseHandle(process_info.hProcess);
-    DestroyEnvironmentBlock(environment);
+    if (!CloseHandle(process_info.hThread))
+    {
+        PLOG(LS_WARNING) << "CloseHandle failed";
+    }
+
+    if (!CloseHandle(process_info.hProcess))
+    {
+        PLOG(LS_WARNING) << "CloseHandle failed";
+    }
+
+    if (!DestroyEnvironmentBlock(environment))
+    {
+        PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+    }
 
     return true;
 }
@@ -533,9 +547,15 @@ void UserSessionManager::startSessionProcess(
                  << " (from: " << location.toString() << ")";
 
 #if defined(OS_WIN)
+    if (session_id == base::kInvalidSessionId)
+    {
+        LOG(LS_WARNING) << "An attempt was detected to start a process in a INVALID session";
+        return;
+    }
+
     if (session_id == base::kServiceSessionId)
     {
-        LOG(LS_WARNING) << "Invalid session ID";
+        LOG(LS_WARNING) << "An attempt was detected to start a process in a SERVICES session";
         return;
     }
 

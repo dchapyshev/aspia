@@ -30,6 +30,12 @@
 
 namespace host {
 
+namespace {
+
+const std::chrono::minutes kSessionAttachTimeout { 1 };
+
+} // namespace
+
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
@@ -63,9 +69,10 @@ void DesktopSessionManager::attachSession(
 
     if (state_ == State::STOPPED)
     {
-        session_attach_timer_.start(std::chrono::minutes(1), [this]()
+        session_attach_timer_.start(kSessionAttachTimeout, [this]()
         {
-            LOG(LS_WARNING) << "Session attach timeout";
+            LOG(LS_WARNING) << "Session attach timeout (" << kSessionAttachTimeout.count()
+                            << " minutes)";
             onErrorOccurred();
         });
     }
@@ -77,7 +84,7 @@ void DesktopSessionManager::attachSession(
     server_ = std::make_unique<base::IpcServer>();
     if (!server_->start(channel_id, this))
     {
-        LOG(LS_ERROR) << "Failed to start IPC server";
+        LOG(LS_ERROR) << "Failed to start IPC server (channel_id: " << channel_id << ")";
 
         onErrorOccurred();
         return;
@@ -87,13 +94,15 @@ void DesktopSessionManager::attachSession(
         DesktopSessionProcess::create(session_id, channel_id);
     if (!process)
     {
-        LOG(LS_ERROR) << "Failed to create session process";
+        LOG(LS_ERROR) << "Failed to create session process (session_id: " << session_id
+                      << " channel_id: " << channel_id << ")";
 
         onErrorOccurred();
         return;
     }
 
-    LOG(LS_INFO) << "Desktop session process created";
+    LOG(LS_INFO) << "Desktop session process created (session_id: " << session_id
+                 << " channel_id: " << channel_id << ")";
 }
 
 void DesktopSessionManager::dettachSession(const base::Location& location)
@@ -119,9 +128,10 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     if (state_ == State::STOPPING)
         return;
 
-    session_attach_timer_.start(std::chrono::minutes(1), [this]()
+    session_attach_timer_.start(kSessionAttachTimeout, [this]()
     {
-        LOG(LS_ERROR) << "Timeout while waiting for session";
+        LOG(LS_ERROR) << "Timeout while waiting for session (" << kSessionAttachTimeout.count()
+                      << " minutes)";
         onErrorOccurred();
     });
 
