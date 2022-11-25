@@ -83,6 +83,8 @@ private:
     void readConfig(const proto::DesktopConfig& config);
     void readSelectScreenExtension(const std::string& data);
     void readPreferredSizeExtension(const std::string& data);
+    void readVideoPauseExtension(const std::string& data);
+    void readAudioPauseExtension(const std::string& data);
     void readPowerControlExtension(const std::string& data);
     void readRemoteUpdateExtension(const std::string& data);
     void readSystemInfoExtension(const std::string& data);
@@ -97,6 +99,8 @@ private:
     DesktopSession::Config desktop_session_config_;
     base::Size source_size_;
     base::Size preferred_size_;
+    bool is_video_paused_ = false;
+    bool is_audio_paused_ = false;
 
 #if defined(OS_WIN)
     std::unique_ptr<TaskManager> task_manager_;

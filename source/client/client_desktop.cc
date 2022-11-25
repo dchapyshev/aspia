@@ -212,6 +212,62 @@ void ClientDesktop::setPreferredSize(int width, int height)
     sendMessage(*outgoing_message_);
 }
 
+void ClientDesktop::setVideoPause(bool enable)
+{
+    LOG(LS_INFO) << "Video pause changed: " << enable;
+
+    if (enable)
+    {
+        ++video_pause_count_;
+    }
+    else
+    {
+        if (!video_pause_count_)
+            return;
+        ++video_resume_count_;
+    }
+
+    outgoing_message_->Clear();
+
+    proto::Pause pause;
+    pause.set_enable(enable);
+
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+
+    extension->set_name(common::kVideoPauseExtension);
+    extension->set_data(pause.SerializeAsString());
+
+    sendMessage(*outgoing_message_);
+}
+
+void ClientDesktop::setAudioPause(bool enable)
+{
+    LOG(LS_INFO) << "Audio pause changed: " << enable;
+
+    if (enable)
+    {
+        ++audio_pause_count_;
+    }
+    else
+    {
+        if (!audio_pause_count_)
+            return;
+        ++audio_resume_count_;
+    }
+
+    outgoing_message_->Clear();
+
+    proto::Pause pause;
+    pause.set_enable(enable);
+
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+
+    extension->set_name(common::kAudioPauseExtension);
+    extension->set_data(pause.SerializeAsString());
+
+    sendMessage(*outgoing_message_);
+}
+
 void ClientDesktop::setVideoRecording(bool enable, const std::filesystem::path& file_path)
 {
     proto::VideoRecording video_recording;
@@ -371,6 +427,8 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
     metrics.video_packet_count = video_packet_count_;
+    metrics.video_pause_count = video_pause_count_;
+    metrics.video_resume_count = video_resume_count_;
 
     if (min_audio_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_audio_packet = min_audio_packet_;
@@ -378,6 +436,8 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
     metrics.audio_packet_count = audio_packet_count_;
+    metrics.audio_pause_count = audio_pause_count_;
+    metrics.audio_resume_count = audio_resume_count_;
 
     metrics.video_capturer_type = video_capturer_type_;
     metrics.fps = fps_;

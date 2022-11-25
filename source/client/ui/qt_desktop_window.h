@@ -128,6 +128,11 @@ private:
     std::optional<QPoint> start_panel_pos_;
     int panel_pos_x_ = 50;
 
+    bool enable_video_pause_ = true;
+    bool video_pause_last_ = false;
+    bool enable_audio_pause_ = true;
+    bool audio_pause_last_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };
 

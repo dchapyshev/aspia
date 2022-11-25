@@ -73,6 +73,11 @@
      </item>
      <item>
       <property name="text">
+       <string notr="true">Video Pause/Resume Count</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string notr="true">MIN Video Packet</string>
       </property>
      </item>
@@ -89,6 +94,11 @@
      <item>
       <property name="text">
        <string notr="true">Audio Packet Count</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Audio Pause/Resume Count</string>
       </property>
      </item>
      <item>

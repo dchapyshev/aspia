@@ -123,7 +123,14 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
     }
     else
     {
-        updated_region_ = frame->constUpdatedRegion();
+        if (isKeyFrameRequired())
+        {
+            updated_region_ = Region(Rect::makeSize(frame->size()));
+        }
+        else
+        {
+            updated_region_ = frame->constUpdatedRegion();
+        }
     }
 
     if (!translator_)
@@ -175,6 +182,7 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 
     // Compress data with using Zstd compressor.
     compressPacket(packet, translate_buffer_.get(), data_size);
+    setKeyFrameRequired(false);
 }
 
 } // namespace base

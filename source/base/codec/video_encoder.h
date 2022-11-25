@@ -34,6 +34,9 @@ public:
 
     virtual void encode(const Frame* frame, proto::VideoPacket* packet) = 0;
 
+    void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
+    bool isKeyFrameRequired() const { return key_frame_required_; }
+
     proto::VideoEncoding encoding() const { return encoding_; }
 
 protected:
@@ -42,6 +45,7 @@ protected:
 private:
     const proto::VideoEncoding encoding_;
     Size last_size_;
+    bool key_frame_required_ = false;
 };
 
 } // namespace base

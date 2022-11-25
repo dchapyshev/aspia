@@ -63,6 +63,13 @@ message PreferredSize
     int32 height = 2;
 }
 
+// Extension name: "video_pause", "audio_pause"
+// Sent by client to host.
+message Pause
+{
+    bool enable = 1;
+}
+
 // Extension name: "power_control"
 // Sent by client to host.
 message PowerControl

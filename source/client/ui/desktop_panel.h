@@ -41,6 +41,8 @@ public:
     void enableTextChat(bool enable);
     void enableRemoteUpdate(bool enable);
     void enableTaskManager(bool enable);
+    void enableVideoPauseFeature(bool enable);
+    void enableAudioPauseFeature(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);
     void startRecording(bool enable);
@@ -50,6 +52,8 @@ public:
     bool sendKeyCombinations() const;
     bool isPanelHidden() const;
     bool isPanelPinned() const;
+    bool isVideoPauseEnabled() const;
+    bool isAudioPauseEnabled() const;
 
 signals:
     void pasteAsKeystrokes();
@@ -72,6 +76,8 @@ signals:
     void closeSession();
     void showHidePanel();
     void recordingStateChanged(bool enable);
+    void videoPauseChanged(bool enable);
+    void audioPauseChanged(bool enable);
 
 protected:
     // QFrame implementation.
@@ -109,8 +115,6 @@ private:
     QSize current_resolution_;
     int64_t current_screen_id_ = -1;
     int screen_count_ = 0;
-
-    DesktopSettings settings_;
 
     std::unique_ptr<QMenu> power_menu_;
     QMenu* additional_menu_ = nullptr;

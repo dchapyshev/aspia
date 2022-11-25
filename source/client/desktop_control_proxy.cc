@@ -86,6 +86,32 @@ void DesktopControlProxy::setPreferredSize(int width, int height)
         desktop_control_->setPreferredSize(width, height);
 }
 
+void DesktopControlProxy::setVideoPause(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::setVideoPause, shared_from_this(), enable));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->setVideoPause(enable);
+}
+
+void DesktopControlProxy::setAudioPause(bool enable)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&DesktopControlProxy::setAudioPause, shared_from_this(), enable));
+        return;
+    }
+
+    if (desktop_control_)
+        desktop_control_->setAudioPause(enable);
+}
+
 void DesktopControlProxy::setVideoRecording(bool enable, const std::filesystem::path& file_path)
 {
     if (!io_task_runner_->belongsToCurrentThread())

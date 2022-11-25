@@ -48,6 +48,12 @@ public:
     bool isToolBarPinned() const;
     void setToolBarPinned(bool enable);
 
+    bool pauseVideoWhenMinimizing() const;
+    void setPauseVideoWhenMinimizing(bool enable);
+
+    bool pauseAudioWhenMinimizing() const;
+    void setPauseAudioWhenMinimizing(bool enable);
+
 private:
     QSettings settings_;
 

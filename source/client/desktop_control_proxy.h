@@ -47,6 +47,8 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& desktop_config);
     void setCurrentScreen(const proto::Screen& screen);
     void setPreferredSize(int width, int height);
+    void setVideoPause(bool enable);
+    void setAudioPause(bool enable);
     void setVideoRecording(bool enable, const std::filesystem::path& file_path);
     void onKeyEvent(const proto::KeyEvent& event);
     void onTextEvent(const proto::TextEvent& event);

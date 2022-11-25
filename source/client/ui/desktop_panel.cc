@@ -55,15 +55,20 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
             onChangeResolutionAction(action);
     });
 
-    ui.action_autoscroll->setChecked(settings_.autoScrolling());
+    DesktopSettings settings;
 
-    scale_ = settings_.scale();
+    ui.action_autoscroll->setChecked(settings.autoScrolling());
+
+    scale_ = settings.scale();
 
     // Sending key combinations is available only in desktop management.
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        ui.action_send_key_combinations->setChecked(settings_.sendKeyCombinations());
+        ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
     else
         ui.action_send_key_combinations->setChecked(false);
+
+    ui.action_pause_video->setChecked(settings.pauseVideoWhenMinimizing());
+    ui.action_pause_audio->setChecked(settings.pauseAudioWhenMinimizing());
 
     connect(ui.action_settings, &QAction::triggered, this, &DesktopPanel::settingsButton);
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
@@ -98,7 +103,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
         emit startSession(proto::SESSION_TYPE_TEXT_CHAT);
     });
 
-    bool is_pinned = settings_.isToolBarPinned();
+    bool is_pinned = settings.isToolBarPinned();
 
     ui.action_pin->setChecked(is_pinned);
     ui.toolbar->setVisible(is_pinned);
@@ -113,13 +118,16 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
 
 DesktopPanel::~DesktopPanel()
 {
-    settings_.setScale(scale_);
-    settings_.setAutoScrolling(ui.action_autoscroll->isChecked());
-    settings_.setToolBarPinned(ui.action_pin->isChecked());
+    DesktopSettings settings;
+    settings.setScale(scale_);
+    settings.setAutoScrolling(ui.action_autoscroll->isChecked());
+    settings.setToolBarPinned(ui.action_pin->isChecked());
+    settings.setPauseVideoWhenMinimizing(ui.action_pause_video->isChecked());
+    settings.setPauseAudioWhenMinimizing(ui.action_pause_audio->isChecked());
 
     // Save the parameter only for desktop management.
     if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE)
-        settings_.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
+        settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
 void DesktopPanel::enableScreenSelect(bool /* enable */)
@@ -190,6 +198,18 @@ void DesktopPanel::enableTaskManager(bool enable)
     ui.action_task_manager->setVisible(enable);
     ui.action_task_manager->setEnabled(enable);
     updateSize();
+}
+
+void DesktopPanel::enableVideoPauseFeature(bool enable)
+{
+    ui.action_pause_video->setVisible(enable);
+    ui.action_pause_video->setEnabled(enable);
+}
+
+void DesktopPanel::enableAudioPauseFeature(bool enable)
+{
+    ui.action_pause_audio->setVisible(enable);
+    ui.action_pause_audio->setEnabled(enable);
 }
 
 void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
@@ -339,6 +359,16 @@ bool DesktopPanel::isPanelHidden() const
 bool DesktopPanel::isPanelPinned() const
 {
     return ui.action_pin->isChecked();
+}
+
+bool DesktopPanel::isVideoPauseEnabled() const
+{
+    return ui.action_pause_video->isChecked();
+}
+
+bool DesktopPanel::isAudioPauseEnabled() const
+{
+    return ui.action_pause_audio->isChecked();
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -574,6 +604,9 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
         additional_menu_->addAction(ui.action_send_key_combinations);
 
+    additional_menu_->addAction(ui.action_pause_video);
+    additional_menu_->addAction(ui.action_pause_audio);
+
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
     additional_menu_->addSeparator();
@@ -646,6 +679,8 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
         emit scaleChanged();
     });
 
+    connect(ui.action_pause_video, &QAction::triggered, this, &DesktopPanel::videoPauseChanged);
+    connect(ui.action_pause_audio, &QAction::triggered, this, &DesktopPanel::audioPauseChanged);
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);

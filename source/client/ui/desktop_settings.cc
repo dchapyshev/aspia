@@ -30,6 +30,8 @@ const QString kSendKeyCombinationsParam = QStringLiteral("Desktop/SendKeyCombina
 const QString kRecordingPathParam = QStringLiteral("Desktop/RecordingPath");
 const QString kRecordSessionsParam = QStringLiteral("Desktop/RecordSessions");
 const QString kToolBarPinnedParam = QStringLiteral("Desktop/ToolBarPinned");
+const QString kPauseVideoParam = QStringLiteral("Desktop/PauseVideo");
+const QString kPauseAudioParam = QStringLiteral("Desktop/PauseAudio");
 
 } // namespace
 
@@ -117,6 +119,26 @@ bool DesktopSettings::isToolBarPinned() const
 void DesktopSettings::setToolBarPinned(bool enable)
 {
     settings_.setValue(kToolBarPinnedParam, enable);
+}
+
+bool DesktopSettings::pauseVideoWhenMinimizing() const
+{
+    return settings_.value(kPauseVideoParam, true).toBool();
+}
+
+void DesktopSettings::setPauseVideoWhenMinimizing(bool enable)
+{
+    settings_.setValue(kPauseVideoParam, enable);
+}
+
+bool DesktopSettings::pauseAudioWhenMinimizing() const
+{
+    return settings_.value(kPauseAudioParam, true).toBool();
+}
+
+void DesktopSettings::setPauseAudioWhenMinimizing(bool enable)
+{
+    settings_.setValue(kPauseAudioParam, enable);
 }
 
 } // namespace client

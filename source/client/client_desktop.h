@@ -58,6 +58,8 @@ public:
     void setDesktopConfig(const proto::DesktopConfig& config) override;
     void setCurrentScreen(const proto::Screen& screen) override;
     void setPreferredSize(int width, int height) override;
+    void setVideoPause(bool enable) override;
+    void setAudioPause(bool enable) override;
     void setVideoRecording(bool enable, const std::filesystem::path& file_path) override;
     void onKeyEvent(const proto::KeyEvent& event) override;
     void onTextEvent(const proto::TextEvent& event) override;
@@ -117,7 +119,11 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
 
     int64_t video_packet_count_ = 0;
+    int64_t video_pause_count_ = 0;
+    int64_t video_resume_count_ = 0;
     int64_t audio_packet_count_ = 0;
+    int64_t audio_pause_count_ = 0;
+    int64_t audio_resume_count_ = 0;
     uint32_t video_capturer_type_ = 0;
     TimePoint start_time_;
     TimePoint fps_time_;

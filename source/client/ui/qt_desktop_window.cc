@@ -116,6 +116,18 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
     connect(panel_, &DesktopPanel::showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
 
+    enable_video_pause_ = panel_->isVideoPauseEnabled();
+    connect(panel_, &DesktopPanel::videoPauseChanged, this, [this](bool enable)
+    {
+        enable_video_pause_ = enable;
+    });
+
+    enable_audio_pause_ = panel_->isAudioPauseEnabled();
+    connect(panel_, &DesktopPanel::audioPauseChanged, this, [this](bool enable)
+    {
+        enable_audio_pause_ = enable;
+    });
+
     connect(panel_, &DesktopPanel::screenSelected, this, [this](const proto::Screen& screen)
     {
         desktop_control_proxy_->setCurrentScreen(screen);
@@ -322,6 +334,8 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     panel_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
     panel_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
     panel_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
+    panel_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
+    panel_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
 }
 
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
@@ -497,8 +511,50 @@ void QtDesktopWindow::leaveEvent(QEvent* event)
 
 void QtDesktopWindow::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::WindowStateChange && isMinimized())
-        desktop_->userLeftFromWindow();
+    if (event->type() == QEvent::WindowStateChange)
+    {
+        bool is_minimized = isMinimized();
+
+        LOG(LS_INFO) << "Window minimized: " << is_minimized;
+
+        if (is_minimized)
+        {
+            if (enable_video_pause_)
+            {
+                desktop_control_proxy_->setVideoPause(true);
+                video_pause_last_ = true;
+            }
+
+            if (enable_audio_pause_)
+            {
+                desktop_control_proxy_->setAudioPause(true);
+                audio_pause_last_ = true;
+            }
+
+            desktop_->userLeftFromWindow();
+        }
+        else
+        {
+            if (enable_video_pause_ || video_pause_last_)
+            {
+                if (video_pause_last_)
+                {
+                    desktop_control_proxy_->setVideoPause(false);
+                    video_pause_last_ = false;
+                }
+            }
+
+            if (enable_audio_pause_ || audio_pause_last_)
+            {
+                if (audio_pause_last_)
+                {
+                    desktop_control_proxy_->setAudioPause(false);
+                    audio_pause_last_ = false;
+                }
+            }
+        }
+    }
+
     QWidget::changeEvent(event);
 }
 

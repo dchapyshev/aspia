@@ -757,7 +757,15 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
     for (int i = 0; i < list.screen_size(); ++i)
     {
         const proto::Screen& screen = list.screen(i);
-        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id() << ", title=" << screen.title();
+        const proto::Point& dpi = screen.dpi();
+        const proto::Point& position = screen.position();
+        const proto::Resolution& resolution = screen.resolution();
+
+        LOG(LS_INFO) << "Screen #" << i << ": id=" << screen.id()
+                     << " title=" << screen.title()
+                     << " dpi=" << dpi.x() << "x" << dpi.y()
+                     << " pos=" << position.x() << "x" << position.y()
+                     << " res=" << resolution.width() << "x" << resolution.height();
     }
 
     for (const auto& client : desktop_clients_)

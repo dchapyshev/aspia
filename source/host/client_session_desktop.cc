@@ -196,7 +196,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 {
     outgoing_message_->Clear();
 
-    if (frame && video_encoder_)
+    if (!is_video_paused_ && frame && video_encoder_)
     {
         DCHECK(scale_reducer_);
 
@@ -266,7 +266,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
 void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
 {
-    if (!audio_encoder_)
+    if (is_audio_paused_ || !audio_encoder_)
         return;
 
     outgoing_message_->Clear();
@@ -333,6 +333,14 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     else if (extension.name() == common::kPreferredSizeExtension)
     {
         readPreferredSizeExtension(extension.data());
+    }
+    else if (extension.name() == common::kVideoPauseExtension)
+    {
+        readVideoPauseExtension(extension.data());
+    }
+    else if (extension.name() == common::kAudioPauseExtension)
+    {
+        readAudioPauseExtension(extension.data());
     }
     else if (extension.name() == common::kPowerControlExtension)
     {
@@ -477,6 +485,45 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 
     preferred_size_.set(preferred_size.width(), preferred_size.height());
     desktop_session_proxy_->captureScreen();
+}
+
+void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
+{
+    proto::Pause pause;
+
+    if (!pause.ParseFromString(data))
+    {
+        LOG(LS_ERROR) << "Unable to parse video pause extension data";
+        return;
+    }
+
+    is_video_paused_ = pause.enable();
+    LOG(LS_INFO) << "Video paused: " << is_video_paused_;
+
+    if (!is_video_paused_)
+    {
+        if (!video_encoder_)
+        {
+            LOG(LS_WARNING) << "Video encoder not initialized";
+            return;
+        }
+
+        video_encoder_->setKeyFrameRequired(true);
+    }
+}
+
+void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
+{
+    proto::Pause pause;
+
+    if (!pause.ParseFromString(data))
+    {
+        LOG(LS_ERROR) << "Unable to parse pause extension data";
+        return;
+    }
+
+    is_audio_paused_ = pause.enable();
+    LOG(LS_INFO) << "Audio paused: " << is_audio_paused_;
 }
 
 void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
