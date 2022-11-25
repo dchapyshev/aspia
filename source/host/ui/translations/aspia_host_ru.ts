@@ -278,28 +278,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="222"/>
-        <location filename="../host_main.cc" line="241"/>
+        <location filename="../host_main.cc" line="225"/>
+        <location filename="../host_main.cc" line="244"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="223"/>
+        <location filename="../host_main.cc" line="226"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="242"/>
+        <location filename="../host_main.cc" line="245"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="277"/>
+        <location filename="../host_main.cc" line="280"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="278"/>
+        <location filename="../host_main.cc" line="281"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Версия приложения: %1.%2.%3.%4.</translation>
     </message>
