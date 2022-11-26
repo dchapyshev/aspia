@@ -52,14 +52,9 @@ jobs:
         export PATH="/usr/local/opt/flex/bin:$PATH"
         export PATH="/usr/local/opt/bison/bin:$PATH"
         export PATH="/usr/local/opt/gcc/bin:$PATH"
-        ./sw -static build source -k 10 -sfc
-    - name: build
-      run: |
-        export PATH="/usr/local/opt/flex/bin:$PATH"
-        export PATH="/usr/local/opt/bison/bin:$PATH"
-        export PATH="/usr/local/opt/gcc/bin:$PATH"
-        ./sw -static build source -sfc
-    - uses: actions/upload-artifact@v3
+        ./sw -static build source
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v3
       with:
         name: sw-macos
         path: .sw/out
