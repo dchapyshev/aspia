@@ -47,7 +47,6 @@ jobs:
     - name: install
       run: brew install flex bison gcc
     - name: build
-      continue-on-error: true
       run: |
         export PATH="/usr/local/opt/flex/bin:$PATH"
         export PATH="/usr/local/opt/bison/bin:$PATH"
