@@ -24,15 +24,21 @@
 
 namespace client {
 
+namespace {
+
+const size_t kNumberOfParallelTasks = 10;
+
+} // namespace
+
 class OnlineCheckerDirect::Instance : public base::NetworkChannel::Listener
 {
 public:
-    Instance();
+    Instance(int computer_id, const std::u16string& address, uint16_t port);
     ~Instance() override;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
 
-    void start(const std::u16string& address, uint16_t port, FinishCallback finish_callback);
+    void start(FinishCallback finish_callback);
 
 protected:
     void onConnected() override;
@@ -41,9 +47,41 @@ protected:
     void onMessageWritten(size_t pending) override;
 
 private:
-    int computer_id_;
+    void onFinished(bool online);
+
+    const int computer_id_;
+    const std::u16string address_;
+    const uint16_t port_;
+
+    FinishCallback finish_callback_;
     std::unique_ptr<base::NetworkChannel> channel_;
 };
+
+OnlineCheckerDirect::Instance::Instance(
+    int computer_id, const std::u16string& address, uint16_t port)
+    : computer_id_(computer_id),
+      address_(address),
+      port_(port)
+{
+    // Nothing
+}
+
+OnlineCheckerDirect::Instance::~Instance()
+{
+    finish_callback_ = nullptr;
+    channel_->setListener(nullptr);
+    channel_.reset();
+}
+
+void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
+{
+    finish_callback_ = std::move(finish_callback);
+    DCHECK(finish_callback_);
+
+    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_->setListener(this);
+    channel_->connect(address_, port_);
+}
 
 void OnlineCheckerDirect::Instance::onConnected()
 {
@@ -52,12 +90,13 @@ void OnlineCheckerDirect::Instance::onConnected()
     message.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
     message.set_identify(proto::IDENTIFY_SRP);
 
+    channel_->setNoDelay(true);
     channel_->send(base::serialize(message));
 }
 
-void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
 {
-
+    onFinished(false);
 }
 
 void OnlineCheckerDirect::Instance::onMessageReceived(const base::ByteArray& buffer)
@@ -73,11 +112,14 @@ void OnlineCheckerDirect::Instance::onMessageReceived(const base::ByteArray& buf
     switch (message.encryption())
     {
         case proto::ENCRYPTION_CHACHA20_POLY1305:
-            break;
+        {
+            onFinished(true);
+        }
+        break;
 
         default:
         {
-            LOG(LS_WARNING) << "Invalid encrition method: " << message.encryption();
+            LOG(LS_WARNING) << "Invalid encryption method: " << message.encryption();
         }
         return;
     }
@@ -88,6 +130,15 @@ void OnlineCheckerDirect::Instance::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
+void OnlineCheckerDirect::Instance::onFinished(bool online)
+{
+    if (finish_callback_)
+    {
+        finish_callback_(computer_id_, online);
+        finish_callback_ = nullptr;
+    }
+}
+
 OnlineCheckerDirect::OnlineCheckerDirect()
 {
     LOG(LS_INFO) << "Ctor";
@@ -96,30 +147,69 @@ OnlineCheckerDirect::OnlineCheckerDirect()
 OnlineCheckerDirect::~OnlineCheckerDirect()
 {
     LOG(LS_INFO) << "Dtor";
+
+    delegate_ = nullptr;
+    pending_queue_.clear();
+    work_queue_.clear();
 }
 
 void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegate)
 {
-    computers_ = computers;
+    pending_queue_ = computers;
     delegate_ = delegate;
     DCHECK(delegate_);
 
-    if (computers_.empty())
+    if (pending_queue_.empty())
     {
         LOG(LS_INFO) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
+
+    size_t count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
+    while (count != 0)
+    {
+        const Computer& computer = pending_queue_.front();
+        std::unique_ptr<Instance> instance =
+            std::make_unique<Instance>(computer.computer_id, computer.address, computer.port);
+
+        work_queue_.emplace_back(std::move(instance));
+        pending_queue_.pop_front();
+    }
+
+    for (const auto& task : work_queue_)
+    {
+        task->start(std::bind(&OnlineCheckerDirect::onChecked, this,
+                              std::placeholders::_1, std::placeholders::_2));
+    }
+}
+
+void OnlineCheckerDirect::onChecked(int computer_id, bool online)
+{
+    if (delegate_)
+        delegate_->onDirectCheckerResult(computer_id, online);
+
+    if (pending_queue_.empty())
+    {
+        onFinished(FROM_HERE);
+        return;
+    }
+
+    const Computer& computer = pending_queue_.front();
+    std::unique_ptr<Instance> instance =
+        std::make_unique<Instance>(computer.computer_id, computer.address, computer.port);
+
+    work_queue_.emplace_back(std::move(instance));
+    work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
+                                        std::placeholders::_1, std::placeholders::_2));
+    pending_queue_.pop_front();
 }
 
 void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
-
-    for (const auto& computer : computers_)
-        delegate_->onDirectCheckerResult(computer.computer_id, false);
-
-    delegate_->onDirectCheckerFinished();
+    if (delegate_)
+        delegate_->onDirectCheckerFinished();
 }
 
 } // namespace client

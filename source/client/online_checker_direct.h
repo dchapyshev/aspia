@@ -49,18 +49,21 @@ public:
     {
         int computer_id = -1;
         std::u16string address;
+        uint16_t port = 0;
     };
     using ComputerList = std::deque<Computer>;
 
     void start(const ComputerList& computers, Delegate* delegate);
 
 private:
+    void onChecked(int computer_id, bool online);
     void onFinished(const base::Location& location);
 
-    ComputerList computers_;
+    ComputerList pending_queue_;
     Delegate* delegate_ = nullptr;
 
     class Instance;
+    std::deque<std::unique_ptr<Instance>> work_queue_;
 };
 
 } // namespace client
