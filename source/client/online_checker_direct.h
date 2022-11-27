@@ -30,7 +30,7 @@ class Location;
 
 namespace client {
 
-class OnlineCheckerDirect : public base::NetworkChannel::Listener
+class OnlineCheckerDirect
 {
 public:
     OnlineCheckerDirect();

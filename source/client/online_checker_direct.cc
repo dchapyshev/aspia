@@ -26,7 +26,7 @@ namespace client {
 
 namespace {
 
-const size_t kNumberOfParallelTasks = 10;
+const size_t kNumberOfParallelTasks = 30;
 
 } // namespace
 

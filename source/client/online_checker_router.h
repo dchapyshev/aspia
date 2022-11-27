@@ -20,7 +20,6 @@
 #define CLIENT_ONLINE_CHECKER_ROUTER_H
 
 #include "base/net/network_channel.h"
-#include "base/peer/authenticator.h"
 #include "client/router_config.h"
 
 #include <deque>
@@ -28,6 +27,7 @@
 namespace base {
 class ClientAuthenticator;
 class Location;
+class TaskRunner;
 } // namespace base
 
 namespace client {

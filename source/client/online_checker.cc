@@ -19,6 +19,8 @@
 #include "client/online_checker.h"
 
 #include "base/logging.h"
+#include "base/net/address.h"
+#include "base/peer/host_id.h"
 
 namespace client {
 
@@ -27,8 +29,6 @@ OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(ui_task_runner_);
-
-    io_thread_.start(base::MessageLoop::Type::ASIO, this);
 }
 
 OnlineChecker::~OnlineChecker()
@@ -37,17 +37,35 @@ OnlineChecker::~OnlineChecker()
     io_thread_.stop();
 }
 
-void OnlineChecker::checkComputers(ComputerList computers)
+void OnlineChecker::checkComputers(const RouterConfig& router_config, const ComputerList& computers)
 {
-    cancelAll();
+    router_config_ = router_config;
 
-    std::scoped_lock lock(computers_lock_);
-    computers_ = computers;
-}
+    for (const auto& computer : computers)
+    {
+        if (base::isHostId(computer.address_or_id))
+        {
+            OnlineCheckerRouter::Computer router_computer;
+            router_computer.computer_id = computer.computer_id;
+            router_computer.host_id = base::stringToHostId(computer.address_or_id);
 
-void OnlineChecker::cancelAll()
-{
+            router_computers_.emplace_back(router_computer);
+        }
+        else
+        {
+            base::Address address =
+                base::Address::fromString(computer.address_or_id, DEFAULT_HOST_TCP_PORT);
 
+            OnlineCheckerDirect::Computer direct_computer;
+            direct_computer.computer_id = computer.computer_id;
+            direct_computer.address = address.host();
+            direct_computer.port = address.port();
+
+            direct_computers_.emplace_back(direct_computer);
+        }
+    }
+
+    io_thread_.start(base::MessageLoop::Type::ASIO, this);
 }
 
 void OnlineChecker::onBeforeThreadRunning()
@@ -56,10 +74,17 @@ void OnlineChecker::onBeforeThreadRunning()
 
     io_task_runner_ = io_thread_.taskRunner();
     DCHECK(io_task_runner_);
+
+    router_checker_ = std::make_unique<OnlineCheckerRouter>(router_config_, io_task_runner_);
+    router_checker_->start(router_computers_, this);
+
+    direct_checker_ = std::make_unique<OnlineCheckerDirect>();
+    direct_checker_->start(direct_computers_, this);
 }
 
 void OnlineChecker::onAfterThreadRunning()
 {
+    delegate_ = nullptr;
     direct_checker_.reset();
     router_checker_.reset();
 
@@ -68,7 +93,8 @@ void OnlineChecker::onAfterThreadRunning()
 
 void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 {
-    delegate_->onOnlineCheckerResult(computer_id, online);
+    if (delegate_)
+        delegate_->onOnlineCheckerResult(computer_id, online);
 }
 
 void OnlineChecker::onDirectCheckerFinished()
@@ -78,7 +104,8 @@ void OnlineChecker::onDirectCheckerFinished()
 
 void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 {
-    delegate_->onOnlineCheckerResult(computer_id, online);
+    if (delegate_)
+        delegate_->onOnlineCheckerResult(computer_id, online);
 }
 
 void OnlineChecker::onRouterCheckerFinished()

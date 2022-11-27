@@ -50,13 +50,12 @@ public:
 
     struct Computer
     {
-        int computer_number = -1;
+        int computer_id = -1;
         std::u16string address_or_id;
     };
     using ComputerList = std::vector<Computer>;
 
-    void checkComputers(ComputerList computers);
-    void cancelAll();
+    void checkComputers(const RouterConfig& router_config, const ComputerList& computers);
 
 protected:
     // base::Thread::Delegate implementation.
@@ -79,9 +78,9 @@ private:
     std::unique_ptr<OnlineCheckerDirect> direct_checker_;
     std::unique_ptr<OnlineCheckerRouter> router_checker_;
 
-    ComputerList computers_;
-    std::mutex computers_lock_;
-
+    RouterConfig router_config_;
+    OnlineCheckerRouter::ComputerList router_computers_;
+    OnlineCheckerDirect::ComputerList direct_computers_;
     Delegate* delegate_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(OnlineChecker);
