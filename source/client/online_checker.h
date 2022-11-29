@@ -20,6 +20,7 @@
 #define CLIENT_ONLINE_CHECKER_H
 
 #include "base/macros_magic.h"
+#include "base/scoped_task_runner.h"
 #include "base/threading/thread.h"
 #include "client/online_checker_direct.h"
 #include "client/online_checker_router.h"
@@ -73,7 +74,7 @@ protected:
 private:
     base::Thread io_thread_;
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::shared_ptr<base::TaskRunner> ui_task_runner_;
+    base::ScopedTaskRunner ui_task_runner_;
 
     std::unique_ptr<OnlineCheckerDirect> direct_checker_;
     std::unique_ptr<OnlineCheckerRouter> router_checker_;

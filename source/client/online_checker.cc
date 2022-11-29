@@ -28,7 +28,6 @@ OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
     : ui_task_runner_(std::move(ui_task_runner))
 {
     LOG(LS_INFO) << "Ctor";
-    DCHECK(ui_task_runner_);
 }
 
 OnlineChecker::~OnlineChecker()
@@ -93,8 +92,11 @@ void OnlineChecker::onAfterThreadRunning()
 
 void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 {
-    if (delegate_)
-        delegate_->onOnlineCheckerResult(computer_id, online);
+    ui_task_runner_.postTask([=]()
+    {
+        if (delegate_)
+            delegate_->onOnlineCheckerResult(computer_id, online);
+    });
 }
 
 void OnlineChecker::onDirectCheckerFinished()
@@ -104,8 +106,11 @@ void OnlineChecker::onDirectCheckerFinished()
 
 void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 {
-    if (delegate_)
-        delegate_->onOnlineCheckerResult(computer_id, online);
+    ui_task_runner_.postTask([=]()
+    {
+        if (delegate_)
+            delegate_->onOnlineCheckerResult(computer_id, online);
+    });
 }
 
 void OnlineChecker::onRouterCheckerFinished()
