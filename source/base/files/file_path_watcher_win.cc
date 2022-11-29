@@ -321,7 +321,10 @@ bool FilePathWatcherImpl::updateWatch()
         if (temp_handle == INVALID_HANDLE_VALUE)
             break;
 
-        FindCloseChangeNotification(handle_);
+        if (!FindCloseChangeNotification(handle_))
+        {
+            PLOG(LS_WARNING) << "FindCloseChangeNotification failed";
+        }
         handle_ = temp_handle;
     }
 
@@ -332,7 +335,10 @@ void FilePathWatcherImpl::destroyWatch()
 {
     watcher_.stopWatching();
 
-    FindCloseChangeNotification(handle_);
+    if (!FindCloseChangeNotification(handle_))
+    {
+        PLOG(LS_WARNING) << "FindCloseChangeNotification failed";
+    }
     handle_ = INVALID_HANDLE_VALUE;
 }
 
