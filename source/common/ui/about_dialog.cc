@@ -24,7 +24,12 @@
 #include "ui_about_dialog.h"
 
 #include <QDesktopServices>
+#include <QFile>
+#include <QFileDialog>
+#include <QMenu>
+#include <QMessageBox>
 #include <QScreen>
+#include <QTextStream>
 
 #include <asio/version.hpp>
 #include <google/protobuf/stubs/common.h>
@@ -144,6 +149,10 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     QListWidget* list = ui->list_service;
 
+    list->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(list, &QListWidget::customContextMenuRequested,
+            this, &AboutDialog::onServiceContextMenu);
+
     list->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
     list->addItem(tr("Compilation date: %1").arg(__DATE__));
     list->addItem(tr("Compilation time: %1").arg(__TIME__));
@@ -227,6 +236,44 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 AboutDialog::~AboutDialog()
 {
     LOG(LS_INFO) << "Dtor";
+}
+
+void AboutDialog::onServiceContextMenu(const QPoint& pos)
+{
+    QMenu menu;
+
+    QAction* save_action = menu.addAction(tr("Save to file..."));
+
+    if (menu.exec(ui->list_service->viewport()->mapToGlobal(pos)) == save_action)
+    {
+        QString selected_filter;
+        QString file_path = QFileDialog::getSaveFileName(this,
+                                                         tr("Save File"),
+                                                         QString(),
+                                                         tr("TXT files (*.txt)"),
+                                                         &selected_filter);
+        if (file_path.isEmpty() || selected_filter.isEmpty())
+            return;
+
+        QFile file(file_path);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Could not open file for writing."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
+        QListWidget* list = ui->list_service;
+        QTextStream stream(&file);
+
+        for (int i = 0; i < list->count(); ++i)
+        {
+            QListWidgetItem* item = list->item(i);
+            stream << item->text() << Qt::endl;
+        }
+    }
 }
 
 } // namespace common

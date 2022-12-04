@@ -265,6 +265,26 @@
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Save to file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="unfinished">儲存檔案</translation>
+    </message>
+    <message>
+        <source>TXT files (*.txt)</source>
+        <translation type="unfinished">TXT 檔案 (*.txt)</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <source>Could not open file for writing.</source>
+        <translation type="unfinished">無法開啟檔案進行寫入。</translation>
+    </message>
 </context>
 <context>
     <name>common::DownloadDialog</name>
