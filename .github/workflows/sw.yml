@@ -14,14 +14,14 @@ jobs:
     #- name: test
       #run: ./sw test source
     - name: Upload Binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: sw-windows
         path: .sw/out
 
   linux:
-    runs-on: ubuntu-20.04
-    container: fedora:36
+    runs-on: ubuntu-22.04
+    container: fedora:37
     steps:
     - uses: actions/checkout@v1
     - name: prepare
@@ -34,7 +34,7 @@ jobs:
     - uses: egorpugin/sw-action@master
     - run: ./sw -static build source -compiler gcc
     - name: Upload Binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: sw-linux
         path: .sw/out
@@ -52,7 +52,8 @@ jobs:
         export PATH="/usr/local/opt/bison/bin:$PATH"
         export PATH="/usr/local/opt/gcc/bin:$PATH"
         ./sw -static build source
-    - uses: actions/upload-artifact@v1
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v3
       with:
         name: sw-macos
         path: .sw/out
