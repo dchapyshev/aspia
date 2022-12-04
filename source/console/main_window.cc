@@ -112,6 +112,9 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_delete_computer_group, &QAction::triggered,
             this, &MainWindow::onDeleteComputerGroup);
 
+    connect(ui.action_update_status, &QAction::triggered,
+            this, &MainWindow::onUpdateStatus);
+
     connect(ui.action_online_help, &QAction::triggered, this, &MainWindow::onOnlineHelp);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
@@ -463,6 +466,18 @@ void MainWindow::onDeleteComputerGroup()
         tab->removeComputerGroup();
 }
 
+void MainWindow::onUpdateStatus()
+{
+    AddressBookTab* tab = currentAddressBookTab();
+    if (!tab)
+    {
+        LOG(LS_ERROR) << "No active tab";
+        return;
+    }
+
+    tab->startOnlineChecker();
+}
+
 void MainWindow::onOnlineHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
@@ -587,7 +602,21 @@ void MainWindow::onCurrentTabChanged(int index)
         ui.action_add_computer->setEnabled(false);
         ui.action_fast_connect->setEnabled(false);
         ui.action_router_manage->setEnabled(false);
+        ui.action_update_status->setEnabled(false);
         return;
+    }
+
+    for (int i = 0; i < ui.tab_widget->count(); ++i)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
+        if (tab)
+        {
+            if (index != i)
+                tab->stopOnlineChecker();
+
+            if (tab->isChanged())
+                ui.action_save_all->setEnabled(true);
+        }
     }
 
     AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
@@ -617,6 +646,8 @@ void MainWindow::onCloseTab(int index)
     AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(index));
     if (!tab)
         return;
+
+    tab->stopOnlineChecker();
 
     if (mru_.isPinnedFile(tab->filePath()))
         return;
@@ -692,6 +723,7 @@ void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
 {
     ui.action_add_computer_group->setEnabled(activated);
     ui.action_add_computer->setEnabled(activated);
+    ui.action_update_status->setEnabled(activated);
 
     ui.action_copy_computer->setEnabled(false);
     ui.action_modify_computer->setEnabled(false);
@@ -1191,6 +1223,8 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &MainWindow::onComputerContextMenu);
     connect(new_tab, &AddressBookTab::computerDoubleClicked,
             this, &MainWindow::onComputerDoubleClicked);
+    connect(new_tab, &AddressBookTab::updateStateForComputers,
+            ui.status_bar, &StatusBar::setUpdateState);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
         QIcon(QStringLiteral(":/img/address-book-pinned.png")) :

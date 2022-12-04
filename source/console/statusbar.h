@@ -22,7 +22,9 @@
 #include "base/macros_magic.h"
 #include "proto/address_book.pb.h"
 
+#include <QLabel>
 #include <QStatusBar>
+#include <QTimer>
 
 namespace console {
 
@@ -37,7 +39,13 @@ public:
     void setCurrentComputerGroup(const proto::address_book::ComputerGroup& computer_group);
     void clear();
 
+    void setUpdateState(bool enable);
+
 private:
+    QTimer* animation_timer_;
+    int animation_index_ = 0;
+    QLabel* status_label_ = nullptr;
+
     DISALLOW_COPY_AND_ASSIGN(StatusBar);
 };
 

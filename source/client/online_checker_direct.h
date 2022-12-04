@@ -19,13 +19,13 @@
 #ifndef CLIENT_ONLINE_CHECKER_DIRECT_H
 #define CLIENT_ONLINE_CHECKER_DIRECT_H
 
-#include "base/net/network_channel.h"
-
 #include <deque>
+#include <memory>
 #include <string>
 
 namespace base {
 class Location;
+class TaskRunner;
 } // namespace base
 
 namespace client {
@@ -33,7 +33,7 @@ namespace client {
 class OnlineCheckerDirect
 {
 public:
-    OnlineCheckerDirect();
+    explicit OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_runner);
     ~OnlineCheckerDirect();
 
     class Delegate
@@ -59,6 +59,7 @@ private:
     void onChecked(int computer_id, bool online);
     void onFinished(const base::Location& location);
 
+    std::shared_ptr<base::TaskRunner> task_runner_;
     ComputerList pending_queue_;
     Delegate* delegate_ = nullptr;
 

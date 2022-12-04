@@ -25,6 +25,7 @@
 #include "client/online_checker_direct.h"
 #include "client/online_checker_router.h"
 
+#include <optional>
 #include <mutex>
 #include <string>
 #include <vector>
@@ -47,6 +48,7 @@ public:
         virtual ~Delegate() = default;
 
         virtual void onOnlineCheckerResult(int computer_id, bool online) = 0;
+        virtual void onOnlineCheckerFinished() = 0;
     };
 
     struct Computer
@@ -56,7 +58,9 @@ public:
     };
     using ComputerList = std::vector<Computer>;
 
-    void checkComputers(const RouterConfig& router_config, const ComputerList& computers);
+    void checkComputers(const std::optional<RouterConfig>& router_config,
+                        const ComputerList& computers,
+                        Delegate* delegate);
 
 protected:
     // base::Thread::Delegate implementation.
@@ -79,10 +83,13 @@ private:
     std::unique_ptr<OnlineCheckerDirect> direct_checker_;
     std::unique_ptr<OnlineCheckerRouter> router_checker_;
 
-    RouterConfig router_config_;
+    std::optional<RouterConfig> router_config_;
     OnlineCheckerRouter::ComputerList router_computers_;
     OnlineCheckerDirect::ComputerList direct_computers_;
     Delegate* delegate_ = nullptr;
+
+    bool direct_finished_ = false;
+    bool router_finished_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(OnlineChecker);
 };

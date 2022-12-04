@@ -26,13 +26,25 @@
 
 namespace client {
 
+namespace {
+
+const std::chrono::seconds kTimeout { 30 };
+
+} // namespace
+
 OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config,
                                          std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
+    : task_runner_(task_runner),
+      timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
       router_config_(router_config)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(task_runner_);
+
+    timer_.start(kTimeout, [this]()
+    {
+        onFinished(FROM_HERE);
+    });
 }
 
 OnlineCheckerRouter::~OnlineCheckerRouter()

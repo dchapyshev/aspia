@@ -42,7 +42,8 @@ public:
         COLUMN_INDEX_ADDRESS   = 1,
         COLUMN_INDEX_COMMENT   = 2,
         COLUMN_INDEX_CREATED   = 3,
-        COLUMN_INDEX_MODIFIED  = 4
+        COLUMN_INDEX_MODIFIED  = 4,
+        COLUMN_INDEX_STATUS    = 5
     };
 
     proto::address_book::Computer* computer() { return computer_; }

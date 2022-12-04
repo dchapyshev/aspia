@@ -24,6 +24,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
 #include "base/strings/unicode.h"
+#include "client/online_checker.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_factory.h"
@@ -31,10 +32,12 @@
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
 #include "console/settings.h"
+#include "qt_base/application.h"
 
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
+#include <QTimer>
 
 namespace console {
 
@@ -263,6 +266,7 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         break;
 
         default:
+            LOG(LS_ERROR) << "Unexpected encryption type: " << address_book_file.encryption_type();
             break;
     }
 
@@ -366,6 +370,8 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
 
 void AddressBookTab::addComputerGroup()
 {
+    stopOnlineChecker();
+
     ComputerGroupItem* parent_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!parent_item)
@@ -402,6 +408,8 @@ void AddressBookTab::addComputerGroup()
 
 void AddressBookTab::addComputer()
 {
+    stopOnlineChecker();
+
     ComputerGroupItem* parent_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!parent_item)
@@ -427,6 +435,8 @@ void AddressBookTab::addComputer()
 
 void AddressBookTab::copyComputer()
 {
+    stopOnlineChecker();
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return;
@@ -456,6 +466,8 @@ void AddressBookTab::copyComputer()
 
 void AddressBookTab::modifyAddressBook()
 {
+    stopOnlineChecker();
+
     ComputerGroupItem* root_item = rootComputerGroupItem();
     if (!root_item)
     {
@@ -473,6 +485,8 @@ void AddressBookTab::modifyAddressBook()
 
 void AddressBookTab::modifyComputerGroup()
 {
+    stopOnlineChecker();
+
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
@@ -511,6 +525,8 @@ void AddressBookTab::modifyComputerGroup()
 
 void AddressBookTab::modifyComputer()
 {
+    stopOnlineChecker();
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return;
@@ -529,6 +545,8 @@ void AddressBookTab::modifyComputer()
 
 void AddressBookTab::removeComputerGroup()
 {
+    stopOnlineChecker();
+
     ComputerGroupItem* current_item =
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
@@ -561,6 +579,8 @@ void AddressBookTab::removeComputerGroup()
 
 void AddressBookTab::removeComputer()
 {
+    stopOnlineChecker();
+
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return;
@@ -588,6 +608,51 @@ void AddressBookTab::removeComputer()
             setChanged(true);
         }
     }
+}
+
+void AddressBookTab::startOnlineChecker()
+{
+    stopOnlineChecker();
+
+    client::OnlineChecker::ComputerList computers;
+
+    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    {
+        ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
+
+        client::OnlineChecker::Computer computer;
+        computer.computer_id = i;
+        computer.address_or_id = base::utf16FromUtf8(computer_item->computer()->address());
+
+        computers.emplace_back(std::move(computer));
+    }
+
+    if (computers.empty())
+    {
+        LOG(LS_INFO) << "No computers to check";
+        return;
+    }
+
+    emit updateStateForComputers(true);
+
+    online_checker_ = std::make_unique<client::OnlineChecker>(qt_base::Application::uiTaskRunner());
+    online_checker_->checkComputers(routerConfig(), computers, this);
+}
+
+void AddressBookTab::stopOnlineChecker()
+{
+    online_checker_.reset();
+
+    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    {
+        ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
+
+        computer_item->setIcon(ComputerItem::COLUMN_INDEX_NAME,
+                               QIcon(QStringLiteral(":/img/computer.png")));
+        computer_item->setText(ComputerItem::COLUMN_INDEX_STATUS, QString());
+    }
+
+    emit updateStateForComputers(false);
 }
 
 void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
@@ -767,6 +832,42 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
+void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
+{
+    QTreeWidgetItem* item = ui.tree_computer->topLevelItem(computer_id);
+    if (!item)
+    {
+        LOG(LS_WARNING) << "Computer '" << computer_id << "' not found";
+        return;
+    }
+
+    QIcon icon;
+    QString status;
+
+    if (online)
+    {
+        icon = QIcon(QStringLiteral(":/img/computer-online.png"));
+        status = tr("Online");
+    }
+    else
+    {
+        icon = QIcon(QStringLiteral(":/img/computer-offline.png"));
+        status = tr("Offline");
+    }
+
+    item->setIcon(ComputerItem::COLUMN_INDEX_NAME, icon);
+    item->setText(ComputerItem::COLUMN_INDEX_STATUS, status);
+}
+
+void AddressBookTab::onOnlineCheckerFinished()
+{
+    QTimer::singleShot(0, this, [this]()
+    {
+        online_checker_.reset();
+        emit updateStateForComputers(false);
+    });
+}
+
 void AddressBookTab::setChanged(bool value)
 {
     is_changed_ = value;
@@ -832,6 +933,8 @@ void AddressBookTab::restoreState(const QByteArray& state)
 
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
+    online_checker_.reset();
+
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)
         std::unique_ptr<QTreeWidgetItem> item_deleter(ui.tree_computer->takeTopLevelItem(i));
 

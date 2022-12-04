@@ -54,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>21</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -137,6 +137,8 @@
     <addaction name="action_minimize_to_tray"/>
     <addaction name="separator"/>
     <addaction name="action_show_icons_in_menus"/>
+    <addaction name="separator"/>
+    <addaction name="action_update_status"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -176,6 +178,8 @@
    <addaction name="separator"/>
    <addaction name="action_fast_connect"/>
    <addaction name="action_router_manage"/>
+   <addaction name="separator"/>
+   <addaction name="action_update_status"/>
    <addaction name="separator"/>
    <addaction name="action_address_book_properties"/>
    <addaction name="action_add_computer_group"/>
@@ -639,6 +643,24 @@
    </property>
    <property name="toolTip">
     <string>Text Chat</string>
+   </property>
+  </action>
+  <action name="action_update_status">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../client/resources/client.qrc">
+     <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update Status</string>
+   </property>
+   <property name="toolTip">
+    <string>Update the status of computers in the list</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>

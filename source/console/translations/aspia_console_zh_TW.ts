@@ -82,6 +82,10 @@
         <source>Modified</source>
         <translation>修改時間</translation>
     </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ComputerDialog</name>
@@ -607,6 +611,18 @@
         <source>F8</source>
         <translation type="unfinished">F8</translation>
     </message>
+    <message>
+        <source>Update Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update the status of computers in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F5</source>
+        <translation type="unfinished">F5</translation>
+    </message>
 </context>
 <context>
     <name>FastConnectDialog</name>
@@ -856,6 +872,14 @@
     </message>
     <message>
         <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1202,6 +1226,10 @@
         <translation>
             <numerusform>%n 個子電腦</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Status update...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -61,6 +61,12 @@
         <file>control-record.png</file>
         <file>control-stop.png</file>
         <file>task-manager.png</file>
+        <file>computer-online.png</file>
+        <file>computer-offline.png</file>
+        <file>arrow-circle.png</file>
+        <file>arrow-circle-135.png</file>
+        <file>arrow-circle-225.png</file>
+        <file>arrow-circle-315.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>

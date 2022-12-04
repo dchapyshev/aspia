@@ -68,6 +68,7 @@ private slots:
     void onAddComputerGroup();
     void onModifyComputerGroup();
     void onDeleteComputerGroup();
+    void onUpdateStatus();
     void onOnlineHelp();
     void onCheckUpdates();
     void onAbout();

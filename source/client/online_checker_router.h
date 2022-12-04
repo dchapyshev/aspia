@@ -19,6 +19,7 @@
 #ifndef CLIENT_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ROUTER_H
 
+#include "base/waitable_timer.h"
 #include "base/net/network_channel.h"
 #include "client/router_config.h"
 
@@ -71,6 +72,7 @@ private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::NetworkChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
+    base::WaitableTimer timer_;
     RouterConfig router_config_;
 
     ComputerList computers_;

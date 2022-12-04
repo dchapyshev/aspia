@@ -36,9 +36,15 @@ OnlineChecker::~OnlineChecker()
     io_thread_.stop();
 }
 
-void OnlineChecker::checkComputers(const RouterConfig& router_config, const ComputerList& computers)
+void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
+                                   const ComputerList& computers,
+                                   Delegate* delegate)
 {
+    LOG(LS_INFO) << "Start online checker (total computers: " << computers.size() << ")";
+
     router_config_ = router_config;
+    delegate_ = delegate;
+    DCHECK(delegate_);
 
     for (const auto& computer : computers)
     {
@@ -74,11 +80,39 @@ void OnlineChecker::onBeforeThreadRunning()
     io_task_runner_ = io_thread_.taskRunner();
     DCHECK(io_task_runner_);
 
-    router_checker_ = std::make_unique<OnlineCheckerRouter>(router_config_, io_task_runner_);
-    router_checker_->start(router_computers_, this);
+    if (router_config_.has_value())
+    {
+        if (!router_computers_.empty())
+        {
+            LOG(LS_INFO) << "Computers for ROUTER checking: " << router_computers_.size();
 
-    direct_checker_ = std::make_unique<OnlineCheckerDirect>();
-    direct_checker_->start(direct_computers_, this);
+            router_checker_ = std::make_unique<OnlineCheckerRouter>(*router_config_, io_task_runner_);
+            router_checker_->start(router_computers_, this);
+        }
+        else
+        {
+            LOG(LS_INFO) << "Computer list for ROUTER is empty";
+            router_finished_ = true;
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "No router config";
+        router_finished_ = true;
+    }
+
+    if (!direct_computers_.empty())
+    {
+        LOG(LS_INFO) << "Computers for DIRECT checking: " << direct_computers_.size();
+
+        direct_checker_ = std::make_unique<OnlineCheckerDirect>(io_task_runner_);
+        direct_checker_->start(direct_computers_, this);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Computer list for DIRECT is empty";
+        direct_finished_ = true;
+    }
 }
 
 void OnlineChecker::onAfterThreadRunning()
@@ -94,28 +128,72 @@ void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 {
     ui_task_runner_.postTask([=]()
     {
-        if (delegate_)
-            delegate_->onOnlineCheckerResult(computer_id, online);
+        LOG(LS_INFO) << "Computer '" << computer_id << "' checked: " << online;
+
+        if (!delegate_)
+        {
+            LOG(LS_WARNING) << "Invalid delegate";
+            return;
+        }
+
+        delegate_->onOnlineCheckerResult(computer_id, online);
     });
 }
 
 void OnlineChecker::onDirectCheckerFinished()
 {
-    io_task_runner_->deleteSoon(std::move(direct_checker_));
+    LOG(LS_INFO) << "DIRECT checker finished";
+    direct_finished_ = true;
+
+    if (direct_finished_ && router_finished_)
+    {
+        ui_task_runner_.postTask([this]()
+        {
+            if (!delegate_)
+            {
+                LOG(LS_WARNING) << "Invalid delegate";
+                return;
+            }
+
+            delegate_->onOnlineCheckerFinished();
+        });
+    }
 }
 
 void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 {
     ui_task_runner_.postTask([=]()
     {
-        if (delegate_)
-            delegate_->onOnlineCheckerResult(computer_id, online);
+        LOG(LS_INFO) << "Computer '" << computer_id << "' checked: " << online;
+
+        if (!delegate_)
+        {
+            LOG(LS_WARNING) << "Invalid delegate";
+            return;
+        }
+
+        delegate_->onOnlineCheckerResult(computer_id, online);
     });
 }
 
 void OnlineChecker::onRouterCheckerFinished()
 {
-    io_task_runner_->deleteSoon(std::move(router_checker_));
+    LOG(LS_INFO) << "RELAY checker finished";
+    router_finished_ = true;
+
+    if (direct_finished_ && router_finished_)
+    {
+        ui_task_runner_.postTask([this]()
+        {
+            if (!delegate_)
+            {
+                LOG(LS_WARNING) << "Invalid delegate";
+                return;
+            }
+
+            delegate_->onOnlineCheckerFinished();
+        });
+    }
 }
 
 } // namespace client

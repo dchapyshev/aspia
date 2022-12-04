@@ -20,17 +20,21 @@
 #define CONSOLE_ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
+#include "client/online_checker.h"
 #include "client/router_config.h"
 #include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
 #include <optional>
+#include <memory>
 
 namespace console {
 
 class ComputerItem;
 
-class AddressBookTab : public QWidget
+class AddressBookTab
+    : public QWidget,
+      public client::OnlineChecker::Delegate
 {
     Q_OBJECT
 
@@ -53,7 +57,7 @@ public:
 
     bool save();
     bool saveAs();
-\
+
     bool isRouterEnabled() const;
     std::optional<client::RouterConfig> routerConfig() const;
 
@@ -68,6 +72,8 @@ public slots:
     void modifyComputer();
     void removeComputerGroup();
     void removeComputer();
+    void startOnlineChecker();
+    void stopOnlineChecker();
 
 signals:
     void addressBookChanged(bool changed);
@@ -76,11 +82,16 @@ signals:
     void computerGroupContextMenu(const QPoint& point, bool is_root);
     void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
     void computerDoubleClicked(const proto::address_book::Computer& computer);
+    void updateStateForComputers(bool started);
 
 protected:
     // ConsoleTab implementation.
     void showEvent(QShowEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
+
+    // client::OnlineChecker::Delegate implementation.
+    void onOnlineCheckerResult(int computer_id, bool online) override;
+    void onOnlineCheckerFinished() override;
 
 private slots:
     void onGroupItemClicked(QTreeWidgetItem* item, int column);
@@ -118,6 +129,8 @@ private:
     proto::address_book::Data data_;
 
     bool is_changed_ = false;
+
+    std::unique_ptr<client::OnlineChecker> online_checker_;
 
     DISALLOW_COPY_AND_ASSIGN(AddressBookTab);
 };

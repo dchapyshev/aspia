@@ -20,6 +20,8 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/waitable_timer.h"
+#include "base/net/network_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace client {
@@ -27,13 +29,15 @@ namespace client {
 namespace {
 
 const size_t kNumberOfParallelTasks = 30;
+const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
 
 class OnlineCheckerDirect::Instance : public base::NetworkChannel::Listener
 {
 public:
-    Instance(int computer_id, const std::u16string& address, uint16_t port);
+    Instance(int computer_id, const std::u16string& address, uint16_t port,
+             std::shared_ptr<base::TaskRunner> task_runner);
     ~Instance() override;
 
     using FinishCallback = std::function<void(int computer_id, bool online)>;
@@ -55,15 +59,22 @@ private:
 
     FinishCallback finish_callback_;
     std::unique_ptr<base::NetworkChannel> channel_;
+    base::WaitableTimer timer_;
 };
 
 OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const std::u16string& address, uint16_t port)
+    int computer_id, const std::u16string& address, uint16_t port,
+    std::shared_ptr<base::TaskRunner> task_runner)
     : computer_id_(computer_id),
       address_(address),
-      port_(port)
+      port_(port),
+      timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
 {
-    // Nothing
+    timer_.start(kTimeout, [this]()
+    {
+        LOG(LS_INFO) << "Timeout for computer: " << computer_id_;
+        onFinished(false);
+    });
 }
 
 OnlineCheckerDirect::Instance::~Instance()
@@ -78,6 +89,9 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     finish_callback_ = std::move(finish_callback);
     DCHECK(finish_callback_);
 
+    LOG(LS_INFO) << "Starting connection to " << address_ << ":" << port_
+                 << " (computer: " << computer_id_ << ")";
+
     channel_ = std::make_unique<base::NetworkChannel>();
     channel_->setListener(this);
     channel_->connect(address_, port_);
@@ -85,17 +99,22 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
 
 void OnlineCheckerDirect::Instance::onConnected()
 {
+    LOG(LS_INFO) << "Connection to " << address_ << ":" << port_
+                 << " established (computer: " << computer_id_ << ")";
+
     proto::ClientHello message;
 
     message.set_encryption(proto::ENCRYPTION_CHACHA20_POLY1305);
     message.set_identify(proto::IDENTIFY_SRP);
 
     channel_->setNoDelay(true);
+    channel_->resume();
     channel_->send(base::serialize(message));
 }
 
 void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
 {
+    LOG(LS_INFO) << "Connection aborted for computer: " << computer_id_;
     onFinished(false);
 }
 
@@ -113,6 +132,7 @@ void OnlineCheckerDirect::Instance::onMessageReceived(const base::ByteArray& buf
     {
         case proto::ENCRYPTION_CHACHA20_POLY1305:
         {
+            LOG(LS_INFO) << "Message received for computer: " << computer_id_;
             onFinished(true);
         }
         break;
@@ -137,11 +157,17 @@ void OnlineCheckerDirect::Instance::onFinished(bool online)
         finish_callback_(computer_id_, online);
         finish_callback_ = nullptr;
     }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid callback";
+    }
 }
 
-OnlineCheckerDirect::OnlineCheckerDirect()
+OnlineCheckerDirect::OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_runner)
+    : task_runner_(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
+    DCHECK(task_runner_);
 }
 
 OnlineCheckerDirect::~OnlineCheckerDirect()
@@ -170,11 +196,15 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
     while (count != 0)
     {
         const Computer& computer = pending_queue_.front();
-        std::unique_ptr<Instance> instance =
-            std::make_unique<Instance>(computer.computer_id, computer.address, computer.port);
+        std::unique_ptr<Instance> instance = std::make_unique<Instance>(
+            computer.computer_id, computer.address, computer.port, task_runner_);
 
+        LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
+                     << computer.address << " port: " << computer.port << ")";
         work_queue_.emplace_back(std::move(instance));
         pending_queue_.pop_front();
+
+        --count;
     }
 
     for (const auto& task : work_queue_)
@@ -187,17 +217,28 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
 void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 {
     if (delegate_)
+    {
         delegate_->onDirectCheckerResult(computer_id, online);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+        return;
+    }
 
     if (pending_queue_.empty())
     {
+        LOG(LS_INFO) << "No more items in queue";
         onFinished(FROM_HERE);
         return;
     }
 
     const Computer& computer = pending_queue_.front();
-    std::unique_ptr<Instance> instance =
-        std::make_unique<Instance>(computer.computer_id, computer.address, computer.port);
+    std::unique_ptr<Instance> instance = std::make_unique<Instance>(
+        computer.computer_id, computer.address, computer.port, task_runner_);
+
+    LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
+                 << computer.address << " port: " << computer.port << ")";
 
     work_queue_.emplace_back(std::move(instance));
     work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
@@ -209,7 +250,13 @@ void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
     if (delegate_)
+    {
         delegate_->onDirectCheckerFinished();
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Invalid delegate";
+    }
 }
 
 } // namespace client

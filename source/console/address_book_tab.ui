@@ -91,7 +91,7 @@
        <bool>true</bool>
       </property>
       <property name="columnCount">
-       <number>5</number>
+       <number>6</number>
       </property>
       <column>
        <property name="text">
@@ -116,6 +116,11 @@
       <column>
        <property name="text">
         <string>Modified</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Status</string>
        </property>
       </column>
      </widget>
