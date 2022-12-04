@@ -81,6 +81,7 @@ private slots:
 private:
     void createLanguageMenu(const QString& current_locale);
     void updateStatusBar();
+    void updateTrayIconTooltip();
 
     Ui::MainWindow ui;
 

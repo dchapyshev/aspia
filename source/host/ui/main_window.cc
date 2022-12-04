@@ -41,7 +41,13 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QNetworkInterface>
+#include <QTimer>
 #include <QUrl>
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <QNetworkConfigurationManager>
+#endif
 
 #if defined(Q_OS_WIN)
 #include "base/win/process_util.h"
@@ -76,9 +82,29 @@ MainWindow::MainWindow(QWidget* parent)
     tray_menu_.addAction(ui.action_exit);
 
     tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.ico")));
-    tray_icon_.setToolTip(tr("Aspia Host"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
+
+    updateTrayIconTooltip();
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QNetworkConfigurationManager* network_config_manager = new QNetworkConfigurationManager(this);
+    connect(network_config_manager, &QNetworkConfigurationManager::configurationAdded,
+            this, &MainWindow::updateTrayIconTooltip);
+    connect(network_config_manager, &QNetworkConfigurationManager::configurationChanged,
+            this, &MainWindow::updateTrayIconTooltip);
+    connect(network_config_manager, &QNetworkConfigurationManager::configurationRemoved,
+            this, &MainWindow::updateTrayIconTooltip);
+    connect(network_config_manager, &QNetworkConfigurationManager::onlineStateChanged,
+            this, &MainWindow::updateTrayIconTooltip);
+#else
+    QTimer* tray_tooltip_timer = new QTimer(this);
+
+    connect(tray_tooltip_timer, &QTimer::timeout, this, &MainWindow::updateTrayIconTooltip);
+
+    tray_tooltip_timer->setInterval(std::chrono::seconds(30));
+    tray_tooltip_timer->start();
+#endif
 
     createLanguageMenu(user_settings.locale());
     onSettingsChanged();
@@ -339,6 +365,8 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     ui.label_password->setEnabled(has_password);
     ui.edit_password->setEnabled(has_password);
     ui.edit_password->setText(QString::fromStdString(credentials.password()));
+
+    updateTrayIconTooltip();
 }
 
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
@@ -710,6 +738,50 @@ void MainWindow::updateStatusBar()
 
     ui.button_status->setText(message);
     ui.button_status->setIcon(QIcon(icon));
+}
+
+void MainWindow::updateTrayIconTooltip()
+{
+    QString ip;
+
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+    for (int i = 0; i < interfaces.count(); ++i)
+    {
+        const QNetworkInterface& interface = interfaces[i];
+
+        QNetworkInterface::InterfaceFlags flags = interface.flags();
+        if (!(flags & QNetworkInterface::IsUp))
+             continue;
+
+        if (!(flags & QNetworkInterface::IsRunning))
+            continue;
+
+        QNetworkInterface::InterfaceType type = interface.type();
+        if (type != QNetworkInterface::Ethernet && type != QNetworkInterface::Wifi &&
+            type != QNetworkInterface::Ieee80211 && type != QNetworkInterface::Ieee80216 &&
+            type != QNetworkInterface::Ieee802154)
+        {
+            continue;
+        }
+
+        QList<QNetworkAddressEntry> addresses = interface.addressEntries();
+        for (int j = 0; j < addresses.count(); ++j)
+        {
+            QHostAddress address = addresses[j].ip();
+            if (address.isGlobal())
+                ip += address.toString() + QLatin1Char('\n');
+        }
+    }
+
+    if (!ip.isEmpty())
+        ip.prepend(tr("IP addresses:") + QLatin1Char('\n'));
+
+    QString tooltip;
+    tooltip += tr("Aspia Host") + QString("\n\n");
+    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QString("\n");
+    tooltip += ip;
+
+    tray_icon_.setToolTip(tooltip);
 }
 
 } // namespace host

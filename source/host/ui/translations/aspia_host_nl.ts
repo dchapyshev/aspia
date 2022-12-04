@@ -885,91 +885,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="79"/>
-        <location filename="../main_window.cc" line="442"/>
-        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="470"/>
+        <location filename="../main_window.cc" line="629"/>
+        <location filename="../main_window.cc" line="780"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="154"/>
-        <location filename="../main_window.cc" line="583"/>
+        <location filename="../main_window.cc" line="180"/>
+        <location filename="../main_window.cc" line="611"/>
         <source>Show</source>
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="333"/>
+        <location filename="../main_window.cc" line="359"/>
         <source>Not available</source>
         <translation>Niet beschikbaar</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="387"/>
+        <location filename="../main_window.cc" line="415"/>
         <source>Connecting to a router %1...</source>
         <translation>Verbinden naar router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="433"/>
+        <location filename="../main_window.cc" line="461"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="622"/>
+        <location filename="../main_window.cc" line="650"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="623"/>
+        <location filename="../main_window.cc" line="651"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="702"/>
+        <location filename="../main_window.cc" line="730"/>
         <source>Connection error</source>
         <translation>Verbindings error</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="383"/>
-        <location filename="../main_window.cc" line="687"/>
+        <location filename="../main_window.cc" line="781"/>
+        <source>ID: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="777"/>
+        <source>IP addresses:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="411"/>
+        <location filename="../main_window.cc" line="715"/>
         <source>Router is disabled</source>
         <translation>Router is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="692"/>
+        <location filename="../main_window.cc" line="720"/>
         <source>Connecting to a router...</source>
         <translation>Verbinden naar een router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="391"/>
+        <location filename="../main_window.cc" line="419"/>
         <source>Connected to a router %1</source>
         <translation>Verbonden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="697"/>
+        <location filename="../main_window.cc" line="725"/>
         <source>Connected to a router</source>
         <translation>Verbonden met een router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="423"/>
         <source>Failed to connect to router %1</source>
         <translation>Kon niet verbinden met een router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="438"/>
+        <location filename="../main_window.cc" line="466"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="588"/>
+        <location filename="../main_window.cc" line="616"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="616"/>
+        <location filename="../main_window.cc" line="644"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="645"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Als u Aspia verlaat, is het niet meer mogelijk om te verbinden naar deze computer tot u de computer aanzet of Aspia handmatig start. Wilt u de applicatie verlaten?</translation>
     </message>
