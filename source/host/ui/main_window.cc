@@ -778,7 +778,7 @@ void MainWindow::updateTrayIconTooltip()
 
     QString tooltip;
     tooltip += tr("Aspia Host") + QLatin1String("\n\n");
-    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QString("\n");
+    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QLatin1Char('\n');
     tooltip += ip;
 
     tray_icon_.setToolTip(tooltip);
