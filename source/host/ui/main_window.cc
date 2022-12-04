@@ -777,7 +777,7 @@ void MainWindow::updateTrayIconTooltip()
         ip.prepend(tr("IP addresses:") + QLatin1Char('\n'));
 
     QString tooltip;
-    tooltip += tr("Aspia Host") + QString("\n\n");
+    tooltip += tr("Aspia Host") + QLatin1String("\n\n");
     tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QString("\n");
     tooltip += ip;
 
