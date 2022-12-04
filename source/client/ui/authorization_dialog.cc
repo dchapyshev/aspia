@@ -65,6 +65,20 @@ AuthorizationDialog::~AuthorizationDialog()
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
     ui.checkbox_one_time_password->setVisible(enable);
+
+    if (!enable)
+    {
+        ui.label_username->setVisible(true);
+        ui.edit_username->setVisible(true);
+    }
+    else
+    {
+        bool is_checked = ui.checkbox_one_time_password->isChecked();
+
+        ui.label_username->setVisible(!is_checked);
+        ui.edit_username->setVisible(!is_checked);
+    }
+
     fitSize();
 }
 

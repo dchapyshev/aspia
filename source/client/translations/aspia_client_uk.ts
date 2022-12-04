@@ -2264,18 +2264,18 @@
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="136"/>
-        <location filename="../ui/authorization_dialog.cc" line="146"/>
+        <location filename="../ui/authorization_dialog.cc" line="150"/>
+        <location filename="../ui/authorization_dialog.cc" line="160"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="137"/>
+        <location filename="../ui/authorization_dialog.cc" line="151"/>
         <source>Username cannot be empty.</source>
         <translation>Ім&apos;я користувача не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/authorization_dialog.cc" line="147"/>
+        <location filename="../ui/authorization_dialog.cc" line="161"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>
