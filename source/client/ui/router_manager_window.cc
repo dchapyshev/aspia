@@ -29,6 +29,11 @@
 #include "ui_router_manager_window.h"
 
 #include <QDateTime>
+#include <QFileDialog>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMenu>
 #include <QMessageBox>
 #include <QTimer>
 
@@ -74,10 +79,10 @@ class RelayTreeItem : public QTreeWidgetItem
 {
 public:
     explicit RelayTreeItem(const proto::Session& session)
-        : timepoint(session.timepoint())
+        : session(session)
     {
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
-            static_cast<uint>(timepoint)), QLocale::ShortFormat);
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
@@ -102,13 +107,13 @@ public:
         if (treeWidget()->sortColumn() == 1)
         {
             const RelayTreeItem* other_item = static_cast<const RelayTreeItem*>(&other);
-            return timepoint < other_item->timepoint;
+            return session.timepoint() < other_item->session.timepoint();
         }
 
         return QTreeWidgetItem::operator<(other);
     }
 
-    const uint64_t timepoint;
+    proto::Session session;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);
@@ -174,6 +179,20 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     connect(ui->tree_hosts, &QTreeWidget::currentItemChanged,
             this, &RouterManagerWindow::onCurrentHostChanged);
+
+    ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested,
+            this, &RouterManagerWindow::onHostsContextMenu);
+
+    ui->tree_relay->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_relay, &QTreeWidget::customContextMenuRequested,
+            this, &RouterManagerWindow::onRelaysContextMenu);
+
+    connect(ui->button_save_hosts, &QPushButton::clicked,
+            this, &RouterManagerWindow::saveHostsToFile);
+
+    connect(ui->button_save_relays, &QPushButton::clicked,
+            this, &RouterManagerWindow::saveRelaysToFile);
 }
 
 RouterManagerWindow::~RouterManagerWindow()
@@ -448,6 +467,30 @@ void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
         router_proxy_->disconnectFromRouter();
 }
 
+void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
+{
+    QMenu menu;
+    QAction* save_action = menu.addAction(tr("Save to file..."));
+
+    QAction* action = menu.exec(ui->tree_hosts->viewport()->mapToGlobal(pos));
+    if (action == save_action)
+    {
+        saveHostsToFile();
+    }
+}
+
+void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
+{
+    QMenu menu;
+    QAction* save_action = menu.addAction(tr("Save to file..."));
+
+    QAction* action = menu.exec(ui->tree_relay->viewport()->mapToGlobal(pos));
+    if (action == save_action)
+    {
+        saveRelaysToFile();
+    }
+}
+
 void RouterManagerWindow::refreshSessionList()
 {
     if (router_proxy_)
@@ -675,6 +718,144 @@ void RouterManagerWindow::beforeRequest()
 void RouterManagerWindow::afterRequest()
 {
     ui->tab->setEnabled(true);
+}
+
+void RouterManagerWindow::saveHostsToFile()
+{
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(this,
+                                                     tr("Save File"),
+                                                     QString(),
+                                                     tr("JSON files (*.json)"),
+                                                     &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+        return;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not open file for writing."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QTreeWidget* tree = ui->tree_hosts;
+    QJsonArray root_array;
+
+    for (int i = 0; i < tree->topLevelItemCount(); ++i)
+    {
+        const proto::Session& session =
+            static_cast<HostTreeItem*>(tree->topLevelItem(i))->session;
+
+        QJsonObject host_object;
+
+        host_object.insert("session_id", QString::number(session.session_id()));
+        host_object.insert("computer_name", QString::fromStdString(session.computer_name()));
+        host_object.insert("operating_system", QString::fromStdString(session.os_name()));
+        host_object.insert("ip_address", QString::fromStdString(session.ip_address()));
+
+        QString version = QString("%1.%2.%3.%4")
+            .arg(session.version().major()).arg(session.version().minor())
+            .arg(session.version().patch()).arg(session.version().revision());
+        host_object.insert("version", version);
+
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+        host_object.insert("connect_time", time);
+
+        QJsonArray id_array;
+
+        proto::HostSessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
+        {
+            for (int i = 0; i < session_data.host_id_size(); ++i)
+                id_array.append(QString::number(session_data.host_id(i)));
+        }
+
+        host_object.insert("host_ids", id_array);
+        root_array.append(host_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("hosts", root_array);
+
+    int64_t written = file.write(QJsonDocument(root_object).toJson());
+    if (written <= 0)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Unable to write file."),
+                             QMessageBox::Ok);
+        return;
+    }
+}
+
+void RouterManagerWindow::saveRelaysToFile()
+{
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(this,
+                                                     tr("Save File"),
+                                                     QString(),
+                                                     tr("JSON files (*.json)"),
+                                                     &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+        return;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not open file for writing."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QTreeWidget* tree = ui->tree_relay;
+    QJsonArray root_array;
+
+    for (int i = 0; i < tree->topLevelItemCount(); ++i)
+    {
+        const proto::Session& session =
+            static_cast<RelayTreeItem*>(tree->topLevelItem(i))->session;
+
+        QJsonObject relay_object;
+
+        relay_object.insert("session_id", QString::number(session.session_id()));
+        relay_object.insert("computer_name", QString::fromStdString(session.computer_name()));
+        relay_object.insert("operating_system", QString::fromStdString(session.os_name()));
+        relay_object.insert("ip_address", QString::fromStdString(session.ip_address()));
+
+        QString version = QString("%1.%2.%3.%4")
+            .arg(session.version().major()).arg(session.version().minor())
+            .arg(session.version().patch()).arg(session.version().revision());
+        relay_object.insert("version", version);
+
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
+        relay_object.insert("connect_time", time);
+
+        proto::RelaySessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
+            relay_object.insert("pool_size", QString::number(session_data.pool_size()));
+
+        root_array.append(relay_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("relays", root_array);
+
+    int64_t written = file.write(QJsonDocument(root_object).toJson());
+    if (written <= 0)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Unable to write file."),
+                             QMessageBox::Ok);
+        return;
+    }
 }
 
 } // namespace client

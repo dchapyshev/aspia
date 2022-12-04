@@ -62,6 +62,10 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
+private slots:
+    void onHostsContextMenu(const QPoint& pos);
+    void onRelaysContextMenu(const QPoint& pos);
+
 private:
     void refreshSessionList();
     void disconnectHost();
@@ -75,6 +79,9 @@ private:
 
     void beforeRequest();
     void afterRequest();
+
+    void saveHostsToFile();
+    void saveRelaysToFile();
 
     std::unique_ptr<Ui::RouterManagerWindow> ui;
 

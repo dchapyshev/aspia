@@ -694,6 +694,10 @@
         <source>User Name</source>
         <translation>使用者名稱</translation>
     </message>
+    <message>
+        <source>Save to file...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RouterStatusDialog</name>
@@ -2418,6 +2422,26 @@
     <message>
         <source>No</source>
         <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <source>Save to file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="unfinished">儲存檔案</translation>
+    </message>
+    <message>
+        <source>JSON files (*.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open file for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to write file.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
