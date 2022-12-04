@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>262</width>
-    <height>191</height>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -273,7 +273,7 @@ border-radius: 2px;
      <x>0</x>
      <y>0</y>
      <width>262</width>
-     <height>21</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">
@@ -281,6 +281,7 @@ border-radius: 2px;
      <string notr="true">Aspia</string>
     </property>
     <addaction name="action_settings"/>
+    <addaction name="action_clear_history"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
    </widget>
@@ -368,6 +369,11 @@ border-radius: 2px;
   <action name="action_update_settings">
    <property name="text">
     <string>Update Settings</string>
+   </property>
+  </action>
+  <action name="action_clear_history">
+   <property name="text">
+    <string>Clear history</string>
    </property>
   </action>
  </widget>

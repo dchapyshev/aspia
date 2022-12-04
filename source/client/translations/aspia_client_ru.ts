@@ -215,52 +215,57 @@
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="300"/>
+        <location filename="../ui/client_window.ui" line="301"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="360"/>
+        <location filename="../ui/client_window.ui" line="361"/>
         <source>Show icons in menus</source>
         <translation>Показывать значки в меню</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="365"/>
+        <location filename="../ui/client_window.ui" line="366"/>
         <source>Check for updates...</source>
         <translation>Проверить обновления...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="370"/>
+        <location filename="../ui/client_window.ui" line="371"/>
         <source>Update Settings</source>
         <translation>Параметры обновления</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="304"/>
+        <location filename="../ui/client_window.ui" line="376"/>
+        <source>Clear history</source>
+        <translation>Очистить историю</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="305"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="290"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="325"/>
+        <location filename="../ui/client_window.ui" line="326"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="334"/>
+        <location filename="../ui/client_window.ui" line="335"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="343"/>
+        <location filename="../ui/client_window.ui" line="344"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="352"/>
+        <location filename="../ui/client_window.ui" line="353"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
@@ -2365,23 +2370,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="149"/>
+        <location filename="../ui/client_window.cc" line="85"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="86"/>
+        <source>Are you sure you want to clear your connection history?</source>
+        <translation>Вы действительно хотите очистить историю подключений?</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="89"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="90"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="166"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="238"/>
         <location filename="../ui/client_window.cc" line="255"/>
+        <location filename="../ui/client_window.cc" line="272"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="239"/>
+        <location filename="../ui/client_window.cc" line="256"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="256"/>
+        <location filename="../ui/client_window.cc" line="273"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>

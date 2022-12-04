@@ -199,52 +199,57 @@
         <translation type="unfinished">Verbinden</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="300"/>
+        <location filename="../ui/client_window.ui" line="301"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="360"/>
+        <location filename="../ui/client_window.ui" line="361"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="365"/>
+        <location filename="../ui/client_window.ui" line="366"/>
         <source>Check for updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="370"/>
+        <location filename="../ui/client_window.ui" line="371"/>
         <source>Update Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="304"/>
+        <location filename="../ui/client_window.ui" line="376"/>
+        <source>Clear history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="305"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="290"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="325"/>
+        <location filename="../ui/client_window.ui" line="326"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="334"/>
+        <location filename="../ui/client_window.ui" line="335"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="343"/>
+        <location filename="../ui/client_window.ui" line="344"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="352"/>
+        <location filename="../ui/client_window.ui" line="353"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2154,23 +2159,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="149"/>
+        <location filename="../ui/client_window.cc" line="85"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Bestätigung</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="86"/>
+        <source>Are you sure you want to clear your connection history?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="89"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="90"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="166"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="238"/>
         <location filename="../ui/client_window.cc" line="255"/>
+        <location filename="../ui/client_window.cc" line="272"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="239"/>
+        <location filename="../ui/client_window.cc" line="256"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="256"/>
+        <location filename="../ui/client_window.cc" line="273"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>

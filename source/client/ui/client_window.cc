@@ -79,6 +79,23 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(ui.action_help, &QAction::triggered, this, &ClientWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &ClientWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &ClientWindow::close);
+    connect(ui.action_clear_history, &QAction::triggered, this, [this]()
+    {
+        QMessageBox messagebox(this);
+        messagebox.setWindowTitle(tr("Confirmation"));
+        messagebox.setText(tr("Are you sure you want to clear your connection history?"));
+        messagebox.setIcon(QMessageBox::Question);
+        messagebox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
+        messagebox.button(QMessageBox::No)->setText(tr("No"));
+
+        if (messagebox.exec() == QMessageBox::Yes)
+        {
+            ClientSettings& settings = Application::instance()->settings();
+            settings.setAddressList(QStringList());
+            ui.combo_address->clear();
+        }
+    });
 
     connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ClientWindow::sessionTypeChanged);

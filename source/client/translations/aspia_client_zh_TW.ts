@@ -203,53 +203,58 @@
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="289"/>
+        <location filename="../ui/client_window.ui" line="290"/>
         <source>Help</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="300"/>
+        <location filename="../ui/client_window.ui" line="301"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="304"/>
+        <location filename="../ui/client_window.ui" line="305"/>
         <source>Language</source>
         <translation>語言</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="325"/>
+        <location filename="../ui/client_window.ui" line="326"/>
         <source>Online Help...</source>
         <translation>線上說明...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="334"/>
+        <location filename="../ui/client_window.ui" line="335"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="343"/>
+        <location filename="../ui/client_window.ui" line="344"/>
         <source>Settings...</source>
         <translation>設定...</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="352"/>
+        <location filename="../ui/client_window.ui" line="353"/>
         <source>Exit</source>
         <translation>離開</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="360"/>
+        <location filename="../ui/client_window.ui" line="361"/>
         <source>Show icons in menus</source>
         <translation>在選單顯示圖示</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="365"/>
+        <location filename="../ui/client_window.ui" line="366"/>
         <source>Check for updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.ui" line="370"/>
+        <location filename="../ui/client_window.ui" line="371"/>
         <source>Update Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.ui" line="376"/>
+        <source>Clear history</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2183,23 +2188,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="149"/>
+        <location filename="../ui/client_window.cc" line="85"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">確認</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="86"/>
+        <source>Are you sure you want to clear your connection history?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="89"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="90"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../ui/client_window.cc" line="166"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="238"/>
         <location filename="../ui/client_window.cc" line="255"/>
+        <location filename="../ui/client_window.cc" line="272"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="239"/>
+        <location filename="../ui/client_window.cc" line="256"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="256"/>
+        <location filename="../ui/client_window.cc" line="273"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
