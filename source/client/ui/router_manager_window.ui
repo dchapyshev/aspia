@@ -252,6 +252,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QPushButton" name="button_add_user">
+            <property name="toolTip">
+             <string>Add</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -265,6 +268,9 @@
            <widget class="QPushButton" name="button_modify_user">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="toolTip">
+             <string>Modify</string>
             </property>
             <property name="text">
              <string/>
@@ -280,6 +286,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="toolTip">
+             <string>Delete</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -291,6 +300,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="button_refresh_users">
+            <property name="toolTip">
+             <string>Refresh</string>
+            </property>
             <property name="text">
              <string/>
             </property>

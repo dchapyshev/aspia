@@ -188,6 +188,10 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     connect(ui->tree_relay, &QTreeWidget::customContextMenuRequested,
             this, &RouterManagerWindow::onRelaysContextMenu);
 
+    ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
+            this, &RouterManagerWindow::onUsersContextMenu);
+
     connect(ui->button_save_hosts, &QPushButton::clicked,
             this, &RouterManagerWindow::saveHostsToFile);
 
@@ -470,6 +474,16 @@ void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
 void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
 {
     QMenu menu;
+
+    QAction* disconnect_action = menu.addAction(tr("Disconnect"));
+
+    menu.addSeparator();
+
+    QAction* disconnect_all_action = menu.addAction(tr("Disconnect All"));
+    QAction* refresh_action = menu.addAction(tr("Refresh"));
+
+    menu.addSeparator();
+
     QAction* save_action = menu.addAction(tr("Save to file..."));
 
     QAction* action = menu.exec(ui->tree_hosts->viewport()->mapToGlobal(pos));
@@ -477,17 +491,90 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     {
         saveHostsToFile();
     }
+    else if (action == disconnect_action)
+    {
+        disconnectHost();
+    }
+    else if (action == disconnect_all_action)
+    {
+        disconnectAllHosts();
+    }
+    else if (action == refresh_action)
+    {
+        refreshSessionList();
+    }
+    else
+    {
+        // Nothing
+    }
 }
 
 void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
 {
     QMenu menu;
+
+    QAction* refresh_action = menu.addAction(tr("Refresh"));
+    menu.addSeparator();
     QAction* save_action = menu.addAction(tr("Save to file..."));
 
     QAction* action = menu.exec(ui->tree_relay->viewport()->mapToGlobal(pos));
     if (action == save_action)
     {
         saveRelaysToFile();
+    }
+    else if (action == refresh_action)
+    {
+        refreshSessionList();
+    }
+}
+
+void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
+{
+    QMenu menu;
+
+    QAction* modify_action = menu.addAction(tr("Modify"));
+    modify_action->setIcon(QIcon(QStringLiteral(":/img/pencil.png")));
+
+    QAction* delete_action = menu.addAction(tr("Delete"));
+    delete_action->setIcon(QIcon(QStringLiteral(":/img/minus.png")));
+
+    QTreeWidgetItem* current_item = ui->tree_users->itemAt(pos);
+    if (!current_item)
+    {
+        modify_action->setVisible(false);
+        delete_action->setVisible(false);
+    }
+    else
+    {
+        menu.addSeparator();
+    }
+
+    QAction* add_action = menu.addAction(tr("Add"));
+    add_action->setIcon(QIcon(QStringLiteral(":/img/plus.png")));
+
+    QAction* refresh_action = menu.addAction(tr("Refresh"));
+    refresh_action->setIcon(QIcon(QStringLiteral(":/img/arrow-circle-double.png")));
+
+    QAction* action = menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
+    if (action == modify_action)
+    {
+        modifyUser();
+    }
+    else if (action == delete_action)
+    {
+        deleteUser();
+    }
+    else if (action == add_action)
+    {
+        addUser();
+    }
+    else if (action == refresh_action)
+    {
+        refreshUserList();
+    }
+    else
+    {
+        // Nothing
     }
 }
 

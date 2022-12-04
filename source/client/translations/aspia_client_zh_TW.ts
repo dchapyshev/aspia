@@ -28,7 +28,7 @@
     <name>Client</name>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="584"/>
+        <location filename="../client_main.cc" line="587"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -38,22 +38,22 @@
         <translation>&quot;%1&quot; 的值不正確。可能的值：%2。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="392"/>
+        <location filename="../client_main.cc" line="395"/>
         <source>Remote computer address.</source>
         <translation>遠端電腦位址。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="396"/>
+        <location filename="../client_main.cc" line="399"/>
         <source>Remote computer port.</source>
         <translation>遠端電腦通訊埠。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="401"/>
+        <location filename="../client_main.cc" line="404"/>
         <source>Name of user.</source>
         <translation>使用者名稱。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="405"/>
+        <location filename="../client_main.cc" line="408"/>
         <source>Password of user.</source>
         <translation>使用者密碼。</translation>
     </message>
@@ -62,82 +62,82 @@
         <translation type="vanished">工作階段類型。可能的值：desktop-manage、desktop-view、file-transfer。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="414"/>
+        <location filename="../client_main.cc" line="417"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>編碼類型。可能的值：vp8、vp9、zstd。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="418"/>
+        <location filename="../client_main.cc" line="421"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>色彩深度。可能的值：3、6、8、16、32。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="422"/>
+        <location filename="../client_main.cc" line="425"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>壓縮率。可能的值：1-22。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="426"/>
+        <location filename="../client_main.cc" line="429"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>啟用或停用音訊。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="430"/>
+        <location filename="../client_main.cc" line="433"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>啟用或停用游標形狀。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="438"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>啟用或停用剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="442"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌面特效。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="446"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌布。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="450"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>啟用或停用字體平滑。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="454"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時清除剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="458"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時鎖定電腦。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="462"/>
+        <location filename="../client_main.cc" line="465"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>阻止遠端輸入。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="466"/>
+        <location filename="../client_main.cc" line="469"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="585"/>
+        <location filename="../client_main.cc" line="588"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="434"/>
+        <location filename="../client_main.cc" line="437"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="409"/>
+        <location filename="../client_main.cc" line="412"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -516,10 +516,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="479"/>
         <source>Pause video when minimizing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/desktop_panel.ui" line="490"/>
         <source>Pause audio when minimizing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -779,13 +781,13 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="45"/>
-        <location filename="../ui/router_manager_window.ui" line="153"/>
+        <location filename="../ui/router_manager_window.ui" line="160"/>
         <source>Connections count:</source>
         <translation>連線次數：</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="72"/>
-        <location filename="../ui/router_manager_window.ui" line="196"/>
+        <location filename="../ui/router_manager_window.ui" line="203"/>
         <source>Computer Name</source>
         <translation>電腦名稱</translation>
     </message>
@@ -796,7 +798,7 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="82"/>
-        <location filename="../ui/router_manager_window.ui" line="181"/>
+        <location filename="../ui/router_manager_window.ui" line="188"/>
         <source>Connect Time</source>
         <translation>連線時間</translation>
     </message>
@@ -811,57 +813,75 @@
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="121"/>
+        <location filename="../ui/router_manager_window.ui" line="128"/>
         <source>Disconnect</source>
         <translation>中斷連線</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="128"/>
+        <location filename="../ui/router_manager_window.ui" line="135"/>
         <source>Disconnect All</source>
         <translation>中斷所有連線</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="135"/>
-        <location filename="../ui/router_manager_window.ui" line="224"/>
+        <location filename="../ui/router_manager_window.ui" line="142"/>
+        <location filename="../ui/router_manager_window.ui" line="238"/>
+        <location filename="../ui/router_manager_window.ui" line="304"/>
         <source>Refresh</source>
         <translation>重新整理</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="145"/>
+        <location filename="../ui/router_manager_window.ui" line="152"/>
         <source>Relay</source>
         <translation>中繼</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="176"/>
+        <location filename="../ui/router_manager_window.ui" line="183"/>
         <source>Address</source>
         <translation>位址</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="186"/>
+        <location filename="../ui/router_manager_window.ui" line="193"/>
         <source>Pool Size</source>
         <translation>池大小</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="191"/>
+        <location filename="../ui/router_manager_window.ui" line="198"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="201"/>
+        <location filename="../ui/router_manager_window.ui" line="208"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="234"/>
+        <location filename="../ui/router_manager_window.ui" line="248"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="311"/>
+        <location filename="../ui/router_manager_window.ui" line="256"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="273"/>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="290"/>
+        <source>Delete</source>
+        <translation type="unfinished">刪除</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.ui" line="337"/>
         <source>User Name</source>
         <translation>使用者名稱</translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.ui" line="121"/>
+        <location filename="../ui/router_manager_window.ui" line="231"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2225,94 +2245,94 @@
 <context>
     <name>client::DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="245"/>
+        <location filename="../ui/desktop_panel.cc" line="265"/>
         <source>Monitor %1 (primary)</source>
         <translation>顯示器 %1（主要）</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="247"/>
+        <location filename="../ui/desktop_panel.cc" line="267"/>
         <source>Monitor %1</source>
         <translation>顯示器 %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="270"/>
+        <location filename="../ui/desktop_panel.cc" line="290"/>
         <source>Resolution</source>
         <translation>解析度</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="422"/>
-        <location filename="../ui/desktop_panel.cc" line="437"/>
         <location filename="../ui/desktop_panel.cc" line="452"/>
         <location filename="../ui/desktop_panel.cc" line="467"/>
         <location filename="../ui/desktop_panel.cc" line="482"/>
+        <location filename="../ui/desktop_panel.cc" line="497"/>
+        <location filename="../ui/desktop_panel.cc" line="512"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="423"/>
+        <location filename="../ui/desktop_panel.cc" line="453"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>您是否確定要關閉遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="438"/>
+        <location filename="../ui/desktop_panel.cc" line="468"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>您是否確定要重新啟動遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="453"/>
+        <location filename="../ui/desktop_panel.cc" line="483"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>您是否確定要重新啟動遠端電腦至安全模式？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="468"/>
+        <location filename="../ui/desktop_panel.cc" line="498"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>您是否確定要結束遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="483"/>
+        <location filename="../ui/desktop_panel.cc" line="513"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>您是否確定要鎖定遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="565"/>
+        <location filename="../ui/desktop_panel.cc" line="595"/>
         <source>Scale</source>
         <translation>縮放</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="226"/>
+        <location filename="../ui/desktop_panel.cc" line="246"/>
         <source>Monitor selection</source>
         <translation type="unfinished">選擇顯示器</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="259"/>
+        <location filename="../ui/desktop_panel.cc" line="279"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="312"/>
+        <location filename="../ui/desktop_panel.cc" line="332"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="317"/>
+        <location filename="../ui/desktop_panel.cc" line="337"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="426"/>
-        <location filename="../ui/desktop_panel.cc" line="441"/>
         <location filename="../ui/desktop_panel.cc" line="456"/>
         <location filename="../ui/desktop_panel.cc" line="471"/>
         <location filename="../ui/desktop_panel.cc" line="486"/>
+        <location filename="../ui/desktop_panel.cc" line="501"/>
+        <location filename="../ui/desktop_panel.cc" line="516"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="427"/>
-        <location filename="../ui/desktop_panel.cc" line="442"/>
         <location filename="../ui/desktop_panel.cc" line="457"/>
         <location filename="../ui/desktop_panel.cc" line="472"/>
         <location filename="../ui/desktop_panel.cc" line="487"/>
+        <location filename="../ui/desktop_panel.cc" line="502"/>
+        <location filename="../ui/desktop_panel.cc" line="517"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
@@ -2612,34 +2632,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="279"/>
-        <location filename="../ui/qt_desktop_window.cc" line="287"/>
-        <location filename="../ui/qt_desktop_window.cc" line="779"/>
+        <location filename="../ui/qt_desktop_window.cc" line="291"/>
+        <location filename="../ui/qt_desktop_window.cc" line="299"/>
+        <location filename="../ui/qt_desktop_window.cc" line="835"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="280"/>
+        <location filename="../ui/qt_desktop_window.cc" line="292"/>
         <source>There are no supported video encodings.</source>
         <translation>沒有支援的視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="288"/>
+        <location filename="../ui/qt_desktop_window.cc" line="300"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="757"/>
+        <location filename="../ui/qt_desktop_window.cc" line="813"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="759"/>
+        <location filename="../ui/qt_desktop_window.cc" line="815"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="779"/>
+        <location filename="../ui/qt_desktop_window.cc" line="835"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>
@@ -2806,229 +2826,275 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="189"/>
+        <location filename="../ui/router_manager_window.cc" line="212"/>
         <source>Connecting to %1:%2...</source>
         <translation>連線到 %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="215"/>
+        <location filename="../ui/router_manager_window.cc" line="238"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>連線到 %1:%2... (版本 %3)</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="236"/>
+        <location filename="../ui/router_manager_window.cc" line="259"/>
         <source>Violation of the communication protocol.</source>
         <translation>違反通訊協定。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="240"/>
+        <location filename="../ui/router_manager_window.cc" line="263"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密錯誤（訊息加密或解密失敗）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="244"/>
+        <location filename="../ui/router_manager_window.cc" line="267"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>網路出現錯誤（例如網路電纜被意外拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="248"/>
+        <location filename="../ui/router_manager_window.cc" line="271"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>連接被對方拒絕（或逾時）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="252"/>
+        <location filename="../ui/router_manager_window.cc" line="275"/>
         <source>Remote host closed the connection.</source>
         <translation>遠端主機關閉了連線。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="256"/>
+        <location filename="../ui/router_manager_window.cc" line="279"/>
         <source>Host address was not found.</source>
         <translation>未找到主機位址。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="260"/>
+        <location filename="../ui/router_manager_window.cc" line="283"/>
         <source>Socket operation timed out.</source>
         <translation>Socket 操作逾時。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="264"/>
+        <location filename="../ui/router_manager_window.cc" line="287"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的位址已被使用並設定為獨占。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="268"/>
+        <location filename="../ui/router_manager_window.cc" line="291"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定位址的主機無法使用。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="278"/>
-        <location filename="../ui/router_manager_window.cc" line="314"/>
+        <location filename="../ui/router_manager_window.cc" line="301"/>
+        <location filename="../ui/router_manager_window.cc" line="337"/>
         <source>An unknown error occurred.</source>
         <translation>出現未知錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="283"/>
-        <location filename="../ui/router_manager_window.cc" line="318"/>
+        <location filename="../ui/router_manager_window.cc" line="306"/>
+        <location filename="../ui/router_manager_window.cc" line="341"/>
         <source>Error: %1</source>
         <translation>錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="294"/>
+        <location filename="../ui/router_manager_window.cc" line="317"/>
         <source>Authentication successfully completed.</source>
         <translation>身分驗證成功完成。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="298"/>
+        <location filename="../ui/router_manager_window.cc" line="321"/>
         <source>Network authentication error.</source>
         <translation>網路認證錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="302"/>
+        <location filename="../ui/router_manager_window.cc" line="325"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>違反資料交換協定。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="306"/>
+        <location filename="../ui/router_manager_window.cc" line="329"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>驗證時出錯：使用者名稱或密碼錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="310"/>
+        <location filename="../ui/router_manager_window.cc" line="333"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>使用者不允許使用指定的工作階段類型。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="379"/>
+        <location filename="../ui/router_manager_window.cc" line="402"/>
         <source>Invalid request.</source>
         <translation>無效的要求。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="383"/>
-        <location filename="../ui/router_manager_window.cc" line="422"/>
+        <location filename="../ui/router_manager_window.cc" line="406"/>
+        <location filename="../ui/router_manager_window.cc" line="445"/>
         <source>Unknown internal error.</source>
         <translation>未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="387"/>
+        <location filename="../ui/router_manager_window.cc" line="410"/>
         <source>Invalid session ID was passed.</source>
         <translation>傳入了無效的工作階段 ID。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="391"/>
-        <location filename="../ui/router_manager_window.cc" line="434"/>
+        <location filename="../ui/router_manager_window.cc" line="414"/>
+        <location filename="../ui/router_manager_window.cc" line="457"/>
         <source>Unknown error type.</source>
         <translation>未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="395"/>
-        <location filename="../ui/router_manager_window.cc" line="438"/>
-        <location filename="../ui/router_manager_window.cc" line="578"/>
+        <location filename="../ui/router_manager_window.cc" line="418"/>
+        <location filename="../ui/router_manager_window.cc" line="461"/>
+        <location filename="../ui/router_manager_window.cc" line="708"/>
+        <location filename="../ui/router_manager_window.cc" line="825"/>
+        <location filename="../ui/router_manager_window.cc" line="875"/>
+        <location filename="../ui/router_manager_window.cc" line="897"/>
+        <location filename="../ui/router_manager_window.cc" line="941"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="426"/>
+        <location filename="../ui/router_manager_window.cc" line="449"/>
         <source>Invalid data was passed.</source>
         <translation>傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="430"/>
+        <location filename="../ui/router_manager_window.cc" line="453"/>
         <source>A user with the specified name already exists.</source>
         <translation>具有指定名稱的使用者已存在。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="467"/>
-        <location filename="../ui/router_manager_window.cc" line="493"/>
-        <location filename="../ui/router_manager_window.cc" line="583"/>
+        <location filename="../ui/router_manager_window.cc" line="478"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">中斷連線</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="482"/>
+        <source>Disconnect All</source>
+        <translation type="unfinished">中斷所有連線</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="483"/>
+        <location filename="../ui/router_manager_window.cc" line="516"/>
+        <location filename="../ui/router_manager_window.cc" line="555"/>
+        <source>Refresh</source>
+        <translation type="unfinished">重新整理</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="535"/>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="538"/>
+        <source>Delete</source>
+        <translation type="unfinished">刪除</translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="552"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="597"/>
+        <location filename="../ui/router_manager_window.cc" line="623"/>
+        <location filename="../ui/router_manager_window.cc" line="713"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="468"/>
+        <location filename="../ui/router_manager_window.cc" line="598"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
         <translation>您是否確定要中斷工作階段 &quot;%1&quot;？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="494"/>
+        <location filename="../ui/router_manager_window.cc" line="624"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>您確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="578"/>
+        <location filename="../ui/router_manager_window.cc" line="708"/>
         <source>You cannot delete a built-in user.</source>
         <translation>您不能刪除內建使用者。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="584"/>
+        <location filename="../ui/router_manager_window.cc" line="714"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您確定要刪除使用者 &quot;%1&quot; 嗎？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="637"/>
+        <location filename="../ui/router_manager_window.cc" line="767"/>
         <source>Computer Name</source>
         <translation>電腦名稱</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="638"/>
+        <location filename="../ui/router_manager_window.cc" line="768"/>
         <source>IP Address</source>
         <translation>IP 位址</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="639"/>
+        <location filename="../ui/router_manager_window.cc" line="769"/>
         <source>Connect Time</source>
         <translation>連線時間</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="641"/>
+        <location filename="../ui/router_manager_window.cc" line="771"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="643"/>
+        <location filename="../ui/router_manager_window.cc" line="773"/>
         <source>Operating System</source>
         <translation>作業系統</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="649"/>
+        <location filename="../ui/router_manager_window.cc" line="779"/>
         <source>Host IDs</source>
         <translation>主機 ID</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="656"/>
+        <location filename="../ui/router_manager_window.cc" line="786"/>
         <source>ID #%1</source>
         <translation>ID #%1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="472"/>
-        <location filename="../ui/router_manager_window.cc" line="497"/>
-        <location filename="../ui/router_manager_window.cc" line="588"/>
+        <location filename="../ui/router_manager_window.cc" line="602"/>
+        <location filename="../ui/router_manager_window.cc" line="627"/>
+        <location filename="../ui/router_manager_window.cc" line="718"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="473"/>
-        <location filename="../ui/router_manager_window.cc" line="498"/>
-        <location filename="../ui/router_manager_window.cc" line="589"/>
+        <location filename="../ui/router_manager_window.cc" line="603"/>
+        <location filename="../ui/router_manager_window.cc" line="628"/>
+        <location filename="../ui/router_manager_window.cc" line="719"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.cc" line="487"/>
+        <location filename="../ui/router_manager_window.cc" line="518"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.cc" line="814"/>
+        <location filename="../ui/router_manager_window.cc" line="886"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.cc" line="816"/>
+        <location filename="../ui/router_manager_window.cc" line="888"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.cc" line="826"/>
+        <location filename="../ui/router_manager_window.cc" line="898"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/router_manager_window.cc" line="876"/>
+        <location filename="../ui/router_manager_window.cc" line="942"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>

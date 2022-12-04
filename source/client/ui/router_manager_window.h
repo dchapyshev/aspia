@@ -65,6 +65,7 @@ protected:
 private slots:
     void onHostsContextMenu(const QPoint& pos);
     void onRelaysContextMenu(const QPoint& pos);
+    void onUsersContextMenu(const QPoint& pos);
 
 private:
     void refreshSessionList();
