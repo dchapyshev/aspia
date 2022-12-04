@@ -60,6 +60,9 @@ public:
     bool isOneTimePasswordChecked() const;
     void setOneTimePasswordChecked(bool check);
 
+    QByteArray routerManagerState() const;
+    void setRouterManagerState(const QByteArray& state);
+
 private:
     QSettings settings_;
 

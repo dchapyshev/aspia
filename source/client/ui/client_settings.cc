@@ -36,6 +36,7 @@ const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
 const QString kUpdateServerParam = QStringLiteral("UpdateServer");
 const QString kOneTimePasswordCheckedParam = QStringLiteral("OneTimePasswordChecked");
+const QString kRouterManagerStateParam = QStringLiteral("RouterManagerState");
 
 } // namespace
 
@@ -170,6 +171,16 @@ bool ClientSettings::isOneTimePasswordChecked() const
 void ClientSettings::setOneTimePasswordChecked(bool check)
 {
     settings_.setValue(kOneTimePasswordCheckedParam, check);
+}
+
+QByteArray ClientSettings::routerManagerState() const
+{
+    return settings_.value(kRouterManagerStateParam, false).toByteArray();
+}
+
+void ClientSettings::setRouterManagerState(const QByteArray& state)
+{
+    settings_.setValue(kRouterManagerStateParam, state);
 }
 
 } // namespace client

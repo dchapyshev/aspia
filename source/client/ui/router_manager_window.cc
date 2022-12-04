@@ -24,6 +24,7 @@
 #include "client/router.h"
 #include "client/router_proxy.h"
 #include "client/router_window_proxy.h"
+#include "client/ui/client_settings.h"
 #include "client/ui/router_user_dialog.h"
 #include "client/ui/router_status_dialog.h"
 #include "ui_router_manager_window.h"
@@ -41,6 +42,23 @@ namespace client {
 
 namespace {
 
+class ColumnAction : public QAction
+{
+public:
+    ColumnAction(const QString& text, int index, QObject* parent)
+        : QAction(text, parent),
+          index_(index)
+    {
+        setCheckable(true);
+    }
+
+    int columnIndex() const { return index_; }
+
+private:
+    const int index_;
+    DISALLOW_COPY_AND_ASSIGN(ColumnAction);
+};
+
 class HostTreeItem : public QTreeWidgetItem
 {
 public:
@@ -53,6 +71,31 @@ public:
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
+
+        QString id;
+
+        proto::HostSessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
+        {
+            for (int i = 0; i < session_data.host_id_size(); ++i)
+            {
+                id += QString::number(session_data.host_id(i));
+
+                if (i != session_data.host_id_size() - 1)
+                    id += QLatin1String(", ");
+            }
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unable to parse session data";
+        }
+
+        setText(3, id);
+
+        proto::Version version = session.version();
+        setText(4, QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(5, QString::fromStdString(session.os_name()));
     }
 
     ~HostTreeItem() override = default;
@@ -197,10 +240,60 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     connect(ui->button_save_relays, &QPushButton::clicked,
             this, &RouterManagerWindow::saveRelaysToFile);
+
+    ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos)
+    {
+        QHeaderView* header = ui->tree_hosts->header();
+        QMenu menu;
+
+        for (int i = 1; i < header->count(); ++i)
+        {
+            ColumnAction* action = new ColumnAction(ui->tree_hosts->headerItem()->text(i), i, &menu);
+            action->setChecked(!header->isSectionHidden(i));
+            menu.addAction(action);
+        }
+
+        ColumnAction* action = dynamic_cast<ColumnAction*>(
+            menu.exec(header->viewport()->mapToGlobal(pos)));
+        if (!action)
+            return;
+
+        header->setSectionHidden(action->columnIndex(), !action->isChecked());
+    });
+
+    ui->tree_relay->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_relay->header(), &QHeaderView::customContextMenuRequested,
+            this, [this](const QPoint& pos)
+    {
+        QHeaderView* header = ui->tree_relay->header();
+        QMenu menu;
+
+        for (int i = 1; i < header->count(); ++i)
+        {
+            ColumnAction* action = new ColumnAction(ui->tree_relay->headerItem()->text(i), i, &menu);
+            action->setChecked(!header->isSectionHidden(i));
+            menu.addAction(action);
+        }
+
+        ColumnAction* action = dynamic_cast<ColumnAction*>(
+            menu.exec(header->viewport()->mapToGlobal(pos)));
+        if (!action)
+            return;
+
+        header->setSectionHidden(action->columnIndex(), !action->isChecked());
+    });
+
+    ClientSettings settings;
+    restoreState(settings.routerManagerState());
 }
 
 RouterManagerWindow::~RouterManagerWindow()
 {
+    ClientSettings settings;
+    settings.setRouterManagerState(saveState());
+
     window_proxy_->dettach();
 }
 
@@ -380,12 +473,6 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
 
     ui->label_hosts_conn_count->setText(QString::number(host_count));
     ui->label_relay_conn_count->setText(QString::number(relay_count));
-
-    for (int i = 0; i < tree_hosts->columnCount(); ++i)
-        tree_hosts->resizeColumnToContents(i);
-
-    for (int i = 0; i < tree_relay->columnCount(); ++i)
-        tree_relay->resizeColumnToContents(i);
 
     afterRequest();
 }
@@ -735,66 +822,10 @@ void RouterManagerWindow::onCurrentUserChanged(
     ui->button_delete_user->setEnabled(true);
 }
 
-void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* current,
+void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* /* current */,
                                                QTreeWidgetItem* /* previous */)
 {
-    QTreeWidget* tree_host_info = ui->tree_host_info;
-    tree_host_info->clear();
-
-    HostTreeItem* host_item = reinterpret_cast<HostTreeItem*>(current);
-    if (!host_item)
-    {
-        tree_host_info->setEnabled(false);
-    }
-    else
-    {
-        tree_host_info->setEnabled(true);
-
-        const proto::Session& session = host_item->session;
-
-        auto add_item = [=](const QString& name, const QString& value)
-        {
-            QTreeWidgetItem* item = new QTreeWidgetItem();
-            item->setText(0, name);
-            item->setText(1, value);
-
-            tree_host_info->addTopLevelItem(item);
-        };
-
-        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
-            static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
-
-        add_item(tr("Computer Name"), QString::fromStdString(session.computer_name()));
-        add_item(tr("IP Address"), QString::fromStdString(session.ip_address()));
-        add_item(tr("Connect Time"), time);
-        const proto::Version& version = session.version();
-        add_item(tr("Version"), QString("%1.%2.%3.%4")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
-        add_item(tr("Operating System"), QString::fromStdString(session.os_name()));
-
-        proto::HostSessionData session_data;
-        if (session_data.ParseFromString(session.session_data()))
-        {
-            QTreeWidgetItem* title_item = new QTreeWidgetItem();
-            title_item->setText(0, tr("Host IDs"));
-
-            tree_host_info->addTopLevelItem(title_item);
-
-            for (int i = 0; i < session_data.host_id_size(); ++i)
-            {
-                QTreeWidgetItem* item = new QTreeWidgetItem();
-                item->setText(0, tr("ID #%1").arg(i + 1));
-                item->setText(1, QString::number(session_data.host_id(i)));
-
-                title_item->addChild(item);
-            }
-
-            title_item->setExpanded(true);
-        }
-
-        for (int i = 0; i < tree_host_info->columnCount(); ++i)
-            tree_host_info->resizeColumnToContents(i);
-    }
+    // Nothing
 }
 
 void RouterManagerWindow::beforeRequest()
@@ -943,6 +974,45 @@ void RouterManagerWindow::saveRelaysToFile()
                              QMessageBox::Ok);
         return;
     }
+}
+
+QByteArray RouterManagerWindow::saveState()
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+
+        stream << saveGeometry();
+        stream << ui->tree_hosts->header()->saveState();
+        stream << ui->tree_relay->header()->saveState();
+    }
+
+    return buffer;
+}
+
+void RouterManagerWindow::restoreState(const QByteArray& state)
+{
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_12);
+
+    QByteArray window_geometry;
+    QByteArray hosts_columns_state;
+    QByteArray relays_columns_state;
+
+    stream >> window_geometry;
+    stream >> hosts_columns_state;
+    stream >> relays_columns_state;
+
+    if (!window_geometry.isEmpty())
+        restoreGeometry(window_geometry);
+
+    if (!hosts_columns_state.isEmpty())
+        ui->tree_hosts->header()->restoreState(hosts_columns_state);
+
+    if (!relays_columns_state.isEmpty())
+        ui->tree_relay->header()->restoreState(relays_columns_state);
 }
 
 } // namespace client

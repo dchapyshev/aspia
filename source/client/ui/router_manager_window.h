@@ -84,6 +84,9 @@ private:
     void saveHostsToFile();
     void saveRelaysToFile();
 
+    QByteArray saveState();
+    void restoreState(const QByteArray& state);
+
     std::unique_ptr<Ui::RouterManagerWindow> ui;
 
     QString peer_address_;

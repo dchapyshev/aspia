@@ -33,6 +33,10 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="tab_hosts">
+       <attribute name="icon">
+        <iconset resource="../resources/client.qrc">
+         <normaloff>:/img/host.png</normaloff>:/img/host.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Hosts</string>
        </attribute>
@@ -82,19 +86,19 @@
              <string>Connect Time</string>
             </property>
            </column>
-          </widget>
-          <widget class="QTreeWidget" name="tree_host_info">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
            <column>
             <property name="text">
-             <string>Name</string>
+             <string>ID</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Value</string>
+             <string>Version</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Operating System</string>
             </property>
            </column>
           </widget>
@@ -148,6 +152,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_relay">
+       <attribute name="icon">
+        <iconset resource="../resources/client.qrc">
+         <normaloff>:/img/computer.png</normaloff>:/img/computer.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Relay</string>
        </attribute>
@@ -244,6 +252,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_users">
+       <attribute name="icon">
+        <iconset resource="../resources/client.qrc">
+         <normaloff>:/img/user.png</normaloff>:/img/user.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Users</string>
        </attribute>
