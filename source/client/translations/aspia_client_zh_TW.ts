@@ -2498,42 +2498,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="74"/>
+        <location filename="../ui/file_remove_dialog.cc" line="101"/>
         <source>Deleting: %1</source>
         <translation>正在刪除：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="90"/>
+        <location filename="../ui/file_remove_dialog.cc" line="131"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>檢索檔案清單時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="95"/>
+        <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>無法刪除 &quot;%1&quot;：%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="102"/>
+        <location filename="../ui/file_remove_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="110"/>
+        <location filename="../ui/file_remove_dialog.cc" line="151"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_remove_dialog.cc" line="154"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <location filename="../ui/file_remove_dialog.cc" line="157"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="44"/>
+        <location filename="../ui/file_remove_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2541,92 +2541,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="79"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
         <source>Current Task: Copying items.</source>
         <translation>目前工作：正在複製項目。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="86"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
         <source>From: %1</source>
         <translation>從：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
         <source>To: %1</source>
         <translation>到：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="160"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="121"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="172"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="175"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="127"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="178"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="130"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="181"/>
         <source>Replace All</source>
         <translation>全部取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="184"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="202"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>目前工作：取消檔案傳輸。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="216"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="274"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>建立用於複製的檔案佇列時出錯</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="221"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="279"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>無法建立資料夾 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="229"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="287"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>無法建立檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="236"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>無法開啟檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="243"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="301"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>無法寫入檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="250"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="308"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>無法讀取檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="257"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="315"/>
         <source>Unknown error type while copying files</source>
         <translation>複製檔案時出現未知錯誤類型</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="43"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="51"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

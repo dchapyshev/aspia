@@ -24,6 +24,13 @@
 #include "client/file_remover.h"
 #include "ui_file_remove_dialog.h"
 
+// Removed completely in qt6.
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(OS_WIN)
+class QWinTaskbarProgress;
+#endif
+#endif
+
 namespace client {
 
 class FileRemoveDialog
@@ -52,6 +59,12 @@ protected:
 
 private:
     Ui::FileRemoveDialog ui;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(OS_WIN)
+    QWinTaskbarProgress* taskbar_progress_ = nullptr;
+#endif
+#endif
 
     std::shared_ptr<FileRemoverProxy> remover_proxy_;
     std::shared_ptr<FileRemoveWindowProxy> remover_window_proxy_;

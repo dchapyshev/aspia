@@ -2430,42 +2430,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="44"/>
+        <location filename="../ui/file_remove_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="74"/>
+        <location filename="../ui/file_remove_dialog.cc" line="101"/>
         <source>Deleting: %1</source>
         <translation>Cancellazione: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="90"/>
+        <location filename="../ui/file_remove_dialog.cc" line="131"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Si è verificato un errore durante l&apos;acquisizione della lista dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="95"/>
+        <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Non sono riuscito a cancellare &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="102"/>
+        <location filename="../ui/file_remove_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="110"/>
+        <location filename="../ui/file_remove_dialog.cc" line="151"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_remove_dialog.cc" line="154"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <location filename="../ui/file_remove_dialog.cc" line="157"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
@@ -2473,92 +2473,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="43"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="51"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="79"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
         <source>Current Task: Copying items.</source>
         <translation>Attività Corrente: Copia elementi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="86"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
         <source>From: %1</source>
         <translation>Da: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
         <source>To: %1</source>
         <translation>A: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="160"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="121"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="172"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="175"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="127"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="178"/>
         <source>Replace</source>
         <translation>Sostituisci</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="130"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="181"/>
         <source>Replace All</source>
         <translation>Sostituisci Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="184"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="202"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Attività Corrente: Interruzione trasferimento dei files.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="216"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="274"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Si è verificato un errore durante la generazione della coda di copia dei files</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="221"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="279"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare la cartella &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="229"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="287"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="236"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito ad aprire il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="243"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="301"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a scrivere il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="250"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="308"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a leggere &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="257"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="315"/>
         <source>Unknown error type while copying files</source>
         <translation>Errore sconosciuto durante la copia dei files</translation>
     </message>

@@ -2626,42 +2626,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="44"/>
+        <location filename="../ui/file_remove_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="74"/>
+        <location filename="../ui/file_remove_dialog.cc" line="101"/>
         <source>Deleting: %1</source>
         <translation>Видалення: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="90"/>
+        <location filename="../ui/file_remove_dialog.cc" line="131"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="95"/>
+        <location filename="../ui/file_remove_dialog.cc" line="136"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не вдалося видалити &quot;%1&quot;:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="102"/>
+        <location filename="../ui/file_remove_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="110"/>
+        <location filename="../ui/file_remove_dialog.cc" line="151"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="113"/>
+        <location filename="../ui/file_remove_dialog.cc" line="154"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="116"/>
+        <location filename="../ui/file_remove_dialog.cc" line="157"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>
@@ -2669,92 +2669,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="43"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="51"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="79"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
         <source>Current Task: Copying items.</source>
         <translation>Поточне завдання: Копіювання файлів.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="86"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="123"/>
         <source>From: %1</source>
         <translation>З: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
         <source>To: %1</source>
         <translation>До: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="109"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="160"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="121"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="172"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="124"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="175"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="127"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="178"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="130"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="181"/>
         <source>Replace All</source>
         <translation>Замінити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="184"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="202"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="260"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Поточне завдання: Відміна передачі файлів.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="216"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="274"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Виникла помилка під час створення файлової черги для копіювання</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="221"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="279"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити каталог &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="229"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="287"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="236"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="294"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="243"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="301"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="250"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="308"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="257"/>
+        <location filename="../ui/file_transfer_dialog.cc" line="315"/>
         <source>Unknown error type while copying files</source>
         <translation>Невідомий тип помилки під час копіювання файлів</translation>
     </message>
