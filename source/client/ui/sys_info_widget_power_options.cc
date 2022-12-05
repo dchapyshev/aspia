@@ -226,7 +226,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
         if (!group.isEmpty())
         {
             ui.tree->addTopLevelItem(
-                new Item(":/img/power-supply.png", tr("Battery #%1").arg(i), group));
+                new Item(":/img/power-supply.png", tr("Battery #%1").arg(i + 1), group));
         }
     }
 
