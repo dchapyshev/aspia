@@ -4486,7 +4486,7 @@
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="148"/>
         <source>Battery Life Percent</source>
-        <translation>Срок службы</translation>
+        <translation>Уровень заряда</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="154"/>
