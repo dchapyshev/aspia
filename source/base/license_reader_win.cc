@@ -22,6 +22,7 @@
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/win/registry.h"
+#include "base/win/windows_version.h"
 
 namespace base {
 
@@ -168,10 +169,50 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
                            access | KEY_READ);
     if (status == ERROR_SUCCESS)
     {
+        base::win::OSInfo* os_info = base::win::OSInfo::instance();
         std::wstring product_name;
 
-        status = key.readValue(L"ProductName", &product_name);
-        if (status == ERROR_SUCCESS)
+        if (os_info->version() >= base::win::VERSION_WIN11)
+        {
+            // Key ProductName in the Windows 11 registry says it's Windows 10.
+            // We can't rely on this value.
+            switch (os_info->versionType())
+            {
+                case base::win::SUITE_HOME:
+                    product_name = L"Windows 11 Home";
+                    break;
+
+                case base::win::SUITE_PROFESSIONAL:
+                    product_name = L"Windows 11 Pro";
+                    break;
+
+                case base::win::SUITE_SERVER:
+                    product_name = L"Windows 11 Server";
+                    break;
+
+                case base::win::SUITE_ENTERPRISE:
+                    product_name = L"Windows 11 Enterprise";
+                    break;
+
+                case base::win::SUITE_EDUCATION:
+                    product_name = L"Windows 11 Education";
+                    break;
+
+                case base::win::SUITE_EDUCATION_PRO:
+                    product_name = L"Windows 11 Education Pro";
+                    break;
+
+                default:
+                    product_name = L"Windows 11";
+                    break;
+            }
+        }
+        else
+        {
+            key.readValue(L"ProductName", &product_name);
+        }
+
+        if (!product_name.empty())
             addMsProduct(message, product_name, key);
     }
 
