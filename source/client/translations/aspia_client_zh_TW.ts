@@ -3944,10 +3944,8 @@
         <translation>全滿電池壽命</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
         <source>%1 s</source>
-        <translation>%1 秒</translation>
+        <translation type="vanished">%1 秒</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>

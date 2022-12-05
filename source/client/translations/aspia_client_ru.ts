@@ -4494,10 +4494,8 @@
         <translation>Полное время работы</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
         <source>%1 s</source>
-        <translation>%1 с</translation>
+        <translation type="vanished">%1 с</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>

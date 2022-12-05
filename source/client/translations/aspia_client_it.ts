@@ -3803,10 +3803,8 @@
         <translation>Carica Batteria Completa</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
         <source>%1 s</source>
-        <translation>%1 s</translation>
+        <translation type="vanished">%1 s</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>

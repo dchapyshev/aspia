@@ -3875,12 +3875,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="155"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="162"/>
-        <source>%1 s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/sys_info_widget_power_options.cc" line="161"/>
         <source>Remaining Battery Life Time</source>
         <translation type="unfinished"></translation>
