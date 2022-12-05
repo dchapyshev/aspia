@@ -128,6 +128,31 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
 //static
 std::string SysInfo::operatingSystemName()
 {
+    base::win::OSInfo* os_info = base::win::OSInfo::instance();
+
+    if (os_info->version() >= base::win::VERSION_WIN11)
+    {
+        // Key ProductName in the Windows 11 registry says it's Windows 10.
+        // We can't rely on this value.
+        switch (os_info->versionType())
+        {
+            case base::win::SUITE_HOME:
+                return "Windows 11 Home";
+            case base::win::SUITE_PROFESSIONAL:
+                return "Windows 11 Pro";
+            case base::win::SUITE_SERVER:
+                return "Windows 11 Server";
+            case base::win::SUITE_ENTERPRISE:
+                return "Windows 11 Enterprise";
+            case base::win::SUITE_EDUCATION:
+                return "Windows 11 Education";
+            case base::win::SUITE_EDUCATION_PRO:
+                return "Windows 11 Education Pro";
+            default:
+                return "Windows 11";
+        }
+    }
+
     win::RegistryKey key;
 
     REGSAM access = KEY_READ;
