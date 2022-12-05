@@ -30,62 +30,72 @@ namespace {
 // Helper to map a major.minor.x.build version (e.g. 6.1) to a Windows release.
 Version majorMinorBuildToVersion(int major, int minor, int build)
 {
-    if ((major == 5) && (minor > 0))
+    if (major == 11)
+        return VERSION_WIN11;
+
+    if (major == 10)
     {
-        // Treat XP Pro x64, Home Server, and Server 2003 R2 as Server 2003.
-        return (minor == 1) ? VERSION_XP : VERSION_SERVER_2003;
+        if (build >= 22000)
+            return VERSION_WIN11;
+        if (build >= 20348)
+            return VERSION_SERVER_2022;
+        if (build >= 19044)
+            return VERSION_WIN10_21H2;
+        if (build >= 19043)
+            return VERSION_WIN10_21H1;
+        if (build >= 19042)
+            return VERSION_WIN10_20H2;
+        if (build >= 19041)
+            return VERSION_WIN10_20H1;
+        if (build >= 18363)
+            return VERSION_WIN10_19H2;
+        if (build >= 18362)
+            return VERSION_WIN10_19H1;
+        if (build >= 17763)
+            return VERSION_WIN10_RS5;
+        if (build >= 17134)
+            return VERSION_WIN10_RS4;
+        if (build >= 16299)
+            return VERSION_WIN10_RS3;
+        if (build >= 15063)
+            return VERSION_WIN10_RS2;
+        if (build >= 14393)
+            return VERSION_WIN10_RS1;
+        if (build >= 10586)
+            return VERSION_WIN10_TH2;
+        return VERSION_WIN10;
     }
-    else if (major == 6)
+
+    if (major > 6)
+    {
+        // Hitting this likely means that it's time for a >11 block above.
+        NOTREACHED() << major << "." << minor << "." << build;
+        return VERSION_WIN_LAST;
+    }
+
+    if (major == 6)
     {
         switch (minor)
         {
             case 0:
-                // Treat Windows Server 2008 the same as Windows Vista.
                 return VERSION_VISTA;
             case 1:
-                // Treat Windows Server 2008 R2 the same as Windows 7.
                 return VERSION_WIN7;
             case 2:
-                // Treat Windows Server 2012 the same as Windows 8.
                 return VERSION_WIN8;
             default:
-                DCHECK_EQ(minor, 3);
+                DCHECK_EQ(minor, 3u);
                 return VERSION_WIN8_1;
         }
     }
-    else if (major == 10)
+
+    if (major == 5 && minor != 0)
     {
-        if (build < 10586)
-        {
-            return VERSION_WIN10;
-        }
-        else if (build < 14393)
-        {
-            return VERSION_WIN10_TH2;
-        }
-        else if (build < 15063)
-        {
-            return VERSION_WIN10_RS1;
-        }
-        else if (build < 16299)
-        {
-            return VERSION_WIN10_RS2;
-        }
-        else if (build < 17134)
-        {
-            return VERSION_WIN10_RS3;
-        }
-        else
-        {
-            return VERSION_WIN10_RS4;
-        }
-    }
-    else if (major > 6)
-    {
-        NOTREACHED();
-        return VERSION_WIN_LAST;
+        // Treat XP Pro x64, Home Server, and Server 2003 R2 as Server 2003.
+        return minor == 1 ? VERSION_XP : VERSION_SERVER_2003;
     }
 
+    // Win 2000 or older.
     return VERSION_PRE_XP;
 }
 
@@ -236,10 +246,17 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
             case PRODUCT_BUSINESS_N:
                 version_type_ = SUITE_ENTERPRISE;
                 break;
+
+            case PRODUCT_PRO_FOR_EDUCATION:
+            case PRODUCT_PRO_FOR_EDUCATION_N:
+                version_type_ = SUITE_EDUCATION_PRO;
+                break;
+
             case PRODUCT_EDUCATION:
             case PRODUCT_EDUCATION_N:
                 version_type_ = SUITE_EDUCATION;
                 break;
+
             case PRODUCT_HOME_BASIC:
             case PRODUCT_HOME_PREMIUM:
             case PRODUCT_STARTER:
