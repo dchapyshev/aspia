@@ -142,8 +142,10 @@ void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 
 void OnlineChecker::onDirectCheckerFinished()
 {
-    LOG(LS_INFO) << "DIRECT checker finished";
     direct_finished_ = true;
+
+    LOG(LS_INFO) << "DIRECT checker finished (r=" << router_finished_
+                 << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
     {
@@ -178,8 +180,10 @@ void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 
 void OnlineChecker::onRouterCheckerFinished()
 {
-    LOG(LS_INFO) << "RELAY checker finished";
     router_finished_ = true;
+
+    LOG(LS_INFO) << "ROUTER checker finished (r=" << router_finished_
+                 << ", d=" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
     {

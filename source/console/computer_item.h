@@ -48,6 +48,7 @@ public:
 
     proto::address_book::Computer* computer() { return computer_; }
     proto::address_book::Computer computerToConnect();
+    int computerId() const { return computer_id_; }
 
     ComputerGroupItem* parentComputerGroupItem();
 
@@ -59,6 +60,7 @@ private:
 
     proto::address_book::Computer* computer_;
     ComputerGroupItem* parent_group_item_;
+    int computer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(ComputerItem);
 };

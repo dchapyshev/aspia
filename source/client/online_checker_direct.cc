@@ -43,6 +43,7 @@ public:
     using FinishCallback = std::function<void(int computer_id, bool online)>;
 
     void start(FinishCallback finish_callback);
+    int computerId() const { return computer_id_; }
 
 protected:
     void onConnected() override;
@@ -226,24 +227,38 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
         return;
     }
 
-    if (pending_queue_.empty())
+    if (!pending_queue_.empty())
     {
-        LOG(LS_INFO) << "No more items in queue";
-        onFinished(FROM_HERE);
-        return;
+        const Computer& computer = pending_queue_.front();
+        std::unique_ptr<Instance> instance = std::make_unique<Instance>(
+            computer.computer_id, computer.address, computer.port, task_runner_);
+
+        LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
+                     << computer.address << " port: " << computer.port << ")";
+
+        work_queue_.emplace_back(std::move(instance));
+        work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
+                                            std::placeholders::_1, std::placeholders::_2));
+        pending_queue_.pop_front();
     }
+    else
+    {
+        for (auto it = work_queue_.begin(); it != work_queue_.end(); ++it)
+        {
+            if (it->get()->computerId() == computer_id)
+            {
+                work_queue_.erase(it);
+                break;
+            }
+        }
 
-    const Computer& computer = pending_queue_.front();
-    std::unique_ptr<Instance> instance = std::make_unique<Instance>(
-        computer.computer_id, computer.address, computer.port, task_runner_);
-
-    LOG(LS_INFO) << "Instance for '" << computer.computer_id << "' is created (address: "
-                 << computer.address << " port: " << computer.port << ")";
-
-    work_queue_.emplace_back(std::move(instance));
-    work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
-                                        std::placeholders::_1, std::placeholders::_2));
-    pending_queue_.pop_front();
+        if (work_queue_.empty())
+        {
+            LOG(LS_INFO) << "No more items in queue";
+            onFinished(FROM_HERE);
+            return;
+        }
+    }
 }
 
 void OnlineCheckerDirect::onFinished(const base::Location& location)

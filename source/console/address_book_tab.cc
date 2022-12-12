@@ -621,7 +621,7 @@ void AddressBookTab::startOnlineChecker()
         ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
 
         client::OnlineChecker::Computer computer;
-        computer.computer_id = i;
+        computer.computer_id = computer_item->computerId();
         computer.address_or_id = base::utf16FromUtf8(computer_item->computer()->address());
 
         computers.emplace_back(std::move(computer));
@@ -834,10 +834,21 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
 
 void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 {
-    QTreeWidgetItem* item = ui.tree_computer->topLevelItem(computer_id);
+    ComputerItem* item = nullptr;
+
+    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    {
+        item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
+        if (!item)
+            return;
+
+        if (item->computerId() == computer_id)
+            break;
+    }
+
     if (!item)
     {
-        LOG(LS_WARNING) << "Computer '" << computer_id << "' not found";
+        LOG(LS_WARNING) << "Computer with id " << computer_id << " not found in list";
         return;
     }
 
