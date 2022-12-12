@@ -48,10 +48,13 @@ Rect parseRect(const proto::Rect& rect)
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-VideoDecoderZstd::~VideoDecoderZstd() = default;
+VideoDecoderZstd::~VideoDecoderZstd()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 // static
 std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
