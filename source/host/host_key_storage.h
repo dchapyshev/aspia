@@ -20,6 +20,7 @@
 #define HOST_HOST_KEY_STORAGE_H
 
 #include "base/macros_magic.h"
+#include "base/peer/host_id.h"
 #include "base/settings/json_settings.h"
 
 namespace host {
@@ -32,6 +33,8 @@ public:
 
     base::ByteArray key(std::string_view session_name) const;
     void setKey(std::string_view session_name, const base::ByteArray& key);
+    base::HostId lastHostId(std::string_view session_name) const;
+    void setLastHostId(std::string_view session_name, base::HostId host_id);
 
 private:
     base::JsonSettings impl_;

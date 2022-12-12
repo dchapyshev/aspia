@@ -32,6 +32,13 @@ std::string sessionKey(std::string_view session_name)
     return base::strCat({ "session/", base::toHex(session_hash) });
 }
 
+std::string sessionKeyForHostId(std::string_view session_name)
+{
+    base::ByteArray session_hash =
+        base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, session_name);
+    return base::strCat({ "session_host_id/", base::toHex(session_hash) });
+}
+
 } // namespace
 
 HostKeyStorage::HostKeyStorage()
@@ -56,6 +63,24 @@ void HostKeyStorage::setKey(std::string_view session_name, const base::ByteArray
         impl_.set<base::ByteArray>("console", key);
     else
         impl_.set<base::ByteArray>(sessionKey(session_name), key);
+
+    impl_.flush();
+}
+
+base::HostId HostKeyStorage::lastHostId(std::string_view session_name) const
+{
+    if (session_name.empty())
+        return impl_.get<base::HostId>("console_host_id");
+
+    return impl_.get<base::HostId>(sessionKeyForHostId(session_name));
+}
+
+void HostKeyStorage::setLastHostId(std::string_view session_name, base::HostId host_id)
+{
+    if (session_name.empty())
+        impl_.set<base::HostId>("console_host_id", host_id);
+    else
+        impl_.set<base::HostId>(sessionKeyForHostId(session_name), host_id);
 
     impl_.flush();
 }
