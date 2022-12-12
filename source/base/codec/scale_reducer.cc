@@ -42,6 +42,12 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     DCHECK(source_frame->format() == PixelFormat::ARGB());
 
     const Size& source_size = source_frame->size();
+    if (source_size.width() == 0 || source_size.height() == 0)
+    {
+        LOG(LS_WARNING) << "Invalid source frame size: "
+                        << source_size.width() << "x" << source_size.height();
+        return nullptr;
+    }
 
     if (source_size_ != source_size || target_size_ != target_size)
     {
@@ -68,7 +74,10 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     {
         target_frame_ = FrameSimple::create(target_size, PixelFormat::ARGB());
         if (!target_frame_)
+        {
+            LOG(LS_ERROR) << "Unable to create target frame";
             return nullptr;
+        }
 
         target_frame_->updatedRegion()->addRect(target_frame_rect);
 
