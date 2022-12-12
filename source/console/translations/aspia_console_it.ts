@@ -1037,53 +1037,53 @@
         <translation>Sei sicuro di voler eliminare il computer &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="850"/>
+        <location filename="../address_book_tab.cc" line="861"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="855"/>
+        <location filename="../address_book_tab.cc" line="866"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="976"/>
+        <location filename="../address_book_tab.cc" line="987"/>
         <source>Save Address Book</source>
         <translation>Salva Rubrica</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="978"/>
+        <location filename="../address_book_tab.cc" line="989"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Rubrica Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="988"/>
+        <location filename="../address_book_tab.cc" line="999"/>
         <source>Unable to create or open address book file.</source>
         <translation>Creazione o apertura rubrica fallita.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1001"/>
+        <location filename="../address_book_tab.cc" line="1012"/>
         <source>Unable to write address book file.</source>
         <translation>Salvataggio rubrica fallito.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1029"/>
+        <location filename="../address_book_tab.cc" line="1040"/>
         <source>Root Group</source>
         <translation>Gruppo Radice</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1040"/>
-        <location filename="../address_book_tab.cc" line="1054"/>
+        <location filename="../address_book_tab.cc" line="1051"/>
+        <location filename="../address_book_tab.cc" line="1065"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1042"/>
+        <location filename="../address_book_tab.cc" line="1053"/>
         <source>Could not open address book</source>
         <translation>Apertura rubrica fallita</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1056"/>
+        <location filename="../address_book_tab.cc" line="1067"/>
         <source>Failed to save address book</source>
         <translation>Salvataggio rubrica fallito</translation>
     </message>
