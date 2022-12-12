@@ -230,7 +230,11 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         proto::VideoPacket* packet = outgoing_message_->mutable_video_packet();
 
         // Encode the frame into a video packet.
-        video_encoder_->encode(scaled_frame, packet);
+        if (!video_encoder_->encode(scaled_frame, packet))
+        {
+            LOG(LS_ERROR) << "Unable to encode video packet";
+            return;
+        }
 
         if (packet->has_format())
         {

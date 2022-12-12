@@ -161,7 +161,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     memset(&active_map_, 0, sizeof(active_map_));
 }
 
-void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
+bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 
@@ -176,12 +176,21 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 
         if (encoding() == proto::VIDEO_ENCODING_VP8)
         {
-            createVp8Codec(frame_size);
+            if (!createVp8Codec(frame_size))
+            {
+                LOG(LS_ERROR) << "Unable to create VP8 codec";
+                return false;
+            }
         }
         else
         {
             DCHECK_EQ(encoding(), proto::VIDEO_ENCODING_VP9);
-            createVp9Codec(frame_size);
+
+            if (!createVp9Codec(frame_size))
+            {
+                LOG(LS_ERROR) << "Unable to create VP9 codec";
+                return false;
+            }
         }
 
         is_key_frame = true;
@@ -196,6 +205,7 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed: " << ret;
+        return false;
     }
 
     // Do the actual encoding.
@@ -209,6 +219,7 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_encode failed: " << ret;
+        return false;
     }
 
     // Read the encoded data.
@@ -228,6 +239,7 @@ void VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     }
 
     setKeyFrameRequired(false);
+    return true;
 }
 
 void VideoEncoderVPX::createActiveMap(const Size& size)
@@ -243,7 +255,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
     clearActiveMap();
 }
 
-void VideoEncoderVPX::createVp8Codec(const Size& size)
+bool VideoEncoderVPX::createVp8Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -254,6 +266,7 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        return false;
     }
 
     setCommonCodecParameters(&config_, size);
@@ -275,6 +288,7 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        return false;
     }
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel motion search.
@@ -282,12 +296,14 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
+        return false;
     }
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
@@ -296,10 +312,13 @@ void VideoEncoderVPX::createVp8Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        return false;
     }
+
+    return true;
 }
 
-void VideoEncoderVPX::createVp9Codec(const Size& size)
+bool VideoEncoderVPX::createVp9Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -310,6 +329,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        return false;
     }
 
     setCommonCodecParameters(&config_, size);
@@ -327,6 +347,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        return false;
     }
 
     // Request the lowest-CPU usage that VP9 supports, which depends on whether we are encoding
@@ -335,12 +356,14 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed: " << ret;
+        return false;
     }
 
     // Use the lowest level of noise sensitivity so as to spend less time on motion estimation and
@@ -349,6 +372,7 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        return false;
     }
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
@@ -356,7 +380,10 @@ void VideoEncoderVPX::createVp9Codec(const Size& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed: " << ret;
+        return false;
     }
+
+    return true;
 }
 
 void VideoEncoderVPX::prepareImageAndActiveMap(

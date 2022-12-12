@@ -81,7 +81,11 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
     }
 
     size_t ret = ZSTD_initDStream(stream_.get());
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
 
     Rect frame_rect = Rect::makeSize(source_frame_->size());
     ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };
