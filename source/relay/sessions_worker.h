@@ -46,6 +46,7 @@ protected:
     void onAfterThreadRunning() override;
 
     // SessionManager::Delegate implementation.
+    void onSessionStatistics(const proto::RelayStat& relay_stat) override;
     void onSessionFinished() override;
 
 private:

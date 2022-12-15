@@ -34,6 +34,7 @@ public:
     using PeerData = std::pair<std::string, uint16_t>;
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
+    const std::optional<proto::RelayStat>& relayStat() const { return relay_stat_; }
     void sendKeyUsed(uint32_t key_id);
 
 protected:
@@ -48,6 +49,7 @@ private:
     void readKeyPool(const proto::RelayKeyPool& key_pool);
 
     std::optional<PeerData> peer_data_;
+    std::optional<proto::RelayStat> relay_stat_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };

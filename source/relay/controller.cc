@@ -232,6 +232,16 @@ void Controller::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
+void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
+{
+    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
+
+    message->mutable_relay_stat()->CopyFrom(relay_stat);
+
+    // Send a message to the router.
+    channel_->send(base::serialize(*message));
+}
+
 void Controller::onSessionFinished()
 {
     // After disconnecting the peer, one key is released.

@@ -37,9 +37,25 @@ message RelayKeyUsed
 }
 
 // Sent from relay to router.
+message RelayStat
+{
+    message PeerConnection
+    {
+        string first_address    = 1;
+        string second_address   = 2;
+        int64 bytes_transferred = 3;
+        int64 duration          = 4;
+        int64 idle_time         = 5;
+    }
+
+    repeated PeerConnection peer_connection = 1;
+}
+
+// Sent from relay to router.
 message RelayToRouter
 {
     RelayKeyPool key_pool = 1;
+    RelayStat relay_stat  = 2;
 }
 
 // Sent from router to relay.

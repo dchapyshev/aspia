@@ -31,6 +31,9 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
 {
     for (size_t i = 0; i < kNumberOfSides; ++i)
         std::fill(buffer_[i].begin(), buffer_[i].end(), 0);
+
+    first_address_ = socket_[0].remote_endpoint().address().to_string();
+    second_address_ = socket_[1].remote_endpoint().address().to_string();
 }
 
 Session::~Session()
@@ -65,6 +68,16 @@ void Session::stop()
 
     LOG(LS_INFO) << "Session stopped (duration: " << duration().count()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
+}
+
+const std::string& Session::firstAddress() const
+{
+    return first_address_;
+}
+
+const std::string& Session::secondAddress() const
+{
+    return second_address_;
 }
 
 std::chrono::seconds Session::idleTime(const TimePoint& current_time) const

@@ -23,7 +23,6 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/crypto/message_decryptor_openssl.h"
-#include "base/peer/host_id.h"
 #include "base/strings/unicode.h"
 
 namespace relay {
@@ -31,6 +30,7 @@ namespace relay {
 namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
+const std::chrono::seconds kStatTimerInterval { 15 };
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
@@ -103,7 +103,8 @@ SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
       acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
                 asio::ip::tcp::endpoint(listen_address, port)),
       idle_timeout_(idle_timeout),
-      idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext())
+      idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext())
 {
     DCHECK(task_runner_);
 
@@ -129,6 +130,9 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
 
     idle_timer_.expires_after(kIdleTimerInterval);
     idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
+
+    stat_timer_.expires_after(kStatTimerInterval);
+    stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
 
     SessionManager::doAccept(this);
 }
@@ -267,6 +271,44 @@ void SessionManager::doIdleTimeoutImpl(const std::error_code& error_code)
 
     idle_timer_.expires_after(kIdleTimerInterval);
     idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
+}
+
+// static
+void SessionManager::doStatTimeout(SessionManager* self, const std::error_code& error_code)
+{
+    if (error_code == asio::error::operation_aborted)
+        return;
+
+    self->doStatTimeoutImpl(error_code);
+}
+
+void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
+{
+    if (!error_code)
+    {
+        proto::RelayStat relay_stat;
+
+        for (const auto& session : active_sessions_)
+        {
+            proto::RelayStat::PeerConnection* peer_connection = relay_stat.add_peer_connection();
+
+            peer_connection->set_first_address(session->firstAddress());
+            peer_connection->set_second_address(session->secondAddress());
+            peer_connection->set_bytes_transferred(session->bytesTransferred());
+            peer_connection->set_idle_time(session->idleTime(Session::Clock::now()).count());
+            peer_connection->set_duration(session->duration().count());
+        }
+
+        if (delegate_)
+            delegate_->onSessionStatistics(relay_stat);
+    }
+    else
+    {
+        LOG(LS_ERROR) << "Error in stat timer: " << base::utf16FromLocal8Bit(error_code.message());
+    }
+
+    stat_timer_.expires_after(kStatTimerInterval);
+    stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
 }
 
 void SessionManager::removePendingSession(PendingSession* session)

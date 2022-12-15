@@ -60,6 +60,10 @@ void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
     {
         readKeyPool(message->key_pool());
     }
+    else if (message->has_relay_stat())
+    {
+        relay_stat_ = std::move(*message->mutable_relay_stat());
+    }
     else
     {
         LOG(LS_WARNING) << "Unhandled message from relay server";

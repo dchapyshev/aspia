@@ -49,6 +49,8 @@ public:
     void start(Delegate* delegate);
     void stop();
 
+    const std::string& firstAddress() const;
+    const std::string& secondAddress() const;
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration() const;
     int64_t bytesTransferred() const;
@@ -57,6 +59,8 @@ private:
     static void doReadSome(Session* session, int source);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
+    std::string first_address_;
+    std::string second_address_;
     TimePoint start_time_;
     mutable TimePoint start_idle_time_;
     int64_t bytes_transferred_ = 0;

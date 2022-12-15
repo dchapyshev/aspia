@@ -51,6 +51,7 @@ protected:
     void onMessageWritten(size_t pending) override;
 
     // SessionManager::Delegate implementation.
+    void onSessionStatistics(const proto::RelayStat& relay_stat) override;
     void onSessionFinished() override;
 
     // SharedPool::Delegate implementation.

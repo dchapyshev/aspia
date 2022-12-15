@@ -20,6 +20,7 @@
 #define RELAY_SESSION_MANAGER_H
 
 #include "proto/relay_peer.pb.h"
+#include "proto/router_relay.pb.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/shared_pool.h"
@@ -42,6 +43,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
+        virtual void onSessionStatistics(const proto::RelayStat& relay_stat) = 0;
         virtual void onSessionFinished() = 0;
     };
 
@@ -66,6 +68,8 @@ private:
     static void doAccept(SessionManager* self);
     static void doIdleTimeout(SessionManager* self, const std::error_code& error_code);
     void doIdleTimeoutImpl(const std::error_code& error_code);
+    static void doStatTimeout(SessionManager* self, const std::error_code& error_code);
+    void doStatTimeoutImpl(const std::error_code& error_code);
 
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
@@ -78,6 +82,8 @@ private:
 
     const std::chrono::minutes idle_timeout_;
     asio::high_resolution_timer idle_timer_;
+
+    asio::high_resolution_timer stat_timer_;
 
     std::unique_ptr<SharedPool> shared_pool_;
     Delegate* delegate_ = nullptr;
