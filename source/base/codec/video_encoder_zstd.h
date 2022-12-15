@@ -38,11 +38,11 @@ public:
     static std::unique_ptr<VideoEncoderZstd> create(
         const PixelFormat& target_format, int compression_ratio);
 
-    void encode(const Frame* frame, proto::VideoPacket* packet) override;
+    bool encode(const Frame* frame, proto::VideoPacket* packet) override;
 
 private:
     VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio);
-    void compressPacket(proto::VideoPacket* packet,
+    bool compressPacket(proto::VideoPacket* packet,
                         const uint8_t* input_data,
                         size_t input_size);
 

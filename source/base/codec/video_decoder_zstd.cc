@@ -48,10 +48,13 @@ Rect parseRect(const proto::Rect& rect)
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
-VideoDecoderZstd::~VideoDecoderZstd() = default;
+VideoDecoderZstd::~VideoDecoderZstd()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 // static
 std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
@@ -81,7 +84,11 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
     }
 
     size_t ret = ZSTD_initDStream(stream_.get());
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_initDStream failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
 
     Rect frame_rect = Rect::makeSize(source_frame_->size());
     ZSTD_inBuffer input = { packet.data().data(), packet.data().size(), 0 };

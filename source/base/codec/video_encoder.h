@@ -32,7 +32,7 @@ public:
     explicit VideoEncoder(proto::VideoEncoding encoding);
     virtual ~VideoEncoder() = default;
 
-    virtual void encode(const Frame* frame, proto::VideoPacket* packet) = 0;
+    virtual bool encode(const Frame* frame, proto::VideoPacket* packet) = 0;
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
     bool isKeyFrameRequired() const { return key_frame_required_; }

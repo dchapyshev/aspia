@@ -1057,53 +1057,53 @@
         <translation>Tem certeza que deseja excluir o computador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="850"/>
+        <location filename="../address_book_tab.cc" line="861"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="855"/>
+        <location filename="../address_book_tab.cc" line="866"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="976"/>
+        <location filename="../address_book_tab.cc" line="987"/>
         <source>Save Address Book</source>
         <translation>Salvar Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="978"/>
+        <location filename="../address_book_tab.cc" line="989"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Cátalog de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="988"/>
+        <location filename="../address_book_tab.cc" line="999"/>
         <source>Unable to create or open address book file.</source>
         <translation>Não foi possível criar ou abrir o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1001"/>
+        <location filename="../address_book_tab.cc" line="1012"/>
         <source>Unable to write address book file.</source>
         <translation>Não foi possível gravar o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1029"/>
+        <location filename="../address_book_tab.cc" line="1040"/>
         <source>Root Group</source>
         <translation>Raiz do Grupo</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1040"/>
-        <location filename="../address_book_tab.cc" line="1054"/>
+        <location filename="../address_book_tab.cc" line="1051"/>
+        <location filename="../address_book_tab.cc" line="1065"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1042"/>
+        <location filename="../address_book_tab.cc" line="1053"/>
         <source>Could not open address book</source>
         <translation>Não foi possível abrir o catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1056"/>
+        <location filename="../address_book_tab.cc" line="1067"/>
         <source>Failed to save address book</source>
         <translation>Falha ao salvar o catálogo de endereços</translation>
     </message>

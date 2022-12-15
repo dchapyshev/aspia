@@ -208,25 +208,29 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
                 return;
         }
 
-        if (host_id_response.host_id() == base::kInvalidHostId)
+        base::HostId host_id = host_id_response.host_id();
+        if (host_id == base::kInvalidHostId)
         {
             LOG(LS_ERROR) << "Invalid host ID received";
             return;
         }
 
+        const std::string& session_name = pending_id_requests_.front();
+        HostKeyStorage host_key_storage;
+
         base::ByteArray host_key = base::fromStdString(host_id_response.key());
         if (!host_key.empty())
         {
             LOG(LS_INFO) << "New host key received";
-
-            HostKeyStorage host_key_storage;
-            host_key_storage.setKey(pending_id_requests_.front(), host_key);
+            host_key_storage.setKey(session_name, host_key);
         }
 
-        LOG(LS_INFO) << "Host ID received: " << host_id_response.host_id()
-                     << " session name: '" << pending_id_requests_.front() << "'";
+        LOG(LS_INFO) << "Host ID received: " << host_id << " session name: '" << session_name << "'";
 
-        delegate_->onHostIdAssigned(pending_id_requests_.front(), host_id_response.host_id());
+        if (host_key_storage.lastHostId(session_name) != host_id)
+            host_key_storage.setLastHostId(session_name, host_id);
+
+        delegate_->onHostIdAssigned(session_name, host_id);
         pending_id_requests_.pop();
     }
     else if (in_message.has_connection_offer())

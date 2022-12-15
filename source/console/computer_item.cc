@@ -31,6 +31,10 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     : computer_(computer),
       parent_group_item_(parent_group_item)
 {
+    static int computer_id = 0;
+    computer_id_ = computer_id;
+    ++computer_id;
+
     setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
     updateItem();
 }

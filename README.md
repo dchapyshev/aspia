@@ -15,6 +15,7 @@ Currently supported
 - File transfer
 - System information
 - Text chat
+- Task manager
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password

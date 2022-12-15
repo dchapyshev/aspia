@@ -39,14 +39,14 @@ public:
     static std::unique_ptr<VideoEncoderVPX> createVP8();
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    void encode(const Frame* frame, proto::VideoPacket* packet) override;
+    bool encode(const Frame* frame, proto::VideoPacket* packet) override;
 
 private:
     explicit VideoEncoderVPX(proto::VideoEncoding encoding);
 
     void createActiveMap(const Size& size);
-    void createVp8Codec(const Size& size);
-    void createVp9Codec(const Size& size);
+    bool createVp8Codec(const Size& size);
+    bool createVp9Codec(const Size& size);
     void prepareImageAndActiveMap(bool is_key_frame, const Frame* frame, proto::VideoPacket* packet);
     void addRectToActiveMap(const Rect& rect);
     void clearActiveMap();

@@ -23,12 +23,14 @@
 #include "base/scoped_logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
+#include "base/strings/strcat.h"
 #include "base/win/mini_dump_writer.h"
 #include "base/win/service_controller.h"
 #include "base/win/session_info.h"
 #include "base/win/session_enumerator.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
+#include "host/host_key_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
 
@@ -119,6 +121,72 @@ void removeService()
     {
         std::cout << "The service was successfully deleted." << std::endl;
     }
+}
+
+std::optional<std::string> currentSessionName()
+{
+    DWORD process_session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &process_session_id))
+        return std::nullopt;
+
+    DWORD console_session_id = WTSGetActiveConsoleSessionId();
+    if (console_session_id == process_session_id)
+        return std::string();
+
+    base::win::SessionInfo current_session_info(process_session_id);
+    if (!current_session_info.isValid())
+        return std::nullopt;
+
+    std::u16string user_name = base::toLower(current_session_info.userName16());
+    std::u16string domain = base::toLower(current_session_info.domain16());
+
+    if (user_name.empty())
+        return std::nullopt;
+
+    using TimeInfo = std::pair<base::SessionId, int64_t>;
+    using TimeInfoList = std::vector<TimeInfo>;
+
+    // Enumarate all user sessions.
+    TimeInfoList times;
+    for (base::win::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    {
+        if (user_name != base::toLower(it.userName16()))
+            continue;
+
+        base::win::SessionInfo session_info(it.sessionId());
+        if (!session_info.isValid())
+            continue;
+
+        // In Windows Server can have multiple RDP sessions with the same username. We get a list of
+        // sessions with the same username and session connection time.
+        times.emplace_back(session_info.sessionId(), session_info.connectTime());
+    }
+
+    // Sort the list by the time it was connected to the server.
+    std::sort(times.begin(), times.end(), [](const TimeInfo& p1, const TimeInfo& p2)
+    {
+        return p1.second < p2.second;
+    });
+
+    // We are looking for the current session in the sorted list.
+    size_t user_number = 0;
+    for (size_t i = 0; i < times.size(); ++i)
+    {
+        if (times[i].first == current_session_info.sessionId())
+        {
+            // Save the user number in the list.
+            user_number = i;
+            break;
+        }
+    }
+
+    // The session name contains the username and domain to reliably distinguish between local and
+    // domain users. It also contains the user number found above. This way, users will receive the
+    // same ID based on the time they were connected to the server.
+    std::string session_name = base::strCat({ base::utf8FromUtf16(user_name), "@",
+        base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
+
+    return std::move(session_name);
 }
 
 int hostServiceMain(int argc, wchar_t* argv[])
@@ -236,6 +304,15 @@ int hostServiceMain(int argc, wchar_t* argv[])
             std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
                       << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
         }
+        else if (command_line->hasSwitch(u"host-id"))
+        {
+            std::optional<std::string> session_name = currentSessionName();
+            if (!session_name.has_value())
+                return 0;
+
+            HostKeyStorage storage;
+            std::cout << storage.lastHostId(*session_name) << std::endl;
+        }
         else if (command_line->hasSwitch(u"install"))
         {
             installService();
@@ -260,6 +337,7 @@ int hostServiceMain(int argc, wchar_t* argv[])
                 << '\t' << "--remove" << '\t' << "Remove service" << std::endl
                 << '\t' << "--start" << '\t' << "Start service" << std::endl
                 << '\t' << "--stop" << '\t' << "Stop service" << std::endl
+                << '\t' << "--host-id" << '\t' << "Get current host id" << std::endl
                 << '\t' << "--version" << '\t' << "Show version information" << std::endl
                 << '\t' << "--help" << '\t' << "Show help" << std::endl;
         }

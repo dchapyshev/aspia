@@ -112,6 +112,6 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 Alternative instructions (SW build system)
 ------------------------------------------
 1. Download, unpack and add to PATH `sw` tool from https://github.com/SoftwareNetwork/binaries
-2. Run `sw build source` in the project root.
-   Binaries will be available under `.sw` directory.
+2. Run `sw build source` in the project root ([example](https://github.com/dchapyshev/aspia/blob/master/.github/workflows/sw.yml)).
+   Binaries will be available under `.sw/out` directory.
 3. To generate VS solution, run `sw generate source`.

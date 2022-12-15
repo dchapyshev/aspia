@@ -81,12 +81,16 @@ std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
         new VideoEncoderZstd(target_format, compression_ratio));
 }
 
-void VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
+bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
                                       const uint8_t* input_data,
                                       size_t input_size)
 {
     size_t ret = ZSTD_initCStream(stream_.get(), compress_ratio_);
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_initCStream failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
 
     const size_t output_size = ZSTD_compressBound(input_size);
     uint8_t* output_data = outputBuffer(packet, output_size);
@@ -99,18 +103,23 @@ void VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
         ret = ZSTD_compressStream(stream_.get(), &output, &input);
         if (ZSTD_isError(ret))
         {
-            LOG(LS_WARNING) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
-            return;
+            LOG(LS_ERROR) << "ZSTD_compressStream failed: " << ZSTD_getErrorName(ret);
+            return false;
         }
     }
 
     ret = ZSTD_endStream(stream_.get(), &output);
-    DCHECK(!ZSTD_isError(ret)) << ZSTD_getErrorName(ret);
+    if (ZSTD_isError(ret))
+    {
+        LOG(LS_ERROR) << "ZSTD_endStream failed: " << ZSTD_getErrorName(ret);
+        return false;
+    }
 
     packet->mutable_data()->resize(output.pos);
+    return true;
 }
 
-void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
+bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
 
@@ -141,7 +150,7 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
         if (!translator_)
         {
             LOG(LS_WARNING) << "Unsupported pixel format";
-            return;
+            return false;
         }
     }
 
@@ -181,8 +190,15 @@ void VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
     }
 
     // Compress data with using Zstd compressor.
-    compressPacket(packet, translate_buffer_.get(), data_size);
+    if (!compressPacket(packet, translate_buffer_.get(), data_size))
+    {
+        LOG(LS_ERROR) << "compressPacket failed";
+        return false;
+    }
+
     setKeyFrameRequired(false);
+
+    return true;
 }
 
 } // namespace base
