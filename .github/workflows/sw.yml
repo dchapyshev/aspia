@@ -1,6 +1,12 @@
 name: sw
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'source/**'
+  pull_request:
+    paths:
+      - 'source/**'
 
 jobs:
   windows:
