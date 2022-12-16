@@ -252,7 +252,14 @@ std::string userNameByHandle(HANDLE process)
 std::string filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
-    GetModuleFileNameExW(process, nullptr, buffer, std::size(buffer));
+    DWORD buffer_size = std::size(buffer);
+
+    if (!QueryFullProcessImageNameW(process, 0, buffer, &buffer_size))
+    {
+        LOG(LS_WARNING) << "QueryFullProcessImageNameW failed";
+        return std::string();
+    }
+
     return base::utf8FromWide(buffer);
 }
 
