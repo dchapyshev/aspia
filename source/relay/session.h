@@ -52,7 +52,7 @@ public:
     const std::string& firstAddress() const;
     const std::string& secondAddress() const;
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
-    std::chrono::seconds duration() const;
+    std::chrono::seconds duration(const TimePoint& current_time) const;
     int64_t bytesTransferred() const;
 
 private:

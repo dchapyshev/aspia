@@ -26,10 +26,14 @@ namespace relay {
 SessionsWorker::SessionsWorker(std::u16string_view listen_interface,
                                uint16_t peer_port,
                                const std::chrono::minutes& peer_idle_timeout,
+                               bool statistics_enabled,
+                               const std::chrono::seconds& statistics_interval,
                                std::unique_ptr<SharedPool> shared_pool)
     : listen_interface_(listen_interface),
       peer_port_(peer_port),
       peer_idle_timeout_(peer_idle_timeout),
+      statistics_enabled_(statistics_enabled),
+      statistics_interval_(statistics_interval),
       shared_pool_(std::move(shared_pool)),
       thread_(std::make_unique<base::Thread>())
 {
@@ -62,7 +66,8 @@ void SessionsWorker::onBeforeThreadRunning()
         asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface_));
 
     session_manager_ = std::make_unique<SessionManager>(
-        self_task_runner_, listen_address, peer_port_, peer_idle_timeout_);
+        self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,
+        statistics_interval_);
     session_manager_->start(std::move(shared_pool_), this);
 }
 

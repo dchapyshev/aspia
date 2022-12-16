@@ -29,6 +29,7 @@ namespace Ui {
 class RouterManagerWindow;
 } // namespace Ui
 
+class QTreeWidget;
 class QTreeWidgetItem;
 
 namespace client {
@@ -77,6 +78,8 @@ private:
     void deleteUser();
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onCurrentRelayChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onContextMenuForTreeHeader(QTreeWidget* tree, const QPoint& pos);
 
     void beforeRequest();
     void afterRequest();
@@ -86,6 +89,9 @@ private:
 
     QByteArray saveState();
     void restoreState(const QByteArray& state);
+
+    static QString delayToString(uint64_t delay);
+    static QString sizeToString(int64_t size);
 
     std::unique_ptr<Ui::RouterManagerWindow> ui;
 

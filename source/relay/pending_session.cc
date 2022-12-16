@@ -41,7 +41,7 @@ PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
       timer_(base::WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner)),
       socket_(std::move(socket))
 {
-    // Nothing
+    address_ = socket_.remote_endpoint().address().to_string();
 }
 
 PendingSession::~PendingSession()
@@ -52,6 +52,8 @@ PendingSession::~PendingSession()
 void PendingSession::start()
 {
     LOG(LS_INFO) << "Starting pending session";
+
+    start_time_ = Clock::now();
 
     asio::ip::tcp::no_delay option(true);
     asio::error_code error_code;
@@ -101,6 +103,21 @@ bool PendingSession::isPeerFor(const PendingSession& other) const
 asio::ip::tcp::socket PendingSession::takeSocket()
 {
     return std::move(socket_);
+}
+
+const std::string& PendingSession::address() const
+{
+    return address_;
+}
+
+std::chrono::seconds PendingSession::duration(const TimePoint& now) const
+{
+    return std::chrono::duration_cast<std::chrono::seconds>(now - start_time_);
+}
+
+uint32_t PendingSession::keyId() const
+{
+    return key_id_;
 }
 
 // static

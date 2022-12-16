@@ -68,3 +68,19 @@ message RelayCredentials
     RelayKey key = 3;
     bytes secret = 4;
 }
+
+message ActivePeerConnection
+{
+    string first_address    = 1;
+    string second_address   = 2;
+    int64 bytes_transferred = 3;
+    int64 duration          = 4;
+    int64 idle_time         = 5;
+}
+
+message PendingPeerConnection
+{
+    string address = 1;
+    int64 duration = 2;
+    uint32 key_id  = 3;
+}

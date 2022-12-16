@@ -49,6 +49,9 @@ public:
         virtual void onPendingSessionFailed(PendingSession* session) = 0;
     };
 
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
     PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
                    asio::ip::tcp::socket&& socket,
                    Delegate* delegate);
@@ -71,6 +74,10 @@ public:
     // Releases a socket from a class.
     asio::ip::tcp::socket takeSocket();
 
+    const std::string& address() const;
+    std::chrono::seconds duration(const TimePoint& now) const;
+    uint32_t keyId() const;
+
 private:
     static void doReadMessage(PendingSession* pending_session);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
@@ -78,6 +85,8 @@ private:
 
     Delegate* delegate_;
 
+    std::string address_;
+    TimePoint start_time_;
     base::WaitableTimer timer_;
     asio::ip::tcp::socket socket_;
 

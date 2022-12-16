@@ -50,7 +50,9 @@ public:
     SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                    const asio::ip::address& listen_address,
                    uint16_t port,
-                   const std::chrono::minutes& idle_timeout);
+                   const std::chrono::minutes& idle_timeout,
+                   bool statistics_enabled,
+                   const std::chrono::seconds& statistics_interval);
     ~SessionManager() override;
 
     void start(std::unique_ptr<SharedPool> shared_pool, Delegate* delegate);
@@ -70,6 +72,7 @@ private:
     void doIdleTimeoutImpl(const std::error_code& error_code);
     static void doStatTimeout(SessionManager* self, const std::error_code& error_code);
     void doStatTimeoutImpl(const std::error_code& error_code);
+    void collectAndSendStatistics();
 
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
@@ -87,6 +90,14 @@ private:
 
     std::unique_ptr<SharedPool> shared_pool_;
     Delegate* delegate_ = nullptr;
+
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
+    TimePoint start_time_;
+
+    bool statistics_enabled_ = false;
+    std::chrono::seconds statistics_interval_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionManager);
 };

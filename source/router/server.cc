@@ -216,6 +216,21 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
             {
                 proto::RelaySessionData session_data;
                 session_data.set_pool_size(relay_key_pool_->countForRelay(session->sessionId()));
+
+                const std::optional<proto::RelayStat>& in_relay_stat =
+                    static_cast<SessionRelay*>(session.get())->relayStat();
+                if (in_relay_stat.has_value())
+                {
+                    proto::RelaySessionData::RelayStat* out_relay_stat =
+                        session_data.mutable_relay_stat();
+
+                    out_relay_stat->set_uptime(in_relay_stat->uptime());
+                    out_relay_stat->mutable_active_peer_connection()->CopyFrom(
+                        in_relay_stat->active_peer_connection());
+                    out_relay_stat->mutable_pending_peer_connection()->CopyFrom(
+                        in_relay_stat->pending_peer_connection());
+                }
+
                 item->set_session_data(session_data.SerializeAsString());
             }
             break;

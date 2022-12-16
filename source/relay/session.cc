@@ -66,7 +66,7 @@ void Session::stop()
         socket_[i].close(ignored_code);
     }
 
-    LOG(LS_INFO) << "Session stopped (duration: " << duration().count()
+    LOG(LS_INFO) << "Session stopped (duration: " << duration(Clock::now()).count()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
 
@@ -91,9 +91,9 @@ std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_idle_time_);
 }
 
-std::chrono::seconds Session::duration() const
+std::chrono::seconds Session::duration(const TimePoint& current_time) const
 {
-    return std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_time_);
+    return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
 }
 
 int64_t Session::bytesTransferred() const

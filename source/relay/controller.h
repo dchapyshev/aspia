@@ -73,6 +73,8 @@ private:
     uint16_t peer_port_ = 0;
     std::chrono::minutes peer_idle_timeout_;
     uint32_t max_peer_count_ = 0;
+    bool statistics_enabled_ = false;
+    std::chrono::seconds statistics_interval_;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::WaitableTimer reconnect_timer_;

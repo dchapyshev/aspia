@@ -60,6 +60,12 @@ public:
     void setMaxPeerCount(uint32_t count);
     uint32_t maxPeerCount() const;
 
+    void setStatisticsEnabled(bool enable);
+    bool isStatisticsEnabled() const;
+
+    void setStatisticsInterval(const std::chrono::seconds& interval);
+    std::chrono::seconds statisticsInterval() const;
+
 private:
     base::JsonSettings impl_;
 };

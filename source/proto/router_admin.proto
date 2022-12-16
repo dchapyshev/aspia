@@ -87,7 +87,15 @@ message HostSessionData
 
 message RelaySessionData
 {
+    message RelayStat
+    {
+        repeated ActivePeerConnection active_peer_connection = 1;
+        repeated PendingPeerConnection pending_peer_connection = 2;
+        int64 uptime = 3;
+    }
+
     uint64 pool_size = 1;
+    RelayStat relay_stat = 2;
 }
 
 message User

@@ -54,6 +54,8 @@ void Settings::reset()
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(std::chrono::minutes(5));
     setMaxPeerCount(100);
+    setStatisticsEnabled(false);
+    setStatisticsInterval(std::chrono::seconds(5));
 }
 
 void Settings::flush()
@@ -143,6 +145,26 @@ void Settings::setMaxPeerCount(uint32_t count)
 uint32_t Settings::maxPeerCount() const
 {
     return impl_.get<uint32_t>("MaxPeerCount", 100);
+}
+
+void Settings::setStatisticsEnabled(bool enable)
+{
+    impl_.set<bool>("StatisticsEnabled", enable);
+}
+
+bool Settings::isStatisticsEnabled() const
+{
+    return impl_.get<bool>("StatisticsEnabled", false);
+}
+
+void Settings::setStatisticsInterval(const std::chrono::seconds& interval)
+{
+    impl_.set<long long>("StatisticsInterval", interval.count());
+}
+
+std::chrono::seconds Settings::statisticsInterval() const
+{
+    return std::chrono::seconds(impl_.get<long long>("StatisticsInterval", 5));
 }
 
 } // namespace relay

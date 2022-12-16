@@ -81,12 +81,16 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     peer_port_ = settings.peerPort();
     peer_idle_timeout_ = settings.peerIdleTimeout();
     max_peer_count_ = settings.maxPeerCount();
+    statistics_enabled_ = settings.isStatisticsEnabled();
+    statistics_interval_ = settings.statisticsInterval();
 
     LOG(LS_INFO) << "Listen interface: " << listen_interface_;
     LOG(LS_INFO) << "Peer address: " << peer_address_;
     LOG(LS_INFO) << "Peer port: " << peer_port_;
     LOG(LS_INFO) << "Peer idle timeout: " << peer_idle_timeout_.count();
     LOG(LS_INFO) << "Max peer count: " << max_peer_count_;
+    LOG(LS_INFO) << "Statistics enabled: " << statistics_enabled_;
+    LOG(LS_INFO) << "Statistics interval: " << statistics_interval_.count();
 }
 
 Controller::~Controller()
@@ -140,8 +144,15 @@ bool Controller::start()
         return false;
     }
 
+    if (statistics_interval_ < std::chrono::seconds(1) || statistics_interval_ > std::chrono::minutes(60))
+    {
+        LOG(LS_WARNING) << "Invalid statistics interval";
+        return false;
+    }
+
     sessions_worker_ = std::make_unique<SessionsWorker>(
-        listen_interface_, peer_port_, peer_idle_timeout_, shared_pool_->share());
+        listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
+        shared_pool_->share());
     sessions_worker_->start(task_runner_, this);
 
     connectToRouter();

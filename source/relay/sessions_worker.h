@@ -34,6 +34,8 @@ public:
     SessionsWorker(std::u16string_view listen_interface,
                    uint16_t peer_port,
                    const std::chrono::minutes& peer_idle_timeout,
+                   bool statistics_enabled,
+                   const std::chrono::seconds& statistics_interval,
                    std::unique_ptr<SharedPool> shared_pool);
     ~SessionsWorker() override;
 
@@ -53,6 +55,8 @@ private:
     const std::u16string listen_interface_;
     const uint16_t peer_port_;
     const std::chrono::minutes peer_idle_timeout_;
+    const bool statistics_enabled_;
+    const std::chrono::seconds statistics_interval_;
 
     std::unique_ptr<SharedPool> shared_pool_;
 

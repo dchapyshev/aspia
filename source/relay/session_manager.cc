@@ -30,7 +30,6 @@ namespace relay {
 namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
-const std::chrono::seconds kStatTimerInterval { 15 };
 
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
 base::ByteArray decryptSecret(const proto::PeerToRelay& message, const SharedPool::Key& key)
@@ -98,13 +97,17 @@ std::unique_ptr<T> removeSessionT(std::vector<std::unique_ptr<T>>* session_list,
 SessionManager::SessionManager(std::shared_ptr<base::TaskRunner> task_runner,
                                const asio::ip::address& listen_address,
                                uint16_t port,
-                               const std::chrono::minutes& idle_timeout)
+                               const std::chrono::minutes& idle_timeout,
+                               bool statistics_enabled,
+                               const std::chrono::seconds& statistics_interval)
     : task_runner_(std::move(task_runner)),
       acceptor_(base::MessageLoop::current()->pumpAsio()->ioContext(),
                 asio::ip::tcp::endpoint(listen_address, port)),
       idle_timeout_(idle_timeout),
       idle_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
-      stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext())
+      stat_timer_(base::MessageLoop::current()->pumpAsio()->ioContext()),
+      statistics_enabled_(statistics_enabled),
+      statistics_interval_(statistics_interval)
 {
     DCHECK(task_runner_);
 
@@ -123,6 +126,8 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
 {
     LOG(LS_INFO) << "Starting session manager";
 
+    start_time_ = Clock::now();
+
     shared_pool_ = std::move(shared_pool);
     delegate_ = delegate;
 
@@ -131,8 +136,11 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     idle_timer_.expires_after(kIdleTimerInterval);
     idle_timer_.async_wait(std::bind(&SessionManager::doIdleTimeout, this, std::placeholders::_1));
 
-    stat_timer_.expires_after(kStatTimerInterval);
-    stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
+    if (statistics_enabled_)
+    {
+        stat_timer_.expires_after(statistics_interval_);
+        stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
+    }
 
     SessionManager::doAccept(this);
 }
@@ -286,29 +294,47 @@ void SessionManager::doStatTimeoutImpl(const std::error_code& error_code)
 {
     if (!error_code)
     {
-        proto::RelayStat relay_stat;
-
-        for (const auto& session : active_sessions_)
-        {
-            proto::RelayStat::PeerConnection* peer_connection = relay_stat.add_peer_connection();
-
-            peer_connection->set_first_address(session->firstAddress());
-            peer_connection->set_second_address(session->secondAddress());
-            peer_connection->set_bytes_transferred(session->bytesTransferred());
-            peer_connection->set_idle_time(session->idleTime(Session::Clock::now()).count());
-            peer_connection->set_duration(session->duration().count());
-        }
-
-        if (delegate_)
-            delegate_->onSessionStatistics(relay_stat);
+        collectAndSendStatistics();
     }
     else
     {
         LOG(LS_ERROR) << "Error in stat timer: " << base::utf16FromLocal8Bit(error_code.message());
     }
 
-    stat_timer_.expires_after(kStatTimerInterval);
+    stat_timer_.expires_after(statistics_interval_);
     stat_timer_.async_wait(std::bind(&SessionManager::doStatTimeout, this, std::placeholders::_1));
+}
+
+void SessionManager::collectAndSendStatistics()
+{
+    Session::TimePoint now = Session::Clock::now();
+
+    proto::RelayStat relay_stat;
+    relay_stat.set_uptime(
+        std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
+
+    for (const auto& session : active_sessions_)
+    {
+        proto::ActivePeerConnection* peer_connection = relay_stat.add_active_peer_connection();
+
+        peer_connection->set_first_address(session->firstAddress());
+        peer_connection->set_second_address(session->secondAddress());
+        peer_connection->set_bytes_transferred(session->bytesTransferred());
+        peer_connection->set_idle_time(session->idleTime(now).count());
+        peer_connection->set_duration(session->duration(now).count());
+    }
+
+    for (const auto& session : pending_sessions_)
+    {
+        proto::PendingPeerConnection* peer_connection = relay_stat.add_pending_peer_connection();
+
+        peer_connection->set_address(session->address());
+        peer_connection->set_duration(session->duration(now).count());
+        peer_connection->set_key_id(session->keyId());
+    }
+
+    if (delegate_)
+        delegate_->onSessionStatistics(relay_stat);
 }
 
 void SessionManager::removePendingSession(PendingSession* session)

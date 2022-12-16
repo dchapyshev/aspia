@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>687</width>
-    <height>520</height>
+    <width>909</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -60,48 +60,43 @@
          </layout>
         </item>
         <item>
-         <widget class="QSplitter" name="splitter">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+         <widget class="QTreeWidget" name="tree_hosts">
+          <property name="indentation">
+           <number>0</number>
           </property>
-          <widget class="QTreeWidget" name="tree_hosts">
-           <property name="indentation">
-            <number>0</number>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Computer Name</string>
            </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
+          </column>
+          <column>
+           <property name="text">
+            <string>IP Address</string>
            </property>
-           <column>
-            <property name="text">
-             <string>Computer Name</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>IP Address</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Connect Time</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>ID</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Version</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Operating System</string>
-            </property>
-           </column>
-          </widget>
+          </column>
+          <column>
+           <property name="text">
+            <string>Connect Time</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Version</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Operating System</string>
+           </property>
+          </column>
          </widget>
         </item>
         <item>
@@ -159,7 +154,7 @@
        <attribute name="title">
         <string>Relay</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
@@ -179,43 +174,141 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="tree_relay">
-          <property name="indentation">
-           <number>0</number>
+         <widget class="QSplitter" name="splitter_relay_hori">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <property name="sortingEnabled">
-           <bool>true</bool>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
           </property>
-          <column>
-           <property name="text">
-            <string>Address</string>
+          <widget class="QTreeWidget" name="tree_relay">
+           <property name="indentation">
+            <number>0</number>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Connect Time</string>
+           <property name="sortingEnabled">
+            <bool>true</bool>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Pool Size</string>
+           <column>
+            <property name="text">
+             <string>Address</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Connect Time</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Pool Size</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Version</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Computer Name</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Operating System</string>
+            </property>
+           </column>
+          </widget>
+          <widget class="QSplitter" name="splitter_relay_vert">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Version</string>
+           <property name="childrenCollapsible">
+            <bool>false</bool>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Computer Name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Operating System</string>
-           </property>
-          </column>
+           <widget class="QWidget" name="layoutWidget">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_active_conn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string notr="true">Active connections: 0</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTreeWidget" name="tree_active_conn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Address 1</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Address 2</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Transferred</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Duration</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Idle</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="layoutWidget">
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QLabel" name="label_pending_conn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string notr="true">Pending connections: 0</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTreeWidget" name="tree_pending_conn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Address</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Duration</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Key ID</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
          </widget>
         </item>
         <item>
