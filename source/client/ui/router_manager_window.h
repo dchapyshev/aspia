@@ -66,6 +66,8 @@ protected:
 private slots:
     void onHostsContextMenu(const QPoint& pos);
     void onRelaysContextMenu(const QPoint& pos);
+    void onActiveConnContextMenu(const QPoint& pos);
+    void onPendingConnContextMenu(const QPoint& pos);
     void onUsersContextMenu(const QPoint& pos);
 
 private:
@@ -80,6 +82,8 @@ private:
     void onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onCurrentRelayChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onContextMenuForTreeHeader(QTreeWidget* tree, const QPoint& pos);
+    void copyRowFromTree(QTreeWidgetItem* item);
+    void copyColumnFromTree(QTreeWidgetItem* item, int column);
 
     void beforeRequest();
     void afterRequest();
@@ -102,6 +106,11 @@ private:
 
     std::shared_ptr<RouterWindowProxy> window_proxy_;
     std::unique_ptr<RouterProxy> router_proxy_;
+
+    int current_hosts_column_ = 0;
+    int current_relays_column_ = 0;
+    int current_active_conn_column_ = 0;
+    int current_pending_conn_column_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(RouterManagerWindow);
 };

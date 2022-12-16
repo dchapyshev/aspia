@@ -29,6 +29,7 @@
 #include "client/ui/router_status_dialog.h"
 #include "ui_router_manager_window.h"
 
+#include <QClipboard>
 #include <QDateTime>
 #include <QFileDialog>
 #include <QJsonArray>
@@ -184,6 +185,18 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
+void copyTextToClipboard(const QString& text)
+{
+    if (text.isEmpty())
+        return;
+
+    QClipboard* clipboard = QApplication::clipboard();
+    if (!clipboard)
+        return;
+
+    clipboard->setText(text);
+}
+
 } // namespace
 
 RouterManagerWindow::RouterManagerWindow(QWidget* parent)
@@ -239,6 +252,14 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     connect(ui->tree_relay, &QTreeWidget::customContextMenuRequested,
             this, &RouterManagerWindow::onRelaysContextMenu);
 
+    ui->tree_active_conn->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_active_conn, &QTreeWidget::customContextMenuRequested,
+            this, &RouterManagerWindow::onActiveConnContextMenu);
+
+    ui->tree_pending_conn->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_pending_conn, &QTreeWidget::customContextMenuRequested,
+            this, &RouterManagerWindow::onPendingConnContextMenu);
+
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
             this, &RouterManagerWindow::onUsersContextMenu);
@@ -275,6 +296,34 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
             this, [this](const QPoint& pos)
     {
         onContextMenuForTreeHeader(ui->tree_pending_conn, pos);
+    });
+
+    ui->tree_hosts->setMouseTracking(true);
+    connect(ui->tree_hosts, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_hosts_column_ = column;
+    });
+
+    ui->tree_relay->setMouseTracking(true);
+    connect(ui->tree_relay, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_relays_column_ = column;
+    });
+
+    ui->tree_active_conn->setMouseTracking(true);
+    connect(ui->tree_active_conn, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_active_conn_column_ = column;
+    });
+
+    ui->tree_pending_conn->setMouseTracking(true);
+    connect(ui->tree_pending_conn, &QTreeWidget::itemEntered,
+            this, [this](QTreeWidgetItem* /* item */, int column)
+    {
+        current_pending_conn_column_ = column;
     });
 
     ClientSettings settings;
@@ -573,7 +622,19 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
 
     menu.addSeparator();
 
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    menu.addSeparator();
+
     QAction* save_action = menu.addAction(tr("Save to file..."));
+
+    QTreeWidgetItem* current_item = ui->tree_hosts->currentItem();
+    if (!current_item)
+    {
+        copy_row->setEnabled(false);
+        copy_col->setEnabled(false);
+    }
 
     QAction* action = menu.exec(ui->tree_hosts->viewport()->mapToGlobal(pos));
     if (action == save_action)
@@ -592,6 +653,14 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     {
         refreshSessionList();
     }
+    else if (action == copy_row)
+    {
+        copyRowFromTree(ui->tree_hosts->currentItem());
+    }
+    else if (action == copy_col)
+    {
+        copyColumnFromTree(ui->tree_hosts->currentItem(), current_hosts_column_);
+    }
     else
     {
         // Nothing
@@ -604,16 +673,78 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
 
     QAction* refresh_action = menu.addAction(tr("Refresh"));
     menu.addSeparator();
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+    menu.addSeparator();
     QAction* save_action = menu.addAction(tr("Save to file..."));
+
+    QTreeWidgetItem* current_item = ui->tree_relay->currentItem();
+    if (!current_item)
+    {
+        copy_row->setEnabled(false);
+        copy_col->setEnabled(false);
+    }
 
     QAction* action = menu.exec(ui->tree_relay->viewport()->mapToGlobal(pos));
     if (action == save_action)
     {
         saveRelaysToFile();
     }
+    else if (action == copy_row)
+    {
+        copyRowFromTree(current_item);
+    }
+    else if (action == copy_col)
+    {
+        copyColumnFromTree(current_item, current_relays_column_);
+    }
     else if (action == refresh_action)
     {
         refreshSessionList();
+    }
+}
+
+void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
+{
+    QTreeWidgetItem* current_item = ui->tree_active_conn->currentItem();
+    if (!current_item)
+        return;
+
+    QMenu menu;
+
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    QAction* action = menu.exec(ui->tree_active_conn->viewport()->mapToGlobal(pos));
+    if (action == copy_row)
+    {
+        copyRowFromTree(current_item);
+    }
+    else if (action == copy_col)
+    {
+        copyColumnFromTree(current_item, current_active_conn_column_);
+    }
+}
+
+void RouterManagerWindow::onPendingConnContextMenu(const QPoint& pos)
+{
+    QTreeWidgetItem* current_item = ui->tree_pending_conn->currentItem();
+    if (!current_item)
+        return;
+
+    QMenu menu;
+
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    QAction* action = menu.exec(ui->tree_pending_conn->viewport()->mapToGlobal(pos));
+    if (action == copy_row)
+    {
+        copyRowFromTree(current_item);
+    }
+    else if (action == copy_col)
+    {
+        copyColumnFromTree(current_item, current_pending_conn_column_);
     }
 }
 
@@ -685,6 +816,42 @@ void RouterManagerWindow::onContextMenuForTreeHeader(QTreeWidget* tree, const QP
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
+}
+
+void RouterManagerWindow::copyRowFromTree(QTreeWidgetItem* item)
+{
+    if (!item)
+        return;
+
+    QString result;
+
+    int column_count = item->columnCount();
+    if (column_count > 2)
+    {
+        for (int i = 0; i < column_count; ++i)
+        {
+            QString text = item->text(i);
+
+            if (!text.isEmpty())
+                result += text + QLatin1Char(' ');
+        }
+
+        result.chop(1);
+    }
+    else
+    {
+        result = item->text(0) + QLatin1String(": ") + item->text(1);
+    }
+
+    copyTextToClipboard(result);
+}
+
+void RouterManagerWindow::copyColumnFromTree(QTreeWidgetItem* item, int column)
+{
+    if (!item)
+        return;
+
+    copyTextToClipboard(item->text(column));
 }
 
 void RouterManagerWindow::refreshSessionList()
