@@ -83,6 +83,9 @@ private:
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionsWorker> sessions_worker_;
 
+    std::unique_ptr<proto::RouterToRelay> incoming_message_;
+    std::unique_ptr<proto::RelayToRouter> outgoing_message_;
+
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };
 

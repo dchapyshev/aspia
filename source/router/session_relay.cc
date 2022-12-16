@@ -24,7 +24,9 @@
 namespace router {
 
 SessionRelay::SessionRelay()
-    : Session(proto::ROUTER_SESSION_RELAY)
+    : Session(proto::ROUTER_SESSION_RELAY),
+      incoming_message_(std::make_unique<proto::RelayToRouter>()),
+      outgoing_message_(std::make_unique<proto::RouterToRelay>())
 {
     // Nothing
 }
@@ -36,9 +38,9 @@ SessionRelay::~SessionRelay()
 
 void SessionRelay::sendKeyUsed(uint32_t key_id)
 {
-    std::unique_ptr<proto::RouterToRelay> message = std::make_unique<proto::RouterToRelay>();
-    message->mutable_key_used()->set_key_id(key_id);
-    sendMessage(*message);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_key_used()->set_key_id(key_id);
+    sendMessage(*outgoing_message_);
 }
 
 void SessionRelay::onSessionReady()
@@ -48,21 +50,21 @@ void SessionRelay::onSessionReady()
 
 void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
 {
-    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
+    incoming_message_->Clear();
 
-    if (!base::parse(buffer, message.get()))
+    if (!base::parse(buffer, incoming_message_.get()))
     {
         LOG(LS_ERROR) << "Could not read message from relay server";
         return;
     }
 
-    if (message->has_key_pool())
+    if (incoming_message_->has_key_pool())
     {
-        readKeyPool(message->key_pool());
+        readKeyPool(incoming_message_->key_pool());
     }
-    else if (message->has_relay_stat())
+    else if (incoming_message_->has_relay_stat())
     {
-        relay_stat_ = std::move(*message->mutable_relay_stat());
+        relay_stat_ = std::move(*incoming_message_->mutable_relay_stat());
     }
     else
     {

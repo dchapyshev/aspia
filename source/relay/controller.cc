@@ -60,7 +60,9 @@ private:
 Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
-      shared_pool_(std::make_unique<SharedPool>(this))
+      shared_pool_(std::make_unique<SharedPool>(this)),
+      incoming_message_(std::make_unique<proto::RouterToRelay>()),
+      outgoing_message_(std::make_unique<proto::RelayToRouter>())
 {
     LOG(LS_INFO) << "Ctor";
 
@@ -215,17 +217,18 @@ void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 
 void Controller::onMessageReceived(const base::ByteArray& buffer)
 {
-    std::unique_ptr<proto::RouterToRelay> message = std::make_unique<proto::RouterToRelay>();
-    if (!base::parse(buffer, message.get()))
+    incoming_message_->Clear();
+
+    if (!base::parse(buffer, incoming_message_.get()))
     {
         LOG(LS_ERROR) << "Invalid message from router";
         return;
     }
 
-    if (message->has_key_used())
+    if (incoming_message_->has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(shared_pool_->share(), message->key_used().key_id());
+            std::make_shared<KeyDeleter>(shared_pool_->share(), incoming_message_->key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
@@ -245,12 +248,11 @@ void Controller::onMessageWritten(size_t /* pending */)
 
 void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
-    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
-
-    message->mutable_relay_stat()->CopyFrom(relay_stat);
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    channel_->send(base::serialize(*message));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 void Controller::onSessionFinished()
@@ -287,8 +289,9 @@ void Controller::delayedConnectToRouter()
 
 void Controller::sendKeyPool(uint32_t key_count)
 {
-    std::unique_ptr<proto::RelayToRouter> message = std::make_unique<proto::RelayToRouter>();
-    proto::RelayKeyPool* relay_key_pool = message->mutable_key_pool();
+    outgoing_message_->Clear();
+
+    proto::RelayKeyPool* relay_key_pool = outgoing_message_->mutable_key_pool();
 
     relay_key_pool->set_peer_host(base::utf8FromUtf16(peer_address_));
     relay_key_pool->set_peer_port(peer_port_);
@@ -313,7 +316,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     }
 
     // Send a message to the router.
-    channel_->send(base::serialize(*message));
+    channel_->send(base::serialize(*outgoing_message_));
 }
 
 } // namespace relay

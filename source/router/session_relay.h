@@ -51,6 +51,9 @@ private:
     std::optional<PeerData> peer_data_;
     std::optional<proto::RelayStat> relay_stat_;
 
+    std::unique_ptr<proto::RelayToRouter> incoming_message_;
+    std::unique_ptr<proto::RouterToRelay> outgoing_message_;
+
     DISALLOW_COPY_AND_ASSIGN(SessionRelay);
 };
 
