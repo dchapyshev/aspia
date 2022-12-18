@@ -1236,9 +1236,9 @@ void RouterManagerWindow::saveRelaysToFile()
                 QJsonObject conn_object;
                 conn_object.insert("first_address", QString::fromStdString(conn.first_address()));
                 conn_object.insert("second_address", QString::fromStdString(conn.second_address()));
-                conn_object.insert("bytes_transferred", conn.bytes_transferred());
-                conn_object.insert("duration", conn.duration());
-                conn_object.insert("idle", conn.idle_time());
+                conn_object.insert("bytes_transferred", static_cast<long long>(conn.bytes_transferred()));
+                conn_object.insert("duration", static_cast<long long>(conn.duration()));
+                conn_object.insert("idle", static_cast<long long>(conn.idle_time()));
 
                 active_array.append(conn_object);
             }
@@ -1250,7 +1250,7 @@ void RouterManagerWindow::saveRelaysToFile()
 
                 QJsonObject conn_object;
                 conn_object.insert("address", QString::fromStdString(conn.address()));
-                conn_object.insert("duration", conn.duration());
+                conn_object.insert("duration", static_cast<long long>(conn.duration()));
                 conn_object.insert("key_id", static_cast<int>(conn.key_id()));
 
                 pending_array.append(conn_object);
@@ -1258,7 +1258,7 @@ void RouterManagerWindow::saveRelaysToFile()
 
             relay_object.insert("active_connections", active_array);
             relay_object.insert("pending_connections", pending_array);
-            relay_object.insert("uptime", relay_stat.uptime());
+            relay_object.insert("uptime", static_cast<long long>(relay_stat.uptime()));
         }
 
         root_array.append(relay_object);
