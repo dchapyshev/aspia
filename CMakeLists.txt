@@ -43,8 +43,9 @@ if (WIN32)
     message(STATUS "Windows detected")
 endif()
 
-message(STATUS "Target processor: ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "Host processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "Host system processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+
 
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
@@ -88,6 +89,7 @@ if (LINUX)
 endif()
 
 if (APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64")
     find_library(FOUNDATION_LIB Foundation)
     find_library(COREAUDIO_LIB CoreAudio)
     find_library(AUDIOTOOLBOX_LIB AudioToolbox)
