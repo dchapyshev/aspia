@@ -159,12 +159,12 @@ bool Settings::isStatisticsEnabled() const
 
 void Settings::setStatisticsInterval(const std::chrono::seconds& interval)
 {
-    impl_.set<long long>("StatisticsInterval", interval.count());
+    impl_.set<int>("StatisticsInterval", static_cast<int>(interval.count()));
 }
 
 std::chrono::seconds Settings::statisticsInterval() const
 {
-    return std::chrono::seconds(impl_.get<long long>("StatisticsInterval", 5));
+    return std::chrono::seconds(impl_.get<int>("StatisticsInterval", 5));
 }
 
 } // namespace relay

@@ -60,6 +60,7 @@ void Service::onStop()
     LOG(LS_INFO) << "Service stopped";
 }
 
+#if defined(OS_WIN)
 void Service::onSessionEvent(
     base::win::SessionStatus /* event */, base::SessionId /* session_id */)
 {
@@ -70,5 +71,6 @@ void Service::onPowerEvent(uint32_t /* event */)
 {
     // Nothing
 }
+#endif // defined(OS_WIN)
 
 } // namespace router
