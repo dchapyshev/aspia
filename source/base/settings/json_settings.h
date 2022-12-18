@@ -61,7 +61,7 @@ public:
     static bool hasBackupFor(const std::filesystem::path& source_file_path);
     static bool removeBackupFileFor(const std::filesystem::path& source_file_path);
     static bool restoreBackupFor(const std::filesystem::path& source_file_path);
-    static void createBackupFor(const std::filesystem::path& source_file_path);
+    static bool createBackupFor(const std::filesystem::path& source_file_path);
 
 private:
     const Encrypted encrypted_;

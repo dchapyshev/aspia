@@ -128,7 +128,7 @@ bool JsonSettings::isWritable() const
     if (std::filesystem::exists(path_, error_code))
     {
         std::ofstream stream;
-        stream.open(path_, std::ofstream::binary);
+        stream.open(path_, std::ofstream::binary | std::ofstream::app);
         return stream.is_open();
     }
     else
@@ -172,7 +172,12 @@ void JsonSettings::sync()
                 // If there was a successful reading of the configuration file and there are no backup
                 // copies yet, then we create a backup copy.
                 if (!hasBackupFor(path_))
-                    createBackupFor(path_);
+                {
+                    if (!createBackupFor(path_))
+                    {
+                        LOG(LS_WARNING) << "createBackupFor failed";
+                    }
+                }
             }
         }
         else
@@ -191,6 +196,8 @@ void JsonSettings::sync()
                 LOG(LS_WARNING) << "Backup file does not exist";
             }
         }
+
+        break;
     }
 
     setChanged(false);
@@ -200,16 +207,27 @@ bool JsonSettings::flush()
 {
     // If the configuration has no changes, then exit.
     if (!isChanged())
+    {
+        LOG(LS_INFO) << "No changes for: " << path_;
         return true;
+    }
 
     // Before writing the configuration file, make a backup copy.
-    createBackupFor(path_);
+    if (!createBackupFor(path_))
+    {
+        LOG(LS_WARNING) << "createBackupFor failed for: " << path_;
+    }
 
     // Write to the configuration file.
     if (writeFile(path_, map(), encrypted_))
     {
+        LOG(LS_INFO) << "Configuration file '" << path_ << "' successfully written to disk";
         setChanged(false);
         return true;
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unable to write configuration file: " << path_;
     }
 
     return false;
@@ -451,8 +469,15 @@ std::filesystem::path JsonSettings::backupFilePathFor(const std::filesystem::pat
 bool JsonSettings::hasBackupFor(const std::filesystem::path& source_file_path)
 {
     std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
+
     std::error_code ignored_code;
-    return std::filesystem::exists(backup_file_path, ignored_code);
+    if (std::filesystem::exists(backup_file_path, ignored_code))
+    {
+        if (std::filesystem::file_size(backup_file_path, ignored_code) > 0)
+            return true;
+    }
+
+    return false;
 }
 
 // static
@@ -533,14 +558,20 @@ bool JsonSettings::restoreBackupFor(const std::filesystem::path& source_file_pat
 }
 
 // static
-void JsonSettings::createBackupFor(const std::filesystem::path& source_file_path)
+bool JsonSettings::createBackupFor(const std::filesystem::path& source_file_path)
 {
     std::error_code error_code;
 
     if (!std::filesystem::exists(source_file_path, error_code))
     {
-        // Source config now exists yet.
-        return;
+        LOG(LS_INFO) << "Source file '" << source_file_path << "' now exists yet";
+        return false;
+    }
+
+    if (std::filesystem::file_size(source_file_path, error_code) <= 0)
+    {
+        LOG(LS_INFO) << "Source file '" << source_file_path << "' is empty";
+        return false;
     }
 
     std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
@@ -553,7 +584,7 @@ void JsonSettings::createBackupFor(const std::filesystem::path& source_file_path
         {
             LOG(LS_ERROR) << "Unable to remove old backup file: " << backup_file_path
                           << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-            return;
+            return false;
         }
     }
 
@@ -562,10 +593,11 @@ void JsonSettings::createBackupFor(const std::filesystem::path& source_file_path
     {
         LOG(LS_ERROR) << "Unable to create backup file for: " << source_file_path
                       << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        return;
+        return false;
     }
 
     LOG(LS_INFO) << "Backup for '" << source_file_path << "' successfully created";
+    return true;
 }
 
 } // namespace base

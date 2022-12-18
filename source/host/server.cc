@@ -315,7 +315,19 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 
     if (!error)
     {
-        DCHECK_EQ(path, settings_.filePath());
+        std::filesystem::path settings_file_path = settings_.filePath();
+        std::error_code ignored_error;
+
+        // While writing the configuration, the file may be empty for a short time. The
+        // configuration monitor has time to detect this, but we must not load an empty
+        // configuration.
+        if (std::filesystem::file_size(settings_file_path, ignored_error) <= 0)
+        {
+            LOG(LS_INFO) << "Configuration file is empty. Configuration update skipped";
+            return;
+        }
+
+        DCHECK_EQ(path, settings_file_path);
 
         // Synchronize the parameters from the file.
         settings_.sync();
@@ -455,8 +467,8 @@ void Server::checkForUpdates()
 
     settings_.setLastUpdateCheck(current_timepoint);
 
-    LOG(LS_INFO) << "Start checking for updates";
-    launchSilentUpdater();
+    //LOG(LS_INFO) << "Start checking for updates";
+    //launchSilentUpdater();
 #endif // defined(OS_WIN)
 }
 
