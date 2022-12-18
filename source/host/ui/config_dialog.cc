@@ -54,6 +54,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
+#if 1
+    ui.checkbox_auto_update->setVisible(false);
+    ui.label_update_check_freq->setVisible(false);
+    ui.combobox_update_check_freq->setVisible(false);
+#endif
+
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
