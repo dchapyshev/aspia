@@ -52,6 +52,7 @@ public:
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
     void deleteUser(int64_t entry_id);
+    void disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
 
 private:
     class Impl;

@@ -24,6 +24,7 @@
 #include "base/strings/unicode.h"
 #include "router/database.h"
 #include "router/server.h"
+#include "router/session_relay.h"
 
 namespace router {
 
@@ -65,6 +66,10 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
     else if (message->has_user_request())
     {
         doUserRequest(message->user_request());
+    }
+    else if (message->has_peer_connection_request())
+    {
+        doPeerConnectionRequest(message->peer_connection_request());
     }
     else
     {
@@ -163,6 +168,19 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
     }
 
     sendMessage(*message);
+}
+
+void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& request)
+{
+    SessionRelay* relay_session =
+        dynamic_cast<SessionRelay*>(server().sessionById(request.relay_session_id()));
+    if (!relay_session)
+    {
+        LOG(LS_WARNING) << "Relay with id " << request.relay_session_id() << " not found";
+        return;
+    }
+
+    relay_session->disconnectPeerSession(request);
 }
 
 proto::UserResult::ErrorCode SessionAdmin::addUser(const proto::User& user)

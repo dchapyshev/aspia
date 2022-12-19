@@ -47,7 +47,7 @@ std::filesystem::path Settings::filePath()
 
 void Settings::reset()
 {
-    setRouterAddress(u"localhost");
+    setRouterAddress(u"127.0.0.1");
     setRouterPort(DEFAULT_ROUTER_TCP_PORT);
     setRouterPublicKey(base::ByteArray());
     setPeerAddress(std::u16string());

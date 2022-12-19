@@ -133,6 +133,21 @@ void Router::deleteUser(int64_t entry_id)
     channel_->send(base::serialize(message));
 }
 
+void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
+{
+    LOG(LS_INFO) << "Sending disconnect for peer session: " << peer_session_id
+                 << " (relay: " << relay_session_id << ")";
+
+    proto::AdminToRouter message;
+
+    proto::PeerConnectionRequest* request = message.mutable_peer_connection_request();
+    request->set_relay_session_id(relay_session_id);
+    request->set_peer_session_id(peer_session_id);
+    request->set_type(proto::PEER_CONNECTION_REQUEST_DISCONNECT);
+
+    channel_->send(base::serialize(message));
+}
+
 void Router::onConnected()
 {
     LOG(LS_INFO) << "Router connected";

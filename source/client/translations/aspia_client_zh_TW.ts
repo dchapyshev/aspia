@@ -2887,263 +2887,282 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="327"/>
+        <location filename="../ui/router_manager_window.cc" line="282"/>
+        <location filename="../ui/router_manager_window.cc" line="1038"/>
+        <location filename="../ui/router_manager_window.cc" line="1078"/>
+        <source>Active peers: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="405"/>
         <source>Connecting to %1:%2...</source>
         <translation>連線到 %1:%2...</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="353"/>
+        <location filename="../ui/router_manager_window.cc" line="431"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>連線到 %1:%2... (版本 %3)</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="374"/>
+        <location filename="../ui/router_manager_window.cc" line="452"/>
         <source>Violation of the communication protocol.</source>
         <translation>違反通訊協定。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="378"/>
+        <location filename="../ui/router_manager_window.cc" line="456"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>加密錯誤（訊息加密或解密失敗）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="382"/>
+        <location filename="../ui/router_manager_window.cc" line="460"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>網路出現錯誤（例如網路電纜被意外拔出）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="386"/>
+        <location filename="../ui/router_manager_window.cc" line="464"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>連接被對方拒絕（或逾時）。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="390"/>
+        <location filename="../ui/router_manager_window.cc" line="468"/>
         <source>Remote host closed the connection.</source>
         <translation>遠端主機關閉了連線。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="394"/>
+        <location filename="../ui/router_manager_window.cc" line="472"/>
         <source>Host address was not found.</source>
         <translation>未找到主機位址。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="398"/>
+        <location filename="../ui/router_manager_window.cc" line="476"/>
         <source>Socket operation timed out.</source>
         <translation>Socket 操作逾時。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="402"/>
+        <location filename="../ui/router_manager_window.cc" line="480"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>指定的位址已被使用並設定為獨占。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="406"/>
+        <location filename="../ui/router_manager_window.cc" line="484"/>
         <source>Address specified does not belong to the host.</source>
         <translation>指定位址的主機無法使用。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="416"/>
-        <location filename="../ui/router_manager_window.cc" line="452"/>
+        <location filename="../ui/router_manager_window.cc" line="494"/>
+        <location filename="../ui/router_manager_window.cc" line="530"/>
         <source>An unknown error occurred.</source>
         <translation>出現未知錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="421"/>
-        <location filename="../ui/router_manager_window.cc" line="456"/>
+        <location filename="../ui/router_manager_window.cc" line="499"/>
+        <location filename="../ui/router_manager_window.cc" line="534"/>
         <source>Error: %1</source>
         <translation>錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="432"/>
+        <location filename="../ui/router_manager_window.cc" line="510"/>
         <source>Authentication successfully completed.</source>
         <translation>身分驗證成功完成。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="436"/>
+        <location filename="../ui/router_manager_window.cc" line="514"/>
         <source>Network authentication error.</source>
         <translation>網路認證錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="440"/>
+        <location filename="../ui/router_manager_window.cc" line="518"/>
         <source>Violation of the data exchange protocol.</source>
         <translation>違反資料交換協定。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="444"/>
+        <location filename="../ui/router_manager_window.cc" line="522"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation>驗證時出錯：使用者名稱或密碼錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="448"/>
+        <location filename="../ui/router_manager_window.cc" line="526"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>使用者不允許使用指定的工作階段類型。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="518"/>
+        <location filename="../ui/router_manager_window.cc" line="655"/>
         <source>Invalid request.</source>
         <translation>無效的要求。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="522"/>
-        <location filename="../ui/router_manager_window.cc" line="561"/>
+        <location filename="../ui/router_manager_window.cc" line="659"/>
+        <location filename="../ui/router_manager_window.cc" line="698"/>
         <source>Unknown internal error.</source>
         <translation>未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="526"/>
+        <location filename="../ui/router_manager_window.cc" line="663"/>
         <source>Invalid session ID was passed.</source>
         <translation>傳入了無效的工作階段 ID。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="530"/>
-        <location filename="../ui/router_manager_window.cc" line="573"/>
+        <location filename="../ui/router_manager_window.cc" line="667"/>
+        <location filename="../ui/router_manager_window.cc" line="710"/>
         <source>Unknown error type.</source>
         <translation>未知錯誤類型。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="534"/>
-        <location filename="../ui/router_manager_window.cc" line="577"/>
-        <location filename="../ui/router_manager_window.cc" line="940"/>
-        <location filename="../ui/router_manager_window.cc" line="1057"/>
-        <location filename="../ui/router_manager_window.cc" line="1107"/>
-        <location filename="../ui/router_manager_window.cc" line="1129"/>
-        <location filename="../ui/router_manager_window.cc" line="1198"/>
+        <location filename="../ui/router_manager_window.cc" line="671"/>
+        <location filename="../ui/router_manager_window.cc" line="714"/>
+        <location filename="../ui/router_manager_window.cc" line="1262"/>
+        <location filename="../ui/router_manager_window.cc" line="1330"/>
+        <location filename="../ui/router_manager_window.cc" line="1380"/>
+        <location filename="../ui/router_manager_window.cc" line="1402"/>
+        <location filename="../ui/router_manager_window.cc" line="1471"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="565"/>
+        <location filename="../ui/router_manager_window.cc" line="702"/>
         <source>Invalid data was passed.</source>
         <translation>傳入了無效資料。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="569"/>
+        <location filename="../ui/router_manager_window.cc" line="706"/>
         <source>A user with the specified name already exists.</source>
         <translation>具有指定名稱的使用者已存在。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="594"/>
+        <location filename="../ui/router_manager_window.cc" line="731"/>
+        <location filename="../ui/router_manager_window.cc" line="789"/>
+        <location filename="../ui/router_manager_window.cc" line="841"/>
         <source>Disconnect</source>
         <translation type="unfinished">中斷連線</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="598"/>
+        <location filename="../ui/router_manager_window.cc" line="735"/>
+        <location filename="../ui/router_manager_window.cc" line="791"/>
+        <location filename="../ui/router_manager_window.cc" line="843"/>
         <source>Disconnect All</source>
         <translation type="unfinished">中斷所有連線</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="599"/>
-        <location filename="../ui/router_manager_window.cc" line="652"/>
-        <location filename="../ui/router_manager_window.cc" line="731"/>
+        <location filename="../ui/router_manager_window.cc" line="736"/>
+        <location filename="../ui/router_manager_window.cc" line="792"/>
+        <location filename="../ui/router_manager_window.cc" line="919"/>
         <source>Refresh</source>
         <translation type="unfinished">重新整理</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="603"/>
-        <location filename="../ui/router_manager_window.cc" line="654"/>
-        <location filename="../ui/router_manager_window.cc" line="693"/>
+        <location filename="../ui/router_manager_window.cc" line="740"/>
+        <location filename="../ui/router_manager_window.cc" line="794"/>
+        <location filename="../ui/router_manager_window.cc" line="845"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="604"/>
-        <location filename="../ui/router_manager_window.cc" line="655"/>
-        <location filename="../ui/router_manager_window.cc" line="694"/>
+        <location filename="../ui/router_manager_window.cc" line="741"/>
+        <location filename="../ui/router_manager_window.cc" line="795"/>
+        <location filename="../ui/router_manager_window.cc" line="846"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="711"/>
+        <location filename="../ui/router_manager_window.cc" line="899"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="714"/>
+        <location filename="../ui/router_manager_window.cc" line="902"/>
         <source>Delete</source>
         <translation type="unfinished">刪除</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="728"/>
+        <location filename="../ui/router_manager_window.cc" line="916"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="829"/>
-        <location filename="../ui/router_manager_window.cc" line="855"/>
-        <location filename="../ui/router_manager_window.cc" line="945"/>
+        <location filename="../ui/router_manager_window.cc" line="1097"/>
+        <location filename="../ui/router_manager_window.cc" line="1123"/>
+        <location filename="../ui/router_manager_window.cc" line="1151"/>
+        <location filename="../ui/router_manager_window.cc" line="1177"/>
+        <location filename="../ui/router_manager_window.cc" line="1267"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="830"/>
+        <location filename="../ui/router_manager_window.cc" line="1098"/>
+        <location filename="../ui/router_manager_window.cc" line="1152"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
         <translation>您是否確定要中斷工作階段 &quot;%1&quot;？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="856"/>
+        <location filename="../ui/router_manager_window.cc" line="1124"/>
+        <source>Are you sure you want to disconnect all relays?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/router_manager_window.cc" line="1178"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>您確定要中斷所有主機的連線嗎？</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="940"/>
+        <location filename="../ui/router_manager_window.cc" line="1262"/>
         <source>You cannot delete a built-in user.</source>
         <translation>您不能刪除內建使用者。</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="946"/>
+        <location filename="../ui/router_manager_window.cc" line="1268"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您確定要刪除使用者 &quot;%1&quot; 嗎？</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1275"/>
+        <location filename="../ui/router_manager_window.cc" line="1548"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform>%n 秒</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1276"/>
+        <location filename="../ui/router_manager_window.cc" line="1549"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform>%n 分鐘</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1277"/>
+        <location filename="../ui/router_manager_window.cc" line="1550"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform>%n 小時</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1301"/>
+        <location filename="../ui/router_manager_window.cc" line="1574"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform>%n 天</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1323"/>
+        <location filename="../ui/router_manager_window.cc" line="1596"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1328"/>
+        <location filename="../ui/router_manager_window.cc" line="1601"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1333"/>
+        <location filename="../ui/router_manager_window.cc" line="1606"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1338"/>
+        <location filename="../ui/router_manager_window.cc" line="1611"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1343"/>
+        <location filename="../ui/router_manager_window.cc" line="1616"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
@@ -3176,53 +3195,50 @@
         <translation type="vanished">ID #%1</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="834"/>
-        <location filename="../ui/router_manager_window.cc" line="859"/>
-        <location filename="../ui/router_manager_window.cc" line="950"/>
+        <location filename="../ui/router_manager_window.cc" line="1102"/>
+        <location filename="../ui/router_manager_window.cc" line="1127"/>
+        <location filename="../ui/router_manager_window.cc" line="1156"/>
+        <location filename="../ui/router_manager_window.cc" line="1181"/>
+        <location filename="../ui/router_manager_window.cc" line="1272"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="835"/>
-        <location filename="../ui/router_manager_window.cc" line="860"/>
-        <location filename="../ui/router_manager_window.cc" line="951"/>
+        <location filename="../ui/router_manager_window.cc" line="1103"/>
+        <location filename="../ui/router_manager_window.cc" line="1128"/>
+        <location filename="../ui/router_manager_window.cc" line="1157"/>
+        <location filename="../ui/router_manager_window.cc" line="1182"/>
+        <location filename="../ui/router_manager_window.cc" line="1273"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="608"/>
-        <location filename="../ui/router_manager_window.cc" line="657"/>
+        <location filename="../ui/router_manager_window.cc" line="745"/>
+        <location filename="../ui/router_manager_window.cc" line="797"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="211"/>
-        <location filename="../ui/router_manager_window.cc" line="996"/>
-        <location filename="../ui/router_manager_window.cc" line="1029"/>
-        <source>Active connections: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/router_manager_window.cc" line="1046"/>
-        <location filename="../ui/router_manager_window.cc" line="1118"/>
+        <location filename="../ui/router_manager_window.cc" line="1319"/>
+        <location filename="../ui/router_manager_window.cc" line="1391"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1048"/>
-        <location filename="../ui/router_manager_window.cc" line="1120"/>
+        <location filename="../ui/router_manager_window.cc" line="1321"/>
+        <location filename="../ui/router_manager_window.cc" line="1393"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1058"/>
-        <location filename="../ui/router_manager_window.cc" line="1130"/>
+        <location filename="../ui/router_manager_window.cc" line="1331"/>
+        <location filename="../ui/router_manager_window.cc" line="1403"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1108"/>
-        <location filename="../ui/router_manager_window.cc" line="1199"/>
+        <location filename="../ui/router_manager_window.cc" line="1381"/>
+        <location filename="../ui/router_manager_window.cc" line="1472"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>

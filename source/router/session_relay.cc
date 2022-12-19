@@ -43,6 +43,13 @@ void SessionRelay::sendKeyUsed(uint32_t key_id)
     sendMessage(*outgoing_message_);
 }
 
+void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& request)
+{
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_peer_connection_request()->CopyFrom(request);
+    sendMessage(*outgoing_message_);
+}
+
 void SessionRelay::onSessionReady()
 {
     // Nothing

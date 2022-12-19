@@ -57,6 +57,17 @@ void SessionsWorker::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
     thread_->start(base::MessageLoop::Type::ASIO, this);
 }
 
+void SessionsWorker::disconnectSession(uint64_t session_id)
+{
+    if (!self_task_runner_->belongsToCurrentThread())
+    {
+        self_task_runner_->postTask(std::bind(&SessionsWorker::disconnectSession, this, session_id));
+        return;
+    }
+
+    session_manager_->disconnectSession(session_id);
+}
+
 void SessionsWorker::onBeforeThreadRunning()
 {
     self_task_runner_ = thread_->taskRunner();

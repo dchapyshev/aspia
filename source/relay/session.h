@@ -51,19 +51,22 @@ public:
 
     void start(Delegate* delegate);
     void stop();
+    void disconnect();
 
-    const std::string& clientAddress() const;
-    const std::string& clientUserName() const;
-    const std::string& hostAddress() const;
-    base::HostId hostId() const;
+    uint64_t sessionId() const { return session_id_; }
+    const std::string& clientAddress() const { return client_address_; }
+    const std::string& clientUserName() const { return client_user_name_; }
+    const std::string& hostAddress() const { return host_address_; }
+    base::HostId hostId() const { return host_id_; }
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration(const TimePoint& current_time) const;
-    int64_t bytesTransferred() const;
+    int64_t bytesTransferred() const { return bytes_transferred_; }
 
 private:
     static void doReadSome(Session* session, int source);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
+    uint64_t session_id_ = 0;
     std::string client_address_;
     std::string client_user_name_;
     std::string host_address_;

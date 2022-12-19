@@ -64,8 +64,9 @@ class HostTreeItem : public QTreeWidgetItem
 {
 public:
     explicit HostTreeItem(const proto::Session& session)
-        : session(session)
     {
+        updateItem(session);
+
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
@@ -74,6 +75,17 @@ public:
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
 
+        proto::Version version = session.version();
+        setText(4, QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(5, QString::fromStdString(session.os_name()));
+    }
+
+    ~HostTreeItem() override = default;
+
+    void updateItem(const proto::Session& updated_session)
+    {
+        session = updated_session;
         QString id;
 
         proto::HostSessionData session_data;
@@ -93,14 +105,7 @@ public:
         }
 
         setText(3, id);
-
-        proto::Version version = session.version();
-        setText(4, QString("%1.%2.%3.%4")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
-        setText(5, QString::fromStdString(session.os_name()));
     }
-
-    ~HostTreeItem() override = default;
 
     // QTreeWidgetItem implementation.
     bool operator<(const QTreeWidgetItem &other) const override
@@ -124,8 +129,9 @@ class RelayTreeItem : public QTreeWidgetItem
 {
 public:
     explicit RelayTreeItem(const proto::Session& session)
-        : session(session)
     {
+        updateItem(session);
+
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
@@ -133,18 +139,23 @@ public:
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
 
-        proto::RelaySessionData session_data;
-        if (session_data.ParseFromString(session.session_data()))
-        {
-            setText(2, QString::number(session_data.pool_size()));
-        }
-
         const proto::Version& version = session.version();
         
         setText(3, QString("%1.%2.%3.%4")
             .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
         setText(4, QString::fromStdString(session.computer_name()));
         setText(5, QString::fromStdString(session.os_name()));
+    }
+
+    void updateItem(const proto::Session& updated_session)
+    {
+        session = updated_session;
+
+        proto::RelaySessionData session_data;
+        if (session_data.ParseFromString(session.session_data()))
+        {
+            setText(2, QString::number(session_data.pool_size()));
+        }
     }
 
     // QTreeWidgetItem implementation.
@@ -163,6 +174,66 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RelayTreeItem);
+};
+
+class PeerConnectionTreeItem : public QTreeWidgetItem
+{
+public:
+    explicit PeerConnectionTreeItem(const proto::PeerConnection& connection)
+    {
+        updateItem(connection);
+
+        setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
+        setText(0, QString::fromStdString(conn.host_address()));
+        setText(1, QString::number(conn.host_id()));
+        setText(2, QString::fromStdString(conn.client_address()));
+        setText(3, QString::fromStdString(conn.client_user_name()));
+    }
+
+    void updateItem(const proto::PeerConnection& connection)
+    {
+        conn = connection;
+        setText(4, RouterManagerWindow::sizeToString(conn.bytes_transferred()));
+        setText(5, RouterManagerWindow::delayToString(conn.duration()));
+        setText(6, RouterManagerWindow::delayToString(conn.idle_time()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const override
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 1)
+        {
+            const PeerConnectionTreeItem* other_item =
+                static_cast<const PeerConnectionTreeItem*>(&other);
+            return conn.host_id() < other_item->conn.host_id();
+        }
+        else if (column == 4)
+        {
+            const PeerConnectionTreeItem* other_item =
+                static_cast<const PeerConnectionTreeItem*>(&other);
+            return conn.bytes_transferred() < other_item->conn.bytes_transferred();
+        }
+        else if (column == 5)
+        {
+            const PeerConnectionTreeItem* other_item =
+                static_cast<const PeerConnectionTreeItem*>(&other);
+            return conn.duration() < other_item->conn.duration();
+        }
+        else if (column == 6)
+        {
+            const PeerConnectionTreeItem* other_item =
+                static_cast<const PeerConnectionTreeItem*>(&other);
+            return conn.idle_time() < other_item->conn.idle_time();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::PeerConnection conn;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(PeerConnectionTreeItem);
 };
 
 class UserTreeItem : public QTreeWidgetItem
@@ -208,7 +279,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->label_active_conn->setText(tr("Active connections: %1").arg(0));
+    ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
 
     connect(ui->button_refresh_hosts, &QPushButton::clicked,
             this, &RouterManagerWindow::refreshSessionList);
@@ -309,6 +380,13 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     ClientSettings settings;
     restoreState(settings.routerManagerState());
+
+    QTimer* update_timer = new QTimer(this);
+    connect(update_timer, &QTimer::timeout, this, [this]()
+    {
+        refreshSessionList();
+    });
+    update_timer->start(std::chrono::seconds(3));
 }
 
 RouterManagerWindow::~RouterManagerWindow()
@@ -462,12 +540,39 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     QTreeWidget* tree_hosts = ui->tree_hosts;
     QTreeWidget* tree_relay = ui->tree_relay;
 
-    tree_hosts->clear();
-    tree_relay->clear();
-
     int host_count = 0;
     int relay_count = 0;
 
+    auto has_session_with_id = [](const proto::SessionList& session_list, int64_t session_id)
+    {
+        for (int i = 0; i < session_list.session_size(); ++i)
+        {
+            if (session_list.session(i).session_id() == session_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all hosts that are not in the list.
+    for (int i = tree_hosts->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        HostTreeItem* item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(i));
+
+        if (!has_session_with_id(*session_list, item->session.session_id()))
+             delete item;
+    }
+
+    // Remove from the UI all relays that are not in the list.
+    for (int i = tree_relay->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        RelayTreeItem* item = static_cast<RelayTreeItem*>(tree_relay->topLevelItem(i));
+
+        if (!has_session_with_id(*session_list, item->session.session_id()))
+             delete item;
+    }
+
+    // Adding and updating elements in the UI.
     for (int i = 0; i < session_list->session_size(); ++i)
     {
         const proto::Session& session = session_list->session(i);
@@ -476,14 +581,44 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
         {
             case proto::ROUTER_SESSION_HOST:
             {
-                tree_hosts->addTopLevelItem(new HostTreeItem(session_list->session(i)));
+                bool found = false;
+
+                for (int j = 0; j < tree_hosts->topLevelItemCount(); ++j)
+                {
+                    HostTreeItem* item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(j));
+                    if (item->session.session_id() == session.session_id())
+                    {
+                        item->updateItem(session);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    tree_hosts->addTopLevelItem(new HostTreeItem(session));
+
                 ++host_count;
             }
             break;
 
             case proto::ROUTER_SESSION_RELAY:
             {
-                tree_relay->addTopLevelItem(new RelayTreeItem(session_list->session(i)));
+                bool found = false;
+
+                for (int j = 0; j < tree_relay->topLevelItemCount(); ++j)
+                {
+                    RelayTreeItem* item = static_cast<RelayTreeItem*>(tree_relay->topLevelItem(j));
+                    if (item->session.session_id() == session.session_id())
+                    {
+                        item->updateItem(session);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    tree_relay->addTopLevelItem(new RelayTreeItem(session));
+
                 ++relay_count;
             }
             break;
@@ -492,6 +627,8 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
                 break;
         }
     }
+
+    updateRelayStatistics();
 
     ui->label_hosts_conn_count->setText(QString::number(host_count));
     ui->label_relay_conn_count->setText(QString::number(relay_count));
@@ -649,6 +786,9 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
 {
     QMenu menu;
 
+    QAction* disconnect_action = menu.addAction(tr("Disconnect"));
+    menu.addSeparator();
+    QAction* disconnect_all_action = menu.addAction(tr("Disconnect All"));
     QAction* refresh_action = menu.addAction(tr("Refresh"));
     menu.addSeparator();
     QAction* copy_row = menu.addAction(tr("Copy Row"));
@@ -680,27 +820,75 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
     {
         refreshSessionList();
     }
+    else if (action == disconnect_action)
+    {
+        disconnectRelay();
+    }
+    else if (action == disconnect_all_action)
+    {
+        disconnectAllRelays();
+    }
 }
 
 void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
 {
-    QTreeWidgetItem* current_item = ui->tree_active_conn->currentItem();
-    if (!current_item)
+    RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui->tree_relay->currentItem());
+    if (!relay_item)
         return;
 
     QMenu menu;
 
+    QAction* disconnect = menu.addAction(tr("Disconnect"));
+    menu.addSeparator();
+    QAction* disconnect_all = menu.addAction(tr("Disconnect All"));
+    menu.addSeparator();
     QAction* copy_row = menu.addAction(tr("Copy Row"));
     QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    PeerConnectionTreeItem* peer_item =
+        static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->currentItem());
+    if (!peer_item)
+    {
+        disconnect->setEnabled(false);
+        copy_row->setEnabled(false);
+        copy_col->setEnabled(false);
+
+        if (ui->tree_active_conn->topLevelItemCount() == 0)
+            return;
+    }
 
     QAction* action = menu.exec(ui->tree_active_conn->viewport()->mapToGlobal(pos));
     if (action == copy_row)
     {
-        copyRowFromTree(current_item);
+        copyRowFromTree(peer_item);
     }
     else if (action == copy_col)
     {
-        copyColumnFromTree(current_item, current_active_conn_column_);
+        copyColumnFromTree(peer_item, current_active_conn_column_);
+    }
+    else if (action == disconnect)
+    {
+        if (router_proxy_)
+        {
+            router_proxy_->disconnectPeerSession(
+                relay_item->session.session_id(), peer_item->conn.session_id());
+        }
+    }
+    else if (action == disconnect_all)
+    {
+        if (router_proxy_)
+        {
+            for (int i = 0; i < ui->tree_active_conn->topLevelItemCount(); ++i)
+            {
+                PeerConnectionTreeItem* item =
+                    static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->topLevelItem(i));
+                if (item)
+                {
+                    router_proxy_->disconnectPeerSession(
+                        relay_item->session.session_id(), item->conn.session_id());
+                }
+            }
+        }
     }
 }
 
@@ -810,12 +998,146 @@ void RouterManagerWindow::copyColumnFromTree(QTreeWidgetItem* item, int column)
     copyTextToClipboard(item->text(column));
 }
 
+void RouterManagerWindow::updateRelayStatistics()
+{
+    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relay->currentItem());
+    if (item)
+    {
+        ui->label_active_conn->setEnabled(true);
+        ui->tree_active_conn->setEnabled(true);
+
+        proto::RelaySessionData session_data;
+        if (session_data.ParseFromString(item->session.session_data()))
+        {
+            if (session_data.has_relay_stat())
+            {
+                const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
+
+                auto has_session_with_id = [](const proto::RelaySessionData::RelayStat& relay_stat,
+                    uint64_t session_id)
+                {
+                    for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
+                    {
+                        if (relay_stat.peer_connection(i).session_id() == session_id)
+                            return true;
+                    }
+
+                    return false;
+                };
+
+                // Remove from the UI all connections that are not in the list.
+                for (int i = ui->tree_active_conn->topLevelItemCount() - 1; i >= 0; --i)
+                {
+                    PeerConnectionTreeItem* item =
+                        static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->topLevelItem(i));
+                    if (!has_session_with_id(relay_stat, item->conn.session_id()))
+                        delete item;
+                }
+
+                ui->label_active_conn->setText(
+                    tr("Active peers: %1").arg(relay_stat.peer_connection_size()));
+
+                for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
+                {
+                    const proto::PeerConnection& connection = relay_stat.peer_connection(i);
+
+                    bool found = false;
+
+                    for (int j = 0; j < ui->tree_active_conn->topLevelItemCount(); ++j)
+                    {
+                        PeerConnectionTreeItem* item =
+                            static_cast<PeerConnectionTreeItem*>(ui->tree_active_conn->topLevelItem(j));
+
+                        if (item->conn.session_id() == connection.session_id())
+                        {
+                            item->updateItem(connection);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                        ui->tree_active_conn->addTopLevelItem(new PeerConnectionTreeItem(connection));
+                }
+
+                return;
+            }
+            else
+            {
+                LOG(LS_INFO) << "No relay statistics";
+            }
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unable to parse session data";
+        }
+    }
+
+    ui->label_active_conn->setEnabled(false);
+    ui->tree_active_conn->setEnabled(false);
+    ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
+}
+
 void RouterManagerWindow::refreshSessionList()
 {
     if (router_proxy_)
     {
         beforeRequest();
         router_proxy_->refreshSessionList();
+    }
+}
+
+void RouterManagerWindow::disconnectRelay()
+{
+    RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_hosts->currentItem());
+    if (!tree_item)
+        return;
+
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to disconnect session \"%1\"?")
+                                .arg(QString::fromStdString(tree_item->session.computer_name())),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::No)
+    {
+        return;
+    }
+
+    if (router_proxy_)
+    {
+        beforeRequest();
+        router_proxy_->stopSession(tree_item->session.session_id());
+    }
+}
+
+void RouterManagerWindow::disconnectAllRelays()
+{
+    if (!router_proxy_)
+        return;
+
+    QMessageBox message_box(QMessageBox::Question,
+                            tr("Confirmation"),
+                            tr("Are you sure you want to disconnect all relays?"),
+                            QMessageBox::Yes | QMessageBox::No,
+                            this);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    if (message_box.exec() == QMessageBox::No)
+        return;
+
+    beforeRequest();
+
+    QTreeWidget* tree_relay = ui->tree_relay;
+    for (int i = 0; i < tree_relay->topLevelItemCount(); ++i)
+    {
+        RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(tree_relay->topLevelItem(i));
+        if (tree_item)
+            router_proxy_->stopSession(tree_item->session.session_id());
     }
 }
 
@@ -974,69 +1296,20 @@ void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* /* current */,
 }
 
 void RouterManagerWindow::onCurrentRelayChanged(
-    QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
+    QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     ui->tree_active_conn->clear();
-
-    RelayTreeItem* item = static_cast<RelayTreeItem*>(current);
-    if (item)
-    {
-        ui->label_active_conn->setEnabled(true);
-        ui->tree_active_conn->setEnabled(true);
-
-        proto::RelaySessionData session_data;
-
-        if (session_data.ParseFromString(item->session.session_data()))
-        {
-            if (session_data.has_relay_stat())
-            {
-                const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
-
-                ui->label_active_conn->setText(
-                    tr("Active connections: %1").arg(relay_stat.peer_connection_size()));
-
-                for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
-                {
-                    const proto::PeerConnection& connection = relay_stat.peer_connection(i);
-
-                    QTreeWidgetItem* connection_item = new QTreeWidgetItem();
-                    connection_item->setText(0, QString::fromStdString(connection.host_address()));
-                    connection_item->setText(1, QString::number(connection.host_id()));
-                    connection_item->setText(2, QString::fromStdString(connection.client_address()));
-                    connection_item->setText(3, QString::fromStdString(connection.client_user_name()));
-                    connection_item->setText(4, sizeToString(connection.bytes_transferred()));
-                    connection_item->setText(5, delayToString(connection.duration()));
-                    connection_item->setText(6, delayToString(connection.idle_time()));
-
-                    ui->tree_active_conn->addTopLevelItem(connection_item);
-                }
-
-                return;
-            }
-            else
-            {
-                LOG(LS_INFO) << "No relay statistics";
-            }
-        }
-        else
-        {
-            LOG(LS_WARNING) << "Unable to parse session data";
-        }
-    }
-
-    ui->label_active_conn->setEnabled(false);
-    ui->tree_active_conn->setEnabled(false);
-    ui->label_active_conn->setText(tr("Active connections: %1").arg(0));
+    updateRelayStatistics();
 }
 
 void RouterManagerWindow::beforeRequest()
 {
-    ui->tab->setEnabled(false);
+    //
 }
 
 void RouterManagerWindow::afterRequest()
 {
-    ui->tab->setEnabled(true);
+    //
 }
 
 void RouterManagerWindow::saveHostsToFile()

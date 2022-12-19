@@ -36,6 +36,7 @@ public:
     const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::RelayStat>& relayStat() const { return relay_stat_; }
     void sendKeyUsed(uint32_t key_id);
+    void disconnectPeerSession(const proto::PeerConnectionRequest& request);
 
 protected:
     // Session implementation.
