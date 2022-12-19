@@ -184,12 +184,12 @@ void Controller::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            LOG(LS_INFO) << "Authentication complete";
+            LOG(LS_INFO) << "Authentication complete (session count: " << session_count_ << ")";
 
             // Now the session will receive incoming messages.
             channel_->resume();
 
-            sendKeyPool(max_peer_count_);
+            sendKeyPool(max_peer_count_ - static_cast<uint32_t>(session_count_));
         }
         else
         {
@@ -261,6 +261,11 @@ void Controller::onMessageWritten(size_t /* pending */)
     // Nothing
 }
 
+void Controller::onSessionStarted()
+{
+    ++session_count_;
+}
+
 void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
     outgoing_message_->Clear();
@@ -272,6 +277,14 @@ void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
 
 void Controller::onSessionFinished()
 {
+    --session_count_;
+
+    if (session_count_ < 0)
+    {
+        LOG(LS_WARNING) << "Invalid value for session count: " << session_count_;
+        session_count_ = 0;
+    }
+
     // After disconnecting the peer, one key is released.
     // Add a new key to the pool and send it to the router.
     sendKeyPool(1);

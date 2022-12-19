@@ -51,6 +51,7 @@ protected:
     void onMessageWritten(size_t pending) override;
 
     // SessionManager::Delegate implementation.
+    void onSessionStarted() override;
     void onSessionStatistics(const proto::RelayStat& relay_stat) override;
     void onSessionFinished() override;
 
@@ -85,6 +86,8 @@ private:
 
     std::unique_ptr<proto::RouterToRelay> incoming_message_;
     std::unique_ptr<proto::RelayToRouter> outgoing_message_;
+
+    int session_count_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(Controller);
 };
