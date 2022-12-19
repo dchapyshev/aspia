@@ -842,7 +842,7 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="120"/>
-        <location filename="../ui/router_manager_window.ui" line="332"/>
+        <location filename="../ui/router_manager_window.ui" line="344"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -853,8 +853,8 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="141"/>
-        <location filename="../ui/router_manager_window.ui" line="339"/>
-        <location filename="../ui/router_manager_window.ui" line="409"/>
+        <location filename="../ui/router_manager_window.ui" line="351"/>
+        <location filename="../ui/router_manager_window.ui" line="421"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
@@ -865,7 +865,7 @@
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="193"/>
-        <location filename="../ui/router_manager_window.ui" line="294"/>
+        <location filename="../ui/router_manager_window.ui" line="306"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -875,58 +875,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="248"/>
+        <location filename="../ui/router_manager_window.ui" line="254"/>
         <source>Address 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="253"/>
+        <location filename="../ui/router_manager_window.ui" line="259"/>
         <source>Address 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="258"/>
+        <location filename="../ui/router_manager_window.ui" line="264"/>
         <source>Transferred</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="263"/>
-        <location filename="../ui/router_manager_window.ui" line="299"/>
+        <location filename="../ui/router_manager_window.ui" line="269"/>
+        <location filename="../ui/router_manager_window.ui" line="311"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="268"/>
+        <location filename="../ui/router_manager_window.ui" line="274"/>
         <source>Idle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="304"/>
+        <location filename="../ui/router_manager_window.ui" line="316"/>
         <source>Key ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="353"/>
+        <location filename="../ui/router_manager_window.ui" line="365"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="361"/>
+        <location filename="../ui/router_manager_window.ui" line="373"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="378"/>
+        <location filename="../ui/router_manager_window.ui" line="390"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="395"/>
+        <location filename="../ui/router_manager_window.ui" line="407"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="442"/>
+        <location filename="../ui/router_manager_window.ui" line="454"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
