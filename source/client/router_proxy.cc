@@ -38,6 +38,7 @@ public:
     void addUser(const proto::User& user);
     void modifyUser(const proto::User& user);
     void deleteUser(int64_t entry_id);
+    void disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
@@ -156,6 +157,19 @@ void RouterProxy::Impl::deleteUser(int64_t entry_id)
         router_->deleteUser(entry_id);
 }
 
+void RouterProxy::Impl::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(std::bind(
+            &Impl::disconnectPeerSession, shared_from_this(), relay_session_id, peer_session_id));
+        return;
+    }
+
+    if (router_)
+        router_->disconnectPeerSession(relay_session_id, peer_session_id);
+}
+
 RouterProxy::RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::unique_ptr<Router> router)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(router)))
@@ -206,6 +220,11 @@ void RouterProxy::modifyUser(const proto::User& user)
 void RouterProxy::deleteUser(int64_t entry_id)
 {
     impl_->deleteUser(entry_id);
+}
+
+void RouterProxy::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
+{
+    impl_->disconnectPeerSession(relay_session_id, peer_session_id);
 }
 
 } // namespace client

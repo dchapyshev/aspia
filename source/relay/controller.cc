@@ -235,6 +235,21 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
         task_runner_->postDelayedTask(
             std::bind(&KeyDeleter::deleteKey, key_deleter), std::chrono::seconds(30));
     }
+    else if (incoming_message_->has_peer_connection_request())
+    {
+        const proto::PeerConnectionRequest& request = incoming_message_->peer_connection_request();
+
+        switch (request.type())
+        {
+            case proto::PEER_CONNECTION_REQUEST_DISCONNECT:
+                sessions_worker_->disconnectSession(request.peer_session_id());
+                break;
+
+            default:
+                LOG(LS_WARNING) << "Unsupported request type: " << request.type();
+                break;
+        }
+    }
     else
     {
         LOG(LS_WARNING) << "Unhandled message from router";

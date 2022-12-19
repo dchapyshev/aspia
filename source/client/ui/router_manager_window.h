@@ -59,6 +59,9 @@ public:
     void onUserList(std::shared_ptr<proto::UserList> user_list) override;
     void onUserResult(std::shared_ptr<proto::UserResult> user_result) override;
 
+    static QString delayToString(uint64_t delay);
+    static QString sizeToString(int64_t size);
+
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
@@ -71,6 +74,8 @@ private slots:
 
 private:
     void refreshSessionList();
+    void disconnectRelay();
+    void disconnectAllRelays();
     void disconnectHost();
     void disconnectAllHosts();
     void refreshUserList();
@@ -83,6 +88,7 @@ private:
     void onContextMenuForTreeHeader(QTreeWidget* tree, const QPoint& pos);
     void copyRowFromTree(QTreeWidgetItem* item);
     void copyColumnFromTree(QTreeWidgetItem* item, int column);
+    void updateRelayStatistics();
 
     void beforeRequest();
     void afterRequest();
@@ -92,9 +98,6 @@ private:
 
     QByteArray saveState();
     void restoreState(const QByteArray& state);
-
-    static QString delayToString(uint64_t delay);
-    static QString sizeToString(int64_t size);
 
     std::unique_ptr<Ui::RouterManagerWindow> ui;
 

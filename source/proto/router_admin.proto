@@ -163,8 +163,9 @@ message RouterToAdmin
 
 message AdminToRouter
 {
-    SessionListRequest session_list_request = 1;
-    SessionRequest session_request          = 2;
-    UserListRequest user_list_request       = 3;
-    UserRequest user_request                = 4;
+    SessionListRequest session_list_request       = 1;
+    SessionRequest session_request                = 2;
+    UserListRequest user_list_request             = 3;
+    UserRequest user_request                      = 4;
+    PeerConnectionRequest peer_connection_request = 5;
 }

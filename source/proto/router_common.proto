@@ -78,12 +78,26 @@ message PeerConnection
         PEER_STATUS_FINISHED = 2;
     }
 
-    PeerStatus status       = 1;
-    string client_address   = 2;
-    string client_user_name = 3;
-    string host_address     = 4;
-    fixed64 host_id         = 5;
-    int64 bytes_transferred = 6;
-    int64 duration          = 7;
-    int64 idle_time         = 8;
+    uint64 session_id       = 1;
+    PeerStatus status       = 2;
+    string client_address   = 3;
+    string client_user_name = 4;
+    string host_address     = 5;
+    fixed64 host_id         = 6;
+    int64 bytes_transferred = 7;
+    int64 duration          = 8;
+    int64 idle_time         = 9;
+}
+
+enum PeerConnectionRequestType
+{
+    PEER_CONNECTION_REQUEST_UNKNOWN    = 0;
+    PEER_CONNECTION_REQUEST_DISCONNECT = 1;
+}
+
+message PeerConnectionRequest
+{
+    int64 relay_session_id         = 1;
+    PeerConnectionRequestType type = 2;
+    uint64 peer_session_id         = 3;
 }

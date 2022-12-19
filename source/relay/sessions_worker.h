@@ -41,6 +41,7 @@ public:
 
     void start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                SessionManager::Delegate* delegate);
+    void disconnectSession(uint64_t session_id);
 
 protected:
     // base::Thread::Delegate implementation.

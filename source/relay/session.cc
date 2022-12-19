@@ -31,6 +31,10 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
                  const base::ByteArray& secret)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
+    static uint64_t session_id = 0;
+    ++session_id;
+    session_id_ = session_id;
+
     proto::PeerToRelay::Secret secret_message;
     if (secret_message.ParseFromArray(secret.data(), static_cast<int>(secret.size())))
     {
@@ -66,7 +70,14 @@ void Session::stop()
         return;
 
     delegate_ = nullptr;
+    disconnect();
 
+    LOG(LS_INFO) << "Session stopped (duration: " << duration(Clock::now()).count()
+                 << " seconds, bytes transferred: " << bytesTransferred() << ")";
+}
+
+void Session::disconnect()
+{
     std::error_code ignored_code;
     for (int i = 0; i < kNumberOfSides; ++i)
     {
@@ -74,28 +85,8 @@ void Session::stop()
         socket_[i].close(ignored_code);
     }
 
-    LOG(LS_INFO) << "Session stopped (duration: " << duration(Clock::now()).count()
-                 << " seconds, bytes transferred: " << bytesTransferred() << ")";
-}
-
-const std::string& Session::clientAddress() const
-{
-    return client_address_;
-}
-
-const std::string& Session::clientUserName() const
-{
-    return client_user_name_;
-}
-
-const std::string& Session::hostAddress() const
-{
-    return host_address_;
-}
-
-base::HostId Session::hostId() const
-{
-    return host_id_;
+    if (delegate_)
+        delegate_->onSessionFinished(this);
 }
 
 std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
@@ -112,11 +103,6 @@ std::chrono::seconds Session::idleTime(const TimePoint& current_time) const
 std::chrono::seconds Session::duration(const TimePoint& current_time) const
 {
     return std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time_);
-}
-
-int64_t Session::bytesTransferred() const
-{
-    return bytes_transferred_;
 }
 
 // static

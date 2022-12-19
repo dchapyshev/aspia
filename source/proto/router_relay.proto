@@ -54,4 +54,5 @@ message RelayToRouter
 message RouterToRelay
 {
     RelayKeyUsed key_used = 1;
+    PeerConnectionRequest peer_connection_request = 2;
 }

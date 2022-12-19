@@ -145,6 +145,22 @@ void SessionManager::start(std::unique_ptr<SharedPool> shared_pool, Delegate* de
     SessionManager::doAccept(this);
 }
 
+void SessionManager::disconnectSession(uint64_t session_id)
+{
+    LOG(LS_INFO) << "Disconnect session by session id: " << session_id;
+
+    for (const auto& session : active_sessions_)
+    {
+        if (session->sessionId() == session_id)
+        {
+            session->disconnect();
+            return;
+        }
+    }
+
+    LOG(LS_WARNING) << "Session with id " << session_id << " not found";
+}
+
 void SessionManager::onPendingSessionReady(
     PendingSession* session, const proto::PeerToRelay& message)
 {
@@ -317,6 +333,7 @@ void SessionManager::collectAndSendStatistics()
     {
         proto::PeerConnection* peer_connection = relay_stat.add_peer_connection();
 
+        peer_connection->set_session_id(session->sessionId());
         peer_connection->set_status(proto::PeerConnection::PEER_STATUS_ACTIVE);
         peer_connection->set_client_address(session->clientAddress());
         peer_connection->set_client_user_name(session->clientUserName());

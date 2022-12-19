@@ -45,6 +45,7 @@ private:
     void doUserRequest(const proto::UserRequest& request);
     void doSessionListRequest(const proto::SessionListRequest& request);
     void doSessionRequest(const proto::SessionRequest& request);
+    void doPeerConnectionRequest(const proto::PeerConnectionRequest& request);
 
     proto::UserResult::ErrorCode addUser(const proto::User& user);
     proto::UserResult::ErrorCode modifyUser(const proto::User& user);
