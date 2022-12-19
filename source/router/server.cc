@@ -399,6 +399,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     session->setVersion(session_info.version);
     session->setOsName(session_info.os_name);
     session->setComputerName(session_info.computer_name);
+    session->setUserName(session_info.user_name);
 
     sessions_.emplace_back(std::move(session));
     sessions_.back()->start(this);
