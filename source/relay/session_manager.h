@@ -43,6 +43,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
+        virtual void onSessionStarted() = 0;
         virtual void onSessionStatistics(const proto::RelayStat& relay_stat) = 0;
         virtual void onSessionFinished() = 0;
     };

@@ -87,6 +87,18 @@ void SessionsWorker::onAfterThreadRunning()
     session_manager_.reset();
 }
 
+void SessionsWorker::onSessionStarted()
+{
+    if (!caller_task_runner_->belongsToCurrentThread())
+    {
+        caller_task_runner_->postTask(std::bind(&SessionsWorker::onSessionStarted, this));
+        return;
+    }
+
+    if (delegate_)
+        delegate_->onSessionStarted();
+}
+
 void SessionsWorker::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
     if (!caller_task_runner_->belongsToCurrentThread())

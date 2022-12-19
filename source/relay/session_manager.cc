@@ -192,6 +192,9 @@ void SessionManager::onPendingSessionReady(
                         std::make_pair(session->takeSocket(), other_session->takeSocket()), secret));
                     active_sessions_.back()->start(this);
 
+                    if (delegate_)
+                        delegate_->onSessionStarted();
+
                     // Pending sessions are no longer needed, remove them.
                     removePendingSession(other_session.get());
                     removePendingSession(session);
