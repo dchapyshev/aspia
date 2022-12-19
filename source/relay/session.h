@@ -20,6 +20,8 @@
 #define RELAY_SESSION_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
+#include "base/peer/host_id.h"
 
 #include <asio/ip/tcp.hpp>
 
@@ -32,7 +34,8 @@ namespace relay {
 class Session
 {
 public:
-    explicit Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets);
+    Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
+            const base::ByteArray& secret);
     ~Session();
 
     using Clock = std::chrono::high_resolution_clock;
@@ -49,8 +52,10 @@ public:
     void start(Delegate* delegate);
     void stop();
 
-    const std::string& firstAddress() const;
-    const std::string& secondAddress() const;
+    const std::string& clientAddress() const;
+    const std::string& clientUserName() const;
+    const std::string& hostAddress() const;
+    base::HostId hostId() const;
     std::chrono::seconds idleTime(const TimePoint& current_time) const;
     std::chrono::seconds duration(const TimePoint& current_time) const;
     int64_t bytesTransferred() const;
@@ -59,8 +64,11 @@ private:
     static void doReadSome(Session* session, int source);
     void onErrorOccurred(const base::Location& location, const std::error_code& error_code);
 
-    std::string first_address_;
-    std::string second_address_;
+    std::string client_address_;
+    std::string client_user_name_;
+    std::string host_address_;
+    base::HostId host_id_ = base::kInvalidHostId;
+
     TimePoint start_time_;
     mutable TimePoint start_idle_time_;
     int64_t bytes_transferred_ = 0;

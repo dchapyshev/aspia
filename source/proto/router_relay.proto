@@ -39,9 +39,8 @@ message RelayKeyUsed
 // Sent from relay to router.
 message RelayStat
 {
-    repeated ActivePeerConnection active_peer_connection = 1;
-    repeated PendingPeerConnection pending_peer_connection = 2;
-    int64 uptime = 3;
+    repeated PeerConnection peer_connection = 1;
+    int64 uptime = 2;
 }
 
 // Sent from relay to router.

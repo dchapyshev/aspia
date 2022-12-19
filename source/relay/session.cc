@@ -21,19 +21,27 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/strings/unicode.h"
+#include "proto/relay_peer.pb.h"
 
 #include <asio/write.hpp>
 
 namespace relay {
 
-Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets)
+Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& sockets,
+                 const base::ByteArray& secret)
     : socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
+    proto::PeerToRelay::Secret secret_message;
+    if (secret_message.ParseFromArray(secret.data(), static_cast<int>(secret.size())))
+    {
+        client_address_ = secret_message.client_address();
+        client_user_name_ = secret_message.client_user_name();
+        host_address_ = secret_message.host_address();
+        host_id_ = secret_message.host_id();
+    }
+
     for (size_t i = 0; i < kNumberOfSides; ++i)
         std::fill(buffer_[i].begin(), buffer_[i].end(), 0);
-
-    first_address_ = socket_[0].remote_endpoint().address().to_string();
-    second_address_ = socket_[1].remote_endpoint().address().to_string();
 }
 
 Session::~Session()
@@ -70,14 +78,24 @@ void Session::stop()
                  << " seconds, bytes transferred: " << bytesTransferred() << ")";
 }
 
-const std::string& Session::firstAddress() const
+const std::string& Session::clientAddress() const
 {
-    return first_address_;
+    return client_address_;
 }
 
-const std::string& Session::secondAddress() const
+const std::string& Session::clientUserName() const
 {
-    return second_address_;
+    return client_user_name_;
+}
+
+const std::string& Session::hostAddress() const
+{
+    return host_address_;
+}
+
+base::HostId Session::hostId() const
+{
+    return host_id_;
 }
 
 std::chrono::seconds Session::idleTime(const TimePoint& current_time) const

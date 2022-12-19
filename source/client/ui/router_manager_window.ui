@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
-    <height>492</height>
+    <width>899</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -154,7 +154,7 @@
        <attribute name="title">
         <string>Relay</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
@@ -177,9 +177,6 @@
          <widget class="QSplitter" name="splitter_relay_hori">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
-          </property>
-          <property name="childrenCollapsible">
-           <bool>false</bool>
           </property>
           <widget class="QTreeWidget" name="tree_relay">
            <property name="indentation">
@@ -219,107 +216,67 @@
             </property>
            </column>
           </widget>
-          <widget class="QSplitter" name="splitter_relay_vert">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="childrenCollapsible">
-            <bool>false</bool>
-           </property>
-           <widget class="QWidget" name="layoutWidget">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="QLabel" name="label_active_conn">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_active_conn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string notr="true">Active connections: 0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTreeWidget" name="tree_active_conn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="indentation">
+               <number>0</number>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+              <column>
                <property name="text">
-                <string notr="true">Active connections: 0</string>
+                <string>Host Address</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTreeWidget" name="tree_active_conn">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="indentation">
-                <number>0</number>
-               </property>
-               <property name="sortingEnabled">
-                <bool>true</bool>
-               </property>
-               <column>
-                <property name="text">
-                 <string>Address 1</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Address 2</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Transferred</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Duration</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Idle</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="layoutWidget">
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="QLabel" name="label_pending_conn">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+              </column>
+              <column>
                <property name="text">
-                <string notr="true">Pending connections: 0</string>
+                <string>Host ID</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTreeWidget" name="tree_pending_conn">
-               <property name="enabled">
-                <bool>false</bool>
+              </column>
+              <column>
+               <property name="text">
+                <string>Client Address</string>
                </property>
-               <property name="indentation">
-                <number>0</number>
+              </column>
+              <column>
+               <property name="text">
+                <string>User Name</string>
                </property>
-               <property name="sortingEnabled">
-                <bool>true</bool>
+              </column>
+              <column>
+               <property name="text">
+                <string>Transferred</string>
                </property>
-               <column>
-                <property name="text">
-                 <string>Address</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Duration</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Key ID</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+              </column>
+              <column>
+               <property name="text">
+                <string>Duration</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Idle</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>

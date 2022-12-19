@@ -225,10 +225,8 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
                         session_data.mutable_relay_stat();
 
                     out_relay_stat->set_uptime(in_relay_stat->uptime());
-                    out_relay_stat->mutable_active_peer_connection()->CopyFrom(
-                        in_relay_stat->active_peer_connection());
-                    out_relay_stat->mutable_pending_peer_connection()->CopyFrom(
-                        in_relay_stat->pending_peer_connection());
+                    out_relay_stat->mutable_peer_connection()->CopyFrom(
+                        in_relay_stat->peer_connection());
                 }
 
                 item->set_session_data(session_data.SerializeAsString());

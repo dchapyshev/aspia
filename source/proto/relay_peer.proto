@@ -32,6 +32,15 @@ message PeerToRelay
     // Public key of the peer.
     bytes public_key = 2;
 
+    message Secret
+    {
+        bytes random_data       = 1;
+        string client_address   = 2;
+        string client_user_name = 3;
+        string host_address     = 4;
+        fixed64 host_id         = 5;
+    }
+
     // Encrypted secret.
     bytes data = 3;
 }

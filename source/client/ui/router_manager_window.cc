@@ -209,7 +209,6 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     ui->setupUi(this);
 
     ui->label_active_conn->setText(tr("Active connections: %1").arg(0));
-    ui->label_pending_conn->setText(tr("Pending connections: %1").arg(0));
 
     connect(ui->button_refresh_hosts, &QPushButton::clicked,
             this, &RouterManagerWindow::refreshSessionList);
@@ -256,10 +255,6 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     connect(ui->tree_active_conn, &QTreeWidget::customContextMenuRequested,
             this, &RouterManagerWindow::onActiveConnContextMenu);
 
-    ui->tree_pending_conn->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_pending_conn, &QTreeWidget::customContextMenuRequested,
-            this, &RouterManagerWindow::onPendingConnContextMenu);
-
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
             this, &RouterManagerWindow::onUsersContextMenu);
@@ -291,13 +286,6 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
         onContextMenuForTreeHeader(ui->tree_active_conn, pos);
     });
 
-    ui->tree_pending_conn->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_pending_conn->header(), &QHeaderView::customContextMenuRequested,
-            this, [this](const QPoint& pos)
-    {
-        onContextMenuForTreeHeader(ui->tree_pending_conn, pos);
-    });
-
     ui->tree_hosts->setMouseTracking(true);
     connect(ui->tree_hosts, &QTreeWidget::itemEntered,
             this, [this](QTreeWidgetItem* /* item */, int column)
@@ -317,13 +305,6 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
             this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_active_conn_column_ = column;
-    });
-
-    ui->tree_pending_conn->setMouseTracking(true);
-    connect(ui->tree_pending_conn, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
-    {
-        current_pending_conn_column_ = column;
     });
 
     ClientSettings settings;
@@ -518,11 +499,8 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     if (relay_count == 0)
     {
         ui->label_active_conn->setEnabled(false);
-        ui->label_pending_conn->setEnabled(false);
         ui->tree_active_conn->setEnabled(false);
-        ui->tree_pending_conn->setEnabled(false);
         ui->tree_active_conn->clear();
-        ui->tree_pending_conn->clear();
     }
 
     afterRequest();
@@ -723,28 +701,6 @@ void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
     else if (action == copy_col)
     {
         copyColumnFromTree(current_item, current_active_conn_column_);
-    }
-}
-
-void RouterManagerWindow::onPendingConnContextMenu(const QPoint& pos)
-{
-    QTreeWidgetItem* current_item = ui->tree_pending_conn->currentItem();
-    if (!current_item)
-        return;
-
-    QMenu menu;
-
-    QAction* copy_row = menu.addAction(tr("Copy Row"));
-    QAction* copy_col = menu.addAction(tr("Copy Value"));
-
-    QAction* action = menu.exec(ui->tree_pending_conn->viewport()->mapToGlobal(pos));
-    if (action == copy_row)
-    {
-        copyRowFromTree(current_item);
-    }
-    else if (action == copy_col)
-    {
-        copyColumnFromTree(current_item, current_pending_conn_column_);
     }
 }
 
@@ -1021,15 +977,12 @@ void RouterManagerWindow::onCurrentRelayChanged(
     QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
 {
     ui->tree_active_conn->clear();
-    ui->tree_pending_conn->clear();
 
     RelayTreeItem* item = static_cast<RelayTreeItem*>(current);
     if (item)
     {
         ui->label_active_conn->setEnabled(true);
-        ui->label_pending_conn->setEnabled(true);
         ui->tree_active_conn->setEnabled(true);
-        ui->tree_pending_conn->setEnabled(true);
 
         proto::RelaySessionData session_data;
 
@@ -1040,36 +993,22 @@ void RouterManagerWindow::onCurrentRelayChanged(
                 const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
 
                 ui->label_active_conn->setText(
-                    tr("Active connections: %1").arg(relay_stat.active_peer_connection_size()));
-                ui->label_pending_conn->setText(
-                    tr("Pending connections: %1").arg(relay_stat.pending_peer_connection_size()));
+                    tr("Active connections: %1").arg(relay_stat.peer_connection_size()));
 
-                for (int i = 0; i < relay_stat.active_peer_connection_size(); ++i)
+                for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
                 {
-                    const proto::ActivePeerConnection& connection =
-                        relay_stat.active_peer_connection(i);
+                    const proto::PeerConnection& connection = relay_stat.peer_connection(i);
 
                     QTreeWidgetItem* connection_item = new QTreeWidgetItem();
-                    connection_item->setText(0, QString::fromStdString(connection.first_address()));
-                    connection_item->setText(1, QString::fromStdString(connection.second_address()));
-                    connection_item->setText(2, sizeToString(connection.bytes_transferred()));
-                    connection_item->setText(3, delayToString(connection.duration()));
-                    connection_item->setText(4, delayToString(connection.idle_time()));
+                    connection_item->setText(0, QString::fromStdString(connection.host_address()));
+                    connection_item->setText(1, QString::number(connection.host_id()));
+                    connection_item->setText(2, QString::fromStdString(connection.client_address()));
+                    connection_item->setText(3, QString::fromStdString(connection.client_user_name()));
+                    connection_item->setText(4, sizeToString(connection.bytes_transferred()));
+                    connection_item->setText(5, delayToString(connection.duration()));
+                    connection_item->setText(6, delayToString(connection.idle_time()));
 
                     ui->tree_active_conn->addTopLevelItem(connection_item);
-                }
-
-                for (int i = 0; i < relay_stat.pending_peer_connection_size(); ++i)
-                {
-                    const proto::PendingPeerConnection& connection =
-                        relay_stat.pending_peer_connection(i);
-
-                    QTreeWidgetItem* connection_item = new QTreeWidgetItem();
-                    connection_item->setText(0, QString::fromStdString(connection.address()));
-                    connection_item->setText(1, delayToString(connection.duration()));
-                    connection_item->setText(2, QString::number(connection.key_id()));
-
-                    ui->tree_pending_conn->addTopLevelItem(connection_item);
                 }
 
                 return;
@@ -1086,11 +1025,8 @@ void RouterManagerWindow::onCurrentRelayChanged(
     }
 
     ui->label_active_conn->setEnabled(false);
-    ui->label_pending_conn->setEnabled(false);
     ui->tree_active_conn->setEnabled(false);
-    ui->tree_pending_conn->setEnabled(false);
     ui->label_active_conn->setText(tr("Active connections: %1").arg(0));
-    ui->label_pending_conn->setText(tr("Pending connections: %1").arg(0));
 }
 
 void RouterManagerWindow::beforeRequest()
@@ -1229,13 +1165,15 @@ void RouterManagerWindow::saveRelaysToFile()
             const proto::RelaySessionData::RelayStat& relay_stat = session_data.relay_stat();
 
             QJsonArray active_array;
-            for (int i = 0; i < relay_stat.active_peer_connection_size(); ++i)
+            for (int i = 0; i < relay_stat.peer_connection_size(); ++i)
             {
-                const proto::ActivePeerConnection& conn = relay_stat.active_peer_connection(i);
+                const proto::PeerConnection& conn = relay_stat.peer_connection(i);
 
                 QJsonObject conn_object;
-                conn_object.insert("first_address", QString::fromStdString(conn.first_address()));
-                conn_object.insert("second_address", QString::fromStdString(conn.second_address()));
+                conn_object.insert("host_address", QString::fromStdString(conn.host_address()));
+                conn_object.insert("host_id", QString::number(conn.host_id()));
+                conn_object.insert("client_address", QString::fromStdString(conn.client_address()));
+                conn_object.insert("user_name", QString::fromStdString(conn.client_user_name()));
                 conn_object.insert("bytes_transferred", static_cast<long long>(conn.bytes_transferred()));
                 conn_object.insert("duration", static_cast<long long>(conn.duration()));
                 conn_object.insert("idle", static_cast<long long>(conn.idle_time()));
@@ -1243,21 +1181,7 @@ void RouterManagerWindow::saveRelaysToFile()
                 active_array.append(conn_object);
             }
 
-            QJsonArray pending_array;
-            for (int i = 0; i < relay_stat.pending_peer_connection_size(); ++i)
-            {
-                const proto::PendingPeerConnection& conn = relay_stat.pending_peer_connection(i);
-
-                QJsonObject conn_object;
-                conn_object.insert("address", QString::fromStdString(conn.address()));
-                conn_object.insert("duration", static_cast<long long>(conn.duration()));
-                conn_object.insert("key_id", static_cast<int>(conn.key_id()));
-
-                pending_array.append(conn_object);
-            }
-
-            relay_object.insert("active_connections", active_array);
-            relay_object.insert("pending_connections", pending_array);
+            relay_object.insert("connections", active_array);
             relay_object.insert("uptime", static_cast<long long>(relay_stat.uptime()));
         }
 
@@ -1290,9 +1214,7 @@ QByteArray RouterManagerWindow::saveState()
         stream << ui->tree_hosts->header()->saveState();
         stream << ui->tree_relay->header()->saveState();
         stream << ui->splitter_relay_hori->saveState();
-        stream << ui->splitter_relay_vert->saveState();
         stream << ui->tree_active_conn->header()->saveState();
-        stream << ui->tree_pending_conn->header()->saveState();
     }
 
     return buffer;
@@ -1307,17 +1229,13 @@ void RouterManagerWindow::restoreState(const QByteArray& state)
     QByteArray hosts_columns_state;
     QByteArray relays_columns_state;
     QByteArray relay_splitter_hori;
-    QByteArray relay_splitter_vert;
     QByteArray active_conn_columns_state;
-    QByteArray pending_conn_columns_state;
 
     stream >> window_geometry;
     stream >> hosts_columns_state;
     stream >> relays_columns_state;
     stream >> relay_splitter_hori;
-    stream >> relay_splitter_vert;
     stream >> active_conn_columns_state;
-    stream >> pending_conn_columns_state;
 
     if (!window_geometry.isEmpty())
         restoreGeometry(window_geometry);
@@ -1342,26 +1260,8 @@ void RouterManagerWindow::restoreState(const QByteArray& state)
         ui->splitter_relay_hori->setSizes(sizes);
     }
 
-    if (!relay_splitter_vert.isEmpty())
-    {
-        ui->splitter_relay_vert->restoreState(relay_splitter_vert);
-    }
-    else
-    {
-        int left_side = (width() * 60) / 100; // 60%
-        int right_side = width() - left_side;
-
-        QList<int> sizes;
-        sizes.push_back(left_side);
-        sizes.push_back(right_side);
-        ui->splitter_relay_vert->setSizes(sizes);
-    }
-
     if (!active_conn_columns_state.isEmpty())
         ui->tree_active_conn->header()->restoreState(active_conn_columns_state);
-
-    if (!pending_conn_columns_state.isEmpty())
-        ui->tree_pending_conn->header()->restoreState(pending_conn_columns_state);
 }
 
 // static

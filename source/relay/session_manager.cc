@@ -173,7 +173,7 @@ void SessionManager::onPendingSessionReady(
 
                     // Now the opposite peer is found, start the data transfer between them.
                     active_sessions_.emplace_back(std::make_unique<Session>(
-                        std::make_pair(session->takeSocket(), other_session->takeSocket())));
+                        std::make_pair(session->takeSocket(), other_session->takeSocket()), secret));
                     active_sessions_.back()->start(this);
 
                     // Pending sessions are no longer needed, remove them.
@@ -315,22 +315,16 @@ void SessionManager::collectAndSendStatistics()
 
     for (const auto& session : active_sessions_)
     {
-        proto::ActivePeerConnection* peer_connection = relay_stat.add_active_peer_connection();
+        proto::PeerConnection* peer_connection = relay_stat.add_peer_connection();
 
-        peer_connection->set_first_address(session->firstAddress());
-        peer_connection->set_second_address(session->secondAddress());
+        peer_connection->set_status(proto::PeerConnection::PEER_STATUS_ACTIVE);
+        peer_connection->set_client_address(session->clientAddress());
+        peer_connection->set_client_user_name(session->clientUserName());
+        peer_connection->set_host_address(session->hostAddress());
+        peer_connection->set_host_id(session->hostId());
         peer_connection->set_bytes_transferred(session->bytesTransferred());
         peer_connection->set_idle_time(session->idleTime(now).count());
         peer_connection->set_duration(session->duration(now).count());
-    }
-
-    for (const auto& session : pending_sessions_)
-    {
-        proto::PendingPeerConnection* peer_connection = relay_stat.add_pending_peer_connection();
-
-        peer_connection->set_address(session->address());
-        peer_connection->set_duration(session->duration(now).count());
-        peer_connection->set_key_id(session->keyId());
     }
 
     if (delegate_)

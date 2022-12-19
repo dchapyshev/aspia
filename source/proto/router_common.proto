@@ -69,18 +69,21 @@ message RelayCredentials
     bytes secret = 4;
 }
 
-message ActivePeerConnection
+message PeerConnection
 {
-    string first_address    = 1;
-    string second_address   = 2;
-    int64 bytes_transferred = 3;
-    int64 duration          = 4;
-    int64 idle_time         = 5;
-}
+    enum PeerStatus
+    {
+        PEER_STATUS_UNKNOWN  = 0;
+        PEER_STATUS_ACTIVE   = 1;
+        PEER_STATUS_FINISHED = 2;
+    }
 
-message PendingPeerConnection
-{
-    string address = 1;
-    int64 duration = 2;
-    uint32 key_id  = 3;
+    PeerStatus status       = 1;
+    string client_address   = 2;
+    string client_user_name = 3;
+    string host_address     = 4;
+    fixed64 host_id         = 5;
+    int64 bytes_transferred = 6;
+    int64 duration          = 7;
+    int64 idle_time         = 8;
 }
