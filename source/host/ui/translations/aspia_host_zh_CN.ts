@@ -1028,71 +1028,71 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="139"/>
-        <location filename="../user_dialog.cc" line="151"/>
-        <location filename="../user_dialog.cc" line="166"/>
-        <location filename="../user_dialog.cc" line="177"/>
-        <location filename="../user_dialog.cc" line="199"/>
-        <location filename="../user_dialog.cc" line="219"/>
+        <location filename="../user_dialog.cc" line="140"/>
+        <location filename="../user_dialog.cc" line="152"/>
+        <location filename="../user_dialog.cc" line="167"/>
+        <location filename="../user_dialog.cc" line="178"/>
+        <location filename="../user_dialog.cc" line="200"/>
+        <location filename="../user_dialog.cc" line="220"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="140"/>
+        <location filename="../user_dialog.cc" line="141"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="152"/>
+        <location filename="../user_dialog.cc" line="153"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="167"/>
+        <location filename="../user_dialog.cc" line="168"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="178"/>
+        <location filename="../user_dialog.cc" line="179"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="189"/>
+        <location filename="../user_dialog.cc" line="190"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="192"/>
+        <location filename="../user_dialog.cc" line="193"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="196"/>
+        <location filename="../user_dialog.cc" line="197"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="203"/>
+        <location filename="../user_dialog.cc" line="204"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="204"/>
+        <location filename="../user_dialog.cc" line="205"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="220"/>
+        <location filename="../user_dialog.cc" line="221"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="274"/>
+        <location filename="../user_dialog.cc" line="275"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>

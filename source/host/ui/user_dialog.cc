@@ -87,7 +87,8 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
 
     connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
     {
-        setAccountChanged(true);
+        if (!account_changed_)
+            setAccountChanged(true);
     });
 }
 
