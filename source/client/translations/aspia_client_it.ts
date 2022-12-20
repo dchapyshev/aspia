@@ -847,7 +847,7 @@
         <translation>Dimensione Pool</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="244"/>
+        <location filename="../ui/router_manager_window.ui" line="254"/>
         <source>Host Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -857,7 +857,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="254"/>
+        <location filename="../ui/router_manager_window.ui" line="259"/>
         <source>Client Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -897,7 +897,7 @@
         <translation type="unfinished">Elimina</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="259"/>
+        <location filename="../ui/router_manager_window.ui" line="244"/>
         <location filename="../ui/router_manager_window.ui" line="411"/>
         <source>User Name</source>
         <translation>Nome Utente</translation>

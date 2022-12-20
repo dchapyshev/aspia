@@ -241,7 +241,7 @@
               </property>
               <column>
                <property name="text">
-                <string>Host Address</string>
+                <string>User Name</string>
                </property>
               </column>
               <column>
@@ -251,12 +251,12 @@
               </column>
               <column>
                <property name="text">
-                <string>Client Address</string>
+                <string>Host Address</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>User Name</string>
+                <string>Client Address</string>
                </property>
               </column>
               <column>

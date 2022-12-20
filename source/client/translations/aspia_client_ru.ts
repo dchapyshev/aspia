@@ -922,7 +922,7 @@
         <translation>Размер пула</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="244"/>
+        <location filename="../ui/router_manager_window.ui" line="254"/>
         <source>Host Address</source>
         <translation>Адрес хоста</translation>
     </message>
@@ -932,7 +932,7 @@
         <translation>ID хоста</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="254"/>
+        <location filename="../ui/router_manager_window.ui" line="259"/>
         <source>Client Address</source>
         <translation>Адрес клиента</translation>
     </message>
@@ -992,7 +992,7 @@
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="259"/>
+        <location filename="../ui/router_manager_window.ui" line="244"/>
         <location filename="../ui/router_manager_window.ui" line="411"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>

@@ -184,10 +184,10 @@ public:
         updateItem(connection);
 
         setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
-        setText(0, QString::fromStdString(conn.host_address()));
+        setText(0, QString::fromStdString(conn.client_user_name()));
         setText(1, QString::number(conn.host_id()));
-        setText(2, QString::fromStdString(conn.client_address()));
-        setText(3, QString::fromStdString(conn.client_user_name()));
+        setText(2, QString::fromStdString(conn.host_address()));
+        setText(3, QString::fromStdString(conn.client_address()));
     }
 
     void updateItem(const proto::PeerConnection& connection)
