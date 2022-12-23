@@ -400,6 +400,10 @@ int clientMain(int argc, char* argv[])
         QStringLiteral("port"),
         QString::number(DEFAULT_HOST_TCP_PORT));
 
+    QCommandLineOption name_option(QStringLiteral("name"),
+        QApplication::translate("Client", "Name of host."),
+        QStringLiteral("name"));
+
     QCommandLineOption username_option(QStringLiteral("username"),
         QApplication::translate("Client", "Name of user."),
         QStringLiteral("username"));
@@ -465,12 +469,30 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
         QStringLiteral("block-remote-input"));
 
+   QCommandLineOption router_address_option(QStringLiteral("router_address"),
+        QApplication::translate("Client", "Router address."),
+        QStringLiteral("router_address"));
+
+    QCommandLineOption router_port_option(QStringLiteral("router_port"),
+        QApplication::translate("Client", "Router port."),
+        QStringLiteral("router_port"),
+        QString::number(8060));
+
+    QCommandLineOption router_username_option(QStringLiteral("router_username"),
+        QApplication::translate("Client", "Router name of user."),
+        QStringLiteral("router_username"));
+
+    QCommandLineOption router_password_option(QStringLiteral("router_password"),
+        QApplication::translate("Client", "Router password of user."),
+        QStringLiteral("router_password"));
+
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(address_option);
     parser.addOption(port_option);
+    parser.addOption(name_option);
     parser.addOption(username_option);
     parser.addOption(password_option);
     parser.addOption(session_type_option);
@@ -487,6 +509,10 @@ int clientMain(int argc, char* argv[])
     parser.addOption(clear_clipboard_option);
     parser.addOption(lock_at_disconnect_option);
     parser.addOption(block_remote_input_option);
+    parser.addOption(router_address_option);
+    parser.addOption(router_port_option);
+    parser.addOption(router_username_option);
+    parser.addOption(router_password_option);
     parser.process(application);
 
     std::unique_ptr<client::ClientWindow> client_window;
@@ -500,6 +526,11 @@ int clientMain(int argc, char* argv[])
         config.port = parser.value(port_option).toUShort();
         config.username = parser.value(username_option).toStdU16String();
         config.password = parser.value(password_option).toStdU16String();
+
+        if (parser.isSet(name_option))
+        {
+            config.computer_name = parser.value(name_option).toStdU16String();
+        }
 
         QString session_type = parser.value(session_type_option);
 
@@ -582,6 +613,15 @@ int clientMain(int argc, char* argv[])
             LOG(LS_INFO) << "Relay connection selected";
 
             client::RouterConfig router_config = client::RouterConfigStorage().routerConfig();
+
+            if (parser.isSet(router_address_option))
+            {
+                router_config.address = parser.value(router_address_option).toStdU16String();
+                router_config.port = parser.value(router_port_option).toUShort();
+                router_config.username = parser.value(router_username_option).toStdU16String();
+                router_config.password = parser.value(router_password_option).toStdU16String();
+            }
+
             if (!router_config.isValid())
             {
                 QString title = QApplication::translate("Client", "Warning");
