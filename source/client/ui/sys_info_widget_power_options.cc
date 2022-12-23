@@ -163,6 +163,11 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
         }
     }
 
+    if (power_options.battery_size() == 0)
+        ui.tree->setIndentation(0);
+    else
+        ui.tree->setIndentation(20);
+
     for (int i = 0; i < power_options.battery_size(); ++i)
     {
         const proto::system_info::PowerOptions::Battery& battery = power_options.battery(i);

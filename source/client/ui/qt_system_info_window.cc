@@ -34,9 +34,12 @@
 #include "client/ui/sys_info_widget_open_files.h"
 #include "client/ui/sys_info_widget_power_options.h"
 #include "client/ui/sys_info_widget_printers.h"
+#include "client/ui/sys_info_widget_processes.h"
 #include "client/ui/sys_info_widget_routes.h"
 #include "client/ui/sys_info_widget_services.h"
 #include "client/ui/sys_info_widget_summary.h"
+#include "client/ui/sys_info_widget_local_users.h"
+#include "client/ui/sys_info_widget_local_user_groups.h"
 #include "client/ui/sys_info_widget_video_adapters.h"
 #include "client/ui/tree_to_html.h"
 #include "common/system_info_constants.h"
@@ -114,6 +117,9 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     sys_info_widgets_.append(new SysInfoWidgetLicenses(this));
     sys_info_widgets_.append(new SysInfoWidgetApplications(this));
     sys_info_widgets_.append(new SysInfoWidgetOpenFiles(this));
+    sys_info_widgets_.append(new SysInfoWidgetLocalUsers(this));
+    sys_info_widgets_.append(new SysInfoWidgetLocalUserGroups(this));
+    sys_info_widgets_.append(new SysInfoWidgetProcesses(this));
 
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
     {
@@ -204,17 +210,11 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
         tr("Services"),
         common::kSystemInfo_Services);
 
-    CategoryItem* env_vars = new CategoryItem(
+    CategoryItem* processes = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/block.png"),
-        tr("Environment Variables"),
-        common::kSystemInfo_EnvironmentVariables);
-
-    CategoryItem* event_logs = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/document-list.png"),
-        tr("Event Logs"),
-        common::kSystemInfo_EventLogs);
+        QStringLiteral(":/img/application.png"),
+        tr("Processes"),
+        common::kSystemInfo_Processes);
 
     CategoryItem* licenses = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
@@ -225,8 +225,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     software_category->addChild(applications);
     software_category->addChild(drivers);
     software_category->addChild(services);
-    software_category->addChild(env_vars);
-    software_category->addChild(event_logs);
+    software_category->addChild(processes);
     software_category->addChild(licenses);
 
     //----------------------------------------------------------------------------------------------
@@ -273,6 +272,42 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     network_category->addChild(open_files);
 
     //----------------------------------------------------------------------------------------------
+    // OPERATING SYSTEM
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* os_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/operating-system.png"), tr("Operating System"));
+
+    CategoryItem* env_vars = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/block.png"),
+        tr("Environment Variables"),
+        common::kSystemInfo_EnvironmentVariables);
+
+    CategoryItem* event_logs = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/document-list.png"),
+        tr("Event Logs"),
+        common::kSystemInfo_EventLogs);
+
+    CategoryItem* local_users = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/user.png"),
+        tr("Users"),
+        common::kSystemInfo_LocalUsers);
+
+    CategoryItem* local_user_groups = new CategoryItem(
+        CategoryItem::Type::CATEGORY_ITEM,
+        QStringLiteral(":/img/users.png"),
+        tr("User Groups"),
+        common::kSystemInfo_LocalUserGroups);
+
+    os_category->addChild(env_vars);
+    os_category->addChild(event_logs);
+    os_category->addChild(local_users);
+    os_category->addChild(local_user_groups);
+
+    //----------------------------------------------------------------------------------------------
     // TOP LEVEL CATEGORIES
     //----------------------------------------------------------------------------------------------
 
@@ -280,6 +315,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     ui->tree_category->addTopLevelItem(hardware_category);
     ui->tree_category->addTopLevelItem(software_category);
     ui->tree_category->addTopLevelItem(network_category);
+    ui->tree_category->addTopLevelItem(os_category);
 
     for (int i = 0; i < ui->tree_category->topLevelItemCount(); ++i)
         ui->tree_category->expandItem(ui->tree_category->topLevelItem(i));

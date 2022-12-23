@@ -215,6 +215,12 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_licenses.cc
     ui/sys_info_widget_licenses.h
     ui/sys_info_widget_licenses.ui
+    ui/sys_info_widget_local_users.cc
+    ui/sys_info_widget_local_users.h
+    ui/sys_info_widget_local_users.ui
+    ui/sys_info_widget_local_user_groups.cc
+    ui/sys_info_widget_local_user_groups.h
+    ui/sys_info_widget_local_user_groups.ui
     ui/sys_info_widget_monitors.cc
     ui/sys_info_widget_monitors.h
     ui/sys_info_widget_monitors.ui
@@ -233,6 +239,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/sys_info_widget_printers.cc
     ui/sys_info_widget_printers.h
     ui/sys_info_widget_printers.ui
+    ui/sys_info_widget_processes.cc
+    ui/sys_info_widget_processes.h
+    ui/sys_info_widget_processes.ui
     ui/sys_info_widget_routes.cc
     ui/sys_info_widget_routes.h
     ui/sys_info_widget_routes.ui

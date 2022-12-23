@@ -38,6 +38,9 @@ extern const char kSystemInfo_NetworkShares[];
 extern const char kSystemInfo_Licenses[];
 extern const char kSystemInfo_Applications[];
 extern const char kSystemInfo_OpenFiles[];
+extern const char kSystemInfo_LocalUsers[];
+extern const char kSystemInfo_LocalUserGroups[];
+extern const char kSystemInfo_Processes[];
 
 } // namespace common
 

@@ -497,6 +497,61 @@ message OpenFiles
     repeated OpenFile open_file = 1;
 }
 
+message LocalUsers
+{
+    message LocalUser
+    {
+        message LocalUserGroup
+        {
+            string name    = 1;
+            string comment = 2;
+        }
+
+        string name                   = 1;
+        string full_name              = 2;
+        string comment                = 3;
+        string home_dir               = 4;
+        repeated LocalUserGroup group = 5;
+        bool disabled                 = 6;
+        bool password_cant_change     = 7;
+        bool password_expired         = 8;
+        bool dont_expire_password     = 9;
+        bool lockout                  = 10;
+        uint32 number_logons          = 11;
+        uint32 bad_password_count     = 12;
+        uint64 last_logon_time        = 13;
+    }
+
+    repeated LocalUser local_user = 1;
+}
+
+message LocalUserGroups
+{
+    message LocalUserGroup
+    {
+        string name    = 1;
+        string comment = 2;
+    }
+
+    repeated LocalUserGroup local_user_group = 1;
+}
+
+message Processes
+{
+    message Process
+    {
+        string name  = 1;
+        uint32 pid   = 2;
+        uint32 sid   = 3;
+        string user  = 4;
+        string path  = 5;
+        int32 cpu    = 6;
+        int64 memory = 7;
+    }
+
+    repeated Process process = 1;
+}
+
 message SystemInfoRequest
 {
     string category = 1;
@@ -511,28 +566,31 @@ message SystemInfoFooter
 
 message SystemInfo
 {
-    Computer computer                = 1;
-    OperatingSystem operating_system = 2;
-    Motherboard motherboard          = 3;
-    Bios bios                        = 4;
-    Processor processor              = 5;
-    Memory memory                    = 6;
-    LogicalDrives logical_drives     = 7;
-    Printers printers                = 8;
-    NetworkAdapters network_adapters = 9;
-    NetworkShares network_shares     = 10;
-    WindowsDevices windows_devices   = 11;
-    VideoAdapters video_adapters     = 12;
-    Monitors monitors                = 13;
-    PowerOptions power_options       = 14;
-    Drivers drivers                  = 15;
-    Services services                = 16;
-    EnvironmentVariables env_vars    = 17;
-    EventLogs event_logs             = 18;
-    Routes routes                    = 19;
-    Connections connections          = 20;
-    Licenses licenses                = 21;
-    Applications applications        = 22;
-    OpenFiles open_files             = 23;
-    SystemInfoFooter footer          = 128000;
+    Computer computer                 = 1;
+    OperatingSystem operating_system  = 2;
+    Motherboard motherboard           = 3;
+    Bios bios                         = 4;
+    Processor processor               = 5;
+    Memory memory                     = 6;
+    LogicalDrives logical_drives      = 7;
+    Printers printers                 = 8;
+    NetworkAdapters network_adapters  = 9;
+    NetworkShares network_shares      = 10;
+    WindowsDevices windows_devices    = 11;
+    VideoAdapters video_adapters      = 12;
+    Monitors monitors                 = 13;
+    PowerOptions power_options        = 14;
+    Drivers drivers                   = 15;
+    Services services                 = 16;
+    EnvironmentVariables env_vars     = 17;
+    EventLogs event_logs              = 18;
+    Routes routes                     = 19;
+    Connections connections           = 20;
+    Licenses licenses                 = 21;
+    Applications applications         = 22;
+    OpenFiles open_files              = 23;
+    LocalUsers local_users            = 24;
+    LocalUserGroups local_user_groups = 25;
+    Processes processes               = 26;
+    SystemInfoFooter footer           = 128000;
 }

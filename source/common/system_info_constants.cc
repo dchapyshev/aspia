@@ -37,5 +37,8 @@ const char kSystemInfo_NetworkShares[] = "EC295A1A-6CBD-4334-9697-38E542687902";
 const char kSystemInfo_Licenses[] = "7D3320B3-E5A6-43AD-8768-09F9304CEFC7";
 const char kSystemInfo_Applications[] = "E2057608-971B-439C-9A2E-31CB0BA6C6CC";
 const char kSystemInfo_OpenFiles[] = "F851332D-D70E-4D68-A30D-7A3F00E69324";
+const char kSystemInfo_LocalUsers[] = "00489EAB-09BF-4BB2-837C-0F975183698F";
+const char kSystemInfo_LocalUserGroups[] = "FDB3703C-A943-4A0B-873F-B980B0ACA0E5";
+const char kSystemInfo_Processes[] = "91165E05-A152-4B07-B988-EF8E48DA66C3";
 
 } // namespace common

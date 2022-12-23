@@ -693,6 +693,10 @@ if (WIN32)
         win/session_status.h
         win/session_watcher.cc
         win/session_watcher.h
+        win/user_enumerator.cc
+        win/user_enumerator.h
+        win/user_group_enumerator.cc
+        win/user_group_enumerator.h
         win/video_adapter_enumerator.cc
         win/video_adapter_enumerator.h
         win/windows_version.cc

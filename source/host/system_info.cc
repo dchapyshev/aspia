@@ -38,8 +38,11 @@
 #include "base/win/monitor_enumerator.h"
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
+#include "base/win/user_enumerator.h"
+#include "base/win/user_group_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
 #include "common/system_info_constants.h"
+#include "host/process_monitor.h"
 
 namespace host {
 
@@ -881,6 +884,72 @@ void fillOpenFilesInfo(proto::system_info::SystemInfo* system_info)
     }
 }
 
+void fillLocalUsersInfo(proto::system_info::SystemInfo* system_info)
+{
+    for (base::win::UserEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::LocalUsers::LocalUser* local_user =
+            system_info->mutable_local_users()->add_local_user();
+
+        local_user->set_name(enumerator.name());
+        local_user->set_full_name(enumerator.fullName());
+        local_user->set_comment(enumerator.comment());
+        local_user->set_home_dir(enumerator.homeDir());
+
+        for (const auto& group : enumerator.groups())
+        {
+            proto::system_info::LocalUsers::LocalUser::LocalUserGroup* group_item =
+                local_user->add_group();
+
+            group_item->set_name(group.first);
+            group_item->set_comment(group.second);
+        }
+
+        local_user->set_disabled(enumerator.isDisabled());
+        local_user->set_password_cant_change(enumerator.isPasswordCantChange());
+        local_user->set_password_expired(enumerator.isPasswordExpired());
+        local_user->set_dont_expire_password(enumerator.isDontExpirePassword());
+        local_user->set_lockout(enumerator.isLockout());
+        local_user->set_number_logons(enumerator.numberLogons());
+        local_user->set_bad_password_count(enumerator.badPasswordCount());
+        local_user->set_last_logon_time(enumerator.lastLogonTime());
+    }
+}
+
+void fillLocalUserGroupsInfo(proto::system_info::SystemInfo* system_info)
+{
+    for (base::win::UserGroupEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
+    {
+        proto::system_info::LocalUserGroups::LocalUserGroup* local_group =
+            system_info->mutable_local_user_groups()->add_local_user_group();
+
+        local_group->set_name(enumerator.name());
+        local_group->set_comment(enumerator.comment());
+    }
+}
+
+void fillProcessesInfo(proto::system_info::SystemInfo* system_info)
+{
+    ProcessMonitor process_monitor;
+
+    process_monitor.processes(true);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    for (const auto& process : process_monitor.processes(false))
+    {
+        proto::system_info::Processes::Process* process_item =
+            system_info->mutable_processes()->add_process();
+
+        process_item->set_name(process.second.process_name);
+        process_item->set_pid(process.first);
+        process_item->set_sid(process.second.session_id);
+        process_item->set_user(process.second.user_name);
+        process_item->set_path(process.second.file_path);
+        process_item->set_cpu(process.second.cpu_ratio);
+        process_item->set_memory(process.second.mem_private_working_set);
+    }
+}
+
 void fillSummaryInfo(proto::system_info::SystemInfo* system_info)
 {
     fillComputer(system_info);
@@ -976,6 +1045,18 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     else if (category == common::kSystemInfo_OpenFiles)
     {
         fillOpenFilesInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_LocalUsers)
+    {
+        fillLocalUsersInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_LocalUserGroups)
+    {
+        fillLocalUserGroupsInfo(system_info);
+    }
+    else if (category == common::kSystemInfo_Processes)
+    {
+        fillProcessesInfo(system_info);
     }
     else
     {

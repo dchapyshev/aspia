@@ -68,6 +68,7 @@
         <file>arrow-circle-225.png</file>
         <file>arrow-circle-315.png</file>
         <file>host.png</file>
+        <file>users.png</file>
         <file>main.ico</file>
     </qresource>
 </RCC>
