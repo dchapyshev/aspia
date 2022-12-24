@@ -28,7 +28,7 @@
     <name>Client</name>
     <message>
         <location filename="../client_main.cc" line="57"/>
-        <location filename="../client_main.cc" line="587"/>
+        <location filename="../client_main.cc" line="627"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -49,11 +49,16 @@
     </message>
     <message>
         <location filename="../client_main.cc" line="404"/>
+        <source>Name of host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="408"/>
         <source>Name of user.</source>
         <translation>使用者名稱。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="408"/>
+        <location filename="../client_main.cc" line="412"/>
         <source>Password of user.</source>
         <translation>使用者密碼。</translation>
     </message>
@@ -62,82 +67,102 @@
         <translation type="vanished">工作階段類型。可能的值：desktop-manage、desktop-view、file-transfer。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="417"/>
+        <location filename="../client_main.cc" line="421"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
         <translation>編碼類型。可能的值：vp8、vp9、zstd。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="421"/>
+        <location filename="../client_main.cc" line="425"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
         <translation>色彩深度。可能的值：3、6、8、16、32。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="425"/>
+        <location filename="../client_main.cc" line="429"/>
         <source>Compression ratio. Possible values: 1-22.</source>
         <translation>壓縮率。可能的值：1-22。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="429"/>
+        <location filename="../client_main.cc" line="433"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>啟用或停用音訊。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="433"/>
+        <location filename="../client_main.cc" line="437"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>啟用或停用游標形狀。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="441"/>
+        <location filename="../client_main.cc" line="445"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>啟用或停用剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="445"/>
+        <location filename="../client_main.cc" line="449"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌面特效。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="449"/>
+        <location filename="../client_main.cc" line="453"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌布。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="453"/>
+        <location filename="../client_main.cc" line="457"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
         <translation>啟用或停用字體平滑。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="457"/>
+        <location filename="../client_main.cc" line="461"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時清除剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="461"/>
+        <location filename="../client_main.cc" line="465"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時鎖定電腦。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="465"/>
+        <location filename="../client_main.cc" line="469"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>阻止遠端輸入。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="469"/>
+        <location filename="../client_main.cc" line="473"/>
+        <source>Router address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="477"/>
+        <source>Router port.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="482"/>
+        <source>Router name of user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="486"/>
+        <source>Router password of user.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client_main.cc" line="490"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="588"/>
+        <location filename="../client_main.cc" line="628"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="437"/>
+        <location filename="../client_main.cc" line="441"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client_main.cc" line="412"/>
+        <location filename="../client_main.cc" line="416"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
