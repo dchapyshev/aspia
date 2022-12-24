@@ -469,22 +469,22 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
         QStringLiteral("block-remote-input"));
 
-   QCommandLineOption router_address_option(QStringLiteral("router_address"),
+   QCommandLineOption router_address_option(QStringLiteral("router-address"),
         QApplication::translate("Client", "Router address."),
-        QStringLiteral("router_address"));
+        QStringLiteral("router-address"));
 
-    QCommandLineOption router_port_option(QStringLiteral("router_port"),
+    QCommandLineOption router_port_option(QStringLiteral("router-port"),
         QApplication::translate("Client", "Router port."),
-        QStringLiteral("router_port"),
+        QStringLiteral("router-port"),
         QString::number(8060));
 
-    QCommandLineOption router_username_option(QStringLiteral("router_username"),
+    QCommandLineOption router_username_option(QStringLiteral("router-username"),
         QApplication::translate("Client", "Router name of user."),
-        QStringLiteral("router_username"));
+        QStringLiteral("router-username"));
 
-    QCommandLineOption router_password_option(QStringLiteral("router_password"),
+    QCommandLineOption router_password_option(QStringLiteral("router-password"),
         QApplication::translate("Client", "Router password of user."),
-        QStringLiteral("router_password"));
+        QStringLiteral("router-password"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
