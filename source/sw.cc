@@ -16,7 +16,7 @@
 }*/
 
 void build(Solution &s) {
-    auto &aspia = s.addProject("aspia", "2.5.0");
+    auto &aspia = s.addProject("aspia", "2.6.0");
     aspia += Git("https://github.com/dchapyshev/aspia", "v{v}");
 
     constexpr auto cppstd = cpp17;
