@@ -159,7 +159,7 @@ void JsonSettings::sync()
                 // If there is a backup copy of the configuration, then we restore it.
                 if (hasBackupFor(path_))
                 {
-                    restoreBackupFor(path_);
+                    restoreBackupFor(path_, encrypted_);
                     continue;
                 }
                 else
@@ -188,7 +188,7 @@ void JsonSettings::sync()
             // If there is a backup copy of the configuration, then we restore it.
             if (hasBackupFor(path_))
             {
-                restoreBackupFor(path_);
+                restoreBackupFor(path_, encrypted_);
                 continue;
             }
             else
@@ -516,8 +516,48 @@ bool JsonSettings::removeBackupFileFor(const std::filesystem::path& source_file_
 }
 
 // static
-bool JsonSettings::restoreBackupFor(const std::filesystem::path& source_file_path)
+bool JsonSettings::isValidBackup(const std::filesystem::path& backup_file_path, Encrypted encrypted)
 {
+    std::error_code error_code;
+
+    // If a corrupted configuration file exists.
+    if (!std::filesystem::exists(backup_file_path, error_code))
+    {
+        LOG(LS_WARNING) << "Backup file not exists";
+        return false;
+    }
+
+    Map map;
+    if (!readFile(backup_file_path, map, encrypted))
+    {
+        LOG(LS_WARNING) << "Unable to read backup file";
+        return false;
+    }
+
+    if (map.empty())
+    {
+        LOG(LS_WARNING) << "Empty backup file";
+        return false;
+    }
+
+    return true;
+}
+
+// static
+bool JsonSettings::restoreBackupFor(const std::filesystem::path& source_file_path, Encrypted encrypted)
+{
+    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
+    if (!isValidBackup(backup_file_path, encrypted))
+    {
+        std::error_code error_code;
+        if (!std::filesystem::remove(backup_file_path, error_code))
+        {
+            LOG(LS_WARNING) << "Unable to remove corrupted backup file: "
+                            << utf16FromLocal8Bit(error_code.message());
+        }
+        return false;
+    }
+
     std::error_code error_code;
 
     // If a corrupted configuration file exists.
@@ -560,8 +600,6 @@ bool JsonSettings::restoreBackupFor(const std::filesystem::path& source_file_pat
             return false;
         }
     }
-
-    std::filesystem::path backup_file_path = backupFilePathFor(source_file_path);
 
     // Restoring a corrupted configuration from a backup.
     if (!std::filesystem::copy_file(backup_file_path, source_file_path, error_code))
