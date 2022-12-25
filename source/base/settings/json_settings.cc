@@ -213,9 +213,12 @@ bool JsonSettings::flush()
     }
 
     // Before writing the configuration file, make a backup copy.
-    if (!createBackupFor(path_))
+    if (!map().empty())
     {
-        LOG(LS_WARNING) << "createBackupFor failed for: " << path_;
+        if (!createBackupFor(path_))
+        {
+            LOG(LS_WARNING) << "createBackupFor failed for: " << path_;
+        }
     }
 
     // Write to the configuration file.
@@ -473,8 +476,23 @@ bool JsonSettings::hasBackupFor(const std::filesystem::path& source_file_path)
     std::error_code ignored_code;
     if (std::filesystem::exists(backup_file_path, ignored_code))
     {
-        if (std::filesystem::file_size(backup_file_path, ignored_code) > 0)
+        if (std::filesystem::file_size(backup_file_path, ignored_code) > 8)
+        {
             return true;
+        }
+        else
+        {
+            std::error_code error_code;
+            if (!std::filesystem::remove(backup_file_path, error_code))
+            {
+                LOG(LS_WARNING) << "Unable to remove invalid backup: "
+                                << utf16FromLocal8Bit(error_code.message());
+            }
+            else
+            {
+                LOG(LS_INFO) << "Invalid backup removed: " << backup_file_path;
+            }
+        }
     }
 
     return false;
@@ -568,7 +586,7 @@ bool JsonSettings::createBackupFor(const std::filesystem::path& source_file_path
         return false;
     }
 
-    if (std::filesystem::file_size(source_file_path, error_code) <= 0)
+    if (std::filesystem::file_size(source_file_path, error_code) <= 8)
     {
         LOG(LS_INFO) << "Source file '" << source_file_path << "' is empty";
         return false;
