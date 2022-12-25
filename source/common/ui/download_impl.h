@@ -16,37 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_DOWNLOAD_DIALOG_H
-#define COMMON_UI_DOWNLOAD_DIALOG_H
+#ifndef COMMON_UI_DOWNLOAD_IMPL_H
+#define COMMON_UI_DOWNLOAD_IMPL_H
 
 #include "base/macros_magic.h"
-#include "ui_download_dialog.h"
 
-#include <QFile>
-#include <QPointer>
 #include <QThread>
 
 namespace common {
 
-class DownloadImpl;
-
-class DownloadDialog : public QDialog
+class DownloadImpl : public QThread
 {
     Q_OBJECT
 
 public:
-    DownloadDialog(const QString& url, QFile& file, QWidget* parent = nullptr);
-    ~DownloadDialog() override = default;
+    explicit DownloadImpl(const QString& url, QObject* parent = nullptr);
+    ~DownloadImpl() override;
+
+signals:
+    void errorOccurred(const QString& error);
+    void downloadCompleted(const QByteArray& data);
+    void progress(int percentage);
+
+protected:
+    void run() override;
 
 private:
-    Ui::DownloadDialog ui;
+    static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, DownloadImpl* self);
+    static int progressCallback(
+        DownloadImpl* self, double dltotal, double dlnow, double ultotal, double ulnow);
 
-    QPointer<DownloadImpl> impl_ = nullptr;
-    QFile& file_;
+    std::string url_;
+    QByteArray data_;
 
-    DISALLOW_COPY_AND_ASSIGN(DownloadDialog);
+    DISALLOW_COPY_AND_ASSIGN(DownloadImpl);
 };
 
 } // namespace common
 
-#endif // COMMON_UI_DOWNLOAD_DIALOG_H
+#endif // COMMON_UI_DOWNLOAD_IMPL_H

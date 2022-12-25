@@ -167,152 +167,152 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="112"/>
+        <location filename="../ui/about_dialog.cc" line="114"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="116"/>
+        <location filename="../ui/about_dialog.cc" line="118"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="117"/>
+        <location filename="../ui/about_dialog.cc" line="119"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="122"/>
+        <location filename="../ui/about_dialog.cc" line="124"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="126"/>
+        <location filename="../ui/about_dialog.cc" line="128"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="127"/>
+        <location filename="../ui/about_dialog.cc" line="129"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="128"/>
+        <location filename="../ui/about_dialog.cc" line="130"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="131"/>
+        <location filename="../ui/about_dialog.cc" line="133"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="133"/>
+        <location filename="../ui/about_dialog.cc" line="135"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="135"/>
+        <location filename="../ui/about_dialog.cc" line="137"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="156"/>
+        <location filename="../ui/about_dialog.cc" line="158"/>
         <source>Path: %1</source>
         <translation>Pad: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="157"/>
+        <location filename="../ui/about_dialog.cc" line="159"/>
         <source>Compilation date: %1</source>
         <translation>Compilatie datum: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="158"/>
+        <location filename="../ui/about_dialog.cc" line="160"/>
         <source>Compilation time: %1</source>
         <translation>Compilatie tijd: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="161"/>
+        <location filename="../ui/about_dialog.cc" line="163"/>
         <source>Git branch: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="162"/>
+        <location filename="../ui/about_dialog.cc" line="164"/>
         <source>Git commit: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="173"/>
+        <location filename="../ui/about_dialog.cc" line="175"/>
         <source>Display &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="174"/>
+        <location filename="../ui/about_dialog.cc" line="176"/>
         <source>Pixel ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="175"/>
+        <location filename="../ui/about_dialog.cc" line="177"/>
         <source>Logical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="178"/>
+        <location filename="../ui/about_dialog.cc" line="180"/>
         <source>Physical DPI: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="183"/>
+        <location filename="../ui/about_dialog.cc" line="185"/>
         <source>Size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="186"/>
+        <location filename="../ui/about_dialog.cc" line="188"/>
         <source>Available size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="190"/>
+        <location filename="../ui/about_dialog.cc" line="192"/>
         <source>Virtual size: %1x%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="193"/>
+        <location filename="../ui/about_dialog.cc" line="195"/>
         <source>Depth: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="194"/>
+        <location filename="../ui/about_dialog.cc" line="196"/>
         <source>Refresh rate: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="199"/>
+        <location filename="../ui/about_dialog.cc" line="201"/>
         <source>%1 version: %2</source>
         <translation>%1 versie: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="245"/>
+        <location filename="../ui/about_dialog.cc" line="248"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="251"/>
+        <location filename="../ui/about_dialog.cc" line="254"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="253"/>
+        <location filename="../ui/about_dialog.cc" line="256"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="262"/>
+        <location filename="../ui/about_dialog.cc" line="265"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="263"/>
+        <location filename="../ui/about_dialog.cc" line="266"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -320,19 +320,27 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="38"/>
+        <location filename="../ui/download_dialog.cc" line="75"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="56"/>
+        <location filename="../ui/download_dialog.cc" line="49"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="57"/>
+        <location filename="../ui/download_dialog.cc" line="50"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Er is een probleem opgetreden bij het downloaden van de update: %1</translation>
+    </message>
+</context>
+<context>
+    <name>common::DownloadImpl</name>
+    <message>
+        <location filename="../ui/download_impl.cc" line="52"/>
+        <source>Initialization error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

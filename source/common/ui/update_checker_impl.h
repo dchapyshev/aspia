@@ -24,9 +24,6 @@
 
 #include <QObject>
 
-class QNetworkAccessManager;
-class QNetworkReply;
-
 namespace common {
 
 class UpdateCheckerImpl : public QObject
@@ -47,8 +44,6 @@ public slots:
     void start();
 
 private:
-    QNetworkAccessManager* network_manager_ = nullptr;
-
     QString update_server_;
     QString package_name_;
 

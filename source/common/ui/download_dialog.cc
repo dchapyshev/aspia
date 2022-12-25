@@ -18,20 +18,55 @@
 
 #include "common/ui/download_dialog.h"
 
+#include "common/ui/download_impl.h"
+
 #include <QAbstractButton>
 #include <QFile>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QNetworkReply>
 
 namespace common {
 
-DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
+DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     : QDialog(parent),
-      network_manager_(this),
       file_(file)
 {
     ui.setupUi(this);
+
+    impl_ = new DownloadImpl(url, this);
+
+    connect(impl_, &DownloadImpl::finished, this, [this]()
+    {
+        reject();
+        close();
+    });
+
+    connect(impl_, &DownloadImpl::errorOccurred, this, [this](const QString& error)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("An error occurred while downloading the update: %1")
+                                .arg(error),
+                             QMessageBox::Ok);
+        reject();
+        close();
+    }, Qt::QueuedConnection);
+
+    connect(impl_, &DownloadImpl::downloadCompleted, this, [this](const QByteArray& data)
+    {
+        file_.write(data);
+        file_.flush();
+
+        accept();
+        close();
+    }, Qt::QueuedConnection);
+
+    connect(impl_, &DownloadImpl::progress, this, [this](int percentage)
+    {
+        ui.progress_bar->setValue(percentage);
+    }, Qt::QueuedConnection);
+
+    impl_->start();
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
@@ -41,43 +76,6 @@ DownloadDialog::DownloadDialog(const QUrl& url, QFile& file, QWidget* parent)
     {
         reject();
         close();
-    });
-
-    // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
-    network_manager_.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
-
-    connect(&network_manager_, &QNetworkAccessManager::finished, this, [this](QNetworkReply* reply)
-    {
-        reject();
-
-        if (reply->error())
-        {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("An error occurred while downloading the update: %1")
-                                    .arg(reply->errorString()),
-                                 QMessageBox::Ok);
-        }
-        else
-        {
-            file_.write(reply->readAll());
-            accept();
-        }
-
-        reply->deleteLater();
-        close();
-    });
-
-    QNetworkReply* reply = network_manager_.get(QNetworkRequest(url));
-
-    connect(reply, &QNetworkReply::downloadProgress,
-            this, [this](qint64 bytes_received, qint64 bytes_total)
-    {
-        if (bytes_total != 0)
-        {
-            int percentage = static_cast<int>((bytes_received * 100) / bytes_total);
-            ui.progress_bar->setValue(percentage);
-        }
     });
 }
 
