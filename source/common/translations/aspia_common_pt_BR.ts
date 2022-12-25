@@ -346,17 +346,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="73"/>
+        <location filename="../ui/download_dialog.cc" line="71"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="47"/>
+        <location filename="../ui/download_dialog.cc" line="45"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="48"/>
+        <location filename="../ui/download_dialog.cc" line="46"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Ocorreu um erro ao baixar a atualização:%1</translation>
     </message>
