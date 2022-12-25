@@ -342,17 +342,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="75"/>
+        <location filename="../ui/download_dialog.cc" line="73"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="49"/>
+        <location filename="../ui/download_dialog.cc" line="47"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="50"/>
+        <location filename="../ui/download_dialog.cc" line="48"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Произошла ошибка при загрузке обновления: %1</translation>
     </message>
