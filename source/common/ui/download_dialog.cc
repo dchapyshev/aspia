@@ -18,8 +18,6 @@
 
 #include "common/ui/download_dialog.h"
 
-#include "common/ui/download_impl.h"
-
 #include <QAbstractButton>
 #include <QFile>
 #include <QPushButton>

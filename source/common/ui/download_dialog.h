@@ -20,6 +20,7 @@
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "common/ui/download_impl.h"
 #include "ui_download_dialog.h"
 
 #include <QFile>
