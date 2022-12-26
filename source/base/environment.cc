@@ -150,10 +150,10 @@ std::vector<std::pair<std::string, std::string>> Environment::list()
     for (wchar_t* current = strings; *current != 0; current++)
     {
         wchar_t* context;
-        wchar_t* name = std::wcstok(current, L"=", &context);
+        wchar_t* name = wcstok_s(current, L"=", &context);
         if (name && std::wcsncmp(name, L"::", 2) != 0)
         {
-            wchar_t* value = std::wcstok(nullptr, L"=", &context);
+            wchar_t* value = wcstok_s(nullptr, L"=", &context);
             if (value)
                 result.emplace_back(utf8FromWide(name), utf8FromWide(value));
         }
