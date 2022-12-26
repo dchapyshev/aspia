@@ -51,6 +51,8 @@ private:
     std::u16string listen_interface_;
     uint16_t port_ = 0;
 
+    int accept_error_count_ = 0;
+
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
@@ -122,9 +124,21 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
     {
         LOG(LS_ERROR) << "Error while accepting connection: "
                       << base::utf16FromLocal8Bit(error_code.message());
+
+        static const int kMaxErrorCount = 500;
+
+        ++accept_error_count_;
+        if (accept_error_count_ > kMaxErrorCount)
+        {
+            LOG(LS_ERROR) << "WARNING! Too many errors when trying to accept a connection. "
+                          << "New connections will not be accepted";
+            return;
+        }
     }
     else
     {
+        accept_error_count_ = 0;
+
         std::unique_ptr<NetworkChannel> channel =
             std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket)));
 
