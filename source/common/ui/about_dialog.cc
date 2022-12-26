@@ -32,6 +32,7 @@
 #include <QTextStream>
 
 #include <asio/version.hpp>
+#include <curl/curl.h>
 #include <google/protobuf/stubs/common.h>
 #include <libyuv.h>
 #include <openssl/crypto.h>
@@ -69,6 +70,7 @@ const char* kTranslators[] =
 const char* kThirdParty[] =
 {
     "asio &copy; 2003-2018 Christopher M. Kohlhoff; Boost Software License 1.0",
+    "curl &copy; 1996-2022 Daniel Stenberg, <daniel@haxx.se>, and many contributors; CURL License"
     "icu &copy; 2016 Unicode, Inc. and others; ICU License",
     "libvpx &copy; 2010, The WebM Project authors; BSD 3-Clause License",
     "libyuv &copy; 2011 The LibYuv Project Authors; BSD 3-Clause License",
@@ -201,6 +203,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     add_version("asio", QString("%1.%2.%3")
         .arg(ASIO_VERSION / 100000).arg(ASIO_VERSION / 100 % 1000).arg(ASIO_VERSION % 100));
+    add_version("curl", curl_version());
 
 #if !defined(OS_WIN)
     UVersionInfo icu_version;

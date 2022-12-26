@@ -94,6 +94,7 @@ if (WIN32)
 endif()
 
 set(THIRD_PARTY_LIBS
+    CURL::libcurl
     protobuf::libprotobuf-lite
     zstd::libzstd_static
     OpenSSL::Crypto

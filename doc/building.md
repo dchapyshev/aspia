@@ -18,6 +18,7 @@ Windows
 4. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
 5. In vcpkg, you need to install the following libraries (use triplet **x86-windows-static** in all cases):
 * asio
+* curl
 * gtest
 * libvpx
 * libyuv
@@ -92,6 +93,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * qtcreator
 2. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
 * asio
+* curl
 * gtest
 * icu
 * libvpx

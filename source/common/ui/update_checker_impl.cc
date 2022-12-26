@@ -18,15 +18,11 @@
 
 #include "common/ui/update_checker_impl.h"
 
+#include "base/environment.h"
 #include "build/version.h"
-#include "qt_base/qt_logging.h"
+#include "base/logging.h"
 
-#include <QCoreApplication>
-#include <QEvent>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrlQuery>
+#include <curl/curl.h>
 
 namespace common {
 
@@ -51,41 +47,60 @@ void UpdateCheckerImpl::setPackageName(const QString& package_name)
     package_name_ = package_name;
 }
 
+static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* data)
+{
+    data->append(reinterpret_cast<const char*>(ptr), static_cast<int>(size * nmemb));
+    return size * nmemb;
+}
+
 void UpdateCheckerImpl::start()
 {
-    network_manager_ = new QNetworkAccessManager(this);
+    QByteArray response;
 
-    // Only "http"->"http", "http"->"https" or "https"->"https" redirects are allowed.
-    network_manager_->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
-
-    connect(network_manager_, &QNetworkAccessManager::finished, this, [this](QNetworkReply* reply)
+    CURL* curl = curl_easy_init();
+    if (!curl)
     {
-        if (reply->error())
+        LOG(LS_WARNING) << "curl_easy_init failed";
+    }
+    else
+    {
+        base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+        std::string url(update_server_.toStdString());
+        url += "/update.php?";
+        url += "package=" + package_name_.toStdString();
+        url += '&';
+        url += "version=" + current_version.toString(3);
+
+        LOG(LS_INFO) << "Start checking for updates. Url: " << url;
+
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
+        curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 15);
+
+        long verify_peer = 1L;
+        if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+            verify_peer = 0L;
+
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, verify_peer);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataFunc);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        CURLcode ret = curl_easy_perform(curl);
+        if (ret != CURLE_OK)
         {
-            LOG(LS_WARNING) << "Error checking for updates: " << reply->errorString()
-                            << " (" << reply->error() << ")";
-            emit finished(QByteArray());
+            LOG(LS_WARNING) << "curl_easy_perform failed: " << ret;
+            response.clear();
         }
         else
         {
-            LOG(LS_INFO) << "Checking is finished";
-            emit finished(reply->readAll());
+            LOG(LS_INFO) << "Checking is finished: " << response.toStdString();
         }
 
-        reply->deleteLater();
-    });
+        curl_easy_cleanup(curl);
+    }
 
-    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-    QUrl url(update_server_);
-
-    url.setPath(url.path() + QStringLiteral("/update.php"));
-    url.setQuery(QUrlQuery(
-        QString("package=%1&version=%2")
-        .arg(package_name_, QString::fromStdString(current_version.toString(3)))));
-
-    LOG(LS_INFO) << "Start checking for updates. Url: " << url.toString();
-    QNetworkRequest request(url);
-    network_manager_->get(request);
+    emit finished(response);
 }
 
 } // namespace common

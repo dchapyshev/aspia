@@ -82,6 +82,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.cc
     ui/download_dialog.h
     ui/download_dialog.ui
+    ui/download_impl.cc
+    ui/download_impl.h
     ui/language_action.cc
     ui/language_action.h
     ui/session_type.cc
