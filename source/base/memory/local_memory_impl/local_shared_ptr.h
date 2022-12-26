@@ -98,7 +98,7 @@ template <class X, class Y, class T>
 inline void sp_enable_shared_from_this(
     base::local_shared_ptr<X> const* ppx, Y const* py, base::enable_shared_from_this<T> const* pe)
 {
-    if (pe != 0)
+    if (pe != nullptr)
     {
         pe->_internal_accept_owner(ppx, const_cast<Y*>(py));
     }
@@ -118,9 +118,9 @@ inline void sp_enable_shared_from_this(...)
 template <class Y, class T>
 inline void sp_assert_convertible()
 {
-      // static_assert( sp_convertible< Y, T >::value );
-      typedef char tmp[sp_convertible<Y, T>::value ? 1 : -1];
-      (void)sizeof(tmp);
+    // static_assert( sp_convertible< Y, T >::value );
+    typedef char tmp[sp_convertible<Y, T>::value ? 1 : -1];
+    (void)sizeof(tmp);
 }
 
 // pointer constructor helper
@@ -326,7 +326,7 @@ public:
         : px(r.px), pn()
     {
         pn.swap(r.pn);
-        r.px = 0;
+        r.px = nullptr;
     }
 
     template <class Y>
@@ -337,7 +337,7 @@ public:
         base::detail::sp_assert_convertible<Y, T>();
 
         pn.swap(r.pn);
-        r.px = 0;
+        r.px = nullptr;
     }
 
     local_shared_ptr &operator=(local_shared_ptr&& r) noexcept
@@ -367,7 +367,7 @@ public:
     template <class Y>
     void reset(Y* p) // Y must be complete
     {
-        assert(p == 0 || p != px); // catch self-reset errors
+        assert(p == nullptr || p != px); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
@@ -392,22 +392,22 @@ public:
     // never throws (but has a KIT_ASSERT in it, so not marked with noexcept)
     typename base::detail::sp_dereference<T>::type operator*() const
     {
-        assert(px != 0);
+        assert(px != nullptr);
         return *px;
     }
 
     // never throws (but has a KIT_ASSERT in it, so not marked with noexcept)
     typename base::detail::sp_member_access<T>::type operator->() const
     {
-        assert(px != 0);
+        assert(px != nullptr);
         return px;
     }
 
     element_type* get() const noexcept { return px; }
 
     // implicit conversion to "bool"
-    explicit operator bool() const noexcept { return px != 0; }
-    bool operator!() const noexcept { return px == 0; }
+    explicit operator bool() const noexcept { return px != nullptr; }
+    bool operator!() const noexcept { return px == nullptr; }
     bool unique() const noexcept { return pn.unique(); }
     long use_count() const noexcept { return pn.use_count(); }
 
@@ -473,25 +473,25 @@ inline bool operator!=(local_shared_ptr<T> const& a, local_shared_ptr<U> const& 
 template <class T>
 inline bool operator==(local_shared_ptr<T> const& p, std::nullptr_t) noexcept
 {
-    return p.get() == 0;
+    return p.get() == nullptr;
 }
 
 template <class T>
 inline bool operator==(std::nullptr_t, local_shared_ptr<T> const& p) noexcept
 {
-    return p.get() == 0;
+    return p.get() == nullptr;
 }
 
 template <class T>
 inline bool operator!=(local_shared_ptr<T> const& p, std::nullptr_t) noexcept
 {
-    return p.get() != 0;
+    return p.get() != nullptr;
 }
 
 template <class T>
 inline bool operator!=(std::nullptr_t, local_shared_ptr<T> const& p) noexcept
 {
-    return p.get() != 0;
+    return p.get() != nullptr;
 }
 
 template <class T, class U>
@@ -509,7 +509,7 @@ inline void swap(local_shared_ptr<T>& a, local_shared_ptr<T>& b) noexcept
 template <class T, class U>
 local_shared_ptr<T> static_pointer_cast(local_shared_ptr<U> const& r) noexcept
 {
-    (void)static_cast<T*>(static_cast<U*>(0));
+    (void)static_cast<T*>(static_cast<U*>(nullptr));
 
     typedef typename local_shared_ptr<T>::element_type E;
 
@@ -520,7 +520,7 @@ local_shared_ptr<T> static_pointer_cast(local_shared_ptr<U> const& r) noexcept
 template <class T, class U>
 local_shared_ptr<T> const_pointer_cast(local_shared_ptr<U> const& r) noexcept
 {
-    (void)const_cast<T*>(static_cast<U*>(0));
+    (void)const_cast<T*>(static_cast<U*>(nullptr));
 
     typedef typename local_shared_ptr<T>::element_type E;
 
@@ -531,7 +531,7 @@ local_shared_ptr<T> const_pointer_cast(local_shared_ptr<U> const& r) noexcept
 template <class T, class U>
 local_shared_ptr<T> dynamic_pointer_cast(local_shared_ptr<U> const& r) noexcept
 {
-    (void)dynamic_cast<T*>(static_cast<U*>(0));
+    (void)dynamic_cast<T*>(static_cast<U*>(nullptr));
 
     typedef typename local_shared_ptr<T>::element_type E;
 
@@ -542,7 +542,7 @@ local_shared_ptr<T> dynamic_pointer_cast(local_shared_ptr<U> const& r) noexcept
 template <class T, class U>
 local_shared_ptr<T> reinterpret_pointer_cast(local_shared_ptr<U> const& r) noexcept
 {
-    (void)reinterpret_cast<T*>(static_cast<U*>(0));
+    (void)reinterpret_cast<T*>(static_cast<U*>(nullptr));
 
     typedef typename local_shared_ptr<T>::element_type E;
 
@@ -611,7 +611,7 @@ template <class D, class T>
 D* get_deleter(local_shared_ptr<T> const& p) noexcept
 {
     D* del = base::detail::basic_get_deleter<D>(p);
-    if (del == 0)
+    if (del == nullptr)
     {
         base::detail::esft2_deleter_wrapper* del_wrapper =
             base::detail::basic_get_deleter<base::detail::esft2_deleter_wrapper>(p);

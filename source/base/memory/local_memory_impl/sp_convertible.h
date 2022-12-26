@@ -35,7 +35,7 @@ struct sp_convertible
     static yes f(T*);
     static no f(...);
 
-    enum _vt { value = sizeof((f)(static_cast<Y *>(0))) == sizeof(yes) };
+    enum _vt { value = sizeof((f)(static_cast<Y *>(nullptr))) == sizeof(yes) };
 };
 
 template <class Y, class T>

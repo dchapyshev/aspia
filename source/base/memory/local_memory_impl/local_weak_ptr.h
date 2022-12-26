@@ -40,7 +40,7 @@ public:
     typedef typename base::detail::sp_element<T>::type element_type;
 
     local_weak_ptr() noexcept
-        : px(0), pn()
+        : px(nullptr), pn()
     {
         // Nothing
     }
@@ -94,14 +94,14 @@ public:
           pn(static_cast<base::detail::weak_count&&>(r.pn))
     {
         base::detail::sp_assert_convertible<Y, T>();
-        r.px = 0;
+        r.px = nullptr;
     }
 
     // for better efficiency in the T == Y case
     local_weak_ptr(local_weak_ptr &&r) noexcept
         : px(r.px), pn(static_cast<base::detail::weak_count &&>(r.pn))
     {
-        r.px = 0;
+        r.px = nullptr;
     }
 
     // for better efficiency in the T == Y case
