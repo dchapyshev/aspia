@@ -131,6 +131,7 @@ void build(Solution &s) {
         base.Public += "org.sw.demo.webmproject.webm"_dep;
         base.Public += "org.sw.demo.xiph.opus"_dep;
         base.Public += "org.sw.demo.sqlite3"_dep;
+        base.Public += "org.sw.demo.badger.curl.libcurl"_dep;
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
             base.Public += "com.Microsoft.Windows.SDK.winrt"_dep;
             base +=
