@@ -18,13 +18,13 @@ class MkvReader : public IMkvReader {
  public:
   MkvReader();
   explicit MkvReader(FILE* fp);
-  virtual ~MkvReader();
+  virtual ~MkvReader() override;
 
   int Open(const char*);
   void Close();
 
-  virtual int Read(long long position, long length, unsigned char* buffer);
-  virtual int Length(long long* total, long long* available);
+  virtual int Read(long long position, long length, unsigned char* buffer) override;
+  virtual int Length(long long* total, long long* available) override;
 
  private:
   MkvReader(const MkvReader&);

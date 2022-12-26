@@ -13,7 +13,7 @@
 
 namespace mkvparser {
 
-MkvReader::MkvReader() : m_file(NULL), reader_owns_file_(true) {}
+MkvReader::MkvReader() : m_file(nullptr), reader_owns_file_(true) {}
 
 MkvReader::MkvReader(FILE* fp) : m_file(fp), reader_owns_file_(false) {
   GetFileSize();
@@ -22,11 +22,11 @@ MkvReader::MkvReader(FILE* fp) : m_file(fp), reader_owns_file_(false) {
 MkvReader::~MkvReader() {
   if (reader_owns_file_)
     Close();
-  m_file = NULL;
+  m_file = nullptr;
 }
 
 int MkvReader::Open(const char* fileName) {
-  if (fileName == NULL)
+  if (fileName == nullptr)
     return -1;
 
   if (m_file)
@@ -47,7 +47,7 @@ int MkvReader::Open(const char* fileName) {
 }
 
 bool MkvReader::GetFileSize() {
-  if (m_file == NULL)
+  if (m_file == nullptr)
     return false;
 #ifdef _MSC_VER
   int status = _fseeki64(m_file, 0L, SEEK_END);
@@ -78,14 +78,14 @@ bool MkvReader::GetFileSize() {
 }
 
 void MkvReader::Close() {
-  if (m_file != NULL) {
+  if (m_file != nullptr) {
     fclose(m_file);
-    m_file = NULL;
+    m_file = nullptr;
   }
 }
 
 int MkvReader::Length(long long* total, long long* available) {
-  if (m_file == NULL)
+  if (m_file == nullptr)
     return -1;
 
   if (total)
@@ -98,7 +98,7 @@ int MkvReader::Length(long long* total, long long* available) {
 }
 
 int MkvReader::Read(long long offset, long len, unsigned char* buffer) {
-  if (m_file == NULL)
+  if (m_file == nullptr)
     return -1;
 
   if (offset < 0)
@@ -124,7 +124,7 @@ int MkvReader::Read(long long offset, long len, unsigned char* buffer) {
   fseeko(m_file, static_cast<off_t>(offset), SEEK_SET);
 #endif
 
-  const size_t size = fread(buffer, 1, len, m_file);
+  const size_t size = fread(buffer, 1, static_cast<size_t>(len), m_file);
 
   if (size < size_t(len))
     return -1;  // error

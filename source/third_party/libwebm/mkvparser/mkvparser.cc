@@ -23,6 +23,11 @@
 #include "common/webmids.h"
 
 namespace mkvparser {
+
+const int E_PARSE_FAILED = -1;
+const int E_FILE_FORMAT_INVALID = -2;
+const int E_BUFFER_NOT_FULL = -3;
+
 const long long kStringElementSizeLimit = 20 * 1000 * 1000;
 const float MasteringMetadata::kValueNotPresent = FLT_MAX;
 const long long Colour::kValueNotPresent = LLONG_MAX;

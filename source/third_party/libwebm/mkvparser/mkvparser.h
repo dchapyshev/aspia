@@ -12,9 +12,9 @@
 
 namespace mkvparser {
 
-const int E_PARSE_FAILED = -1;
-const int E_FILE_FORMAT_INVALID = -2;
-const int E_BUFFER_NOT_FULL = -3;
+extern const int E_PARSE_FAILED;
+extern const int E_FILE_FORMAT_INVALID;
+extern const int E_BUFFER_NOT_FULL;
 
 class IMkvReader {
  public:
@@ -147,8 +147,8 @@ class SimpleBlock : public BlockEntry {
   SimpleBlock(Cluster*, long index, long long start, long long size);
   long Parse();
 
-  Kind GetKind() const;
-  const Block* GetBlock() const;
+  Kind GetKind() const override;
+  const Block* GetBlock() const override;
 
  protected:
   Block m_block;
@@ -167,8 +167,8 @@ class BlockGroup : public BlockEntry {
 
   long Parse();
 
-  Kind GetKind() const;
-  const Block* GetBlock() const;
+  Kind GetKind() const override;
+  const Block* GetBlock() const override;
 
   long long GetPrevTimeCode() const;  // relative to block's time
   long long GetNextTimeCode() const;  // as above
@@ -378,8 +378,8 @@ class Track {
    public:
     EOSBlock();
 
-    Kind GetKind() const;
-    const Block* GetBlock() const;
+    Kind GetKind() const override;
+    const Block* GetBlock() const override;
   };
 
   EOSBlock m_eos;
@@ -403,10 +403,10 @@ struct MasteringMetadata {
   static const float kValueNotPresent;
 
   MasteringMetadata()
-      : r(NULL),
-        g(NULL),
-        b(NULL),
-        white_point(NULL),
+      : r(nullptr),
+        g(nullptr),
+        b(nullptr),
+        white_point(nullptr),
         luminance_max(kValueNotPresent),
         luminance_min(kValueNotPresent) {}
   ~MasteringMetadata() {
@@ -447,10 +447,10 @@ struct Colour {
         primaries(kValueNotPresent),
         max_cll(kValueNotPresent),
         max_fall(kValueNotPresent),
-        mastering_metadata(NULL) {}
+        mastering_metadata(nullptr) {}
   ~Colour() {
     delete mastering_metadata;
-    mastering_metadata = NULL;
+    mastering_metadata = nullptr;
   }
 
   static bool Parse(IMkvReader* reader, long long element_start,
@@ -484,7 +484,7 @@ struct Projection {
   static const float kValueNotPresent;
   Projection()
       : type(kTypeNotPresent),
-        private_data(NULL),
+        private_data(nullptr),
         private_data_length(0),
         pose_yaw(kValueNotPresent),
         pose_pitch(kValueNotPresent),
@@ -508,7 +508,7 @@ class VideoTrack : public Track {
   VideoTrack(Segment*, long long element_start, long long element_size);
 
  public:
-  virtual ~VideoTrack();
+  virtual ~VideoTrack() override;
   static long Parse(Segment*, const Info&, long long element_start,
                     long long element_size, VideoTrack*&);
 
@@ -520,8 +520,8 @@ class VideoTrack : public Track {
   long long GetStereoMode() const;
   double GetFrameRate() const;
 
-  bool VetEntry(const BlockEntry*) const;
-  long Seek(long long time_ns, const BlockEntry*&) const;
+  bool VetEntry(const BlockEntry*) const override;
+  long Seek(long long time_ns, const BlockEntry*&) const override;
 
   Colour* GetColour() const;
 
