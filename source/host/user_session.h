@@ -88,6 +88,7 @@ public:
     std::optional<std::string> sessionName() const;
     base::User user() const;
     size_t clientsCount() const;
+    bool isConnectedToUi() const { return channel_ != nullptr; }
 
     void onClientSession(std::unique_ptr<ClientSession> client_session);
     void onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id);

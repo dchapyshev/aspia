@@ -80,7 +80,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     base::SessionId console_session_id = base::activeConsoleSessionId();
     if (console_session_id == base::kInvalidSessionId)
     {
-        LOG(LS_WARNING) << "Invalid console session ID";
+        LOG(LS_WARNING) << "Invalid console session ID (sid: " << session_id_ << ")";
     }
 
     if (session_id_ != console_session_id)
@@ -89,8 +89,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     type_ = UserSession::Type::CONSOLE;
 #endif
 
-    LOG(LS_INFO) << "Ctor (session ID: " << session_id_
-                 << " type: " << typeToString(type_) << ")";
+    LOG(LS_INFO) << "Ctor (sid: " << session_id_ << " type: " << typeToString(type_) << ")";
     CHECK(task_runner_);
     CHECK(delegate_);
 
@@ -110,7 +109,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
 
 UserSession::~UserSession()
 {
-    LOG(LS_INFO) << "Dtor (session ID: " << session_id_
+    LOG(LS_INFO) << "Dtor (sid: " << session_id_
                  << " type: " << typeToString(type_)
                  << " state: " << stateToString(state_) << ")";
 }
@@ -154,7 +153,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "User session started "
                  << (channel_ ? "WITH" : "WITHOUT")
-                 << " connection to UI";
+                 << " connection to UI (sid: " << session_id_ << ")";
 
     router_state_ = router_state;
 
@@ -166,7 +165,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
 
     if (channel_)
     {
-        LOG(LS_INFO) << "IPC channel exists";
+        LOG(LS_INFO) << "IPC channel exists (sid: " << session_id_ << ")";
 
         channel_->setListener(this);
         channel_->resume();
@@ -178,7 +177,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     }
     else
     {
-        LOG(LS_INFO) << "IPC channel does NOT exist";
+        LOG(LS_INFO) << "IPC channel does NOT exist (sid: " << session_id_ << ")";
     }
 
     setState(FROM_HERE, State::STARTED);
@@ -191,7 +190,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
     LOG(LS_INFO) << "User session restarted "
                  << (channel_ ? "WITH" : "WITHOUT")
-                 << " connection to UI";
+                 << " connection to UI (sid: " << session_id_ << ")";
 
     ui_attach_timer_.stop();
     desktop_dettach_timer_.stop();
@@ -202,7 +201,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
     if (channel_)
     {
-        LOG(LS_INFO) << "IPC channel exists";
+        LOG(LS_INFO) << "IPC channel exists (sid: " << session_id_ << ")";
 
         channel_->setListener(this);
         channel_->resume();
@@ -225,7 +224,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     }
     else
     {
-        LOG(LS_INFO) << "IPC channel does NOT exist";
+        LOG(LS_INFO) << "IPC channel does NOT exist (sid: " << session_id_ << ")";
     }
 
     setState(FROM_HERE, State::STARTED);
@@ -233,7 +232,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 
 std::optional<std::string> UserSession::sessionName() const
 {
-    LOG(LS_INFO) << "Session name request (session ID: " << session_id_
+    LOG(LS_INFO) << "Session name request (sid: " << session_id_
                  << " type: " << typeToString(type_)
                  << " state: " << stateToString(state_) << ")";
 
@@ -249,7 +248,7 @@ std::optional<std::string> UserSession::sessionName() const
     base::win::SessionInfo current_session_info(sessionId());
     if (!current_session_info.isValid())
     {
-        LOG(LS_ERROR) << "Failed to get session information";
+        LOG(LS_ERROR) << "Failed to get session information (sid: " << session_id_ << ")";
         return std::nullopt;
     }
 
@@ -258,7 +257,7 @@ std::optional<std::string> UserSession::sessionName() const
 
     if (user_name.empty())
     {
-        LOG(LS_INFO) << "User is not logged in yet";
+        LOG(LS_INFO) << "User is not logged in yet (sid: " << session_id_ << ")";
         return std::nullopt;
     }
 
@@ -305,7 +304,7 @@ std::optional<std::string> UserSession::sessionName() const
     std::string session_name = base::strCat({ base::utf8FromUtf16(user_name), "@",
         base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
 
-    LOG(LS_INFO) << "Session name for RDP session: " << session_name;
+    LOG(LS_INFO) << "Session name for RDP session: " << session_name << " (sid: " << session_id_ << ")";
     return std::move(session_name);
 #else
     return std::string();
@@ -316,13 +315,13 @@ base::User UserSession::user() const
 {
     if (host_id_ == base::kInvalidHostId)
     {
-        LOG(LS_INFO) << "Invalid host ID";
+        LOG(LS_INFO) << "Invalid host ID (sid: " << session_id_ << ")";
         return base::User();
     }
 
     if (password_.empty())
     {
-        LOG(LS_INFO) << "No password for user";
+        LOG(LS_INFO) << "No password for user (sid: " << session_id_ << ")";
         return base::User();
     }
 
@@ -350,32 +349,32 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
     proto::SessionType session_type = client_session->sessionType();
     if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
     {
-        LOG(LS_INFO) << "Confirmation for system info session NOT required";
+        LOG(LS_INFO) << "Confirmation for system info session NOT required (sid: " << session_id_ << ")";
         confirm_required = false;
     }
 
     if (connection_confirmation_ && confirm_required)
     {
         LOG(LS_INFO) << "User confirmation of connection is required (state: "
-                     << stateToString(state_) << ")";
+                     << stateToString(state_) << " sid: " << session_id_ << ")";
 
         if (state_ == State::STARTED && !channel_)
         {
             if (no_user_action_ == SystemSettings::NoUserAction::ACCEPT)
             {
-                LOG(LS_INFO) << "Accept client session";
+                LOG(LS_INFO) << "Accept client session (sid: " << session_id_ << ")";
 
                 // There is no active user and automatic accept of connections is indicated.
                 addNewClientSession(std::move(client_session));
             }
             else
             {
-                LOG(LS_INFO) << "Reject client session";
+                LOG(LS_INFO) << "Reject client session (sid: " << session_id_ << ")";
             }
         }
         else
         {
-            LOG(LS_INFO) << "New unconfirmed client session";
+            LOG(LS_INFO) << "New unconfirmed client session (sid: " << session_id_ << ")";
 
             outgoing_message_.Clear();
             proto::internal::ConnectConfirmationRequest* request =
@@ -395,18 +394,19 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 
             if (channel_)
             {
-                LOG(LS_INFO) << "Sending connect request to UI process";
+                LOG(LS_INFO) << "Sending connect request to UI process (sid: " << session_id_ << ")";
                 channel_->send(base::serialize(outgoing_message_));
             }
             else
             {
-                LOG(LS_ERROR) << "Invalid IPC channel";
+                LOG(LS_ERROR) << "Invalid IPC channel (sid: " << session_id_ << ")";
             }
         }
     }
     else
     {
-        LOG(LS_INFO) << "No confirmation of connection is required from the user";
+        LOG(LS_INFO) << "No confirmation of connection is required from the user (sid: "
+                     << session_id_ << ")";
         addNewClientSession(std::move(client_session));
     }
 }
@@ -431,13 +431,13 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         {
             if (state_ == State::FINISHED)
             {
-                LOG(LS_INFO) << "User session is finished";
+                LOG(LS_INFO) << "User session is finished (sid: " << session_id_ << ")";
                 return;
             }
 
             if (state_ != State::DETTACHED)
             {
-                LOG(LS_INFO) << "User session not in DETTACHED state";
+                LOG(LS_INFO) << "User session not in DETTACHED state (sid: " << session_id_ << ")";
                 return;
             }
 
@@ -483,7 +483,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
 
             if (type_ != Type::RDP)
             {
-                LOG(LS_WARNING) << "REMOTE_DISCONNECT not for RDP session";
+                LOG(LS_WARNING) << "REMOTE_DISCONNECT not for RDP session (sid: " << session_id_ << ")";
             }
 
             setState(FROM_HERE, State::FINISHED);
@@ -508,7 +508,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
 
 void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(LS_INFO) << "Router state updated";
+    LOG(LS_INFO) << "Router state updated (sid: " << session_id_ << ")";
     router_state_ = router_state;
 
     sendRouterState(FROM_HERE);
@@ -551,7 +551,7 @@ void UserSession::onSettingsChanged()
     }
     else
     {
-        LOG(LS_INFO) << "No changes in password settings";
+        LOG(LS_INFO) << "No changes in password settings (sid: " << session_id_ << ")";
     }
 
     connection_confirmation_ = settings.connConfirm();
@@ -576,7 +576,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
     if (!base::parse(buffer, &incoming_message_))
     {
-        LOG(LS_ERROR) << "Invalid message from UI";
+        LOG(LS_ERROR) << "Invalid message from UI (sid: " << session_id_ << ")";
         return;
     }
 
@@ -587,13 +587,13 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
-            LOG(LS_INFO) << "New credentials requested";
+            LOG(LS_INFO) << "New credentials requested (sid: " << session_id_ << ")";
             updateCredentials(FROM_HERE);
         }
         else
         {
             DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
-            LOG(LS_INFO) << "Credentials update requested";
+            LOG(LS_INFO) << "Credentials update requested (sid: " << session_id_ << ")";
         }
 
         sendCredentials(FROM_HERE);
@@ -618,7 +618,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!control.has_unsigned_integer())
                 {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_KILL";
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_KILL (sid: " << session_id_ << ")";
                     return;
                 }
 
@@ -630,7 +630,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!control.has_boolean())
                 {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE";
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_PAUSE (sid: " << session_id_ << ")";
                     return;
                 }
 
@@ -645,7 +645,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!control.has_boolean())
                 {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE";
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid: " << session_id_ << ")";
                     return;
                 }
 
@@ -657,7 +657,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
             {
                 if (!control.has_boolean())
                 {
-                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD";
+                    LOG(LS_ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid: " << session_id_ << ")";
                     return;
                 }
 
@@ -674,7 +674,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
 
             default:
             {
-                LOG(LS_ERROR) << "Unhandled control code: " << control.code();
+                LOG(LS_ERROR) << "Unhandled control code: " << control.code() << " (sid: " << session_id_ << ")";
                 return;
             }
         }
@@ -690,18 +690,18 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from UI";
+        LOG(LS_WARNING) << "Unhandled message from UI (sid: " << session_id_ << ")";
     }
 }
 
 void UserSession::onDesktopSessionStarted()
 {
-    LOG(LS_INFO) << "Desktop session is connected";
+    LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
 
     proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
     if (desktop_clients_.empty())
     {
-        LOG(LS_INFO) << "No desktop clients. Disable session";
+        LOG(LS_INFO) << "No desktop clients. Disable session (sid: " << session_id_ << ")";
         action = proto::internal::DesktopControl::DISABLE;
     }
     else
@@ -717,11 +717,11 @@ void UserSession::onDesktopSessionStarted()
 
 void UserSession::onDesktopSessionStopped()
 {
-    LOG(LS_INFO) << "Desktop session is disconnected";
+    LOG(LS_INFO) << "Desktop session is disconnected (sid: " << session_id_ << ")";
 
     if (type_ == Type::RDP)
     {
-        LOG(LS_INFO) << "Session type is RDP. Disconnect all";
+        LOG(LS_INFO) << "Session type is RDP. Disconnect all (sid: " << session_id_ << ")";
 
         desktop_clients_.clear();
         file_transfer_clients_.clear();
@@ -750,7 +750,7 @@ void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_po
 
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
-    LOG(LS_INFO) << "Screen list changed";
+    LOG(LS_INFO) << "Screen list changed (sid: " << session_id_ << ")";
     LOG(LS_INFO) << "Primary screen: " << list.primary_screen();
     LOG(LS_INFO) << "Current screen: " << list.current_screen();
 
@@ -780,7 +780,7 @@ void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 
 void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 {
-    LOG(LS_INFO) << "Client session '" << id << "' is accepted";
+    LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid: " << session_id_ << ")";
 
     scoped_task_runner_->postTask([=]()
     {
@@ -800,7 +800,7 @@ void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 
 void UserSession::onUnconfirmedSessionReject(uint32_t id)
 {
-    LOG(LS_INFO) << "Client session '" << id << "' is rejected";
+    LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid: " << session_id_ << ")";
 
     scoped_task_runner_->postTask([=]()
     {
@@ -819,11 +819,11 @@ void UserSession::onClientSessionConfigured()
 {
     if (desktop_clients_.empty())
     {
-        LOG(LS_INFO) << "No desktop clients";
+        LOG(LS_INFO) << "No desktop clients (sid: " << session_id_ << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Client session configured";
+    LOG(LS_INFO) << "Client session configured (sid: " << session_id_ << ")";
 
     DesktopSession::Config system_config;
     memset(&system_config, 0, sizeof(system_config));
@@ -877,7 +877,7 @@ void UserSession::onClientSessionFinished()
             if (client_session->state() == ClientSession::State::FINISHED)
             {
                 LOG(LS_INFO) << "Client session with id " << client_session->sessionId()
-                             << " finished. Delete it";
+                             << " finished. Delete it (sid: " << session_id_ << ")";
 
                 if (client_session->sessionType() == proto::SESSION_TYPE_TEXT_CHAT)
                     onTextChatSessionFinished(client_session->id());
@@ -898,7 +898,7 @@ void UserSession::onClientSessionFinished()
         }
     };
 
-    LOG(LS_INFO) << "Client session finished";
+    LOG(LS_INFO) << "Client session finished (sid: " << session_id_ << ")";
 
     delete_finished(&desktop_clients_);
     delete_finished(&file_transfer_clients_);
@@ -907,7 +907,7 @@ void UserSession::onClientSessionFinished()
 
     if (desktop_clients_.empty())
     {
-        LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent";
+        LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent (sid: " << session_id_ << ")";
         desktop_session_proxy_->control(proto::internal::DesktopControl::DISABLE);
 
         desktop_session_proxy_->setMouseLock(false);
@@ -921,7 +921,7 @@ void UserSession::onClientSessionVideoRecording(
 {
     if (!channel_)
     {
-        LOG(LS_INFO) << "IPC channel not exists";
+        LOG(LS_INFO) << "IPC channel not exists (sid: " << session_id_ << ")";
         return;
     }
 
@@ -940,7 +940,7 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
 {
     if (!channel_)
     {
-        LOG(LS_INFO) << "IPC channel not exists";
+        LOG(LS_INFO) << "IPC channel not exists (sid: " << session_id_ << ")";
         return;
     }
 
@@ -964,11 +964,12 @@ void UserSession::onSessionDettached(const base::Location& location)
 {
     if (state_ == State::DETTACHED)
     {
-        LOG(LS_INFO) << "Session already dettached";
+        LOG(LS_INFO) << "Session already dettached (sid: " << session_id_ << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Dettach session (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Dettach session (sid: " << session_id_
+                 << " from: " << location.toString() << ")";
 
     if (channel_)
     {
@@ -997,48 +998,49 @@ void UserSession::onSessionDettached(const base::Location& location)
 
     if (type_ == Type::RDP)
     {
-        LOG(LS_INFO) << "RDP session finished";
+        LOG(LS_INFO) << "RDP session finished (sid: " << session_id_ << ")";
 
         setState(FROM_HERE, State::FINISHED);
         delegate_->onUserSessionFinished();
     }
     else
     {
-        LOG(LS_INFO) << "Starting attach timer";
+        LOG(LS_INFO) << "Starting attach timer (sid: " << session_id_ << ")";
 
         if (ui_attach_timer_.isActive())
         {
-            LOG(LS_INFO) << "Attach timer is active";
+            LOG(LS_INFO) << "Attach timer is active (sid: " << session_id_ << ")";
         }
 
         ui_attach_timer_.start(std::chrono::seconds(60), [this]()
         {
-            LOG(LS_INFO) << "Session attach timeout";
+            LOG(LS_INFO) << "Session attach timeout (sid: " << session_id_ << ")";
 
             setState(FROM_HERE, State::FINISHED);
             delegate_->onUserSessionFinished();
         });
     }
 
-    LOG(LS_INFO) << "Session dettached";
+    LOG(LS_INFO) << "Session dettached (sid: " << session_id_ << ")";
 }
 
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
     proto::SessionType session_type = client_session.sessionType();
     if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
     {
-        LOG(LS_INFO) << "Notify for system info session NOT required";
+        LOG(LS_INFO) << "Notify for system info session NOT required (sid: " << session_id_ << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id();
+    LOG(LS_INFO) << "Sending connect event for session ID " << client_session.id()
+                 << " (sid: " << session_id_ << ")";
 
     outgoing_message_.Clear();
     proto::internal::ConnectEvent* event = outgoing_message_.mutable_connect_event();
@@ -1054,11 +1056,12 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
-    LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id;
+    LOG(LS_INFO) << "Sending disconnect event for session ID " << session_id
+                 << " (sid: " << session_id_ << ")";
 
     outgoing_message_.Clear();
     outgoing_message_.mutable_disconnect_event()->set_id(session_id);
@@ -1067,7 +1070,8 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 
 void UserSession::updateCredentials(const base::Location& location)
 {
-    LOG(LS_INFO) << "Updating credentials (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Updating credentials (sid: " << session_id_
+                 << " from: " << location.toString() << ")";
 
     if (password_enabled_)
     {
@@ -1102,17 +1106,17 @@ void UserSession::updateCredentials(const base::Location& location)
 void UserSession::sendCredentials(const base::Location& location)
 {
     LOG(LS_INFO) << "Send credentials for host ID: " << host_id_
-                 << " (from: " << location.toString() << ")";
+                 << " (sid: " << session_id_ << " from: " << location.toString() << ")";
 
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
     if (host_id_ == base::kInvalidHostId)
     {
-        LOG(LS_WARNING) << "Invalid host ID";
+        LOG(LS_WARNING) << "Invalid host ID (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1139,7 +1143,7 @@ void UserSession::killClientSession(uint32_t id)
         }
     };
 
-    LOG(LS_INFO) << "Kill client session with ID: " << id;
+    LOG(LS_INFO) << "Kill client session with ID: " << id << " (sid: " << session_id_ << ")";
 
     stop_by_id(&desktop_clients_, id);
     stop_by_id(&file_transfer_clients_, id);
@@ -1149,11 +1153,12 @@ void UserSession::killClientSession(uint32_t id)
 
 void UserSession::sendRouterState(const base::Location& location)
 {
-    LOG(LS_INFO) << "Sending router state to UI (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Sending router state to UI (sid: " << session_id_
+                 << " from: " << location.toString() << ")";
 
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel";
+        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1167,11 +1172,12 @@ void UserSession::sendRouterState(const base::Location& location)
 
 void UserSession::sendHostIdRequest(const base::Location& location)
 {
-    LOG(LS_INFO) << "Send host id request (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Send host id request (sid: " << session_id_
+                 << " from: " << location.toString() << ")";
 
     if (router_state_.state() != proto::internal::RouterState::CONNECTED)
     {
-        LOG(LS_INFO) << "Router not connected yet";
+        LOG(LS_INFO) << "Router not connected yet (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1191,7 +1197,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::SESSION_TYPE_DESKTOP_VIEW:
         {
-            LOG(LS_INFO) << "New desktop session";
+            LOG(LS_INFO) << "New desktop session (sid: " << session_id_ << ")";
 
             bool enable_required = desktop_clients_.empty();
 
@@ -1209,21 +1215,21 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
         {
-            LOG(LS_INFO) << "New file transfer session";
+            LOG(LS_INFO) << "New file transfer session (sid: " << session_id_ << ")";
             file_transfer_clients_.emplace_back(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
         {
-            LOG(LS_INFO) << "New system info session";
+            LOG(LS_INFO) << "New system info session (sid: " << session_id_ << ")";
             system_info_clients_.emplace_back(std::move(client_session));
         }
         break;
 
         case proto::SESSION_TYPE_TEXT_CHAT:
         {
-            LOG(LS_INFO) << "New text chat session";
+            LOG(LS_INFO) << "New text chat session (sid: " << session_id_ << ")";
             text_chat_clients_.emplace_back(std::move(client_session));
         }
         break;
@@ -1235,7 +1241,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
         }
     }
 
-    LOG(LS_INFO) << "Starting session...";
+    LOG(LS_INFO) << "Starting session... (sid: " << session_id_ << ")";
     client_session_ptr->setSessionId(sessionId());
     client_session_ptr->start(this);
 
@@ -1260,13 +1266,14 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
 void UserSession::setState(const base::Location& location, State state)
 {
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
-                 << " (from: " << location.toString() << ")";
+                 << " (sid: " << session_id_ << " from: " << location.toString() << ")";
     state_ = state;
 }
 
 void UserSession::onTextChatHasUser(const base::Location& location, bool has_user)
 {
-    LOG(LS_INFO) << "User state changed: " << has_user << " (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "User state changed: " << has_user << " (sid: " << session_id_
+                 << " from: " << location.toString() << ")";
 
     for (const auto& client : text_chat_clients_)
     {
@@ -1317,7 +1324,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
 
     if (!channel_)
     {
-        LOG(LS_INFO) << "IPC channel not exists";
+        LOG(LS_INFO) << "IPC channel not exists (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1356,7 +1363,7 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
 
     if (!channel_)
     {
-        LOG(LS_INFO) << "IPC channel not exists";
+        LOG(LS_INFO) << "IPC channel not exists (sid: " << session_id_ << ")";
         return;
     }
 
