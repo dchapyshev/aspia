@@ -46,6 +46,36 @@ bool SessionEnumerator::isAtEnd() const
     return current_ >= count_;
 }
 
+// static
+const char* SessionEnumerator::stateToString(WTS_CONNECTSTATE_CLASS state)
+{
+    switch (state)
+    {
+        case WTSActive:
+            return "WTSActive";
+        case WTSConnected:
+            return "WTSConnected";
+        case WTSConnectQuery:
+            return "WTSConnectQuery";
+        case WTSShadow:
+            return "WTSShadow";
+        case WTSDisconnected:
+            return "WTSDisconnected";
+        case WTSIdle:
+            return "WTSIdle";
+        case WTSListen:
+            return "WTSListen";
+        case WTSReset:
+            return "WTSReset";
+        case WTSDown:
+            return "WTSDown";
+        case WTSInit:
+            return "WTSInit";
+        default:
+            return "Unknown";
+    }
+}
+
 WTS_CONNECTSTATE_CLASS SessionEnumerator::state() const
 {
     return info_[current_]->State;

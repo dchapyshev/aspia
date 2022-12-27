@@ -36,6 +36,8 @@ public:
     void advance();
     bool isAtEnd() const;
 
+    static const char* stateToString(WTS_CONNECTSTATE_CLASS state);
+
     WTS_CONNECTSTATE_CLASS state() const;
     SessionId sessionId() const;
 
