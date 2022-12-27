@@ -71,8 +71,10 @@ public:
     int64_t logonTime() const;
     int64_t currentTime() const;
 
+    bool isUserLocked() const;
+
 private:
-    ScopedWtsMemory<WTSINFOW> info_;
+    ScopedWtsMemory<WTSINFOEXW> info_;
 
     DISALLOW_COPY_AND_ASSIGN(SessionInfo);
 };

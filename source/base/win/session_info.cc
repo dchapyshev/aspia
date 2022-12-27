@@ -20,17 +20,18 @@
 
 #include "base/logging.h"
 #include "base/strings/unicode.h"
+#include "base/win/windows_version.h"
 
 namespace base::win {
 
 SessionInfo::SessionInfo(SessionId session_id)
 {
-    ScopedWtsMemory<WTSINFOW> info;
+    ScopedWtsMemory<WTSINFOEXW> info;
     DWORD bytes_returned;
 
     if (!WTSQuerySessionInformationW(WTS_CURRENT_SERVER_HANDLE,
                                      session_id,
-                                     WTSSessionInfo,
+                                     WTSSessionInfoEx,
                                      reinterpret_cast<LPWSTR*>(info.recieve()),
                                      &bytes_returned))
     {
@@ -53,7 +54,7 @@ SessionId SessionInfo::sessionId() const
     if (!isValid())
         return kInvalidSessionId;
 
-    return info_->SessionId;
+    return info_->Data.WTSInfoExLevel1.SessionId;
 }
 
 SessionInfo::ConnectState SessionInfo::connectState() const
@@ -61,7 +62,7 @@ SessionInfo::ConnectState SessionInfo::connectState() const
     if (!isValid())
         return ConnectState::DISCONNECTED;
 
-    return static_cast<ConnectState>(info_->State);
+    return static_cast<ConnectState>(info_->Data.WTSInfoExLevel1.SessionState);
 }
 
 // static
@@ -104,7 +105,7 @@ std::u16string SessionInfo::winStationName16() const
     if (!isValid())
         return std::u16string();
 
-    return reinterpret_cast<const char16_t*>(info_->WinStationName);
+    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.WinStationName);
 }
 
 std::string SessionInfo::domain() const
@@ -117,7 +118,7 @@ std::u16string SessionInfo::domain16() const
     if (!isValid())
         return std::u16string();
 
-    return reinterpret_cast<const char16_t*>(info_->Domain);
+    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.DomainName);
 }
 
 std::string SessionInfo::userName() const
@@ -130,7 +131,7 @@ std::u16string SessionInfo::userName16() const
     if (!isValid())
         return std::u16string();
 
-    return reinterpret_cast<const char16_t*>(info_->UserName);
+    return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.UserName);
 }
 
 std::string SessionInfo::clientName() const
@@ -171,7 +172,7 @@ int64_t SessionInfo::connectTime() const
     if (!isValid())
         return 0;
 
-    return info_->ConnectTime.QuadPart;
+    return info_->Data.WTSInfoExLevel1.ConnectTime.QuadPart;
 }
 
 int64_t SessionInfo::disconnectTime() const
@@ -179,7 +180,7 @@ int64_t SessionInfo::disconnectTime() const
     if (!isValid())
         return 0;
 
-    return info_->DisconnectTime.QuadPart;
+    return info_->Data.WTSInfoExLevel1.DisconnectTime.QuadPart;
 }
 
 int64_t SessionInfo::lastInputTime() const
@@ -187,7 +188,7 @@ int64_t SessionInfo::lastInputTime() const
     if (!isValid())
         return 0;
 
-    return info_->LastInputTime.QuadPart;
+    return info_->Data.WTSInfoExLevel1.LastInputTime.QuadPart;
 }
 
 int64_t SessionInfo::logonTime() const
@@ -195,7 +196,7 @@ int64_t SessionInfo::logonTime() const
     if (!isValid())
         return 0;
 
-    return info_->LogonTime.QuadPart;
+    return info_->Data.WTSInfoExLevel1.LogonTime.QuadPart;
 }
 
 int64_t SessionInfo::currentTime() const
@@ -203,7 +204,25 @@ int64_t SessionInfo::currentTime() const
     if (!isValid())
         return 0;
 
-    return info_->CurrentTime.QuadPart;
+    return info_->Data.WTSInfoExLevel1.CurrentTime.QuadPart;
+}
+
+bool SessionInfo::isUserLocked() const
+{
+    if (!isValid())
+        return false;
+
+    if (base::win::OSInfo::instance()->version() <= VERSION_WIN7)
+    {
+        // Due to a code defect, the usage of the WTS_SESSIONSTATE_LOCK and WTS_SESSIONSTATE_UNLOCK
+        // flags is reversed. That is, WTS_SESSIONSTATE_LOCK indicates that the session is unlocked,
+        // and WTS_SESSIONSTATE_UNLOCK indicates the session is locked.
+        return info_->Data.WTSInfoExLevel1.SessionFlags == WTS_SESSIONSTATE_UNLOCK;
+    }
+    else
+    {
+        return info_->Data.WTSInfoExLevel1.SessionFlags == WTS_SESSIONSTATE_LOCK;
+    }
 }
 
 } // namespace base::win
