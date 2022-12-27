@@ -32,7 +32,6 @@
 #include "host/user_session_constants.h"
 
 #if defined(OS_WIN)
-#include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
@@ -245,10 +244,15 @@ bool UserSessionManager::start(Delegate* delegate)
             if (session.state() != WTSActive)
             {
                 LOG(LS_INFO) << "RDP session with ID " << session_id << " not in active state. "
-                             << "Session process will not be started";
+                             << "Session process will not be started (name: '" << name << "' state: "
+                             << base::win::SessionEnumerator::stateToString(session.state()) << ")";
                 continue;
             }
         }
+
+        LOG(LS_INFO) << "Starting process for session id: " << session_id << " (name: '" << name
+                     << "' state: " << base::win::SessionEnumerator::stateToString(session.state())
+                     << ")";
 
         // Start UI process in user session.
         startSessionProcess(FROM_HERE, session.sessionId());
@@ -276,6 +280,23 @@ void UserSessionManager::onUserSessionEvent(
         {
             // Start UI process in user session.
             startSessionProcess(FROM_HERE, session_id);
+        }
+        break;
+
+        case base::win::SessionStatus::SESSION_UNLOCK:
+        {
+            for (const auto& session : sessions_)
+            {
+                if (session->sessionId() == session_id)
+                {
+                    if (!session->isConnectedToUi())
+                    {
+                        // Start UI process in user session.
+                        startSessionProcess(FROM_HERE, session_id);
+                    }
+                    break;
+                }
+            }
         }
         break;
 
@@ -543,8 +564,8 @@ void UserSessionManager::onUserSessionFinished()
 void UserSessionManager::startSessionProcess(
     const base::Location& location, base::SessionId session_id)
 {
-    LOG(LS_INFO) << "Starting UI process for session ID: " << session_id
-                 << " (from: " << location.toString() << ")";
+    LOG(LS_INFO) << "Starting UI process (sid: " << session_id
+                 << " from: " << location.toString() << ")";
 
 #if defined(OS_WIN)
     if (session_id == base::kInvalidSessionId)
@@ -562,13 +583,13 @@ void UserSessionManager::startSessionProcess(
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_WARNING) << "Failed to get user token";
+        LOG(LS_WARNING) << "Failed to get user token (sid: " << session_id << ")";
         return;
     }
 
     if (!user_token.isValid())
     {
-        LOG(LS_INFO) << "Invalid user token. User is not logged in";
+        LOG(LS_INFO) << "User is not logged in (sid: " << session_id << ")";
 
         // If there is no user logged in, but the session exists, then add the session without
         // connecting to UI (we cannot start UI if the user is not logged in).
@@ -576,10 +597,31 @@ void UserSessionManager::startSessionProcess(
         return;
     }
 
+    base::win::SessionInfo session_info(session_id);
+    if (!session_info.isValid())
+    {
+        LOG(LS_WARNING) << "Unable to get session info (sid: " << session_id << ")";
+        return;
+    }
+
+    if (session_info.isUserLocked())
+    {
+        LOG(LS_INFO) << "Session has LOCKED user (sid: " << session_id << ")";
+
+        // If the user session is locked, then we do not start the UI process. The process will be
+        // started later when the user session is unlocked.
+        addUserSession(session_id, nullptr);
+        return;
+    }
+    else
+    {
+        LOG(LS_INFO) << "Session has UNLOCKED user (sid: " << session_id << ")";
+    }
+
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-        LOG(LS_WARNING) << "Failed to get current exec directory";
+        LOG(LS_WARNING) << "Failed to get current exec directory (sid: " << session_id << ")";
         return;
     }
 
@@ -590,8 +632,8 @@ void UserSessionManager::startSessionProcess(
 
     if (!createProcessWithToken(user_token, command_line))
     {
-        LOG(LS_WARNING) << "Failed to start process with user token ("
-                        << command_line.commandLineString() << ")";
+        LOG(LS_WARNING) << "Failed to start process with user token (sid: " << session_id
+                        << " cmd: " << command_line.commandLineString() << ")";
     }
 #else
     NOTIMPLEMENTED();
@@ -607,7 +649,7 @@ void UserSessionManager::addUserSession(
     {
         if (session->sessionId() == session_id)
         {
-            LOG(LS_INFO) << "Restart user session";
+            LOG(LS_INFO) << "Restart user session: " << session_id;
             session->restart(std::move(channel));
             return;
         }
@@ -616,7 +658,7 @@ void UserSessionManager::addUserSession(
     std::unique_ptr<UserSession> user_session = std::make_unique<UserSession>(
         task_runner_, session_id, std::move(channel), this);
 
-    LOG(LS_INFO) << "Start user session";
+    LOG(LS_INFO) << "Start user session: " << session_id;
     sessions_.emplace_back(std::move(user_session));
     sessions_.back()->start(router_state_);
 }
