@@ -35,7 +35,7 @@
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
 #include "base/win/process_util.h"
-#include "base/win/scoped_thread_desktop.h"
+#include "base/win/desktop.h"
 #include "base/win/session_info.h"
 #endif // defined(OS_WIN)
 
