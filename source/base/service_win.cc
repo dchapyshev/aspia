@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
-#include "base/message_loop/message_loop_task_runner.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/threading/simple_thread.h"
 #include "base/win/scoped_com_initializer.h"
@@ -55,6 +55,29 @@ const wchar_t kComProcessSd[] =
 const wchar_t kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
+
+std::string serviceStateToString(DWORD state)
+{
+    switch (state)
+    {
+        case SERVICE_CONTINUE_PENDING:
+            return "SERVICE_CONTINUE_PENDING";
+        case SERVICE_PAUSE_PENDING:
+            return "SERVICE_PAUSE_PENDING";
+        case SERVICE_PAUSED:
+            return "SERVICE_PAUSED";
+        case SERVICE_RUNNING:
+            return "SERVICE_RUNNING";
+        case SERVICE_START_PENDING:
+            return "SERVICE_START_PENDING";
+        case SERVICE_STOP_PENDING:
+            return "SERVICE_STOP_PENDING";
+        case SERVICE_STOPPED:
+            return "SERVICE_STOPPED";
+        default:
+            return "Unknown State (" + numberToString(state) + ")";
+    }
+}
 
 class ServiceThread
 {
@@ -146,7 +169,7 @@ void ServiceThread::start()
 
 void ServiceThread::setStatus(DWORD status)
 {
-    LOG(LS_INFO) << "Service status changed: " << status;
+    LOG(LS_INFO) << "Service status changed: " << serviceStateToString(status);
 
     status_.dwServiceType = SERVICE_WIN32;
     status_.dwControlsAccepted = 0;
