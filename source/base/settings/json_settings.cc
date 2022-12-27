@@ -93,8 +93,9 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
 } // namespace
 
-JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
-    : encrypted_(encrypted)
+JsonSettings::JsonSettings(std::string_view file_name, Backups backups, Encrypted encrypted)
+    : encrypted_(encrypted),
+      backups_(backups)
 {
     path_ = filePath(file_name);
     if (path_.empty())
@@ -106,8 +107,10 @@ JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
 JsonSettings::JsonSettings(Scope scope,
                            std::string_view application_name,
                            std::string_view file_name,
+                           Backups backups,
                            Encrypted encrypted)
-    : encrypted_(encrypted)
+    : encrypted_(encrypted),
+      backups_(backups)
 {
     path_ = filePath(scope, application_name, file_name);
     if (path_.empty())
@@ -150,6 +153,9 @@ void JsonSettings::sync()
     {
         if (readFile(path_, map(), encrypted_))
         {
+            if (backups_ == Backups::NO)
+                break;
+
             // A corrupted configuration file may be empty.
             if (map().empty())
             {
@@ -182,6 +188,9 @@ void JsonSettings::sync()
         }
         else
         {
+            if (backups_ == Backups::NO)
+                break;
+
             LOG(LS_WARNING) << "Configuration file '" << path_ << "' is corrupted. "
                             << "Attempt to restore from a backup...";
 
@@ -213,7 +222,7 @@ bool JsonSettings::flush()
     }
 
     // Before writing the configuration file, make a backup copy.
-    if (!map().empty())
+    if (backups_ == Backups::YES && !map().empty())
     {
         if (!createBackupFor(path_))
         {

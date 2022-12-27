@@ -26,6 +26,7 @@ RouterConfigStorage::RouterConfigStorage()
     : storage_(base::JsonSettings::Scope::USER,
                "aspia",
                "router_config",
+               base::JsonSettings::Backups::NO,
                base::JsonSettings::Encrypted::YES)
 {
     // Nothing

@@ -18,8 +18,6 @@
 
 #include "host/system_settings.h"
 
-#include "base/base64.h"
-#include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
@@ -34,7 +32,7 @@ const size_t kPasswordHashSaltSize = 256;
 } // namespace
 
 SystemSettings::SystemSettings()
-    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
+    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host", base::JsonSettings::Backups::YES)
 {
     // Nothing
 }
