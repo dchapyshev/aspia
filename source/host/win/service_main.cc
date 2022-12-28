@@ -279,7 +279,8 @@ int hostServiceMain(int argc, wchar_t* argv[])
     {
         LOG(LS_INFO) << enumerator.sessionName() << " (id: " << enumerator.sessionId()
                      << ", host: '" << enumerator.hostName() << "', user: '" << enumerator.userName()
-                     << "', domain: '" << enumerator.domainName() << "')";
+                     << "', domain: '" << enumerator.domainName() << "', locked: "
+                     << enumerator.isUserLocked() << ")";
     }
     LOG(LS_INFO) << "#####################################################";
 

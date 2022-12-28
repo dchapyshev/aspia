@@ -146,6 +146,7 @@ void desktopAgentMain(int argc, const char* const* argv)
                 << base::win::SessionInfo::connectStateToString(session_info.connectState());
             LOG(LS_INFO) << "WinStation name: '" << session_info.winStationName() << "'";
             LOG(LS_INFO) << "Domain name: '" << session_info.domain() << "'";
+            LOG(LS_INFO) << "User Locked: " << session_info.isUserLocked();
         }
     }
 
