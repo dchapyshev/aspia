@@ -98,8 +98,18 @@ ScopedSasPolicy::~ScopedSasPolicy()
 
 void injectSAS()
 {
-    ScopedSasPolicy sas_policy;
-    SendSAS(FALSE);
+    HMODULE sas_dll = LoadLibraryExW(L"sas.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (sas_dll)
+    {
+        auto send_sas_proc = reinterpret_cast<decltype(SendSAS)*>(GetProcAddress(sas_dll, "SendSAS"));
+        if (send_sas_proc)
+        {
+            ScopedSasPolicy sas_policy;
+            send_sas_proc(FALSE);
+        }
+
+        FreeLibrary(sas_dll);
+    }
 }
 
 } // namespace host

@@ -161,7 +161,6 @@ if (WIN32)
         imm32
         iphlpapi
         netapi32
-        sas
         setupapi
         userenv
         uxtheme
