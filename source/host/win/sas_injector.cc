@@ -107,8 +107,16 @@ void injectSAS()
             ScopedSasPolicy sas_policy;
             send_sas_proc(FALSE);
         }
+        else
+        {
+            PLOG(LS_WARNING) << "Unable to load SendSAS function";
+        }
 
         FreeLibrary(sas_dll);
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "Unable to load sas.dll";
     }
 }
 

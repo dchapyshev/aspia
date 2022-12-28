@@ -51,6 +51,13 @@ private:
     const Frame* captureImage();
     bool prepareCaptureResources();
 
+    typedef HRESULT(STDAPICALLTYPE* DwmEnableCompositionFunc) (UINT uCompositionAction);
+    typedef HRESULT(STDAPICALLTYPE* DwmIsCompositionEnabledFunc) (BOOL* pfEnabled);
+
+    HMODULE dwmapi_dll_ = nullptr;
+    DwmEnableCompositionFunc dwm_enable_composition_func_ = nullptr;
+    DwmIsCompositionEnabledFunc dwm_is_composition_enabled_func_ = nullptr;
+
     bool composition_changed_ = false;
 
     ScreenId current_screen_id_ = kFullDesktopScreenId;

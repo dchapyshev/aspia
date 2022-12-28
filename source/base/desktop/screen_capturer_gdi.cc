@@ -49,14 +49,39 @@ ScreenCapturerGdi::ScreenCapturerGdi()
 
     memset(&curr_cursor_info_, 0, sizeof(curr_cursor_info_));
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
+
+    dwmapi_dll_ = LoadLibraryExW(L"dwmapi.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (dwmapi_dll_)
+    {
+        dwm_enable_composition_func_ = reinterpret_cast<DwmEnableCompositionFunc>(
+            GetProcAddress(dwmapi_dll_, "DwmEnableComposition"));
+        if (!dwm_enable_composition_func_)
+        {
+            PLOG(LS_WARNING) << "Unable to load DwmEnableComposition function";
+        }
+
+        dwm_is_composition_enabled_func_ = reinterpret_cast<DwmIsCompositionEnabledFunc>(
+            GetProcAddress(dwmapi_dll_, "DwmIsCompositionEnabled"));
+        if (!dwm_is_composition_enabled_func_)
+        {
+            PLOG(LS_WARNING) << "Unable to load DwmIsCompositionEnabled function";
+        }
+    }
+    else
+    {
+        PLOG(LS_WARNING) << "Unable to load dwmapi.dll";
+    }
 }
 
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
     LOG(LS_INFO) << "Dtor";
 
-    if (composition_changed_)
-        DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+    if (composition_changed_ && dwm_enable_composition_func_)
+        dwm_enable_composition_func_(DWM_EC_ENABLECOMPOSITION);
+
+    if (dwmapi_dll_)
+        FreeLibrary(dwmapi_dll_);
 }
 
 int ScreenCapturerGdi::screenCount()
@@ -267,15 +292,18 @@ bool ScreenCapturerGdi::prepareCaptureResources()
     {
         DCHECK(!memory_dc_);
 
-        BOOL enabled;
-        HRESULT hr = DwmIsCompositionEnabled(&enabled);
-        if (SUCCEEDED(hr) && enabled)
+        if (dwm_enable_composition_func_ && dwm_is_composition_enabled_func_)
         {
-            // Vote to disable Aero composited desktop effects while capturing.
-            // Windows will restore Aero automatically if the process exits.
-            // This has no effect under Windows 8 or higher.
-            DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
-            composition_changed_ = true;
+            BOOL enabled;
+            HRESULT hr = dwm_is_composition_enabled_func_(&enabled);
+            if (SUCCEEDED(hr) && enabled)
+            {
+                // Vote to disable Aero composited desktop effects while capturing.
+                // Windows will restore Aero automatically if the process exits.
+                // This has no effect under Windows 8 or higher.
+                dwm_enable_composition_func_(DWM_EC_DISABLECOMPOSITION);
+                composition_changed_ = true;
+            }
         }
 
         // Create GDI device contexts to capture from the desktop into memory.
