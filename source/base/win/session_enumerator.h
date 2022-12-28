@@ -66,6 +66,8 @@ public:
     std::string farmName() const;
     std::u16string farmName16() const;
 
+    bool isUserLocked() const;
+
 private:
     base::win::ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
     DWORD count_ = 0;

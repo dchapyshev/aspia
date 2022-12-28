@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/strings/unicode.h"
+#include "base/win/session_info.h"
 
 namespace base::win {
 
@@ -149,6 +150,18 @@ std::u16string SessionEnumerator::farmName16() const
         return std::u16string();
 
     return reinterpret_cast<const char16_t*>(info_[current_]->pFarmName);
+}
+
+bool SessionEnumerator::isUserLocked() const
+{
+    SessionInfo session_info(sessionId());
+    if (!session_info.isValid())
+    {
+        LOG(LS_WARNING) << "Unable to get session info";
+        return false;
+    }
+
+    return session_info.isUserLocked();
 }
 
 } // namespace base::win
