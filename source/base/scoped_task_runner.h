@@ -32,6 +32,7 @@ public:
     ~ScopedTaskRunner();
 
     void postTask(TaskRunner::Callback callback);
+    void postDelayedTask(const std::chrono::milliseconds& timeout, TaskRunner::Callback callback);
 
 private:
     class Impl;

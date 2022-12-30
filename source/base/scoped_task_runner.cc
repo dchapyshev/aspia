@@ -48,6 +48,18 @@ public:
         });
     }
 
+    void postDelayedTask(const std::chrono::milliseconds& timeout, TaskRunner::Callback callback)
+    {
+        auto self = shared_from_this();
+        task_runner_->postDelayedTask([self, callback]()
+        {
+            if (!self->attached_)
+                return;
+
+            callback();
+        }, timeout);
+    }
+
     void dettach()
     {
         attached_ = false;
@@ -74,6 +86,12 @@ ScopedTaskRunner::~ScopedTaskRunner()
 void ScopedTaskRunner::postTask(TaskRunner::Callback callback)
 {
     impl_->postTask(std::move(callback));
+}
+
+void ScopedTaskRunner::postDelayedTask(
+    const std::chrono::milliseconds& timeout, TaskRunner::Callback callback)
+{
+    impl_->postDelayedTask(timeout, std::move(callback));
 }
 
 } // namespace base
