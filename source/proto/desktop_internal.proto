@@ -62,8 +62,9 @@ message SharedBuffer
 
 message ScreenCaptured
 {
-    DesktopFrame frame       = 1;
-    MouseCursor mouse_cursor = 2;
+    VideoErrorCode error_code = 1;
+    DesktopFrame frame        = 2;
+    MouseCursor mouse_cursor  = 3;
 }
 
 message NextScreenCapture
