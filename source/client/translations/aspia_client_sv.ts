@@ -2457,6 +2457,29 @@
     </message>
 </context>
 <context>
+    <name>client::DesktopWidget</name>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="500"/>
+        <source>The session was paused by a remote user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="504"/>
+        <source>The session is temporarily unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="508"/>
+        <source>The session is permanently unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="512"/>
+        <source>Error while receiving video stream: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="99"/>
@@ -2730,7 +2753,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="291"/>
         <location filename="../ui/qt_desktop_window.cc" line="299"/>
-        <location filename="../ui/qt_desktop_window.cc" line="835"/>
+        <location filename="../ui/qt_desktop_window.cc" line="841"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2745,17 +2768,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="813"/>
+        <location filename="../ui/qt_desktop_window.cc" line="819"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="815"/>
+        <location filename="../ui/qt_desktop_window.cc" line="821"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="835"/>
+        <location filename="../ui/qt_desktop_window.cc" line="841"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>

@@ -2663,6 +2663,29 @@
     </message>
 </context>
 <context>
+    <name>client::DesktopWidget</name>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="500"/>
+        <source>The session was paused by a remote user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="504"/>
+        <source>The session is temporarily unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="508"/>
+        <source>The session is permanently unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_widget.cc" line="512"/>
+        <source>Error while receiving video stream: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>client::FileListModel</name>
     <message>
         <location filename="../ui/file_list_model.cc" line="99"/>
@@ -2959,7 +2982,7 @@
     <message>
         <location filename="../ui/qt_desktop_window.cc" line="291"/>
         <location filename="../ui/qt_desktop_window.cc" line="299"/>
-        <location filename="../ui/qt_desktop_window.cc" line="835"/>
+        <location filename="../ui/qt_desktop_window.cc" line="841"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -2974,17 +2997,17 @@
         <translation>主机不支持当前的视频编码。请指定其他视频编码。</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="813"/>
+        <location filename="../ui/qt_desktop_window.cc" line="819"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="815"/>
+        <location filename="../ui/qt_desktop_window.cc" line="821"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 图像 (*.png);;BMP 图像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_desktop_window.cc" line="835"/>
+        <location filename="../ui/qt_desktop_window.cc" line="841"/>
         <source>Could not save image</source>
         <translation>无法保存图像</translation>
     </message>
