@@ -50,6 +50,7 @@ OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config,
 OnlineCheckerRouter::~OnlineCheckerRouter()
 {
     LOG(LS_INFO) << "Dtor";
+    delegate_ = nullptr;
 }
 
 void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegate)
@@ -122,6 +123,9 @@ void OnlineCheckerRouter::onDisconnected(base::NetworkChannel::ErrorCode error_c
 
 void OnlineCheckerRouter::onMessageReceived(const base::ByteArray& buffer)
 {
+    if (!delegate_)
+        return;
+
     proto::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
@@ -137,10 +141,12 @@ void OnlineCheckerRouter::onMessageReceived(const base::ByteArray& buffer)
         return;
     }
 
-    delegate_->onRouterCheckerResult(computers_.front().computer_id,
-        message.host_status().status() == proto::HostStatus::STATUS_ONLINE);
-    computers_.pop_front();
+    bool online = message.host_status().status() == proto::HostStatus::STATUS_ONLINE;
+    const Computer& computer = computers_.front();
 
+    delegate_->onRouterCheckerResult(computer.computer_id, online);
+
+    computers_.pop_front();
     checkNextComputer();
 }
 
@@ -170,15 +176,25 @@ void OnlineCheckerRouter::checkNextComputer()
 
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
+    if (!delegate_)
+        return;
+
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";
 
-    authenticator_.reset();
-    channel_.reset();
+    if (channel_)
+    {
+        channel_->setListener(nullptr);
+        task_runner_->deleteSoon(std::move(channel_));
+    }
+
+    if (authenticator_)
+        task_runner_->deleteSoon(std::move(authenticator_));
 
     for (const auto& computer : computers_)
         delegate_->onRouterCheckerResult(computer.computer_id, false);
 
     delegate_->onRouterCheckerFinished();
+    delegate_ = nullptr;
 }
 
 } // namespace client
