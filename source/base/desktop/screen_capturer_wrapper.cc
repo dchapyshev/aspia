@@ -210,7 +210,8 @@ void ScreenCapturerWrapper::captureFrame()
         switch (error)
         {
             case ScreenCapturer::Error::TEMPORARY:
-                break;
+                delegate_->onScreenCaptureError(error);
+                return;
 
             case ScreenCapturer::Error::PERMANENT:
             {
@@ -218,8 +219,10 @@ void ScreenCapturerWrapper::captureFrame()
 
                 LOG(LS_WARNING) << "Permanent error detected (" << permanent_error_count_ << ")";
                 selectCapturer();
+
+                delegate_->onScreenCaptureError(error);
             }
-            break;
+            return;
 
             default:
                 NOTREACHED();
@@ -333,7 +336,7 @@ void ScreenCapturerWrapper::selectCapturer()
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     LOG(LS_INFO) << "Selecting screen capturer. Preferred capturer: "
-                 << static_cast<int>(preferred_type_);
+                 << ScreenCapturer::typeToString(preferred_type_);
 
 #if defined(OS_WIN)
     auto try_mirror_capturer = [this]()

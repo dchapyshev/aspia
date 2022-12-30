@@ -196,6 +196,11 @@ void DesktopSessionManager::onScreenCaptured(
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
+void DesktopSessionManager::onScreenCaptureError(proto::VideoErrorCode error_code)
+{
+    delegate_->onScreenCaptureError(error_code);
+}
+
 void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     delegate_->onAudioCaptured(audio_packet);

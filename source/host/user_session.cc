@@ -634,10 +634,28 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
                     return;
                 }
 
-                desktop_session_proxy_->setPaused(control.boolean());
-                desktop_session_proxy_->control(control.boolean() ?
+                bool is_paused = control.boolean();
+
+                desktop_session_proxy_->setPaused(is_paused);
+                desktop_session_proxy_->control(is_paused ?
                     proto::internal::DesktopControl::DISABLE :
                     proto::internal::DesktopControl::ENABLE);
+
+                if (is_paused)
+                {
+                    scoped_task_runner_->postDelayedTask(std::chrono::milliseconds(500), [this]()
+                    {
+                        for (const auto& client : desktop_clients_)
+                        {
+                            static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(
+                                proto::VIDEO_ERROR_CODE_PAUSED);
+                        }
+                    });
+                }
+                else
+                {
+                    mergeAndSendConfiguration();
+                }
             }
             break;
 
@@ -736,6 +754,12 @@ void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCu
         static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
 }
 
+void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
+{
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(error_code);
+}
+
 void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     for (const auto& client : desktop_clients_)
@@ -817,53 +841,7 @@ void UserSession::onUnconfirmedSessionReject(uint32_t id)
 
 void UserSession::onClientSessionConfigured()
 {
-    if (desktop_clients_.empty())
-    {
-        LOG(LS_INFO) << "No desktop clients (sid: " << session_id_ << ")";
-        return;
-    }
-
-    LOG(LS_INFO) << "Client session configured (sid: " << session_id_ << ")";
-
-    DesktopSession::Config system_config;
-    memset(&system_config, 0, sizeof(system_config));
-
-    for (const auto& client : desktop_clients_)
-    {
-        const DesktopSession::Config& client_config =
-            static_cast<ClientSessionDesktop*>(client.get())->desktopSessionConfig();
-
-        // If at least one client has disabled font smoothing, then the font smoothing will be
-        // disabled for everyone.
-        system_config.disable_font_smoothing =
-            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
-
-        // If at least one client has disabled effects, then the effects will be disabled for
-        // everyone.
-        system_config.disable_effects =
-            system_config.disable_effects || client_config.disable_effects;
-
-        // If at least one client has disabled the wallpaper, then the effects will be disabled for
-        // everyone.
-        system_config.disable_wallpaper =
-            system_config.disable_wallpaper || client_config.disable_wallpaper;
-
-        // If at least one client has enabled input block, then the block will be enabled for
-        // everyone.
-        system_config.block_input = system_config.block_input || client_config.block_input;
-
-        system_config.lock_at_disconnect =
-            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
-
-        system_config.clear_clipboard =
-            system_config.clear_clipboard || client_config.clear_clipboard;
-
-        system_config.cursor_position =
-            system_config.cursor_position || client_config.cursor_position;
-    }
-
-    desktop_session_proxy_->configure(system_config);
-    desktop_session_proxy_->captureScreen();
+    mergeAndSendConfiguration();
 }
 
 void UserSession::onClientSessionFinished()
@@ -1368,6 +1346,57 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
     }
 
     channel_->send(base::serialize(outgoing_message_));
+}
+
+void UserSession::mergeAndSendConfiguration()
+{
+    if (desktop_clients_.empty())
+    {
+        LOG(LS_INFO) << "No desktop clients (sid: " << session_id_ << ")";
+        return;
+    }
+
+    LOG(LS_INFO) << "Client session configured (sid: " << session_id_ << ")";
+
+    DesktopSession::Config system_config;
+    memset(&system_config, 0, sizeof(system_config));
+
+    for (const auto& client : desktop_clients_)
+    {
+        const DesktopSession::Config& client_config =
+            static_cast<ClientSessionDesktop*>(client.get())->desktopSessionConfig();
+
+        // If at least one client has disabled font smoothing, then the font smoothing will be
+        // disabled for everyone.
+        system_config.disable_font_smoothing =
+            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
+
+        // If at least one client has disabled effects, then the effects will be disabled for
+        // everyone.
+        system_config.disable_effects =
+            system_config.disable_effects || client_config.disable_effects;
+
+        // If at least one client has disabled the wallpaper, then the effects will be disabled for
+        // everyone.
+        system_config.disable_wallpaper =
+            system_config.disable_wallpaper || client_config.disable_wallpaper;
+
+        // If at least one client has enabled input block, then the block will be enabled for
+        // everyone.
+        system_config.block_input = system_config.block_input || client_config.block_input;
+
+        system_config.lock_at_disconnect =
+            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
+
+        system_config.clear_clipboard =
+            system_config.clear_clipboard || client_config.clear_clipboard;
+
+        system_config.cursor_position =
+            system_config.cursor_position || client_config.cursor_position;
+    }
+
+    desktop_session_proxy_->configure(system_config);
+    desktop_session_proxy_->captureScreen();
 }
 
 } // namespace host

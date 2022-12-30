@@ -71,6 +71,7 @@ public:
     void setTaskManager(const proto::task_manager::HostToClient& message) override;
     void setMetrics(const DesktopWindow::Metrics& metrics) override;
     std::unique_ptr<FrameFactory> frameFactory() override;
+    void setFrameError(proto::VideoErrorCode error_code) override;
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame) override;
     void drawFrame() override;
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor) override;

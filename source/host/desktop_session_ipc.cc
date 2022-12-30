@@ -334,7 +334,14 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
     if (delegate_)
     {
-        delegate_->onScreenCaptured(frame, mouse_cursor);
+        if (screen_captured.error_code() == proto::VIDEO_ERROR_CODE_OK)
+        {
+            delegate_->onScreenCaptured(frame, mouse_cursor);
+        }
+        else
+        {
+            delegate_->onScreenCaptureError(screen_captured.error_code());
+        }
     }
     else
     {

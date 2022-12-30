@@ -485,6 +485,14 @@ void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_
 
 void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
 {
+    proto::VideoErrorCode error_code = packet.error_code();
+    if (error_code != proto::VIDEO_ERROR_CODE_OK)
+    {
+        LOG(LS_WARNING) << "Video error detected: " << error_code;
+        desktop_window_proxy_->setFrameError(error_code);
+        return;
+    }
+
     if (video_encoding_ != packet.encoding())
     {
         video_decoder_ = base::VideoDecoder::create(packet.encoding());

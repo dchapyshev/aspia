@@ -392,6 +392,29 @@ void DesktopSessionAgent::onScreenCaptured(
     }
 }
 
+void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error)
+{
+    outgoing_message_->Clear();
+    proto::internal::ScreenCaptured* screen_captured = outgoing_message_->mutable_screen_captured();
+
+    switch (error)
+    {
+        case base::ScreenCapturer::Error::PERMANENT:
+            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_PERMANENT);
+            break;
+
+        case base::ScreenCapturer::Error::TEMPORARY:
+            screen_captured->set_error_code(proto::VIDEO_ERROR_CODE_TEMPORARY);
+            break;
+
+        default:
+            NOTREACHED();
+            return;
+    }
+
+    channel_->send(base::serialize(*outgoing_message_));
+}
+
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
     outgoing_message_->Clear();

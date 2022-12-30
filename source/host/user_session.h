@@ -105,6 +105,7 @@ protected:
     void onDesktopSessionStarted() override;
     void onDesktopSessionStopped() override;
     void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) override;
+    void onScreenCaptureError(proto::VideoErrorCode error_code) override;
     void onAudioCaptured(const proto::AudioPacket& audio_packet) override;
     void onCursorPositionChanged(const proto::CursorPosition& cursor_position) override;
     void onScreenListChanged(const proto::ScreenList& list) override;
@@ -135,6 +136,7 @@ private:
     void onTextChatHasUser(const base::Location& location, bool has_user);
     void onTextChatSessionStarted(uint32_t id);
     void onTextChatSessionFinished(uint32_t id);
+    void mergeAndSendConfiguration();
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     std::unique_ptr<base::ScopedTaskRunner> scoped_task_runner_;

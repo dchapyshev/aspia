@@ -46,6 +46,7 @@ public:
         virtual void onScreenListChanged(
             const ScreenCapturer::ScreenList& list, ScreenCapturer::ScreenId current) = 0;
         virtual void onScreenCaptured(const Frame* frame, const MouseCursor* mouse_cursor) = 0;
+        virtual void onScreenCaptureError(ScreenCapturer::Error error) = 0;
         virtual void onCursorPositionChanged(const Point& position) = 0;
     };
 

@@ -29,6 +29,8 @@
 
 #include <QEvent>
 #include <QPainter>
+#include <QPointer>
+#include <QTimer>
 #include <QWidget>
 
 #include <memory>
@@ -46,6 +48,8 @@ public:
 
     base::Frame* desktopFrame();
     void setDesktopFrame(std::shared_ptr<base::Frame>& frame);
+    void setDesktopFrameError(proto::VideoErrorCode error_code);
+    void drawDesktopFrame();
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
     void setCursorPosition(const QPoint& cursor_position);
 
@@ -93,6 +97,11 @@ private:
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
     base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
+
+    QPointer<QTimer> error_timer_;
+    proto::VideoErrorCode last_error_code_ = proto::VIDEO_ERROR_CODE_OK;
+    proto::VideoErrorCode current_error_code_ = proto::VIDEO_ERROR_CODE_OK;
+    std::unique_ptr<QImage> error_image_;
 
     std::shared_ptr<base::Frame> frame_;
     bool enable_key_sequenses_ = true;

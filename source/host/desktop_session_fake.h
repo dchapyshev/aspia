@@ -20,7 +20,6 @@
 #define HOST_DESKTOP_SESSION_FAKE_H
 
 #include "base/macros_magic.h"
-#include "base/memory/local_memory.h"
 #include "host/desktop_session.h"
 
 namespace base {
@@ -48,9 +47,6 @@ public:
     void injectClipboardEvent(const proto::ClipboardEvent& event) override;
 
 private:
-    class FrameGenerator;
-    base::local_shared_ptr<FrameGenerator> frame_generator_;
-
     Delegate* delegate_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionFake);

@@ -41,6 +41,7 @@ public:
         virtual void onDesktopSessionStarted() = 0;
         virtual void onDesktopSessionStopped() = 0;
         virtual void onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor) = 0;
+        virtual void onScreenCaptureError(proto::VideoErrorCode error_code) = 0;
         virtual void onAudioCaptured(const proto::AudioPacket& audio_packet) = 0;
         virtual void onCursorPositionChanged(const proto::CursorPosition& cursor_position) = 0;
         virtual void onScreenListChanged(const proto::ScreenList& list) = 0;

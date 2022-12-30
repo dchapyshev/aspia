@@ -398,6 +398,12 @@ std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
     return std::make_unique<FrameFactoryQImage>();
 }
 
+void QtDesktopWindow::setFrameError(proto::VideoErrorCode error_code)
+{
+    desktop_->setDesktopFrameError(error_code);
+    desktop_->update();
+}
+
 void QtDesktopWindow::setFrame(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
@@ -423,7 +429,7 @@ void QtDesktopWindow::setFrame(
 
 void QtDesktopWindow::drawFrame()
 {
-    desktop_->update();
+    desktop_->drawDesktopFrame();
     panel_->update();
 }
 

@@ -54,6 +54,7 @@ public:
     void setMetrics(const DesktopWindow::Metrics& metrics);
 
     std::shared_ptr<base::Frame> allocateFrame(const base::Size& size);
+    void setFrameError(proto::VideoErrorCode error_code);
     void setFrame(const base::Size& screen_size, std::shared_ptr<base::Frame> frame);
     void drawFrame();
     void setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor);

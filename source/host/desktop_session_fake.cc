@@ -20,112 +20,12 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/desktop/frame_simple.h"
-#include "base/desktop/screen_capturer.h"
 
 namespace host {
 
-namespace {
-
-const int kFrameWidth = 800;
-const int kFrameHeight = 600;
-
-} // namespace
-
-class DesktopSessionFake::FrameGenerator : public base::enable_shared_from_this<FrameGenerator>
-{
-public:
-    explicit FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner);
-    ~FrameGenerator();
-
-    void start(Delegate* delegate);
-    void stop();
-    void generateFrame();
-
-private:
-
-    Delegate* delegate_ = nullptr;
-
-    std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::Frame> frame_;
-
-    DISALLOW_COPY_AND_ASSIGN(FrameGenerator);
-};
-
-DesktopSessionFake::FrameGenerator::FrameGenerator(std::shared_ptr<base::TaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)),
-      frame_(base::FrameSimple::create(
-          base::Size(kFrameWidth, kFrameHeight), base::PixelFormat::ARGB()))
-
-{
-    LOG(LS_INFO) << "Ctor";
-    DCHECK(task_runner_);
-
-    if (!frame_)
-    {
-        LOG(LS_ERROR) << "Frame not created";
-        return;
-    }
-
-    memset(frame_->frameData(),
-           0,
-           static_cast<size_t>(frame_->stride()) * static_cast<size_t>(frame_->size().height()));
-
-    frame_->setCapturerType(static_cast<uint32_t>(base::ScreenCapturer::Type::FAKE));
-}
-
-DesktopSessionFake::FrameGenerator::~FrameGenerator()
-{
-    LOG(LS_INFO) << "Dtor";
-}
-
-void DesktopSessionFake::FrameGenerator::start(Delegate* delegate)
-{
-    LOG(LS_INFO) << "Start frame generator";
-
-    delegate_ = delegate;
-    DCHECK(delegate);
-
-    generateFrame();
-}
-
-void DesktopSessionFake::FrameGenerator::stop()
-{
-    LOG(LS_INFO) << "Stop frame generator";
-    delegate_ = nullptr;
-}
-
-void DesktopSessionFake::FrameGenerator::generateFrame()
-{
-    if (!frame_)
-    {
-        LOG(LS_ERROR) << "No frame generated";
-        return;
-    }
-
-    base::Region* updated_region = frame_->updatedRegion();
-    updated_region->clear();
-    updated_region->addRect(base::Rect::makeWH(kFrameWidth, kFrameHeight));
-
-    if (delegate_)
-    {
-        delegate_->onScreenCaptured(frame_.get(), nullptr);
-
-        task_runner_->postDelayedTask(
-            std::bind(&FrameGenerator::generateFrame, shared_from_this()),
-            std::chrono::milliseconds(1000));
-    }
-    else
-    {
-        LOG(LS_INFO) << "Reset desktop frame";
-        frame_.reset();
-    }
-}
-
 DesktopSessionFake::DesktopSessionFake(
-    std::shared_ptr<base::TaskRunner> task_runner, Delegate* delegate)
-    : frame_generator_(base::make_local_shared<FrameGenerator>(std::move(task_runner))),
-      delegate_(delegate)
+    std::shared_ptr<base::TaskRunner> /* task_runner */, Delegate* delegate)
+    : delegate_(delegate)
 {
     LOG(LS_INFO) << "Ctor";
     DCHECK(delegate_);
@@ -134,7 +34,6 @@ DesktopSessionFake::DesktopSessionFake(
 DesktopSessionFake::~DesktopSessionFake()
 {
     LOG(LS_INFO) << "Dtor";
-    frame_generator_->stop();
 }
 
 void DesktopSessionFake::start()
@@ -154,9 +53,7 @@ void DesktopSessionFake::start()
 void DesktopSessionFake::stop()
 {
     LOG(LS_INFO) << "Stop called for fake session";
-
     delegate_ = nullptr;
-    frame_generator_->stop();
 }
 
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
@@ -166,11 +63,8 @@ void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
     switch (action)
     {
         case proto::internal::DesktopControl::ENABLE:
-            frame_generator_->start(delegate_);
-            break;
-
-        case proto::internal::DesktopControl::DISABLE:
-            frame_generator_->stop();
+            if (delegate_)
+                delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
             break;
 
         default:
@@ -190,7 +84,8 @@ void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 
 void DesktopSessionFake::captureScreen()
 {
-    frame_generator_->generateFrame();
+    if (delegate_)
+        delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
 }
 
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)

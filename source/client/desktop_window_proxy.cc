@@ -167,6 +167,20 @@ void DesktopWindowProxy::showWindow(
         desktop_window_->showWindow(desktop_control_proxy, peer_version);
 }
 
+void DesktopWindowProxy::setFrameError(proto::VideoErrorCode error_code)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(&DesktopWindowProxy::setFrameError,
+                                            shared_from_this(),
+                                            error_code));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setFrameError(error_code);
+}
+
 void DesktopWindowProxy::setFrame(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {

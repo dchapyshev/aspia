@@ -19,6 +19,9 @@
 #ifndef CLIENT_DESKTOP_WINDOW_H
 #define CLIENT_DESKTOP_WINDOW_H
 
+#include "proto/desktop.pb.h"
+#include "proto/desktop_extensions.pb.h"
+
 #include <chrono>
 #include <memory>
 #include <string>
@@ -31,11 +34,6 @@ class Version;
 } // namespace base
 
 namespace proto {
-
-class CursorPosition;
-class DesktopConfig;
-class ScreenList;
-
 namespace system_info {
 class SystemInfo;
 } // namespace system_info
@@ -102,6 +100,7 @@ public:
     virtual void setMetrics(const Metrics& metrics) = 0;
 
     virtual std::unique_ptr<FrameFactory> frameFactory() = 0;
+    virtual void setFrameError(proto::VideoErrorCode error_code) = 0;
     virtual void setFrame(const base::Size& screen_size,
                           std::shared_ptr<base::Frame> frame) = 0;
     virtual void drawFrame() = 0;

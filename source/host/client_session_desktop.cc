@@ -281,6 +281,15 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     sendMessage(base::serialize(*outgoing_message_));
 }
 
+void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
+{
+    CHECK_NE(error_code, proto::VIDEO_ERROR_CODE_OK);
+
+    outgoing_message_->Clear();
+    outgoing_message_->mutable_video_packet()->set_error_code(error_code);
+    sendMessage(base::serialize(*outgoing_message_));
+}
+
 void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     if (!desktop_session_config_.cursor_position)

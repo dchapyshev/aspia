@@ -142,6 +142,52 @@ void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
     frame_ = std::move(frame);
 }
 
+void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
+{
+    if (last_error_code_ == error_code)
+        return;
+
+    last_error_code_ = error_code;
+
+    if (error_timer_)
+        delete error_timer_;
+
+    error_timer_ = new QTimer(this);
+    connect(error_timer_, &QTimer::timeout, this, [=]()
+    {
+        if (last_error_code_ != proto::VIDEO_ERROR_CODE_OK)
+        {
+            current_error_code_ = last_error_code_;
+
+            if (frame_)
+            {
+                QImage* source_image = static_cast<FrameQImage*>(frame_.get())->image();
+                error_image_ = std::make_unique<QImage>(
+                    source_image->convertToFormat(QImage::Format_Grayscale8));
+            }
+        }
+
+        error_timer_->deleteLater();
+        update();
+    });
+
+    error_timer_->start(std::chrono::milliseconds(1500));
+}
+
+void DesktopWidget::drawDesktopFrame()
+{
+    if (error_timer_)
+        delete error_timer_;
+
+    if (current_error_code_ != proto::VIDEO_ERROR_CODE_OK)
+        error_image_.reset();
+
+    last_error_code_ = proto::VIDEO_ERROR_CODE_OK;
+    current_error_code_ = proto::VIDEO_ERROR_CODE_OK;
+
+    update();
+}
+
 void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot)
 {
     remote_cursor_shape_ = std::move(cursor_shape);
@@ -377,37 +423,100 @@ void DesktopWidget::userLeftFromWindow()
 
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
-    FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
-    if (frame)
-    {
-        painter_.begin(this);
+    painter_.begin(this);
 
 #if !defined(OS_MAC)
-        // SmoothPixmapTransform causes too much CPU load in MacOSX.
-        painter_.setRenderHint(QPainter::SmoothPixmapTransform);
+    // SmoothPixmapTransform causes too much CPU load in MacOSX.
+    painter_.setRenderHint(QPainter::SmoothPixmapTransform);
 #endif
-
-        painter_.drawImage(rect(), frame->constImage());
-
-        if (enable_remote_cursor_pos_)
+    if (current_error_code_ == proto::VIDEO_ERROR_CODE_OK)
+    {
+        FrameQImage* frame = reinterpret_cast<FrameQImage*>(frame_.get());
+        if (frame)
         {
-            if (!remote_cursor_shape_.isNull())
+            painter_.drawImage(rect(), frame->constImage());
+
+            if (enable_remote_cursor_pos_)
             {
-                painter_.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
-                                          remote_cursor_shape_.size()),
-                                    remote_cursor_shape_,
-                                    remote_cursor_shape_.rect());
-            }
-            else
-            {
-                painter_.setBrush(QBrush(Qt::black));
-                painter_.setPen(QPen(Qt::white));
-                painter_.drawEllipse(remote_cursor_pos_, 3, 3);
+                if (!remote_cursor_shape_.isNull())
+                {
+                    painter_.drawPixmap(QRect(remote_cursor_pos_ - remote_cursor_hotspot_,
+                                              remote_cursor_shape_.size()),
+                                        remote_cursor_shape_,
+                                        remote_cursor_shape_.rect());
+                }
+                else
+                {
+                    painter_.setBrush(QBrush(Qt::black));
+                    painter_.setPen(QPen(Qt::white));
+                    painter_.drawEllipse(remote_cursor_pos_, 3, 3);
+                }
             }
         }
-
-        painter_.end();
     }
+    else
+    {
+        const int kTableWidth = 400;
+        const int kTableHeight = 100;
+        const int kBorderSize = 1;
+        const int kTitleHeight = 30;
+
+        const QRect table_rect(width() / 2 - kTableWidth / 2,
+                               height() / 2 - kTableHeight / 2,
+                               kTableWidth,
+                               kTableHeight);
+
+        QRect title_rect(table_rect.x() + kBorderSize,
+                         table_rect.y() + kBorderSize,
+                         table_rect.width() - (kBorderSize * 2),
+                         kTitleHeight);
+
+        QRect message_rect(table_rect.x() + kBorderSize,
+                           title_rect.bottom() + kBorderSize,
+                           table_rect.width() - (kBorderSize * 2),
+                           table_rect.height() - kTitleHeight - (kBorderSize * 2));
+
+        if (error_image_)
+            painter_.drawImage(rect(), *error_image_);
+
+        painter_.fillRect(table_rect, QColor(167, 167, 167));
+        painter_.fillRect(title_rect, QColor(207, 207, 207));
+        painter_.fillRect(message_rect, QColor(255, 255, 255));
+
+        QPixmap icon(QStringLiteral(":/img/main.png"));
+        QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
+
+        title_rect.setLeft(icon_pos.x() + icon.width() + 8);
+
+        painter_.setPen(Qt::black);
+
+        painter_.drawPixmap(icon_pos, icon);
+        painter_.drawText(title_rect, Qt::AlignVCenter, QStringLiteral("Aspia"));
+
+        QString message;
+        switch (last_error_code_)
+        {
+            case proto::VIDEO_ERROR_CODE_PAUSED:
+                message = tr("The session was paused by a remote user");
+                break;
+
+            case proto::VIDEO_ERROR_CODE_TEMPORARY:
+                message = tr("The session is temporarily unavailable");
+                break;
+
+            case proto::VIDEO_ERROR_CODE_PERMANENT:
+                message = tr("The session is permanently unavailable");
+                break;
+
+            default:
+                message = tr("Error while receiving video stream: %1").arg(last_error_code_);
+                break;
+        }
+
+        painter_.drawText(message_rect, Qt::AlignCenter, message);
+    }
+
+    painter_.end();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
