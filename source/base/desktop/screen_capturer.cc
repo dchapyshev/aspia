@@ -42,6 +42,9 @@ const char* ScreenCapturer::typeToString(Type type)
 {
     switch (type)
     {
+        case Type::DEFAULT:
+            return "DEFAULT";
+
         case Type::FAKE:
             return "FAKE";
 
