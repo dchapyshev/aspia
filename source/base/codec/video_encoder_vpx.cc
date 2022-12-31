@@ -242,6 +242,62 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     return true;
 }
 
+bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
+{
+    if (min_quantizer < 10 || min_quantizer > 50)
+    {
+        LOG(LS_WARNING) << "Invalid quantizer value: " << min_quantizer;
+        return false;
+    }
+
+    if (config_.rc_min_quantizer == min_quantizer)
+        return true;
+
+    config_.rc_min_quantizer = min_quantizer;
+
+    vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        return false;
+    }
+
+    return true;
+}
+
+uint32_t VideoEncoderVPX::minQuantizer() const
+{
+    return config_.rc_min_quantizer;
+}
+
+bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
+{
+    if (max_quantizer < 10 || max_quantizer > 50)
+    {
+        LOG(LS_WARNING) << "Invalid quantizer value: " << max_quantizer;
+        return false;
+    }
+
+    if (config_.rc_max_quantizer == max_quantizer)
+        return true;
+
+    config_.rc_max_quantizer = max_quantizer;
+
+    vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        return false;
+    }
+
+    return true;
+}
+
+uint32_t VideoEncoderVPX::maxQuantizer() const
+{
+    return config_.rc_max_quantizer;
+}
+
 void VideoEncoderVPX::createActiveMap(const Size& size)
 {
     active_map_.cols = static_cast<unsigned int>(
