@@ -37,6 +37,7 @@ public:
 
     // Returns average bitrate for the stream in bits per second.
     virtual int bitrate() = 0;
+    virtual bool setBitrate(int bitrate) = 0;
 };
 
 } // namespace base

@@ -28,9 +28,6 @@ namespace base {
 
 namespace {
 
-// Output 64 kb/s bitrate.
-const int kOutputBitrateBps = 64 * 1024;
-
 // Opus doesn't support 44100 sampling rate so we always resample to 48kHz.
 const proto::AudioPacket::SamplingRate kOpusSamplingRate =
     proto::AudioPacket::SAMPLING_RATE_48000;
@@ -71,7 +68,7 @@ void AudioEncoderOpus::initEncoder()
         return;
     }
 
-    opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(kOutputBitrateBps));
+    opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitrate_));
 
     frame_size_ = sampling_rate_ * kFrameSizeMs / std::chrono::milliseconds(1000);
 
@@ -146,7 +143,31 @@ void AudioEncoderOpus::fetchBytesToResample(int /* resampler_frame_delay */, Aud
 
 int AudioEncoderOpus::bitrate()
 {
-    return kOutputBitrateBps;
+    return bitrate_;
+}
+
+bool AudioEncoderOpus::setBitrate(int bitrate)
+{
+    switch (bitrate)
+    {
+        case 128 * 1024:
+        case 96 * 1024:
+        case 64 * 1024:
+        case 32 * 1024:
+        case 24 * 1024:
+        case 10 * 1024:
+            break;
+
+        default:
+            LOG(LS_WARNING) << "Invalid bitrate value: " << bitrate;
+            return false;
+    }
+
+    LOG(LS_INFO) << "Bitrate changed from " << bitrate_ << " to " << bitrate;
+    bitrate_ = bitrate;
+
+    opus_encoder_ctl(encoder_, OPUS_SET_BITRATE(bitrate));
+    return true;
 }
 
 bool AudioEncoderOpus::encode(
