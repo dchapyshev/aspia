@@ -18,6 +18,7 @@
 
 #include "host/client_session_desktop.h"
 
+#include "base/environment.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/codec/audio_encoder_opus.h"
@@ -60,8 +61,9 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::NetworkChannel> channel,
-                                           std::shared_ptr<base::TaskRunner> /*task_runner */)
+                                           std::shared_ptr<base::TaskRunner> task_runner)
     : ClientSession(session_type, std::move(channel)),
+      overflow_detection_timer_(base::WaitableTimer::Type::REPEATED, std::move(task_runner)),
       incoming_message_(std::make_unique<proto::ClientToHost>()),
       outgoing_message_(std::make_unique<proto::HostToClient>())
 {
@@ -142,13 +144,28 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
+void ClientSessionDesktop::onMessageWritten(size_t pending)
 {
-    // Nothing
+    static const double kAlpha = 0.1;
+    avg_pending_messages_ =
+        (kAlpha * static_cast<double>(pending)) + ((1.0 - kAlpha) * avg_pending_messages_);
+    pending_messages_ = pending;
 }
 
 void ClientSessionDesktop::onStarted()
 {
+    if (!base::Environment::has("ASPIA_NO_OVERFLOW_DETECTION"))
+    {
+        LOG(LS_INFO) << "Overflow detection enabled";
+
+        overflow_detection_timer_.start(std::chrono::milliseconds(1000),
+            std::bind(&ClientSessionDesktop::onOverflowDetectionTimer, this));
+    }
+    else
+    {
+        LOG(LS_INFO) << "Overflow detection disabled by environment variable";
+    }
+
     const char* extensions;
 
     // Supported extensions are different for managing and viewing the desktop.
@@ -194,6 +211,9 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
 
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
+    if (critical_overflow_)
+        return;
+
     outgoing_message_->Clear();
 
     if (!is_video_paused_ && frame && video_encoder_)
@@ -270,6 +290,9 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
 
 void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
 {
+    if (critical_overflow_)
+        return;
+
     if (is_audio_paused_ || !audio_encoder_)
         return;
 
@@ -717,6 +740,226 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 
     task_manager_->readMessage(message);
 #endif // defined(OS_WIN)
+}
+
+void ClientSessionDesktop::onOverflowDetectionTimer()
+{
+    // Maximum value of messages in the queue for sending.
+    static const size_t kCriticalPendingCount = 3;
+
+    // Maximum average number of messages in the send queue.
+    static const double kWarningPendingCount = 1.5;
+
+    if (pending_messages_ > kCriticalPendingCount)
+    {
+        critical_overflow_ = true;
+        write_normal_count_ = 0;
+        ++write_overflow_count_;
+
+        LOG(LS_INFO) << "Critical overflow detected: " << pending_messages_
+                     << " (avg: " << avg_pending_messages_
+                     << " count: " << write_overflow_count_ << ")";
+
+        downStepOverflow();
+    }
+    else if (avg_pending_messages_ > kWarningPendingCount)
+    {
+        if (critical_overflow_)
+        {
+            if (video_encoder_)
+                video_encoder_->setKeyFrameRequired(true);
+        }
+
+        critical_overflow_ = false;
+        write_normal_count_ = 0;
+        ++write_overflow_count_;
+
+        LOG(LS_INFO) << "Overflow detected: " << pending_messages_
+                     << " (avg: " << avg_pending_messages_
+                     << " count: " << write_overflow_count_ << ")";
+
+        downStepOverflow();
+    }
+    else if (write_overflow_count_ > 0)
+    {
+        if (critical_overflow_)
+        {
+            if (video_encoder_)
+                video_encoder_->setKeyFrameRequired(true);
+        }
+
+        critical_overflow_ = false;
+        write_normal_count_ = 1;
+        write_overflow_count_ = 0;
+
+        LOG(LS_INFO) << "Overflow finished: " << pending_messages_
+                     << " (avg: " << avg_pending_messages_ << ")";
+    }
+    else
+    {
+        ++write_normal_count_;
+
+        if (write_normal_count_ > 0 && (write_normal_count_ % 3) == 0)
+            upStepOverflow();
+    }
+}
+
+void ClientSessionDesktop::downStepOverflow()
+{
+    // Minimum allowed FPS for screen capture.
+    static const int kMinFpsValue = 15;
+
+    // Max quantizer for VPX video encoder.
+    static const uint32_t kMaxQuantizerValue = 50;
+
+    // Max compression ratio for ZSTD video encoder.
+    static const int kMaxCompressRatio = 12;
+
+    int fps = desktop_session_proxy_->screenCaptureFps();
+    if (fps > kMinFpsValue)
+    {
+        int new_fps = fps - 1;
+
+        if (critical_overflow_)
+            new_fps = std::max(fps - 5, kMinFpsValue);
+
+        LOG(LS_INFO) << "FPS level reduced from " << fps << " to " << new_fps;
+        desktop_session_proxy_->setScreenCaptureFps(new_fps);
+    }
+
+    if (fps < 20)
+    {
+        if (video_encoder_)
+        {
+            proto::VideoEncoding encoding = video_encoder_->encoding();
+            if (encoding == proto::VIDEO_ENCODING_VP8 || encoding == proto::VIDEO_ENCODING_VP9)
+            {
+                base::VideoEncoderVPX* video_encoder =
+                    reinterpret_cast<base::VideoEncoderVPX*>(video_encoder_.get());
+
+                uint32_t quantizer = video_encoder->maxQuantizer();
+                if (quantizer < kMaxQuantizerValue)
+                {
+                    uint32_t new_quantizer = quantizer + 10;
+
+                    LOG(LS_INFO) << "Quantizer level increased from " << quantizer
+                                 << " to " << new_quantizer;
+                    video_encoder->setMaxQuantizer(new_quantizer);
+                }
+            }
+            else if (encoding == proto::VIDEO_ENCODING_ZSTD)
+            {
+                base::VideoEncoderZstd* video_encoder =
+                    reinterpret_cast<base::VideoEncoderZstd*>(video_encoder_.get());
+
+                int compress_ratio = video_encoder->compressRatio();
+                if (compress_ratio < kMaxCompressRatio)
+                {
+                    int new_compress_ratio = compress_ratio + 1;
+
+                    LOG(LS_INFO) << "Compression level increased from " << compress_ratio
+                                 << " to " << new_compress_ratio;
+                    video_encoder->setCompressRatio(new_compress_ratio);
+                }
+            }
+        }
+    }
+
+    if (fps < 25)
+    {
+        if (audio_encoder_)
+        {
+            static const int k96kbs = 96 * 1024;
+            static const int k64kbs = 64 * 1024;
+            static const int k32kbs = 32 * 1024;
+            static const int k24kbs = 24 * 1024;
+
+            int bitrate = audio_encoder_->bitrate();
+            if (bitrate >= k96kbs)
+                audio_encoder_->setBitrate(k64kbs);
+            else if (bitrate >= k64kbs)
+                audio_encoder_->setBitrate(k32kbs);
+            else if (bitrate >= k32kbs)
+                audio_encoder_->setBitrate(k24kbs);
+        }
+    }
+}
+
+void ClientSessionDesktop::upStepOverflow()
+{
+    // Maximum allowed FPS for screen capture.
+    static const int kMaxFpsValue = 30;
+
+    // Min quantizer for VPX video encoder.
+    static const uint32_t kMinQuantizerValue = 30;
+
+    // Min compression ratio for ZSTD video encoder.
+    static const int kMinCompressRatio = 8;
+
+    int fps = desktop_session_proxy_->screenCaptureFps();
+    if (fps <= kMaxFpsValue)
+    {
+        int new_fps = fps + 1;
+
+        LOG(LS_INFO) << "FPS level increased from " << fps << " to " << new_fps;
+        desktop_session_proxy_->setScreenCaptureFps(new_fps);
+    }
+
+    if (fps >= 20)
+    {
+        if (video_encoder_)
+        {
+            proto::VideoEncoding encoding = video_encoder_->encoding();
+            if (encoding == proto::VIDEO_ENCODING_VP8 || encoding == proto::VIDEO_ENCODING_VP9)
+            {
+                base::VideoEncoderVPX* video_encoder =
+                    reinterpret_cast<base::VideoEncoderVPX*>(video_encoder_.get());
+
+                uint32_t quantizer = video_encoder->maxQuantizer();
+                if (quantizer > kMinQuantizerValue)
+                {
+                    uint32_t new_quantizer = quantizer - 10;
+
+                    LOG(LS_INFO) << "Quantizer level reduced from " << quantizer
+                                 << " to " << new_quantizer;
+                    video_encoder->setMaxQuantizer(new_quantizer);
+                }
+            }
+            else if (encoding == proto::VIDEO_ENCODING_ZSTD)
+            {
+                base::VideoEncoderZstd* video_encoder =
+                    reinterpret_cast<base::VideoEncoderZstd*>(video_encoder_.get());
+
+                int compress_ratio = video_encoder->compressRatio();
+                if (compress_ratio > kMinCompressRatio)
+                {
+                    int new_compress_ratio = compress_ratio - 1;
+
+                    LOG(LS_INFO) << "Compression level reduced from " << compress_ratio
+                                 << " to " << new_compress_ratio;
+                    video_encoder->setCompressRatio(new_compress_ratio);
+                }
+            }
+        }
+    }
+
+    if (fps >= 25)
+    {
+        if (audio_encoder_)
+        {
+            static const int k96kbs = 96 * 1024;
+            static const int k64kbs = 64 * 1024;
+            static const int k32kbs = 32 * 1024;
+
+            int bitrate = audio_encoder_->bitrate();
+            if (bitrate < k32kbs)
+                audio_encoder_->setBitrate(k32kbs);
+            else if (bitrate < k64kbs)
+                audio_encoder_->setBitrate(k64kbs);
+            else if (bitrate < k96kbs)
+                audio_encoder_->setBitrate(k96kbs);
+        }
+    }
 }
 
 } // namespace host

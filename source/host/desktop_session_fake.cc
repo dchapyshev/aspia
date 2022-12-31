@@ -88,6 +88,11 @@ void DesktopSessionFake::captureScreen()
         delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
 }
 
+void DesktopSessionFake::setScreenCaptureFps(int /* fps */)
+{
+    // Nothing
+}
+
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
 {
     // Nothing

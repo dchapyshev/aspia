@@ -178,6 +178,17 @@ void DesktopSessionIpc::captureScreen()
     }
 }
 
+void DesktopSessionIpc::setScreenCaptureFps(int fps)
+{
+    if (fps > 30 || fps < 5)
+    {
+        LOG(LS_WARNING) << "Invalid fps: " << fps;
+        return;
+    }
+
+    update_interval_ = std::chrono::milliseconds(1000 / fps);
+}
+
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_->Clear();
@@ -349,7 +360,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     }
 
     outgoing_message_->Clear();
-    outgoing_message_->mutable_next_screen_capture()->set_update_interval(40);
+    outgoing_message_->mutable_next_screen_capture()->set_update_interval(update_interval_.count());
     channel_->send(base::serialize(*outgoing_message_));
 }
 

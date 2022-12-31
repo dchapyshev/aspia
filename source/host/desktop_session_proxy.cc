@@ -62,6 +62,19 @@ void DesktopSessionProxy::captureScreen()
         desktop_session_->captureScreen();
 }
 
+void DesktopSessionProxy::setScreenCaptureFps(int fps)
+{
+    screen_capture_fps_ = fps;
+
+    if (desktop_session_)
+        desktop_session_->setScreenCaptureFps(fps);
+}
+
+int DesktopSessionProxy::screenCaptureFps() const
+{
+    return screen_capture_fps_;
+}
+
 void DesktopSessionProxy::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (is_keyboard_locked_ || is_paused_)
@@ -120,6 +133,7 @@ void DesktopSessionProxy::attachAndStart(DesktopSession* desktop_session)
     desktop_session_ = desktop_session;
     DCHECK(desktop_session_);
 
+    desktop_session_->setScreenCaptureFps(screen_capture_fps_);
     desktop_session_->start();
 }
 

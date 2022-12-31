@@ -39,6 +39,7 @@ public:
     void configure(const Config& config) override;
     void selectScreen(const proto::Screen& screen) override;
     void captureScreen() override;
+    void setScreenCaptureFps(int fps) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectTextEvent(const proto::TextEvent& event) override;
     void injectMouseEvent(const proto::MouseEvent& event) override;
@@ -66,6 +67,8 @@ private:
     std::unique_ptr<base::MouseCursor> last_mouse_cursor_;
     std::unique_ptr<proto::ScreenList> last_screen_list_;
     Delegate* delegate_;
+
+    std::chrono::milliseconds update_interval_ { 33 }; // 30 fps by default.
 
     std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
     std::unique_ptr<proto::internal::DesktopToService> incoming_message_;

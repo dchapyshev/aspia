@@ -136,9 +136,12 @@ void ClientDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientDesktop::onMessageWritten(size_t /* pending */)
+void ClientDesktop::onMessageWritten(size_t pending)
 {
-    // Nothing
+    if (pending >= 2)
+        input_event_filter_.setNetworkOverflow(true);
+    else
+        input_event_filter_.setNetworkOverflow(false);
 }
 
 void ClientDesktop::onClipboardEvent(const proto::ClipboardEvent& event)

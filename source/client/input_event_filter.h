@@ -34,6 +34,7 @@ public:
 
     void setSessionType(proto::SessionType session_type);
     void setClipboardEnabled(bool enable);
+    void setNetworkOverflow(bool enable);
 
     std::optional<proto::MouseEvent> mouseEvent(const proto::MouseEvent& event);
     std::optional<proto::KeyEvent> keyEvent(const proto::KeyEvent& event);
@@ -52,6 +53,7 @@ public:
 private:
     proto::SessionType session_type_ = proto::SESSION_TYPE_UNKNOWN;
     bool clipboard_enabled_ = false;
+    bool network_overflow_ = false;
 
     int32_t last_pos_x_ = 0;
     int32_t last_pos_y_ = 0;

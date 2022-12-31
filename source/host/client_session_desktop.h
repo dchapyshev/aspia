@@ -23,6 +23,7 @@
 #include "base/macros_magic.h"
 #include "base/desktop/geometry.h"
 #include "base/memory/local_memory.h"
+#include "base/waitable_timer.h"
 #include "host/client_session.h"
 #include "host/desktop_session.h"
 
@@ -91,6 +92,9 @@ private:
     void readSystemInfoExtension(const std::string& data);
     void readVideoRecordingExtension(const std::string& data);
     void readTaskManagerExtension(const std::string& data);
+    void onOverflowDetectionTimer();
+    void downStepOverflow();
+    void upStepOverflow();
 
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy_;
     std::unique_ptr<base::ScaleReducer> scale_reducer_;
@@ -102,6 +106,13 @@ private:
     base::Size preferred_size_;
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
+
+    base::WaitableTimer overflow_detection_timer_;
+    size_t write_overflow_count_ = 0;
+    size_t write_normal_count_ = 0;
+    size_t pending_messages_ = 0;
+    double avg_pending_messages_ = 0;
+    bool critical_overflow_ = false;
 
 #if defined(OS_WIN)
     std::unique_ptr<TaskManager> task_manager_;

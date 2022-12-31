@@ -78,6 +78,8 @@ public:
     virtual void selectScreen(const proto::Screen& screen) = 0;
     virtual void captureScreen() = 0;
 
+    virtual void setScreenCaptureFps(int fps) = 0;
+
     virtual void injectKeyEvent(const proto::KeyEvent& event) = 0;
     virtual void injectTextEvent(const proto::TextEvent& event) = 0;
     virtual void injectMouseEvent(const proto::MouseEvent& event) = 0;

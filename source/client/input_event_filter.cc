@@ -38,9 +38,17 @@ void InputEventFilter::setClipboardEnabled(bool enable)
     clipboard_enabled_ = enable;
 }
 
+void InputEventFilter::setNetworkOverflow(bool enable)
+{
+    network_overflow_ = enable;
+}
+
 std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::MouseEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return std::nullopt;
+
+    if (network_overflow_)
         return std::nullopt;
 
     int32_t delta_x = std::abs(event.x() - last_pos_x_);
@@ -71,6 +79,9 @@ std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent&
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
         return std::nullopt;
 
+    if (network_overflow_)
+        return std::nullopt;
+
     ++send_key_count_;
     return event;
 }
@@ -78,6 +89,9 @@ std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent&
 std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return std::nullopt;
+
+    if (network_overflow_)
         return std::nullopt;
 
     ++send_text_count_;
@@ -101,6 +115,9 @@ std::optional<proto::ClipboardEvent> InputEventFilter::sendClipboardEvent(
     const proto::ClipboardEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
+        return std::nullopt;
+
+    if (network_overflow_)
         return std::nullopt;
 
     if (!clipboard_enabled_)

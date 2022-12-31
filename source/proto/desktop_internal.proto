@@ -69,7 +69,7 @@ message ScreenCaptured
 
 message NextScreenCapture
 {
-    uint32 update_interval = 1;
+    int64 update_interval = 1;
 }
 
 message SelectSource

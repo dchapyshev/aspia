@@ -37,6 +37,8 @@ public:
     void configure(const DesktopSession::Config& config);
     void selectScreen(const proto::Screen& screen);
     void captureScreen();
+    void setScreenCaptureFps(int fps);
+    int screenCaptureFps() const;
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectTextEvent(const proto::TextEvent& event);
     void injectMouseEvent(const proto::MouseEvent& event);
@@ -62,6 +64,8 @@ private:
     bool is_mouse_locked_ = false;
     bool is_keyboard_locked_ = false;
     bool is_paused_ = false;
+
+    int screen_capture_fps_ = 30;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };

@@ -41,6 +41,7 @@ public:
     void configure(const Config& config) override;
     void selectScreen(const proto::Screen& screen) override;
     void captureScreen() override;
+    void setScreenCaptureFps(int fps) override;
     void injectKeyEvent(const proto::KeyEvent& event) override;
     void injectTextEvent(const proto::TextEvent& event) override;
     void injectMouseEvent(const proto::MouseEvent& event) override;
