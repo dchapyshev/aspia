@@ -40,6 +40,9 @@ public:
 
     bool encode(const Frame* frame, proto::VideoPacket* packet) override;
 
+    bool setCompressRatio(int compression_ratio);
+    int compressRatio() const;
+
 private:
     VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio);
     bool compressPacket(proto::VideoPacket* packet,

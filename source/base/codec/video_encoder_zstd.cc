@@ -201,4 +201,21 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
     return true;
 }
 
+bool VideoEncoderZstd::setCompressRatio(int compression_ratio)
+{
+    if (compression_ratio > ZSTD_maxCLevel() || compression_ratio < 1)
+    {
+        LOG(LS_WARNING) << "Invalid compression ratio: " << compression_ratio;
+        return false;
+    }
+
+    compress_ratio_ = compression_ratio;
+    return true;
+}
+
+int VideoEncoderZstd::compressRatio() const
+{
+    return compress_ratio_;
+}
+
 } // namespace base
