@@ -68,7 +68,7 @@ private:
     std::unique_ptr<proto::ScreenList> last_screen_list_;
     Delegate* delegate_;
 
-    std::chrono::milliseconds update_interval_ { 33 }; // 30 fps by default.
+    std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 
     std::unique_ptr<proto::internal::ServiceToDesktop> outgoing_message_;
     std::unique_ptr<proto::internal::DesktopToService> incoming_message_;

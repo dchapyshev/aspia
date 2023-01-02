@@ -180,7 +180,7 @@ void DesktopSessionIpc::captureScreen()
 
 void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
-    if (fps > 30 || fps < 5)
+    if (fps > 60 || fps < 1)
     {
         LOG(LS_WARNING) << "Invalid fps: " << fps;
         return;

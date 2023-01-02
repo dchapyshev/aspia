@@ -65,7 +65,7 @@ private:
     bool is_keyboard_locked_ = false;
     bool is_paused_ = false;
 
-    int screen_capture_fps_ = 30;
+    int screen_capture_fps_ = 25;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };
