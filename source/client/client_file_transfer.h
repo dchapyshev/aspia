@@ -24,6 +24,8 @@
 #include "common/file_task_consumer.h"
 #include "common/file_task_producer.h"
 
+#include <queue>
+
 namespace common {
 class FileTaskConsumerProxy;
 class FileTaskProducerProxy;

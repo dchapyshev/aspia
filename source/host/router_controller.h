@@ -25,6 +25,8 @@
 #include "base/peer/relay_peer_manager.h"
 #include "proto/host_internal.pb.h"
 
+#include <queue>
+
 namespace base {
 class ClientAuthenticator;
 } // namespace base
