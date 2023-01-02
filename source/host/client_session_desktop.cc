@@ -146,7 +146,7 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
 
 void ClientSessionDesktop::onMessageWritten(size_t pending)
 {
-    static const double kAlpha = 0.1;
+    static const double kAlpha = 0.4;
     avg_pending_messages_ =
         (kAlpha * static_cast<double>(pending)) + ((1.0 - kAlpha) * avg_pending_messages_);
     pending_messages_ = pending;
@@ -745,7 +745,7 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 void ClientSessionDesktop::onOverflowDetectionTimer()
 {
     // Maximum value of messages in the queue for sending.
-    static const size_t kCriticalPendingCount = 3;
+    static const size_t kCriticalPendingCount = 12;
 
     // Maximum average number of messages in the send queue.
     static const double kWarningPendingCount = 1.5;
@@ -756,9 +756,9 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Critical overflow detected: " << pending_messages_
+        LOG(LS_INFO) << "Critical overflow: " << pending_messages_
                      << " (avg: " << avg_pending_messages_
-                     << " count: " << write_overflow_count_ << ")";
+                     << " cnt: " << write_overflow_count_ << ")";
 
         downStepOverflow();
     }
@@ -774,9 +774,8 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Overflow detected: " << pending_messages_
-                     << " (avg: " << avg_pending_messages_
-                     << " count: " << write_overflow_count_ << ")";
+        LOG(LS_INFO) << "Overflow: " << pending_messages_ << " (avg: " << avg_pending_messages_
+                     << " cnt: " << write_overflow_count_ << ")";
 
         downStepOverflow();
     }
@@ -799,7 +798,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
     {
         ++write_normal_count_;
 
-        if (write_normal_count_ > 0 && (write_normal_count_ % 3) == 0)
+        if ((write_normal_count_ % 10) == 0)
             upStepOverflow();
     }
 }
@@ -807,27 +806,28 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
 void ClientSessionDesktop::downStepOverflow()
 {
     // Minimum allowed FPS for screen capture.
-    static const int kMinFpsValue = 15;
+    static const int kMinFpsValue = 1;
 
     // Max quantizer for VPX video encoder.
-    static const uint32_t kMaxQuantizerValue = 50;
+    static const uint32_t kMaxQuantizerValue = 60;
 
     // Max compression ratio for ZSTD video encoder.
     static const int kMaxCompressRatio = 12;
 
     int fps = desktop_session_proxy_->screenCaptureFps();
+    int new_fps = fps;
     if (fps > kMinFpsValue)
     {
-        int new_fps = fps - 1;
-
         if (critical_overflow_)
-            new_fps = std::max(fps - 5, kMinFpsValue);
+            new_fps = std::max(fps - 2, kMinFpsValue);
+        else
+            new_fps = fps - 1;
 
-        LOG(LS_INFO) << "FPS level reduced from " << fps << " to " << new_fps;
+        LOG(LS_INFO) << "FPS changed: " << fps << " to " << new_fps;
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
-    if (fps < 20)
+    if (new_fps < 20)
     {
         if (video_encoder_)
         {
@@ -842,7 +842,7 @@ void ClientSessionDesktop::downStepOverflow()
                 {
                     uint32_t new_quantizer = quantizer + 10;
 
-                    LOG(LS_INFO) << "Quantizer level increased from " << quantizer
+                    LOG(LS_INFO) << "Quantizer changed: " << quantizer
                                  << " to " << new_quantizer;
                     video_encoder->setMaxQuantizer(new_quantizer);
                 }
@@ -857,16 +857,13 @@ void ClientSessionDesktop::downStepOverflow()
                 {
                     int new_compress_ratio = compress_ratio + 1;
 
-                    LOG(LS_INFO) << "Compression level increased from " << compress_ratio
+                    LOG(LS_INFO) << "Compression changed: " << compress_ratio
                                  << " to " << new_compress_ratio;
                     video_encoder->setCompressRatio(new_compress_ratio);
                 }
             }
         }
-    }
 
-    if (fps < 25)
-    {
         if (audio_encoder_)
         {
             static const int k96kbs = 96 * 1024;
@@ -891,21 +888,22 @@ void ClientSessionDesktop::upStepOverflow()
     static const int kMaxFpsValue = 30;
 
     // Min quantizer for VPX video encoder.
-    static const uint32_t kMinQuantizerValue = 30;
+    static const uint32_t kMinQuantizerValue = 20;
 
     // Min compression ratio for ZSTD video encoder.
     static const int kMinCompressRatio = 8;
 
     int fps = desktop_session_proxy_->screenCaptureFps();
-    if (fps <= kMaxFpsValue)
+    int new_fps = fps;
+    if (fps < kMaxFpsValue)
     {
-        int new_fps = fps + 1;
+        new_fps = fps + 1;
 
-        LOG(LS_INFO) << "FPS level increased from " << fps << " to " << new_fps;
+        LOG(LS_INFO) << "FPS changed: " << fps << " to " << new_fps;
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
-    if (fps >= 20)
+    if (new_fps >= 20)
     {
         if (video_encoder_)
         {
@@ -920,7 +918,7 @@ void ClientSessionDesktop::upStepOverflow()
                 {
                     uint32_t new_quantizer = quantizer - 10;
 
-                    LOG(LS_INFO) << "Quantizer level reduced from " << quantizer
+                    LOG(LS_INFO) << "Quantizer changed: " << quantizer
                                  << " to " << new_quantizer;
                     video_encoder->setMaxQuantizer(new_quantizer);
                 }
@@ -935,16 +933,13 @@ void ClientSessionDesktop::upStepOverflow()
                 {
                     int new_compress_ratio = compress_ratio - 1;
 
-                    LOG(LS_INFO) << "Compression level reduced from " << compress_ratio
+                    LOG(LS_INFO) << "Compression changed: " << compress_ratio
                                  << " to " << new_compress_ratio;
                     video_encoder->setCompressRatio(new_compress_ratio);
                 }
             }
         }
-    }
 
-    if (fps >= 25)
-    {
         if (audio_encoder_)
         {
             static const int k96kbs = 96 * 1024;
