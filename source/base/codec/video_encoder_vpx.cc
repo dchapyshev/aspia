@@ -272,7 +272,7 @@ uint32_t VideoEncoderVPX::minQuantizer() const
 
 bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
 {
-    if (max_quantizer < 10 || max_quantizer > 50)
+    if (max_quantizer < 10 || max_quantizer > 60)
     {
         LOG(LS_WARNING) << "Invalid quantizer value: " << max_quantizer;
         return false;
@@ -333,7 +333,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
 
     // To enable remoting to be highly interactive and allow the target bitrate to be met, we relax
     // the max quantizer. The quality will get topped-off in subsequent frames.
-    config_.rc_min_quantizer = 20;
+    config_.rc_min_quantizer = 10;
     config_.rc_max_quantizer = 30;
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
@@ -392,7 +392,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
 
     // Configure VP9 for I420 source frames.
     config_.g_profile = kVp9I420ProfileNumber;
-    config_.rc_min_quantizer = 20;
+    config_.rc_min_quantizer = 10;
     config_.rc_max_quantizer = 30;
 
     // In the absence of a good bandwidth estimator set the target bitrate to a
@@ -508,8 +508,8 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
         proto::Rect* dirty_rect = packet->add_dirty_rect();
         dirty_rect->set_x(rect.x());
         dirty_rect->set_y(rect.y());
-        dirty_rect->set_width(rect.width());
-        dirty_rect->set_height(rect.height());
+        dirty_rect->set_width(width);
+        dirty_rect->set_height(height);
     }
 }
 
@@ -520,7 +520,7 @@ void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
     int right = (rect.right() - 1) / kMacroBlockSize;
     int bottom = (rect.bottom() - 1) / kMacroBlockSize;
 
-    uint8_t* map = active_map_.active_map + top * active_map_.cols;
+    uint8_t* map = active_map_.active_map + static_cast<uint32_t>(top) * active_map_.cols;
 
     for (int y = top; y <= bottom; ++y)
     {
