@@ -148,6 +148,9 @@ int AudioEncoderOpus::bitrate()
 
 bool AudioEncoderOpus::setBitrate(int bitrate)
 {
+    if (!encoder_)
+        return false;
+
     switch (bitrate)
     {
         case 128 * 1024:
