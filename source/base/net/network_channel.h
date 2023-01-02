@@ -153,6 +153,7 @@ public:
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
 
+    size_t pendingMessages() const { return write_queue_.size(); }
     int64_t totalRx() const { return total_rx_; }
     int64_t totalTx() const { return total_tx_; }
     int speedRx();

@@ -110,8 +110,7 @@ private:
     base::WaitableTimer overflow_detection_timer_;
     size_t write_overflow_count_ = 0;
     size_t write_normal_count_ = 0;
-    size_t pending_messages_ = 0;
-    double avg_pending_messages_ = 0;
+    size_t last_pending_count_ = 0;
     bool critical_overflow_ = false;
 
 #if defined(OS_WIN)

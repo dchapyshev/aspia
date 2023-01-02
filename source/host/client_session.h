@@ -98,6 +98,8 @@ protected:
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
 
+    size_t pendingMessages() const;
+
     Delegate* delegate_ = nullptr;
 
 private:

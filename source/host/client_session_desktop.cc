@@ -144,12 +144,9 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten(size_t pending)
+void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
 {
-    static const double kAlpha = 0.4;
-    avg_pending_messages_ =
-        (kAlpha * static_cast<double>(pending)) + ((1.0 - kAlpha) * avg_pending_messages_);
-    pending_messages_ = pending;
+    // Nothing
 }
 
 void ClientSessionDesktop::onStarted()
@@ -748,21 +745,20 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
     static const size_t kCriticalPendingCount = 12;
 
     // Maximum average number of messages in the send queue.
-    static const double kWarningPendingCount = 1.5;
+    static const size_t kWarningPendingCount = 2;
 
-    if (pending_messages_ > kCriticalPendingCount)
+    size_t pending = pendingMessages();
+    if (pending > kCriticalPendingCount)
     {
         critical_overflow_ = true;
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Critical overflow: " << pending_messages_
-                     << " (avg: " << avg_pending_messages_
-                     << " cnt: " << write_overflow_count_ << ")";
+        LOG(LS_INFO) << "Critical overflow: " << pending << " (" << write_overflow_count_ << ")";
 
         downStepOverflow();
     }
-    else if (avg_pending_messages_ > kWarningPendingCount)
+    else if (pending > kWarningPendingCount)
     {
         if (critical_overflow_)
         {
@@ -774,10 +770,10 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
-        LOG(LS_INFO) << "Overflow: " << pending_messages_ << " (avg: " << avg_pending_messages_
-                     << " cnt: " << write_overflow_count_ << ")";
+        LOG(LS_INFO) << "Overflow: " << pending << " (" << write_overflow_count_ << ")";
 
-        downStepOverflow();
+        if (pending > last_pending_count_ || write_overflow_count_ > 10)
+            downStepOverflow();
     }
     else if (write_overflow_count_ > 0)
     {
@@ -791,8 +787,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         write_normal_count_ = 1;
         write_overflow_count_ = 0;
 
-        LOG(LS_INFO) << "Overflow finished: " << pending_messages_
-                     << " (avg: " << avg_pending_messages_ << ")";
+        LOG(LS_INFO) << "Overflow finished: " << pending;
     }
     else
     {
@@ -801,6 +796,8 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         if ((write_normal_count_ % 10) == 0)
             upStepOverflow();
     }
+
+    last_pending_count_ = pending;
 }
 
 void ClientSessionDesktop::downStepOverflow()
@@ -818,12 +815,9 @@ void ClientSessionDesktop::downStepOverflow()
     int new_fps = fps;
     if (fps > kMinFpsValue)
     {
-        if (critical_overflow_)
-            new_fps = std::max(fps - 2, kMinFpsValue);
-        else
-            new_fps = fps - 1;
+        new_fps = fps - 1;
 
-        LOG(LS_INFO) << "FPS changed: " << fps << " to " << new_fps;
+        LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
@@ -842,8 +836,7 @@ void ClientSessionDesktop::downStepOverflow()
                 {
                     uint32_t new_quantizer = quantizer + 10;
 
-                    LOG(LS_INFO) << "Quantizer changed: " << quantizer
-                                 << " to " << new_quantizer;
+                    LOG(LS_INFO) << "Quantizer: " << quantizer << " to " << new_quantizer;
                     video_encoder->setMaxQuantizer(new_quantizer);
                 }
             }
@@ -857,8 +850,7 @@ void ClientSessionDesktop::downStepOverflow()
                 {
                     int new_compress_ratio = compress_ratio + 1;
 
-                    LOG(LS_INFO) << "Compression changed: " << compress_ratio
-                                 << " to " << new_compress_ratio;
+                    LOG(LS_INFO) << "Compression: " << compress_ratio << " to " << new_compress_ratio;
                     video_encoder->setCompressRatio(new_compress_ratio);
                 }
             }
@@ -899,7 +891,7 @@ void ClientSessionDesktop::upStepOverflow()
     {
         new_fps = fps + 1;
 
-        LOG(LS_INFO) << "FPS changed: " << fps << " to " << new_fps;
+        LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
@@ -918,8 +910,7 @@ void ClientSessionDesktop::upStepOverflow()
                 {
                     uint32_t new_quantizer = quantizer - 10;
 
-                    LOG(LS_INFO) << "Quantizer changed: " << quantizer
-                                 << " to " << new_quantizer;
+                    LOG(LS_INFO) << "Quantizer: " << quantizer << " to " << new_quantizer;
                     video_encoder->setMaxQuantizer(new_quantizer);
                 }
             }
@@ -933,8 +924,7 @@ void ClientSessionDesktop::upStepOverflow()
                 {
                     int new_compress_ratio = compress_ratio - 1;
 
-                    LOG(LS_INFO) << "Compression changed: " << compress_ratio
-                                 << " to " << new_compress_ratio;
+                    LOG(LS_INFO) << "Compression: " << compress_ratio << " to " << new_compress_ratio;
                     video_encoder->setCompressRatio(new_compress_ratio);
                 }
             }

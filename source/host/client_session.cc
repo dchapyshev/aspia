@@ -169,4 +169,9 @@ void ClientSession::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     delegate_->onClientSessionFinished();
 }
 
+size_t ClientSession::pendingMessages() const
+{
+    return channel_->pendingMessages();
+}
+
 } // namespace host
