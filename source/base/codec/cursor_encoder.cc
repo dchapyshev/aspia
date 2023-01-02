@@ -32,7 +32,7 @@ namespace {
 constexpr size_t kCacheSize = 30;
 
 // The compression ratio can be in the range of 1 to 22.
-constexpr int kCompressionRatio = 8;
+constexpr int kCompressionRatio = 12;
 
 // Recommended seed value for a hash.
 constexpr uint32_t kHashingSeed = 5381;
