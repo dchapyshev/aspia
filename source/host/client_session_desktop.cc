@@ -821,7 +821,7 @@ void ClientSessionDesktop::downStepOverflow()
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
-    if (new_fps < 20)
+    if (new_fps < 25)
     {
         if (video_encoder_)
         {
@@ -895,7 +895,7 @@ void ClientSessionDesktop::upStepOverflow()
         desktop_session_proxy_->setScreenCaptureFps(new_fps);
     }
 
-    if (new_fps >= 20)
+    if (new_fps >= 25)
     {
         if (video_encoder_)
         {
