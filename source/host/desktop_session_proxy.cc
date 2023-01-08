@@ -19,10 +19,73 @@
 #include "host/desktop_session_proxy.h"
 
 #include "base/logging.h"
+#include "base/environment.h"
+#include "base/strings/string_number_conversions.h"
 
 namespace host {
 
-DesktopSessionProxy::DesktopSessionProxy() = default;
+DesktopSessionProxy::DesktopSessionProxy()
+{
+    std::string default_fps_string;
+    if (base::Environment::get("ASPIA_DEFAULT_FPS", &default_fps_string))
+    {
+        int default_fps = kDefaultScreenCaptureFps;
+
+        if (base::stringToInt(default_fps_string, &default_fps))
+        {
+            LOG(LS_INFO) << "Default FPS specified by environment variable";
+
+            if (default_fps < 1 || default_fps > 60)
+            {
+                LOG(LS_INFO) << "Environment variable contains an incorrect default FPS: " << default_fps;
+            }
+            else
+            {
+                default_capture_fps_ = default_fps;
+            }
+        }
+    }
+
+    std::string min_fps_string;
+    if (base::Environment::get("ASPIA_MIN_FPS", &min_fps_string))
+    {
+        int min_fps = kMinScreenCaptureFps;
+
+        if (base::stringToInt(min_fps_string, &min_fps))
+        {
+            LOG(LS_INFO) << "Minimum FPS specified by environment variable";
+
+            if (min_fps < 1 || min_fps > 60)
+            {
+                LOG(LS_INFO) << "Environment variable contains an incorrect minimum FPS: " << min_fps;
+            }
+            else
+            {
+                min_capture_fps_ = min_fps;
+            }
+        }
+    }
+
+    std::string max_fps_string;
+    if (base::Environment::get("ASPIA_MAX_FPS", &max_fps_string))
+    {
+        int max_fps = kMaxScreenCaptureFps;
+
+        if (base::stringToInt(max_fps_string, &max_fps))
+        {
+            LOG(LS_INFO) << "Maximum FPS specified by environment variable";
+
+            if (max_fps < 1 || max_fps > 60)
+            {
+                LOG(LS_INFO) << "Environment variable contains an incorrect maximum FPS: " << max_fps;
+            }
+            else
+            {
+                max_capture_fps_ = max_fps;
+            }
+        }
+    }
+}
 
 DesktopSessionProxy::~DesktopSessionProxy()
 {
@@ -68,6 +131,21 @@ void DesktopSessionProxy::setScreenCaptureFps(int fps)
 
     if (desktop_session_)
         desktop_session_->setScreenCaptureFps(fps);
+}
+
+int DesktopSessionProxy::defaultScreenCaptureFps() const
+{
+    return default_capture_fps_;
+}
+
+int DesktopSessionProxy::minScreenCaptureFps() const
+{
+    return min_capture_fps_;
+}
+
+int DesktopSessionProxy::maxScreenCaptureFps() const
+{
+    return max_capture_fps_;
 }
 
 int DesktopSessionProxy::screenCaptureFps() const

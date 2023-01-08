@@ -39,6 +39,9 @@ public:
     void captureScreen();
     void setScreenCaptureFps(int fps);
     int screenCaptureFps() const;
+    int defaultScreenCaptureFps() const;
+    int minScreenCaptureFps() const;
+    int maxScreenCaptureFps() const;
     void injectKeyEvent(const proto::KeyEvent& event);
     void injectTextEvent(const proto::TextEvent& event);
     void injectMouseEvent(const proto::MouseEvent& event);
@@ -65,7 +68,14 @@ private:
     bool is_keyboard_locked_ = false;
     bool is_paused_ = false;
 
-    int screen_capture_fps_ = 25;
+    static const int kDefaultScreenCaptureFps = 20;
+    static const int kMinScreenCaptureFps = 1;
+    static const int kMaxScreenCaptureFps = 30;
+
+    int screen_capture_fps_ = kDefaultScreenCaptureFps;
+    int default_capture_fps_ = kDefaultScreenCaptureFps;
+    int min_capture_fps_ = kMinScreenCaptureFps;
+    int max_capture_fps_ = kMaxScreenCaptureFps;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };

@@ -888,6 +888,8 @@ void UserSession::onClientSessionFinished()
         LOG(LS_INFO) << "No desktop clients connected. Disabling the desktop agent (sid: " << session_id_ << ")";
         desktop_session_proxy_->control(proto::internal::DesktopControl::DISABLE);
 
+        desktop_session_proxy_->setScreenCaptureFps(
+            desktop_session_proxy_->defaultScreenCaptureFps());
         desktop_session_proxy_->setMouseLock(false);
         desktop_session_proxy_->setKeyboardLock(false);
         desktop_session_proxy_->setPaused(false);

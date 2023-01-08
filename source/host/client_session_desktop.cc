@@ -151,16 +151,21 @@ void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
 
 void ClientSessionDesktop::onStarted()
 {
+    max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
+
     if (!base::Environment::has("ASPIA_NO_OVERFLOW_DETECTION"))
     {
-        LOG(LS_INFO) << "Overflow detection enabled";
+        LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
+                     << desktop_session_proxy_->screenCaptureFps()
+                     << ", max FPS: " << max_fps_ << ")";
 
         overflow_detection_timer_.start(std::chrono::milliseconds(1000),
             std::bind(&ClientSessionDesktop::onOverflowDetectionTimer, this));
     }
     else
     {
-        LOG(LS_INFO) << "Overflow detection disabled by environment variable";
+        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS: "
+                     << desktop_session_proxy_->screenCaptureFps() << ")";
     }
 
     const char* extensions;
@@ -222,6 +227,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
             // Every time we change the resolution, we have to reset the preferred size.
             source_size_ = frame->size();
             preferred_size_ = base::Size();
+            forced_size_ = base::Size();
         }
 
         base::Size current_size = preferred_size_;
@@ -236,6 +242,15 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         // If we don't have a preferred size, then we use the original frame size.
         if (current_size.isEmpty())
             current_size = source_size_;
+
+        if (!forced_size_.isEmpty())
+        {
+            int forced = forced_size_.width() * forced_size_.height();
+            int current = current_size.width() * current_size.height();
+
+            if (forced < current)
+                current_size = forced_size_;
+        }
 
         const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
         if (!scaled_frame)
@@ -760,13 +775,6 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
     }
     else if (pending > kWarningPendingCount)
     {
-        if (critical_overflow_)
-        {
-            if (video_encoder_)
-                video_encoder_->setKeyFrameRequired(true);
-        }
-
-        critical_overflow_ = false;
         write_normal_count_ = 0;
         ++write_overflow_count_;
 
@@ -775,7 +783,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
         if (pending > last_pending_count_ || write_overflow_count_ > 10)
             downStepOverflow();
     }
-    else if (write_overflow_count_ > 0)
+    else if (write_overflow_count_ > 0 && pending == 0)
     {
         if (critical_overflow_)
         {
@@ -789,10 +797,22 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
 
         LOG(LS_INFO) << "Overflow finished: " << pending;
     }
-    else
+    else if (write_normal_count_ > 0)
     {
         ++write_normal_count_;
 
+        // Trying to raise the maximum FPS every 30 seconds.
+        if ((write_normal_count_ % 30) == 0)
+        {
+            int new_max_fps = std::min(max_fps_ + 1, desktop_session_proxy_->maxScreenCaptureFps());
+            if (new_max_fps != max_fps_)
+            {
+                LOG(LS_INFO) << "Max FPS: " << max_fps_ << " to " << new_max_fps;
+                max_fps_ = new_max_fps;
+            }
+        }
+
+        // Trying to raise the current FPS every 10 seconds.
         if ((write_normal_count_ % 10) == 0)
             upStepOverflow();
     }
@@ -802,60 +822,32 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
 
 void ClientSessionDesktop::downStepOverflow()
 {
-    // Minimum allowed FPS for screen capture.
-    static const int kMinFpsValue = 1;
-
-    // Max quantizer for VPX video encoder.
-    static const uint32_t kMaxQuantizerValue = 60;
-
-    // Max compression ratio for ZSTD video encoder.
-    static const int kMaxCompressRatio = 12;
-
     int fps = desktop_session_proxy_->screenCaptureFps();
     int new_fps = fps;
-    if (fps > kMinFpsValue)
+    if (fps > desktop_session_proxy_->minScreenCaptureFps())
     {
-        new_fps = fps - 1;
+        if (fps >= 25)
+            new_fps = 20;
+        else if (fps >= 20)
+            new_fps = 15;
+        else
+            new_fps = fps - 1;
 
-        LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
-        desktop_session_proxy_->setScreenCaptureFps(new_fps);
+        if (critical_overflow_ && new_fps != max_fps_)
+        {
+            LOG(LS_INFO) << "Max FPS: " << max_fps_ << " to " << new_fps;
+            max_fps_ = new_fps;
+        }
+
+        if (new_fps != fps)
+        {
+            LOG(LS_INFO) << "FPS: " << fps << " to " << new_fps;
+            desktop_session_proxy_->setScreenCaptureFps(new_fps);
+        }
     }
 
     if (new_fps < 25)
     {
-        if (video_encoder_)
-        {
-            proto::VideoEncoding encoding = video_encoder_->encoding();
-            if (encoding == proto::VIDEO_ENCODING_VP8 || encoding == proto::VIDEO_ENCODING_VP9)
-            {
-                base::VideoEncoderVPX* video_encoder =
-                    reinterpret_cast<base::VideoEncoderVPX*>(video_encoder_.get());
-
-                uint32_t quantizer = video_encoder->maxQuantizer();
-                if (quantizer < kMaxQuantizerValue)
-                {
-                    uint32_t new_quantizer = quantizer + 10;
-
-                    LOG(LS_INFO) << "Quantizer: " << quantizer << " to " << new_quantizer;
-                    video_encoder->setMaxQuantizer(new_quantizer);
-                }
-            }
-            else if (encoding == proto::VIDEO_ENCODING_ZSTD)
-            {
-                base::VideoEncoderZstd* video_encoder =
-                    reinterpret_cast<base::VideoEncoderZstd*>(video_encoder_.get());
-
-                int compress_ratio = video_encoder->compressRatio();
-                if (compress_ratio < kMaxCompressRatio)
-                {
-                    int new_compress_ratio = compress_ratio + 1;
-
-                    LOG(LS_INFO) << "Compression: " << compress_ratio << " to " << new_compress_ratio;
-                    video_encoder->setCompressRatio(new_compress_ratio);
-                }
-            }
-        }
-
         if (audio_encoder_)
         {
             static const int k96kbs = 96 * 1024;
@@ -872,22 +864,31 @@ void ClientSessionDesktop::downStepOverflow()
                 audio_encoder_->setBitrate(k24kbs);
         }
     }
+
+    if (new_fps < 20)
+    {
+        base::Size new_forced_size;
+
+        if (new_fps < 10)
+            new_forced_size.set(source_size_.width() * 70 / 100, source_size_.height() * 70 / 100);
+        else if (new_fps < 15)
+            new_forced_size.set(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
+        else
+            new_forced_size.set(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
+
+        if (new_forced_size != forced_size_)
+        {
+            LOG(LS_INFO) << "Forced size: " << forced_size_ << " to " << new_forced_size;
+            forced_size_ = new_forced_size;
+        }
+    }
 }
 
 void ClientSessionDesktop::upStepOverflow()
 {
-    // Maximum allowed FPS for screen capture.
-    static const int kMaxFpsValue = 30;
-
-    // Min quantizer for VPX video encoder.
-    static const uint32_t kMinQuantizerValue = 20;
-
-    // Min compression ratio for ZSTD video encoder.
-    static const int kMinCompressRatio = 8;
-
     int fps = desktop_session_proxy_->screenCaptureFps();
     int new_fps = fps;
-    if (fps < kMaxFpsValue)
+    if (fps < max_fps_)
     {
         new_fps = fps + 1;
 
@@ -897,39 +898,6 @@ void ClientSessionDesktop::upStepOverflow()
 
     if (new_fps >= 25)
     {
-        if (video_encoder_)
-        {
-            proto::VideoEncoding encoding = video_encoder_->encoding();
-            if (encoding == proto::VIDEO_ENCODING_VP8 || encoding == proto::VIDEO_ENCODING_VP9)
-            {
-                base::VideoEncoderVPX* video_encoder =
-                    reinterpret_cast<base::VideoEncoderVPX*>(video_encoder_.get());
-
-                uint32_t quantizer = video_encoder->maxQuantizer();
-                if (quantizer > kMinQuantizerValue)
-                {
-                    uint32_t new_quantizer = quantizer - 10;
-
-                    LOG(LS_INFO) << "Quantizer: " << quantizer << " to " << new_quantizer;
-                    video_encoder->setMaxQuantizer(new_quantizer);
-                }
-            }
-            else if (encoding == proto::VIDEO_ENCODING_ZSTD)
-            {
-                base::VideoEncoderZstd* video_encoder =
-                    reinterpret_cast<base::VideoEncoderZstd*>(video_encoder_.get());
-
-                int compress_ratio = video_encoder->compressRatio();
-                if (compress_ratio > kMinCompressRatio)
-                {
-                    int new_compress_ratio = compress_ratio - 1;
-
-                    LOG(LS_INFO) << "Compression: " << compress_ratio << " to " << new_compress_ratio;
-                    video_encoder->setCompressRatio(new_compress_ratio);
-                }
-            }
-        }
-
         if (audio_encoder_)
         {
             static const int k96kbs = 96 * 1024;
@@ -943,6 +911,26 @@ void ClientSessionDesktop::upStepOverflow()
                 audio_encoder_->setBitrate(k64kbs);
             else if (bitrate < k96kbs)
                 audio_encoder_->setBitrate(k96kbs);
+        }
+    }
+
+    if (!forced_size_.isEmpty())
+    {
+        base::Size new_forced_size;
+
+        if (new_fps >= 25)
+            new_forced_size.set(0, 0);
+        else if (new_fps >= 20)
+            new_forced_size.set(source_size_.width() * 90 / 100, source_size_.height() * 90 / 100);
+        else if (new_fps >= 15)
+            new_forced_size.set(source_size_.width() * 80 / 100, source_size_.height() * 80 / 100);
+        else
+            new_forced_size = forced_size_;
+
+        if (new_forced_size != forced_size_)
+        {
+            LOG(LS_INFO) << "Forced size: " << forced_size_ << " to " << new_forced_size;
+            forced_size_ = new_forced_size;
         }
     }
 }

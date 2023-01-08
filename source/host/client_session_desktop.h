@@ -104,14 +104,16 @@ private:
     DesktopSession::Config desktop_session_config_;
     base::Size source_size_;
     base::Size preferred_size_;
+    base::Size forced_size_;
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 
     base::WaitableTimer overflow_detection_timer_;
     size_t write_overflow_count_ = 0;
-    size_t write_normal_count_ = 0;
+    size_t write_normal_count_ = 1;
     size_t last_pending_count_ = 0;
     bool critical_overflow_ = false;
+    int max_fps_ = 0;
 
 #if defined(OS_WIN)
     std::unique_ptr<TaskManager> task_manager_;
