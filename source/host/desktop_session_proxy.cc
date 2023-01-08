@@ -22,6 +22,8 @@
 #include "base/environment.h"
 #include "base/strings/string_number_conversions.h"
 
+#include <thread>
+
 namespace host {
 
 DesktopSessionProxy::DesktopSessionProxy()
@@ -66,10 +68,11 @@ DesktopSessionProxy::DesktopSessionProxy()
         }
     }
 
+    bool max_fps_from_env = false;
     std::string max_fps_string;
     if (base::Environment::get("ASPIA_MAX_FPS", &max_fps_string))
     {
-        int max_fps = kMaxScreenCaptureFps;
+        int max_fps = kMaxScreenCaptureFpsHighEnd;
 
         if (base::stringToInt(max_fps_string, &max_fps))
         {
@@ -82,7 +85,18 @@ DesktopSessionProxy::DesktopSessionProxy()
             else
             {
                 max_capture_fps_ = max_fps;
+                max_fps_from_env = true;
             }
+        }
+    }
+
+    if (!max_fps_from_env)
+    {
+        uint32_t threads = std::thread::hardware_concurrency();
+        if (threads <= 2)
+        {
+            LOG(LS_INFO) << "Low-end CPU detected. Maximum capture FPS: " << kMaxScreenCaptureFpsLowEnd;
+            max_capture_fps_ = kMaxScreenCaptureFpsLowEnd;
         }
     }
 }

@@ -70,12 +70,13 @@ private:
 
     static const int kDefaultScreenCaptureFps = 20;
     static const int kMinScreenCaptureFps = 1;
-    static const int kMaxScreenCaptureFps = 30;
+    static const int kMaxScreenCaptureFpsHighEnd = 30;
+    static const int kMaxScreenCaptureFpsLowEnd = 20;
 
     int screen_capture_fps_ = kDefaultScreenCaptureFps;
     int default_capture_fps_ = kDefaultScreenCaptureFps;
     int min_capture_fps_ = kMinScreenCaptureFps;
-    int max_capture_fps_ = kMaxScreenCaptureFps;
+    int max_capture_fps_ = kMaxScreenCaptureFpsHighEnd;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProxy);
 };
