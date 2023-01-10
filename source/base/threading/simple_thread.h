@@ -54,10 +54,10 @@ public:
     // Waits for thread to finish.
     void join();
 
-    // Returns true if the StopSoon method was called.
+    // Returns true if the stopSoon method was called.
     bool isStopping() const;
 
-    // Returns if the Run method is running.
+    // Returns if the run method is running.
     bool isRunning() const;
 
 private:
@@ -70,7 +70,7 @@ private:
 
     std::atomic<State> state_ = State::STOPPED;
 
-    // True while inside of Run().
+    // True while inside of run().
     bool running_ = false;
     std::mutex running_lock_;
     std::condition_variable running_event_;
