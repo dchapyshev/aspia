@@ -18,8 +18,6 @@
 
 #include "base/memory/byte_array.h"
 
-#include "base/logging.h"
-
 namespace base {
 
 namespace {
@@ -120,6 +118,16 @@ std::string toHex(const ByteArray& in)
     }
 
     return out;
+}
+
+void append(ByteArray* in, const void* data, size_t size)
+{
+    if (!in || !data || !size)
+        return;
+
+    size_t initial_size = in->size();
+    in->resize(initial_size + size);
+    memcpy(in->data() + initial_size, data, size);
 }
 
 base::ByteArray serialize(const google::protobuf::MessageLite& message)

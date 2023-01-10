@@ -37,6 +37,8 @@ std::string toStdString(const ByteArray& in);
 ByteArray fromHex(std::string_view in);
 std::string toHex(const ByteArray& in);
 
+void append(ByteArray* in, const void* data, size_t size);
+
 base::ByteArray serialize(const google::protobuf::MessageLite& message);
 
 template <class T>
