@@ -82,8 +82,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.cc
     ui/download_dialog.h
     ui/download_dialog.ui
-    ui/download_impl.cc
-    ui/download_impl.h
+    ui/file_downloader.cc
+    ui/file_downloader.h
     ui/language_action.cc
     ui/language_action.h
     ui/session_type.cc
@@ -106,8 +106,6 @@ list(APPEND SOURCE_COMMON_UI
     ui/text_chat_widget.ui
     ui/update_checker.cc
     ui/update_checker.h
-    ui/update_checker_impl.cc
-    ui/update_checker_impl.h
     ui/update_dialog.cc
     ui/update_dialog.h
     ui/update_dialog.ui

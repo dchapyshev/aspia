@@ -20,8 +20,7 @@
 #define COMMON_UI_UPDATE_INFO_H
 
 #include "base/version.h"
-
-#include <QUrl>
+#include "base/memory/byte_array.h"
 
 namespace common {
 
@@ -33,20 +32,20 @@ public:
     UpdateInfo& operator=(const UpdateInfo& other) = default;
     ~UpdateInfo() = default;
 
-    static UpdateInfo fromXml(const QByteArray& buffer);
+    static UpdateInfo fromXml(const base::ByteArray& buffer);
 
     bool hasUpdate() const;
 
     bool isValid() const { return valid_; }
     base::Version version() const { return version_; }
-    QString description() const { return description_; }
-    QString url() const { return url_; }
+    std::string description() const { return description_; }
+    std::string url() const { return url_; }
 
 private:
     bool valid_ = false;
     base::Version version_;
-    QString description_;
-    QString url_;
+    std::string description_;
+    std::string url_;
 };
 
 } // namespace common

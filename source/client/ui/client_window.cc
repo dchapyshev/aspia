@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
-#include "client/config_factory.h"
 #include "client/router_config_storage.h"
 #include "client/ui/application.h"
 #include "client/ui/client_settings.h"
@@ -114,15 +113,12 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     if (settings.checkUpdates())
     {
-        common::UpdateChecker* checker = new common::UpdateChecker(this);
+        update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        checker->setUpdateServer(settings.updateServer());
-        checker->setPackageName(QStringLiteral("client"));
+        update_checker_->setUpdateServer(settings.updateServer().toStdString());
+        update_checker_->setPackageName("client");
 
-        connect(checker, &common::UpdateChecker::finished, this, &ClientWindow::onUpdateChecked);
-        connect(checker, &common::UpdateChecker::finished, checker, &common::UpdateChecker::deleteLater);
-
-        checker->start();
+        update_checker_->start(Application::uiTaskRunner(), this);
     }
 #else
     ui.action_check_for_updates->setVisible(false);
@@ -137,6 +133,23 @@ ClientWindow::~ClientWindow() = default;
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     QApplication::quit();
+}
+
+void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
+{
+    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+    if (!update_info.isValid() || !update_info.hasUpdate())
+        return;
+
+    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+    if (update_info.version() > current_version)
+        common::UpdateDialog(update_info, this).exec();
+
+    QTimer::singleShot(0, this, [this]()
+    {
+        update_checker_.reset();
+    });
 }
 
 void ClientWindow::onLanguageChanged(QAction* action)
@@ -339,20 +352,9 @@ void ClientWindow::connectToHost()
 void ClientWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
-    common::UpdateDialog(Application::instance()->settings().updateServer(), "client", this).exec();
+    common::UpdateDialog(Application::instance()->settings().updateServer().toStdString(),
+                         "client", this).exec();
 #endif
-}
-
-void ClientWindow::onUpdateChecked(const QByteArray& result)
-{
-    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
-    if (!update_info.isValid() || !update_info.hasUpdate())
-        return;
-
-    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-
-    if (update_info.version() > current_version)
-        common::UpdateDialog(update_info, this).exec();
 }
 
 void ClientWindow::createLanguageMenu(const QString& current_locale)

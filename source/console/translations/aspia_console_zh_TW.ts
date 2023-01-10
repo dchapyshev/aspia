@@ -1378,108 +1378,108 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="197"/>
-        <location filename="../main_window.cc" line="1312"/>
+        <location filename="../main_window.cc" line="199"/>
+        <location filename="../main_window.cc" line="1316"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="198"/>
+        <location filename="../main_window.cc" line="200"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>找不到釘選的通訊錄檔案「%1」。&lt;br/&gt;此檔案將被取消釘選。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="277"/>
         <source>Information</source>
         <translation>詳細資訊</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="279"/>
+        <location filename="../main_window.cc" line="278"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>通訊錄「%1」已經開啟。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="306"/>
+        <location filename="../main_window.cc" line="305"/>
         <source>Open Address Book</source>
         <translation>開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="308"/>
+        <location filename="../main_window.cc" line="307"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="497"/>
-        <location filename="../main_window.cc" line="1181"/>
+        <location filename="../main_window.cc" line="496"/>
+        <location filename="../main_window.cc" line="1185"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="658"/>
-        <location filename="../main_window.cc" line="983"/>
-        <location filename="../main_window.cc" line="1065"/>
+        <location filename="../main_window.cc" line="657"/>
+        <location filename="../main_window.cc" line="982"/>
+        <location filename="../main_window.cc" line="1064"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="659"/>
-        <location filename="../main_window.cc" line="1066"/>
+        <location filename="../main_window.cc" line="658"/>
+        <location filename="../main_window.cc" line="1065"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通訊錄「%1」已修改。是否儲存變更？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="879"/>
+        <location filename="../main_window.cc" line="878"/>
         <source>Close other tabs</source>
         <translation>關閉其他分頁。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="886"/>
+        <location filename="../main_window.cc" line="885"/>
         <source>Close tab</source>
         <translation>關閉分頁</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="887"/>
-        <location filename="../main_window.cc" line="892"/>
+        <location filename="../main_window.cc" line="886"/>
+        <location filename="../main_window.cc" line="891"/>
         <source>Pin tab</source>
         <translation>釘選分頁</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="984"/>
+        <location filename="../main_window.cc" line="983"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打開的通訊錄清單將被清除。是否繼續？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1020"/>
+        <location filename="../main_window.cc" line="1019"/>
         <source>Hide</source>
         <translation>隱藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1035"/>
+        <location filename="../main_window.cc" line="1034"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1313"/>
+        <location filename="../main_window.cc" line="1317"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="662"/>
+        <location filename="../main_window.cc" line="986"/>
+        <location filename="../main_window.cc" line="1069"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="663"/>
         <location filename="../main_window.cc" line="987"/>
         <location filename="../main_window.cc" line="1070"/>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main_window.cc" line="664"/>
-        <location filename="../main_window.cc" line="988"/>
-        <location filename="../main_window.cc" line="1071"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="665"/>
-        <location filename="../main_window.cc" line="1072"/>
+        <location filename="../main_window.cc" line="664"/>
+        <location filename="../main_window.cc" line="1071"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

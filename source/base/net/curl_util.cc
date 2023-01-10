@@ -16,40 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_UPDATE_CHECKER_IMPL_H
-#define COMMON_UI_UPDATE_CHECKER_IMPL_H
+#include "base/net/curl_util.h"
 
-#include "base/macros_magic.h"
-#include "common/ui/update_info.h"
+#include "base/logging.h"
 
-#include <QObject>
+namespace base {
 
-namespace common {
-
-class UpdateCheckerImpl : public QObject
+ScopedCURL::ScopedCURL()
+    : curl_(curl_easy_init())
 {
-    Q_OBJECT
+    CHECK(curl_);
+}
 
-public:
-    explicit UpdateCheckerImpl(QObject* parent = nullptr);
-    ~UpdateCheckerImpl() override;
+ScopedCURL::~ScopedCURL()
+{
+    curl_easy_cleanup(curl_);
+}
 
-    void setUpdateServer(const QString& update_server);
-    void setPackageName(const QString& package_name);
+ScopedCURLM::ScopedCURLM()
+    : curlm_(curl_multi_init())
+{
+    CHECK(curlm_);
+}
 
-signals:
-    void finished(const QByteArray& result);
+ScopedCURLM::~ScopedCURLM()
+{
+    curl_multi_cleanup(curlm_);
+}
 
-public slots:
-    void start();
-
-private:
-    QString update_server_;
-    QString package_name_;
-
-    DISALLOW_COPY_AND_ASSIGN(UpdateCheckerImpl);
-};
-
-} // namespace common
-
-#endif // COMMON_UI_UPDATE_CHECKER_IMPL_H
+} // namespace base

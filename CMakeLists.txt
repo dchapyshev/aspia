@@ -46,7 +46,6 @@ endif()
 message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "Host system processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
-
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets Xml)
 find_package(Qt5LinguistTools)
 find_package(asio CONFIG REQUIRED)
@@ -61,6 +60,8 @@ find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_package(mimalloc CONFIG) # Optional component
+
+find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 message(STATUS "MIMALLOC found: ${mimalloc_FOUND}")
 

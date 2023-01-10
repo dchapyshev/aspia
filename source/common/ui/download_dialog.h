@@ -20,7 +20,7 @@
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "common/ui/download_impl.h"
+#include "common/ui/file_downloader.h"
 #include "ui_download_dialog.h"
 
 #include <QFile>
@@ -29,20 +29,26 @@
 
 namespace common {
 
-class DownloadImpl;
-
-class DownloadDialog : public QDialog
+class DownloadDialog
+    : public QDialog,
+      public FileDownloader::Delegate
 {
     Q_OBJECT
 
 public:
-    DownloadDialog(const QString& url, QFile& file, QWidget* parent = nullptr);
+    DownloadDialog(std::string_view url, QFile& file, QWidget* parent = nullptr);
     ~DownloadDialog() override = default;
+
+protected:
+    // FileDownloader::Delegate implementation.
+    void onFileDownloaderError(int error_code) override;
+    void onFileDownloaderCompleted() override;
+    void onFileDownloaderProgress(int percentage) override;
 
 private:
     Ui::DownloadDialog ui;
 
-    QPointer<DownloadImpl> impl_ = nullptr;
+    std::unique_ptr<FileDownloader> downloader_ = nullptr;
     QFile& file_;
 
     DISALLOW_COPY_AND_ASSIGN(DownloadDialog);

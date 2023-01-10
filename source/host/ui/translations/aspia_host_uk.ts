@@ -294,12 +294,12 @@
         <translation>Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="281"/>
+        <location filename="../host_main.cc" line="272"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="282"/>
+        <location filename="../host_main.cc" line="273"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Версія додатку: %1.%2.%3.%4.</translation>
     </message>

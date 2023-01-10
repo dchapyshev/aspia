@@ -18,90 +18,65 @@
 
 #include "common/ui/update_info.h"
 
-#include "qt_base/qt_logging.h"
+#include "base/logging.h"
 
-#include <QtXml>
+#include <rapidxml/rapidxml.hpp>
 
 namespace common {
 
-namespace {
-
-QString parseElement(QXmlStreamReader& xml)
-{
-    if (xml.tokenType() != QXmlStreamReader::StartElement)
-        return QString();
-
-    if (xml.readNext() != QXmlStreamReader::Characters)
-        return QString();
-
-    return xml.text().toString();
-}
-
-} // namespace
-
 // static
-UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
+UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
 {
-    if (buffer.isEmpty())
+    if (buffer.empty())
+        return UpdateInfo();
+
+    rapidxml::xml_document<> xml;
+
+    try
+    {
+        xml.parse<rapidxml::parse_non_destructive>(
+            reinterpret_cast<char*>(const_cast<uint8_t*>(buffer.data())));
+    }
+    catch (const rapidxml::parse_error& error)
+    {
+        LOG(LS_WARNING) << "Invalid XML for update info: " << error.what();
+        return UpdateInfo();
+    }
+
+    rapidxml::xml_node<>* root_node = xml.first_node("update");
+    if (!root_node)
         return UpdateInfo();
 
     UpdateInfo update_info;
 
-    QXmlStreamReader xml(buffer);
-    while (!xml.atEnd() && !xml.hasError())
+    for (const rapidxml::xml_node<>* child_node = root_node->first_node();
+         child_node != nullptr;
+         child_node = child_node->next_sibling())
     {
-        QXmlStreamReader::TokenType token = xml.readNext();
-
-        if (token == QXmlStreamReader::StartDocument)
+        if (child_node->type() != rapidxml::node_element)
             continue;
 
-        if (token == QXmlStreamReader::StartElement)
+        std::string_view name(child_node->name(), child_node->name_size());
+
+        const rapidxml::xml_node<>* node = child_node->first_node();
+        if (node && node->type() == rapidxml::node_data)
         {
-            if (xml.name() == QLatin1String("update"))
-                continue;
-
-            while (xml.tokenType() != QXmlStreamReader::EndElement)
-            {
-                if (xml.tokenType() == QXmlStreamReader::StartElement)
-                {
-                    if (xml.name() == QLatin1String("version"))
-                    {
-                        update_info.version_ = base::Version(parseElement(xml).toStdString());
-                    }
-                    else if (xml.name() == QLatin1String("description"))
-                    {
-                        update_info.description_ = parseElement(xml);
-                    }
-                    else if (xml.name() == QLatin1String("url"))
-                    {
-                        update_info.url_ = parseElement(xml);
-                    }
-                    else
-                    {
-                        // Unknown field. Ignore.
-                    }
-                }
-
-                xml.readNext();
-            }
+            if (name == "version")
+                update_info.version_ = base::Version(std::string_view(node->value(), node->value_size()));
+            else if (name == "description")
+                update_info.description_ = std::string(node->value(), node->value_size());
+            else if (name == "url")
+                update_info.url_ = std::string(node->value(), node->value_size());
         }
     }
 
-    if (xml.hasError())
-    {
-        LOG(LS_WARNING) << "Error parsing XML: " << xml.errorString();
-    }
-    else
-    {
-        update_info.valid_ = true;
-    }
-
+    update_info.valid_ = true;
     return update_info;
 }
 
 bool UpdateInfo::hasUpdate() const
 {
-    return !version_.isValid() && !url_.isEmpty();
+    return !version_.isValid() && !url_.empty();
 }
 
 } // namespace common

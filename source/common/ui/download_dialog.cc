@@ -18,6 +18,8 @@
 
 #include "common/ui/download_dialog.h"
 
+#include "qt_base/application.h"
+
 #include <QAbstractButton>
 #include <QFile>
 #include <QPushButton>
@@ -25,46 +27,12 @@
 
 namespace common {
 
-DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
+DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* parent)
     : QDialog(parent),
+      downloader_(std::make_unique<FileDownloader>()),
       file_(file)
 {
     ui.setupUi(this);
-
-    impl_ = new DownloadImpl(url, this);
-
-    connect(impl_, &DownloadImpl::finished, this, [this]()
-    {
-        reject();
-        close();
-    });
-
-    connect(impl_, &DownloadImpl::errorOccurred, this, [this](const QString& error)
-    {
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("An error occurred while downloading the update: %1")
-                                .arg(error),
-                             QMessageBox::Ok);
-        reject();
-        close();
-    }, Qt::QueuedConnection);
-
-    connect(impl_, &DownloadImpl::downloadCompleted, this, [this](const QByteArray& data)
-    {
-        file_.write(data);
-        file_.flush();
-
-        accept();
-        close();
-    }, Qt::QueuedConnection);
-
-    connect(impl_, &DownloadImpl::progress, this, [this](int percentage)
-    {
-        ui.progress_bar->setValue(percentage);
-    }, Qt::QueuedConnection);
-
-    impl_->start();
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
@@ -75,6 +43,34 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
         reject();
         close();
     });
+
+    downloader_->start(url, qt_base::Application::uiTaskRunner(), this);
+}
+
+void DownloadDialog::onFileDownloaderError(int error_code)
+{
+    QMessageBox::warning(this,
+                         tr("Warning"),
+                         tr("An error occurred while downloading the update: %1").arg(error_code),
+                         QMessageBox::Ok);
+    reject();
+    close();
+}
+
+void DownloadDialog::onFileDownloaderCompleted()
+{
+    const base::ByteArray& buffer = downloader_->data();
+
+    file_.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
+    file_.flush();
+
+    accept();
+    close();
+}
+
+void DownloadDialog::onFileDownloaderProgress(int percentage)
+{
+    ui.progress_bar->setValue(percentage);
 }
 
 } // namespace common

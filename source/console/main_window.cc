@@ -221,15 +221,12 @@ MainWindow::MainWindow(const QString& file_path)
 
     if (settings.checkUpdates())
     {
-        common::UpdateChecker* checker = new common::UpdateChecker(this);
+        update_checker_ = std::make_unique<common::UpdateChecker>();
 
-        checker->setUpdateServer(settings.updateServer());
-        checker->setPackageName(QStringLiteral("console"));
+        update_checker_->setUpdateServer(settings.updateServer().toStdString());
+        update_checker_->setPackageName("console");
 
-        connect(checker, &common::UpdateChecker::finished, this, &MainWindow::onUpdateChecked);
-        connect(checker, &common::UpdateChecker::finished, checker, &common::UpdateChecker::deleteLater);
-
-        checker->start();
+        update_checker_->start(Application::uiTaskRunner(), this);
     }
 #else
     ui.action_check_updates->setVisible(false);
@@ -486,7 +483,7 @@ void MainWindow::onOnlineHelp()
 void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
-    common::UpdateDialog(Application::instance()->settings().updateServer(),
+    common::UpdateDialog(Application::instance()->settings().updateServer().toStdString(),
                          "console",
                          this).exec();
 #endif
@@ -1115,7 +1112,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::onUpdateChecked(const QByteArray& result)
+void MainWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
     if (!update_info.isValid() || !update_info.hasUpdate())
@@ -1125,6 +1122,11 @@ void MainWindow::onUpdateChecked(const QByteArray& result)
 
     if (update_info.version() > current_version)
         common::UpdateDialog(update_info, this).exec();
+
+    QTimer::singleShot(0, this, [this]()
+    {
+        update_checker_.reset();
+    });
 }
 
 void MainWindow::createLanguageMenu(const QString& current_locale)

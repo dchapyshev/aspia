@@ -294,12 +294,12 @@
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="281"/>
+        <location filename="../host_main.cc" line="272"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="282"/>
+        <location filename="../host_main.cc" line="273"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation type="unfinished"></translation>
     </message>

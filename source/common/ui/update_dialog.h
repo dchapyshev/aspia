@@ -20,10 +20,10 @@
 #define COMMON_UI_UPDATE_DIALOG_H
 
 #include "base/macros_magic.h"
+#include "common/ui/update_checker.h"
 #include "common/ui/update_info.h"
 
 #include <QDialog>
-#include <QPointer>
 
 namespace Ui {
 class UpdateDialog;
@@ -31,15 +31,15 @@ class UpdateDialog;
 
 namespace common {
 
-class UpdateChecker;
-
-class UpdateDialog : public QDialog
+class UpdateDialog
+    : public QDialog,
+      public common::UpdateChecker::Delegate
 {
     Q_OBJECT
 
 public:
-    UpdateDialog(const QString& update_server,
-                 const QString& package_name,
+    UpdateDialog(std::string_view update_server,
+                 std::string_view package_name,
                  QWidget* parent = nullptr);
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
     ~UpdateDialog() override;
@@ -49,8 +49,10 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 
+    // common::UpdateChecker::Delegate implementation.
+    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+
 private slots:
-    void onUpdateChecked(const QByteArray& result);
     void onUpdateNow();
 
 private:
@@ -59,7 +61,7 @@ private:
     std::unique_ptr<Ui::UpdateDialog> ui;
     UpdateInfo update_info_;
 
-    QPointer<UpdateChecker> checker_;
+    std::unique_ptr<UpdateChecker> checker_;
     bool checker_finished_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UpdateDialog);

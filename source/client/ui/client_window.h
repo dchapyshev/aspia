@@ -20,7 +20,9 @@
 #define CLIENT_UI_CLIENT_WINDOW_H
 
 #include "base/macros_magic.h"
+#include "base/memory/byte_array.h"
 #include "client/client_config.h"
+#include "common/ui/update_checker.h"
 #include "proto/desktop.pb.h"
 #include "ui_client_window.h"
 
@@ -28,7 +30,9 @@
 
 namespace client {
 
-class ClientWindow : public QMainWindow
+class ClientWindow
+    : public QMainWindow,
+      public common::UpdateChecker::Delegate
 {
     Q_OBJECT
 
@@ -40,6 +44,9 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
+    // common::UpdateChecker::Delegate implementation.
+    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+
 private slots:
     void onLanguageChanged(QAction* action);
     void onSettings();
@@ -49,13 +56,13 @@ private slots:
     void sessionConfigButtonPressed();
     void connectToHost();
     void onCheckUpdates();
-    void onUpdateChecked(const QByteArray& result);
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void reloadSessionTypes();
 
     Ui::ClientWindow ui;
+    std::unique_ptr<common::UpdateChecker> update_checker_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientWindow);
 };

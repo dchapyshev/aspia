@@ -521,6 +521,8 @@ list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.h
     net/address.cc
     net/address.h
+    net/curl_util.cc
+    net/curl_util.h
     net/ip_util.cc
     net/ip_util.h
     net/network_channel.cc

@@ -110,8 +110,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui.button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        common::UpdateDialog(QString::fromStdU16String(SystemSettings().updateServer()),
-                             QStringLiteral("host"),
+        common::UpdateDialog(base::utf8FromUtf16(SystemSettings().updateServer()),
+                             "host",
                              this).exec();
     });
 

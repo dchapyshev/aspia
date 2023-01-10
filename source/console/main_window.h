@@ -35,7 +35,9 @@ class AddressBookTab;
 class ComputerItem;
 class Client;
 
-class MainWindow : public QMainWindow
+class MainWindow
+    : public QMainWindow,
+      public common::UpdateChecker::Delegate
 {
     Q_OBJECT
 
@@ -51,6 +53,9 @@ protected:
     // QMainWindow implementation.
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
+
+    // common::UpdateChecker::Delegate implementation.
+    void onUpdateCheckedFinished(const base::ByteArray& result) override;
 
 private slots:
     void onNew();
@@ -92,7 +97,6 @@ private slots:
     void onLanguageChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
-    void onUpdateChecked(const QByteArray& result);
 
 private:
     void createLanguageMenu(const QString& current_locale);
@@ -111,6 +115,7 @@ private:
 
     std::unique_ptr<QSystemTrayIcon> tray_icon_;
     std::unique_ptr<QMenu> tray_menu_;
+    std::unique_ptr<common::UpdateChecker> update_checker_;
 
     DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };

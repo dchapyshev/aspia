@@ -18,53 +18,128 @@
 
 #include "common/ui/update_checker.h"
 
-#include "common/ui/update_checker_impl.h"
-
-#include <QThread>
+#include "base/environment.h"
+#include "base/logging.h"
+#include "base/version.h"
+#include "base/memory/byte_array.h"
+#include "base/net/curl_util.h"
 
 namespace common {
 
-UpdateChecker::UpdateChecker(QObject* parent)
-    : QObject(parent)
-{
-    thread_ = new QThread(this);
-    impl_ = new UpdateCheckerImpl();
-
-    impl_->moveToThread(thread_);
-
-    connect(impl_, &UpdateCheckerImpl::finished, this, &UpdateChecker::finished);
-    connect(impl_, &UpdateCheckerImpl::finished, impl_, &UpdateCheckerImpl::deleteLater);
-    connect(impl_, &UpdateCheckerImpl::finished, thread_, &QThread::quit);
-
-    connect(thread_, &QThread::started, impl_, &UpdateCheckerImpl::start);
-    connect(thread_, &QThread::finished, thread_, &QThread::deleteLater);
-}
+UpdateChecker::UpdateChecker() = default;
 
 UpdateChecker::~UpdateChecker()
 {
-    if (thread_ && thread_->isRunning())
+    delegate_ = nullptr;
+    thread_.stop();
+}
+
+void UpdateChecker::setUpdateServer(std::string_view update_server)
+{
+    update_server_ = update_server;
+}
+
+void UpdateChecker::setPackageName(std::string_view package_name)
+{
+    package_name_ = package_name;
+}
+
+void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
+{
+    owner_task_runner_ = std::move(owner_task_runner);
+    delegate_ = delegate;
+
+    DCHECK(owner_task_runner_);
+    DCHECK(delegate_);
+
+    thread_.start(std::bind(&UpdateChecker::run, this));
+}
+
+static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArray* buffer)
+{
+    size_t append_size = size * nmemb;
+    base::append(buffer, ptr, append_size);
+    return append_size;
+}
+
+void UpdateChecker::run()
+{
+    base::Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+
+    std::string url(update_server_);
+    url += "/update.php?";
+    url += "package=" + package_name_;
+    url += '&';
+    url += "version=" + version.toString(3);
+
+    LOG(LS_INFO) << "Start checking for updates. Url: " << url;
+
+    base::ScopedCURL curl;
+    curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
+
+    long verify_peer = 1;
+    if (base::Environment::has("ASPIA_NO_VERIFY_TLS_PEER"))
+        verify_peer = 0;
+
+    base::ByteArray response;
+
+    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, verify_peer);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, writeDataFunc);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
+
+    base::ScopedCURLM multi_curl;
+    curl_multi_add_handle(multi_curl.get(), curl.get());
+
+    int still_running = 1;
+    do
     {
-        thread_->quit();
-        thread_->wait();
+        CURLMcode mc = curl_multi_perform(multi_curl.get(), &still_running);
+        if (!mc)
+        {
+              // Wait for activity, timeout or "nothing".
+              mc = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
+        }
+
+        if (mc)
+        {
+            LOG(LS_WARNING) << "curl_multi_poll failed: " << mc;
+            response.clear();
+            break;
+        }
+
+        if (thread_.isStopping())
+        {
+            LOG(LS_INFO) << "Update check canceled";
+            response.clear();
+            break;
+        }
+    }
+    while (still_running);
+
+    curl_multi_remove_handle(multi_curl.get(), curl.get());
+
+    if (!thread_.isStopping())
+    {
+        LOG(LS_INFO) << "Checking is finished: " << base::toStdString(response);
+        onFinished(response);
     }
 }
 
-void UpdateChecker::setUpdateServer(const QString& update_server)
+void UpdateChecker::onFinished(const base::ByteArray& response)
 {
-    if (impl_)
-        impl_->setUpdateServer(update_server);
-}
+    if (!owner_task_runner_->belongsToCurrentThread())
+    {
+        owner_task_runner_->postTask(std::bind(&UpdateChecker::onFinished, this, response));
+        return;
+    }
 
-void UpdateChecker::setPackageName(const QString& package_name)
-{
-    if (impl_)
-        impl_->setPackageName(package_name);
-}
-
-void UpdateChecker::start()
-{
-    if (thread_)
-        thread_->start(QThread::LowPriority);
+    if (delegate_)
+    {
+        delegate_->onUpdateCheckedFinished(response);
+        delegate_ = nullptr;
+    }
 }
 
 } // namespace common

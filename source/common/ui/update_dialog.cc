@@ -20,9 +20,9 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "build/version.h"
 #include "common/ui/download_dialog.h"
 #include "common/ui/update_checker.h"
+#include "qt_base/application.h"
 #include "ui_update_dialog.h"
 
 #if defined(OS_WIN)
@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QTemporaryFile>
+#include <QTimer>
 
 namespace common {
 
@@ -45,8 +46,8 @@ QString makeUrl(const QUrl& url)
 
 } // namespace
 
-UpdateDialog::UpdateDialog(const QString& update_server,
-                           const QString& package_name,
+UpdateDialog::UpdateDialog(std::string_view update_server,
+                           std::string_view package_name,
                            QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>())
@@ -56,15 +57,12 @@ UpdateDialog::UpdateDialog(const QString& update_server,
 
     ui->label_available->setText(tr("Receiving information..."));
 
-    checker_ = new UpdateChecker(this);
+    checker_ = std::make_unique<UpdateChecker>();
 
     checker_->setUpdateServer(update_server);
     checker_->setPackageName(package_name);
 
-    connect(checker_, &UpdateChecker::finished, this, &UpdateDialog::onUpdateChecked);
-    connect(checker_, &UpdateChecker::finished, checker_, &UpdateChecker::deleteLater);
-
-    checker_->start();
+    checker_->start(qt_base::Application::uiTaskRunner(), this);
 }
 
 UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
@@ -75,8 +73,8 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     initialize();
 
     ui->label_available->setText(QString::fromStdString(update_info_.version().toString(3)));
-    ui->label_url->setText(makeUrl(update_info_.url()));
-    ui->edit_description->setText(update_info_.description());
+    ui->label_url->setText(makeUrl(QString::fromStdString(update_info_.url())));
+    ui->edit_description->setText(QString::fromStdString(update_info_.description()));
     ui->button_update->setEnabled(true);
 }
 
@@ -100,29 +98,15 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 {
     if (checker_)
     {
-        checker_finished_ = false;
-
-        connect(checker_, &UpdateChecker::finished, [this]()
-        {
-            checker_finished_ = true;
-            close();
-        });
-
         ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
         ui->button_close->setEnabled(false);
-        checker_ = nullptr;
-    }
-
-    if (!checker_finished_)
-    {
-        event->ignore();
-        return;
+        checker_.reset();
     }
 
     QDialog::closeEvent(event);
 }
 
-void UpdateDialog::onUpdateChecked(const QByteArray& result)
+void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     UpdateInfo update_info = UpdateInfo::fromXml(result);
     if (!update_info.isValid())
@@ -139,8 +123,8 @@ void UpdateDialog::onUpdateChecked(const QByteArray& result)
         if (new_version > current_version)
         {
             ui->label_available->setText(QString::fromStdString(new_version.toString(3)));
-            ui->edit_description->setText(update_info.description());
-            ui->label_url->setText(makeUrl(update_info.url()));
+            ui->edit_description->setText(QString::fromStdString(update_info.description()));
+            ui->label_url->setText(makeUrl(QString::fromStdString(update_info.url())));
 
 #if defined(OS_WIN)
             ui->button_update->setEnabled(true);
@@ -154,6 +138,11 @@ void UpdateDialog::onUpdateChecked(const QByteArray& result)
     }
 
     update_info_ = update_info;
+
+    QTimer::singleShot(0, this, [this]()
+    {
+        checker_.reset();
+    });
 }
 
 void UpdateDialog::onUpdateNow()
