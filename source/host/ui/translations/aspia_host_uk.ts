@@ -566,251 +566,251 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="390"/>
-        <location filename="../config_dialog.cc" line="541"/>
-        <location filename="../config_dialog.cc" line="598"/>
+        <location filename="../config_dialog.cc" line="388"/>
+        <location filename="../config_dialog.cc" line="539"/>
+        <location filename="../config_dialog.cc" line="596"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="391"/>
+        <location filename="../config_dialog.cc" line="389"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="527"/>
+        <location filename="../config_dialog.cc" line="525"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="242"/>
+        <location filename="../config_dialog.cc" line="240"/>
         <source>Default</source>
         <translation>Стандартний</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="527"/>
-        <location filename="../config_dialog.cc" line="561"/>
+        <location filename="../config_dialog.cc" line="525"/>
+        <location filename="../config_dialog.cc" line="559"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON файли (*.json)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="536"/>
-        <location filename="../config_dialog.cc" line="593"/>
+        <location filename="../config_dialog.cc" line="534"/>
+        <location filename="../config_dialog.cc" line="591"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="561"/>
+        <location filename="../config_dialog.cc" line="559"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="580"/>
+        <location filename="../config_dialog.cc" line="578"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="473"/>
-        <location filename="../config_dialog.cc" line="509"/>
-        <location filename="../config_dialog.cc" line="583"/>
-        <location filename="../config_dialog.cc" line="619"/>
-        <location filename="../config_dialog.cc" line="632"/>
-        <location filename="../config_dialog.cc" line="906"/>
-        <location filename="../config_dialog.cc" line="929"/>
-        <location filename="../config_dialog.cc" line="948"/>
-        <location filename="../config_dialog.cc" line="958"/>
-        <location filename="../config_dialog.cc" line="978"/>
-        <location filename="../config_dialog.cc" line="988"/>
+        <location filename="../config_dialog.cc" line="471"/>
+        <location filename="../config_dialog.cc" line="507"/>
+        <location filename="../config_dialog.cc" line="581"/>
+        <location filename="../config_dialog.cc" line="617"/>
+        <location filename="../config_dialog.cc" line="630"/>
+        <location filename="../config_dialog.cc" line="904"/>
+        <location filename="../config_dialog.cc" line="927"/>
+        <location filename="../config_dialog.cc" line="946"/>
+        <location filename="../config_dialog.cc" line="956"/>
+        <location filename="../config_dialog.cc" line="976"/>
+        <location filename="../config_dialog.cc" line="986"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="65"/>
+        <location filename="../config_dialog.cc" line="63"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="68"/>
+        <location filename="../config_dialog.cc" line="66"/>
         <source>Apply</source>
         <translation>Примінити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="85"/>
+        <location filename="../config_dialog.cc" line="83"/>
         <source>Once a day</source>
         <translation>Щодня</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="86"/>
+        <location filename="../config_dialog.cc" line="84"/>
         <source>Once a week</source>
         <translation>Щотижня</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="87"/>
+        <location filename="../config_dialog.cc" line="85"/>
         <source>Once a month</source>
         <translation>Щомісяця</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="135"/>
+        <location filename="../config_dialog.cc" line="133"/>
         <source>On reboot</source>
         <translation>При перезавантаженні</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="136"/>
+        <location filename="../config_dialog.cc" line="134"/>
         <source>Every 5 minutes</source>
         <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="137"/>
+        <location filename="../config_dialog.cc" line="135"/>
         <source>Every 30 minutes</source>
         <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="138"/>
+        <location filename="../config_dialog.cc" line="136"/>
         <source>Every 1 hour</source>
         <translation>Кожну годину</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="139"/>
+        <location filename="../config_dialog.cc" line="137"/>
         <source>Every 6 hours</source>
         <translation>Кожні 6 годин</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="140"/>
+        <location filename="../config_dialog.cc" line="138"/>
         <source>Every 12 hours</source>
         <translation>Кожні 12 годин</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="141"/>
+        <location filename="../config_dialog.cc" line="139"/>
         <source>Every 24 hours</source>
         <translation>Кожні 24 години</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="152"/>
+        <location filename="../config_dialog.cc" line="150"/>
         <source>Letters</source>
         <translatorcomment>Буквы или письма?</translatorcomment>
         <translation>Букви</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="171"/>
+        <location filename="../config_dialog.cc" line="169"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="172"/>
+        <location filename="../config_dialog.cc" line="170"/>
         <source>15 seconds</source>
         <translation>15 секунд</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="173"/>
+        <location filename="../config_dialog.cc" line="171"/>
         <source>30 seconds</source>
         <translation>30 секунд</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="174"/>
+        <location filename="../config_dialog.cc" line="172"/>
         <source>45 seconds</source>
         <translation>45 секунд</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="175"/>
+        <location filename="../config_dialog.cc" line="173"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="183"/>
+        <location filename="../config_dialog.cc" line="181"/>
         <source>Accept connection</source>
         <translation>Прийняти підключення</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="185"/>
+        <location filename="../config_dialog.cc" line="183"/>
         <source>Reject connection</source>
         <translation>Відхилити підключення</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="395"/>
-        <location filename="../config_dialog.cc" line="545"/>
-        <location filename="../config_dialog.cc" line="602"/>
+        <location filename="../config_dialog.cc" line="393"/>
+        <location filename="../config_dialog.cc" line="543"/>
+        <location filename="../config_dialog.cc" line="600"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="396"/>
-        <location filename="../config_dialog.cc" line="546"/>
-        <location filename="../config_dialog.cc" line="603"/>
+        <location filename="../config_dialog.cc" line="394"/>
+        <location filename="../config_dialog.cc" line="544"/>
+        <location filename="../config_dialog.cc" line="601"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="474"/>
-        <location filename="../config_dialog.cc" line="510"/>
+        <location filename="../config_dialog.cc" line="472"/>
+        <location filename="../config_dialog.cc" line="508"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка під час обробки пароля.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="620"/>
+        <location filename="../config_dialog.cc" line="618"/>
         <source>Incorrect router address entered.</source>
         <translation>Введено неправильну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="633"/>
+        <location filename="../config_dialog.cc" line="631"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введено неправильний відкритий ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="804"/>
-        <location filename="../config_dialog.cc" line="837"/>
+        <location filename="../config_dialog.cc" line="802"/>
+        <location filename="../config_dialog.cc" line="835"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="846"/>
+        <location filename="../config_dialog.cc" line="844"/>
         <source>Started</source>
         <translation>Розпочато</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="847"/>
+        <location filename="../config_dialog.cc" line="845"/>
         <source>Stop</source>
         <translation>Зупинити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="852"/>
+        <location filename="../config_dialog.cc" line="850"/>
         <source>Not started</source>
         <translation>Не розпочато</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="853"/>
-        <location filename="../config_dialog.cc" line="860"/>
-        <location filename="../config_dialog.cc" line="873"/>
+        <location filename="../config_dialog.cc" line="851"/>
+        <location filename="../config_dialog.cc" line="858"/>
+        <location filename="../config_dialog.cc" line="871"/>
         <source>Start</source>
         <translation>Почати</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="859"/>
+        <location filename="../config_dialog.cc" line="857"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="870"/>
+        <location filename="../config_dialog.cc" line="868"/>
         <source>Not installed</source>
         <translation>Не встановлено</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="877"/>
+        <location filename="../config_dialog.cc" line="875"/>
         <source>Current service state: %1</source>
         <translation>Поточний стан служби: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="799"/>
-        <location filename="../config_dialog.cc" line="872"/>
+        <location filename="../config_dialog.cc" line="797"/>
+        <location filename="../config_dialog.cc" line="870"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="149"/>
+        <location filename="../config_dialog.cc" line="147"/>
         <source>Letters and digits</source>
         <translation>Букви і цифри</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="154"/>
+        <location filename="../config_dialog.cc" line="152"/>
         <source>Digits</source>
         <translation>Цифри</translation>
     </message>
@@ -819,28 +819,28 @@
         <translation type="vanished">Поточний стан: %1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="907"/>
+        <location filename="../config_dialog.cc" line="905"/>
         <source>The service could not be installed.</source>
         <translation>Неможливо встановити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="930"/>
+        <location filename="../config_dialog.cc" line="928"/>
         <source>The service could not be removed.</source>
         <translation>Неможливо видалити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="949"/>
-        <location filename="../config_dialog.cc" line="979"/>
+        <location filename="../config_dialog.cc" line="947"/>
+        <location filename="../config_dialog.cc" line="977"/>
         <source>Could not access the service.</source>
         <translation>Немає доступу до служби.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="959"/>
+        <location filename="../config_dialog.cc" line="957"/>
         <source>The service could not be started.</source>
         <translation>Неможливо запустити службу.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="989"/>
+        <location filename="../config_dialog.cc" line="987"/>
         <source>The service could not be stopped.</source>
         <translation>Неможливо зупинити службу.</translation>
     </message>
