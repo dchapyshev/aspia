@@ -20,7 +20,7 @@
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "common/ui/file_downloader.h"
+#include "common/http_file_downloader.h"
 #include "ui_download_dialog.h"
 
 #include <QFile>
@@ -31,7 +31,7 @@ namespace common {
 
 class DownloadDialog
     : public QDialog,
-      public FileDownloader::Delegate
+      public HttpFileDownloader::Delegate
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ public:
     ~DownloadDialog() override = default;
 
 protected:
-    // FileDownloader::Delegate implementation.
+    // HttpFileDownloader::Delegate implementation.
     void onFileDownloaderError(int error_code) override;
     void onFileDownloaderCompleted() override;
     void onFileDownloaderProgress(int percentage) override;
@@ -48,7 +48,7 @@ protected:
 private:
     Ui::DownloadDialog ui;
 
-    std::unique_ptr<FileDownloader> downloader_ = nullptr;
+    std::unique_ptr<HttpFileDownloader> downloader_ = nullptr;
     QFile& file_;
 
     DISALLOW_COPY_AND_ASSIGN(DownloadDialog);

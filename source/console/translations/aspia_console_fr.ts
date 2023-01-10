@@ -1350,108 +1350,108 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="199"/>
-        <location filename="../main_window.cc" line="1316"/>
+        <location filename="../main_window.cc" line="196"/>
+        <location filename="../main_window.cc" line="1313"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="200"/>
+        <location filename="../main_window.cc" line="197"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="277"/>
+        <location filename="../main_window.cc" line="274"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="275"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="305"/>
+        <location filename="../main_window.cc" line="302"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="307"/>
+        <location filename="../main_window.cc" line="304"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="657"/>
-        <location filename="../main_window.cc" line="982"/>
-        <location filename="../main_window.cc" line="1064"/>
+        <location filename="../main_window.cc" line="654"/>
+        <location filename="../main_window.cc" line="979"/>
+        <location filename="../main_window.cc" line="1061"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="658"/>
-        <location filename="../main_window.cc" line="1065"/>
+        <location filename="../main_window.cc" line="655"/>
+        <location filename="../main_window.cc" line="1062"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="662"/>
-        <location filename="../main_window.cc" line="986"/>
-        <location filename="../main_window.cc" line="1069"/>
+        <location filename="../main_window.cc" line="659"/>
+        <location filename="../main_window.cc" line="983"/>
+        <location filename="../main_window.cc" line="1066"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="663"/>
-        <location filename="../main_window.cc" line="987"/>
-        <location filename="../main_window.cc" line="1070"/>
+        <location filename="../main_window.cc" line="660"/>
+        <location filename="../main_window.cc" line="984"/>
+        <location filename="../main_window.cc" line="1067"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="664"/>
-        <location filename="../main_window.cc" line="1071"/>
+        <location filename="../main_window.cc" line="661"/>
+        <location filename="../main_window.cc" line="1068"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="878"/>
+        <location filename="../main_window.cc" line="875"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="885"/>
+        <location filename="../main_window.cc" line="882"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="886"/>
-        <location filename="../main_window.cc" line="891"/>
+        <location filename="../main_window.cc" line="883"/>
+        <location filename="../main_window.cc" line="888"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="983"/>
+        <location filename="../main_window.cc" line="980"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1019"/>
+        <location filename="../main_window.cc" line="1016"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1034"/>
+        <location filename="../main_window.cc" line="1031"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="496"/>
-        <location filename="../main_window.cc" line="1185"/>
+        <location filename="../main_window.cc" line="493"/>
+        <location filename="../main_window.cc" line="1182"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1317"/>
+        <location filename="../main_window.cc" line="1314"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>

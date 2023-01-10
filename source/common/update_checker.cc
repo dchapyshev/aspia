@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/update_checker.h"
+#include "common/update_checker.h"
 
 #include "base/environment.h"
 #include "base/logging.h"

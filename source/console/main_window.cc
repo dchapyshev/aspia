@@ -20,7 +20,6 @@
 
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
-#include "build/version.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/qt_system_info_window.h"

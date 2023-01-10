@@ -36,7 +36,6 @@
 #include "common/ui/language_action.h"
 #include "common/ui/session_type.h"
 #include "common/ui/update_dialog.h"
-#include "common/ui/update_checker.h"
 
 #include <QActionGroup>
 #include <QDesktopServices>

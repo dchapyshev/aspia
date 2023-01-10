@@ -44,10 +44,16 @@ list(APPEND SOURCE_COMMON
     file_task_producer_proxy.h
     file_worker.cc
     file_worker.h
+    http_file_downloader.cc
+    http_file_downloader.h
     keycode_converter.cc
     keycode_converter.h
     system_info_constants.cc
-    system_info_constants.h)
+    system_info_constants.h
+    update_checker.cc
+    update_checker.h
+    update_info.cc
+    update_info.h)
 
 if (WIN32)
     list(APPEND SOURCE_COMMON
@@ -82,8 +88,6 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.cc
     ui/download_dialog.h
     ui/download_dialog.ui
-    ui/file_downloader.cc
-    ui/file_downloader.h
     ui/language_action.cc
     ui/language_action.h
     ui/session_type.cc
@@ -104,13 +108,9 @@ list(APPEND SOURCE_COMMON_UI
     ui/text_chat_widget.cc
     ui/text_chat_widget.h
     ui/text_chat_widget.ui
-    ui/update_checker.cc
-    ui/update_checker.h
     ui/update_dialog.cc
     ui/update_dialog.h
-    ui/update_dialog.ui
-    ui/update_info.cc
-    ui/update_info.h)
+    ui/update_dialog.ui)
 
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 

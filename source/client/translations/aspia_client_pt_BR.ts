@@ -2452,43 +2452,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="84"/>
+        <location filename="../ui/client_window.cc" line="83"/>
         <source>Confirmation</source>
         <translation type="unfinished">Confirmação</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="85"/>
+        <location filename="../ui/client_window.cc" line="84"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="88"/>
+        <location filename="../ui/client_window.cc" line="87"/>
         <source>Yes</source>
         <translation type="unfinished">Sim</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="89"/>
+        <location filename="../ui/client_window.cc" line="88"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="179"/>
+        <location filename="../ui/client_window.cc" line="178"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="268"/>
-        <location filename="../ui/client_window.cc" line="285"/>
+        <location filename="../ui/client_window.cc" line="267"/>
+        <location filename="../ui/client_window.cc" line="284"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="269"/>
+        <location filename="../ui/client_window.cc" line="268"/>
         <source>An invalid computer address was entered.</source>
         <translation>Um endereço inválido do computador foi inserido.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="286"/>
+        <location filename="../ui/client_window.cc" line="285"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Uma ID de host foi inserida mas o roteador não foi configurado. Você precisa configurar o roteador antes de conectar.</translation>
     </message>

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_UPDATE_CHECKER_H
-#define COMMON_UI_UPDATE_CHECKER_H
+#ifndef COMMON_UPDATE_CHECKER_H
+#define COMMON_UPDATE_CHECKER_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -59,4 +59,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON_UI_UPDATE_CHECKER_H
+#endif // COMMON_UPDATE_CHECKER_H

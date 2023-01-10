@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_FILE_DOWNLOADER_H
-#define COMMON_UI_FILE_DOWNLOADER_H
+#ifndef COMMON_HTTP_FILE_DOWNLOADER_H
+#define COMMON_HTTP_FILE_DOWNLOADER_H
 
 #include "base/macros_magic.h"
 #include "base/task_runner.h"
@@ -26,11 +26,11 @@
 
 namespace common {
 
-class FileDownloader
+class HttpFileDownloader
 {
 public:
-    FileDownloader();
-    ~FileDownloader();
+    HttpFileDownloader();
+    ~HttpFileDownloader();
 
     class Delegate
     {
@@ -53,9 +53,9 @@ private:
     void onCompleted();
     void onProgress(int percentage);
 
-    static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, FileDownloader* self);
+    static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self);
     static int progressCallback(
-        FileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
+        HttpFileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
 
     base::SimpleThread thread_;
 
@@ -65,9 +65,9 @@ private:
     std::string url_;
     base::ByteArray data_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileDownloader);
+    DISALLOW_COPY_AND_ASSIGN(HttpFileDownloader);
 };
 
 } // namespace common
 
-#endif // COMMON_UI_FILE_DOWNLOADER_H
+#endif // COMMON_HTTP_FILE_DOWNLOADER_H

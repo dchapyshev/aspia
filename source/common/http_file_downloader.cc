@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/file_downloader.h"
+#include "common/http_file_downloader.h"
 
 #include "base/environment.h"
 #include "base/logging.h"
@@ -24,12 +24,12 @@
 
 namespace common {
 
-FileDownloader::FileDownloader()
+HttpFileDownloader::HttpFileDownloader()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
-FileDownloader::~FileDownloader()
+HttpFileDownloader::~HttpFileDownloader()
 {
     LOG(LS_INFO) << "Dtor";
 
@@ -37,9 +37,9 @@ FileDownloader::~FileDownloader()
     thread_.stop();
 }
 
-void FileDownloader::start(std::string_view url,
-                           std::shared_ptr<base::TaskRunner> owner_task_runner,
-                           Delegate* delegate)
+void HttpFileDownloader::start(std::string_view url,
+                               std::shared_ptr<base::TaskRunner> owner_task_runner,
+                               Delegate* delegate)
 {
     url_ = url;
     owner_task_runner_ = std::move(owner_task_runner);
@@ -48,10 +48,10 @@ void FileDownloader::start(std::string_view url,
     DCHECK(owner_task_runner_);
     DCHECK(delegate_);
 
-    thread_.start(std::bind(&FileDownloader::run, this));
+    thread_.start(std::bind(&HttpFileDownloader::run, this));
 }
 
-void FileDownloader::run()
+void HttpFileDownloader::run()
 {
     base::ScopedCURL curl;
 
@@ -115,11 +115,11 @@ void FileDownloader::run()
     }
 }
 
-void FileDownloader::onError(int error_code)
+void HttpFileDownloader::onError(int error_code)
 {
     if (!owner_task_runner_->belongsToCurrentThread())
     {
-        owner_task_runner_->postTask(std::bind(&FileDownloader::onError, this, error_code));
+        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onError, this, error_code));
         return;
     }
 
@@ -130,11 +130,11 @@ void FileDownloader::onError(int error_code)
     }
 }
 
-void FileDownloader::onCompleted()
+void HttpFileDownloader::onCompleted()
 {
     if (!owner_task_runner_->belongsToCurrentThread())
     {
-        owner_task_runner_->postTask(std::bind(&FileDownloader::onCompleted, this));
+        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onCompleted, this));
         return;
     }
 
@@ -145,11 +145,11 @@ void FileDownloader::onCompleted()
     }
 }
 
-void FileDownloader::onProgress(int percentage)
+void HttpFileDownloader::onProgress(int percentage)
 {
     if (!owner_task_runner_->belongsToCurrentThread())
     {
-        owner_task_runner_->postTask(std::bind(&FileDownloader::onProgress, this, percentage));
+        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onProgress, this, percentage));
         return;
     }
 
@@ -158,7 +158,8 @@ void FileDownloader::onProgress(int percentage)
 }
 
 // static
-size_t FileDownloader::writeDataCallback(void* ptr, size_t size, size_t nmemb, FileDownloader* self)
+size_t HttpFileDownloader::writeDataCallback(
+    void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self)
 {
     size_t result = 0;
 
@@ -178,8 +179,8 @@ size_t FileDownloader::writeDataCallback(void* ptr, size_t size, size_t nmemb, F
 }
 
 // static
-int FileDownloader::progressCallback(
-    FileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)
+int HttpFileDownloader::progressCallback(
+    HttpFileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)
 {
     if (self && !self->thread_.isStopping())
     {

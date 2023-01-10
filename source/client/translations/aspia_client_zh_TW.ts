@@ -2362,43 +2362,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../ui/client_window.cc" line="84"/>
+        <location filename="../ui/client_window.cc" line="83"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="85"/>
+        <location filename="../ui/client_window.cc" line="84"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="88"/>
+        <location filename="../ui/client_window.cc" line="87"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="89"/>
+        <location filename="../ui/client_window.cc" line="88"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="179"/>
+        <location filename="../ui/client_window.cc" line="178"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="268"/>
-        <location filename="../ui/client_window.cc" line="285"/>
+        <location filename="../ui/client_window.cc" line="267"/>
+        <location filename="../ui/client_window.cc" line="284"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="269"/>
+        <location filename="../ui/client_window.cc" line="268"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="286"/>
+        <location filename="../ui/client_window.cc" line="285"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>

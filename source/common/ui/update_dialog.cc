@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "common/ui/download_dialog.h"
-#include "common/ui/update_checker.h"
 #include "qt_base/application.h"
 #include "ui_update_dialog.h"
 

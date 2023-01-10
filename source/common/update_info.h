@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_UPDATE_INFO_H
-#define COMMON_UI_UPDATE_INFO_H
+#ifndef COMMON_UPDATE_INFO_H
+#define COMMON_UPDATE_INFO_H
 
 #include "base/version.h"
 #include "base/memory/byte_array.h"
@@ -50,4 +50,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON_UI_UPDATE_INFO_H
+#endif // COMMON_UPDATE_INFO_H

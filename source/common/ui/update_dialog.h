@@ -20,8 +20,8 @@
 #define COMMON_UI_UPDATE_DIALOG_H
 
 #include "base/macros_magic.h"
-#include "common/ui/update_checker.h"
-#include "common/ui/update_info.h"
+#include "common/update_checker.h"
+#include "common/update_info.h"
 
 #include <QDialog>
 

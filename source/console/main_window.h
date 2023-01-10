@@ -20,7 +20,7 @@
 #define CONSOLE_MAIN_WINDOW_H
 
 #include "client/router_config.h"
-#include "common/ui/update_checker.h"
+#include "common/update_checker.h"
 #include "console/mru.h"
 #include "proto/address_book.pb.h"
 #include "ui_main_window.h"
