@@ -91,11 +91,11 @@ namespace base {
 // Where to record logging output? A flat file and/or system debug log via OutputDebugString.
 enum LoggingDestination
 {
-    LOG_NONE                = 0,
-    LOG_TO_FILE             = 1 << 0,
-    LOG_TO_SYSTEM_DEBUG_LOG = 1 << 1,
+    LOG_NONE      = 0,
+    LOG_TO_FILE   = 1 << 0,
+    LOG_TO_STDOUT = 1 << 1,
 
-    LOG_TO_ALL = LOG_TO_FILE | LOG_TO_SYSTEM_DEBUG_LOG,
+    LOG_TO_ALL    = LOG_TO_FILE | LOG_TO_STDOUT,
 
 #if defined(OS_WIN)
     // On Windows, use a file next to the exe.

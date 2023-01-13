@@ -158,10 +158,13 @@ bool initLoggingUnlocked(const std::string& prefix)
     if (!g_log_file.is_open())
         return false;
 
-    std::filesystem::file_time_type file_time =
-        std::filesystem::last_write_time(file_path, error_code);
-    if (!error_code)
-        removeOldFiles(file_dir, file_time, g_max_log_file_age);
+    if (g_max_log_file_age != 0)
+    {
+        std::filesystem::file_time_type file_time =
+            std::filesystem::last_write_time(file_path, error_code);
+        if (!error_code)
+            removeOldFiles(file_dir, file_time, g_max_log_file_age);
+    }
 
     g_log_file_path = std::move(file_path);
     return true;
@@ -175,8 +178,7 @@ bool initLoggingUnlocked(const std::string& prefix)
 std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
-    : destination(LOG_DEFAULT),
-      min_log_level(LOG_LS_WARNING),
+    : min_log_level(LOG_LS_WARNING),
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
@@ -190,6 +192,62 @@ LoggingSettings::LoggingSettings()
             log_level = std::min(log_level, LOG_LS_FATAL);
 
             min_log_level = log_level;
+        }
+    }
+
+    int log_to_file = 0;
+    if (LOG_DEFAULT & LOG_TO_FILE)
+        log_to_file = 1;
+
+    std::string log_to_file_string;
+    if (Environment::get("ASPIA_LOG_TO_FILE", &log_to_file_string))
+    {
+        int value;
+        if (stringToInt(log_to_file_string, &value))
+            log_to_file = value;
+    }
+
+    int log_to_stdout = 0;
+    if (LOG_DEFAULT & LOG_TO_STDOUT)
+        log_to_stdout = 1;
+
+    std::string log_to_stdout_string;
+    if (Environment::get("ASPIA_LOG_TO_STDOUT", &log_to_stdout_string))
+    {
+        int value;
+        if (stringToInt(log_to_stdout_string, &value))
+            log_to_stdout = value;
+    }
+
+    if (log_to_file != 0 && log_to_stdout != 0)
+        destination = LOG_TO_ALL;
+    else if (log_to_file != 0 && log_to_stdout == 0)
+        destination = LOG_TO_FILE;
+    else if (log_to_file == 0 && log_to_stdout != 0)
+        destination = LOG_TO_STDOUT;
+    else
+        destination = LOG_NONE;
+
+    std::string max_log_file_size_string;
+    if (Environment::get("ASPIA_MAX_LOG_FILE_SIZE", &max_log_file_size_string))
+    {
+        unsigned long long value;
+        if (stringToULong64(max_log_file_size_string, &value))
+        {
+            static const unsigned long long kMinValue = 1024;
+            static const unsigned long long kMaxValue = 10 * 1024 * 1024;
+
+            max_log_file_size = static_cast<size_t>(std::min(std::max(value, kMinValue), kMaxValue));
+        }
+    }
+
+    std::string max_log_file_age_string;
+    if (Environment::get("ASPIA_MAX_LOG_FILE_AGE", &max_log_file_age_string))
+    {
+        unsigned long long value;
+        if (stringToULong64(max_log_file_age_string, &value))
+        {
+            max_log_file_age = static_cast<size_t>(std::min(value, 366ULL));
         }
     }
 }
@@ -370,7 +428,7 @@ LogMessage::~LogMessage()
 
     std::string message(stream_.str());
 
-    if ((g_logging_destination & LOG_TO_SYSTEM_DEBUG_LOG) != 0)
+    if ((g_logging_destination & LOG_TO_STDOUT) != 0)
     {
         debugPrint(message.data());
 
