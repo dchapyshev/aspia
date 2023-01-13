@@ -49,9 +49,6 @@ public:
 
 private:
     void run();
-    void onError(int error_code);
-    void onCompleted();
-    void onProgress(int percentage);
 
     static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self);
     static int progressCallback(
@@ -59,8 +56,8 @@ private:
 
     base::SimpleThread thread_;
 
-    std::shared_ptr<base::TaskRunner> owner_task_runner_;
-    Delegate* delegate_ = nullptr;
+    class Runner;
+    std::shared_ptr<Runner> runner_;
 
     std::string url_;
     base::ByteArray data_;

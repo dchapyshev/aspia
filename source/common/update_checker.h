@@ -46,10 +46,9 @@ public:
 
 private:
     void run();
-    void onFinished(const base::ByteArray& response);
 
-    std::shared_ptr<base::TaskRunner> owner_task_runner_;
-    Delegate* delegate_ = nullptr;
+    class Runner;
+    std::shared_ptr<Runner> runner_;
     base::SimpleThread thread_;
     std::string update_server_;
     std::string package_name_;

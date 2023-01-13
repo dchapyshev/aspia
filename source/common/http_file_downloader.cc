@@ -24,6 +24,76 @@
 
 namespace common {
 
+class HttpFileDownloader::Runner : public std::enable_shared_from_this<Runner>
+{
+public:
+    Runner(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
+        : owner_task_runner_(std::move(owner_task_runner)),
+          delegate_(delegate)
+    {
+        DCHECK(owner_task_runner_);
+        DCHECK(delegate_);
+    }
+
+    ~Runner()
+    {
+        dettach();
+    }
+
+    void dettach()
+    {
+        delegate_ = nullptr;
+    }
+
+    void onError(int error_code)
+    {
+        if (!owner_task_runner_->belongsToCurrentThread())
+        {
+            owner_task_runner_->postTask(std::bind(&Runner::onError, shared_from_this(), error_code));
+            return;
+        }
+
+        if (delegate_)
+        {
+            delegate_->onFileDownloaderError(error_code);
+            delegate_ = nullptr;
+        }
+    }
+
+    void onCompleted()
+    {
+        if (!owner_task_runner_->belongsToCurrentThread())
+        {
+            owner_task_runner_->postTask(std::bind(&Runner::onCompleted, shared_from_this()));
+            return;
+        }
+
+        if (delegate_)
+        {
+            delegate_->onFileDownloaderCompleted();
+            delegate_ = nullptr;
+        }
+    }
+
+    void onProgress(int percentage)
+    {
+        if (!owner_task_runner_->belongsToCurrentThread())
+        {
+            owner_task_runner_->postTask(std::bind(&Runner::onProgress, shared_from_this(), percentage));
+            return;
+        }
+
+        if (delegate_)
+            delegate_->onFileDownloaderProgress(percentage);
+    }
+
+private:
+    std::shared_ptr<base::TaskRunner> owner_task_runner_;
+    Delegate* delegate_ = nullptr;
+
+    DISALLOW_COPY_AND_ASSIGN(Runner);
+};
+
 HttpFileDownloader::HttpFileDownloader()
 {
     LOG(LS_INFO) << "Ctor";
@@ -33,7 +103,11 @@ HttpFileDownloader::~HttpFileDownloader()
 {
     LOG(LS_INFO) << "Dtor";
 
-    delegate_ = nullptr;
+    if (runner_)
+    {
+        runner_->dettach();
+        runner_.reset();
+    }
     thread_.stop();
 }
 
@@ -42,12 +116,7 @@ void HttpFileDownloader::start(std::string_view url,
                                Delegate* delegate)
 {
     url_ = url;
-    owner_task_runner_ = std::move(owner_task_runner);
-    delegate_ = delegate;
-
-    DCHECK(owner_task_runner_);
-    DCHECK(delegate_);
-
+    runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&HttpFileDownloader::run, this));
 }
 
@@ -105,56 +174,16 @@ void HttpFileDownloader::run()
     {
         if (error_code != CURLM_OK)
         {
-            onError(error_code);
+            if (runner_)
+                runner_->onError(error_code);
         }
         else
         {
             LOG(LS_INFO) << "Download is finished: " << data_.size() << " bytes";
-            onCompleted();
+            if (runner_)
+                runner_->onCompleted();
         }
     }
-}
-
-void HttpFileDownloader::onError(int error_code)
-{
-    if (!owner_task_runner_->belongsToCurrentThread())
-    {
-        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onError, this, error_code));
-        return;
-    }
-
-    if (delegate_)
-    {
-        delegate_->onFileDownloaderError(error_code);
-        delegate_ = nullptr;
-    }
-}
-
-void HttpFileDownloader::onCompleted()
-{
-    if (!owner_task_runner_->belongsToCurrentThread())
-    {
-        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onCompleted, this));
-        return;
-    }
-
-    if (delegate_)
-    {
-        delegate_->onFileDownloaderCompleted();
-        delegate_ = nullptr;
-    }
-}
-
-void HttpFileDownloader::onProgress(int percentage)
-{
-    if (!owner_task_runner_->belongsToCurrentThread())
-    {
-        owner_task_runner_->postTask(std::bind(&HttpFileDownloader::onProgress, this, percentage));
-        return;
-    }
-
-    if (delegate_)
-        delegate_->onFileDownloaderProgress(percentage);
 }
 
 // static
@@ -188,7 +217,8 @@ int HttpFileDownloader::progressCallback(
         if (dltotal > 0)
             percentage = static_cast<int>((dlnow * 100) / dltotal);
 
-        self->onProgress(percentage);
+        if (self->runner_)
+            self->runner_->onProgress(percentage);
     }
 
     return 0;

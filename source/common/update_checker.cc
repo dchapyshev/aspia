@@ -26,11 +26,58 @@
 
 namespace common {
 
+class UpdateChecker::Runner : public std::enable_shared_from_this<Runner>
+{
+public:
+    Runner(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
+        : owner_task_runner_(std::move(owner_task_runner)),
+          delegate_(delegate)
+    {
+        DCHECK(owner_task_runner_);
+        DCHECK(delegate_);
+    }
+
+    ~Runner()
+    {
+        dettach();
+    }
+
+    void dettach()
+    {
+        delegate_ = nullptr;
+    }
+
+    void onFinished(const base::ByteArray& response)
+    {
+        if (!owner_task_runner_->belongsToCurrentThread())
+        {
+            owner_task_runner_->postTask(std::bind(&Runner::onFinished, shared_from_this(), response));
+            return;
+        }
+
+        if (delegate_)
+        {
+            delegate_->onUpdateCheckedFinished(response);
+            delegate_ = nullptr;
+        }
+    }
+
+private:
+    std::shared_ptr<base::TaskRunner> owner_task_runner_;
+    Delegate* delegate_ = nullptr;
+
+    DISALLOW_COPY_AND_ASSIGN(Runner);
+};
+
 UpdateChecker::UpdateChecker() = default;
 
 UpdateChecker::~UpdateChecker()
 {
-    delegate_ = nullptr;
+    if (runner_)
+    {
+        runner_->dettach();
+        runner_.reset();
+    }
     thread_.stop();
 }
 
@@ -46,12 +93,7 @@ void UpdateChecker::setPackageName(std::string_view package_name)
 
 void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
 {
-    owner_task_runner_ = std::move(owner_task_runner);
-    delegate_ = delegate;
-
-    DCHECK(owner_task_runner_);
-    DCHECK(delegate_);
-
+    runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&UpdateChecker::run, this));
 }
 
@@ -123,22 +165,8 @@ void UpdateChecker::run()
     if (!thread_.isStopping())
     {
         LOG(LS_INFO) << "Checking is finished: " << base::toStdString(response);
-        onFinished(response);
-    }
-}
-
-void UpdateChecker::onFinished(const base::ByteArray& response)
-{
-    if (!owner_task_runner_->belongsToCurrentThread())
-    {
-        owner_task_runner_->postTask(std::bind(&UpdateChecker::onFinished, this, response));
-        return;
-    }
-
-    if (delegate_)
-    {
-        delegate_->onUpdateCheckedFinished(response);
-        delegate_ = nullptr;
+        if (runner_)
+            runner_->onFinished(response);
     }
 }
 
