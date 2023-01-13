@@ -274,12 +274,12 @@
         <translation>Parametri di esportazione e importazione non possono essere definiti insieme.</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="272"/>
+        <location filename="../host_main.cc" line="281"/>
         <source>Aspia Host</source>
         <translation>Host Aspia</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="273"/>
+        <location filename="../host_main.cc" line="282"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation>Versione applicazione: %1.%2.%3.%4.</translation>
     </message>
@@ -861,101 +861,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="359"/>
+        <location filename="../main_window.cc" line="343"/>
         <source>Not available</source>
         <translation>Non disponibile</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="470"/>
-        <location filename="../main_window.cc" line="629"/>
-        <location filename="../main_window.cc" line="780"/>
+        <location filename="../main_window.cc" line="454"/>
+        <location filename="../main_window.cc" line="613"/>
+        <location filename="../main_window.cc" line="764"/>
         <source>Aspia Host</source>
         <translation>Host Aspia</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="180"/>
-        <location filename="../main_window.cc" line="611"/>
+        <location filename="../main_window.cc" line="164"/>
+        <location filename="../main_window.cc" line="595"/>
         <source>Show</source>
         <translation>Visualizza</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="616"/>
+        <location filename="../main_window.cc" line="600"/>
         <source>Hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="644"/>
+        <location filename="../main_window.cc" line="628"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="645"/>
+        <location filename="../main_window.cc" line="629"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Se esci da Aspia, non sarà possibile connettersi al computer fino a quando non riavvierai il computer o Aspia manualmente. Vuoi veramente uscire dall&apos;applicazione?</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="411"/>
-        <location filename="../main_window.cc" line="715"/>
+        <location filename="../main_window.cc" line="395"/>
+        <location filename="../main_window.cc" line="699"/>
         <source>Router is disabled</source>
         <translation>Router disabilitato</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="720"/>
+        <location filename="../main_window.cc" line="704"/>
         <source>Connecting to a router...</source>
         <translation>Connession al router...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="725"/>
+        <location filename="../main_window.cc" line="709"/>
         <source>Connected to a router</source>
         <translation>Connesso al router</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="730"/>
+        <location filename="../main_window.cc" line="714"/>
         <source>Connection error</source>
         <translation>Errore connessione</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="419"/>
+        <location filename="../main_window.cc" line="403"/>
         <source>Connected to a router %1</source>
         <translation>Connesso al router %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="423"/>
+        <location filename="../main_window.cc" line="407"/>
         <source>Failed to connect to router %1</source>
         <translation>Connession al router %1 fallita</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="415"/>
+        <location filename="../main_window.cc" line="399"/>
         <source>Connecting to a router %1...</source>
         <translation>Connessione al router %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="461"/>
+        <location filename="../main_window.cc" line="445"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha avviato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="466"/>
+        <location filename="../main_window.cc" line="450"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Utente &quot;%1&quot; (%2) ha arrestato la registrazione dello schermo.</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="650"/>
+        <location filename="../main_window.cc" line="634"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="651"/>
+        <location filename="../main_window.cc" line="635"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="781"/>
+        <location filename="../main_window.cc" line="765"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="777"/>
+        <location filename="../main_window.cc" line="761"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
