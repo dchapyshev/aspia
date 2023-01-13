@@ -45,10 +45,6 @@
 #include <QTimer>
 #include <QUrl>
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-#include <QNetworkConfigurationManager>
-#endif
-
 #if defined(Q_OS_WIN)
 #include "base/win/process_util.h"
 
@@ -87,24 +83,12 @@ MainWindow::MainWindow(QWidget* parent)
 
     updateTrayIconTooltip();
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QNetworkConfigurationManager* network_config_manager = new QNetworkConfigurationManager(this);
-    connect(network_config_manager, &QNetworkConfigurationManager::configurationAdded,
-            this, &MainWindow::updateTrayIconTooltip);
-    connect(network_config_manager, &QNetworkConfigurationManager::configurationChanged,
-            this, &MainWindow::updateTrayIconTooltip);
-    connect(network_config_manager, &QNetworkConfigurationManager::configurationRemoved,
-            this, &MainWindow::updateTrayIconTooltip);
-    connect(network_config_manager, &QNetworkConfigurationManager::onlineStateChanged,
-            this, &MainWindow::updateTrayIconTooltip);
-#else
     QTimer* tray_tooltip_timer = new QTimer(this);
 
     connect(tray_tooltip_timer, &QTimer::timeout, this, &MainWindow::updateTrayIconTooltip);
 
     tray_tooltip_timer->setInterval(std::chrono::seconds(30));
     tray_tooltip_timer->start();
-#endif
 
     createLanguageMenu(user_settings.locale());
     onSettingsChanged();
