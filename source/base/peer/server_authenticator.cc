@@ -29,28 +29,12 @@
 #include "base/crypto/srp_math.h"
 #include "base/peer/user_list.h"
 #include "base/strings/unicode.h"
-#include "build/version.h"
 
 namespace base {
 
 namespace {
 
 constexpr size_t kIvSize = 12;
-
-const char* encryptionToString(uint32_t encryption)
-{
-    switch (encryption)
-    {
-        case proto::ENCRYPTION_AES256_GCM:
-            return "ENCRYPTION_AES256_GCM";
-
-        case proto::ENCRYPTION_CHACHA20_POLY1305:
-            return "ENCRYPTION_CHACHA20_POLY1305";
-
-        default:
-            return "UNKNOWN";
-    }
-}
 
 const char* identifyToString(proto::Identify identify)
 {
@@ -281,11 +265,20 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
         return;
     }
 
-    LOG(LS_INFO) << "Encryption: " << encryptionToString(client_hello->encryption());
+    const uint32_t encryption = client_hello->encryption();
+
+    LOG(LS_INFO) << "Supported by client:";
+
+    if (encryption & proto::ENCRYPTION_AES256_GCM)
+        LOG(LS_INFO) << "ENCRYPTION_AES256_GCM";
+
+    if (encryption & proto::ENCRYPTION_CHACHA20_POLY1305)
+        LOG(LS_INFO) << "ENCRYPTION_CHACHA20_POLY1305";
+
     LOG(LS_INFO) << "Identify: " << identifyToString(client_hello->identify());
 
-    if (!(client_hello->encryption() & proto::ENCRYPTION_AES256_GCM) &&
-        !(client_hello->encryption() & proto::ENCRYPTION_CHACHA20_POLY1305))
+    if (!(encryption & proto::ENCRYPTION_AES256_GCM) &&
+        !(encryption & proto::ENCRYPTION_CHACHA20_POLY1305))
     {
         // No encryption methods supported.
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
@@ -358,7 +351,7 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
     has_aes_ni = CpuidUtil::hasAesNi();
 #endif
 
-    if ((client_hello->encryption() & proto::ENCRYPTION_AES256_GCM) && has_aes_ni)
+    if ((encryption & proto::ENCRYPTION_AES256_GCM) && has_aes_ni)
     {
         LOG(LS_INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
