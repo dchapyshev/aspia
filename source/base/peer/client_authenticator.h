@@ -38,17 +38,17 @@ public:
 
 protected:
     // Authenticator implementation.
-    bool onStarted() override;
+    [[nodiscard]] bool onStarted() override;
     void onReceived(const ByteArray& buffer) override;
     void onWritten() override;
 
 private:
     void sendClientHello();
-    bool readServerHello(const ByteArray& buffer);
+    [[nodiscard]] bool readServerHello(const ByteArray& buffer);
     void sendIdentify();
-    bool readServerKeyExchange(const ByteArray& buffer);
+    [[nodiscard]] bool readServerKeyExchange(const ByteArray& buffer);
     void sendClientKeyExchange();
-    bool readSessionChallenge(const ByteArray& buffer);
+    [[nodiscard]] bool readSessionChallenge(const ByteArray& buffer);
     void sendSessionResponse();
 
     enum class InternalState

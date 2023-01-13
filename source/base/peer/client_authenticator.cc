@@ -28,7 +28,6 @@
 #include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 #include "base/strings/unicode.h"
-#include "build/version.h"
 
 namespace base {
 

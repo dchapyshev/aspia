@@ -55,7 +55,7 @@ public:
 
 protected:
     // Authenticator implementation.
-    bool onStarted() override;
+    [[nodiscard]] bool onStarted() override;
     void onReceived(const ByteArray& buffer) override;
     void onWritten() override;
 
