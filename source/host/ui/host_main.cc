@@ -267,8 +267,7 @@ int hostMain(int argc, char* argv[])
     }
     else if (command_line.hasSwitch(u"update"))
     {
-        common::UpdateDialog dialog(
-            base::utf8FromUtf16(host::SystemSettings().updateServer()), "host");
+        common::UpdateDialog dialog(host::SystemSettings().updateServer(), "host");
         dialog.show();
         dialog.activateWindow();
 

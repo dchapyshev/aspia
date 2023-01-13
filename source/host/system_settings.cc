@@ -202,12 +202,12 @@ void SystemSettings::setUserList(const base::UserList& users)
     settings_.set("SeedKey", users.seedKey());
 }
 
-std::u16string SystemSettings::updateServer() const
+std::string SystemSettings::updateServer() const
 {
-    return settings_.get<std::u16string>("UpdateServer", DEFAULT_UPDATE_SERVER);
+    return settings_.get<std::string>("UpdateServer", DEFAULT_UPDATE_SERVER);
 }
 
-void SystemSettings::setUpdateServer(const std::u16string& server)
+void SystemSettings::setUpdateServer(const std::string& server)
 {
     settings_.set("UpdateServer", server);
 }

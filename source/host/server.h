@@ -22,6 +22,8 @@
 #include "build/build_config.h"
 #include "base/net/network_server.h"
 #include "base/peer/server_authenticator_manager.h"
+#include "common/http_file_downloader.h"
+#include "common/update_checker.h"
 #include "host/router_controller.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
@@ -38,7 +40,9 @@ class Server
     : public base::NetworkServer::Delegate,
       public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
-      public UserSessionManager::Delegate
+      public UserSessionManager::Delegate,
+      public common::UpdateChecker::Delegate,
+      public common::HttpFileDownloader::Delegate
 {
 public:
     explicit Server(std::shared_ptr<base::TaskRunner> task_runner);
@@ -65,6 +69,14 @@ protected:
     void onResetHostId(base::HostId host_id) override;
     void onUserListChanged() override;
 
+    // common::UpdateChecker::Delegate implementation.
+    void onUpdateCheckedFinished(const base::ByteArray& result) override;
+
+    // common::HttpFileDownloader::Delegate implementation.
+    void onFileDownloaderError(int error_code) override;
+    void onFileDownloaderCompleted() override;
+    void onFileDownloaderProgress(int percentage) override;
+
 private:
     void startAuthentication(std::unique_ptr<base::NetworkChannel> channel);
     void addFirewallRules();
@@ -86,6 +98,9 @@ private:
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;
+
+    std::unique_ptr<common::UpdateChecker> update_checker_;
+    std::unique_ptr<common::HttpFileDownloader> update_downloader_;
 
     DISALLOW_COPY_AND_ASSIGN(Server);
 };

@@ -21,14 +21,18 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 #include "base/waitable_timer.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
 #include "base/net/network_channel.h"
+#include "common/update_info.h"
 #include "host/client_session.h"
 #include "host/win/updater_launcher.h"
 
 #if defined(OS_WIN)
+#include "base/files/file_util.h"
 #include "base/net/firewall_manager.h"
+#include "base/win/process_util.h"
 #endif // defined(OS_WIN)
 
 namespace host {
@@ -237,6 +241,94 @@ void Server::onUserListChanged()
 {
     LOG(LS_INFO) << "User list changed";
     reloadUserList();
+}
+
+void Server::onUpdateCheckedFinished(const base::ByteArray& result)
+{
+    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+    if (!update_info.isValid())
+    {
+        LOG(LS_INFO) << "No valid update info";
+    }
+    else
+    {
+        base::Version current_version(
+            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+        base::Version new_version = update_info.version();
+
+        if (new_version > current_version)
+        {
+            update_downloader_ = std::make_unique<common::HttpFileDownloader>();
+            update_downloader_->start(update_info.url(), task_runner_, this);
+        }
+        else
+        {
+            LOG(LS_INFO) << "No available updates";
+        }
+    }
+
+    task_runner_->deleteSoon(std::move(update_checker_));
+}
+
+void Server::onFileDownloaderError(int error_code)
+{
+    LOG(LS_WARNING) << "Unable to download update: " << error_code;
+    task_runner_->deleteSoon(std::move(update_downloader_));
+}
+
+void Server::onFileDownloaderCompleted()
+{
+#if defined(OS_WIN)
+    std::error_code error_code;
+    std::filesystem::path file_path = std::filesystem::temp_directory_path(error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "Unable to get temp directory: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+    }
+    else
+    {
+        file_path.append("aspia_host_" + base::toHex(base::Random::byteArray(16)) + ".msi");
+
+        if (!base::writeFile(file_path, update_downloader_->data()))
+        {
+            LOG(LS_WARNING) << "Unable to write file '" << file_path << "'";
+        }
+        else
+        {
+            std::u16string arguments;
+
+            arguments += u"/i "; // Normal install.
+            arguments += file_path.u16string(); // MSI package file.
+            arguments += u" /qn"; // No UI during the installation process.
+
+            if (base::win::createProcess(u"msiexec",
+                                         arguments,
+                                         base::win::ProcessExecuteMode::ELEVATE))
+            {
+                LOG(LS_INFO) << "Update process started (cmd: " << arguments << ")";
+            }
+            else
+            {
+                LOG(LS_WARNING) << "Unable to create update process (cmd: " << arguments << ")";
+
+                // If the update fails, delete the temporary file.
+                if (!std::filesystem::remove(file_path, error_code))
+                {
+                    LOG(LS_WARNING) << "Unable to remove installer file: "
+                                    << base::utf16FromLocal8Bit(error_code.message());
+                }
+            }
+        }
+    }
+#endif // defined(OS_WIN)
+
+    task_runner_->deleteSoon(std::move(update_downloader_));
+}
+
+void Server::onFileDownloaderProgress(int percentage)
+{
+    LOG(LS_INFO) << "Update downloading progress: " << percentage;
 }
 
 void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
@@ -467,8 +559,14 @@ void Server::checkForUpdates()
 
     settings_.setLastUpdateCheck(current_timepoint);
 
-    //LOG(LS_INFO) << "Start checking for updates";
-    //launchSilentUpdater();
+    LOG(LS_INFO) << "Start checking for updates";
+
+    update_checker_ = std::make_unique<common::UpdateChecker>();
+
+    update_checker_->setUpdateServer(settings_.updateServer());
+    update_checker_->setPackageName("host");
+
+    update_checker_->start(task_runner_, this);
 #endif // defined(OS_WIN)
 }
 
