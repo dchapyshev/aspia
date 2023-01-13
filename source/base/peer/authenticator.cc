@@ -127,8 +127,13 @@ const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
 
 void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 {
+    sendMessage(base::serialize(message));
+}
+
+void Authenticator::sendMessage(base::ByteArray&& data)
+{
     DCHECK(channel_);
-    channel_->send(base::serialize(message));
+    channel_->send(std::move(data));
 }
 
 void Authenticator::finish(const Location& location, ErrorCode error_code)

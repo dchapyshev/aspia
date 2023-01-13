@@ -79,6 +79,7 @@ protected:
     virtual void onWritten() = 0;
 
     void sendMessage(const google::protobuf::MessageLite& message);
+    void sendMessage(base::ByteArray&& data);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::Version& version);
     void setPeerOsName(const std::string& name);
