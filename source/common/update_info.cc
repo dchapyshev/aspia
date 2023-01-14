@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 
-#include <rapidxml/rapidxml.hpp>
+#include "third_party/rapidxml/rapidxml.hpp"
 
 namespace common {
 
