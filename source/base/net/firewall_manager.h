@@ -50,6 +50,12 @@ public:
                     std::wstring_view description,
                     uint16_t port);
 
+    // Adds a firewall rule allowing inbound connections to the application on
+    // UDP port |port|. Replaces the rule if it already exists. Needs elevation.
+    bool addUdpRule(std::wstring_view rule_name,
+                    std::wstring_view description,
+                    uint16_t port);
+
     // Deletes all rules with specified name. Needs elevation.
     void deleteRuleByName(std::wstring_view rule_name);
 

@@ -133,6 +133,45 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
     return true;
 }
 
+bool FirewallManager::addUdpRule(std::wstring_view rule_name,
+                                 std::wstring_view description,
+                                 uint16_t port)
+{
+    // Delete the rule. According MDSN |INetFwRules::Add| should replace rule with same
+    // "rule identifier". It's not clear what is "rule identifier", but it can successfully
+    // create many rule with same name.
+    deleteRuleByName(rule_name);
+
+    Microsoft::WRL::ComPtr<INetFwRule> rule;
+
+    HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
+    if (FAILED(hr))
+    {
+        LOG(LS_WARNING) << "CoCreateInstance failed: "
+                        << SystemError::toString(static_cast<DWORD>(hr));
+        return false;
+    }
+
+    rule->put_Name(_bstr_t(rule_name.data()));
+    rule->put_Description(_bstr_t(description.data()));
+    rule->put_ApplicationName(_bstr_t(application_path_.c_str()));
+    rule->put_Protocol(NET_FW_IP_PROTOCOL_UDP);
+    rule->put_Direction(NET_FW_RULE_DIR_IN);
+    rule->put_Enabled(VARIANT_TRUE);
+    rule->put_LocalPorts(_bstr_t(std::to_wstring(port).c_str()));
+    rule->put_Profiles(NET_FW_PROFILE2_ALL);
+    rule->put_Action(NET_FW_ACTION_ALLOW);
+
+    firewall_rules_->Add(rule.Get());
+    if (FAILED(hr))
+    {
+        LOG(LS_WARNING) << "Add failed: " << SystemError::toString(static_cast<DWORD>(hr));
+        return false;
+    }
+
+    return true;
+}
+
 void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
 {
     std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
