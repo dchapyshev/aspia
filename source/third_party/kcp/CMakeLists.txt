@@ -16,16 +16,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-add_subdirectory(libwebm)
-add_subdirectory(modp_b64)
-add_subdirectory(custom_c_allocator)
-add_subdirectory(kcp)
-add_subdirectory(x11region)
+list(APPEND SOURCE_KCP ikcp.c ikcp.h)
 
-if (APPLE)
-    add_subdirectory(portaudio)
-endif()
+source_group("" FILES ${SOURCE_KCP})
 
-if (LINUX)
-    add_subdirectory(xdg_user_dirs)
-endif()
+add_library(kcp STATIC ${SOURCE_KCP})
+set_target_properties(kcp PROPERTIES LANGUAGE C LINKER_LANGUAGE C)
+set_target_properties(kcp PROPERTIES FOLDER third_party)
