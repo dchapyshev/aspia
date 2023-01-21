@@ -107,13 +107,13 @@ enum LoggingDestination
 
 using LoggingSeverity = int;
 
-const LoggingSeverity LOG_LS_INFO = 0;
-const LoggingSeverity LOG_LS_WARNING = 1;
-const LoggingSeverity LOG_LS_ERROR = 2;
-const LoggingSeverity LOG_LS_FATAL = 3;
-const LoggingSeverity LOG_LS_NUMBER = 4;
-const LoggingSeverity LOG_LS_DFATAL = LOG_LS_FATAL;
-const LoggingSeverity LOG_LS_DCHECK = LOG_LS_FATAL;
+[[maybe_unused]] const LoggingSeverity LOG_LS_INFO = 0;
+[[maybe_unused]] const LoggingSeverity LOG_LS_WARNING = 1;
+[[maybe_unused]] const LoggingSeverity LOG_LS_ERROR = 2;
+[[maybe_unused]] const LoggingSeverity LOG_LS_FATAL = 3;
+[[maybe_unused]] const LoggingSeverity LOG_LS_NUMBER = 4;
+[[maybe_unused]] const LoggingSeverity LOG_LS_DFATAL = LOG_LS_FATAL;
+[[maybe_unused]] const LoggingSeverity LOG_LS_DCHECK = LOG_LS_FATAL;
 
 struct LoggingSettings
 {
