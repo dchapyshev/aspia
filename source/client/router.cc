@@ -152,7 +152,7 @@ void Router::onConnected()
 {
     LOG(LS_INFO) << "Router connected";
 
-    channel_->setOwnKeepAlive(true);
+    channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
     authenticator_->start(std::move(channel_),

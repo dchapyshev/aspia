@@ -276,6 +276,7 @@ void Client::startAuthentication()
 
     channel_->setReadBufferSize(kReadBufferSize);
     channel_->setNoDelay(true);
+    channel_->setKeepAlive(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>(io_task_runner_);
 
@@ -295,21 +296,6 @@ void Client::startAuthentication()
             // notifications.
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
-
-            if (authenticator_->peerVersion() >= base::Version(2, 0, 0))
-            {
-                LOG(LS_INFO) << "Using OWN keep alive";
-
-                // Versions 2.0.0+ support their own implementation keep alive.
-                channel_->setOwnKeepAlive(true);
-            }
-            else
-            {
-                LOG(LS_INFO) << "Using TCP keep alive";
-
-                // Otherwise use TCP keep alive.
-                channel_->setTcpKeepAlive(true);
-            }
 
             if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
             {

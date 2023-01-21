@@ -26,7 +26,6 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/net/network_channel_proxy.h"
-#include "base/net/tcp_keep_alive.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
@@ -222,14 +221,7 @@ bool NetworkChannel::setNoDelay(bool enable)
     return true;
 }
 
-bool NetworkChannel::setTcpKeepAlive(bool enable,
-                                     const Milliseconds& time,
-                                     const Milliseconds& interval)
-{
-    return base::setTcpKeepAlive(socket_.native_handle(), enable, time, interval);
-}
-
-bool NetworkChannel::setOwnKeepAlive(bool enable, const Seconds& interval, const Seconds& timeout)
+bool NetworkChannel::setKeepAlive(bool enable, const Seconds& interval, const Seconds& timeout)
 {
     if (enable && keep_alive_timer_)
     {

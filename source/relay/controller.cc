@@ -165,7 +165,7 @@ void Controller::onConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
-    channel_->setOwnKeepAlive(true);
+    channel_->setKeepAlive(true);
     channel_->setNoDelay(true);
 
     authenticator_ = std::make_unique<base::ClientAuthenticator>(task_runner_);

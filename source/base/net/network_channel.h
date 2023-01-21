@@ -137,18 +137,9 @@ public:
     bool setNoDelay(bool enable);
 
     // Enables or disables sending keep alive packets.
-    // If the |enable| is set to true, TCP keep-alive is enabled. If |enable| is false, then
-    // disabled and |time| and |interval| are ignored.
-    // |time| specifies the timeout, in milliseconds, with no activity until the first keep-alive
-    // packet is sent.
-    // |interval| specifies the interval, in milliseconds, between when successive keep-alive
-    // packets are sent if no acknowledgement is received.
-    bool setTcpKeepAlive(bool enable,
-                         const Milliseconds& time = Milliseconds(45000),
-                         const Milliseconds& interval = Milliseconds(5000));
-    bool setOwnKeepAlive(bool enable,
-                         const Seconds& interval = Seconds(45),
-                         const Seconds& timeout = Seconds(15));
+    bool setKeepAlive(bool enable,
+                      const Seconds& interval = Seconds(45),
+                      const Seconds& timeout = Seconds(15));
 
     void setChannelIdSupport(bool enable);
     bool hasChannelIdSupport() const;
