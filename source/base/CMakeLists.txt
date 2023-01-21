@@ -529,6 +529,8 @@ list(APPEND SOURCE_BASE_NET
     net/kcp_channel.h
     net/kcp_channel_proxy.cc
     net/kcp_channel_proxy.h
+    net/network_channel.cc
+    net/network_channel.h
     net/tcp_channel.cc
     net/tcp_channel.h
     net/tcp_channel_proxy.cc

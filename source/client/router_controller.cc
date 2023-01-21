@@ -54,7 +54,7 @@ void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
     channel_->connect(router_config_.address, router_config_.port);
 }
 
-void RouterController::onConnected()
+void RouterController::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
@@ -114,7 +114,7 @@ void RouterController::onConnected()
     });
 }
 
-void RouterController::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
                  << base::TcpChannel::errorToString(error_code) << ")";
@@ -132,7 +132,7 @@ void RouterController::onDisconnected(base::TcpChannel::ErrorCode error_code)
     delegate_->onErrorOccurred(error);
 }
 
-void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     Error error;
     error.type = ErrorType::ROUTER;
@@ -201,7 +201,7 @@ void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::B
     }
 }
 
-void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

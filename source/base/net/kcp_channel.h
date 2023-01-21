@@ -22,6 +22,7 @@
 #include "base/location.h"
 #include "base/macros_magic.h"
 #include "base/memory/byte_array.h"
+#include "base/net/network_channel.h"
 #include "base/net/write_task.h"
 #include "third_party/kcp/ikcp.h"
 
@@ -38,52 +39,11 @@ class KcpChannelProxy;
 class MessageEncryptor;
 class MessageDecryptor;
 
-class KcpChannel
+class KcpChannel : public NetworkChannel
 {
 public:
     KcpChannel();
-    ~KcpChannel();
-
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
-    enum class ErrorCode
-    {
-        // Unknown error.
-        UNKNOWN,
-
-        // No error.
-        SUCCESS,
-
-        // Violation of the communication protocol.
-        INVALID_PROTOCOL,
-
-        // Cryptography error (message encryption or decryption failed).
-        ACCESS_DENIED,
-
-        // An error occurred with the network (e.g., the network cable was accidentally plugged out).
-        NETWORK_ERROR,
-
-        // The connection was refused by the peer (or timed out).
-        CONNECTION_REFUSED,
-
-        // The remote host closed the connection.
-        REMOTE_HOST_CLOSED,
-
-        // The host address was not found.
-        SPECIFIED_HOST_NOT_FOUND,
-
-        // The socket operation timed out.
-        SOCKET_TIMEOUT,
-
-        // The address specified is already in use and was set to be exclusive.
-        ADDRESS_IN_USE,
-
-        // The address specified does not belong to the host.
-        ADDRESS_NOT_AVAILABLE
-    };
+    ~KcpChannel() override;
 
     class Listener
     {
@@ -135,10 +95,6 @@ public:
                       const Seconds& timeout = Seconds(15));
 
     size_t pendingMessages() const;
-    int64_t totalRx() const { return total_rx_; }
-    int64_t totalTx() const { return total_tx_; }
-    int speedRx();
-    int speedTx();
 
     // Converts an error code to a human readable string.
     // Does not support localization. Used for logs.
@@ -212,9 +168,6 @@ private:
     void onUpdate(uint32_t time);
     void initKcp();
 
-    void addTxBytes(size_t bytes_count);
-    void addRxBytes(size_t bytes_count);
-
     void onKeepAliveInterval(const std::error_code& error_code);
     void onKeepAliveTimeout(const std::error_code& error_code);
     void sendKeepAlive(uint8_t flags, const void* data, size_t size);
@@ -257,17 +210,6 @@ private:
     uint32_t read_size_ = 0;
     ByteArray read_buffer_;
     ByteArray decrypt_buffer_;
-
-    int64_t total_tx_ = 0;
-    int64_t total_rx_ = 0;
-
-    TimePoint begin_time_tx_;
-    int64_t bytes_tx_ = 0;
-    int speed_tx_ = 0;
-
-    TimePoint begin_time_rx_;
-    int64_t bytes_rx_ = 0;
-    int speed_rx_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(KcpChannel);
 };

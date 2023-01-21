@@ -22,8 +22,6 @@
 #include "base/task_runner.h"
 #include "base/strings/strcat.h"
 #include "base/strings/string_number_conversions.h"
-#include "build/build_config.h"
-#include "build/version.h"
 #include "client/status_window_proxy.h"
 
 #if defined(OS_MAC)
@@ -203,21 +201,21 @@ int Client::speedTx()
     return channel_->speedTx();
 }
 
-void Client::onConnected()
+void Client::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection established";
     startAuthentication();
 }
 
-void Client::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void Client::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection terminated: " << base::TcpChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
 
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
 }
 
-void Client::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -233,7 +231,7 @@ void Client::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer
     }
 }
 
-void Client::onMessageWritten(uint8_t channel_id, size_t pending)
+void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {

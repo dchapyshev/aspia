@@ -143,20 +143,20 @@ void Session::sendMessage(uint8_t channel_id, const google::protobuf::MessageLit
         channel_->send(channel_id, base::serialize(message));
 }
 
-void Session::onConnected()
+void Session::onTcpConnected()
 {
     NOTREACHED();
 }
 
-void Session::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void Session::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << base::TcpChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
 
     if (delegate_)
         delegate_->onSessionFinished(session_id_, session_type_);
 }
 
-void Session::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {
@@ -168,7 +168,7 @@ void Session::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffe
     }
 }
 
-void Session::onMessageWritten(uint8_t channel_id, size_t pending)
+void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
     {

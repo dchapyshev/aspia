@@ -97,10 +97,10 @@ protected:
     void sendMessage(uint8_t channel_id, base::ByteArray&& buffer);
 
     // base::TcpChannel::Listener implementation.
-    void onConnected() override;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
-    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onMessageWritten(uint8_t channel_id, size_t pending) override;
+    void onTcpConnected() override;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
 
     size_t pendingMessages() const;
 

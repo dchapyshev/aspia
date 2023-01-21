@@ -172,25 +172,25 @@ void Authenticator::setPeerComputerName(const std::string& name)
     peer_computer_name_ = name;
 }
 
-void Authenticator::onConnected()
+void Authenticator::onTcpConnected()
 {
     // The authenticator receives the channel always in an already connected state.
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(TcpChannel::ErrorCode error_code)
+void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << TcpChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 
-    if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
         result = ErrorCode::ACCESS_DENIED;
 
     finish(FROM_HERE, result);
 }
 
-void Authenticator::onMessageReceived(uint8_t /* channel_id */, const ByteArray& buffer)
+void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArray& buffer)
 {
     if (state() != State::PENDING)
         return;
@@ -198,7 +198,7 @@ void Authenticator::onMessageReceived(uint8_t /* channel_id */, const ByteArray&
     onReceived(buffer);
 }
 
-void Authenticator::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     if (state() != State::PENDING)
         return;

@@ -46,10 +46,11 @@ public:
     int computerId() const { return computer_id_; }
 
 protected:
-    void onConnected() override;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
-    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
-    void onMessageWritten(uint8_t channel_id, size_t pending) override;
+    // base::TcpChannel::Listener implementation.
+    void onTcpConnected() override;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     void onFinished(bool online);
@@ -98,7 +99,7 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     channel_->connect(address_, port_);
 }
 
-void OnlineCheckerDirect::Instance::onConnected()
+void OnlineCheckerDirect::Instance::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to " << address_ << ":" << port_
                  << " established (computer: " << computer_id_ << ")";
@@ -113,13 +114,14 @@ void OnlineCheckerDirect::Instance::onConnected()
     channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
-void OnlineCheckerDirect::Instance::onDisconnected(base::TcpChannel::ErrorCode /* error_code */)
+void OnlineCheckerDirect::Instance::onTcpDisconnected(
+    base::NetworkChannel::ErrorCode /* error_code */)
 {
     LOG(LS_INFO) << "Connection aborted for computer: " << computer_id_;
     onFinished(false);
 }
 
-void OnlineCheckerDirect::Instance::onMessageReceived(
+void OnlineCheckerDirect::Instance::onTcpMessageReceived(
     uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::ServerHello message;
@@ -147,7 +149,8 @@ void OnlineCheckerDirect::Instance::onMessageReceived(
     }
 }
 
-void OnlineCheckerDirect::Instance::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void OnlineCheckerDirect::Instance::onTcpMessageWritten(
+    uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -141,21 +141,21 @@ void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
     channel_->send(channel_id, std::move(buffer));
 }
 
-void ClientSession::onConnected()
+void ClientSession::onTcpConnected()
 {
     NOTREACHED();
 }
 
-void ClientSession::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Client disconnected with error: "
-                    << base::TcpChannel::errorToString(error_code);
+                    << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();
 }
 
-void ClientSession::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {
@@ -171,7 +171,7 @@ void ClientSession::onMessageReceived(uint8_t channel_id, const base::ByteArray&
     }
 }
 
-void ClientSession::onMessageWritten(uint8_t channel_id, size_t pending)
+void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
     {

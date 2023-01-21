@@ -73,7 +73,7 @@ void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegat
     channel_->connect(router_config_.address, router_config_.port);
 }
 
-void OnlineCheckerRouter::onConnected()
+void OnlineCheckerRouter::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
@@ -114,14 +114,15 @@ void OnlineCheckerRouter::onConnected()
     });
 }
 
-void OnlineCheckerRouter::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::TcpChannel::errorToString(error_code) << ")";
+                 << base::NetworkChannel::errorToString(error_code) << ")";
     onFinished(FROM_HERE);
 }
 
-void OnlineCheckerRouter::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void OnlineCheckerRouter::onTcpMessageReceived(
+    uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     if (!delegate_)
         return;
@@ -150,7 +151,7 @@ void OnlineCheckerRouter::onMessageReceived(uint8_t /* channel_id */, const base
     checkNextComputer();
 }
 
-void OnlineCheckerRouter::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void OnlineCheckerRouter::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

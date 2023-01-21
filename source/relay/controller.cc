@@ -161,7 +161,7 @@ bool Controller::start()
     return true;
 }
 
-void Controller::onConnected()
+void Controller::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
 
@@ -209,10 +209,10 @@ void Controller::onConnected()
     });
 }
 
-void Controller::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "The connection to the router has been lost: "
-                 << base::TcpChannel::errorToString(error_code);
+                 << base::NetworkChannel::errorToString(error_code);
 
     // Clearing the key pool.
     shared_pool_->clear();
@@ -221,7 +221,7 @@ void Controller::onDisconnected(base::TcpChannel::ErrorCode error_code)
     delayedConnectToRouter();
 }
 
-void Controller::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -262,7 +262,7 @@ void Controller::onMessageReceived(uint8_t /* channel_id */, const base::ByteArr
     }
 }
 
-void Controller::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Controller::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

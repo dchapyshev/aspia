@@ -113,7 +113,7 @@ void RouterController::resetHostId(base::HostId host_id)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
-void RouterController::onConnected()
+void RouterController::onTcpConnected()
 {
     DCHECK(channel_);
 
@@ -162,16 +162,16 @@ void RouterController::onConnected()
     });
 }
 
-void RouterController::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::TcpChannel::errorToString(error_code) << ")";
+                 << base::NetworkChannel::errorToString(error_code) << ")";
 
     routerStateChanged(proto::internal::RouterState::FAILED);
     delayedConnectToRouter();
 }
 
-void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToPeer in_message;
     if (!base::parse(buffer, &in_message))
@@ -261,7 +261,7 @@ void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::B
     }
 }
 
-void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -86,10 +86,10 @@ protected:
     void setPeerComputerName(const std::string& name);
 
     // base::TcpChannel::Listener implementation.
-    void onConnected() final;
-    void onDisconnected(TcpChannel::ErrorCode error_code) final;
-    void onMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
-    void onMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onTcpConnected() final;
+    void onTcpDisconnected(NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     [[nodiscard]] bool onSessionKeyChanged();
 

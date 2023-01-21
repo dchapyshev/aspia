@@ -148,7 +148,7 @@ void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_sessi
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
-void Router::onConnected()
+void Router::onTcpConnected()
 {
     LOG(LS_INFO) << "Router connected";
 
@@ -190,13 +190,13 @@ void Router::onConnected()
     });
 }
 
-void Router::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void Router::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Router disconnected: " << base::TcpChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
     window_proxy_->onDisconnected(error_code);
 }
 
-void Router::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
+void Router::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToAdmin message;
 
@@ -241,7 +241,7 @@ void Router::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& 
     }
 }
 
-void Router::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
+void Router::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Not used.
 }

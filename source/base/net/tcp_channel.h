@@ -20,6 +20,7 @@
 #define BASE_NET_TCP_CHANNEL_H
 
 #include "base/memory/byte_array.h"
+#include "base/net/network_channel.h"
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
 #include "base/peer/host_id.h"
@@ -37,63 +38,22 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannel
+class TcpChannel : public NetworkChannel
 {
 public:
     // Constructor available for client.
     TcpChannel();
-    ~TcpChannel();
-
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
-    enum class ErrorCode
-    {
-        // Unknown error.
-        UNKNOWN,
-
-        // No error.
-        SUCCESS,
-
-        // Violation of the communication protocol.
-        INVALID_PROTOCOL,
-
-        // Cryptography error (message encryption or decryption failed).
-        ACCESS_DENIED,
-
-        // An error occurred with the network (e.g., the network cable was accidentally plugged out).
-        NETWORK_ERROR,
-
-        // The connection was refused by the peer (or timed out).
-        CONNECTION_REFUSED,
-
-        // The remote host closed the connection.
-        REMOTE_HOST_CLOSED,
-
-        // The host address was not found.
-        SPECIFIED_HOST_NOT_FOUND,
-
-        // The socket operation timed out.
-        SOCKET_TIMEOUT,
-
-        // The address specified is already in use and was set to be exclusive.
-        ADDRESS_IN_USE,
-
-        // The address specified does not belong to the host.
-        ADDRESS_NOT_AVAILABLE
-    };
+    ~TcpChannel() override;
 
     class Listener
     {
     public:
         virtual ~Listener() = default;
 
-        virtual void onConnected() = 0;
-        virtual void onDisconnected(ErrorCode error_code) = 0;
-        virtual void onMessageReceived(uint8_t channel_id, const ByteArray& buffer) = 0;
-        virtual void onMessageWritten(uint8_t channel_id, size_t pending) = 0;
+        virtual void onTcpConnected() = 0;
+        virtual void onTcpDisconnected(ErrorCode error_code) = 0;
+        virtual void onTcpMessageReceived(uint8_t channel_id, const ByteArray& buffer) = 0;
+        virtual void onTcpMessageWritten(uint8_t channel_id, size_t pending) = 0;
     };
 
     std::shared_ptr<TcpChannelProxy> channelProxy();
@@ -148,17 +108,9 @@ public:
     bool setWriteBufferSize(size_t size);
 
     size_t pendingMessages() const { return write_queue_.size(); }
-    int64_t totalRx() const { return total_rx_; }
-    int64_t totalTx() const { return total_tx_; }
-    int speedRx();
-    int speedTx();
 
     base::HostId hostId() const { return host_id_; }
     void setHostId(base::HostId host_id) { host_id_ = host_id; }
-
-    // Converts an error code to a human readable string.
-    // Does not support localization. Used for logs.
-    static std::string errorToString(ErrorCode error_code);
 
 protected:
     friend class TcpServer;
@@ -230,9 +182,6 @@ private:
     void onKeepAliveTimeout(const std::error_code& error_code);
     void sendKeepAlive(uint8_t flags, const void* data, size_t size);
 
-    void addTxBytes(size_t bytes_count);
-    void addRxBytes(size_t bytes_count);
-
     std::shared_ptr<TcpChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
@@ -259,17 +208,6 @@ private:
     VariableSizeReader variable_size_reader_;
     ByteArray read_buffer_;
     ByteArray decrypt_buffer_;
-
-    int64_t total_tx_ = 0;
-    int64_t total_rx_ = 0;
-
-    TimePoint begin_time_tx_;
-    int64_t bytes_tx_ = 0;
-    int speed_tx_ = 0;
-
-    TimePoint begin_time_rx_;
-    int64_t bytes_rx_ = 0;
-    int speed_rx_ = 0;
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool channel_id_support_ = false;

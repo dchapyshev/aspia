@@ -79,10 +79,10 @@ protected:
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
     // base::TcpChannel::Listener implementation.
-    void onConnected() final;
-    void onDisconnected(base::TcpChannel::ErrorCode error_code) final;
-    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
-    void onMessageWritten(uint8_t channel_id, size_t pending) final;
+    void onTcpConnected() final;
+    void onTcpDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onTcpMessageWritten(uint8_t channel_id, size_t pending) final;
 
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }

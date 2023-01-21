@@ -26,7 +26,6 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
 #include "base/net/tcp_channel_proxy.h"
-#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
 #include <asio/connect.hpp>
@@ -34,33 +33,6 @@
 #include <asio/write.hpp>
 
 namespace base {
-
-namespace {
-
-static const size_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
-
-int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, int64_t bytes)
-{
-    static const double kAlpha = 0.1;
-    return static_cast<int>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
-}
-
-void resizeBuffer(ByteArray* buffer, size_t new_size)
-{
-    // If the reserved buffer size is less, then increase it.
-    if (buffer->capacity() < new_size)
-    {
-        buffer->clear();
-        buffer->reserve(new_size);
-    }
-
-    // Change the size of the buffer.
-    buffer->resize(new_size);
-}
-
-} // namespace
 
 TcpChannel::TcpChannel()
     : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
@@ -152,7 +124,7 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
             connected_ = true;
 
             if (listener_)
-                listener_->onConnected();
+                listener_->onTcpConnected();
         });
     });
 }
@@ -312,87 +284,6 @@ bool TcpChannel::setWriteBufferSize(size_t size)
     return true;
 }
 
-int TcpChannel::speedRx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
-
-    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
-
-    begin_time_rx_ = current_time;
-    bytes_rx_ = 0;
-
-    return speed_rx_;
-}
-
-int TcpChannel::speedTx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
-
-    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
-
-    begin_time_tx_ = current_time;
-    bytes_tx_ = 0;
-
-    return speed_tx_;
-}
-
-// static
-std::string TcpChannel::errorToString(ErrorCode error_code)
-{
-    const char* str;
-
-    switch (error_code)
-    {
-        case ErrorCode::SUCCESS:
-            str = "SUCCESS";
-            break;
-
-        case ErrorCode::INVALID_PROTOCOL:
-            str = "INVALID_PROTOCOL";
-            break;
-
-        case ErrorCode::ACCESS_DENIED:
-            str = "ACCESS_DENIED";
-            break;
-
-        case ErrorCode::NETWORK_ERROR:
-            str = "NETWORK_ERROR";
-            break;
-
-        case ErrorCode::CONNECTION_REFUSED:
-            str = "CONNECTION_REFUSED";
-            break;
-
-        case ErrorCode::REMOTE_HOST_CLOSED:
-            str = "REMOTE_HOST_CLOSED";
-            break;
-
-        case ErrorCode::SPECIFIED_HOST_NOT_FOUND:
-            str = "SPECIFIED_HOST_NOT_FOUND";
-            break;
-
-        case ErrorCode::SOCKET_TIMEOUT:
-            str = "SOCKET_TIMEOUT";
-            break;
-
-        case ErrorCode::ADDRESS_IN_USE:
-            str = "ADDRESS_IN_USE";
-            break;
-
-        case ErrorCode::ADDRESS_NOT_AVAILABLE:
-            str = "ADDRESS_NOT_AVAILABLE";
-            break;
-
-        default:
-            str = "UNKNOWN";
-            break;
-    }
-
-    return stringPrintf("%s (%d)", str, static_cast<int>(error_code));
-}
-
 void TcpChannel::disconnect()
 {
     if (!connected_)
@@ -442,7 +333,7 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 
     if (listener_)
     {
-        listener_->onDisconnected(error_code);
+        listener_->onTcpDisconnected(error_code);
         listener_ = nullptr;
     }
 }
@@ -450,7 +341,7 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 void TcpChannel::onMessageWritten(uint8_t channel_id)
 {
     if (listener_)
-        listener_->onMessageWritten(channel_id, write_queue_.size());
+        listener_->onTcpMessageWritten(channel_id, write_queue_.size());
 }
 
 void TcpChannel::onMessageReceived()
@@ -475,7 +366,7 @@ void TcpChannel::onMessageReceived()
     }
 
     if (listener_)
-        listener_->onMessageReceived(channel_id, decrypt_buffer_);
+        listener_->onTcpMessageReceived(channel_id, decrypt_buffer_);
 }
 
 void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data)
@@ -907,18 +798,6 @@ void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
 
     // Add a task to the queue.
     addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
-}
-
-void TcpChannel::addTxBytes(size_t bytes_count)
-{
-    bytes_tx_ += bytes_count;
-    total_tx_ += bytes_count;
-}
-
-void TcpChannel::addRxBytes(size_t bytes_count)
-{
-    bytes_rx_ += bytes_count;
-    total_rx_ += bytes_count;
 }
 
 } // namespace base
