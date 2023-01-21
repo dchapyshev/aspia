@@ -79,7 +79,7 @@ void NetworkServer::Impl::start(
 
     asio::error_code error_code;
     asio::ip::address listen_address =
-        asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface), error_code);
+        asio::ip::make_address(base::local8BitFromUtf16(listen_interface), error_code);
     if (error_code)
     {
         LOG(LS_ERROR) << "Invalid listen address: " << listen_interface.data()
