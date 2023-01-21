@@ -525,6 +525,10 @@ list(APPEND SOURCE_BASE_NET
     net/curl_util.h
     net/ip_util.cc
     net/ip_util.h
+    net/kcp_channel.cc
+    net/kcp_channel.h
+    net/kcp_channel_proxy.cc
+    net/kcp_channel_proxy.h
     net/network_channel.cc
     net/network_channel.h
     net/network_channel_proxy.cc
