@@ -200,9 +200,9 @@ void NetworkChannel::resume()
     doReadSize();
 }
 
-void NetworkChannel::send(ByteArray&& buffer)
+void NetworkChannel::send(uint8_t channel_id, ByteArray&& buffer)
 {
-    addWriteTask(WriteTask::Type::USER_DATA, std::move(buffer));
+    addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
 }
 
 bool NetworkChannel::setNoDelay(bool enable)
@@ -274,6 +274,16 @@ bool NetworkChannel::setOwnKeepAlive(bool enable, const Seconds& interval, const
     }
 
     return true;
+}
+
+void NetworkChannel::setChannelIdSupport(bool enable)
+{
+    channel_id_support_ = enable;
+}
+
+bool NetworkChannel::hasChannelIdSupport() const
+{
+    return channel_id_support_;
 }
 
 bool NetworkChannel::setReadBufferSize(size_t size)
@@ -445,32 +455,43 @@ void NetworkChannel::onErrorOccurred(const Location& location, ErrorCode error_c
     }
 }
 
-void NetworkChannel::onMessageWritten()
+void NetworkChannel::onMessageWritten(uint8_t channel_id)
 {
     if (listener_)
-        listener_->onMessageWritten(write_queue_.size());
+        listener_->onMessageWritten(channel_id, write_queue_.size());
 }
 
 void NetworkChannel::onMessageReceived()
 {
-    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
+    uint8_t* read_data = read_buffer_.data();
+    size_t read_size = read_buffer_.size();
+    uint8_t channel_id = 0;
 
-    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
+    if (channel_id_support_)
+    {
+        read_data += sizeof(channel_id);
+        read_size -= sizeof(channel_id);
+        channel_id = read_buffer_[0];
+    }
+
+    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_size));
+
+    if (!decryptor_->decrypt(read_data, read_size, decrypt_buffer_.data()))
     {
         onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
         return;
     }
 
     if (listener_)
-        listener_->onMessageReceived(decrypt_buffer_);
+        listener_->onMessageReceived(channel_id, decrypt_buffer_);
 }
 
-void NetworkChannel::addWriteTask(WriteTask::Type type, ByteArray&& data)
+void NetworkChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(type, std::move(data));
+    write_queue_.emplace(type, channel_id, std::move(data));
 
     if (schedule_write)
         doWrite();
@@ -480,6 +501,7 @@ void NetworkChannel::doWrite()
 {
     const WriteTask& task = write_queue_.front();
     const ByteArray& source_buffer = task.data();
+    const uint8_t channel_id = task.channelId();
 
     if (source_buffer.empty())
     {
@@ -490,7 +512,9 @@ void NetworkChannel::doWrite()
     if (task.type() == WriteTask::Type::USER_DATA)
     {
         // Calculate the size of the encrypted message.
-        const size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+        size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+        if (channel_id_support_)
+            target_data_size += sizeof(channel_id);
 
         if (target_data_size > kMaxMessageSize)
         {
@@ -506,10 +530,16 @@ void NetworkChannel::doWrite()
         // Copy the size of the message to the buffer.
         memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
 
+        uint8_t* write_buffer = write_buffer_.data() + variable_size.size();
+        if (channel_id_support_)
+        {
+            // Copy the channel id to the buffer.
+            memcpy(write_buffer, &channel_id, sizeof(channel_id));
+            write_buffer += sizeof(channel_id);
+        }
+
         // Encrypt the message.
-        if (!encryptor_->encrypt(source_buffer.data(),
-                                 source_buffer.size(),
-                                 write_buffer_.data() + variable_size.size()))
+        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), write_buffer))
         {
             onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
             return;
@@ -547,7 +577,9 @@ void NetworkChannel::onWrite(const std::error_code& error_code, size_t bytes_tra
     // Update TX statistics.
     addTxBytes(bytes_transferred);
 
-    WriteTask::Type task_type = write_queue_.front().type();
+    const WriteTask& task = write_queue_.front();
+    WriteTask::Type task_type = task.type();
+    uint8_t channel_id = task.channelId();
 
     // Delete the sent message from the queue.
     write_queue_.pop();
@@ -556,7 +588,7 @@ void NetworkChannel::onWrite(const std::error_code& error_code, size_t bytes_tra
     bool schedule_write = !write_queue_.empty() || proxy_->reloadWriteQueue(&write_queue_);
 
     if (task_type == WriteTask::Type::USER_DATA)
-        onMessageWritten();
+        onMessageWritten(channel_id);
 
     if (schedule_write)
         doWrite();
@@ -882,7 +914,7 @@ void NetworkChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
     memcpy(buffer.data() + sizeof(uint8_t) + sizeof(header), data, size);
 
     // Add a task to the queue.
-    addWriteTask(WriteTask::Type::SERVICE_DATA, std::move(buffer));
+    addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
 }
 
 void NetworkChannel::addTxBytes(size_t bytes_count)

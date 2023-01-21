@@ -31,7 +31,7 @@ NetworkChannelProxy::NetworkChannelProxy(
     // Nothing
 }
 
-void NetworkChannelProxy::send(ByteArray&& buffer)
+void NetworkChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
 {
     bool schedule_write;
 
@@ -39,7 +39,7 @@ void NetworkChannelProxy::send(ByteArray&& buffer)
         std::scoped_lock lock(incoming_queue_lock_);
 
         schedule_write = incoming_queue_.empty();
-        incoming_queue_.emplace(WriteTask::Type::USER_DATA, std::move(buffer));
+        incoming_queue_.emplace(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
     }
 
     if (!schedule_write)

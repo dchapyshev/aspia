@@ -30,10 +30,11 @@ class TaskRunner;
 class NetworkChannelProxy : public std::enable_shared_from_this<NetworkChannelProxy>
 {
 public:
-    void send(ByteArray&& buffer);
+    void send(uint8_t channel_id, ByteArray&& buffer);
 
 private:
     friend class NetworkChannel;
+    friend class KcpChannel;
     NetworkChannelProxy(std::shared_ptr<TaskRunner> task_runner, NetworkChannel* channel);
 
     // Called directly by NetworkChannel::~NetworkChannel.

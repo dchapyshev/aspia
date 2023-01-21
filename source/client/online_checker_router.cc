@@ -121,7 +121,7 @@ void OnlineCheckerRouter::onDisconnected(base::NetworkChannel::ErrorCode error_c
     onFinished(FROM_HERE);
 }
 
-void OnlineCheckerRouter::onMessageReceived(const base::ByteArray& buffer)
+void OnlineCheckerRouter::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     if (!delegate_)
         return;
@@ -150,7 +150,7 @@ void OnlineCheckerRouter::onMessageReceived(const base::ByteArray& buffer)
     checkNextComputer();
 }
 
-void OnlineCheckerRouter::onMessageWritten(size_t /* pending */)
+void OnlineCheckerRouter::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -171,7 +171,7 @@ void OnlineCheckerRouter::checkNextComputer()
 
     proto::PeerToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void OnlineCheckerRouter::onFinished(const base::Location& location)

@@ -78,6 +78,12 @@ void RouterController::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
+            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
+            }
+
             LOG(LS_INFO) << "Sending connection request (host_id: " << host_id_ << ")";
 
             // Now the session will receive incoming messages.
@@ -86,7 +92,7 @@ void RouterController::onConnected()
             // Send connection request.
             proto::PeerToRouter message;
             message.mutable_connection_request()->set_host_id(host_id_);
-            channel_->send(base::serialize(message));
+            channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
         }
         else
         {
@@ -126,12 +132,19 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     delegate_->onErrorOccurred(error);
 }
 
-void RouterController::onMessageReceived(const base::ByteArray& buffer)
+void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
+    Error error;
+    error.type = ErrorType::ROUTER;
+
     proto::RouterToPeer message;
     if (!base::parse(buffer, &message))
     {
         LOG(LS_ERROR) << "Invalid message from router";
+
+        error.code.router = ErrorCode::UNKNOWN_ERROR;
+        if (delegate_)
+            delegate_->onErrorOccurred(error);
         return;
     }
 
@@ -150,9 +163,6 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
         {
             if (delegate_)
             {
-                Error error;
-                error.type = ErrorType::ROUTER;
-
                 switch (connection_offer.error_code())
                 {
                     case proto::ConnectionOffer::PEER_NOT_FOUND:
@@ -191,7 +201,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void RouterController::onMessageWritten(size_t /* pending */)
+void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

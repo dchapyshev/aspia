@@ -67,7 +67,7 @@ void Router::refreshSessionList()
 
     proto::AdminToRouter message;
     message.mutable_session_list_request()->set_dummy(1);
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::stopSession(int64_t session_id)
@@ -80,7 +80,7 @@ void Router::stopSession(int64_t session_id)
     request->set_type(proto::SESSION_REQUEST_DISCONNECT);
     request->set_session_id(session_id);
 
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::refreshUserList()
@@ -89,7 +89,7 @@ void Router::refreshUserList()
 
     proto::AdminToRouter message;
     message.mutable_user_list_request()->set_dummy(1);
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::addUser(const proto::User& user)
@@ -103,7 +103,7 @@ void Router::addUser(const proto::User& user)
     request->set_type(proto::USER_REQUEST_ADD);
     request->mutable_user()->CopyFrom(user);
 
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::modifyUser(const proto::User& user)
@@ -117,7 +117,7 @@ void Router::modifyUser(const proto::User& user)
     request->set_type(proto::USER_REQUEST_MODIFY);
     request->mutable_user()->CopyFrom(user);
 
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::deleteUser(int64_t entry_id)
@@ -130,7 +130,7 @@ void Router::deleteUser(int64_t entry_id)
     request->set_type(proto::USER_REQUEST_DELETE);
     request->mutable_user()->set_entry_id(entry_id);
 
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
@@ -145,7 +145,7 @@ void Router::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_sessi
     request->set_peer_session_id(peer_session_id);
     request->set_type(proto::PEER_CONNECTION_REQUEST_DISCONNECT);
 
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void Router::onConnected()
@@ -166,6 +166,12 @@ void Router::onConnected()
             // notifications.
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
+
+            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
+            }
 
             window_proxy_->onConnected(authenticator_->peerVersion());
 
@@ -190,7 +196,7 @@ void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     window_proxy_->onDisconnected(error_code);
 }
 
-void Router::onMessageReceived(const base::ByteArray& buffer)
+void Router::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToAdmin message;
 
@@ -235,7 +241,7 @@ void Router::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Router::onMessageWritten(size_t /* pending */)
+void Router::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Not used.
 }

@@ -46,7 +46,7 @@ void ClientSystemInfo::setSystemInfoWindow(
 
 void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    sendMessage(request);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, request);
 }
 
 void ClientSystemInfo::onSessionStarted(const base::Version& /* peer_version */)
@@ -56,7 +56,8 @@ void ClientSystemInfo::onSessionStarted(const base::Version& /* peer_version */)
     system_info_window_proxy_->start(system_info_control_proxy_);
 }
 
-void ClientSystemInfo::onMessageReceived(const base::ByteArray& buffer)
+void ClientSystemInfo::onSessionMessageReceived(
+    uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::system_info::SystemInfo system_info;
 
@@ -69,7 +70,7 @@ void ClientSystemInfo::onMessageReceived(const base::ByteArray& buffer)
     system_info_window_proxy_->setSystemInfo(system_info);
 }
 
-void ClientSystemInfo::onMessageWritten(size_t /* pending */)
+void ClientSystemInfo::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -71,14 +71,18 @@ public:
     std::chrono::seconds duration() const;
 
 protected:
-    void sendMessage(const google::protobuf::MessageLite& message);
+    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
     std::unique_ptr<Database> openDatabase() const;
 
     virtual void onSessionReady() = 0;
+    virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
     // base::NetworkChannel::Listener implementation.
-    void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onConnected() final;
+    void onDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
+    void onMessageWritten(uint8_t channel_id, size_t pending) final;
 
     SharedKeyPool& relayKeyPool() { return *relay_key_pool_; }
     const SharedKeyPool& relayKeyPool() const { return *relay_key_pool_; }

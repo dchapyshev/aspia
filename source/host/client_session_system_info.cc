@@ -38,7 +38,12 @@ ClientSessionSystemInfo::~ClientSessionSystemInfo()
     LOG(LS_INFO) << "Dtor";
 }
 
-void ClientSessionSystemInfo::onMessageReceived(const base::ByteArray& buffer)
+void ClientSessionSystemInfo::onStarted()
+{
+    // Nothing
+}
+
+void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
 #if defined(OS_WIN)
     proto::system_info::SystemInfoRequest request;
@@ -52,16 +57,11 @@ void ClientSessionSystemInfo::onMessageReceived(const base::ByteArray& buffer)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    sendMessage(base::serialize(system_info));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(system_info));
 #endif // defined(OS_WIN)
 }
 
-void ClientSessionSystemInfo::onMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
-void ClientSessionSystemInfo::onStarted()
+void ClientSessionSystemInfo::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -36,10 +36,8 @@ public:
 protected:
     // Session implementation.
     void onSessionReady() override;
-
-    // base::NetworkChannel::Listener implementation.
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     void readConnectionRequest(const proto::ConnectionRequest& request);

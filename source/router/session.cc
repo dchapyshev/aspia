@@ -137,10 +137,10 @@ std::chrono::seconds Session::duration() const
         std::chrono::system_clock::now() - time_point);
 }
 
-void Session::sendMessage(const google::protobuf::MessageLite& message)
+void Session::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
 {
     if (channel_)
-        channel_->send(base::serialize(message));
+        channel_->send(channel_id, base::serialize(message));
 }
 
 void Session::onConnected()
@@ -155,5 +155,30 @@ void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     if (delegate_)
         delegate_->onSessionFinished(session_id_, session_type_);
 }
+
+void Session::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+{
+    if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
+    {
+        onSessionMessageReceived(channel_id, buffer);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+    }
+}
+
+void Session::onMessageWritten(uint8_t channel_id, size_t pending)
+{
+    if (channel_id == proto::ROUTER_CHANNEL_ID_SESSION)
+    {
+        onSessionMessageWritten(channel_id, pending);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+    }
+}
+
 
 } // namespace router

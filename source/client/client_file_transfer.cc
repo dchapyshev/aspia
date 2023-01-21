@@ -70,7 +70,8 @@ void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version *
     file_manager_window_proxy_->start(file_control_proxy_);
 }
 
-void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
+void ClientFileTransfer::onSessionMessageReceived(
+    uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
 
@@ -101,7 +102,7 @@ void ClientFileTransfer::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientFileTransfer::onMessageWritten(size_t /* pending */)
+void ClientFileTransfer::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -160,7 +161,7 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendMessage(remote_task_queue_.front()->request());
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front()->request());
 }
 
 common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Target target)

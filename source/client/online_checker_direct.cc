@@ -48,8 +48,8 @@ public:
 protected:
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     void onFinished(bool online);
@@ -110,7 +110,7 @@ void OnlineCheckerDirect::Instance::onConnected()
 
     channel_->setNoDelay(true);
     channel_->resume();
-    channel_->send(base::serialize(message));
+    channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
@@ -119,7 +119,8 @@ void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCo
     onFinished(false);
 }
 
-void OnlineCheckerDirect::Instance::onMessageReceived(const base::ByteArray& buffer)
+void OnlineCheckerDirect::Instance::onMessageReceived(
+    uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::ServerHello message;
 
@@ -146,7 +147,7 @@ void OnlineCheckerDirect::Instance::onMessageReceived(const base::ByteArray& buf
     }
 }
 
-void OnlineCheckerDirect::Instance::onMessageWritten(size_t /* pending */)
+void OnlineCheckerDirect::Instance::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

@@ -41,7 +41,7 @@ void SessionAdmin::onSessionReady()
     // Nothing
 }
 
-void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
+void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::AdminToRouter> message = std::make_unique<proto::AdminToRouter>();
 
@@ -77,7 +77,7 @@ void SessionAdmin::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionAdmin::onMessageWritten(size_t /* pending */)
+void SessionAdmin::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -98,7 +98,7 @@ void SessionAdmin::doUserListRequest()
     for (const auto& user : users)
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionAdmin::doUserRequest(const proto::UserRequest& request)
@@ -126,7 +126,7 @@ void SessionAdmin::doUserRequest(const proto::UserRequest& request)
             return;
     }
 
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* request */)
@@ -137,7 +137,7 @@ void SessionAdmin::doSessionListRequest(const proto::SessionListRequest& /* requ
     if (!message->has_session_list())
         message->mutable_session_list()->set_error_code(proto::SessionList::UNKNOWN_ERROR);
 
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
@@ -167,7 +167,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
         session_result->set_error_code(proto::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& request)

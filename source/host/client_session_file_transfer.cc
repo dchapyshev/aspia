@@ -164,7 +164,7 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
     {
         proto::FileReply reply;
         reply.set_error_code(proto::FILE_ERROR_NO_LOGGED_ON_USER);
-        channel_proxy_->send(base::serialize(reply));
+        channel_proxy_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(reply));
     }
 }
 
@@ -215,7 +215,7 @@ void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
 
 void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
-    channel_proxy_->send(base::serialize(task->reply()));
+    channel_proxy_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(task->reply()));
 }
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel)
@@ -229,7 +229,12 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
     LOG(LS_INFO) << "Dtor";
 }
 
-void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
+void ClientSessionFileTransfer::onStarted()
+{
+    // Nothing
+}
+
+void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileRequest> request = std::make_unique<proto::FileRequest>();
 
@@ -250,12 +255,7 @@ void ClientSessionFileTransfer::onMessageReceived(const base::ByteArray& buffer)
     worker_->postRequest(std::move(request));
 }
 
-void ClientSessionFileTransfer::onMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
-void ClientSessionFileTransfer::onStarted()
+void ClientSessionFileTransfer::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

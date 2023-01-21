@@ -50,7 +50,7 @@ void SessionHost::sendConnectionOffer(const proto::ConnectionOffer& offer)
 {
     std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();
     message->mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionHost::onSessionReady()
@@ -58,7 +58,7 @@ void SessionHost::onSessionReady()
     // Nothing
 }
 
-void SessionHost::onMessageReceived(const base::ByteArray& buffer)
+void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
     if (!base::parse(buffer, message.get()))
@@ -81,7 +81,7 @@ void SessionHost::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionHost::onMessageWritten(size_t /* pending */)
+void SessionHost::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -163,7 +163,7 @@ void SessionHost::readHostIdRequest(const proto::HostIdRequest& host_id_request)
             break;
     }
 
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)

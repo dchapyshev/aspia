@@ -148,7 +148,7 @@ proto::SessionType Client::sessionType() const
     return config_.session_type;
 }
 
-void Client::sendMessage(const google::protobuf::MessageLite& message)
+void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message)
 {
     if (!channel_)
     {
@@ -156,7 +156,7 @@ void Client::sendMessage(const google::protobuf::MessageLite& message)
         return;
     }
 
-    channel_->send(base::serialize(message));
+    channel_->send(channel_id, base::serialize(message));
 }
 
 int64_t Client::totalRx() const
@@ -215,6 +215,38 @@ void Client::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
+}
+
+void Client::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+{
+    if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
+    {
+        onSessionMessageReceived(channel_id, buffer);
+    }
+    else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+    }
+}
+
+void Client::onMessageWritten(uint8_t channel_id, size_t pending)
+{
+    if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
+    {
+        onSessionMessageWritten(channel_id, pending);
+    }
+    else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+    }
 }
 
 void Client::onHostConnected(std::unique_ptr<base::NetworkChannel> channel)
@@ -277,6 +309,12 @@ void Client::startAuthentication()
 
                 // Otherwise use TCP keep alive.
                 channel_->setTcpKeepAlive(true);
+            }
+
+            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
             }
 
             status_window_proxy_->onConnected();

@@ -184,6 +184,12 @@ void Controller::onConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
+            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
+            }
+
             LOG(LS_INFO) << "Authentication complete (session count: " << session_count_ << ")";
 
             // Now the session will receive incoming messages.
@@ -215,7 +221,7 @@ void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
     delayedConnectToRouter();
 }
 
-void Controller::onMessageReceived(const base::ByteArray& buffer)
+void Controller::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -256,7 +262,7 @@ void Controller::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void Controller::onMessageWritten(size_t /* pending */)
+void Controller::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -272,7 +278,7 @@ void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
     outgoing_message_->mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void Controller::onSessionFinished()
@@ -344,7 +350,7 @@ void Controller::sendKeyPool(uint32_t key_count)
     }
 
     // Send a message to the router.
-    channel_->send(base::serialize(*outgoing_message_));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 } // namespace relay

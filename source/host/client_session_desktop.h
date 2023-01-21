@@ -68,12 +68,10 @@ public:
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }
 
 protected:
-    // net::Listener implementation.
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
-
     // ClientSession implementation.
     void onStarted() override;
+    void onReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onWritten(uint8_t channel_id, size_t pending) override;
 
 #if defined(OS_WIN)
     // TaskManager::Delegate implementation.

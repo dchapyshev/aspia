@@ -28,18 +28,21 @@ class WriteTask
 public:
     enum class Type { SERVICE_DATA, USER_DATA };
 
-    WriteTask(Type type, ByteArray&& data)
+    WriteTask(Type type, uint8_t channel_id, ByteArray&& data)
         : type_(type),
+          channel_id_(channel_id),
           data_(std::move(data))
     {
         // Nothing
     }
 
     Type type() const { return type_; }
+    uint8_t channelId() const { return channel_id_; }
     const ByteArray& data() const { return data_; }
 
 private:
     const Type type_;
+    const uint8_t channel_id_;
     const ByteArray data_;
 };
 

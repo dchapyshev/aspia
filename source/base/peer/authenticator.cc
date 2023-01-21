@@ -27,6 +27,7 @@ namespace base {
 
 namespace {
 
+constexpr uint8_t kChannelIdAuthenticator = 0;
 constexpr std::chrono::minutes kTimeout{ 1 };
 
 } // namespace
@@ -133,7 +134,7 @@ void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 void Authenticator::sendMessage(base::ByteArray&& data)
 {
     DCHECK(channel_);
-    channel_->send(std::move(data));
+    channel_->send(kChannelIdAuthenticator, std::move(data));
 }
 
 void Authenticator::finish(const Location& location, ErrorCode error_code)
@@ -189,7 +190,7 @@ void Authenticator::onDisconnected(NetworkChannel::ErrorCode error_code)
     finish(FROM_HERE, result);
 }
 
-void Authenticator::onMessageReceived(const ByteArray& buffer)
+void Authenticator::onMessageReceived(uint8_t /* channel_id */, const ByteArray& buffer)
 {
     if (state() != State::PENDING)
         return;
@@ -197,7 +198,7 @@ void Authenticator::onMessageReceived(const ByteArray& buffer)
     onReceived(buffer);
 }
 
-void Authenticator::onMessageWritten(size_t /* pending */)
+void Authenticator::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     if (state() != State::PENDING)
         return;

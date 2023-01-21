@@ -57,8 +57,8 @@ protected:
     // net::Channel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;

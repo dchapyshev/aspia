@@ -85,8 +85,8 @@ protected:
     // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // base::RelayPeer::Delegate implementation.
     void onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel) override;

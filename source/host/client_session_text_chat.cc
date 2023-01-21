@@ -37,7 +37,7 @@ ClientSessionTextChat::~ClientSessionTextChat()
 
 void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
 {
-    sendMessage(base::serialize(text_chat));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(text_chat));
 }
 
 void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
@@ -61,7 +61,12 @@ void ClientSessionTextChat::setHasUser(bool enable)
     has_user_ = enable;
 }
 
-void ClientSessionTextChat::onMessageReceived(const base::ByteArray& buffer)
+void ClientSessionTextChat::onStarted()
+{
+    // Nothing
+}
+
+void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::TextChat text_chat;
 
@@ -82,12 +87,7 @@ void ClientSessionTextChat::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionTextChat::onMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
-void ClientSessionTextChat::onStarted()
+void ClientSessionTextChat::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

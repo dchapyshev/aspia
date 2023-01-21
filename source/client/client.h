@@ -66,9 +66,11 @@ protected:
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted(const base::Version& peer_version) = 0;
+    virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
     // Sends outgoing message.
-    void sendMessage(const google::protobuf::MessageLite& message);
+    void sendMessage(uint8_t channel_id, const google::protobuf::MessageLite& message);
 
     // Methods for obtaining network metrics.
     int64_t totalRx() const;
@@ -79,6 +81,8 @@ protected:
     // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // RouterController::Delegate implementation.
     void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) override;

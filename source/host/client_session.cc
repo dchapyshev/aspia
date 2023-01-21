@@ -150,9 +150,9 @@ std::shared_ptr<base::NetworkChannelProxy> ClientSession::channelProxy()
     return channel_->channelProxy();
 }
 
-void ClientSession::sendMessage(base::ByteArray&& buffer)
+void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
 {
-    channel_->send(std::move(buffer));
+    channel_->send(channel_id, std::move(buffer));
 }
 
 void ClientSession::onConnected()
@@ -167,6 +167,38 @@ void ClientSession::onDisconnected(base::NetworkChannel::ErrorCode error_code)
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();
+}
+
+void ClientSession::onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
+{
+    if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
+    {
+        onReceived(channel_id, buffer);
+    }
+    else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+    }
+}
+
+void ClientSession::onMessageWritten(uint8_t channel_id, size_t pending)
+{
+    if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
+    {
+        onWritten(channel_id, pending);
+    }
+    else if (channel_id == proto::HOST_CHANNEL_ID_SERVICE)
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+    }
 }
 
 size_t ClientSession::pendingMessages() const

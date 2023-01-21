@@ -40,14 +40,14 @@ void SessionRelay::sendKeyUsed(uint32_t key_id)
 {
     outgoing_message_->Clear();
     outgoing_message_->mutable_key_used()->set_key_id(key_id);
-    sendMessage(*outgoing_message_);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
 void SessionRelay::disconnectPeerSession(const proto::PeerConnectionRequest& request)
 {
     outgoing_message_->Clear();
     outgoing_message_->mutable_peer_connection_request()->CopyFrom(request);
-    sendMessage(*outgoing_message_);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *outgoing_message_);
 }
 
 void SessionRelay::onSessionReady()
@@ -55,7 +55,7 @@ void SessionRelay::onSessionReady()
     // Nothing
 }
 
-void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
+void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -79,7 +79,7 @@ void SessionRelay::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionRelay::onMessageWritten(size_t /* pending */)
+void SessionRelay::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

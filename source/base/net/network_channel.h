@@ -92,8 +92,8 @@ public:
 
         virtual void onConnected() = 0;
         virtual void onDisconnected(ErrorCode error_code) = 0;
-        virtual void onMessageReceived(const ByteArray& buffer) = 0;
-        virtual void onMessageWritten(size_t pending) = 0;
+        virtual void onMessageReceived(uint8_t channel_id, const ByteArray& buffer) = 0;
+        virtual void onMessageWritten(uint8_t channel_id, size_t pending) = 0;
     };
 
     std::shared_ptr<NetworkChannelProxy> channelProxy();
@@ -131,7 +131,7 @@ public:
 
     // Sending a message. The method call is thread safe. After the call, the message will be added
     // to the queue to be sent.
-    void send(ByteArray&& buffer);
+    void send(uint8_t channel_id, ByteArray&& buffer);
 
     // Disable or enable the algorithm of Nagle.
     bool setNoDelay(bool enable);
@@ -149,6 +149,9 @@ public:
     bool setOwnKeepAlive(bool enable,
                          const Seconds& interval = Seconds(45),
                          const Seconds& timeout = Seconds(15));
+
+    void setChannelIdSupport(bool enable);
+    bool hasChannelIdSupport() const;
 
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
@@ -212,10 +215,10 @@ private:
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
-    void onMessageWritten();
+    void onMessageWritten(uint8_t channel_id);
     void onMessageReceived();
 
-    void addWriteTask(WriteTask::Type type, ByteArray&& data);
+    void addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data);
 
     void doWrite();
     void onWrite(const std::error_code& error_code, size_t bytes_transferred);
@@ -278,6 +281,7 @@ private:
     int speed_rx_ = 0;
 
     base::HostId host_id_ = base::kInvalidHostId;
+    bool channel_id_support_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };

@@ -90,13 +90,17 @@ protected:
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
     virtual void onStarted() = 0;
+    virtual void onReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
+    virtual void onWritten(uint8_t channel_id, size_t pending) = 0;
 
     std::shared_ptr<base::NetworkChannelProxy> channelProxy();
-    void sendMessage(base::ByteArray&& buffer);
+    void sendMessage(uint8_t channel_id, base::ByteArray&& buffer);
 
     // base::NetworkChannel::Listener implementation.
     void onConnected() override;
     void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     size_t pendingMessages() const;
 

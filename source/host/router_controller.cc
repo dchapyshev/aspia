@@ -95,7 +95,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
 
     // Send host ID request.
     LOG(LS_INFO) << "Send ID request to router";
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void RouterController::resetHostId(base::HostId host_id)
@@ -110,7 +110,7 @@ void RouterController::resetHostId(base::HostId host_id)
 
     proto::PeerToRouter message;
     message.mutable_reset_host_id()->set_host_id(host_id);
-    channel_->send(base::serialize(message));
+    channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
 void RouterController::onConnected()
@@ -137,6 +137,12 @@ void RouterController::onConnected()
             // notifications.
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
+
+            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
+            }
 
             LOG(LS_INFO) << "Router connected";
             routerStateChanged(proto::internal::RouterState::CONNECTED);
@@ -165,7 +171,7 @@ void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code
     delayedConnectToRouter();
 }
 
-void RouterController::onMessageReceived(const base::ByteArray& buffer)
+void RouterController::onMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToPeer in_message;
     if (!base::parse(buffer, &in_message))
@@ -199,7 +205,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
 
                 // Send host ID request.
                 LOG(LS_INFO) << "Send ID request to router";
-                channel_->send(base::serialize(out_message));
+                channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(out_message));
                 return;
             }
 
@@ -255,7 +261,7 @@ void RouterController::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void RouterController::onMessageWritten(size_t /* pending */)
+void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

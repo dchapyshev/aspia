@@ -186,6 +186,12 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 {
     LOG(LS_INFO) << "New client session";
 
+    if (session_info.version >= base::Version(2, 6, 0))
+    {
+        LOG(LS_INFO) << "Using channel id support";
+        session_info.channel->setChannelIdSupport(true);
+    }
+
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type),
         std::move(session_info.channel),

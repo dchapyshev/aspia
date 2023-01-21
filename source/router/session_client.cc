@@ -41,7 +41,7 @@ void SessionClient::onSessionReady()
     // Nothing
 }
 
-void SessionClient::onMessageReceived(const base::ByteArray& buffer)
+void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
     if (!base::parse(buffer, message.get()))
@@ -64,7 +64,7 @@ void SessionClient::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void SessionClient::onMessageWritten(size_t /* pending */)
+void SessionClient::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
@@ -143,7 +143,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     LOG(LS_INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::ConnectionOffer::CLIENT);
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host_status)
@@ -158,7 +158,7 @@ void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host
 
     LOG(LS_INFO) << "Sending host status for host ID " << check_host_status.host_id()
                  << ": " << host_status->status();
-    sendMessage(*message);
+    sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
 } // namespace router

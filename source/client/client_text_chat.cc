@@ -46,7 +46,7 @@ void ClientTextChat::setTextChatWindow(
 
 void ClientTextChat::onTextChatMessage(const proto::TextChat& text_chat)
 {
-    sendMessage(text_chat);
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, text_chat);
 }
 
 void ClientTextChat::onSessionStarted(const base::Version& /* peer_version */)
@@ -55,10 +55,10 @@ void ClientTextChat::onSessionStarted(const base::Version& /* peer_version */)
     text_chat_window_proxy_->start(text_chat_control_proxy_);
 }
 
-void ClientTextChat::onMessageReceived(const base::ByteArray& buffer)
+void ClientTextChat::onSessionMessageReceived(
+    uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::TextChat text_chat;
-
     if (!base::parse(buffer, &text_chat))
     {
         LOG(LS_WARNING) << "Unable to parse text chat message";
@@ -68,7 +68,7 @@ void ClientTextChat::onMessageReceived(const base::ByteArray& buffer)
     text_chat_window_proxy_->onTextChatMessage(text_chat);
 }
 
-void ClientTextChat::onMessageWritten(size_t /* pending */)
+void ClientTextChat::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }

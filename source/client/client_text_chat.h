@@ -43,10 +43,8 @@ public:
 protected:
     // Client implementation.
     void onSessionStarted(const base::Version& peer_version) override;
-
-    // net::Channel::Listener implementation.
-    void onMessageReceived(const base::ByteArray& buffer) override;
-    void onMessageWritten(size_t pending) override;
+    void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
+    void onSessionMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     std::shared_ptr<TextChatControlProxy> text_chat_control_proxy_;

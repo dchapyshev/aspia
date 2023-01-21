@@ -88,8 +88,8 @@ protected:
     // base::NetworkChannel::Listener implementation.
     void onConnected() final;
     void onDisconnected(NetworkChannel::ErrorCode error_code) final;
-    void onMessageReceived(const ByteArray& buffer) final;
-    void onMessageWritten(size_t pending) final;
+    void onMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
+    void onMessageWritten(uint8_t channel_id, size_t pending) final;
 
     [[nodiscard]] bool onSessionKeyChanged();
 

@@ -82,7 +82,56 @@ void ClientSessionDesktop::setDesktopSessionProxy(
     DCHECK(desktop_session_proxy_);
 }
 
-void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
+void ClientSessionDesktop::onStarted()
+{
+    max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
+
+    if (!base::Environment::has("ASPIA_NO_OVERFLOW_DETECTION"))
+    {
+        LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
+                     << desktop_session_proxy_->screenCaptureFps()
+                     << ", max FPS: " << max_fps_ << ")";
+
+        overflow_detection_timer_.start(std::chrono::milliseconds(1000),
+            std::bind(&ClientSessionDesktop::onOverflowDetectionTimer, this));
+    }
+    else
+    {
+        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS: "
+                     << desktop_session_proxy_->screenCaptureFps() << ")";
+    }
+
+    const char* extensions;
+
+    // Supported extensions are different for managing and viewing the desktop.
+    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        extensions = common::kSupportedExtensionsForManage;
+    }
+    else
+    {
+        DCHECK_EQ(sessionType(), proto::SESSION_TYPE_DESKTOP_VIEW);
+        extensions = common::kSupportedExtensionsForView;
+    }
+
+    // Create a configuration request.
+    proto::DesktopConfigRequest* request = outgoing_message_->mutable_config_request();
+
+    // Add supported extensions and video encodings.
+    request->set_extensions(extensions);
+    request->set_video_encodings(common::kSupportedVideoEncodings);
+    request->set_audio_encodings(common::kSupportedAudioEncodings);
+
+    LOG(LS_INFO) << "Sending config request";
+    LOG(LS_INFO) << "Supported extensions: " << request->extensions();
+    LOG(LS_INFO) << "Supported video encodings: " << request->video_encodings();
+    LOG(LS_INFO) << "Supported audio encodings: " << request->audio_encodings();
+
+    // Send the request.
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+}
+
+void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
@@ -144,58 +193,9 @@ void ClientSessionDesktop::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
-void ClientSessionDesktop::onMessageWritten(size_t /* pending */)
+void ClientSessionDesktop::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
-}
-
-void ClientSessionDesktop::onStarted()
-{
-    max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
-
-    if (!base::Environment::has("ASPIA_NO_OVERFLOW_DETECTION"))
-    {
-        LOG(LS_INFO) << "Overflow detection enabled (current FPS: "
-                     << desktop_session_proxy_->screenCaptureFps()
-                     << ", max FPS: " << max_fps_ << ")";
-
-        overflow_detection_timer_.start(std::chrono::milliseconds(1000),
-            std::bind(&ClientSessionDesktop::onOverflowDetectionTimer, this));
-    }
-    else
-    {
-        LOG(LS_INFO) << "Overflow detection disabled by environment variable (current FPS: "
-                     << desktop_session_proxy_->screenCaptureFps() << ")";
-    }
-
-    const char* extensions;
-
-    // Supported extensions are different for managing and viewing the desktop.
-    if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        extensions = common::kSupportedExtensionsForManage;
-    }
-    else
-    {
-        DCHECK_EQ(sessionType(), proto::SESSION_TYPE_DESKTOP_VIEW);
-        extensions = common::kSupportedExtensionsForView;
-    }
-
-    // Create a configuration request.
-    proto::DesktopConfigRequest* request = outgoing_message_->mutable_config_request();
-
-    // Add supported extensions and video encodings.
-    request->set_extensions(extensions);
-    request->set_video_encodings(common::kSupportedVideoEncodings);
-    request->set_audio_encodings(common::kSupportedAudioEncodings);
-
-    LOG(LS_INFO) << "Sending config request";
-    LOG(LS_INFO) << "Supported extensions: " << request->extensions();
-    LOG(LS_INFO) << "Supported video encodings: " << request->video_encodings();
-    LOG(LS_INFO) << "Supported audio encodings: " << request->audio_encodings();
-
-    // Send the request.
-    sendMessage(base::serialize(*outgoing_message_));
 }
 
 #if defined(OS_WIN)
@@ -207,7 +207,7 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
 
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 #endif // defined(OS_WIN)
 
@@ -297,7 +297,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
     }
 
     if (outgoing_message_->has_video_packet() || outgoing_message_->has_cursor_shape())
-        sendMessage(base::serialize(*outgoing_message_));
+        sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
@@ -313,7 +313,7 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     if (!audio_encoder_->encode(audio_packet, outgoing_message_->mutable_audio_packet()))
         return;
 
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
@@ -322,7 +322,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 
     outgoing_message_->Clear();
     outgoing_message_->mutable_video_packet()->set_error_code(error_code);
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
@@ -341,7 +341,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     position->set_x(pos_x);
     position->set_y(pos_y);
 
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
@@ -351,7 +351,7 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(list.SerializeAsString());
 
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
@@ -360,7 +360,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     {
         outgoing_message_->Clear();
         outgoing_message_->mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(base::serialize(*outgoing_message_));
+        sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
     }
     else
     {
@@ -702,7 +702,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendMessage(base::serialize(*outgoing_message_));
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 #endif // defined(OS_WIN)
 }
 

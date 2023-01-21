@@ -338,6 +338,12 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
 
+    if (session_info.version >= base::Version(2, 6, 0))
+    {
+        LOG(LS_INFO) << "Using channel id support";
+        session_info.channel->setChannelIdSupport(true);
+    }
+
     std::unique_ptr<Session> session;
 
     switch (session_info.session_type)
