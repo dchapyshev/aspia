@@ -101,7 +101,7 @@ enum LoggingDestination
     // On Windows, use a file next to the exe.
     LOG_DEFAULT = LOG_TO_FILE
 #elif defined(OS_POSIX)
-    LOG_DEFAULT = LOG_TO_SYSTEM_DEBUG_LOG
+    LOG_DEFAULT = LOG_TO_STDOUT
 #endif
 };
 
