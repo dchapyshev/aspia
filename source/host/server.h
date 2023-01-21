@@ -20,7 +20,7 @@
 #define HOST_SERVER_H
 
 #include "build/build_config.h"
-#include "base/net/network_server.h"
+#include "base/net/tcp_server.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
@@ -37,7 +37,7 @@ class WaitableTimer;
 namespace host {
 
 class Server
-    : public base::NetworkServer::Delegate,
+    : public base::TcpServer::Delegate,
       public RouterController::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public UserSessionManager::Delegate,
@@ -53,13 +53,13 @@ public:
     void setPowerEvent(uint32_t power_event);
 
 protected:
-    // net::Server::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
+    // net::TcpServer::Delegate implementation.
+    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) override;
 
     // RouterController::Delegate implementation.
     void onRouterStateChanged(const proto::internal::RouterState& router_state) override;
     void onHostIdAssigned(const std::string& session_name, base::HostId host_id) override;
-    void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onClientConnected(std::unique_ptr<base::TcpChannel> channel) override;
 
     // base::AuthenticatorManager::Delegate implementation.
     void onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info) override;
@@ -78,7 +78,7 @@ protected:
     void onFileDownloaderProgress(int percentage) override;
 
 private:
-    void startAuthentication(std::unique_ptr<base::NetworkChannel> channel);
+    void startAuthentication(std::unique_ptr<base::TcpChannel> channel);
     void addFirewallRules();
     void deleteFirewallRules();
     void updateConfiguration(const std::filesystem::path& path, bool error);
@@ -94,7 +94,7 @@ private:
     SystemSettings settings_;
 
     // Accepts incoming network connections.
-    std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<base::TcpServer> server_;
     std::unique_ptr<RouterController> router_controller_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<UserSessionManager> user_session_manager_;

@@ -20,7 +20,7 @@
 
 #include "build/build_config.h"
 #include "base/logging.h"
-#include "base/net/network_channel_proxy.h"
+#include "base/net/tcp_channel_proxy.h"
 #include "base/threading/thread.h"
 #include "common/file_task.h"
 #include "common/file_task_producer.h"
@@ -103,7 +103,7 @@ class ClientSessionFileTransfer::Worker
       public common::FileTaskProducer
 {
 public:
-    Worker(base::SessionId session_id, std::shared_ptr<base::NetworkChannelProxy> channel_proxy);
+    Worker(base::SessionId session_id, std::shared_ptr<base::TcpChannelProxy> channel_proxy);
     ~Worker() override;
 
     void start();
@@ -120,7 +120,7 @@ protected:
 private:
     base::Thread thread_;
     const base::SessionId session_id_;
-    std::shared_ptr<base::NetworkChannelProxy> channel_proxy_;
+    std::shared_ptr<base::TcpChannelProxy> channel_proxy_;
     std::shared_ptr<common::FileTaskProducerProxy> producer_proxy_;
     std::unique_ptr<common::FileWorker> impl_;
 
@@ -132,7 +132,7 @@ private:
 };
 
 ClientSessionFileTransfer::Worker::Worker(
-    base::SessionId session_id, std::shared_ptr<base::NetworkChannelProxy> channel_proxy)
+    base::SessionId session_id, std::shared_ptr<base::TcpChannelProxy> channel_proxy)
     : session_id_(session_id),
       channel_proxy_(std::move(channel_proxy))
 {
@@ -218,7 +218,7 @@ void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileT
     channel_proxy_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(task->reply()));
 }
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel)
+ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";

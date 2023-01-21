@@ -60,7 +60,7 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 } // namespace
 
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
-                                           std::unique_ptr<base::NetworkChannel> channel,
+                                           std::unique_ptr<base::TcpChannel> channel,
                                            std::shared_ptr<base::TaskRunner> task_runner)
     : ClientSession(session_type, std::move(channel)),
       overflow_detection_timer_(base::WaitableTimer::Type::REPEATED, std::move(task_runner)),

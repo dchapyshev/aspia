@@ -36,7 +36,7 @@ public:
         SessionInfo(const SessionInfo& other) = delete;
         SessionInfo& operator=(const SessionInfo& other) = delete;
 
-        std::unique_ptr<NetworkChannel> channel;
+        std::unique_ptr<TcpChannel> channel;
         Version version;
         std::string os_name;
         std::string computer_name;
@@ -66,7 +66,7 @@ public:
     // Adds a channel to the authentication queue. After success completion, a session will be
     // created (in a stopped state) and method Delegate::onNewSession will be called.
     // If authentication fails, the channel will be automatically deleted.
-    void addNewChannel(std::unique_ptr<NetworkChannel> channel);
+    void addNewChannel(std::unique_ptr<TcpChannel> channel);
 
 private:
     void onComplete();

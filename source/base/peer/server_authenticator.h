@@ -22,7 +22,7 @@
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
 #include "base/memory/local_memory.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 
 namespace base {

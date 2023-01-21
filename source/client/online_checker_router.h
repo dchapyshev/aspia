@@ -20,7 +20,7 @@
 #define CLIENT_ONLINE_CHECKER_ROUTER_H
 
 #include "base/waitable_timer.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "client/router_config.h"
 
 #include <deque>
@@ -33,7 +33,7 @@ class TaskRunner;
 
 namespace client {
 
-class OnlineCheckerRouter : public base::NetworkChannel::Listener
+class OnlineCheckerRouter : public base::TcpChannel::Listener
 {
 public:
     OnlineCheckerRouter(const RouterConfig& router_config,
@@ -59,9 +59,9 @@ public:
     void start(const ComputerList& computers, Delegate* delegate);
 
 protected:
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
@@ -70,7 +70,7 @@ private:
     void onFinished(const base::Location& location);
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     base::WaitableTimer timer_;
     RouterConfig router_config_;

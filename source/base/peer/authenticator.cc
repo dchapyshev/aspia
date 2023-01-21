@@ -43,7 +43,7 @@ Authenticator::~Authenticator()
     LOG(LS_INFO) << "Dtor";
 }
 
-void Authenticator::start(std::unique_ptr<NetworkChannel> channel, Callback callback)
+void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback)
 {
     if (state() != State::STOPPED)
     {
@@ -71,7 +71,7 @@ void Authenticator::start(std::unique_ptr<NetworkChannel> channel, Callback call
         channel_->resume();
 }
 
-std::unique_ptr<NetworkChannel> Authenticator::takeChannel()
+std::unique_ptr<TcpChannel> Authenticator::takeChannel()
 {
     if (state() != State::SUCCESS)
         return nullptr;
@@ -178,13 +178,13 @@ void Authenticator::onConnected()
     NOTREACHED();
 }
 
-void Authenticator::onDisconnected(NetworkChannel::ErrorCode error_code)
+void Authenticator::onDisconnected(TcpChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << TcpChannel::errorToString(error_code);
 
     ErrorCode result = ErrorCode::NETWORK_ERROR;
 
-    if (error_code == NetworkChannel::ErrorCode::ACCESS_DENIED)
+    if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
         result = ErrorCode::ACCESS_DENIED;
 
     finish(FROM_HERE, result);

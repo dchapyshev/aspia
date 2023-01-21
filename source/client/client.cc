@@ -94,7 +94,7 @@ void Client::start(const Config& config)
             base::strCat({ config_.address_or_id, u":", base::numberToString16(config_.port) }));
 
         // Create a network channel for messaging.
-        channel_ = std::make_unique<base::NetworkChannel>();
+        channel_ = std::make_unique<base::TcpChannel>();
 
         // Set the listener for the network channel.
         channel_->setListener(this);
@@ -209,9 +209,9 @@ void Client::onConnected()
     startAuthentication();
 }
 
-void Client::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Client::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Connection terminated: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Connection terminated: " << base::TcpChannel::errorToString(error_code);
 
     // Show an error to the user.
     status_window_proxy_->onDisconnected(error_code);
@@ -249,7 +249,7 @@ void Client::onMessageWritten(uint8_t channel_id, size_t pending)
     }
 }
 
-void Client::onHostConnected(std::unique_ptr<base::NetworkChannel> channel)
+void Client::onHostConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Host connected";
     DCHECK(channel);

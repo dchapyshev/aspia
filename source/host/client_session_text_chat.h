@@ -27,7 +27,7 @@ namespace host {
 class ClientSessionTextChat : public ClientSession
 {
 public:
-    explicit ClientSessionTextChat(std::unique_ptr<base::NetworkChannel> channel);
+    explicit ClientSessionTextChat(std::unique_ptr<base::TcpChannel> channel);
     ~ClientSessionTextChat() override;
 
     void sendTextChat(const proto::TextChat& text_chat);

@@ -52,7 +52,7 @@ class ClientSessionDesktop
 {
 public:
     ClientSessionDesktop(proto::SessionType session_type,
-                         std::unique_ptr<base::NetworkChannel> channel,
+                         std::unique_ptr<base::TcpChannel> channel,
                          std::shared_ptr<base::TaskRunner> task_runner);
     ~ClientSessionDesktop() override;
 

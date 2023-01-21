@@ -32,7 +32,7 @@ namespace client {
 
 class RouterWindowProxy;
 
-class Router : public base::NetworkChannel::Listener
+class Router : public base::TcpChannel::Listener
 {
 public:
     Router(std::shared_ptr<RouterWindowProxy> window_proxy,
@@ -54,15 +54,15 @@ public:
     void disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id);
 
 protected:
-    // net::Channel::Listener implementation.
+    // net::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
     std::shared_ptr<base::TaskRunner> io_task_runner_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<RouterWindowProxy> window_proxy_;
 

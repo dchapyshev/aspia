@@ -20,7 +20,7 @@
 #define ROUTER_SESSION_H
 
 #include "base/version.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/memory/local_memory.h"
 #include "proto/router_common.pb.h"
 
@@ -31,7 +31,7 @@ class DatabaseFactory;
 class Server;
 class SharedKeyPool;
 
-class Session : public base::NetworkChannel::Listener
+class Session : public base::TcpChannel::Listener
 {
 public:
     explicit Session(proto::RouterSession session_type);
@@ -48,7 +48,7 @@ public:
             SessionId session_id, proto::RouterSession session_type) = 0;
     };
 
-    void setChannel(std::unique_ptr<base::NetworkChannel> channel);
+    void setChannel(std::unique_ptr<base::TcpChannel> channel);
     void setRelayKeyPool(std::unique_ptr<SharedKeyPool> relay_key_pool);
     void setDatabaseFactory(base::local_shared_ptr<DatabaseFactory> database_factory);
     void setServer(Server* server);
@@ -78,9 +78,9 @@ protected:
     virtual void onSessionMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(uint8_t channel_id, size_t pending) = 0;
 
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() final;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) final;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) final;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) final;
     void onMessageWritten(uint8_t channel_id, size_t pending) final;
 
@@ -95,7 +95,7 @@ private:
     const SessionId session_id_;
     time_t start_time_ = 0;
 
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     base::local_shared_ptr<DatabaseFactory> database_factory_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     Server* server_ = nullptr;

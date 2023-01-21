@@ -56,7 +56,7 @@ void Router::connectToRouter(std::u16string_view address, uint16_t port)
 {
     LOG(LS_INFO) << "Connecting to router " << address.data() << ":" << port;
 
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
     channel_->connect(address, port);
 }
@@ -190,9 +190,9 @@ void Router::onConnected()
     });
 }
 
-void Router::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Router::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Router disconnected: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Router disconnected: " << base::TcpChannel::errorToString(error_code);
     window_proxy_->onDisconnected(error_code);
 }
 

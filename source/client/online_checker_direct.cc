@@ -21,7 +21,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/waitable_timer.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace client {
@@ -33,7 +33,7 @@ const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
 
-class OnlineCheckerDirect::Instance : public base::NetworkChannel::Listener
+class OnlineCheckerDirect::Instance : public base::TcpChannel::Listener
 {
 public:
     Instance(int computer_id, const std::u16string& address, uint16_t port,
@@ -47,7 +47,7 @@ public:
 
 protected:
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
@@ -59,7 +59,7 @@ private:
     const uint16_t port_;
 
     FinishCallback finish_callback_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     base::WaitableTimer timer_;
 };
 
@@ -93,7 +93,7 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     LOG(LS_INFO) << "Starting connection to " << address_ << ":" << port_
                  << " (computer: " << computer_id_ << ")";
 
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
     channel_->connect(address_, port_);
 }
@@ -113,7 +113,7 @@ void OnlineCheckerDirect::Instance::onConnected()
     channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
-void OnlineCheckerDirect::Instance::onDisconnected(base::NetworkChannel::ErrorCode /* error_code */)
+void OnlineCheckerDirect::Instance::onDisconnected(base::TcpChannel::ErrorCode /* error_code */)
 {
     LOG(LS_INFO) << "Connection aborted for computer: " << computer_id_;
     onFinished(false);

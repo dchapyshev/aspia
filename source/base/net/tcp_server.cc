@@ -16,19 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/network_server.h"
+#include "base/net/tcp_server.h"
 
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
 
 #include <asio/ip/address.hpp>
 
 namespace base {
 
-class NetworkServer::Impl : public base::enable_shared_from_this<Impl>
+class TcpServer::Impl : public base::enable_shared_from_this<Impl>
 {
 public:
     explicit Impl(asio::io_context& io_context);
@@ -56,20 +56,19 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
-NetworkServer::Impl::Impl(asio::io_context& io_context)
+TcpServer::Impl::Impl(asio::io_context& io_context)
     : io_context_(io_context)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
-NetworkServer::Impl::~Impl()
+TcpServer::Impl::~Impl()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!acceptor_);
 }
 
-void NetworkServer::Impl::start(
-    std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
     listen_interface_ = listen_interface;
@@ -93,29 +92,29 @@ void NetworkServer::Impl::start(
     doAccept();
 }
 
-void NetworkServer::Impl::stop()
+void TcpServer::Impl::stop()
 {
     delegate_ = nullptr;
     acceptor_.reset();
 }
 
-std::u16string NetworkServer::Impl::listenInterface() const
+std::u16string TcpServer::Impl::listenInterface() const
 {
     return listen_interface_;
 }
 
-uint16_t NetworkServer::Impl::port() const
+uint16_t TcpServer::Impl::port() const
 {
     return port_;
 }
 
-void NetworkServer::Impl::doAccept()
+void TcpServer::Impl::doAccept()
 {
     acceptor_->async_accept(
         std::bind(&Impl::onAccept, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
-void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
+void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
 {
     if (!delegate_)
         return;
@@ -139,8 +138,8 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
     {
         accept_error_count_ = 0;
 
-        std::unique_ptr<NetworkChannel> channel =
-            std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket)));
+        std::unique_ptr<TcpChannel> channel =
+            std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket)));
 
         // Connection accepted.
         delegate_->onNewConnection(std::move(channel));
@@ -150,40 +149,40 @@ void NetworkServer::Impl::onAccept(const std::error_code& error_code, asio::ip::
     doAccept();
 }
 
-NetworkServer::NetworkServer()
+TcpServer::TcpServer()
     : impl_(base::make_local_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
-NetworkServer::~NetworkServer()
+TcpServer::~TcpServer()
 {
     LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 
-void NetworkServer::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
+void TcpServer::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
     impl_->start(listen_interface, port, delegate);
 }
 
-void NetworkServer::stop()
+void TcpServer::stop()
 {
     impl_->stop();
 }
 
-std::u16string NetworkServer::listenInterface() const
+std::u16string TcpServer::listenInterface() const
 {
     return impl_->listenInterface();
 }
 
-uint16_t NetworkServer::port() const
+uint16_t TcpServer::port() const
 {
     return impl_->port();
 }
 
 // static
-bool NetworkServer::isValidListenInterface(std::u16string_view interface)
+bool TcpServer::isValidListenInterface(std::u16string_view interface)
 {
     asio::error_code error_code;
     asio::ip::make_address_v4(base::local8BitFromUtf16(interface), error_code);

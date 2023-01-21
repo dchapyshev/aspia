@@ -20,7 +20,7 @@
 #define HOST_ROUTER_CONTROLLER_H
 
 #include "base/waitable_timer.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer_manager.h"
 #include "proto/host_internal.pb.h"
@@ -34,7 +34,7 @@ class ClientAuthenticator;
 namespace host {
 
 class RouterController
-    : public base::NetworkChannel::Listener,
+    : public base::TcpChannel::Listener,
       public base::RelayPeerManager::Delegate
 {
 public:
@@ -55,7 +55,7 @@ public:
 
         virtual void onRouterStateChanged(const proto::internal::RouterState& router_state) = 0;
         virtual void onHostIdAssigned(const std::string& username, base::HostId host_id) = 0;
-        virtual void onClientConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
+        virtual void onClientConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
     };
 
     void start(const RouterInfo& router_info, Delegate* delegate);
@@ -68,14 +68,14 @@ public:
     const base::ByteArray& publicKey() const { return router_info_.public_key; }
 
 protected:
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // base::RelayPeerManager::Delegate implementation.
-    void onNewPeerConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel) override;
 
 private:
     void connectToRouter();
@@ -86,7 +86,7 @@ private:
     Delegate* delegate_ = nullptr;
 
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<base::RelayPeerManager> peer_manager_;
     base::WaitableTimer reconnect_timer_;

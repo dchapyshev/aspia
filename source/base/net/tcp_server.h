@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_NETWORK_SERVER_H
-#define BASE_NET_NETWORK_SERVER_H
+#ifndef BASE_NET_TCP_SERVER_H
+#define BASE_NET_TCP_SERVER_H
 
 #include "base/macros_magic.h"
 #include "base/memory/local_memory.h"
@@ -28,20 +28,20 @@
 
 namespace base {
 
-class NetworkChannel;
+class TcpChannel;
 
-class NetworkServer
+class TcpServer
 {
 public:
-    NetworkServer();
-    ~NetworkServer();
+    TcpServer();
+    ~TcpServer();
 
     class Delegate
     {
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewConnection(std::unique_ptr<NetworkChannel> channel) = 0;
+        virtual void onNewConnection(std::unique_ptr<TcpChannel> channel) = 0;
     };
 
     void start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate);
@@ -56,9 +56,9 @@ private:
     class Impl;
     base::local_shared_ptr<Impl> impl_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkServer);
+    DISALLOW_COPY_AND_ASSIGN(TcpServer);
 };
 
 } // namespace base
 
-#endif // BASE_NET_NETWORK_SERVER_H
+#endif // BASE_NET_TCP_SERVER_H

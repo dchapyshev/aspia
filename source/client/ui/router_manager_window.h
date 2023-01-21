@@ -52,7 +52,7 @@ public:
 
     // RouterWindow implementation.
     void onConnected(const base::Version& peer_version) override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onSessionList(std::shared_ptr<proto::SessionList> session_list) override;
     void onSessionResult(std::shared_ptr<proto::SessionResult> session_result) override;

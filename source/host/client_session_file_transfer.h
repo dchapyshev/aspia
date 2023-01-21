@@ -27,7 +27,7 @@ namespace host {
 class ClientSessionFileTransfer : public ClientSession
 {
 public:
-    explicit ClientSessionFileTransfer(std::unique_ptr<base::NetworkChannel> channel);
+    explicit ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel);
     ~ClientSessionFileTransfer() override;
 
 protected:

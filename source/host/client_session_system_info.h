@@ -27,7 +27,7 @@ namespace host {
 class ClientSessionSystemInfo : public ClientSession
 {
 public:
-    explicit ClientSessionSystemInfo(std::unique_ptr<base::NetworkChannel> channel);
+    explicit ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel);
     ~ClientSessionSystemInfo() override;
 
 protected:

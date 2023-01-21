@@ -442,51 +442,51 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     }
 }
 
-void RouterManagerWindow::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case base::NetworkChannel::ErrorCode::INVALID_PROTOCOL:
+        case base::TcpChannel::ErrorCode::INVALID_PROTOCOL:
             message = QT_TR_NOOP("Violation of the communication protocol.");
             break;
 
-        case base::NetworkChannel::ErrorCode::ACCESS_DENIED:
+        case base::TcpChannel::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;
 
-        case base::NetworkChannel::ErrorCode::NETWORK_ERROR:
+        case base::TcpChannel::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;
 
-        case base::NetworkChannel::ErrorCode::CONNECTION_REFUSED:
+        case base::TcpChannel::ErrorCode::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
 
-        case base::NetworkChannel::ErrorCode::REMOTE_HOST_CLOSED:
+        case base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
 
-        case base::NetworkChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
+        case base::TcpChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
 
-        case base::NetworkChannel::ErrorCode::SOCKET_TIMEOUT:
+        case base::TcpChannel::ErrorCode::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
 
-        case base::NetworkChannel::ErrorCode::ADDRESS_IN_USE:
+        case base::TcpChannel::ErrorCode::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
 
-        case base::NetworkChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
+        case base::TcpChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
 
         default:
         {
-            if (error_code != base::NetworkChannel::ErrorCode::UNKNOWN)
+            if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
             {
                 LOG(LS_WARNING) << "Unknown error code: " << static_cast<int>(error_code);
             }

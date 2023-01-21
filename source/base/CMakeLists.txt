@@ -529,12 +529,12 @@ list(APPEND SOURCE_BASE_NET
     net/kcp_channel.h
     net/kcp_channel_proxy.cc
     net/kcp_channel_proxy.h
-    net/network_channel.cc
-    net/network_channel.h
-    net/network_channel_proxy.cc
-    net/network_channel_proxy.h
-    net/network_server.cc
-    net/network_server.h
+    net/tcp_channel.cc
+    net/tcp_channel.h
+    net/tcp_channel_proxy.cc
+    net/tcp_channel_proxy.h
+    net/tcp_server.cc
+    net/tcp_server.h
     net/variable_size.cc
     net/variable_size.h
     net/write_task.h)

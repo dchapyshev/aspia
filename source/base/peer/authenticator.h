@@ -21,14 +21,14 @@
 
 #include "base/waitable_timer.h"
 #include "base/version.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
 
 namespace base {
 
 class Location;
 
-class Authenticator : public NetworkChannel::Listener
+class Authenticator : public TcpChannel::Listener
 {
 public:
     explicit Authenticator(std::shared_ptr<TaskRunner> task_runner);
@@ -54,7 +54,7 @@ public:
 
     using Callback = std::function<void(ErrorCode error_code)>;
 
-    void start(std::unique_ptr<NetworkChannel> channel, Callback callback);
+    void start(std::unique_ptr<TcpChannel> channel, Callback callback);
 
     [[nodiscard]] proto::Identify identify() const { return identify_; }
     [[nodiscard]] proto::Encryption encryption() const { return encryption_; }
@@ -68,7 +68,7 @@ public:
     [[nodiscard]] State state() const { return state_; }
 
     // Releases network channel.
-    [[nodiscard]] std::unique_ptr<NetworkChannel> takeChannel();
+    [[nodiscard]] std::unique_ptr<TcpChannel> takeChannel();
 
     static const char* stateToString(State state);
     static const char* errorToString(Authenticator::ErrorCode error_code);
@@ -85,9 +85,9 @@ protected:
     void setPeerOsName(const std::string& name);
     void setPeerComputerName(const std::string& name);
 
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() final;
-    void onDisconnected(NetworkChannel::ErrorCode error_code) final;
+    void onDisconnected(TcpChannel::ErrorCode error_code) final;
     void onMessageReceived(uint8_t channel_id, const ByteArray& buffer) final;
     void onMessageWritten(uint8_t channel_id, size_t pending) final;
 
@@ -104,7 +104,7 @@ protected:
 
 private:
     WaitableTimer timer_;
-    std::unique_ptr<NetworkChannel> channel_;
+    std::unique_ptr<TcpChannel> channel_;
     Callback callback_;
     State state_ = State::STOPPED;
     Version peer_version_; // Remote peer version.

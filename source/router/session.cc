@@ -19,7 +19,7 @@
 #include "router/session.h"
 
 #include "base/logging.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
 #include "router/database.h"
 #include "router/database_factory.h"
@@ -43,7 +43,7 @@ Session::Session(proto::RouterSession session_type)
 
 Session::~Session() = default;
 
-void Session::setChannel(std::unique_ptr<base::NetworkChannel> channel)
+void Session::setChannel(std::unique_ptr<base::TcpChannel> channel)
 {
     channel_ = std::move(channel);
 }
@@ -148,9 +148,9 @@ void Session::onConnected()
     NOTREACHED();
 }
 
-void Session::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Session::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(LS_INFO) << "Network error: " << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_INFO) << "Network error: " << base::TcpChannel::errorToString(error_code);
 
     if (delegate_)
         delegate_->onSessionFinished(session_id_, session_type_);

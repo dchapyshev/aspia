@@ -19,7 +19,7 @@
 #ifndef ROUTER_SERVER_H
 #define ROUTER_SERVER_H
 
-#include "base/net/network_server.h"
+#include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/server_authenticator_manager.h"
 #include "build/build_config.h"
@@ -34,7 +34,7 @@ class SessionHost;
 class SessionRelay;
 
 class Server
-    : public base::NetworkServer::Delegate,
+    : public base::TcpServer::Delegate,
       public SharedKeyPool::Delegate,
       public base::ServerAuthenticatorManager::Delegate,
       public Session::Delegate
@@ -53,8 +53,8 @@ public:
     Session* sessionById(Session::SessionId session_id);
 
 protected:
-    // base::NetworkServer::Delegate implementation.
-    void onNewConnection(std::unique_ptr<base::NetworkChannel> channel) override;
+    // base::TcpServer::Delegate implementation.
+    void onNewConnection(std::unique_ptr<base::TcpChannel> channel) override;
 
     // SharedKeyPool::Delegate implementation.
     void onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id) override;
@@ -69,7 +69,7 @@ protected:
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::local_shared_ptr<DatabaseFactory> database_factory_;
-    std::unique_ptr<base::NetworkServer> server_;
+    std::unique_ptr<base::TcpServer> server_;
     std::unique_ptr<base::ServerAuthenticatorManager> authenticator_manager_;
     std::unique_ptr<SharedKeyPool> relay_key_pool_;
     std::vector<std::unique_ptr<Session>> sessions_;

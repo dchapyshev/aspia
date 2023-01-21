@@ -162,10 +162,10 @@ void RouterController::onConnected()
     });
 }
 
-void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterController::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::NetworkChannel::errorToString(error_code) << ")";
+                 << base::TcpChannel::errorToString(error_code) << ")";
 
     routerStateChanged(proto::internal::RouterState::FAILED);
     delayedConnectToRouter();
@@ -266,7 +266,7 @@ void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pend
     // Nothing
 }
 
-void RouterController::onNewPeerConnected(std::unique_ptr<base::NetworkChannel> channel)
+void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New peer connected";
 
@@ -286,7 +286,7 @@ void RouterController::connectToRouter()
 
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
     channel_->connect(router_info_.address, router_info_.port);
 }

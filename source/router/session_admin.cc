@@ -19,9 +19,7 @@
 #include "router/session_admin.h"
 
 #include "base/logging.h"
-#include "base/net/network_channel.h"
 #include "base/peer/user.h"
-#include "base/strings/unicode.h"
 #include "router/database.h"
 #include "router/server.h"
 #include "router/session_relay.h"

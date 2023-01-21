@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/network_channel_proxy.h"
+#include "base/net/tcp_channel_proxy.h"
 
 #include "base/logging.h"
 #include "base/task_runner.h"
 
 namespace base {
 
-NetworkChannelProxy::NetworkChannelProxy(
-    std::shared_ptr<TaskRunner> task_runner, NetworkChannel* channel)
+TcpChannelProxy::TcpChannelProxy(
+    std::shared_ptr<TaskRunner> task_runner, TcpChannel* channel)
     : task_runner_(std::move(task_runner)),
       channel_(channel)
 {
     // Nothing
 }
 
-void NetworkChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
+void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
 {
     bool schedule_write;
 
@@ -45,15 +45,15 @@ void NetworkChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
     if (!schedule_write)
         return;
 
-    task_runner_->postTask(std::bind(&NetworkChannelProxy::scheduleWrite, shared_from_this()));
+    task_runner_->postTask(std::bind(&TcpChannelProxy::scheduleWrite, shared_from_this()));
 }
 
-void NetworkChannelProxy::willDestroyCurrentChannel()
+void TcpChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
 }
 
-void NetworkChannelProxy::scheduleWrite()
+void TcpChannelProxy::scheduleWrite()
 {
     if (!channel_)
         return;
@@ -64,7 +64,7 @@ void NetworkChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
-bool NetworkChannelProxy::reloadWriteQueue(std::queue<WriteTask>* work_queue)
+bool TcpChannelProxy::reloadWriteQueue(std::queue<WriteTask>* work_queue)
 {
     if (!work_queue->empty())
         return false;

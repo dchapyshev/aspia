@@ -24,7 +24,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database_sqlite.h"
 #include "router/session_admin.h"
@@ -99,7 +99,7 @@ bool Server::start()
     }
 
     std::u16string listen_interface = settings.listenInterface();
-    if (!base::NetworkServer::isValidListenInterface(listen_interface))
+    if (!base::TcpServer::isValidListenInterface(listen_interface))
     {
         LOG(LS_ERROR) << "Invalid listen interface address";
         return false;
@@ -176,7 +176,7 @@ bool Server::start()
 
     relay_key_pool_ = std::make_unique<SharedKeyPool>(this);
 
-    server_ = std::make_unique<base::NetworkServer>();
+    server_ = std::make_unique<base::TcpServer>();
     server_->start(listen_interface, port, this);
 
     LOG(LS_INFO) << "Server started";
@@ -309,7 +309,7 @@ Session* Server::sessionById(Session::SessionId session_id)
     return nullptr;
 }
 
-void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
+void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
 

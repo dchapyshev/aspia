@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 
 namespace base {
 
@@ -44,7 +44,7 @@ void RelayPeerManager::addConnectionOffer(const proto::ConnectionOffer& offer)
     pending_.back()->start(offer, this);
 }
 
-void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<NetworkChannel> channel)
+void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<TcpChannel> channel)
 {
     if (delegate_)
     {

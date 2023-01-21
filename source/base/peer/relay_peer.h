@@ -31,7 +31,7 @@
 
 namespace base {
 
-class NetworkChannel;
+class TcpChannel;
 class Location;
 
 class RelayPeer
@@ -45,7 +45,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onRelayConnectionReady(std::unique_ptr<NetworkChannel> channel) = 0;
+        virtual void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) = 0;
         virtual void onRelayConnectionError() = 0;
     };
 

@@ -19,7 +19,7 @@
 #include "host/client_session_system_info.h"
 
 #include "base/logging.h"
-#include "base/net/network_channel_proxy.h"
+#include "base/net/tcp_channel_proxy.h"
 
 #if defined(OS_WIN)
 #include "host/system_info.h"
@@ -27,7 +27,7 @@
 
 namespace host {
 
-ClientSessionSystemInfo::ClientSessionSystemInfo(std::unique_ptr<base::NetworkChannel> channel)
+ClientSessionSystemInfo::ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_SYSTEM_INFO, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";

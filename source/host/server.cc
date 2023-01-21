@@ -24,7 +24,7 @@
 #include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_path_watcher.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "common/update_info.h"
 #include "host/client_session.h"
 #include "host/win/updater_launcher.h"
@@ -101,7 +101,7 @@ void Server::start()
     reloadUserList();
     addFirewallRules();
 
-    server_ = std::make_unique<base::NetworkServer>();
+    server_ = std::make_unique<base::TcpServer>();
     server_->start(u"0.0.0.0", settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
@@ -158,7 +158,7 @@ void Server::setPowerEvent(uint32_t power_event)
 #endif // defined(OS_WIN)
 }
 
-void Server::onNewConnection(std::unique_ptr<base::NetworkChannel> channel)
+void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New DIRECT connection";
     startAuthentication(std::move(channel));
@@ -176,7 +176,7 @@ void Server::onHostIdAssigned(const std::string& session_name, base::HostId host
     user_session_manager_->onHostIdChanged(session_name, host_id);
 }
 
-void Server::onClientConnected(std::unique_ptr<base::NetworkChannel> channel)
+void Server::onClientConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New RELAY connection";
     startAuthentication(std::move(channel));
@@ -334,10 +334,10 @@ void Server::onFileDownloaderCompleted()
 
 void Server::onFileDownloaderProgress(int percentage)
 {
-    LOG(LS_INFO) << "Update downloading progress: " << percentage;
+    LOG(LS_INFO) << "Update downloading progress: " << percentage << "%";
 }
 
-void Server::startAuthentication(std::unique_ptr<base::NetworkChannel> channel)
+void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Start authentication";
 

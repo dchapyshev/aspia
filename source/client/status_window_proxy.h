@@ -42,7 +42,7 @@ public:
     void onStarted(const std::u16string& address_or_id);
     void onStopped();
     void onConnected();
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code);
+    void onDisconnected(base::TcpChannel::ErrorCode error_code);
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onRouterError(const RouterController::Error& error);
 

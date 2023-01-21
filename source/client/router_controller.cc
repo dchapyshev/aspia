@@ -49,7 +49,7 @@ void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
 
     LOG(LS_INFO) << "Connecting to router...";
 
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
     channel_->connect(router_config_.address, router_config_.port);
 }
@@ -114,10 +114,10 @@ void RouterController::onConnected()
     });
 }
 
-void RouterController::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterController::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::NetworkChannel::errorToString(error_code) << ")";
+                 << base::TcpChannel::errorToString(error_code) << ")";
 
     if (!delegate_)
     {
@@ -206,7 +206,7 @@ void RouterController::onMessageWritten(uint8_t /* channel_id */, size_t /* pend
     // Nothing
 }
 
-void RouterController::onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel)
+void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel)
 {
     if (delegate_)
     {

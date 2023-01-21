@@ -20,7 +20,7 @@
 #define CLIENT_ROUTER_CONTROLLER_H
 
 #include "base/waitable_timer.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
@@ -33,7 +33,7 @@ class ClientAuthenticator;
 namespace client {
 
 class RouterController
-    : public base::NetworkChannel::Listener,
+    : public base::TcpChannel::Listener,
       public base::RelayPeer::Delegate
 {
 public:
@@ -60,7 +60,7 @@ public:
 
         union Code
         {
-            base::NetworkChannel::ErrorCode network;
+            base::TcpChannel::ErrorCode network;
             base::Authenticator::ErrorCode authentication;
             ErrorCode router;
         } code;
@@ -71,7 +71,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) = 0;
+        virtual void onHostConnected(std::unique_ptr<base::TcpChannel> channel) = 0;
         virtual void onErrorOccurred(const Error& error) = 0;
     };
 
@@ -82,19 +82,19 @@ public:
     void connectTo(base::HostId host_id, Delegate* delegate);
 
 protected:
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // base::RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel) override;
     void onRelayConnectionError() override;
 
 private:
     std::shared_ptr<base::TaskRunner> task_runner_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<base::RelayPeer> relay_peer_;
     RouterConfig router_config_;

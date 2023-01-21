@@ -22,7 +22,7 @@
 #include "base/version.h"
 #include "client/client_config.h"
 #include "client/router_controller.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 
 namespace base {
 class ClientAuthenticator;
@@ -36,7 +36,7 @@ class StatusWindowProxy;
 
 class Client
     : public RouterController::Delegate,
-      public base::NetworkChannel::Listener
+      public base::TcpChannel::Listener
 {
 public:
     explicit Client(std::shared_ptr<base::TaskRunner> io_task_runner);
@@ -78,14 +78,14 @@ protected:
     int speedRx();
     int speedTx();
 
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
     // RouterController::Delegate implementation.
-    void onHostConnected(std::unique_ptr<base::NetworkChannel> channel) override;
+    void onHostConnected(std::unique_ptr<base::TcpChannel> channel) override;
     void onErrorOccurred(const RouterController::Error& error) override;
 
 private:
@@ -93,7 +93,7 @@ private:
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::unique_ptr<RouterController> router_controller_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::shared_ptr<StatusWindowProxy> status_window_proxy_;
 

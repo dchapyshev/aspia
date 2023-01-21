@@ -60,7 +60,7 @@ void RouterWindowProxy::onConnected(const base::Version& peer_version)
         router_window_->onConnected(peer_version);
 }
 
-void RouterWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void RouterWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

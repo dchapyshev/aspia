@@ -65,7 +65,7 @@ protected:
     void onStarted(const std::u16string& address_or_id) override;
     void onStopped() override;
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onRouterError(const RouterController::Error& error) override;
 
@@ -73,7 +73,7 @@ private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
 
-    static QString netErrorToString(base::NetworkChannel::ErrorCode error_code);
+    static QString netErrorToString(base::TcpChannel::ErrorCode error_code);
     static QString authErrorToString(base::ClientAuthenticator::ErrorCode error_code);
     static QString routerErrorToString(RouterController::ErrorCode error_code);
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_NETWORK_CHANNEL_H
-#define BASE_NET_NETWORK_CHANNEL_H
+#ifndef BASE_NET_TCP_CHANNEL_H
+#define BASE_NET_TCP_CHANNEL_H
 
 #include "base/memory/byte_array.h"
 #include "base/net/variable_size.h"
@@ -31,18 +31,18 @@
 
 namespace base {
 
-class NetworkChannelProxy;
+class TcpChannelProxy;
 class Location;
 class MessageEncryptor;
 class MessageDecryptor;
-class NetworkServer;
+class TcpServer;
 
-class NetworkChannel
+class TcpChannel
 {
 public:
     // Constructor available for client.
-    NetworkChannel();
-    ~NetworkChannel();
+    TcpChannel();
+    ~TcpChannel();
 
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
@@ -96,7 +96,7 @@ public:
         virtual void onMessageWritten(uint8_t channel_id, size_t pending) = 0;
     };
 
-    std::shared_ptr<NetworkChannelProxy> channelProxy();
+    std::shared_ptr<TcpChannelProxy> channelProxy();
 
     // Sets an instance of the class to receive connection status notifications or new messages.
     // You can change this in the process.
@@ -161,18 +161,18 @@ public:
     static std::string errorToString(ErrorCode error_code);
 
 protected:
-    friend class NetworkServer;
+    friend class TcpServer;
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    explicit NetworkChannel(asio::ip::tcp::socket&& socket);
+    explicit TcpChannel(asio::ip::tcp::socket&& socket);
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.
     void disconnect();
 
 private:
-    friend class NetworkChannelProxy;
+    friend class TcpChannelProxy;
 
     enum class ReadState
     {
@@ -233,7 +233,7 @@ private:
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 
-    std::shared_ptr<NetworkChannelProxy> proxy_;
+    std::shared_ptr<TcpChannelProxy> proxy_;
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;
@@ -274,9 +274,9 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool channel_id_support_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
+    DISALLOW_COPY_AND_ASSIGN(TcpChannel);
 };
 
 } // namespace base
 
-#endif // BASE_NET_NETWORK_CHANNEL_H
+#endif // BASE_NET_TCP_CHANNEL_H

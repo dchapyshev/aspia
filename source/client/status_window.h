@@ -32,7 +32,7 @@ public:
     virtual void onStarted(const std::u16string& address_or_id) = 0;
     virtual void onStopped() = 0;
     virtual void onConnected() = 0;
-    virtual void onDisconnected(base::NetworkChannel::ErrorCode error_code) = 0;
+    virtual void onDisconnected(base::TcpChannel::ErrorCode error_code) = 0;
     virtual void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) = 0;
     virtual void onRouterError(const RouterController::Error& error) = 0;
 };

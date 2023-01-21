@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/task_runner.h"
-#include "base/net/network_server.h"
+#include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_common.pb.h"
 #include "relay/settings.h"
@@ -122,7 +122,7 @@ bool Controller::start()
         return false;
     }
 
-    if (!base::NetworkServer::isValidListenInterface(listen_interface_))
+    if (!base::TcpServer::isValidListenInterface(listen_interface_))
     {
         LOG(LS_ERROR) << "Invalid listen interface";
         return false;
@@ -209,10 +209,10 @@ void Controller::onConnected()
     });
 }
 
-void Controller::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void Controller::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "The connection to the router has been lost: "
-                 << base::NetworkChannel::errorToString(error_code);
+                 << base::TcpChannel::errorToString(error_code);
 
     // Clearing the key pool.
     shared_pool_->clear();
@@ -308,7 +308,7 @@ void Controller::connectToRouter()
     LOG(LS_INFO) << "Connecting to router...";
 
     // Create channel.
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
 
     // Connect to router.
     channel_->setListener(this);

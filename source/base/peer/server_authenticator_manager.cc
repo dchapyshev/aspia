@@ -56,7 +56,7 @@ void ServerAuthenticatorManager::setAnonymousAccess(
     anonymous_session_types_ = session_types;
 }
 
-void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<NetworkChannel> channel)
+void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> channel)
 {
     DCHECK(channel);
 

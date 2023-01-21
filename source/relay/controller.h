@@ -20,7 +20,7 @@
 #define RELAY_CONTROLLER_H
 
 #include "base/waitable_timer.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "build/build_config.h"
 #include "proto/router_relay.pb.h"
 #include "relay/sessions_worker.h"
@@ -33,7 +33,7 @@ class ClientAuthenticator;
 namespace relay {
 
 class Controller
-    : public base::NetworkChannel::Listener,
+    : public base::TcpChannel::Listener,
       public SessionManager::Delegate,
       public SharedPool::Delegate
 {
@@ -44,9 +44,9 @@ public:
     bool start();
 
 protected:
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
@@ -79,7 +79,7 @@ private:
 
     std::shared_ptr<base::TaskRunner> task_runner_;
     base::WaitableTimer reconnect_timer_;
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
     std::unique_ptr<base::ClientAuthenticator> authenticator_;
     std::unique_ptr<SharedPool> shared_pool_;
     std::unique_ptr<SessionsWorker> sessions_worker_;

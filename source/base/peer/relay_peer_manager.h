@@ -31,7 +31,7 @@ class RelayCredentials;
 
 namespace base {
 
-class NetworkChannel;
+class TcpChannel;
 class TaskRunner;
 
 class RelayPeerManager : public RelayPeer::Delegate
@@ -42,7 +42,7 @@ public:
     public:
         virtual ~Delegate() = default;
 
-        virtual void onNewPeerConnected(std::unique_ptr<NetworkChannel> channel) = 0;
+        virtual void onNewPeerConnected(std::unique_ptr<TcpChannel> channel) = 0;
     };
 
     RelayPeerManager(std::shared_ptr<TaskRunner> task_runner, Delegate* delegate);
@@ -52,7 +52,7 @@ public:
 
 protected:
     // RelayPeer::Delegate implementation.
-    void onRelayConnectionReady(std::unique_ptr<NetworkChannel> channel) override;
+    void onRelayConnectionReady(std::unique_ptr<TcpChannel> channel) override;
     void onRelayConnectionError() override;
 
 private:

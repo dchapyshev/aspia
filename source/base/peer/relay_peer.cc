@@ -26,7 +26,7 @@
 #include "base/crypto/message_encryptor_openssl.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_pump_asio.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "base/strings/unicode.h"
 #include "proto/relay_peer.pb.h"
 
@@ -142,8 +142,8 @@ void RelayPeer::onConnected()
             is_finished_ = true;
             if (delegate_)
             {
-                std::unique_ptr<NetworkChannel> channel =
-                    std::unique_ptr<NetworkChannel>(new NetworkChannel(std::move(socket_)));
+                std::unique_ptr<TcpChannel> channel =
+                    std::unique_ptr<TcpChannel>(new TcpChannel(std::move(socket_)));
                 channel->setHostId(connection_offer_.host_data().host_id());
 
                 delegate_->onRelayConnectionReady(std::move(channel));

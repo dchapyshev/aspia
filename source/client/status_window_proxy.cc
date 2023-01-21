@@ -84,7 +84,7 @@ void StatusWindowProxy::onConnected()
         status_window_->onConnected();
 }
 
-void StatusWindowProxy::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void StatusWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {

@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_NETWORK_CHANNEL_PROXY_H
-#define BASE_NET_NETWORK_CHANNEL_PROXY_H
+#ifndef BASE_NET_TCP_CHANNEL_PROXY_H
+#define BASE_NET_TCP_CHANNEL_PROXY_H
 
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 
 #include <shared_mutex>
 
@@ -27,17 +27,16 @@ namespace base {
 
 class TaskRunner;
 
-class NetworkChannelProxy : public std::enable_shared_from_this<NetworkChannelProxy>
+class TcpChannelProxy : public std::enable_shared_from_this<TcpChannelProxy>
 {
 public:
     void send(uint8_t channel_id, ByteArray&& buffer);
 
 private:
-    friend class NetworkChannel;
-    friend class KcpChannel;
-    NetworkChannelProxy(std::shared_ptr<TaskRunner> task_runner, NetworkChannel* channel);
+    friend class TcpChannel;
+    TcpChannelProxy(std::shared_ptr<TaskRunner> task_runner, TcpChannel* channel);
 
-    // Called directly by NetworkChannel::~NetworkChannel.
+    // Called directly by TcpChannel::~TcpChannel.
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
@@ -45,14 +44,14 @@ private:
 
     std::shared_ptr<TaskRunner> task_runner_;
 
-    NetworkChannel* channel_;
+    TcpChannel* channel_;
 
     std::queue<WriteTask> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannelProxy);
+    DISALLOW_COPY_AND_ASSIGN(TcpChannelProxy);
 };
 
 } // namespace base
 
-#endif // BASE_NET_NETWORK_CHANNEL_PROXY_H
+#endif // BASE_NET_TCP_CHANNEL_PROXY_H

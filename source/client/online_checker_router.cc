@@ -68,7 +68,7 @@ void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegat
 
     LOG(LS_INFO) << "Connecting to router...";
 
-    channel_ = std::make_unique<base::NetworkChannel>();
+    channel_ = std::make_unique<base::TcpChannel>();
     channel_->setListener(this);
     channel_->connect(router_config_.address, router_config_.port);
 }
@@ -114,10 +114,10 @@ void OnlineCheckerRouter::onConnected()
     });
 }
 
-void OnlineCheckerRouter::onDisconnected(base::NetworkChannel::ErrorCode error_code)
+void OnlineCheckerRouter::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
-                 << base::NetworkChannel::errorToString(error_code) << ")";
+                 << base::TcpChannel::errorToString(error_code) << ")";
     onFinished(FROM_HERE);
 }
 

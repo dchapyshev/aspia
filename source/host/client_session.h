@@ -21,12 +21,12 @@
 
 #include "base/session_id.h"
 #include "base/version.h"
-#include "base/net/network_channel.h"
+#include "base/net/tcp_channel.h"
 #include "proto/desktop_extensions.pb.h"
 #include "proto/text_chat.pb.h"
 
 namespace base {
-class NetworkChannelProxy;
+class TcpChannelProxy;
 class TaskRunner;
 } // namespace base
 
@@ -34,7 +34,7 @@ namespace host {
 
 class DesktopSessionProxy;
 
-class ClientSession : public base::NetworkChannel::Listener
+class ClientSession : public base::TcpChannel::Listener
 {
 public:
     virtual ~ClientSession() override;
@@ -59,7 +59,7 @@ public:
     };
 
     static std::unique_ptr<ClientSession> create(proto::SessionType session_type,
-                                                 std::unique_ptr<base::NetworkChannel> channel,
+                                                 std::unique_ptr<base::TcpChannel> channel,
                                                  std::shared_ptr<base::TaskRunner> task_runner);
 
     void start(Delegate* delegate);
@@ -85,7 +85,7 @@ public:
     base::HostId hostId() const { return channel_->hostId(); }
 
 protected:
-    ClientSession(proto::SessionType session_type, std::unique_ptr<base::NetworkChannel> channel);
+    ClientSession(proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
@@ -93,12 +93,12 @@ protected:
     virtual void onReceived(uint8_t channel_id, const base::ByteArray& buffer) = 0;
     virtual void onWritten(uint8_t channel_id, size_t pending) = 0;
 
-    std::shared_ptr<base::NetworkChannelProxy> channelProxy();
+    std::shared_ptr<base::TcpChannelProxy> channelProxy();
     void sendMessage(uint8_t channel_id, base::ByteArray&& buffer);
 
-    // base::NetworkChannel::Listener implementation.
+    // base::TcpChannel::Listener implementation.
     void onConnected() override;
-    void onDisconnected(base::NetworkChannel::ErrorCode error_code) override;
+    void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
     void onMessageReceived(uint8_t channel_id, const base::ByteArray& buffer) override;
     void onMessageWritten(uint8_t channel_id, size_t pending) override;
 
@@ -115,7 +115,7 @@ private:
     std::string username_;
     std::string computer_name_;
 
-    std::unique_ptr<base::NetworkChannel> channel_;
+    std::unique_ptr<base::TcpChannel> channel_;
 };
 
 } // namespace host
