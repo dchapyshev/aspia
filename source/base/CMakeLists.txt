@@ -572,6 +572,10 @@ list(APPEND SOURCE_BASE_PEER
     peer/server_authenticator.h
     peer/server_authenticator_manager.cc
     peer/server_authenticator_manager.h
+    peer/stun_peer.cc
+    peer/stun_peer.h
+    peer/stun_server.cc
+    peer/stun_server.h
     peer/user.cc
     peer/user.h
     peer/user_list.cc
