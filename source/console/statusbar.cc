@@ -55,9 +55,12 @@ StatusBar::StatusBar(QWidget* parent)
                 return;
         }
 
-        status_label_->setText(
-            QStringLiteral("<table><tr><td><img src='%1'></td><td>%2</td></tr></table>")
-            .arg(icon, tr("Status update...")));
+        if (status_label_)
+        {
+            status_label_->setText(
+                QStringLiteral("<table><tr><td><img src='%1'></td><td>%2</td></tr></table>")
+                .arg(icon, tr("Status update...")));
+        }
 
         ++animation_index_;
     });
@@ -114,7 +117,8 @@ void StatusBar::clear()
 
 void StatusBar::setUpdateState(bool enable)
 {
-    status_label_->setVisible(enable);
+    if (status_label_)
+        status_label_->setVisible(enable);
 
     if (enable)
     {
@@ -122,7 +126,8 @@ void StatusBar::setUpdateState(bool enable)
     }
     else
     {
-        status_label_->setText(QString());
+        if (status_label_)
+            status_label_->setText(QString());
         animation_timer_->stop();
         animation_index_ = 0;
     }

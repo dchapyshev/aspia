@@ -23,6 +23,7 @@
 #include "proto/address_book.pb.h"
 
 #include <QLabel>
+#include <QPointer>
 #include <QStatusBar>
 #include <QTimer>
 
@@ -44,7 +45,7 @@ public:
 private:
     QTimer* animation_timer_;
     int animation_index_ = 0;
-    QLabel* status_label_ = nullptr;
+    QPointer<QLabel> status_label_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(StatusBar);
 };

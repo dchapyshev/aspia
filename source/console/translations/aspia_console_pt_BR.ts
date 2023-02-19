@@ -1528,7 +1528,7 @@
 <context>
     <name>console::StatusBar</name>
     <message numerus="yes">
-        <location filename="../statusbar.cc" line="71"/>
+        <location filename="../statusbar.cc" line="74"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n grupo(s) abaixo</numerusform>
@@ -1536,7 +1536,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../statusbar.cc" line="72"/>
+        <location filename="../statusbar.cc" line="75"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n computador(es) abaixo</numerusform>
@@ -1544,7 +1544,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../statusbar.cc" line="60"/>
+        <location filename="../statusbar.cc" line="62"/>
         <source>Status update...</source>
         <translation type="unfinished"></translation>
     </message>
