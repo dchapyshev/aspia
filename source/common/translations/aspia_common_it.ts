@@ -11,12 +11,12 @@
     <message>
         <location filename="../ui/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="90"/>
         <source>Service Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni Servizio</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.ui" line="105"/>
@@ -215,102 +215,102 @@
     <message>
         <location filename="../ui/about_dialog.cc" line="158"/>
         <source>Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="159"/>
         <source>Compilation date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Data compilazione: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="160"/>
         <source>Compilation time: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ora compilazione: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="163"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ramo Git: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="164"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Commit Git: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="175"/>
         <source>Display &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Schermo &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="176"/>
         <source>Pixel ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapporto pixel: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="177"/>
         <source>Logical DPI: %1x%2</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Logici: %1x%2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="180"/>
         <source>Physical DPI: %1x%2</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI Fisici: %1x%2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="185"/>
         <source>Size: %1x%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione: %1x%2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="188"/>
         <source>Available size: %1x%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione disponibile: %1x%2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="192"/>
         <source>Virtual size: %1x%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione virtuale: %1x%2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="195"/>
         <source>Depth: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Profondità: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="196"/>
         <source>Refresh rate: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequenza di aggiornamento: %1</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="201"/>
         <source>%1 version: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 versione: %2</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="248"/>
         <source>Save to file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva nel file...</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="254"/>
         <source>Save File</source>
-        <translation type="unfinished">Salva File</translation>
+        <translation>Salva File</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="256"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Files TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="265"/>
         <source>Warning</source>
-        <translation type="unfinished">Attenzione</translation>
+        <translation>Attenzione</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog.cc" line="266"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Non riesco ad aprire il file per la scrittura.</translation>
+        <translation>Non riesco ad aprire il file per la scrittura.</translation>
     </message>
 </context>
 <context>
