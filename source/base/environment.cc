@@ -22,6 +22,7 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -29,6 +30,10 @@
 #include <Windows.h>
 #elif defined(OS_POSIX)
 #include <stdlib.h>
+#endif
+
+#if defined(OS_LINUX)
+extern char** environ;
 #endif
 
 namespace base {
@@ -164,7 +169,18 @@ std::vector<std::pair<std::string, std::string>> Environment::list()
 
     FreeEnvironmentStringsW(strings);
     return result;
-
+#elif defined(OS_LINUX)
+    for (char** current = environ; *current; current++)
+    {
+        char* name = strtok(*current, "=");
+        if (name)
+        {
+            char* value = strtok(nullptr, "=");
+            if (value)
+                result.emplace_back(name, value);
+        }
+    }
+    return result;
 #else
     return result;
 #endif
