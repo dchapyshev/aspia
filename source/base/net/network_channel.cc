@@ -34,6 +34,8 @@ int calculateSpeed(int last_speed, const NetworkChannel::Milliseconds& duration,
 
 } // namespace
 
+const uint32_t NetworkChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+
 int NetworkChannel::speedRx()
 {
     TimePoint current_time = Clock::now();

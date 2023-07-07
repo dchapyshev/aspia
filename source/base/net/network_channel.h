@@ -28,7 +28,7 @@ namespace base {
 class NetworkChannel
 {
 public:
-    static const uint32_t kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+    static const uint32_t kMaxMessageSize;
 
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
