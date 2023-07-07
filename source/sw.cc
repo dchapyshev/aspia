@@ -108,7 +108,6 @@ void build(Solution &s) {
             base += "third_party/xdg_user_dirs/.*"_rr;
         if (base.getBuildSettings().TargetOS.isApple())
             base += "third_party/portaudio/.*"_rr;
-        base += "third_party/custom_c_allocator/.*"_rr;
         base -= "build/.*"_rr;
         setup_target(base, "base", false);
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
