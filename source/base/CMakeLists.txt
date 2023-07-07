@@ -525,10 +525,6 @@ list(APPEND SOURCE_BASE_NET
     net/curl_util.h
     net/ip_util.cc
     net/ip_util.h
-    net/kcp_channel.cc
-    net/kcp_channel.h
-    net/kcp_channel_proxy.cc
-    net/kcp_channel_proxy.h
     net/network_channel.cc
     net/network_channel.h
     net/tcp_channel.cc
@@ -572,10 +568,6 @@ list(APPEND SOURCE_BASE_PEER
     peer/server_authenticator.h
     peer/server_authenticator_manager.cc
     peer/server_authenticator_manager.h
-    peer/stun_peer.cc
-    peer/stun_peer.h
-    peer/stun_server.cc
-    peer/stun_server.h
     peer/user.cc
     peer/user.h
     peer/user_list.cc

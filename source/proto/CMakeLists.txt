@@ -30,7 +30,6 @@ list(APPEND SOURCE_PROTO
     router_common.proto
     router_peer.proto
     router_relay.proto
-    stun_peer.proto
     system_info.proto
     task_manager.proto
     text_chat.proto)
