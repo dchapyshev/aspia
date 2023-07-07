@@ -478,7 +478,6 @@ list(APPEND SOURCE_BASE_MEMORY
     memory/aligned_memory.h
     memory/byte_array.cc
     memory/byte_array.h
-    memory/custom_new.cc
     memory/local_memory.h
     memory/typed_buffer.h
     memory/local_memory_impl/bad_local_weak_ptr.h

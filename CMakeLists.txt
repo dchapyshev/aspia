@@ -59,9 +59,6 @@ find_package(RapidJSON CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
-find_package(mimalloc CONFIG) # Optional component
-
-message(STATUS "MIMALLOC found: ${mimalloc_FOUND}")
 
 if (WIN32)
     find_package(Qt5WinExtras REQUIRED)

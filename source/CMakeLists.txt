@@ -27,10 +27,6 @@ list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
 add_definitions(-DUSE_PCG_GENERATOR)
 
-if (mimalloc_FOUND)
-    add_definitions(-DUSE_MIMALLOC)
-endif()
-
 if(NOT Qt5LinguistTools_FOUND)
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
     add_definitions(-DI18L_DISABLED)
@@ -100,7 +96,6 @@ set(THIRD_PARTY_LIBS
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
-    mimalloc-static
     modp_b64
     libwebm
     unofficial::libvpx::libvpx

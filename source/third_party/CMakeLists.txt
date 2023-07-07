@@ -18,7 +18,6 @@
 
 add_subdirectory(libwebm)
 add_subdirectory(modp_b64)
-add_subdirectory(custom_c_allocator)
 add_subdirectory(x11region)
 
 if (APPLE)

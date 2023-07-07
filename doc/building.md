@@ -22,7 +22,6 @@ Windows
 * gtest
 * libvpx
 * libyuv
-* mimalloc
 * openssl
 * opus
 * protobuf
@@ -98,7 +97,6 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * icu
 * libvpx
 * libyuv
-* mimalloc
 * openssl
 * opus
 * protobuf
