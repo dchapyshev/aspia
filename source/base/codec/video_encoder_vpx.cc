@@ -108,7 +108,7 @@ void createImage(const Size& size,
     ByteArray image_buffer;
 
     // Allocate a YUV buffer large enough for the aligned data & padding.
-    image_buffer.resize(y_stride * y_rows + (2 * uv_stride) * uv_rows);
+    image_buffer.resize(static_cast<size_t>(y_stride * y_rows + (2 * uv_stride) * uv_rows));
 
     // Reset image value to 128 so we just need to fill in the y plane.
     memset(image_buffer.data(), 128, image_buffer.size());
