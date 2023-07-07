@@ -90,7 +90,7 @@ ByteArray fromHex(std::string_view in)
             continue;
 
         if (is_odd)
-            *--result = hex;
+            *--result = static_cast<uint8_t>(hex);
         else
             *result |= hex << 4;
 
