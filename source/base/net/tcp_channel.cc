@@ -242,12 +242,12 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
 
 void TcpChannel::setChannelIdSupport(bool enable)
 {
-    channel_id_support_ = enable;
+    is_channel_id_supported_ = enable;
 }
 
 bool TcpChannel::hasChannelIdSupport() const
 {
-    return channel_id_support_;
+    return is_channel_id_supported_;
 }
 
 bool TcpChannel::setReadBufferSize(size_t size)
@@ -348,13 +348,31 @@ void TcpChannel::onMessageReceived()
 {
     uint8_t* read_data = read_buffer_.data();
     size_t read_size = read_buffer_.size();
-    uint8_t channel_id = 0;
 
-    if (channel_id_support_)
+    UserDataHeader header;
+
+    if (is_channel_id_supported_)
     {
-        read_data += sizeof(channel_id);
-        read_size -= sizeof(channel_id);
-        channel_id = read_buffer_[0];
+        if (read_size < sizeof(header))
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        memcpy(&header, read_data, sizeof(header));
+
+        read_data += sizeof(header);
+        read_size -= sizeof(header);
+    }
+    else
+    {
+        memset(&header, 0, sizeof(header));
+    }
+
+    if (!read_size)
+    {
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+        return;
     }
 
     resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_size));
@@ -366,7 +384,7 @@ void TcpChannel::onMessageReceived()
     }
 
     if (listener_)
-        listener_->onTcpMessageReceived(channel_id, decrypt_buffer_);
+        listener_->onTcpMessageReceived(header.channel_id, decrypt_buffer_);
 }
 
 void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data)
@@ -396,8 +414,8 @@ void TcpChannel::doWrite()
     {
         // Calculate the size of the encrypted message.
         size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
-        if (channel_id_support_)
-            target_data_size += sizeof(channel_id);
+        if (is_channel_id_supported_)
+            target_data_size += sizeof(UserDataHeader);
 
         if (target_data_size > kMaxMessageSize)
         {
@@ -414,11 +432,15 @@ void TcpChannel::doWrite()
         memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
 
         uint8_t* write_buffer = write_buffer_.data() + variable_size.size();
-        if (channel_id_support_)
+        if (is_channel_id_supported_)
         {
+            UserDataHeader header;
+            header.channel_id = channel_id;
+            header.reserved = 0;
+
             // Copy the channel id to the buffer.
-            memcpy(write_buffer, &channel_id, sizeof(channel_id));
-            write_buffer += sizeof(channel_id);
+            memcpy(write_buffer, &header, sizeof(header));
+            write_buffer += sizeof(header);
         }
 
         // Encrypt the message.

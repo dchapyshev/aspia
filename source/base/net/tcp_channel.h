@@ -136,6 +136,12 @@ private:
         PENDING              // There is a message about which we did not notify.
     };
 
+    struct UserDataHeader
+    {
+        uint8_t channel_id;
+        uint8_t reserved;
+    };
+
     enum ServiceMessageType
     {
         KEEP_ALIVE = 1
@@ -210,7 +216,7 @@ private:
     ByteArray decrypt_buffer_;
 
     base::HostId host_id_ = base::kInvalidHostId;
-    bool channel_id_support_ = false;
+    bool is_channel_id_supported_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(TcpChannel);
 };
