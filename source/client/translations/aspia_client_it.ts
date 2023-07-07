@@ -44,17 +44,17 @@
     <message>
         <location filename="../client_main.cc" line="404"/>
         <source>Name of host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome host.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="408"/>
         <source>Name of user.</source>
-        <translation>Nome dell&apos;utente.</translation>
+        <translation>Nome utente.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="412"/>
         <source>Password of user.</source>
-        <translation>Password dell&apos;utente.</translation>
+        <translation>Password utente.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="416"/>
@@ -129,22 +129,22 @@
     <message>
         <location filename="../client_main.cc" line="473"/>
         <source>Router address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo router.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="477"/>
         <source>Router port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Porta router.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="482"/>
         <source>Router name of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome router utente.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="486"/>
         <source>Router password of user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Password router utente.</translation>
     </message>
     <message>
         <location filename="../client_main.cc" line="490"/>
@@ -246,7 +246,7 @@
     <message>
         <location filename="../ui/client_window.ui" line="376"/>
         <source>Clear history</source>
-        <translation type="unfinished"></translation>
+        <translation>Azzera storico</translation>
     </message>
     <message>
         <location filename="../ui/client_window.ui" line="305"/>
@@ -544,12 +544,12 @@
     <message>
         <location filename="../ui/desktop_panel.ui" line="479"/>
         <source>Pause video when minimizing</source>
-        <translation type="unfinished"></translation>
+        <translation>Metti in pausa il video se minimizzato</translation>
     </message>
     <message>
         <location filename="../ui/desktop_panel.ui" line="490"/>
         <source>Pause audio when minimizing</source>
-        <translation type="unfinished"></translation>
+        <translation>Metti in pausa l&apos;audio se minimizzato</translation>
     </message>
 </context>
 <context>
@@ -836,13 +836,13 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="87"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="120"/>
         <location filename="../ui/router_manager_window.ui" line="301"/>
         <source>Save to file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva su file...</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="134"/>
@@ -874,32 +874,32 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="254"/>
         <source>Host Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo Host</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="249"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID Host</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="259"/>
         <source>Client Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo Client</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="264"/>
         <source>Transferred</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasferiti</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="269"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="274"/>
         <source>Idle</source>
-        <translation type="unfinished">Inattivo</translation>
+        <translation>Inattivo</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="322"/>
@@ -909,17 +909,17 @@
     <message>
         <location filename="../ui/router_manager_window.ui" line="330"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="347"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="364"/>
         <source>Delete</source>
-        <translation type="unfinished">Elimina</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.ui" line="244"/>
@@ -1353,27 +1353,27 @@
     <message>
         <location filename="../ui/sys_info_widget_local_user_groups.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_user_groups.ui" line="53"/>
         <source>Description</source>
-        <translation type="unfinished">Descrizione</translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_user_groups.ui" line="61"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Copia Riga</translation>
+        <translation>Copia Riga</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_user_groups.ui" line="66"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Copia Nome</translation>
+        <translation>Copia Nome</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_user_groups.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Copia Valore</translation>
+        <translation>Copia Valore</translation>
     </message>
 </context>
 <context>
@@ -1381,27 +1381,27 @@
     <message>
         <location filename="../ui/sys_info_widget_local_users.ui" line="45"/>
         <source>Parameter</source>
-        <translation type="unfinished">Parametro</translation>
+        <translation>Parametro</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished">Valore</translation>
+        <translation>Valore</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Copia Riga</translation>
+        <translation>Copia Riga</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Copia Nome</translation>
+        <translation>Copia Nome</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Copia Valore</translation>
+        <translation>Copia Valore</translation>
     </message>
 </context>
 <context>
@@ -1577,32 +1577,32 @@
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="56"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="61"/>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="66"/>
         <source>Memory</source>
-        <translation type="unfinished">Memoria</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="71"/>
         <source>Session ID</source>
-        <translation type="unfinished">ID Sessione</translation>
+        <translation>ID Sessione</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="76"/>
         <source>User Name</source>
-        <translation type="unfinished">Nome Utente</translation>
+        <translation>Nome Utente</translation>
     </message>
     <message>
         <source>Threads</source>
@@ -1611,22 +1611,22 @@
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="81"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="89"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Copia Riga</translation>
+        <translation>Copia Riga</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="94"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Copia Nome</translation>
+        <translation>Copia Nome</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.ui" line="99"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Copia Valore</translation>
+        <translation>Copia Valore</translation>
     </message>
 </context>
 <context>
@@ -2296,22 +2296,22 @@
     <message>
         <location filename="../ui/client_window.cc" line="83"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Conferma</translation>
+        <translation>Conferma</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="84"/>
         <source>Are you sure you want to clear your connection history?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sei sicuro di voler azzerare lo storico della tua connessione?</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="87"/>
         <source>Yes</source>
-        <translation type="unfinished">Sì</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="88"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../ui/client_window.cc" line="178"/>
@@ -2473,22 +2473,22 @@
     <message>
         <location filename="../ui/desktop_widget.cc" line="500"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>La sessione è stata messa in pausa dell&apos;utente remoto</translation>
     </message>
     <message>
         <location filename="../ui/desktop_widget.cc" line="504"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>La sessione è temporaneamente indisponibile</translation>
     </message>
     <message>
         <location filename="../ui/desktop_widget.cc" line="508"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>La sessione è permanentemente indisponibile</translation>
     </message>
     <message>
         <location filename="../ui/desktop_widget.cc" line="512"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore durante la ricezione dello stream video: %1</translation>
     </message>
 </context>
 <context>
@@ -2878,12 +2878,12 @@
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="216"/>
         <source>Processes</source>
-        <translation type="unfinished">Processi</translation>
+        <translation>Processi</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="279"/>
         <source>Operating System</source>
-        <translation type="unfinished">Sistema Operativo</translation>
+        <translation>Sistema Operativo</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="284"/>
@@ -2933,12 +2933,12 @@
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="296"/>
         <source>Users</source>
-        <translation type="unfinished">Utenti</translation>
+        <translation>Utenti</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="302"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppi Utente</translation>
     </message>
     <message>
         <location filename="../ui/qt_system_info_window.cc" line="329"/>
@@ -3089,90 +3089,90 @@
         <location filename="../ui/router_manager_window.cc" line="789"/>
         <location filename="../ui/router_manager_window.cc" line="841"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Disconnetti</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="735"/>
         <location filename="../ui/router_manager_window.cc" line="791"/>
         <location filename="../ui/router_manager_window.cc" line="843"/>
         <source>Disconnect All</source>
-        <translation type="unfinished">Disconetti Tutti</translation>
+        <translation>Disconetti Tutti</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="736"/>
         <location filename="../ui/router_manager_window.cc" line="792"/>
         <location filename="../ui/router_manager_window.cc" line="919"/>
         <source>Refresh</source>
-        <translation type="unfinished">Aggiorna</translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="740"/>
         <location filename="../ui/router_manager_window.cc" line="794"/>
         <location filename="../ui/router_manager_window.cc" line="845"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Copia Riga</translation>
+        <translation>Copia Riga</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="741"/>
         <location filename="../ui/router_manager_window.cc" line="795"/>
         <location filename="../ui/router_manager_window.cc" line="846"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Copia Valore</translation>
+        <translation>Copia Valore</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="745"/>
         <location filename="../ui/router_manager_window.cc" line="797"/>
         <source>Save to file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva in file...</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="899"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="902"/>
         <source>Delete</source>
-        <translation type="unfinished">Elimina</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="916"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1124"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sei sicuro di voler disconnettere tutti i relays?</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1319"/>
         <location filename="../ui/router_manager_window.cc" line="1391"/>
         <source>Save File</source>
-        <translation type="unfinished">Salva File</translation>
+        <translation>Salva File</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1321"/>
         <location filename="../ui/router_manager_window.cc" line="1393"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON files (*.json)</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1331"/>
         <location filename="../ui/router_manager_window.cc" line="1403"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non ho potuto aprire il file per la scrittura.</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1381"/>
         <location filename="../ui/router_manager_window.cc" line="1472"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere il file.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/router_manager_window.cc" line="1548"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n secondo</numerusform>
             <numerusform>%n secondi</numerusform>
         </translation>
@@ -3180,7 +3180,7 @@
     <message numerus="yes">
         <location filename="../ui/router_manager_window.cc" line="1549"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n minuto</numerusform>
             <numerusform>%n minuti</numerusform>
         </translation>
@@ -3188,7 +3188,7 @@
     <message numerus="yes">
         <location filename="../ui/router_manager_window.cc" line="1550"/>
         <source>%n hours</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n ora</numerusform>
             <numerusform>%n ore</numerusform>
         </translation>
@@ -3196,7 +3196,7 @@
     <message numerus="yes">
         <location filename="../ui/router_manager_window.cc" line="1574"/>
         <source>%n days</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n giorno</numerusform>
             <numerusform>%n giorni</numerusform>
         </translation>
@@ -3204,27 +3204,27 @@
     <message>
         <location filename="../ui/router_manager_window.cc" line="1596"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1601"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1606"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1611"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1616"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="1098"/>
@@ -3237,7 +3237,7 @@
         <location filename="../ui/router_manager_window.cc" line="1038"/>
         <location filename="../ui/router_manager_window.cc" line="1078"/>
         <source>Active peers: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nodi attivi: %1</translation>
     </message>
     <message>
         <location filename="../ui/router_manager_window.cc" line="667"/>
@@ -3836,22 +3836,22 @@
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="143"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome Completo</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="146"/>
         <source>Description</source>
-        <translation type="unfinished">Descrizione</translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="149"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella Home</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="151"/>
         <source>Disabled</source>
-        <translation type="unfinished">Disabilitato</translation>
+        <translation>Disabilitato</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="151"/>
@@ -3860,7 +3860,7 @@
         <location filename="../ui/sys_info_widget_local_users.cc" line="154"/>
         <location filename="../ui/sys_info_widget_local_users.cc" line="155"/>
         <source>Yes</source>
-        <translation type="unfinished">Sì</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="151"/>
@@ -3869,52 +3869,52 @@
         <location filename="../ui/sys_info_widget_local_users.cc" line="154"/>
         <location filename="../ui/sys_info_widget_local_users.cc" line="155"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="152"/>
         <source>Password Can&apos;t Change</source>
-        <translation type="unfinished"></translation>
+        <translation>La Password Non Può Essere Modificata</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Password Scaduta</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password Senza Scadenza</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="155"/>
         <source>Lockout</source>
-        <translation type="unfinished"></translation>
+        <translation>Blocca</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="159"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Mai</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="163"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultima Connessione</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="164"/>
         <source>Number Logons</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di Connessioni</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="165"/>
         <source>Bad Password Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Conteggio Password Errate</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_local_users.cc" line="177"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppi</translation>
     </message>
 </context>
 <context>
@@ -4397,12 +4397,12 @@
     <message>
         <location filename="../ui/sys_info_widget_processes.cc" line="141"/>
         <source>System Idle Process</source>
-        <translation type="unfinished">Processo Inattivo Sistema</translation>
+        <translation>Processo Inattivo Sistema</translation>
     </message>
     <message>
         <location filename="../ui/sys_info_widget_processes.cc" line="143"/>
         <source>Unknown Process</source>
-        <translation type="unfinished">Processo Sconosciuto</translation>
+        <translation>Processo Sconosciuto</translation>
     </message>
 </context>
 <context>

@@ -105,7 +105,7 @@
     <message>
         <location filename="../address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato</translation>
     </message>
 </context>
 <context>
@@ -688,17 +688,17 @@
     <message>
         <location filename="../main_window.ui" line="657"/>
         <source>Update Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna Stato</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="660"/>
         <source>Update the status of computers in the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna lo stato dei computer nella lista</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="663"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../main_window.ui" line="494"/>
@@ -1039,12 +1039,12 @@
     <message>
         <location filename="../address_book_tab.cc" line="861"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Collegato</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="866"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Scollegato</translation>
     </message>
     <message>
         <location filename="../address_book_tab.cc" line="987"/>
@@ -1503,7 +1503,7 @@
     <message>
         <location filename="../statusbar.cc" line="62"/>
         <source>Status update...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiornamento stato...</translation>
     </message>
 </context>
 <context>
