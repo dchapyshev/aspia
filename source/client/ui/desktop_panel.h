@@ -119,11 +119,13 @@ private:
     std::unique_ptr<QMenu> power_menu_;
     QMenu* additional_menu_ = nullptr;
 
+    QList<QAction*> screen_actions_;
+
+    QMenu* resolutions_menu_ = nullptr;
+    QActionGroup* resolutions_group_ = nullptr;
+
     QMenu* scale_menu_ = nullptr;
     QActionGroup* scale_group_ = nullptr;
-
-    QMenu* screens_menu_ = nullptr;
-    QActionGroup* screens_group_ = nullptr;
 
     QTimer* hide_timer_ = nullptr;
 

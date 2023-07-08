@@ -60,7 +60,6 @@
      </property>
      <addaction name="action_pin"/>
      <addaction name="separator"/>
-     <addaction name="action_monitors"/>
      <addaction name="action_power_control"/>
      <addaction name="action_cad"/>
      <addaction name="action_settings"/>
@@ -137,21 +136,6 @@
    </property>
    <property name="toolTip">
     <string>Session configuration</string>
-   </property>
-  </action>
-  <action name="action_monitors">
-   <property name="icon">
-    <iconset resource="../resources/client.qrc">
-     <normaloff>:/img/monitors.png</normaloff>:/img/monitors.png</iconset>
-   </property>
-   <property name="text">
-    <string notr="true"/>
-   </property>
-   <property name="toolTip">
-    <string>Monitor selection</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
   <action name="action_autosize">

@@ -40,19 +40,15 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     hide_timer_ = new QTimer(this);
     connect(hide_timer_, &QTimer::timeout, this, &DesktopPanel::onHideTimer);
 
-    screens_menu_ = new QMenu(this);
-    screens_group_ = new QActionGroup(screens_menu_);
-    ui.action_monitors->setMenu(screens_menu_);
+    resolutions_menu_ = new QMenu(this);
+    resolutions_group_ = new QActionGroup(resolutions_menu_);
 
-    connect(screens_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
-    connect(screens_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
+    connect(resolutions_menu_, &QMenu::aboutToShow, this, &DesktopPanel::onMenuShow);
+    connect(resolutions_menu_, &QMenu::aboutToHide, this, &DesktopPanel::onMenuHide);
 
-    connect(screens_group_, &QActionGroup::triggered, this, [this](QAction* action)
+    connect(resolutions_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
-        if (screen_count_ > 1)
-            onChangeScreenAction(action);
-        else
-            onChangeResolutionAction(action);
+        onChangeResolutionAction(action);
     });
 
     DesktopSettings settings;
@@ -134,8 +130,6 @@ void DesktopPanel::enableScreenSelect(bool /* enable */)
 {
     // By default, we disable the monitor selection menu. Selection will be enabled when receiving
     // a list of monitors.
-    ui.action_monitors->setVisible(false);
-    ui.action_monitors->setEnabled(false);
     updateSize();
 }
 
@@ -217,7 +211,10 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()
                  << " resolutions: " << screen_list.resolution_size() << ")";
 
-    screens_menu_->clear();
+    for (int i = 0; i < screen_actions_.size(); ++i)
+        delete screen_actions_[i];
+    screen_actions_.clear();
+    resolutions_menu_->clear();
 
     current_screen_id_ = screen_list.current_screen();
     current_resolution_ = QSize(0, 0);
@@ -234,63 +231,77 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
         }
     }
 
-    QToolButton* button = qobject_cast<QToolButton*>(
-        ui.toolbar->widgetForAction(ui.action_monitors));
-    button->setPopupMode(QToolButton::InstantPopup);
-
-    bool is_full_screen = false;
+    bool is_full_desktop = false;
 
     // If it has only one screen or an empty list is received.
     if (screen_list.screen_size() > 1)
     {
-        ui.action_monitors->setToolTip(tr("Monitor selection"));
-
-        SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
-        if (screen_list.current_screen() == -1)
-        {
-            full_screen_action->setChecked(true);
-            is_full_screen = true;
-        }
-
-        screens_group_->addAction(full_screen_action);
-        screens_menu_->addAction(full_screen_action);
-
         for (int i = 0; i < screen_list.screen_size(); ++i)
         {
             const proto::Screen& screen = screen_list.screen(i);
+            bool is_primary = screen.id() == screen_list.primary_screen();
 
-            QString title;
+            SelectScreenAction* action =
+                new SelectScreenAction(i + 1, screen, is_primary, ui.toolbar);
 
-            if (screen.id() == screen_list.primary_screen())
-                title = tr("Monitor %1 (primary)").arg(i + 1);
-            else
-                title = tr("Monitor %1").arg(i + 1);
+            ui.toolbar->insertAction(ui.action_power_control, action);
+            screen_actions_.append(action);
 
-            SelectScreenAction* action = new SelectScreenAction(screen, title, screens_group_);
             if (screen_list.current_screen() == screen.id())
+            {
                 action->setChecked(true);
 
-            screens_group_->addAction(action);
-            screens_menu_->addAction(action);
+                if (screen_list.resolution_size() > 0)
+                {
+                    action->setMenu(resolutions_menu_);
+
+                    QToolButton* button = qobject_cast<QToolButton*>(
+                        ui.toolbar->widgetForAction(action));
+                    if (button)
+                        button->setPopupMode(QToolButton::InstantPopup);
+                }
+            }
+
+            connect(action, &SelectScreenAction::triggered, this, [this, action]()
+            {
+                onChangeScreenAction(action);
+            });
         }
+
+        SelectScreenAction* full_desktop_action = new SelectScreenAction(ui.toolbar);
+        if (screen_list.current_screen() == -1)
+        {
+            full_desktop_action->setChecked(true);
+            is_full_desktop = true;
+        }
+
+        connect(full_desktop_action, &SelectScreenAction::triggered, this, [this, full_desktop_action]()
+        {
+            onChangeScreenAction(full_desktop_action);
+        });
+
+        ui.toolbar->insertAction(ui.action_power_control, full_desktop_action);
+        screen_actions_.append(full_desktop_action);
     }
     else
     {
-        ui.action_monitors->setToolTip(tr("Resolution selection"));
+        QAction* resolution_select_action = new QAction(ui.toolbar);
+
+        resolution_select_action->setToolTip(tr("Resolution selection"));
+        resolution_select_action->setIcon(QIcon(":/img/monitor.png"));
+        resolution_select_action->setMenu(resolutions_menu_);
+
+        ui.toolbar->insertAction(ui.action_power_control, resolution_select_action);
+        screen_actions_.append(resolution_select_action);
+
+        QToolButton* button = qobject_cast<QToolButton*>(
+            ui.toolbar->widgetForAction(resolution_select_action));
+        if (button)
+            button->setPopupMode(QToolButton::InstantPopup);
     }
 
-    if (screen_list.resolution_size() > 0 && !is_full_screen)
+    if (screen_list.resolution_size() > 0 && !is_full_desktop)
     {
-        QMenu* resolutions_menu = screens_menu_;
-        QActionGroup* resolutions_group = screens_group_;
-
-        if (screen_list.screen_size() > 1)
-        {
-            screens_menu_->addSeparator();
-            resolutions_menu = screens_menu_->addMenu(tr("Resolution"));
-            resolutions_group = new QActionGroup(resolutions_menu);
-        }
-
         for (int i = 0; i < screen_list.resolution_size(); ++i)
         {
             QSize resolution =
@@ -304,22 +315,10 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
             if (resolution == current_resolution_)
                 resolution_action->setChecked(true);
 
-            resolutions_group->addAction(resolution_action);
-            resolutions_menu->addAction(resolution_action);
-        }
-
-        if (screen_list.screen_size() > 1)
-        {
-            connect(resolutions_group, &QActionGroup::triggered,
-                    this, &DesktopPanel::onChangeResolutionAction);
+            resolutions_group_->addAction(resolution_action);
+            resolutions_menu_->addAction(resolution_action);
         }
     }
-
-    bool is_monitos_action_available =
-        (screen_list.resolution_size() > 0) || (screen_list.screen_size() > 1);
-
-    ui.action_monitors->setVisible(is_monitos_action_available);
-    ui.action_monitors->setEnabled(is_monitos_action_available);
 
     updateSize();
 }

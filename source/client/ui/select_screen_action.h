@@ -34,16 +34,32 @@ public:
     explicit SelectScreenAction(QObject* parent)
         : QAction(parent)
     {
-        setText(tr("Full Desktop"));
+        setToolTip(tr("Full Desktop"));
+        setIcon(QIcon(":/img/monitors.png"));
         setCheckable(true);
         screen_.set_id(-1);
     }
 
-    SelectScreenAction(const proto::Screen& screen, const QString& title, QObject* parent)
+    SelectScreenAction(int number, const proto::Screen& screen, bool is_primary, QObject* parent)
         : QAction(parent),
           screen_(screen)
     {
-        setText(title);
+        QString tooltip;
+
+        if (is_primary)
+            tooltip = tr("Monitor %1 (primary)").arg(number);
+        else
+            tooltip = tr("Monitor %1").arg(number);
+
+        setToolTip(tooltip);
+
+        QString icon;
+        if (number >= 1 && number <= 9)
+            icon = QString(":/img/monitor-%1.png").arg(number);
+        else
+            icon = ":/img/monitor-n.png";
+
+        setIcon(QIcon(icon));
         setCheckable(true);
     }
 
