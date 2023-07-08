@@ -60,10 +60,10 @@
      </property>
      <addaction name="action_pin"/>
      <addaction name="separator"/>
-     <addaction name="action_settings"/>
      <addaction name="action_monitors"/>
      <addaction name="action_power_control"/>
      <addaction name="action_cad"/>
+     <addaction name="action_settings"/>
      <addaction name="separator"/>
      <addaction name="action_autosize"/>
      <addaction name="action_fullscreen"/>
