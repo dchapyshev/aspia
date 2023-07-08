@@ -42,7 +42,7 @@ std::string sessionKeyForHostId(std::string_view session_name)
 } // namespace
 
 HostKeyStorage::HostKeyStorage()
-    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "host_key", base::JsonSettings::Backups::YES)
+    : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "host_key")
 {
     // Nothing
 }

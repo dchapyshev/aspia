@@ -32,7 +32,7 @@ const size_t kPasswordHashSaltSize = 256;
 } // namespace
 
 SystemSettings::SystemSettings()
-    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host", base::JsonSettings::Backups::YES)
+    : settings_(base::JsonSettings::Scope::SYSTEM, "aspia", "host")
 {
     // Nothing
 }
