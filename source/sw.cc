@@ -110,6 +110,8 @@ void build(Solution &s) {
             base += "third_party/portaudio/.*"_rr;
         base -= "build/.*"_rr;
         setup_target(base, "base", false);
+        base -= "peer/stun_server.cc";
+        base -= "peer/stun_peer.cc";
         if (base.getBuildSettings().TargetOS.Type == OSType::Windows) {
             base.Public += "UNICODE"_def;
             base.Public += "WIN32_LEAN_AND_MEAN"_def;
