@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'source/**'
+      - '.github/workflows/sw.yml' # for test purposes
   pull_request:
     paths:
       - 'source/**'
+      - '.github/workflows/sw.yml' # for test purposes
 
 jobs:
   windows:
