@@ -35,6 +35,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 RelayPeer::RelayPeer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
       socket_(io_context_),
@@ -43,6 +44,7 @@ RelayPeer::RelayPeer()
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 RelayPeer::~RelayPeer()
 {
     LOG(LS_INFO) << "Dtor";
@@ -53,6 +55,7 @@ RelayPeer::~RelayPeer()
     socket_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
 {
     delegate_ = delegate;
@@ -97,6 +100,7 @@ void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::onConnected()
 {
     if (message_.empty())
@@ -156,6 +160,7 @@ void RelayPeer::onConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     LOG(LS_ERROR) << "Failed to connect to relay server: "
@@ -173,6 +178,7 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray RelayPeer::authenticationMessage(const proto::RelayKey& key, const std::string& secret)
 {

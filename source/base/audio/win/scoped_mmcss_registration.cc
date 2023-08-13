@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* priorityClassToString(DWORD priority_class)
 {
     switch (priority_class)
@@ -47,6 +48,7 @@ const char* priorityClassToString(DWORD priority_class)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 const char* priorityToString(int priority)
 {
     switch (priority)
@@ -73,6 +75,7 @@ const char* priorityToString(int priority)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ScopedMMCSSRegistration::ScopedMMCSSRegistration(const wchar_t* task_name)
 {
     // Register the calling thread with MMCSS for the supplied |task_name|.
@@ -93,6 +96,7 @@ ScopedMMCSSRegistration::ScopedMMCSSRegistration(const wchar_t* task_name)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedMMCSSRegistration::~ScopedMMCSSRegistration()
 {
     if (isSucceeded())
@@ -102,6 +106,7 @@ ScopedMMCSSRegistration::~ScopedMMCSSRegistration()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedMMCSSRegistration::isSucceeded() const
 {
     return mmcss_handle_ != nullptr;

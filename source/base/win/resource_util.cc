@@ -22,6 +22,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 bool resourceFromModule(HMODULE module,
                         int resource_id,
                         const wchar_t* resource_type,
@@ -65,6 +66,7 @@ bool resourceFromModule(HMODULE module,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool dataResourceFromModule(HMODULE module,
                             int resource_id,
                             void** data,

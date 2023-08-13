@@ -22,15 +22,19 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 MessageDecryptorFake::MessageDecryptorFake() = default;
 
+//--------------------------------------------------------------------------------------------------
 MessageDecryptorFake::~MessageDecryptorFake() = default;
 
+//--------------------------------------------------------------------------------------------------
 size_t MessageDecryptorFake::decryptedDataSize(size_t in_size)
 {
     return in_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageDecryptorFake::decrypt(const void* in, size_t in_size, void* out)
 {
     memcpy(out, in, in_size);

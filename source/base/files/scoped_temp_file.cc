@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScopedTempFile::ScopedTempFile(const std::filesystem::path& file_path)
     : file_path_(file_path)
 {
@@ -29,6 +30,7 @@ ScopedTempFile::ScopedTempFile(const std::filesystem::path& file_path)
     stream_.open(file_path, mode);
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedTempFile::~ScopedTempFile()
 {
     stream_.close();
@@ -37,11 +39,13 @@ ScopedTempFile::~ScopedTempFile()
     std::filesystem::remove(file_path_, ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 const std::filesystem::path& ScopedTempFile::filePath() const
 {
     return file_path_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::fstream& ScopedTempFile::stream()
 {
     return stream_;

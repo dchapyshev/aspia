@@ -22,6 +22,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
 {
     DCHECK(buffer);
@@ -63,6 +64,7 @@ void largeNumberIncrement(uint8_t* buffer, size_t buffer_size)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void largeNumberIncrement(ByteArray* buffer)
 {
     DCHECK(buffer);

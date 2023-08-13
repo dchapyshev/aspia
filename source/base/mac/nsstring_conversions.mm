@@ -24,6 +24,7 @@ namespace base {
 
 namespace  {
 
+//--------------------------------------------------------------------------------------------------
 // Convert the supplied CFString into the specified encoding, and return it as
 // an STL string of the template type.  Returns an empty string on failure.
 //
@@ -72,6 +73,7 @@ static StringType CFStringToSTLStringWithEncodingT(CFStringRef cfstring, CFStrin
     return StringType(out_buffer.data(), elements - 1);
 }
 
+//--------------------------------------------------------------------------------------------------
 // Given a StringPiece |in| with an encoding specified by |in_encoding|, return
 // it as a CFStringRef. Returns NULL on failure.
 template <typename CharType>
@@ -100,36 +102,43 @@ static const CFStringEncoding kMediumStringEncoding = kCFStringEncodingUTF16LE;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 CFStringRef utf8ToCFStringRef(std::string_view utf8)
 {
     return StringPieceToCFStringWithEncodingsT<char>(utf8, kNarrowStringEncoding);
 }
 
+//--------------------------------------------------------------------------------------------------
 CFStringRef utf16ToCFStringRef(std::u16string_view utf16)
 {
     return StringPieceToCFStringWithEncodingsT<char16_t>(utf16, kMediumStringEncoding);
 }
 
+//--------------------------------------------------------------------------------------------------
 NSString* utf8ToNSString(std::string_view utf8)
 {
     return [reinterpret_cast<NSString*>(utf8ToCFStringRef(utf8)) autorelease];
 }
 
+//--------------------------------------------------------------------------------------------------
 NSString* utf16ToNSString(std::u16string_view utf16)
 {
     return [reinterpret_cast<NSString*>(utf16ToCFStringRef(utf16)) autorelease];
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string CFStringRefToUtf8(CFStringRef ref)
 {
     return CFStringToSTLStringWithEncodingT<std::string>(ref, kNarrowStringEncoding);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string CFStringRefToUtf16(CFStringRef ref)
 {
     return CFStringToSTLStringWithEncodingT<std::u16string>(ref, kMediumStringEncoding);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string NSStringToUtf8(NSString* nsstring)
 {
     if (!nsstring)
@@ -137,6 +146,7 @@ std::string NSStringToUtf8(NSString* nsstring)
     return CFStringRefToUtf8(reinterpret_cast<CFStringRef>(nsstring));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string NSStringToUtf16(NSString* nsstring)
 {
     if (!nsstring)

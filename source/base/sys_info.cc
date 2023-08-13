@@ -27,6 +27,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::processorName()
 {
@@ -80,6 +81,7 @@ std::string SysInfo::processorName()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::processorVendor()
 {

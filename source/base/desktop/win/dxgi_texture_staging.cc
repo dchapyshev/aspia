@@ -28,14 +28,17 @@ using Microsoft::WRL::ComPtr;
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DxgiTextureStaging::DxgiTextureStaging(const D3dDevice& device)
     : device_(device)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiTextureStaging::~DxgiTextureStaging() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTextureStaging::initializeStage(ID3D11Texture2D* texture)
 {
     DCHECK(texture);
@@ -92,6 +95,7 @@ bool DxgiTextureStaging::initializeStage(ID3D11Texture2D* texture)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiTextureStaging::assertStageAndSurfaceAreSameObject()
 {
     ComPtr<IUnknown> left;
@@ -105,6 +109,7 @@ void DxgiTextureStaging::assertStageAndSurfaceAreSameObject()
     DCHECK(left.Get() == right.Get());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTextureStaging::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
                                          ID3D11Texture2D* texture)
 {
@@ -133,6 +138,7 @@ bool DxgiTextureStaging::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_in
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTextureStaging::doRelease()
 {
     _com_error error = surface_->Unmap();

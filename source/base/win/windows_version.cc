@@ -27,6 +27,7 @@ namespace base::win {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 // Helper to map a major.minor.x.build version (e.g. 6.1) to a Windows release.
 Version majorMinorBuildToVersion(int major, int minor, int build)
 {
@@ -99,6 +100,7 @@ Version majorMinorBuildToVersion(int major, int minor, int build)
     return VERSION_PRE_XP;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Returns the the "UBR" value from the registry. Introduced in Windows 10, this undocumented value
 // appears to be similar to a patch number.
 // Returns 0 if the value does not exist or it could not be read.
@@ -119,6 +121,7 @@ int readUBR()
     return static_cast<int>(ubr);
 }
 
+//--------------------------------------------------------------------------------------------------
 OSInfo::WOW64Status wow64StatusForProcess()
 {
     BOOL is_wow64 = FALSE;
@@ -131,6 +134,7 @@ OSInfo::WOW64Status wow64StatusForProcess()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 OSInfo** OSInfo::instanceStorage()
 {
@@ -161,12 +165,14 @@ OSInfo** OSInfo::instanceStorage()
     return &info;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 OSInfo* OSInfo::instance()
 {
     return *instanceStorage();
 }
 
+//--------------------------------------------------------------------------------------------------
 OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
                const _SYSTEM_INFO& system_info,
                int os_type)
@@ -295,8 +301,10 @@ OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 OSInfo::~OSInfo() = default;
 
+//--------------------------------------------------------------------------------------------------
 Version OSInfo::kernel32Version() const
 {
     base::Version base_version = kernel32BaseVersion();
@@ -308,6 +316,7 @@ Version OSInfo::kernel32Version() const
     return kernel32_version;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Retrieve a version from kernel32. This is useful because when running in compatibility mode for
 // a down-level version of the OS, the file version of kernel32 will still be the "real" version.
 base::Version OSInfo::kernel32BaseVersion() const
@@ -338,6 +347,7 @@ base::Version OSInfo::kernel32BaseVersion() const
     return version;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string OSInfo::processorModelName()
 {
     if (processor_model_name_.empty())
@@ -356,6 +366,7 @@ std::string OSInfo::processorModelName()
     return processor_model_name_;
 }
 
+//--------------------------------------------------------------------------------------------------
 Version windowsVersion()
 {
     return OSInfo::instance()->version();

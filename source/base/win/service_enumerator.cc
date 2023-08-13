@@ -23,6 +23,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ServiceEnumerator::ServiceEnumerator(Type type)
 {
     manager_handle_.reset(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ENUMERATE_SERVICE));
@@ -70,11 +71,13 @@ ServiceEnumerator::ServiceEnumerator(Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceEnumerator::isAtEnd() const
 {
     return current_service_index_ >= services_count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceEnumerator::advance()
 {
     current_service_handle_.reset();
@@ -82,6 +85,7 @@ void ServiceEnumerator::advance()
     ++current_service_index_;
 }
 
+//--------------------------------------------------------------------------------------------------
 ENUM_SERVICE_STATUS_PROCESS* ServiceEnumerator::currentService() const
 {
     if (!services_buffer_ || !services_count_ || isAtEnd())
@@ -93,6 +97,7 @@ ENUM_SERVICE_STATUS_PROCESS* ServiceEnumerator::currentService() const
     return &services[current_service_index_];
 }
 
+//--------------------------------------------------------------------------------------------------
 SC_HANDLE ServiceEnumerator::currentServiceHandle() const
 {
     if (!current_service_handle_.isValid())
@@ -111,6 +116,7 @@ SC_HANDLE ServiceEnumerator::currentServiceHandle() const
     return current_service_handle_;
 }
 
+//--------------------------------------------------------------------------------------------------
 LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
 {
     if (!current_service_config_)
@@ -145,6 +151,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
     return reinterpret_cast<LPQUERY_SERVICE_CONFIG>(current_service_config_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring ServiceEnumerator::nameW() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = currentService();
@@ -155,11 +162,13 @@ std::wstring ServiceEnumerator::nameW() const
     return service->lpServiceName;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ServiceEnumerator::name() const
 {
     return utf8FromWide(nameW());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring ServiceEnumerator::displayNameW() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = currentService();
@@ -170,11 +179,13 @@ std::wstring ServiceEnumerator::displayNameW() const
     return service->lpDisplayName;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ServiceEnumerator::displayName() const
 {
     return utf8FromWide(displayNameW());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring ServiceEnumerator::descriptionW() const
 {
     SC_HANDLE service_handle = currentServiceHandle();
@@ -211,11 +222,13 @@ std::wstring ServiceEnumerator::descriptionW() const
     return description->lpDescription;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ServiceEnumerator::description() const
 {
     return utf8FromWide(descriptionW());
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceEnumerator::Status ServiceEnumerator::status() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = currentService();
@@ -251,6 +264,7 @@ ServiceEnumerator::Status ServiceEnumerator::status() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceEnumerator::StartupType ServiceEnumerator::startupType() const
 {
     LPQUERY_SERVICE_CONFIG config = currentServiceConfig();
@@ -280,6 +294,7 @@ ServiceEnumerator::StartupType ServiceEnumerator::startupType() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring ServiceEnumerator::binaryPathW() const
 {
     LPQUERY_SERVICE_CONFIG config = currentServiceConfig();
@@ -290,11 +305,13 @@ std::wstring ServiceEnumerator::binaryPathW() const
     return config->lpBinaryPathName;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ServiceEnumerator::binaryPath() const
 {
     return utf8FromWide(binaryPathW());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring ServiceEnumerator::startNameW() const
 {
     LPQUERY_SERVICE_CONFIG config = currentServiceConfig();
@@ -305,6 +322,7 @@ std::wstring ServiceEnumerator::startNameW() const
     return config->lpServiceStartName;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ServiceEnumerator::startName() const
 {
     return utf8FromWide(startNameW());

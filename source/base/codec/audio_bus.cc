@@ -25,11 +25,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 static bool IsAligned(void* ptr)
 {
     return (reinterpret_cast<uintptr_t>(ptr) & (AudioBus::kChannelAlignment - 1)) == 0U;
 }
 
+//--------------------------------------------------------------------------------------------------
 // In order to guarantee that the memory block for each channel starts at an
 // aligned address when splitting a contiguous block of memory into one block
 // per channel, we may have to make these blocks larger than otherwise needed.
@@ -53,6 +55,7 @@ static int CalculateMemorySizeInternal(int channels,
     return sizeof(float) * channels * aligned_frames;
 }
 
+//--------------------------------------------------------------------------------------------------
 static void ValidateConfig(int channels, int frames)
 {
     CHECK_GT(frames, 0);
@@ -62,6 +65,7 @@ static void ValidateConfig(int channels, int frames)
     CHECK_LE(channels, kMaxChannels);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::CheckOverflow(int start_frame, int frames, int total_frames)
 {
     CHECK_GE(start_frame, 0);
@@ -72,6 +76,7 @@ void AudioBus::CheckOverflow(int start_frame, int frames, int total_frames)
     CHECK_GE(sum, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioBus::AudioBus(int channels, int frames)
     : frames_(frames),
       can_set_channel_data_(false)
@@ -86,6 +91,7 @@ AudioBus::AudioBus(int channels, int frames)
     BuildChannelData(channels, aligned_frames, data_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioBus::AudioBus(int channels, int frames, float* data)
     : frames_(frames),
       can_set_channel_data_(false)
@@ -100,6 +106,7 @@ AudioBus::AudioBus(int channels, int frames, float* data)
     BuildChannelData(channels, aligned_frames, data);
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioBus::AudioBus(int frames, const std::vector<float*>& channel_data)
     : channel_data_(channel_data),
       frames_(frames),
@@ -112,6 +119,7 @@ AudioBus::AudioBus(int frames, const std::vector<float*>& channel_data)
         DCHECK(IsAligned(channel_data_[i]));
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioBus::AudioBus(int channels)
     : channel_data_(channels),
       frames_(0),
@@ -122,23 +130,28 @@ AudioBus::AudioBus(int channels)
         channel_data_[i] = NULL;
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioBus::~AudioBus() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioBus> AudioBus::Create(int channels, int frames)
 {
     return std::unique_ptr<AudioBus>(new AudioBus(channels, frames));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioBus> AudioBus::CreateWrapper(int channels)
 {
     return std::unique_ptr<AudioBus>(new AudioBus(channels));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioBus> AudioBus::WrapVector(int frames, const std::vector<float*>& channel_data)
 {
     return std::unique_ptr<AudioBus>(new AudioBus(frames, channel_data));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioBus> AudioBus::WrapMemory(int channels,
                                                int frames,
                                                void* data)
@@ -148,6 +161,7 @@ std::unique_ptr<AudioBus> AudioBus::WrapMemory(int channels,
     return std::unique_ptr<AudioBus>(new AudioBus(channels, frames, static_cast<float*>(data)));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<const AudioBus> AudioBus::WrapReadOnlyMemory(int channels,
                                                              int frames,
                                                              const void* data)
@@ -159,6 +173,7 @@ std::unique_ptr<const AudioBus> AudioBus::WrapReadOnlyMemory(int channels,
     return WrapMemory(channels, frames, const_cast<void*>(data));
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::SetChannelData(int channel, float* data)
 {
     CHECK(can_set_channel_data_);
@@ -169,6 +184,7 @@ void AudioBus::SetChannelData(int channel, float* data)
     channel_data_[channel] = data;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::set_frames(int frames)
 {
     CHECK(can_set_channel_data_);
@@ -176,30 +192,35 @@ void AudioBus::set_frames(int frames)
     frames_ = frames;
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t AudioBus::GetBitstreamDataSize() const
 {
     DCHECK(is_bitstream_format_);
     return bitstream_data_size_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::SetBitstreamDataSize(size_t data_size)
 {
     DCHECK(is_bitstream_format_);
     bitstream_data_size_ = data_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 int AudioBus::GetBitstreamFrames() const
 {
     DCHECK(is_bitstream_format_);
     return bitstream_frames_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::SetBitstreamFrames(int frames)
 {
     DCHECK(is_bitstream_format_);
     bitstream_frames_ = frames;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::ZeroFramesPartial(int start_frame, int frames)
 {
     CheckOverflow(start_frame, frames, frames_);
@@ -232,16 +253,19 @@ void AudioBus::ZeroFramesPartial(int start_frame, int frames)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::ZeroFrames(int frames)
 {
     ZeroFramesPartial(0, frames);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::Zero()
 {
     ZeroFrames(frames_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioBus::AreFramesZero() const
 {
     DCHECK(!is_bitstream_format_);
@@ -256,11 +280,13 @@ bool AudioBus::AreFramesZero() const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 int AudioBus::CalculateMemorySize(int channels, int frames)
 {
     return CalculateMemorySizeInternal(channels, frames, NULL);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::BuildChannelData(int channels, int aligned_frames, float* data)
 {
     DCHECK(!is_bitstream_format_);
@@ -272,6 +298,7 @@ void AudioBus::BuildChannelData(int channels, int aligned_frames, float* data)
         channel_data_.push_back(data + i * aligned_frames);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::CopyTo(AudioBus* dest) const
 {
     dest->set_is_bitstream_format(is_bitstream_format());
@@ -286,6 +313,7 @@ void AudioBus::CopyTo(AudioBus* dest) const
     CopyPartialFramesTo(0, frames(), 0, dest);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::CopyPartialFramesTo(int source_start_frame,
                                    int frame_count,
                                    int dest_start_frame,
@@ -306,6 +334,7 @@ void AudioBus::CopyPartialFramesTo(int source_start_frame,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::Scale(float volume)
 {
     DCHECK(!is_bitstream_format_);
@@ -323,6 +352,7 @@ void AudioBus::Scale(float volume)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioBus::SwapChannels(int a, int b)
 {
     DCHECK(!is_bitstream_format_);

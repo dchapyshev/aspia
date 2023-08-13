@@ -29,6 +29,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void updatePerUserSystemParameters()
 {
     win::ScopedHandle user_token;
@@ -97,17 +98,20 @@ void updatePerUserSystemParameters()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentWin::DesktopEnvironmentWin()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentWin::~DesktopEnvironmentWin()
 {
     LOG(LS_INFO) << "Dtor";
     revertAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void DesktopEnvironmentWin::updateEnvironment()
 {
@@ -115,6 +119,7 @@ void DesktopEnvironmentWin::updateEnvironment()
     updatePerUserSystemParameters();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableWallpaper()
 {
     LOG(LS_INFO) << "Disable desktop wallpaper";
@@ -126,6 +131,7 @@ void DesktopEnvironmentWin::disableWallpaper()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableFontSmoothing()
 {
     LOG(LS_INFO) << "Disable font smoothing";
@@ -135,6 +141,7 @@ void DesktopEnvironmentWin::disableFontSmoothing()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableEffects()
 {
     LOG(LS_INFO) << "Disable desktop effects";
@@ -192,6 +199,7 @@ void DesktopEnvironmentWin::disableEffects()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::revertAll()
 {
     LOG(LS_INFO) << "Reverting desktop environment changes";

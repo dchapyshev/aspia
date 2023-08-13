@@ -32,17 +32,20 @@ constexpr std::chrono::minutes kTimeout{ 1 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Authenticator::Authenticator(std::shared_ptr<TaskRunner> task_runner)
     : timer_(WaitableTimer::Type::SINGLE_SHOT, std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 Authenticator::~Authenticator()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback)
 {
     if (state() != State::STOPPED)
@@ -71,6 +74,7 @@ void Authenticator::start(std::unique_ptr<TcpChannel> channel, Callback callback
         channel_->resume();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<TcpChannel> Authenticator::takeChannel()
 {
     if (state() != State::SUCCESS)
@@ -79,6 +83,7 @@ std::unique_ptr<TcpChannel> Authenticator::takeChannel()
     return std::move(channel_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* Authenticator::stateToString(State state)
 {
@@ -101,6 +106,7 @@ const char* Authenticator::stateToString(State state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
 {
@@ -126,17 +132,20 @@ const char* Authenticator::errorToString(Authenticator::ErrorCode error_code)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
 {
     sendMessage(base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::sendMessage(base::ByteArray&& data)
 {
     DCHECK(channel_);
     channel_->send(kChannelIdAuthenticator, std::move(data));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::finish(const Location& location, ErrorCode error_code)
 {
     // If the network channel is already destroyed, then exit (we have a repeated notification).
@@ -157,27 +166,32 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     callback_(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerVersion(const proto::Version& version)
 {
     peer_version_ = Version(version.major(), version.minor(), version.patch(), version.revision());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerOsName(const std::string& name)
 {
     peer_os_name_ = name;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerComputerName(const std::string& name)
 {
     peer_computer_name_ = name;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpConnected()
 {
     // The authenticator receives the channel always in an already connected state.
     NOTREACHED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error: " << NetworkChannel::errorToString(error_code);
@@ -190,6 +204,7 @@ void Authenticator::onTcpDisconnected(NetworkChannel::ErrorCode error_code)
     finish(FROM_HERE, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArray& buffer)
 {
     if (state() != State::PENDING)
@@ -198,6 +213,7 @@ void Authenticator::onTcpMessageReceived(uint8_t /* channel_id */, const ByteArr
     onReceived(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     if (state() != State::PENDING)
@@ -206,6 +222,7 @@ void Authenticator::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pend
     onWritten();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Authenticator::onSessionKeyChanged()
 {
     LOG(LS_INFO) << "Session key changed";

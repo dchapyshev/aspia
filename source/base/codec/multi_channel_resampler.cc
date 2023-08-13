@@ -27,6 +27,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 MultiChannelResampler::MultiChannelResampler(int channels,
                                              double io_sample_rate_ratio,
                                              size_t request_size,
@@ -60,8 +61,10 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 MultiChannelResampler::~MultiChannelResampler() = default;
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
 {
     DCHECK_EQ(static_cast<size_t>(audio_bus->channels()), resamplers_.size());
@@ -102,6 +105,7 @@ void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::ProvideInput(int channel, int frames, float* destination)
 {
     // Get the data from the multi-channel provider when the first channel asks
@@ -124,31 +128,35 @@ void MultiChannelResampler::ProvideInput(int channel, int frames, float* destina
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::Flush()
 {
     for (size_t i = 0; i < resamplers_.size(); ++i)
         resamplers_[i]->Flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::SetRatio(double io_sample_rate_ratio)
 {
     for (size_t i = 0; i < resamplers_.size(); ++i)
         resamplers_[i]->SetRatio(io_sample_rate_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 int MultiChannelResampler::ChunkSize() const
 {
     DCHECK(!resamplers_.empty());
     return resamplers_[0]->ChunkSize();
 }
 
-
+//--------------------------------------------------------------------------------------------------
 double MultiChannelResampler::BufferedFrames() const
 {
     DCHECK(!resamplers_.empty());
     return resamplers_[0]->BufferedFrames();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MultiChannelResampler::PrimeWithSilence()
 {
     DCHECK(!resamplers_.empty());

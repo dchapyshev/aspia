@@ -27,6 +27,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FirewallManager::FirewallManager(const std::filesystem::path& application_path)
     : application_path_(application_path)
 {
@@ -48,11 +49,13 @@ FirewallManager::FirewallManager(const std::filesystem::path& application_path)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::isValid() const
 {
     return firewall_rules_ && firewall_policy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::isFirewallEnabled() const
 {
     long profile_types = 0;
@@ -86,6 +89,7 @@ bool FirewallManager::isFirewallEnabled() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::hasAnyRule()
 {
     std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
@@ -94,6 +98,7 @@ bool FirewallManager::hasAnyRule()
     return !rules.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::addTcpRule(std::wstring_view rule_name,
                                  std::wstring_view description,
                                  uint16_t port)
@@ -133,6 +138,7 @@ bool FirewallManager::addTcpRule(std::wstring_view rule_name,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::addUdpRule(std::wstring_view rule_name,
                                  std::wstring_view description,
                                  uint16_t port)
@@ -172,6 +178,7 @@ bool FirewallManager::addUdpRule(std::wstring_view rule_name,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
 {
     std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
@@ -196,6 +203,7 @@ void FirewallManager::deleteRuleByName(std::wstring_view rule_name)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FirewallManager::deleteAllRules()
 {
     std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
@@ -205,6 +213,7 @@ void FirewallManager::deleteAllRules()
         deleteRule(rule);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
 {
     Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
@@ -272,6 +281,7 @@ void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* 
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
 {
     // Rename rule to unique name and delete by unique name. We can't just delete rule by name.

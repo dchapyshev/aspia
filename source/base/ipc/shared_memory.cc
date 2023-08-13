@@ -37,6 +37,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 int randomInt()
 {
 #if defined(USE_PCG_GENERATOR)
@@ -51,12 +52,14 @@ int randomInt()
     return distance(engine);
 }
 
+//--------------------------------------------------------------------------------------------------
 int createUniqueId()
 {
     static std::atomic_int last_id = randomInt();
     return last_id++;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string createFilePath(int id)
 {
     static const char16_t kPrefix[] = u"Global\\aspia_";
@@ -65,6 +68,7 @@ std::u16string createFilePath(int id)
 
 #if defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
 {
     switch (mode)
@@ -83,6 +87,7 @@ bool modeToDesiredAccess(SharedMemory::Mode mode, DWORD* desired_access)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::ScopedHandle* out)
 {
     DWORD protect;
@@ -133,6 +138,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool openFileMapping(SharedMemory::Mode mode, int id, win::ScopedHandle* out)
 {
     DWORD desired_access;
@@ -150,6 +156,7 @@ bool openFileMapping(SharedMemory::Mode mode, int id, win::ScopedHandle* out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
 {
     DWORD desired_access;
@@ -176,6 +183,7 @@ const SharedMemory::PlatformHandle kInvalidHandle = nullptr;
 const SharedMemory::PlatformHandle kInvalidHandle = -1;
 #endif
 
+//--------------------------------------------------------------------------------------------------
 SharedMemory::SharedMemory(int id,
                            ScopedPlatformHandle&& handle,
                            void* data,
@@ -189,6 +197,7 @@ SharedMemory::SharedMemory(int id,
         factory_proxy_->onSharedMemoryCreate(id_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemory::~SharedMemory()
 {
     if (factory_proxy_)
@@ -199,6 +208,7 @@ SharedMemory::~SharedMemory()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<SharedMemory> SharedMemory::create(
     Mode mode, size_t size, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)
@@ -233,6 +243,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<SharedMemory> SharedMemory::open(
     Mode mode, int id, base::local_shared_ptr<SharedMemoryFactoryProxy> factory_proxy)

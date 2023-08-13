@@ -24,6 +24,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 ALWAYS_INLINE RegionPtr region_cast(const RegionRec* region)
 {
     return reinterpret_cast<RegionPtr>(const_cast<RegionRec*>(region));
@@ -31,11 +32,13 @@ ALWAYS_INLINE RegionPtr region_cast(const RegionRec* region)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Region::Region()
 {
     miRegionInit(&x11reg_, NullBox, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::Region(const Rect& rect)
 {
     if (!rect.isEmpty())
@@ -53,28 +56,33 @@ Region::Region(const Rect& rect)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::Region(const Rect* rects, int count)
 {
     miRegionInit(&x11reg_, NullBox, 0);
     addRects(rects, count);
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::Region(const Region& other)
 {
     miRegionInit(&x11reg_, NullBox, 0);
     miRegionCopy(&x11reg_, region_cast(&other.x11reg_));
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::Region(Region&& other) noexcept
 {
     *this = std::move(other);
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::~Region()
 {
     miRegionUninit(&x11reg_);
 }
 
+//--------------------------------------------------------------------------------------------------
 Region& Region::operator=(const Region& other)
 {
     if (this == &other)
@@ -84,6 +92,7 @@ Region& Region::operator=(const Region& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 Region& Region::operator=(Region&& other) noexcept
 {
     if (this == &other)
@@ -99,11 +108,13 @@ Region& Region::operator=(Region&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Region::isEmpty() const
 {
     return (miRegionNotEmpty(region_cast(&x11reg_)) == FALSE);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Region::equals(const Region& region) const
 {
     if (isEmpty() && region.isEmpty())
@@ -112,17 +123,20 @@ bool Region::equals(const Region& region) const
     return (miRegionsEqual(region_cast(&x11reg_), region_cast(&region.x11reg_)) != FALSE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::clear()
 {
     miRegionEmpty(&x11reg_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::setRect(const Rect& rect)
 {
     clear();
     addRect(rect);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::addRect(const Rect& rect)
 {
     if (!rect.isEmpty())
@@ -132,27 +146,32 @@ void Region::addRect(const Rect& rect)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::addRects(const Rect* rects, int count)
 {
     for (int i = 0; i < count; ++i)
         addRect(rects[i]);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::addRegion(const Region& region)
 {
     miUnion(&x11reg_, &x11reg_, region_cast(&region.x11reg_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::intersect(const Region& region1, const Region& region2)
 {
     miIntersect(&x11reg_, region_cast(&region1.x11reg_), region_cast(&region2.x11reg_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::intersectWith(const Region& region)
 {
     miIntersect(&x11reg_, &x11reg_, region_cast(&region.x11reg_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::intersectWith(const Rect& rect)
 {
     Region region;
@@ -160,11 +179,13 @@ void Region::intersectWith(const Rect& rect)
     intersectWith(region);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::subtract(const Region& region)
 {
     miSubtract(&x11reg_, &x11reg_, region_cast(&region.x11reg_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::subtract(const Rect& rect)
 {
     Region region;
@@ -172,17 +193,20 @@ void Region::subtract(const Rect& rect)
     subtract(region);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::translate(int32_t dx, int32_t dy)
 {
     miTranslateRegion(&x11reg_, dx, dy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::swap(Region* region)
 {
     std::swap(x11reg_.extents, region->x11reg_.extents);
     std::swap(x11reg_.data, region->x11reg_.data);
 }
 
+//--------------------------------------------------------------------------------------------------
 Region::Iterator::Iterator(const Region& region)
     : rects_(REGION_RECTS(&region.x11reg_)),
       count_(REGION_NUM_RECTS(&region.x11reg_)),
@@ -191,11 +215,13 @@ Region::Iterator::Iterator(const Region& region)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Region::Iterator::isAtEnd() const
 {
     return pos_ >= count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Region::Iterator::advance()
 {
     ++pos_;

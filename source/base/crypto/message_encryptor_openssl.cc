@@ -33,6 +33,7 @@ const int kTagSize = 16; // 128 bits, 16 bytes.
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const ByteArray& iv)
     : ctx_(std::move(ctx)),
       iv_(iv)
@@ -41,8 +42,10 @@ MessageEncryptorOpenssl::MessageEncryptorOpenssl(EVP_CIPHER_CTX_ptr ctx, const B
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(ctx_.get()), kIVSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 MessageEncryptorOpenssl::~MessageEncryptorOpenssl() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
     const ByteArray& key, const ByteArray& iv)
@@ -64,6 +67,7 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForAes256Gcm(
     return std::unique_ptr<MessageEncryptor>(new MessageEncryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly1305(
     const ByteArray& key, const ByteArray& iv)
@@ -85,11 +89,13 @@ std::unique_ptr<MessageEncryptor> MessageEncryptorOpenssl::createForChaCha20Poly
     return std::unique_ptr<MessageEncryptor>(new MessageEncryptorOpenssl(std::move(ctx), iv));
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t MessageEncryptorOpenssl::encryptedDataSize(size_t in_size)
 {
     return in_size + kTagSize;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)

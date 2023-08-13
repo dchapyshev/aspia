@@ -76,6 +76,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Listener);
 };
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::Listener::Listener(IpcServer* server, size_t index)
     : server_(server),
       index_(index)
@@ -83,8 +84,10 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::Listener::~Listener() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_view channel_name)
 {
 #if defined(OS_WIN)
@@ -170,6 +173,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
 {
@@ -188,6 +192,7 @@ void IpcServer::Listener::onNewConnetion(
     server_->onNewConnection(index_, std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext())
 {
@@ -197,6 +202,7 @@ IpcServer::IpcServer()
         listeners_[i] = base::make_local_shared<Listener>(this, i);
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcServer::~IpcServer()
 {
     LOG(LS_INFO) << "Dtor";
@@ -204,6 +210,7 @@ IpcServer::~IpcServer()
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::u16string IpcServer::createUniqueId()
 {
@@ -236,6 +243,7 @@ std::u16string IpcServer::createUniqueId()
         stringPrintf("%lu.%lu.%lu", process_id, channel_id, random_number));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -261,6 +269,7 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::stop()
 {
     LOG(LS_INFO) << "Stopping IPC server";
@@ -276,6 +285,7 @@ void IpcServer::stop()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcServer::runListener(size_t index)
 {
     base::local_shared_ptr<Listener> listener = listeners_[index];
@@ -285,6 +295,7 @@ bool IpcServer::runListener(size_t index)
     return listener->listen(io_context_, channel_name_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channel)
 {
     LOG(LS_INFO) << "New IPC connecting";
@@ -300,6 +311,7 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
     LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_

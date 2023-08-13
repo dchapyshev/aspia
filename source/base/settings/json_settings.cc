@@ -34,6 +34,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string createKey(const std::vector<std::string_view>& segments)
 {
     std::string key;
@@ -48,6 +49,7 @@ std::string createKey(const std::vector<std::string_view>& segments)
     return key;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 void parseObject(const T& object, std::vector<std::string_view>* segments, Settings::Map* map)
 {
@@ -92,6 +94,7 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
     : encrypted_(encrypted)
 {
@@ -102,6 +105,7 @@ JsonSettings::JsonSettings(std::string_view file_name, Encrypted encrypted)
     sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 JsonSettings::JsonSettings(Scope scope,
                            std::string_view application_name,
                            std::string_view file_name,
@@ -115,11 +119,13 @@ JsonSettings::JsonSettings(Scope scope,
     sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 JsonSettings::~JsonSettings()
 {
     flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool JsonSettings::isWritable() const
 {
     std::error_code error_code;
@@ -143,12 +149,14 @@ bool JsonSettings::isWritable() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void JsonSettings::sync()
 {
     readFile(path_, map(), encrypted_);
     setChanged(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool JsonSettings::flush()
 {
     // If the configuration has no changes, then exit.
@@ -173,6 +181,7 @@ bool JsonSettings::flush()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path JsonSettings::filePath(std::string_view file_name)
 {
@@ -189,6 +198,7 @@ std::filesystem::path JsonSettings::filePath(std::string_view file_name)
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path JsonSettings::filePath(Scope scope,
                                              std::string_view application_name,
@@ -224,6 +234,7 @@ std::filesystem::path JsonSettings::filePath(Scope scope,
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypted encrypted)
 {
@@ -298,6 +309,7 @@ bool JsonSettings::readFile(const std::filesystem::path& file, Map& map, Encrypt
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, Encrypted encrypted)
 {

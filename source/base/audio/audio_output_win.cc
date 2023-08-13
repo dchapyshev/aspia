@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionStateToString(AudioSessionState state)
 {
     switch (state)
@@ -45,6 +46,7 @@ const char* sessionStateToString(AudioSessionState state)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     : AudioOutput(need_more_data_cb)
 {
@@ -65,11 +67,13 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     is_initialized_ = init();
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputWin::~AudioOutputWin()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::start()
 {
     if (!is_initialized_)
@@ -112,6 +116,7 @@ bool AudioOutputWin::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::stop()
 {
     if (!is_initialized_)
@@ -154,6 +159,7 @@ bool AudioOutputWin::stop()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::threadRun()
 {
     if (!isMMCSSSupported())
@@ -217,6 +223,7 @@ void AudioOutputWin::threadRun()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::init()
 {
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
@@ -296,6 +303,7 @@ bool AudioOutputWin::init()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::handleDataRequest()
 {
     // Get the padding value which indicates the amount of valid unread data that the endpoint
@@ -354,6 +362,7 @@ bool AudioOutputWin::handleDataRequest()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::handleRestartEvent()
 {
     DCHECK(audio_thread_);
@@ -374,6 +383,7 @@ bool AudioOutputWin::handleRestartEvent()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::stopThread()
 {
     DCHECK(!is_restarting_);
@@ -394,6 +404,7 @@ void AudioOutputWin::stopThread()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputWin::releaseCOMObjects()
 {
     if (audio_client_)
@@ -406,18 +417,21 @@ void AudioOutputWin::releaseCOMObjects()
         audio_render_client_.Reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 ULONG AudioOutputWin::AddRef()
 {
     ULONG new_ref = InterlockedIncrement(&ref_count_);
     return new_ref;
 }
 
+//--------------------------------------------------------------------------------------------------
 ULONG AudioOutputWin::Release()
 {
     ULONG new_ref = InterlockedDecrement(&ref_count_);
     return new_ref;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
 {
     if (object == nullptr)
@@ -433,11 +447,13 @@ HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
     return E_NOINTERFACE;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnStateChanged(AudioSessionState /* new_state */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disconnect_reason)
 {
     if (is_restarting_)
@@ -459,23 +475,27 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnDisplayNameChanged(
     LPCWSTR /* new_display_name */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnIconPathChanged(LPCWSTR /* new_icon_path */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnSimpleVolumeChanged(
     float /* new_simple_volume */, BOOL /* new_mute */, LPCGUID /* event_context */)
 {
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnChannelVolumeChanged(
     DWORD /* channel_count */, float /* new_channel_volumes */[], DWORD /* changed_channel */,
     LPCGUID /* event_context */)
@@ -483,6 +503,7 @@ HRESULT AudioOutputWin::OnChannelVolumeChanged(
     return S_OK;
 }
 
+//--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnGroupingParamChanged(
     LPCGUID /* new_grouping_param */, LPCGUID /* event_context */)
 {

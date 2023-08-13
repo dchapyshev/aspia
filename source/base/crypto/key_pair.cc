@@ -24,20 +24,24 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair() = default;
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair(EVP_PKEY_ptr&& pkey) noexcept
     : pkey_(std::move(pkey))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::KeyPair(KeyPair&& other) noexcept
     : pkey_(std::move(other.pkey_))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair& KeyPair::operator=(KeyPair&& other) noexcept
 {
     if (&other != this)
@@ -46,8 +50,10 @@ KeyPair& KeyPair::operator=(KeyPair&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 KeyPair::~KeyPair() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 KeyPair KeyPair::create(Type type)
 {
@@ -76,6 +82,7 @@ KeyPair KeyPair::create(Type type)
     return KeyPair(EVP_PKEY_ptr(private_key));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
 {
@@ -89,11 +96,13 @@ KeyPair KeyPair::fromPrivateKey(const ByteArray& private_key)
         EVP_PKEY_X25519, nullptr, private_key.data(), private_key.size())));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool KeyPair::isValid() const
 {
     return pkey_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::privateKey() const
 {
     size_t private_key_length = 0;
@@ -128,6 +137,7 @@ ByteArray KeyPair::privateKey() const
     return private_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::publicKey() const
 {
     size_t public_key_length = 0;
@@ -162,6 +172,7 @@ ByteArray KeyPair::publicKey() const
     return public_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray KeyPair::sessionKey(const ByteArray& peer_public_key) const
 {
     if (peer_public_key.empty())

@@ -46,6 +46,7 @@ const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
+//--------------------------------------------------------------------------------------------------
 ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = kNullProcessId;
@@ -59,6 +60,7 @@ ProcessId clientProcessIdImpl(HANDLE pipe_handle)
     return process_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 {
     ULONG process_id = kNullProcessId;
@@ -72,6 +74,7 @@ ProcessId serverProcessIdImpl(HANDLE pipe_handle)
     return process_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId clientSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = kInvalidSessionId;
@@ -85,6 +88,7 @@ SessionId clientSessionIdImpl(HANDLE pipe_handle)
     return session_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId serverSessionIdImpl(HANDLE pipe_handle)
 {
     ULONG session_id = kInvalidSessionId;
@@ -102,6 +106,7 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel()
     : stream_(MessageLoop::current()->pumpAsio()->ioContext()),
       proxy_(new IpcChannelProxy(MessageLoop::current()->taskRunner(), this))
@@ -109,6 +114,7 @@ IpcChannel::IpcChannel()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
     : channel_name_(channel_name),
       stream_(std::move(stream)),
@@ -123,6 +129,7 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
     LOG(LS_INFO) << "Dtor";
@@ -136,17 +143,20 @@ IpcChannel::~IpcChannel()
     disconnect();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<IpcChannelProxy> IpcChannel::channelProxy()
 {
     return proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::setListener(Listener* listener)
 {
     LOG(LS_INFO) << "Listener changed (" << (listener != nullptr) << ")";
     listener_ = listener;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::connect(std::u16string_view channel_id)
 {
 #if defined(OS_WIN)
@@ -202,6 +212,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::disconnect()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -218,24 +229,28 @@ void IpcChannel::disconnect()
     stream_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::isConnected() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_connected_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannel::isPaused() const
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     return is_paused_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::pause()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     is_paused_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::resume()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -255,6 +270,7 @@ void IpcChannel::resume()
     doReadMessage();
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::send(ByteArray&& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -268,6 +284,7 @@ void IpcChannel::send(ByteArray&& buffer)
         doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path IpcChannel::peerFilePath() const
 {
 #if defined(OS_WIN)
@@ -294,6 +311,7 @@ std::filesystem::path IpcChannel::peerFilePath() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 {
@@ -307,6 +325,7 @@ std::u16string IpcChannel::channelName(std::u16string_view channel_id)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
@@ -330,6 +349,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::doWrite()
 {
     write_size_ = static_cast<uint32_t>(write_queue_.front().size());
@@ -379,6 +399,7 @@ void IpcChannel::doWrite()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadMessage()
 {
     asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
@@ -432,6 +453,7 @@ void IpcChannel::doReadMessage()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
     if (listener_)

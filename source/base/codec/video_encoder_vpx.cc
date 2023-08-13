@@ -41,6 +41,7 @@ const int kVp9I420ProfileNumber = 0;
 // Magic encoder constant for adaptive quantization strategy.
 const int kVp9AqModeCyclicRefresh = 3;
 
+//--------------------------------------------------------------------------------------------------
 void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 {
     // Use millisecond granularity time base.
@@ -76,6 +77,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
     config->rc_overshoot_pct = 15;
 }
 
+//--------------------------------------------------------------------------------------------------
 void createImage(const Size& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  ByteArray* out_image_buffer)
@@ -125,11 +127,13 @@ void createImage(const Size& size,
     *out_image_buffer = std::move(image_buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 int roundToTwosMultiple(int x)
 {
     return x & (~1);
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect alignRect(const Rect& rect)
 {
     int x = roundToTwosMultiple(rect.left());
@@ -142,18 +146,21 @@ Rect alignRect(const Rect& rect)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
     return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
     return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     : VideoEncoder(encoding)
 {
@@ -161,6 +168,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
     memset(&active_map_, 0, sizeof(active_map_));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
@@ -242,6 +250,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
 {
     if (min_quantizer < 10 || min_quantizer > 50)
@@ -265,11 +274,13 @@ bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t VideoEncoderVPX::minQuantizer() const
 {
     return config_.rc_min_quantizer;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
 {
     if (max_quantizer < 10 || max_quantizer > 60)
@@ -293,11 +304,13 @@ bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t VideoEncoderVPX::maxQuantizer() const
 {
     return config_.rc_max_quantizer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::createActiveMap(const Size& size)
 {
     active_map_.cols = static_cast<unsigned int>(
@@ -311,6 +324,7 @@ void VideoEncoderVPX::createActiveMap(const Size& size)
     clearActiveMap();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::createVp8Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
@@ -374,6 +388,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::createVp9Codec(const Size& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
@@ -442,6 +457,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::VideoPacket* packet)
 {
@@ -513,6 +529,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
@@ -531,6 +548,7 @@ void VideoEncoderVPX::addRectToActiveMap(const Rect& rect)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoderVPX::clearActiveMap()
 {
     memset(active_map_buffer_.data(), 0, active_map_buffer_.size());

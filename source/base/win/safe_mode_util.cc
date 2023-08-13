@@ -44,6 +44,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedWow64FsRedirection);
 };
 
+//--------------------------------------------------------------------------------------------------
 ScopedWow64FsRedirection::ScopedWow64FsRedirection()
 {
     BOOL wow64 = FALSE;
@@ -72,6 +73,7 @@ ScopedWow64FsRedirection::ScopedWow64FsRedirection()
     succeeded_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedWow64FsRedirection::~ScopedWow64FsRedirection()
 {
     if (required_ && succeeded_)
@@ -85,6 +87,7 @@ ScopedWow64FsRedirection::~ScopedWow64FsRedirection()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SafeModeUtil::setSafeMode(bool enable)
 {
@@ -169,6 +172,7 @@ bool SafeModeUtil::setSafeMode(bool enable)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SafeModeUtil::setSafeModeService(std::u16string_view service_name, bool enable)
 {

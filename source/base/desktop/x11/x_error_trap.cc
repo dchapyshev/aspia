@@ -29,6 +29,7 @@ namespace {
 static bool g_xserver_error_trap_enabled = false;
 static int g_last_xserver_error_code = 0;
 
+//--------------------------------------------------------------------------------------------------
 int XServerErrorHandler(Display* display, XErrorEvent* error_event)
 {
     assert(g_xserver_error_trap_enabled);
@@ -38,6 +39,7 @@ int XServerErrorHandler(Display* display, XErrorEvent* error_event)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 XErrorTrap::XErrorTrap(Display* display)
     : original_error_handler_(NULL),
       enabled_(true)
@@ -48,6 +50,7 @@ XErrorTrap::XErrorTrap(Display* display)
     g_last_xserver_error_code = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 int XErrorTrap::lastErrorAndDisable()
 {
     enabled_ = false;
@@ -58,6 +61,7 @@ int XErrorTrap::lastErrorAndDisable()
     return g_last_xserver_error_code;
 }
 
+//--------------------------------------------------------------------------------------------------
 XErrorTrap::~XErrorTrap()
 {
     if (enabled_)

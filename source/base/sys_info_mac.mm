@@ -28,12 +28,14 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 //static
 std::string SysInfo::operatingSystemName()
 {
     return "Mac OS X";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemVersion()
 {
@@ -52,6 +54,7 @@ std::string SysInfo::operatingSystemVersion()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
@@ -76,6 +79,7 @@ std::string SysInfo::operatingSystemArchitecture()
     return arch;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemDir()
 {
@@ -83,6 +87,7 @@ std::string SysInfo::operatingSystemDir()
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint64_t SysInfo::uptime()
 {
@@ -90,6 +95,7 @@ uint64_t SysInfo::uptime()
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerName()
 {
@@ -100,6 +106,7 @@ std::string SysInfo::computerName()
     return std::string(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerDomain()
 {
@@ -107,6 +114,7 @@ std::string SysInfo::computerDomain()
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerWorkgroup()
 {
@@ -114,6 +122,7 @@ std::string SysInfo::computerWorkgroup()
     return std::string();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorPackages()
 {
@@ -121,6 +130,7 @@ int SysInfo::processorPackages()
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorCores()
 {
@@ -128,6 +138,7 @@ int SysInfo::processorCores()
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorThreads()
 {

@@ -25,8 +25,10 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController() = default;
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
     : sc_manager_(sc_manager),
       service_(service)
@@ -34,6 +36,7 @@ ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::ServiceController(ServiceController&& other) noexcept
     : sc_manager_(std::move(other.sc_manager_)),
       service_(std::move(other.service_))
@@ -41,6 +44,7 @@ ServiceController::ServiceController(ServiceController&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController& ServiceController::operator=(ServiceController&& other) noexcept
 {
     sc_manager_ = std::move(other.sc_manager_);
@@ -48,8 +52,10 @@ ServiceController& ServiceController::operator=(ServiceController&& other) noexc
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 ServiceController::~ServiceController() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 ServiceController ServiceController::open(std::u16string_view name)
 {
@@ -70,6 +76,7 @@ ServiceController ServiceController::open(std::u16string_view name)
     return ServiceController(sc_manager.release(), service.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ServiceController ServiceController::install(std::u16string_view name,
                                              std::u16string_view display_name,
@@ -121,6 +128,7 @@ ServiceController ServiceController::install(std::u16string_view name,
     return ServiceController(sc_manager.release(), service.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::remove(std::u16string_view name)
 {
@@ -161,6 +169,7 @@ bool ServiceController::remove(std::u16string_view name)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::isInstalled(std::u16string_view name)
 {
@@ -185,6 +194,7 @@ bool ServiceController::isInstalled(std::u16string_view name)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ServiceController::isRunning(std::u16string_view name)
 {
@@ -213,12 +223,14 @@ bool ServiceController::isRunning(std::u16string_view name)
     return status.dwCurrentState != SERVICE_STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServiceController::close()
 {
     service_.reset();
     sc_manager_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setDescription(std::u16string_view description)
 {
     SERVICE_DESCRIPTIONW service_description;
@@ -234,6 +246,7 @@ bool ServiceController::setDescription(std::u16string_view description)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string ServiceController::description() const
 {
     DWORD bytes_needed = 0;
@@ -265,6 +278,7 @@ std::u16string ServiceController::description() const
     return asUtf16(service_description->lpDescription);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setDependencies(const std::vector<std::u16string>& dependencies)
 {
     std::string buffer;
@@ -295,6 +309,7 @@ bool ServiceController::setDependencies(const std::vector<std::u16string>& depen
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::u16string> ServiceController::dependencies() const
 {
     DWORD bytes_needed = 0;
@@ -339,6 +354,7 @@ std::vector<std::u16string> ServiceController::dependencies() const
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::setAccount(std::u16string_view username, std::u16string_view password)
 {
     if (!ChangeServiceConfigW(service_,
@@ -356,6 +372,7 @@ bool ServiceController::setAccount(std::u16string_view username, std::u16string_
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path ServiceController::filePath() const
 {
     DWORD bytes_needed = 0;
@@ -385,11 +402,13 @@ std::filesystem::path ServiceController::filePath() const
     return service_config->lpBinaryPathName;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::isValid() const
 {
     return sc_manager_.isValid() && service_.isValid();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::isRunning() const
 {
     SERVICE_STATUS status;
@@ -403,6 +422,7 @@ bool ServiceController::isRunning() const
     return status.dwCurrentState != SERVICE_STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::start()
 {
     if (!StartServiceW(service_, 0, nullptr))
@@ -432,6 +452,7 @@ bool ServiceController::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServiceController::stop()
 {
     SERVICE_STATUS status;

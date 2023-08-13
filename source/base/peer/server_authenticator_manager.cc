@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ServerAuthenticatorManager::ServerAuthenticatorManager(
     std::shared_ptr<TaskRunner> task_runner, Delegate* delegate)
     : task_runner_(std::move(task_runner)),
@@ -33,22 +34,26 @@ ServerAuthenticatorManager::ServerAuthenticatorManager(
     DCHECK(task_runner_ && delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 ServerAuthenticatorManager::~ServerAuthenticatorManager()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::setUserList(std::unique_ptr<UserListBase> user_list)
 {
     user_list_.reset(user_list.release());
     DCHECK(user_list_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::setPrivateKey(const ByteArray& private_key)
 {
     private_key_ = private_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::setAnonymousAccess(
     ServerAuthenticator::AnonymousAccess anonymous_access, uint32_t session_types)
 {
@@ -56,6 +61,7 @@ void ServerAuthenticatorManager::setAnonymousAccess(
     anonymous_session_types_ = session_types;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> channel)
 {
     DCHECK(channel);
@@ -87,6 +93,7 @@ void ServerAuthenticatorManager::addNewChannel(std::unique_ptr<TcpChannel> chann
         std::move(channel), std::bind(&ServerAuthenticatorManager::onComplete, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorManager::onComplete()
 {
     for (auto it = pending_.begin(); it != pending_.end();)

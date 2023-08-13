@@ -24,6 +24,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 template <class Container>
 bool readFileT(const std::filesystem::path& filename, Container* buffer)
 {
@@ -49,6 +50,7 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 bool writeFile(const std::filesystem::path& filename, const void* data, size_t size)
 {
     std::ofstream stream;
@@ -62,21 +64,25 @@ bool writeFile(const std::filesystem::path& filename, const void* data, size_t s
     return !stream.fail();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeFile(const std::filesystem::path& filename, const ByteArray& buffer)
 {
     return writeFile(filename, buffer.data(), buffer.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeFile(const std::filesystem::path& filename, std::string_view buffer)
 {
     return writeFile(filename, buffer.data(), buffer.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool readFile(const std::filesystem::path& filename, ByteArray* buffer)
 {
     return readFileT(filename, buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool readFile(const std::filesystem::path& filename, std::string* buffer)
 {
     return readFileT(filename, buffer);

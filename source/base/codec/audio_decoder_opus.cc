@@ -39,13 +39,16 @@ const proto::AudioPacket::SamplingRate kSamplingRate =
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AudioDecoderOpus::AudioDecoderOpus() = default;
 
+//--------------------------------------------------------------------------------------------------
 AudioDecoderOpus::~AudioDecoderOpus()
 {
     destroyDecoder();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioDecoderOpus::initDecoder()
 {
     DCHECK(!decoder_);
@@ -58,6 +61,7 @@ void AudioDecoderOpus::initDecoder()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioDecoderOpus::destroyDecoder()
 {
     if (decoder_)
@@ -67,6 +71,7 @@ void AudioDecoderOpus::destroyDecoder()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioDecoderOpus::resetForPacket(const proto::AudioPacket& packet)
 {
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
@@ -91,6 +96,7 @@ bool AudioDecoderOpus::resetForPacket(const proto::AudioPacket& packet)
     return decoder_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioPacket& packet)
 {
     if (packet.encoding() != proto::AUDIO_ENCODING_OPUS)

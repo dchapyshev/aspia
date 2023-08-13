@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFrame::SharedMemoryFrame(const Size& size,
                                      const PixelFormat& format,
                                      SharedMemoryBase* shared_memory)
@@ -32,11 +33,13 @@ SharedMemoryFrame::SharedMemoryFrame(const Size& size,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFrame::~SharedMemoryFrame()
 {
     delete shared_memory_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::create(
     const Size& size, const PixelFormat& format, SharedMemoryFactory* shared_memory_factory)
@@ -53,6 +56,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::create(
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::open(
     const Size& size, const PixelFormat& format, int id, SharedMemoryFactory* shared_memory_factory)
@@ -67,6 +71,7 @@ std::unique_ptr<Frame> SharedMemoryFrame::open(
     return std::unique_ptr<Frame>(new SharedMemoryFrame(size, format, shared_memory.release()));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Frame> SharedMemoryFrame::attach(
     const Size& size, const PixelFormat& format, std::unique_ptr<SharedMemoryBase> shared_memory)

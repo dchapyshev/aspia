@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
                                      std::wstring* device_name,
@@ -62,6 +63,7 @@ bool MirrorHelper::findDisplayDevice(std::wstring_view device_string,
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
 {

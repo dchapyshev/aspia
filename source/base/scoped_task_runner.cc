@@ -72,22 +72,26 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 ScopedTaskRunner::ScopedTaskRunner(std::shared_ptr<TaskRunner> task_runner)
     : impl_(base::make_local_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedTaskRunner::~ScopedTaskRunner()
 {
     impl_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedTaskRunner::postTask(TaskRunner::Callback callback)
 {
     impl_->postTask(std::move(callback));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedTaskRunner::postDelayedTask(
     const std::chrono::milliseconds& timeout, TaskRunner::Callback callback)
 {

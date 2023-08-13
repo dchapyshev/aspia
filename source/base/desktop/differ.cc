@@ -33,6 +33,7 @@ const int kBlockSize = 16;
 const int kBytesPerPixel = 4;
 const int kBytesPerBlock = kBlockSize * kBytesPerPixel;
 
+//--------------------------------------------------------------------------------------------------
 // Check for diffs in upper-left portion of the block. The size of the portion to check is
 // specified by the |width| and |height| values.
 // Note that if we force the capturer to always return images whose width and height are multiples
@@ -59,6 +60,7 @@ uint8_t diffPartialBlock(const uint8_t* prev_image,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Differ::Differ(const Size& size)
     : screen_rect_(Rect::makeSize(size)),
       bytes_per_row_(size.width() * kBytesPerPixel),
@@ -93,6 +95,7 @@ Differ::Differ(const Size& size)
     CHECK(diff_full_block_func_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Differ::DiffFullBlockFunc Differ::diffFunction()
 {
@@ -120,6 +123,7 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Identify all of the blocks that contain changed pixels.
 void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
 {
@@ -201,6 +205,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // After the dirty blocks have been identified, this routine merges adjacent blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 void Differ::mergeBlocks(Region* dirty_region)
@@ -284,6 +289,7 @@ void Differ::mergeBlocks(Region* dirty_region)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Differ::calcDirtyRegion(const uint8_t* prev_image,
                              const uint8_t* curr_image,
                              Region* dirty_region)

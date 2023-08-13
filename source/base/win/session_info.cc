@@ -24,6 +24,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 SessionInfo::SessionInfo(SessionId session_id)
 {
     ScopedWtsMemory<WTSINFOEXW> info;
@@ -42,13 +43,16 @@ SessionInfo::SessionInfo(SessionId session_id)
     info_.reset(info.release());
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionInfo::~SessionInfo() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool SessionInfo::isValid() const
 {
     return info_.isValid();
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionId SessionInfo::sessionId() const
 {
     if (!isValid())
@@ -57,6 +61,7 @@ SessionId SessionInfo::sessionId() const
     return info_->Data.WTSInfoExLevel1.SessionId;
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionInfo::ConnectState SessionInfo::connectState() const
 {
     if (!isValid())
@@ -65,6 +70,7 @@ SessionInfo::ConnectState SessionInfo::connectState() const
     return static_cast<ConnectState>(info_->Data.WTSInfoExLevel1.SessionState);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* SessionInfo::connectStateToString(ConnectState connect_state)
 {
@@ -95,11 +101,13 @@ const char* SessionInfo::connectStateToString(ConnectState connect_state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionInfo::winStationName() const
 {
     return utf8FromUtf16(winStationName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionInfo::winStationName16() const
 {
     if (!isValid())
@@ -108,11 +116,13 @@ std::u16string SessionInfo::winStationName16() const
     return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.WinStationName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionInfo::domain() const
 {
     return utf8FromUtf16(domain16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionInfo::domain16() const
 {
     if (!isValid())
@@ -121,11 +131,13 @@ std::u16string SessionInfo::domain16() const
     return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.DomainName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionInfo::userName() const
 {
     return utf8FromUtf16(userName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionInfo::userName16() const
 {
     if (!isValid())
@@ -134,11 +146,13 @@ std::u16string SessionInfo::userName16() const
     return reinterpret_cast<const char16_t*>(info_->Data.WTSInfoExLevel1.UserName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string SessionInfo::clientName() const
 {
     return utf8FromUtf16(clientName16());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string SessionInfo::clientName16() const
 {
     if (!isValid())
@@ -167,6 +181,7 @@ std::u16string SessionInfo::clientName16() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t SessionInfo::connectTime() const
 {
     if (!isValid())
@@ -175,6 +190,7 @@ int64_t SessionInfo::connectTime() const
     return info_->Data.WTSInfoExLevel1.ConnectTime.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t SessionInfo::disconnectTime() const
 {
     if (!isValid())
@@ -183,6 +199,7 @@ int64_t SessionInfo::disconnectTime() const
     return info_->Data.WTSInfoExLevel1.DisconnectTime.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t SessionInfo::lastInputTime() const
 {
     if (!isValid())
@@ -191,6 +208,7 @@ int64_t SessionInfo::lastInputTime() const
     return info_->Data.WTSInfoExLevel1.LastInputTime.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t SessionInfo::logonTime() const
 {
     if (!isValid())
@@ -199,6 +217,7 @@ int64_t SessionInfo::logonTime() const
     return info_->Data.WTSInfoExLevel1.LogonTime.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t SessionInfo::currentTime() const
 {
     if (!isValid())
@@ -207,6 +226,7 @@ int64_t SessionInfo::currentTime() const
     return info_->Data.WTSInfoExLevel1.CurrentTime.QuadPart;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionInfo::isUserLocked() const
 {
     if (!isValid())

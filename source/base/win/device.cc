@@ -22,11 +22,13 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 Device::~Device()
 {
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Device::open(const std::filesystem::path& device_path,
                   DWORD desired_access,
                   DWORD share_mode)
@@ -41,16 +43,19 @@ bool Device::open(const std::filesystem::path& device_path,
     return device_.isValid();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Device::open(const std::filesystem::path& device_path)
 {
     return open(device_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Device::close()
 {
     device_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Device::ioControl(DWORD io_control_code,
                        LPVOID input_buffer,
                        DWORD input_buffer_size,

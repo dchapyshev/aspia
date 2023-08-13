@@ -26,14 +26,17 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DxgiTextureMapping::DxgiTextureMapping(IDXGIOutputDuplication* duplication)
     : duplication_(duplication)
 {
     DCHECK(duplication_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiTextureMapping::~DxgiTextureMapping() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTextureMapping::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_info,
                                          ID3D11Texture2D* texture)
 {
@@ -54,6 +57,7 @@ bool DxgiTextureMapping::copyFromTexture(const DXGI_OUTDUPL_FRAME_INFO& frame_in
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiTextureMapping::doRelease()
 {
     _com_error error = duplication_->UnMapDesktopSurface();

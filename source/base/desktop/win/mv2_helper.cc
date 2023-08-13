@@ -30,12 +30,14 @@ static const int kBitsPerPixel = 32;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Mv2Helper::Mv2Helper(const Rect& screen_rect)
     : screen_rect_(screen_rect)
 {
     DCHECK(!screen_rect_.isEmpty());
 }
 
+//--------------------------------------------------------------------------------------------------
 Mv2Helper::~Mv2Helper()
 {
     if (is_mapped_)
@@ -48,6 +50,7 @@ Mv2Helper::~Mv2Helper()
         update(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
 {
@@ -89,6 +92,7 @@ std::unique_ptr<Mv2Helper> Mv2Helper::create(const Rect& screen_rect)
     return helper;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mv2Helper::addUpdatedRects(Region* updated_region) const
 {
     DCHECK(updated_region);
@@ -110,6 +114,7 @@ void Mv2Helper::addUpdatedRects(Region* updated_region) const
     last_update_ = next_update;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
 {
     DCHECK(frame);
@@ -126,6 +131,7 @@ void Mv2Helper::copyRegion(Frame* frame, const Region& updated_region) const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mv2Helper::update(bool load)
 {
     DEVMODE device_mode;
@@ -157,6 +163,7 @@ bool Mv2Helper::update(bool load)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mv2Helper::mapMemory(bool map)
 {
     if (map)

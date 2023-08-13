@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SharedFrame::SharedFrame(base::local_shared_ptr<Frame>& frame)
     : Frame(frame->size(), frame->format(), frame->stride(),
             frame->frameData(), frame->sharedMemory()),
@@ -28,8 +29,10 @@ SharedFrame::SharedFrame(base::local_shared_ptr<Frame>& frame)
     copyFrameInfoFrom(*frame_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedFrame::~SharedFrame() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<SharedFrame> SharedFrame::wrap(std::unique_ptr<Frame> desktop_frame)
 {
@@ -37,11 +40,13 @@ std::unique_ptr<SharedFrame> SharedFrame::wrap(std::unique_ptr<Frame> desktop_fr
     return std::unique_ptr<SharedFrame>(new SharedFrame(shared_frame));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedFrame::shareFrameWith(const SharedFrame& other) const
 {
     return frame_.get() == other.frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedFrame> SharedFrame::share()
 {
     std::unique_ptr<SharedFrame> result(new SharedFrame(frame_));
@@ -49,11 +54,13 @@ std::unique_ptr<SharedFrame> SharedFrame::share()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SharedFrame::isShared()
 {
     return frame_.use_count() > 1;
 }
 
+//--------------------------------------------------------------------------------------------------
 Frame* SharedFrame::underlyingFrame()
 {
     return frame_.get();

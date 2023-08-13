@@ -22,24 +22,28 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::clearInvalidRegion()
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
     invalid_region_.clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::invalidateRegion(const Region& invalid_region)
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
     invalid_region_.addRegion(invalid_region);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::invalidateScreen(const Size& size)
 {
     std::scoped_lock scoped_invalid_region_lock(invalid_region_mutex_);
     invalid_region_.addRect(Rect::makeSize(size));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::takeInvalidRegion(Region* invalid_region)
 {
     invalid_region->clear();
@@ -59,21 +63,25 @@ void ScreenCapturerHelper::takeInvalidRegion(Region* invalid_region)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::setLogGridSize(int log_grid_size)
 {
     log_grid_size_ = log_grid_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Size& ScreenCapturerHelper::sizeMostRecent() const
 {
     return size_most_recent_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::setSizeMostRecent(const Size& size)
 {
     size_most_recent_ = size;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Returns the largest multiple of |n| that is <= |x|.
 // |n| must be a power of 2. |nMask| is ~(|n| - 1).
 static int downToMultiple(int x, int nMask)
@@ -81,6 +89,7 @@ static int downToMultiple(int x, int nMask)
     return (x & nMask);
 }
 
+//--------------------------------------------------------------------------------------------------
 // Returns the smallest multiple of |n| that is >= |x|.
 // |n| must be a power of 2. |nMask| is ~(|n| - 1).
 static int upToMultiple(int x, int n, int nMask)
@@ -88,6 +97,7 @@ static int upToMultiple(int x, int n, int nMask)
     return ((x + n - 1) & nMask);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerHelper::expandToGrid(const Region& region, int log_grid_size, Region* result)
 {
     assert(log_grid_size >= 1);

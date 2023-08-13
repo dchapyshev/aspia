@@ -51,18 +51,21 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void FMAC_C(const float src[], float scale, int len, float dest[])
 {
     for (int i = 0; i < len; ++i)
         dest[i] += src[i] * scale;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FMUL_C(const float src[], float scale, int len, float dest[])
 {
     for (int i = 0; i < len; ++i)
         dest[i] = src[i] * scale;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::pair<float, float> EWMAAndMaxPower_C(
     float initial_value, const float src[], int len, float smoothing_factor)
 {
@@ -80,6 +83,7 @@ std::pair<float, float> EWMAAndMaxPower_C(
 }
 
 #if defined(ARCH_CPU_X86_FAMILY) && !defined(OS_NACL)
+//--------------------------------------------------------------------------------------------------
 void FMUL_SSE(const float src[], float scale, int len, float dest[])
 {
     const int rem = len % 4;
@@ -93,6 +97,7 @@ void FMUL_SSE(const float src[], float scale, int len, float dest[])
         dest[i] = src[i] * scale;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FMAC_SSE(const float src[], float scale, int len, float dest[])
 {
     const int rem = len % 4;
@@ -120,6 +125,7 @@ void FMAC_SSE(const float src[], float scale, int len, float dest[])
          _mm_cvtss_f32(a) : \
          _mm_cvtss_f32(_mm_shuffle_ps(a, a, i)))
 
+//--------------------------------------------------------------------------------------------------
 std::pair<float, float> EWMAAndMaxPower_SSE(
     float initial_value, const float src[], int len, float smoothing_factor)
 {
@@ -189,6 +195,7 @@ std::pair<float, float> EWMAAndMaxPower_SSE(
 #endif
 
 #if defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+//--------------------------------------------------------------------------------------------------
 void FMAC_NEON(const float src[], float scale, int len, float dest[])
 {
     const int rem = len % 4;
@@ -205,6 +212,7 @@ void FMAC_NEON(const float src[], float scale, int len, float dest[])
         dest[i] += src[i] * scale;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FMUL_NEON(const float src[], float scale, int len, float dest[])
 {
     const int rem = len % 4;
@@ -219,6 +227,7 @@ void FMUL_NEON(const float src[], float scale, int len, float dest[])
         dest[i] = src[i] * scale;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::pair<float, float> EWMAAndMaxPower_NEON(
     float initial_value, const float src[], int len, float smoothing_factor)
 {
@@ -286,6 +295,7 @@ std::pair<float, float> EWMAAndMaxPower_NEON(
 }
 #endif
 
+//--------------------------------------------------------------------------------------------------
 void FMAC(const float src[], float scale, int len, float dest[])
 {
     // Ensure |src| and |dest| are 16-byte aligned.
@@ -294,6 +304,7 @@ void FMAC(const float src[], float scale, int len, float dest[])
     return FMAC_FUNC(src, scale, len, dest);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FMUL(const float src[], float scale, int len, float dest[])
 {
     // Ensure |src| and |dest| are 16-byte aligned.
@@ -302,6 +313,7 @@ void FMUL(const float src[], float scale, int len, float dest[])
     return FMUL_FUNC(src, scale, len, dest);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::pair<float, float> EWMAAndMaxPower(
     float initial_value, const float src[], int len, float smoothing_factor)
 {
@@ -310,6 +322,7 @@ std::pair<float, float> EWMAAndMaxPower(
     return EWMAAndMaxPower_FUNC(initial_value, src, len, smoothing_factor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void crossfade(const float src[], int len, float dest[])
 {
     float cf_ratio = 0;

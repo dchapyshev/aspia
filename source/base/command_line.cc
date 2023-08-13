@@ -43,6 +43,7 @@ const size_t kSwitchPrefixesCount = std::size(kSwitchPrefixes);
 
 const std::u16string kEmptyString;
 
+//--------------------------------------------------------------------------------------------------
 size_t switchPrefixLength(std::u16string_view string)
 {
     for (size_t i = 0; i < kSwitchPrefixesCount; ++i)
@@ -56,6 +57,7 @@ size_t switchPrefixLength(std::u16string_view string)
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Fills in |switch_string| and |switch_value| if |string| is a switch.
 // This will preserve the input switch prefix in the output |switch_string|.
 bool isSwitch(std::u16string_view string,
@@ -78,6 +80,7 @@ bool isSwitch(std::u16string_view string,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Append switches and arguments, keeping switches before arguments.
 void appendSwitchesAndArguments(CommandLine* command_line, const CommandLine::StringVector& argv)
 {
@@ -101,6 +104,7 @@ void appendSwitchesAndArguments(CommandLine* command_line, const CommandLine::St
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 // Quote a string as necessary for CommandLineToArgvW compatiblity *on Windows*.
 std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_placeholders)
 {
@@ -169,6 +173,7 @@ std::u16string quoteForCommandLineToArgvW(const std::u16string& arg, bool quote_
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(NoProgram /* no_program */)
     : argv_(1),
       begin_args_(1)
@@ -176,6 +181,7 @@ CommandLine::CommandLine(NoProgram /* no_program */)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(const std::filesystem::path& program)
     : argv_(1),
       begin_args_(1)
@@ -183,6 +189,7 @@ CommandLine::CommandLine(const std::filesystem::path& program)
     setProgram(program);
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(int argc, const char16_t* const* argv)
     : argv_(1),
       begin_args_(1)
@@ -190,6 +197,7 @@ CommandLine::CommandLine(int argc, const char16_t* const* argv)
     initFromArgv(argc, argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(int argc, const char* const* argv)
     : argv_(1),
       begin_args_(1)
@@ -197,6 +205,7 @@ CommandLine::CommandLine(int argc, const char* const* argv)
     initFromArgv(argc, argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(const StringVector& argv)
     : argv_(1),
       begin_args_(1)
@@ -204,6 +213,7 @@ CommandLine::CommandLine(const StringVector& argv)
     initFromArgv(argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::CommandLine(CommandLine&& other) noexcept
     : argv_(std::move(other.argv_)),
       switches_(std::move(other.switches_)),
@@ -212,6 +222,7 @@ CommandLine::CommandLine(CommandLine&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine& CommandLine::operator=(CommandLine&& other) noexcept
 {
     if (this != &other)
@@ -225,6 +236,7 @@ CommandLine& CommandLine::operator=(CommandLine&& other) noexcept
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 // static
 CommandLine CommandLine::fromString(std::u16string_view command_line)
 {
@@ -258,6 +270,7 @@ bool CommandLine::init(int argc, const char* const* argv)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void CommandLine::reset()
 {
@@ -266,6 +279,7 @@ void CommandLine::reset()
     current_process_commandline_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 CommandLine* CommandLine::forCurrentProcess()
 {
@@ -273,12 +287,14 @@ CommandLine* CommandLine::forCurrentProcess()
     return current_process_commandline_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool CommandLine::isInitializedForCurrentProcess()
 {
     return !!current_process_commandline_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::initFromArgv(int argc, const char16_t* const* argv)
 {
     StringVector new_argv;
@@ -289,6 +305,7 @@ void CommandLine::initFromArgv(int argc, const char16_t* const* argv)
     initFromArgv(new_argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::initFromArgv(int argc, const char* const* argv)
 {
     StringVector new_argv;
@@ -299,6 +316,7 @@ void CommandLine::initFromArgv(int argc, const char* const* argv)
     initFromArgv(new_argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::initFromArgv(const StringVector& argv)
 {
     argv_ = StringVector(1);
@@ -308,27 +326,32 @@ void CommandLine::initFromArgv(const StringVector& argv)
     appendSwitchesAndArguments(this, argv);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path CommandLine::program() const
 {
     return argv_[0];
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::setProgram(const std::filesystem::path& program)
 {
     trimWhitespace(program.u16string(), TRIM_ALL, &argv_[0]);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool CommandLine::isEmpty() const
 {
     return argv_.size() == 1 && switches_.empty();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool CommandLine::hasSwitch(std::u16string_view switch_string) const
 {
     DCHECK(toLower(switch_string) == switch_string);
     return switches_.find(switch_string) != switches_.end();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path CommandLine::switchValuePath(std::u16string_view switch_string) const
 {
     DCHECK(toLower(switch_string) == switch_string);
@@ -336,6 +359,7 @@ std::filesystem::path CommandLine::switchValuePath(std::u16string_view switch_st
     return result == switches_.end() ? std::filesystem::path() : std::filesystem::path(result->second);
 }
 
+//--------------------------------------------------------------------------------------------------
 const std::u16string& CommandLine::switchValue(std::u16string_view switch_string) const
 {
     DCHECK(toLower(switch_string) == switch_string);
@@ -343,17 +367,20 @@ const std::u16string& CommandLine::switchValue(std::u16string_view switch_string
     return result == switches_.end() ? kEmptyString : result->second;
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::appendSwitch(std::u16string_view switch_string)
 {
     appendSwitch(switch_string, std::u16string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::appendSwitchPath(std::u16string_view switch_string,
                                    const std::filesystem::path& path)
 {
     appendSwitch(switch_string, path.u16string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::appendSwitch(std::u16string_view switch_string, std::u16string_view value)
 {
     const std::u16string switch_key = toLower(switch_string);
@@ -379,12 +406,14 @@ void CommandLine::appendSwitch(std::u16string_view switch_string, std::u16string
     argv_.insert(argv_.begin() + begin_args_++, combined_switch_string);
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::removeSwitch(std::u16string_view switch_string)
 {
     DCHECK(toLowerASCII(switch_string) == switch_string);
     switches_.erase(std::u16string(switch_string));
 }
 
+//--------------------------------------------------------------------------------------------------
 CommandLine::StringVector CommandLine::args() const
 {
     // Gather all arguments after the last switch (may include kSwitchTerminator).
@@ -400,17 +429,20 @@ CommandLine::StringVector CommandLine::args() const
     return args;
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::appendArgPath(const std::filesystem::path& value)
 {
     appendArg(value.u16string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void CommandLine::appendArg(std::u16string_view value)
 {
     argv_.emplace_back(value);
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void CommandLine::parseFromString(std::u16string_view command_line)
 {
     command_line = trimWhitespace(command_line, TRIM_ALL);
@@ -453,6 +485,7 @@ void CommandLine::parseFromString(std::u16string_view command_line)
 }
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 std::u16string CommandLine::commandLineStringInternal(bool quote_placeholders) const
 {
     std::u16string string(argv_[0]);
@@ -471,6 +504,7 @@ std::u16string CommandLine::commandLineStringInternal(bool quote_placeholders) c
     return string;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string CommandLine::argumentsStringInternal(bool quote_placeholders) const
 {
     std::u16string params;

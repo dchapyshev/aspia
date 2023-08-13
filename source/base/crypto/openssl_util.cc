@@ -25,27 +25,32 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void BIGNUM_CTX_Deleter::operator()(bignum_ctx* bignum_ctx)
 {
     BN_CTX_free(bignum_ctx);
 }
 
+//--------------------------------------------------------------------------------------------------
 void BIGNUM_Deleter::operator()(bignum_st* bignum)
 {
     BN_clear_free(bignum);
 }
 
+//--------------------------------------------------------------------------------------------------
 void EVP_CIPHER_CTX_Deleter::operator()(evp_cipher_ctx_st* ctx)
 {
     EVP_CIPHER_CTX_cleanup(ctx);
     EVP_CIPHER_CTX_free(ctx);
 }
 
+//--------------------------------------------------------------------------------------------------
 void EVP_PKEY_CTX_Deleter::operator()(evp_pkey_ctx_st* ctx)
 {
     EVP_PKEY_CTX_free(ctx);
 }
 
+//--------------------------------------------------------------------------------------------------
 void EVP_PKEY_Deleter::operator()(evp_pkey_st* pkey)
 {
     EVP_PKEY_free(pkey);
@@ -53,6 +58,7 @@ void EVP_PKEY_Deleter::operator()(evp_pkey_st* pkey)
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const EVP_CIPHER* cipherType(CipherType type)
 {
     switch (type)
@@ -69,6 +75,7 @@ const EVP_CIPHER* cipherType(CipherType type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 int cipherMode(CipherMode mode)
 {
     switch (mode)
@@ -87,6 +94,7 @@ int cipherMode(CipherMode mode)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const ByteArray& key, int iv_size)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());

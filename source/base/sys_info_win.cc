@@ -31,6 +31,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isWow64Process()
 {
     BOOL is_wow64_process = FALSE;
@@ -38,6 +39,7 @@ bool isWow64Process()
     return !!is_wow64_process;
 }
 
+//--------------------------------------------------------------------------------------------------
 int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
 {
     DWORD returned_length = 0;
@@ -72,6 +74,7 @@ int processorCount(LOGICAL_PROCESSOR_RELATIONSHIP relationship)
     return count;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size)
 {
     constexpr char kKeyMap[] = "BCDFGHJKMPQRTVWXY2346789";
@@ -125,6 +128,7 @@ std::string digitalProductIdToString(uint8_t* product_id, size_t product_id_size
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 //static
 std::string SysInfo::operatingSystemName()
 {
@@ -183,12 +187,14 @@ std::string SysInfo::operatingSystemName()
     return utf8FromWide(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemVersion()
 {
     return win::OSInfo::instance()->kernel32BaseVersion().toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemArchitecture()
 {
@@ -211,6 +217,7 @@ std::string SysInfo::operatingSystemArchitecture()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemDir()
 {
@@ -222,6 +229,7 @@ std::string SysInfo::operatingSystemDir()
     return dir.u8string();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::operatingSystemKey()
 {
@@ -264,6 +272,7 @@ std::string SysInfo::operatingSystemKey()
     return digitalProductIdToString(product_id.get(), product_id_size);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int64_t SysInfo::operatingSystemInstallDate()
 {
@@ -291,6 +300,7 @@ int64_t SysInfo::operatingSystemInstallDate()
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint64_t SysInfo::uptime()
 {
@@ -312,6 +322,7 @@ uint64_t SysInfo::uptime()
     return static_cast<uint64_t>(counter.QuadPart / frequency.QuadPart);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerName()
 {
@@ -327,6 +338,7 @@ std::string SysInfo::computerName()
     return utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerDomain()
 {
@@ -350,6 +362,7 @@ std::string SysInfo::computerDomain()
     return utf8FromWide(buffer.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string SysInfo::computerWorkgroup()
 {
@@ -371,18 +384,21 @@ std::string SysInfo::computerWorkgroup()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorPackages()
 {
     return processorCount(RelationProcessorPackage);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorCores()
 {
     return processorCount(RelationProcessorCore);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int SysInfo::processorThreads()
 {

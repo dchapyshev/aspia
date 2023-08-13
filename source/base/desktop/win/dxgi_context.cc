@@ -22,22 +22,32 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterContext::DxgiAdapterContext() = default;
+
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterContext::DxgiAdapterContext(const DxgiAdapterContext& context) = default;
+
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterContext& DxgiAdapterContext::operator=(const DxgiAdapterContext& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 DxgiAdapterContext::~DxgiAdapterContext() = default;
 
+//--------------------------------------------------------------------------------------------------
 DxgiFrameContext::DxgiFrameContext(base::local_shared_ptr<DxgiDuplicatorController> controller)
     : controller(std::move(controller))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiFrameContext::~DxgiFrameContext()
 {
     reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DxgiFrameContext::reset()
 {
     controller->unregister(this);

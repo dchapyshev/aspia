@@ -23,6 +23,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 NetShareEnumerator::NetShareEnumerator()
 {
     DWORD entries_read = 0;
@@ -40,22 +41,26 @@ NetShareEnumerator::NetShareEnumerator()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 NetShareEnumerator::~NetShareEnumerator()
 {
     if (share_info_)
         NetApiBufferFree(share_info_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool NetShareEnumerator::isAtEnd() const
 {
     return current_pos_ >= total_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void NetShareEnumerator::advance()
 {
     ++current_pos_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string NetShareEnumerator::name() const
 {
     if (!share_info_[current_pos_].shi502_netname)
@@ -64,6 +69,7 @@ std::string NetShareEnumerator::name() const
     return utf8FromWide(share_info_[current_pos_].shi502_netname);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string NetShareEnumerator::localPath() const
 {
     if (!share_info_[current_pos_].shi502_path)
@@ -72,6 +78,7 @@ std::string NetShareEnumerator::localPath() const
     return utf8FromWide(share_info_[current_pos_].shi502_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string NetShareEnumerator::description() const
 {
     if (!share_info_[current_pos_].shi502_remark)
@@ -80,6 +87,7 @@ std::string NetShareEnumerator::description() const
     return utf8FromWide(share_info_[current_pos_].shi502_remark);
 }
 
+//--------------------------------------------------------------------------------------------------
 NetShareEnumerator::Type NetShareEnumerator::type() const
 {
     switch (share_info_[current_pos_].shi502_type)
@@ -107,11 +115,13 @@ NetShareEnumerator::Type NetShareEnumerator::type() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t NetShareEnumerator::currentUses() const
 {
     return share_info_[current_pos_].shi502_current_uses;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t NetShareEnumerator::maxUses() const
 {
     return share_info_[current_pos_].shi502_max_uses;

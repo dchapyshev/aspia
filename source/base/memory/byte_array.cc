@@ -22,6 +22,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 int charToHex(char ch)
 {
     if (ch >= '0' && ch <= '9')
@@ -36,6 +37,7 @@ int charToHex(char ch)
     return -1;
 }
 
+//--------------------------------------------------------------------------------------------------
 char hexToChar(int value)
 {
     return "0123456789ABCDEF"[value & 0xF];
@@ -43,6 +45,7 @@ char hexToChar(int value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ByteArray fromData(const void* data, size_t size)
 {
     if (!data || !size)
@@ -55,11 +58,13 @@ ByteArray fromData(const void* data, size_t size)
     return out;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray fromStdString(std::string_view in)
 {
     return fromData(in.data(), in.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string toStdString(const ByteArray& in)
 {
     if (in.empty())
@@ -72,6 +77,7 @@ std::string toStdString(const ByteArray& in)
     return out;
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray fromHex(std::string_view in)
 {
     if (in.empty())
@@ -101,6 +107,7 @@ ByteArray fromHex(std::string_view in)
     return out;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string toHex(const ByteArray& in)
 {
     if (in.empty())
@@ -120,6 +127,7 @@ std::string toHex(const ByteArray& in)
     return out;
 }
 
+//--------------------------------------------------------------------------------------------------
 void append(ByteArray* in, const void* data, size_t size)
 {
     if (!in || !data || !size)
@@ -130,6 +138,7 @@ void append(ByteArray* in, const void* data, size_t size)
     memcpy(in->data() + initial_size, data, size);
 }
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray serialize(const google::protobuf::MessageLite& message)
 {
     const size_t size = message.ByteSizeLong();
@@ -143,6 +152,7 @@ base::ByteArray serialize(const google::protobuf::MessageLite& message)
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 int compare(const base::ByteArray& first, const base::ByteArray& second)
 {
     if (first.empty() && second.empty())
@@ -157,6 +167,7 @@ int compare(const base::ByteArray& first, const base::ByteArray& second)
     return memcmp(first.data(), second.data(), first.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const ByteArray& bytearray)
 {
     return out << toHex(bytearray);

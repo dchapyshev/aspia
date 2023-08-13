@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void SimpleThread::threadMain()
 {
     {
@@ -37,17 +38,20 @@ void SimpleThread::threadMain()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SimpleThread::stopSoon()
 {
     state_ = State::STOPPING;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SimpleThread::stop()
 {
     stopSoon();
     join();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SimpleThread::join()
 {
     if (state_ == State::STOPPED)
@@ -61,16 +65,19 @@ void SimpleThread::join()
     state_ = State::STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SimpleThread::isStopping() const
 {
     return state_ == State::STOPPING;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SimpleThread::isRunning() const
 {
     return running_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SimpleThread::start(const RunCallback& run_callback)
 {
     if (state_ != State::STOPPED)

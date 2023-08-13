@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Rect::Rect(const Rect& other)
     : left_(other.left_),
       top_(other.top_),
@@ -32,34 +33,40 @@ Rect::Rect(const Rect& other)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::setTopLeft(const Point& top_left)
 {
     left_ = top_left.x();
     top_ = top_left.y();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::setSize(const Size& size)
 {
     right_ = left_ + size.width();
     bottom_ = top_ + size.height();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Rect::contains(int32_t x, int32_t y) const
 {
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Rect::contains(const Point& pos) const
 {
     return contains(pos.x(), pos.y());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Rect::containsRect(const Rect& rect) const
 {
     return (rect.left_ >= left_ && rect.right_  <= right_ &&
             rect.top_  >= top_  && rect.bottom_ <= bottom_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::translate(int32_t dx, int32_t dy)
 {
     left_   += dx;
@@ -68,6 +75,7 @@ void Rect::translate(int32_t dx, int32_t dy)
     bottom_ += dy;
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect Rect::translated(int32_t dx, int32_t dy) const
 {
     Rect result(*this);
@@ -75,6 +83,7 @@ Rect Rect::translated(int32_t dx, int32_t dy) const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::intersectWith(const Rect& rect)
 {
     left_   = std::max(left(),   rect.left());
@@ -91,6 +100,7 @@ void Rect::intersectWith(const Rect& rect)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::unionWith(const Rect& rect)
 {
     if (isEmpty())
@@ -108,6 +118,7 @@ void Rect::unionWith(const Rect& rect)
     bottom_ = std::max(bottom(), rect.bottom());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::extend(int32_t left_offset,
                          int32_t top_offset,
                          int32_t right_offset,
@@ -119,12 +130,14 @@ void Rect::extend(int32_t left_offset,
     bottom_ += bottom_offset;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::scale(double horizontal, double vertical)
 {
     right_ += static_cast<int32_t>(std::round(width() * (horizontal - 1)));
     bottom_ += static_cast<int32_t>(std::round(height() * (vertical - 1)));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Rect::move(int32_t x, int32_t y)
 {
     right_  += x - left_;
@@ -133,6 +146,7 @@ void Rect::move(int32_t x, int32_t y)
     top_  = y;
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect Rect::moved(int32_t x, int32_t y) const
 {
     Rect moved_rect(*this);
@@ -140,6 +154,7 @@ Rect Rect::moved(int32_t x, int32_t y) const
     return moved_rect;
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect& Rect::operator=(const Rect& other)
 {
     left_   = other.left_;
@@ -150,6 +165,7 @@ Rect& Rect::operator=(const Rect& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& stream, const Rect& rect)
 {
     return stream << "Rect("
@@ -158,11 +174,13 @@ std::ostream& operator<<(std::ostream& stream, const Rect& rect)
                   << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& stream, const Point& point)
 {
     return stream << "Point(" << point.x() << ' ' << point.y() << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& stream, const Size& size)
 {
     return stream << "Size(" << size.width() << ' ' << size.height() << ')';

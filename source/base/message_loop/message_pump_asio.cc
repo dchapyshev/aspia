@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForAsio::run(Delegate* delegate)
 {
     DCHECK(keep_running_) << "Quit must have been called outside of run!";
@@ -91,17 +92,20 @@ void MessagePumpForAsio::run(Delegate* delegate)
     keep_running_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForAsio::quit()
 {
     keep_running_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForAsio::scheduleWork()
 {
     // Since this can be called on any thread, we need to ensure that our run() loop wakes up.
     asio::post(io_context_, []{});
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForAsio::scheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can

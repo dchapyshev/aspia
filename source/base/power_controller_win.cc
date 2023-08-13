@@ -33,6 +33,7 @@ namespace {
 // Delay for shutdown and reboot.
 const DWORD kActionDelayInSeconds = 0;
 
+//--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
 {
     win::ScopedHandle process_token;
@@ -58,6 +59,7 @@ bool copyProcessToken(DWORD desired_access, win::ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Creates a copy of the current process with SE_SHUTDOWN_NAME privilege enabled.
 bool createPrivilegedToken(win::ScopedHandle* token_out)
 {
@@ -95,6 +97,7 @@ bool createPrivilegedToken(win::ScopedHandle* token_out)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::shutdown()
 {
@@ -138,6 +141,7 @@ bool PowerController::shutdown()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::reboot()
 {
@@ -181,6 +185,7 @@ bool PowerController::reboot()
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::logoff()
 {
@@ -209,6 +214,7 @@ bool PowerController::logoff()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::lock()
 {

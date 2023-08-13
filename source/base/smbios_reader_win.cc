@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 std::string readSmbiosDump()
 {
     UINT buffer_size = GetSystemFirmwareTable('RSMB', 'PCAF', nullptr, 0);

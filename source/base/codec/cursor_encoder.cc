@@ -37,6 +37,7 @@ constexpr int kCompressionRatio = 12;
 // Recommended seed value for a hash.
 constexpr uint32_t kHashingSeed = 5381;
 
+//--------------------------------------------------------------------------------------------------
 uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
@@ -45,6 +46,7 @@ uint8_t* outputBuffer(proto::CursorShape* cursor_shape, size_t size)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 CursorEncoder::CursorEncoder()
     : stream_(ZSTD_createCStream())
 {
@@ -57,11 +59,13 @@ CursorEncoder::CursorEncoder()
     cache_.reserve(kCacheSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 CursorEncoder::~CursorEncoder()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool CursorEncoder::compressCursor(
     const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape) const
 {
@@ -125,6 +129,7 @@ bool CursorEncoder::compressCursor(
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::CursorShape* cursor_shape)
 {
     const Size& size = mouse_cursor.size();

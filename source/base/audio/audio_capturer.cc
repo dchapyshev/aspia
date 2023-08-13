@@ -27,6 +27,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // Returns true if the sampling rate is supported by Pepper.
 bool AudioCapturer::isValidSampleRate(int sample_rate)
 {
@@ -43,6 +44,7 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<AudioCapturer> AudioCapturer::create()
 {
 #if defined(OS_WIN)

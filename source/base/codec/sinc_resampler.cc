@@ -136,6 +136,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedSubnormalFloatDisabler);
 };
 
+//--------------------------------------------------------------------------------------------------
 static double SincScaleFactor(double io_ratio)
 {
     // |sinc_scale_factor| is basically the normalized cutoff frequency of the
@@ -153,11 +154,13 @@ static double SincScaleFactor(double io_ratio)
     return sinc_scale_factor;
 }
 
+//--------------------------------------------------------------------------------------------------
 static int CalculateChunkSize(int block_size_, double io_ratio)
 {
     return static_cast<int>(block_size_ / io_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 SincResampler::SincResampler(double io_sample_rate_ratio,
                              int request_frames,
                              const ReadCB& read_cb)
@@ -186,8 +189,10 @@ SincResampler::SincResampler(double io_sample_rate_ratio,
     InitializeKernel();
 }
 
+//--------------------------------------------------------------------------------------------------
 SincResampler::~SincResampler() = default;
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::UpdateRegions(bool second_load)
 {
     // Setup various region pointers in the buffer (see diagram above).  If we're
@@ -206,6 +211,7 @@ void SincResampler::UpdateRegions(bool second_load)
     CHECK_LT(r2_, r3_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::InitializeKernel()
 {
     // Blackman window parameters.
@@ -242,6 +248,7 @@ void SincResampler::InitializeKernel()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::SetRatio(double io_sample_rate_ratio)
 {
     if (fabs(io_sample_rate_ratio_ - io_sample_rate_ratio) < std::numeric_limits<double>::epsilon())
@@ -267,6 +274,7 @@ void SincResampler::SetRatio(double io_sample_rate_ratio)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::Resample(int frames, float* destination)
 {
     int remaining_frames = frames;
@@ -336,6 +344,7 @@ void SincResampler::Resample(int frames, float* destination)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::PrimeWithSilence()
 {
     // By enforcing the buffer hasn't been primed, we ensure the input buffer has
@@ -345,6 +354,7 @@ void SincResampler::PrimeWithSilence()
     UpdateRegions(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SincResampler::Flush()
 {
     virtual_source_idx_ = 0;
@@ -353,11 +363,13 @@ void SincResampler::Flush()
     UpdateRegions(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 double SincResampler::BufferedFrames() const
 {
     return buffer_primed_ ? request_frames_ - virtual_source_idx_ : 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_C(const float* input_ptr, const float* k1,
                                 const float* k2,
                                 double kernel_interpolation_factor)
@@ -379,6 +391,7 @@ float SincResampler::Convolve_C(const float* input_ptr, const float* k1,
 }
 
 #if defined(ARCH_CPU_X86_FAMILY)
+//--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_SSE(const float* input_ptr, const float* k1,
                                   const float* k2,
                                   double kernel_interpolation_factor)
@@ -421,6 +434,7 @@ float SincResampler::Convolve_SSE(const float* input_ptr, const float* k1,
     return result;
 }
 #elif defined(ARCH_CPU_ARM_FAMILY) && defined(USE_NEON)
+//--------------------------------------------------------------------------------------------------
 float SincResampler::Convolve_NEON(const float* input_ptr, const float* k1,
                                    const float* k2,
                                    double kernel_interpolation_factor)

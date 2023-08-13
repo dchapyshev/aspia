@@ -30,6 +30,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::string_view> splitString(std::string_view str, char separator)
 {
     std::vector<std::string_view> result;
@@ -62,6 +63,7 @@ std::vector<std::string_view> splitString(std::string_view str, char separator)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Parses the |numbers| vector representing the different numbers inside the version string and
 // constructs a vector of valid integers. It stops when it reaches an invalid item (including the
 // wildcard character). |parsed| is the resulting integer vector. Function returns true if all
@@ -100,6 +102,7 @@ bool parseVersionNumbers(std::string_view version_str, std::vector<uint32_t>* pa
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Compares version components in |components1| with components in
 // |components2|. Returns -1, 0 or 1 if |components1| is less than, equal to,
 // or greater than |components2|, respectively.
@@ -139,14 +142,22 @@ int compareVersionComponents(const std::vector<uint32_t>& components1,
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 Version::Version() = default;
 
+//--------------------------------------------------------------------------------------------------
 Version::Version(const Version& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 Version& Version::operator=(const Version& other) = default;
 
+//--------------------------------------------------------------------------------------------------
 Version::Version(Version&& other) noexcept = default;
+
+//--------------------------------------------------------------------------------------------------
 Version& Version::operator=(Version&& other) noexcept = default;
 
+//--------------------------------------------------------------------------------------------------
 Version::Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revision)
 {
     components_.push_back(major);
@@ -155,8 +166,10 @@ Version::Version(uint32_t major, uint32_t minor, uint32_t build, uint32_t revisi
     components_.push_back(revision);
 }
 
+//--------------------------------------------------------------------------------------------------
 Version::~Version() = default;
 
+//--------------------------------------------------------------------------------------------------
 Version::Version(std::string_view version_str)
 {
     std::vector<uint32_t> parsed;
@@ -167,17 +180,20 @@ Version::Version(std::string_view version_str)
     components_.swap(parsed);
 }
 
+//--------------------------------------------------------------------------------------------------
 Version::Version(const std::vector<uint32_t>& components)
     : components_(components)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Version::isValid() const
 {
     return (!components_.empty());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Version::isValidWildcardString(std::string_view wildcard_string)
 {
@@ -189,6 +205,7 @@ bool Version::isValidWildcardString(std::string_view wildcard_string)
     return version.isValid();
 }
 
+//--------------------------------------------------------------------------------------------------
 int Version::compareToWildcardString(std::string_view wildcard_string) const
 {
     DCHECK(isValid());
@@ -230,6 +247,7 @@ int Version::compareToWildcardString(std::string_view wildcard_string) const
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 int Version::compareTo(const Version& other) const
 {
     if (!other.isValid() && !isValid())
@@ -244,6 +262,7 @@ int Version::compareTo(const Version& other) const
     return compareVersionComponents(components_, other.components_);
 }
 
+//--------------------------------------------------------------------------------------------------
 const std::string Version::toString(size_t components_count) const
 {
     if (!isValid() || !components_count)
@@ -266,6 +285,7 @@ const std::string Version::toString(size_t components_count) const
     return version_str;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::Version Version::toProto() const
 {
     proto::Version proto_version;
@@ -298,6 +318,7 @@ proto::Version Version::toProto() const
     return proto_version;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Version Version::fromProto(const proto::Version& proto_version)
 {
@@ -305,36 +326,43 @@ Version Version::fromProto(const proto::Version& proto_version)
                    proto_version.patch(), proto_version.revision());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator==(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) == 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator!=(const Version& v1, const Version& v2)
 {
     return !(v1 == v2);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator<(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) < 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator<=(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) <= 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator>(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) > 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool operator>=(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) >= 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& stream, const Version& v)
 {
     return stream << v.toString();

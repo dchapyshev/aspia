@@ -35,6 +35,7 @@ namespace {
 
 const size_t kIvSize = 12; // 12 bytes.
 
+//--------------------------------------------------------------------------------------------------
 bool verifyNg(std::string_view N, std::string_view g)
 {
     switch (N.size())
@@ -70,42 +71,50 @@ bool verifyNg(std::string_view N, std::string_view g)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ClientAuthenticator::ClientAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientAuthenticator::~ClientAuthenticator()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPeerPublicKey(const ByteArray& public_key)
 {
     peer_public_key_ = public_key;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setIdentify(proto::Identify identify)
 {
     identify_ = identify;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setUserName(std::u16string_view username)
 {
     username_ = username;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPassword(std::u16string_view password)
 {
     password_ = password;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setSessionType(uint32_t session_type)
 {
     session_type_ = session_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::onStarted()
 {
     internal_state_ = InternalState::SEND_CLIENT_HELLO;
@@ -113,6 +122,7 @@ bool ClientAuthenticator::onStarted()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::onReceived(const ByteArray& buffer)
 {
     switch (internal_state_)
@@ -162,6 +172,7 @@ void ClientAuthenticator::onReceived(const ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::onWritten()
 {
     switch (internal_state_)
@@ -204,6 +215,7 @@ void ClientAuthenticator::onWritten()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.
@@ -270,6 +282,7 @@ void ClientAuthenticator::sendClientHello()
     sendMessage(*client_hello);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerHello";
@@ -312,6 +325,7 @@ bool ClientAuthenticator::readServerHello(const ByteArray& buffer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendIdentify()
 {
     std::unique_ptr<proto::SrpIdentify> identify = std::make_unique<proto::SrpIdentify>();
@@ -321,6 +335,7 @@ void ClientAuthenticator::sendIdentify()
     sendMessage(*identify);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ServerKeyExchange";
@@ -384,6 +399,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientKeyExchange()
 {
     std::unique_ptr<proto::SrpClientKeyExchange> client_key_exchange =
@@ -395,6 +411,7 @@ void ClientAuthenticator::sendClientKeyExchange()
     sendMessage(*client_key_exchange);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionChallenge";
@@ -425,6 +442,7 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendSessionResponse()
 {
     std::unique_ptr<proto::SessionResponse> response = std::make_unique<proto::SessionResponse>();

@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 OpenFilesEnumerator::OpenFilesEnumerator()
 {
     DWORD total_entries = 0;
@@ -52,27 +53,32 @@ OpenFilesEnumerator::OpenFilesEnumerator()
     total_entries_ = total_entries;
 }
 
+//--------------------------------------------------------------------------------------------------
 OpenFilesEnumerator::~OpenFilesEnumerator()
 {
     if (file_info_)
         NetApiBufferFree(file_info_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool OpenFilesEnumerator::isAtEnd() const
 {
     return current_pos_ >= total_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void OpenFilesEnumerator::advance()
 {
     ++current_pos_;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t OpenFilesEnumerator::id() const
 {
     return file_info_[current_pos_].fi3_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string OpenFilesEnumerator::userName() const
 {
     wchar_t* user_name = file_info_[current_pos_].fi3_username;
@@ -82,11 +88,13 @@ std::string OpenFilesEnumerator::userName() const
     return utf8FromWide(user_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t OpenFilesEnumerator::lockCount() const
 {
     return file_info_[current_pos_].fi3_num_locks;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string OpenFilesEnumerator::filePath() const
 {
     wchar_t* file_path = file_info_[current_pos_].fi3_pathname;

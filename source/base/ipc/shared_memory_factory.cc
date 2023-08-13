@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactory::SharedMemoryFactory(Delegate* delegate)
     : factory_proxy_(base::make_local_shared<SharedMemoryFactoryProxy>(this)),
       delegate_(delegate)
@@ -30,26 +31,31 @@ SharedMemoryFactory::SharedMemoryFactory(Delegate* delegate)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactory::~SharedMemoryFactory()
 {
     factory_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedMemory> SharedMemoryFactory::create(size_t size)
 {
     return SharedMemory::create(SharedMemory::Mode::READ_WRITE, size, factory_proxy_);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<SharedMemory> SharedMemoryFactory::open(int id)
 {
     return SharedMemory::open(SharedMemory::Mode::READ_ONLY, id, factory_proxy_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedMemoryFactory::onSharedMemoryCreate(int id)
 {
     delegate_->onSharedMemoryCreate(id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedMemoryFactory::onSharedMemoryDestroy(int id)
 {
     delegate_->onSharedMemoryDestroy(id);

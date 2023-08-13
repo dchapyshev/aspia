@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 IpcChannelProxy::IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcChannel* channel)
     : task_runner_(std::move(task_runner)),
       channel_(channel)
@@ -30,6 +31,7 @@ IpcChannelProxy::IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcCha
     DCHECK(task_runner_ && channel_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannelProxy::send(ByteArray&& buffer)
 {
     bool schedule_write;
@@ -47,11 +49,13 @@ void IpcChannelProxy::send(ByteArray&& buffer)
     task_runner_->postTask(std::bind(&IpcChannelProxy::scheduleWrite, shared_from_this()));
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void IpcChannelProxy::scheduleWrite()
 {
     if (!channel_)
@@ -63,6 +67,7 @@ void IpcChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool IpcChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
 {
     if (!work_queue->empty())

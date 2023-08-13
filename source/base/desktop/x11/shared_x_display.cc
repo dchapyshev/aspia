@@ -27,18 +27,21 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SharedXDisplay::SharedXDisplay(Display* display)
     : display_(display)
 {
     DCHECK(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedXDisplay::~SharedXDisplay()
 {
     DCHECK(event_handlers_.empty());
     XCloseDisplay(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 base::local_shared_ptr<SharedXDisplay> SharedXDisplay::create(const std::string& display_name)
 {
@@ -52,17 +55,20 @@ base::local_shared_ptr<SharedXDisplay> SharedXDisplay::create(const std::string&
     return base::make_local_shared<SharedXDisplay>(display);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 base::local_shared_ptr<SharedXDisplay> SharedXDisplay::createDefault()
 {
     return create(std::string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::addEventHandler(int type, XEventHandler* handler)
 {
     event_handlers_[type].push_back(handler);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
 {
     EventHandlersMap::iterator handlers = event_handlers_.find(type);
@@ -78,6 +84,7 @@ void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
         event_handlers_.erase(handlers);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::processPendingXEvents()
 {
     // Hold reference to |this| to prevent it from being destroyed while processing events.
@@ -105,6 +112,7 @@ void SharedXDisplay::processPendingXEvents()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedXDisplay::ignoreXServerGrabs()
 {
     int test_event_base = 0;

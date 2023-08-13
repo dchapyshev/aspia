@@ -31,18 +31,21 @@ namespace base {
 const uint32_t PasswordGenerator::kDefaultCharacters = UPPER_CASE | LOWER_CASE | DIGITS;
 const size_t PasswordGenerator::kDefaultLength = 8;
 
+//--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setCharacters(uint32_t value)
 {
     if (value)
         characters_ = value;
 }
 
+//--------------------------------------------------------------------------------------------------
 void PasswordGenerator::setLength(size_t value)
 {
     if (value)
         length_ = value;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string PasswordGenerator::result() const
 {
     constexpr std::string_view lower_case = "abcdefghijklmnopqrstuvwxyz";

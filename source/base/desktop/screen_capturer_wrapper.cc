@@ -40,6 +40,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type,
                                              Delegate* delegate)
     : preferred_type_(preferred_type),
@@ -93,11 +94,13 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     selectCapturer();
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerWrapper::~ScreenCapturerWrapper()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -177,6 +180,7 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::captureFrame()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -259,6 +263,7 @@ void ScreenCapturerWrapper::captureFrame()
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
@@ -267,6 +272,7 @@ void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_m
         screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     if (environment_)
@@ -279,6 +285,7 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableEffects(bool enable)
 {
     if (environment_)
@@ -291,6 +298,7 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
 {
     if (environment_)
@@ -303,11 +311,13 @@ void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableCursorPosition(bool enable)
 {
     enable_cursor_position_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
     ScreenCapturer::ScreenList screen_list;
@@ -331,6 +341,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
     return ScreenCapturer::kFullDesktopScreenId;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::selectCapturer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -419,6 +430,7 @@ void ScreenCapturerWrapper::selectCapturer()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);

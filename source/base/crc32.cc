@@ -77,6 +77,7 @@ const uint32_t kCrcTable[256] =
     0x2d02ef8dL,
 };
 
+//--------------------------------------------------------------------------------------------------
 // We generate the CRC-32 using the low order bits to select whether to XOR in the reversed
 // polynomial 0xEDB88320. This is nice and simple, and allows us to keep the quotient in a uint32_t.
 // Since we're not concerned about the nature of corruptions (i.e., we don't care about bit

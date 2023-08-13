@@ -214,6 +214,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<PixelTranslator> PixelTranslator::create(
     const PixelFormat& source_format, const PixelFormat& target_format)

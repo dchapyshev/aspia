@@ -35,6 +35,7 @@ const int kMacroBlockSize = 16;
 
 const std::chrono::milliseconds kTargetFrameInterval{ 80 };
 
+//--------------------------------------------------------------------------------------------------
 void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 {
     // Use millisecond granularity time base.
@@ -72,17 +73,20 @@ void setCodecParameters(vpx_codec_enc_cfg_t* config, const Size& size)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 WebmVideoEncoder::WebmVideoEncoder()
 {
     LOG(LS_INFO) << "Ctor";
     memset(&config_, 0, sizeof(config_));
 }
 
+//--------------------------------------------------------------------------------------------------
 WebmVideoEncoder::~WebmVideoEncoder()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
 {
     DCHECK(packet);
@@ -154,6 +158,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmVideoEncoder::createImage()
 {
     image_ = std::make_unique<vpx_image_t>();
@@ -196,6 +201,7 @@ void WebmVideoEncoder::createImage()
     image_->stride[1] = image_->stride[2] = uv_stride;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmVideoEncoder::createCodec()
 {
     codec_.reset(new vpx_codec_ctx_t());

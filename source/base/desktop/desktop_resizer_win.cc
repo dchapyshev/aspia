@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isModeValid(const DEVMODEW& mode)
 {
     const DWORD kRequiredFields =
@@ -37,6 +38,7 @@ bool isModeValid(const DEVMODEW& mode)
     return (mode.dmFields & kRequiredFields) == kRequiredFields;
 }
 
+//--------------------------------------------------------------------------------------------------
 Size resolutionFromMode(const DEVMODEW& mode)
 {
     DCHECK(isModeValid(mode));
@@ -45,6 +47,7 @@ Size resolutionFromMode(const DEVMODEW& mode)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // Provide comparison operation for base::Size so we can use it in std::map.
 static inline bool operator<(const Size& a, const Size& b)
 {
@@ -74,6 +77,7 @@ private:
     std::map<Size, DEVMODEW> best_mode_;
 };
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     : screen_id_(screen_id)
 {
@@ -112,6 +116,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
 {
     std::vector<Size> result;
@@ -122,6 +127,7 @@ std::vector<Size> DesktopResizerWin::Screen::supportedResolutions() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
 {
     if (current_resolution_ == resolution)
@@ -150,6 +156,7 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::Screen::restoreResolution()
 {
     // Restore the display mode based on the registry configuration.
@@ -160,6 +167,7 @@ void DesktopResizerWin::Screen::restoreResolution()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMODEW* mode)
 {
     DCHECK(mode);
@@ -172,6 +180,7 @@ bool DesktopResizerWin::Screen::modeForResolution(const Size& resolution, DEVMOD
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::Screen::updateBestModeForResolution(
     const DEVMODEW& current_mode, const DEVMODEW& candidate_mode)
 {
@@ -231,6 +240,7 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
     best_mode_[candidate_resolution] = candidate_mode;
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::DesktopResizerWin()
 {
     ScreenCapturer::ScreenList screen_list;
@@ -244,11 +254,13 @@ DesktopResizerWin::DesktopResizerWin()
         screens_.emplace(screen.id, std::make_unique<Screen>(screen.id));
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopResizerWin::~DesktopResizerWin()
 {
     restoreResulution();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
@@ -261,6 +273,7 @@ std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
     return screen->second->supportedResolutions();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution)
 {
     auto screen = screens_.find(screen_id);
@@ -273,6 +286,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
     return screen->second->setResolution(resolution);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::restoreResolution(ScreenId screen_id)
 {
     auto screen = screens_.find(screen_id);
@@ -285,6 +299,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
     screen->second->restoreResolution();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopResizerWin::restoreResulution()
 {
     for (const auto& screen : screens_)

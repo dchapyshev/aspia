@@ -35,12 +35,14 @@ constexpr wchar_t kProviderNameKey[] = L"ProviderName";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::DeviceEnumerator()
     : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT | DIGCF_PROFILE)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
 {
     device_info_.reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
@@ -53,8 +55,10 @@ DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
     device_info_data_.cbSize = sizeof(device_info_data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DeviceEnumerator::~DeviceEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool DeviceEnumerator::isAtEnd() const
 {
     if (!SetupDiEnumDeviceInfo(device_info_.get(), device_index_, &device_info_data_))
@@ -73,11 +77,13 @@ bool DeviceEnumerator::isAtEnd() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DeviceEnumerator::advance()
 {
     ++device_index_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::friendlyName() const
 {
     wchar_t friendly_name[MAX_PATH] = { 0 };
@@ -97,6 +103,7 @@ std::string DeviceEnumerator::friendlyName() const
     return utf8FromWide(friendly_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::description() const
 {
     wchar_t description[MAX_PATH] = { 0 };
@@ -116,6 +123,7 @@ std::string DeviceEnumerator::description() const
     return utf8FromWide(description);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring DeviceEnumerator::driverKeyPath() const
 {
     wchar_t driver[MAX_PATH] = { 0 };
@@ -138,6 +146,7 @@ std::wstring DeviceEnumerator::driverKeyPath() const
     return driver_key_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = driverKeyPath();
@@ -163,6 +172,7 @@ std::wstring DeviceEnumerator::driverRegistryString(const wchar_t* key_name) con
     return value;
 }
 
+//--------------------------------------------------------------------------------------------------
 DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = driverKeyPath();
@@ -187,21 +197,25 @@ DWORD DeviceEnumerator::driverRegistryDW(const wchar_t* key_name) const
     return value;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverVersion() const
 {
     return utf8FromWide(driverRegistryString(kDriverVersionKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverDate() const
 {
     return utf8FromWide(driverRegistryString(kDriverDateKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::driverVendor() const
 {
     return utf8FromWide(driverRegistryString(kProviderNameKey));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string DeviceEnumerator::deviceID() const
 {
     wchar_t device_id[MAX_PATH] = { 0 };

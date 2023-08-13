@@ -29,6 +29,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 Point dpiByRect(const Rect& rect)
 {
     Point result(96, 96);
@@ -102,6 +103,7 @@ Point dpiByRect(const Rect& rect)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
 {
@@ -148,6 +150,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
 {
@@ -170,6 +173,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wst
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Rect ScreenCaptureUtils::fullScreenRect()
 {
@@ -179,6 +183,7 @@ Rect ScreenCaptureUtils::fullScreenRect()
                           GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                                     const std::wstring& device_key)
@@ -220,6 +225,7 @@ Rect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
                           static_cast<int32_t>(device_mode.dmPelsHeight));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int ScreenCaptureUtils::screenCount()
 {

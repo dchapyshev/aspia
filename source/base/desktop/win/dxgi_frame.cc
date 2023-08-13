@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 DxgiFrame::DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller,
                      SharedMemoryFactory* shared_memory_factory)
     : shared_memory_factory_(shared_memory_factory),
@@ -34,11 +35,13 @@ DxgiFrame::DxgiFrame(base::local_shared_ptr<DxgiDuplicatorController> controller
                  << " shared memory factory";
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiFrame::~DxgiFrame()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 {
     if (source_id != source_id_)
@@ -96,12 +99,14 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
     return !!frame_;
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedFrame* DxgiFrame::frame() const
 {
     DCHECK(frame_);
     return frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 DxgiFrame::Context* DxgiFrame::context()
 {
     DCHECK(frame_);

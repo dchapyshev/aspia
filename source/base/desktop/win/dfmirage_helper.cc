@@ -37,6 +37,7 @@ struct DeviceMode : DEVMODEW
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DFMirageHelper::DFMirageHelper(const Rect& screen_rect)
     : screen_rect_(screen_rect)
 {
@@ -45,6 +46,7 @@ DFMirageHelper::DFMirageHelper(const Rect& screen_rect)
     memset(&get_changes_buffer_, 0, sizeof(get_changes_buffer_));
 }
 
+//--------------------------------------------------------------------------------------------------
 DFMirageHelper::~DFMirageHelper()
 {
     if (is_mapped_)
@@ -57,6 +59,7 @@ DFMirageHelper::~DFMirageHelper()
         update(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
 {
@@ -98,6 +101,7 @@ std::unique_ptr<DFMirageHelper> DFMirageHelper::create(const Rect& screen_rect)
     return helper;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DFMirageHelper::addUpdatedRects(Region* updated_region) const
 {
     DCHECK(updated_region);
@@ -119,6 +123,7 @@ void DFMirageHelper::addUpdatedRects(Region* updated_region) const
     last_update_ = next_update;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) const
 {
     DCHECK(frame);
@@ -135,6 +140,7 @@ void DFMirageHelper::copyRegion(Frame* frame, const Region& updated_region) cons
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DFMirageHelper::update(bool load)
 {
     static const DWORD dmf_devmodewext_magic_sig = 0xDF20C0DE;
@@ -177,6 +183,7 @@ bool DFMirageHelper::update(bool load)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DFMirageHelper::mapMemory(bool map)
 {
     if (map)

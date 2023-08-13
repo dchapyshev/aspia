@@ -36,6 +36,7 @@ const wchar_t kInstallLocation[] = L"InstallLocation";
 const wchar_t kSystemComponent[] = L"SystemComponent";
 const wchar_t kParentKeyName[] = L"ParentKeyName";
 
+//--------------------------------------------------------------------------------------------------
 bool addApplication(
     proto::system_info::Applications* message, const wchar_t* key_name, REGSAM access)
 {
@@ -92,6 +93,7 @@ bool addApplication(
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void readApplicationsInformation(proto::system_info::Applications* applications)
 {
     win::RegistryKeyIterator machine_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath);

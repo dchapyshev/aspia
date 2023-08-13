@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool EndianUtil::isLittle()
 {
@@ -38,6 +39,7 @@ bool EndianUtil::isLittle()
     return is_endian.little;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint16_t EndianUtil::byteSwap(uint16_t value)
 {
@@ -50,6 +52,7 @@ uint16_t EndianUtil::byteSwap(uint16_t value)
 #endif // defined(CC_*)
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint32_t EndianUtil::byteSwap(uint32_t value)
 {
@@ -65,6 +68,7 @@ uint32_t EndianUtil::byteSwap(uint32_t value)
 #endif // defined(CC_*)
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint64_t EndianUtil::byteSwap(uint64_t value)
 {

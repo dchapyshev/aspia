@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
 uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
@@ -34,6 +35,7 @@ uint8_t* outputBuffer(proto::VideoPacket* packet, size_t size)
     return reinterpret_cast<uint8_t*>(packet->mutable_data()->data());
 }
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -47,6 +49,7 @@ void serializePixelFormat(const PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
+//--------------------------------------------------------------------------------------------------
 void serializeRect(const Rect& from, proto::Rect* to)
 {
     to->set_x(from.x());
@@ -57,6 +60,7 @@ void serializeRect(const Rect& from, proto::Rect* to)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 VideoEncoderZstd::VideoEncoderZstd(const PixelFormat& target_format, int compression_ratio)
     : VideoEncoder(proto::VIDEO_ENCODING_ZSTD),
       target_format_(target_format),
@@ -66,8 +70,10 @@ VideoEncoderZstd::VideoEncoderZstd(const PixelFormat& target_format, int compres
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoEncoderZstd::~VideoEncoderZstd() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
     const PixelFormat& target_format, int compression_ratio)
@@ -81,6 +87,7 @@ std::unique_ptr<VideoEncoderZstd> VideoEncoderZstd::create(
         new VideoEncoderZstd(target_format, compression_ratio));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
                                       const uint8_t* input_data,
                                       size_t input_size)
@@ -119,6 +126,7 @@ bool VideoEncoderZstd::compressPacket(proto::VideoPacket* packet,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
 {
     fillPacketInfo(frame, packet);
@@ -201,6 +209,7 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderZstd::setCompressRatio(int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel() || compression_ratio < 1)
@@ -213,6 +222,7 @@ bool VideoEncoderZstd::setCompressRatio(int compression_ratio)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 int VideoEncoderZstd::compressRatio() const
 {
     return compress_ratio_;

@@ -28,6 +28,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 UserEnumerator::UserEnumerator()
 {
     DWORD entries_read = 0;
@@ -45,22 +46,26 @@ UserEnumerator::UserEnumerator()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 UserEnumerator::~UserEnumerator()
 {
     if (user_info_)
         NetApiBufferFree(user_info_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserEnumerator::advance()
 {
     ++current_entry_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isAtEnd() const
 {
     return current_entry_ >= total_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserEnumerator::name() const
 {
     if (!user_info_[current_entry_].usri3_name)
@@ -68,6 +73,7 @@ std::string UserEnumerator::name() const
     return utf8FromWide(user_info_[current_entry_].usri3_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserEnumerator::fullName() const
 {
     if (!user_info_[current_entry_].usri3_full_name)
@@ -75,6 +81,7 @@ std::string UserEnumerator::fullName() const
     return utf8FromWide(user_info_[current_entry_].usri3_full_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserEnumerator::comment() const
 {
     if (!user_info_[current_entry_].usri3_comment)
@@ -82,6 +89,7 @@ std::string UserEnumerator::comment() const
     return utf8FromWide(user_info_[current_entry_].usri3_comment);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string UserEnumerator::homeDir() const
 {
     if (!user_info_[current_entry_].usri3_home_dir)
@@ -89,6 +97,7 @@ std::string UserEnumerator::homeDir() const
     return utf8FromWide(user_info_[current_entry_].usri3_home_dir);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
 {
     const wchar_t* user_name = user_info_[current_entry_].usri3_name;
@@ -139,41 +148,49 @@ std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isDisabled() const
 {
     return user_info_[current_entry_].usri3_flags & UF_ACCOUNTDISABLE;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isPasswordCantChange() const
 {
     return user_info_[current_entry_].usri3_flags & UF_PASSWD_CANT_CHANGE;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isPasswordExpired() const
 {
     return user_info_[current_entry_].usri3_flags & UF_PASSWORD_EXPIRED;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isDontExpirePassword() const
 {
     return user_info_[current_entry_].usri3_flags & UF_DONT_EXPIRE_PASSWD;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserEnumerator::isLockout() const
 {
     return user_info_[current_entry_].usri3_flags & UF_LOCKOUT;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t UserEnumerator::numberLogons() const
 {
     return user_info_[current_entry_].usri3_num_logons;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t UserEnumerator::badPasswordCount() const
 {
     return user_info_[current_entry_].usri3_bad_pw_count;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint64_t UserEnumerator::lastLogonTime() const
 {
     return user_info_[current_entry_].usri3_last_logon;

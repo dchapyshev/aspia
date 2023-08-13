@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return PixelFormat(
@@ -38,6 +39,7 @@ PixelFormat parsePixelFormat(const proto::PixelFormat& format)
         static_cast<uint8_t>(format.blue_shift()));
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect parseRect(const proto::Rect& rect)
 {
     return Rect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
@@ -45,23 +47,27 @@ Rect parseRect(const proto::Rect& rect)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 VideoDecoderZstd::VideoDecoderZstd()
     : stream_(ZSTD_createDStream())
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoDecoderZstd::~VideoDecoderZstd()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoDecoderZstd> VideoDecoderZstd::create()
 {
     return std::unique_ptr<VideoDecoderZstd>(new VideoDecoderZstd());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_frame)
 {
     if (packet.has_format())

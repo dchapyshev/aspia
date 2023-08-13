@@ -26,11 +26,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Thread::~Thread()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::start(MessageLoop::Type message_loop_type, Delegate* delegate)
 {
     DCHECK(!message_loop_);
@@ -49,6 +51,7 @@ void Thread::start(MessageLoop::Type message_loop_type, Delegate* delegate)
     DCHECK(message_loop_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::stopSoon()
 {
     if (state_ == State::STOPPING || !message_loop_)
@@ -59,6 +62,7 @@ void Thread::stopSoon()
     message_loop_->postTask(message_loop_->quitClosure());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::stop()
 {
     if (state_ == State::STOPPED)
@@ -79,6 +83,7 @@ void Thread::stop()
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::join()
 {
     if (state_ == State::STOPPED)
@@ -92,11 +97,13 @@ void Thread::join()
     state_ = State::STOPPED;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::Delegate::onThreadRunning(MessageLoop* message_loop)
 {
     message_loop->run();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Thread::threadMain(MessageLoop::Type message_loop_type)
 {
     // The message loop for this thread.
@@ -147,6 +154,7 @@ void Thread::threadMain(MessageLoop::Type message_loop_type)
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 bool Thread::setPriority(Priority priority)
 {
     if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
