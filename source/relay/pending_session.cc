@@ -34,6 +34,7 @@ constexpr uint32_t kMaxMessageSize = 1 * 1024 * 1024; // 1 MB
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
                                asio::ip::tcp::socket&& socket,
                                Delegate* delegate)
@@ -44,11 +45,13 @@ PendingSession::PendingSession(std::shared_ptr<base::TaskRunner> task_runner,
     address_ = socket_.remote_endpoint().address().to_string();
 }
 
+//--------------------------------------------------------------------------------------------------
 PendingSession::~PendingSession()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void PendingSession::start()
 {
     LOG(LS_INFO) << "Starting pending session";
@@ -70,6 +73,7 @@ void PendingSession::start()
     PendingSession::doReadMessage(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void PendingSession::stop()
 {
     if (!delegate_)
@@ -83,12 +87,14 @@ void PendingSession::stop()
     socket_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void PendingSession::setIdentify(uint32_t key_id, const base::ByteArray& secret)
 {
     secret_ = secret;
     key_id_ = key_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool PendingSession::isPeerFor(const PendingSession& other) const
 {
     if (&other == this)
@@ -100,26 +106,31 @@ bool PendingSession::isPeerFor(const PendingSession& other) const
     return key_id_ == other.key_id_ && base::equals(secret_, other.secret_);
 }
 
+//--------------------------------------------------------------------------------------------------
 asio::ip::tcp::socket PendingSession::takeSocket()
 {
     return std::move(socket_);
 }
 
+//--------------------------------------------------------------------------------------------------
 const std::string& PendingSession::address() const
 {
     return address_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::chrono::seconds PendingSession::duration(const TimePoint& now) const
 {
     return std::chrono::duration_cast<std::chrono::seconds>(now - start_time_);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t PendingSession::keyId() const
 {
     return key_id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void PendingSession::doReadMessage(PendingSession* session)
 {
@@ -171,6 +182,7 @@ void PendingSession::doReadMessage(PendingSession* session)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void PendingSession::onErrorOccurred(
     const base::Location& location, const std::error_code& error_code)
 {
@@ -182,6 +194,7 @@ void PendingSession::onErrorOccurred(
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void PendingSession::onMessage()
 {
     proto::PeerToRelay message;

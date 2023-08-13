@@ -36,6 +36,7 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void createConfig()
 {
     std::filesystem::path settings_file_path = relay::Settings::filePath();
@@ -55,6 +56,7 @@ void createConfig()
     std::cout << "Configuration successfully created." << std::endl;
 }
 
+//--------------------------------------------------------------------------------------------------
 void showHelp()
 {
     std::cout << "aspia_relay [switch]" << std::endl
@@ -72,6 +74,7 @@ void showHelp()
 } // namespace
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 int wmain()
 {
     base::installFailureHandler(L"aspia_relay");
@@ -116,6 +119,7 @@ int wmain()
     return 0;
 }
 #else
+//--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
     base::initLogging();

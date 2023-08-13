@@ -38,6 +38,7 @@ namespace router {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionTypeToString(proto::RouterSession session_type)
 {
     switch (session_type)
@@ -61,6 +62,7 @@ const char* sessionTypeToString(proto::RouterSession session_type)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
       database_factory_(base::make_local_shared<DatabaseFactorySqlite>())
@@ -69,11 +71,13 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Server::start()
 {
     if (server_)
@@ -183,6 +187,7 @@ bool Server::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::SessionList> Server::sessionList() const
 {
     std::unique_ptr<proto::SessionList> result = std::make_unique<proto::SessionList>();
@@ -242,6 +247,7 @@ std::unique_ptr<proto::SessionList> Server::sessionList() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Server::stopSession(Session::SessionId session_id)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
@@ -256,6 +262,7 @@ bool Server::stopSession(Session::SessionId session_id)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostSessionWithId(SessionHost* session)
 {
     for (auto it = sessions_.begin(); it != sessions_.end();)
@@ -282,6 +289,7 @@ void Server::onHostSessionWithId(SessionHost* session)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionHost* Server::hostSessionById(base::HostId host_id)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)
@@ -298,6 +306,7 @@ SessionHost* Server::hostSessionById(base::HostId host_id)
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Session* Server::sessionById(Session::SessionId session_id)
 {
     for (auto& session : sessions_)
@@ -309,6 +318,7 @@ Session* Server::sessionById(Session::SessionId session_id)
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New connection: " << channel->peerAddress();
@@ -320,6 +330,7 @@ void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
         authenticator_manager_->addNewChannel(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
 {
     for (const auto& session : sessions_)
@@ -330,6 +341,7 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, uint32_t key_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     std::u16string address = session_info.channel->peerAddress();
@@ -411,6 +423,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     sessions_.back()->start(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onSessionFinished(Session::SessionId session_id, proto::RouterSession /* session_type */)
 {
     for (auto it = sessions_.begin(); it != sessions_.end(); ++it)

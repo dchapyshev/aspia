@@ -27,6 +27,7 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 void startService()
 {
     base::win::ServiceController controller =
@@ -49,6 +50,7 @@ void startService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void stopService()
 {
     base::win::ServiceController controller =
@@ -71,6 +73,7 @@ void stopService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void installService()
 {
     std::filesystem::path file_path;
@@ -95,6 +98,7 @@ void installService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void removeService()
 {
     if (base::win::ServiceController::isRunning(router::kServiceName))

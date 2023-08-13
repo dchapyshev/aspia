@@ -28,19 +28,23 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 SessionClient::SessionClient()
     : Session(proto::ROUTER_SESSION_CLIENT)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionClient::~SessionClient() = default;
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionReady()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::PeerToRouter> message = std::make_unique<proto::PeerToRouter>();
@@ -64,11 +68,13 @@ void SessionClient::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::readConnectionRequest(const proto::ConnectionRequest& request)
 {
     LOG(LS_INFO) << "New connection request (host_id: " << request.host_id() << ")";
@@ -146,6 +152,7 @@ void SessionClient::readConnectionRequest(const proto::ConnectionRequest& reques
     sendMessage(proto::ROUTER_CHANNEL_ID_SESSION, *message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionClient::readCheckHostStatus(const proto::CheckHostStatus& check_host_status)
 {
     std::unique_ptr<proto::RouterToPeer> message = std::make_unique<proto::RouterToPeer>();

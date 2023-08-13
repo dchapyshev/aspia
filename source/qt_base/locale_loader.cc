@@ -33,6 +33,7 @@ const QString kTranslationsDir = QStringLiteral(":/tr/");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 LocaleLoader::LocaleLoader()
 {
     const QStringList qm_file_list =
@@ -62,11 +63,13 @@ LocaleLoader::LocaleLoader()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 LocaleLoader::~LocaleLoader()
 {
     removeTranslators();
 }
 
+//--------------------------------------------------------------------------------------------------
 LocaleLoader::LocaleList LocaleLoader::localeList() const
 {
     LocaleList list;
@@ -102,11 +105,13 @@ LocaleLoader::LocaleList LocaleLoader::localeList() const
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool LocaleLoader::contains(const QString& locale) const
 {
     return locale_list_.contains(locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 void LocaleLoader::installTranslators(const QString& locale)
 {
     removeTranslators();
@@ -129,6 +134,7 @@ void LocaleLoader::installTranslators(const QString& locale)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void LocaleLoader::removeTranslators()
 {
     LOG(LS_INFO) << "Cleanup translators";

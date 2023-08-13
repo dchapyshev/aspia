@@ -22,15 +22,19 @@
 
 namespace router {
 
+//--------------------------------------------------------------------------------------------------
 DatabaseFactorySqlite::DatabaseFactorySqlite() = default;
 
+//--------------------------------------------------------------------------------------------------
 DatabaseFactorySqlite::~DatabaseFactorySqlite() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Database> DatabaseFactorySqlite::createDatabase() const
 {
     return DatabaseSqlite::create();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Database> DatabaseFactorySqlite::openDatabase() const
 {
     return DatabaseSqlite::open();

@@ -57,6 +57,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       reconnect_timer_(base::WaitableTimer::Type::SINGLE_SHOT, task_runner),
@@ -95,11 +96,13 @@ Controller::Controller(std::shared_ptr<base::TaskRunner> task_runner)
     LOG(LS_INFO) << "Statistics interval: " << statistics_interval_.count();
 }
 
+//--------------------------------------------------------------------------------------------------
 Controller::~Controller()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Controller::start()
 {
     LOG(LS_INFO) << "Starting controller";
@@ -161,6 +164,7 @@ bool Controller::start()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
@@ -209,6 +213,7 @@ void Controller::onTcpConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "The connection to the router has been lost: "
@@ -221,6 +226,7 @@ void Controller::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
     delayedConnectToRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
@@ -262,16 +268,19 @@ void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::Byte
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onSessionStarted()
 {
     ++session_count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
 {
     outgoing_message_->Clear();
@@ -281,6 +290,7 @@ void Controller::onSessionStatistics(const proto::RelayStat& relay_stat)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onSessionFinished()
 {
     --session_count_;
@@ -296,6 +306,7 @@ void Controller::onSessionFinished()
     sendKeyPool(1);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::onPoolKeyExpired(uint32_t /* key_id */)
 {
     // The key has expired and has been removed from the pool.
@@ -303,6 +314,7 @@ void Controller::onPoolKeyExpired(uint32_t /* key_id */)
     sendKeyPool(1);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
@@ -315,12 +327,14 @@ void Controller::connectToRouter()
     channel_->connect(router_address_, router_port_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
     reconnect_timer_.start(kReconnectTimeout, std::bind(&Controller::connectToRouter, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Controller::sendKeyPool(uint32_t key_count)
 {
     outgoing_message_->Clear();
