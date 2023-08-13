@@ -24,22 +24,26 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionTextChat::ClientSessionTextChat(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_TEXT_CHAT, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionTextChat::~ClientSessionTextChat()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendTextChat(const proto::TextChat& text_chat)
 {
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(text_chat));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
 {
     proto::TextChat text_chat;
@@ -51,21 +55,25 @@ void ClientSessionTextChat::sendStatus(proto::TextChatStatus::Status status)
     sendTextChat(text_chat);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientSessionTextChat::hasUser() const
 {
     return has_user_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::setHasUser(bool enable)
 {
     has_user_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onStarted()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::TextChat text_chat;
@@ -87,6 +95,7 @@ void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const base::Byt
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionTextChat::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
