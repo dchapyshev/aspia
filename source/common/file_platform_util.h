@@ -22,8 +22,9 @@
 #include "base/macros_magic.h"
 #include "proto/file_transfer.pb.h"
 
+#include <utility>
+
 #include <QIcon>
-#include <QPair>
 #include <QString>
 
 namespace common {
@@ -32,7 +33,7 @@ class FilePlatformUtil
 {
 public:
     // Returns a pair of icons for the file type and a description of the file type.
-    static QPair<QIcon, QString> fileTypeInfo(const QString& file_name);
+    static std::pair<QIcon, QString> fileTypeInfo(const QString& file_name);
 
     // The methods below return the appropriate icons.
     static QIcon computerIcon();

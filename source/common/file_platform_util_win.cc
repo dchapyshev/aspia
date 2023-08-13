@@ -72,7 +72,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
+std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -87,17 +87,17 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
     if (icon.isValid())
     {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        return QPair<QIcon, QString>(QtWin::fromHICON(icon),
+        return std::pair<QIcon, QString>(QtWin::fromHICON(icon),
 #else
-        return QPair<QIcon, QString>(QPixmap::fromImage(QImage::fromHICON(icon)),
+        return std::pair<QIcon, QString>(QPixmap::fromImage(QImage::fromHICON(icon)),
 #endif
-                                     QString::fromUtf16(
-                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
+                                         QString::fromUtf16(
+                                             reinterpret_cast<const ushort*>(file_info.szTypeName)));
     }
 
-    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
-                                 QString::fromUtf16(
-                                     reinterpret_cast<const ushort*>(file_info.szTypeName)));
+    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
+                                     QString::fromUtf16(
+                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }
 
 //--------------------------------------------------------------------------------------------------

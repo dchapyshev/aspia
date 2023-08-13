@@ -44,11 +44,11 @@ const int kMaxFileNameLength = (kMaxPathLength - 5);
 
 //--------------------------------------------------------------------------------------------------
 // static
-QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
+std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
     static QMimeDatabase mime_database;
     QMimeType mime_type = mime_database.mimeTypeForFile(file_name, QMimeDatabase::MatchExtension);
-    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")), mime_type.comment());
+    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")), mime_type.comment());
 }
 
 //--------------------------------------------------------------------------------------------------

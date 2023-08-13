@@ -21,6 +21,8 @@
 
 #include "base/macros_magic.h"
 
+#include <utility>
+
 #include <QHash>
 #include <QStringList>
 #include <QVector>
@@ -35,7 +37,7 @@ public:
     LocaleLoader();
     ~LocaleLoader();
 
-    using Locale = QPair<QString, QString>;
+    using Locale = std::pair<QString, QString>;
     using LocaleList = QVector<Locale>;
 
     LocaleList localeList() const;
