@@ -77,6 +77,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetProcesses::SysInfoWidgetProcesses(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -107,13 +108,16 @@ SysInfoWidgetProcesses::SysInfoWidgetProcesses(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetProcesses::~SysInfoWidgetProcesses() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetProcesses::category() const
 {
     return common::kSystemInfo_Processes;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -172,11 +176,13 @@ void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo&
     ui.tree->setColumnWidth(5, 110);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetProcesses::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetProcesses::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

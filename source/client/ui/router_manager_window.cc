@@ -256,6 +256,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
+//--------------------------------------------------------------------------------------------------
 void copyTextToClipboard(const QString& text)
 {
     if (text.isEmpty())
@@ -270,6 +271,7 @@ void copyTextToClipboard(const QString& text)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(std::make_unique<Ui::RouterManagerWindow>()),
@@ -389,6 +391,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     update_timer->start(std::chrono::seconds(3));
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterManagerWindow::~RouterManagerWindow()
 {
     ClientSettings settings;
@@ -397,6 +400,7 @@ RouterManagerWindow::~RouterManagerWindow()
     window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 {
     peer_address_ = QString::fromStdU16String(router_config.address);
@@ -424,6 +428,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     router_proxy_->connectToRouter(router_config.address, router_config.port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onConnected(const base::Version& peer_version)
 {
     status_dialog_->hide();
@@ -442,6 +447,7 @@ void RouterManagerWindow::onConnected(const base::Version& peer_version)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     const char* message;
@@ -500,6 +506,7 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
     status_dialog_->show();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;
@@ -535,6 +542,7 @@ void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode er
     status_dialog_->show();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> session_list)
 {
     QTreeWidget* tree_hosts = ui->tree_hosts;
@@ -643,6 +651,7 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::SessionList> sess
     afterRequest();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::SessionResult> session_result)
 {
     if (session_result->error_code() != proto::SessionResult::SUCCESS)
@@ -675,6 +684,7 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::SessionResult> 
     afterRequest();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
 {
     QTreeWidget* tree_users = ui->tree_users;
@@ -686,6 +696,7 @@ void RouterManagerWindow::onUserList(std::shared_ptr<proto::UserList> user_list)
     afterRequest();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_result)
 {
     if (user_result->error_code() != proto::UserResult::SUCCESS)
@@ -718,12 +729,14 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::UserResult> user_r
     afterRequest();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (router_proxy_)
         router_proxy_->disconnectFromRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
 {
     QMenu menu;
@@ -782,6 +795,7 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
 {
     QMenu menu;
@@ -830,6 +844,7 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
 {
     RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui->tree_relay->currentItem());
@@ -892,6 +907,7 @@ void RouterManagerWindow::onActiveConnContextMenu(const QPoint& pos)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
 {
     QMenu menu;
@@ -942,6 +958,7 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onContextMenuForTreeHeader(QTreeWidget* tree, const QPoint& pos)
 {
     QHeaderView* header = tree->header();
@@ -962,6 +979,7 @@ void RouterManagerWindow::onContextMenuForTreeHeader(QTreeWidget* tree, const QP
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::copyRowFromTree(QTreeWidgetItem* item)
 {
     if (!item)
@@ -990,6 +1008,7 @@ void RouterManagerWindow::copyRowFromTree(QTreeWidgetItem* item)
     copyTextToClipboard(result);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::copyColumnFromTree(QTreeWidgetItem* item, int column)
 {
     if (!item)
@@ -998,6 +1017,7 @@ void RouterManagerWindow::copyColumnFromTree(QTreeWidgetItem* item, int column)
     copyTextToClipboard(item->text(column));
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::updateRelayStatistics()
 {
     RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relay->currentItem());
@@ -1078,6 +1098,7 @@ void RouterManagerWindow::updateRelayStatistics()
     ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::refreshSessionList()
 {
     if (router_proxy_)
@@ -1087,6 +1108,7 @@ void RouterManagerWindow::refreshSessionList()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectRelay()
 {
     RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_hosts->currentItem());
@@ -1114,6 +1136,7 @@ void RouterManagerWindow::disconnectRelay()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllRelays()
 {
     if (!router_proxy_)
@@ -1141,6 +1164,7 @@ void RouterManagerWindow::disconnectAllRelays()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectHost()
 {
     HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
@@ -1168,6 +1192,7 @@ void RouterManagerWindow::disconnectHost()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::disconnectAllHosts()
 {
     if (!router_proxy_)
@@ -1195,6 +1220,7 @@ void RouterManagerWindow::disconnectAllHosts()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::refreshUserList()
 {
     if (router_proxy_)
@@ -1204,6 +1230,7 @@ void RouterManagerWindow::refreshUserList()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::addUser()
 {
     QTreeWidget* tree_users = ui->tree_users;
@@ -1223,6 +1250,7 @@ void RouterManagerWindow::addUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::modifyUser()
 {
     QTreeWidget* tree_users = ui->tree_users;
@@ -1250,6 +1278,7 @@ void RouterManagerWindow::modifyUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::deleteUser()
 {
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
@@ -1282,6 +1311,7 @@ void RouterManagerWindow::deleteUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onCurrentUserChanged(
     QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
@@ -1289,12 +1319,14 @@ void RouterManagerWindow::onCurrentUserChanged(
     ui->button_delete_user->setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* /* current */,
                                                QTreeWidgetItem* /* previous */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onCurrentRelayChanged(
     QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
@@ -1302,16 +1334,19 @@ void RouterManagerWindow::onCurrentRelayChanged(
     updateRelayStatistics();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::beforeRequest()
 {
     //
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::afterRequest()
 {
     //
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveHostsToFile()
 {
     QString selected_filter;
@@ -1384,6 +1419,7 @@ void RouterManagerWindow::saveHostsToFile()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveRelaysToFile()
 {
     QString selected_filter;
@@ -1475,6 +1511,7 @@ void RouterManagerWindow::saveRelaysToFile()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray RouterManagerWindow::saveState()
 {
     QByteArray buffer;
@@ -1493,6 +1530,7 @@ QByteArray RouterManagerWindow::saveState()
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
@@ -1537,6 +1575,7 @@ void RouterManagerWindow::restoreState(const QByteArray& state)
         ui->tree_active_conn->header()->restoreState(active_conn_columns_state);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString RouterManagerWindow::delayToString(uint64_t delay)
 {
@@ -1580,6 +1619,7 @@ QString RouterManagerWindow::delayToString(uint64_t delay)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString RouterManagerWindow::sizeToString(int64_t size)
 {

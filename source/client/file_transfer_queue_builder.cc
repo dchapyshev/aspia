@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::FileTransferQueueBuilder(
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
     common::FileTask::Target target)
@@ -36,11 +37,13 @@ FileTransferQueueBuilder::FileTransferQueueBuilder(
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransferQueueBuilder::~FileTransferQueueBuilder()
 {
     task_producer_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::start(const std::string& source_path,
                                      const std::string& target_path,
                                      const std::vector<FileTransfer::Item>& items,
@@ -55,16 +58,19 @@ void FileTransferQueueBuilder::start(const std::string& source_path,
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::TaskList FileTransferQueueBuilder::takeQueue()
 {
     return std::move(tasks_);
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t FileTransferQueueBuilder::totalSize() const
 {
     return total_size_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     DCHECK(!tasks_.empty());
@@ -102,6 +108,7 @@ void FileTransferQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::addPendingTask(const std::string& source_dir,
                                               const std::string& target_dir,
                                               const std::string& item_name,
@@ -116,6 +123,7 @@ void FileTransferQueueBuilder::addPendingTask(const std::string& source_dir,
     pending_tasks_.emplace_back(std::move(source_path), std::move(target_path), is_directory, size);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::doPendingTasks()
 {
     while (!pending_tasks_.empty())
@@ -133,6 +141,7 @@ void FileTransferQueueBuilder::doPendingTasks()
     callback_(proto::FILE_ERROR_SUCCESS);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferQueueBuilder::onAborted(proto::FileError error_code)
 {
     pending_tasks_.clear();

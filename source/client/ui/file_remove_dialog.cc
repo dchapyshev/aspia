@@ -39,6 +39,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent),
       remover_window_proxy_(std::make_shared<FileRemoveWindowProxy>(
@@ -68,6 +69,7 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_current_item->font());
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveDialog::~FileRemoveDialog()
 {
     remover_window_proxy_->dettach();
@@ -80,6 +82,7 @@ FileRemoveDialog::~FileRemoveDialog()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
 {
     remover_proxy_ = std::move(remover_proxy);
@@ -89,12 +92,14 @@ void FileRemoveDialog::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
     activateWindow();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::stop()
 {
     stopped_ = true;
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentage)
 {
     QString elided_text = label_metrics_->elidedText(
@@ -113,6 +118,7 @@ void FileRemoveDialog::setCurrentProgress(const std::string& name, int percentag
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::errorOccurred(const std::string& path,
                                      proto::FileError error_code,
                                      uint32_t available_actions)
@@ -186,6 +192,7 @@ void FileRemoveDialog::errorOccurred(const std::string& path,
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveDialog::closeEvent(QCloseEvent* event)
 {
     if (stopped_)

@@ -29,6 +29,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner)
     : Client(io_task_runner),
       task_consumer_proxy_(std::make_shared<common::FileTaskConsumerProxy>(this)),
@@ -39,6 +40,7 @@ ClientFileTransfer::ClientFileTransfer(std::shared_ptr<base::TaskRunner> io_task
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientFileTransfer::~ClientFileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
@@ -51,12 +53,14 @@ ClientFileTransfer::~ClientFileTransfer()
     transfer_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::setFileManagerWindow(
     std::shared_ptr<FileManagerWindowProxy> file_manager_window_proxy)
 {
     file_manager_window_proxy_ = std::move(file_manager_window_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version */)
 {
     LOG(LS_INFO) << "File transfer session started";
@@ -70,6 +74,7 @@ void ClientFileTransfer::onSessionStarted(const base::Version& /* peer_version *
     file_manager_window_proxy_->start(file_control_proxy_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionMessageReceived(
     uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
@@ -102,11 +107,13 @@ void ClientFileTransfer::onSessionMessageReceived(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
@@ -136,6 +143,7 @@ void ClientFileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
 {
     if (task->target() == common::FileTask::Target::LOCAL)
@@ -155,6 +163,7 @@ void ClientFileTransfer::doTask(std::shared_ptr<common::FileTask> task)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::doNextRemoteTask()
 {
     if (remote_task_queue_.empty())
@@ -164,6 +173,7 @@ void ClientFileTransfer::doNextRemoteTask()
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, remote_task_queue_.front()->request());
 }
 
+//--------------------------------------------------------------------------------------------------
 common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Target target)
 {
     common::FileTaskFactory* task_factory;
@@ -182,21 +192,25 @@ common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Targe
     return task_factory;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::driveList(common::FileTask::Target target)
 {
     task_consumer_proxy_->doTask(taskFactory(target)->driveList());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::fileList(common::FileTask::Target target, const std::string& path)
 {
     task_consumer_proxy_->doTask(taskFactory(target)->fileList(path));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::createDirectory(common::FileTask::Target target, const std::string& path)
 {
     task_consumer_proxy_->doTask(taskFactory(target)->createDirectory(path));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::rename(common::FileTask::Target target,
                                 const std::string& old_path,
                                 const std::string& new_path)
@@ -204,6 +218,7 @@ void ClientFileTransfer::rename(common::FileTask::Target target,
     task_consumer_proxy_->doTask(taskFactory(target)->rename(old_path, new_path));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::remove(common::FileTask::Target target,
                                 std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                                 const FileRemover::TaskList& items)
@@ -219,6 +234,7 @@ void ClientFileTransfer::remove(common::FileTask::Target target,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                                   FileTransfer::Type transfer_type,
                                   const std::string& source_path,

@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
       duration_(0, 0)
@@ -36,8 +37,10 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     update_timer_->start(std::chrono::seconds(1));
 }
 
+//--------------------------------------------------------------------------------------------------
 StatisticsDialog::~StatisticsDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
@@ -171,6 +174,7 @@ void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString StatisticsDialog::sizeToString(int64_t size)
 {
@@ -213,6 +217,7 @@ QString StatisticsDialog::sizeToString(int64_t size)
         .arg(units);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString StatisticsDialog::speedToString(int64_t speed)
 {

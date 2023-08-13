@@ -30,6 +30,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void copyTextToClipboard(const QString& text)
 {
     if (text.isEmpty())
@@ -42,6 +43,7 @@ void copyTextToClipboard(const QString& text)
     clipboard->setText(text);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString encodeUrl(const QString& str)
 {
     if (str.isEmpty())
@@ -71,12 +73,14 @@ QString encodeUrl(const QString& str)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidget::SysInfoWidget(QWidget* parent)
     : QWidget(parent)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::system_info::SystemInfoRequest SysInfoWidget::request() const
 {
     proto::system_info::SystemInfoRequest system_info_request;
@@ -84,6 +88,7 @@ proto::system_info::SystemInfoRequest SysInfoWidget::request() const
     return system_info_request;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidget::sizeToString(int64_t size)
 {
@@ -126,6 +131,7 @@ QString SysInfoWidget::sizeToString(int64_t size)
         .arg(units);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString SysInfoWidget::delayToString(uint64_t delay)
 {
     uint64_t days = (delay / 86400);
@@ -168,6 +174,7 @@ QString SysInfoWidget::delayToString(uint64_t delay)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidget::speedToString(uint64_t speed)
 {
@@ -204,12 +211,14 @@ QString SysInfoWidget::speedToString(uint64_t speed)
         .arg(units);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidget::timeToString(time_t time)
 {
     return QLocale::system().toString(QDateTime::fromSecsSinceEpoch(time), QLocale::ShortFormat);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidget::copyRow(QTreeWidgetItem* item)
 {
     if (!item)
@@ -238,6 +247,7 @@ void SysInfoWidget::copyRow(QTreeWidgetItem* item)
     copyTextToClipboard(result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void SysInfoWidget::searchInGoogle(const QString& request)
 {
@@ -245,6 +255,7 @@ void SysInfoWidget::searchInGoogle(const QString& request)
     QDesktopServices::openUrl(find_url);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidget::copyColumn(QTreeWidgetItem* item, int column)
 {
     if (!item)

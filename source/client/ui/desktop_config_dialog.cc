@@ -39,6 +39,7 @@ enum ColorDepth
     COLOR_DEPTH_RGB111
 };
 
+//--------------------------------------------------------------------------------------------------
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
@@ -51,6 +52,7 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
         static_cast<uint8_t>(format.blue_shift()));
 }
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -66,6 +68,7 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
                                          const proto::DesktopConfig& config,
                                          uint32_t video_encodings,
@@ -184,8 +187,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::~DesktopConfigDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =
@@ -199,11 +204,13 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
     ui->label_best->setEnabled(has_pixel_format);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCompressionRatioChanged(int value)
 {
     ui->label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)

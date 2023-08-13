@@ -35,6 +35,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     : SessionWindow(parent),
       ui(std::make_unique<Ui::FileManagerWindow>()),
@@ -55,11 +56,13 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
     ui->local_panel->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 QtFileManagerWindow::~QtFileManagerWindow()
 {
     file_manager_window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtFileManagerWindow::createClient()
 {
     std::unique_ptr<ClientFileTransfer> client = std::make_unique<ClientFileTransfer>(
@@ -70,6 +73,7 @@ std::unique_ptr<Client> QtFileManagerWindow::createClient()
     return std::move(client);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_proxy)
 {
     file_control_proxy_ = std::move(file_control_proxy);
@@ -80,6 +84,7 @@ void QtFileManagerWindow::start(std::shared_ptr<FileControlProxy> file_control_p
     refresh();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
 {
     QMessageBox::warning(this,
@@ -89,6 +94,7 @@ void QtFileManagerWindow::onErrorOccurred(proto::FileError error_code)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onDriveList(
     common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
@@ -103,6 +109,7 @@ void QtFileManagerWindow::onDriveList(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onFileList(
     common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
@@ -117,6 +124,7 @@ void QtFileManagerWindow::onFileList(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onCreateDirectory(
     common::FileTask::Target target, proto::FileError error_code)
 {
@@ -131,6 +139,7 @@ void QtFileManagerWindow::onCreateDirectory(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onRename(common::FileTask::Target target, proto::FileError error_code)
 {
     if (target == common::FileTask::Target::LOCAL)
@@ -144,6 +153,7 @@ void QtFileManagerWindow::onRename(common::FileTask::Target target, proto::FileE
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray QtFileManagerWindow::saveState() const
 {
     QByteArray buffer;
@@ -159,6 +169,7 @@ QByteArray QtFileManagerWindow::saveState() const
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
@@ -176,12 +187,14 @@ void QtFileManagerWindow::restoreState(const QByteArray& state)
     ui->remote_panel->restoreState(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::refresh()
 {
     ui->local_panel->refresh();
     ui->remote_panel->refresh();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::closeEvent(QCloseEvent* event)
 {
     if (transfer_dialog_)
@@ -198,6 +211,7 @@ void QtFileManagerWindow::closeEvent(QCloseEvent* event)
     SessionWindow::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::TaskList& items)
 {
     remove_dialog_ = new FileRemoveDialog(this);
@@ -225,6 +239,7 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
     file_control_proxy_->remove(target, remove_dialog_->windowProxy(), items);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::sendItems(FilePanel* sender, const std::vector<FileTransfer::Item>& items)
 {
     if (sender == ui->local_panel)
@@ -245,6 +260,7 @@ void QtFileManagerWindow::sendItems(FilePanel* sender, const std::vector<FileTra
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::receiveItems(FilePanel* sender,
                                        const QString& target_folder,
                                        const std::vector<FileTransfer::Item>& items)
@@ -267,6 +283,7 @@ void QtFileManagerWindow::receiveItems(FilePanel* sender,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::transferItems(FileTransfer::Type type,
                                         const QString& source_path,
                                         const QString& target_path,
@@ -290,6 +307,7 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
         items);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
 {
     bool allow = path != AddressBarModel::computerPath();
@@ -306,6 +324,7 @@ void QtFileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtFileManagerWindow::initPanel(
     common::FileTask::Target target, const QString& title, const QString& mime_type, FilePanel* panel)
 {

@@ -21,12 +21,14 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileNameValidator::FileNameValidator(QObject* parent)
     : QValidator(parent)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileNameValidator::State FileNameValidator::validate(QString& input, int& /* pos */) const
 {
     if (!input.isEmpty())
@@ -47,6 +49,7 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& /* pos
     return Acceptable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileNameValidator::fixup(QString& input) const
 {
     const QList<QChar>& invalid_characters =

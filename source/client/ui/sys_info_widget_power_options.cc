@@ -69,6 +69,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -79,6 +80,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -86,6 +88,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetPowerOptions::SysInfoWidgetPowerOptions(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -116,13 +119,16 @@ SysInfoWidgetPowerOptions::SysInfoWidgetPowerOptions(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetPowerOptions::~SysInfoWidgetPowerOptions() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetPowerOptions::category() const
 {
     return common::kSystemInfo_PowerOptions;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -241,11 +247,13 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetPowerOptions::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPowerOptions::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);
@@ -262,6 +270,7 @@ void SysInfoWidgetPowerOptions::onContextMenu(const QPoint& point)
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetPowerOptions::powerSourceToString(
     proto::system_info::PowerOptions::PowerSource value)
@@ -279,6 +288,7 @@ QString SysInfoWidgetPowerOptions::powerSourceToString(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetPowerOptions::batteryStatusToString(
     proto::system_info::PowerOptions::BatteryStatus value)

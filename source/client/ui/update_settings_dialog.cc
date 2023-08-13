@@ -26,6 +26,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -73,6 +74,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateSettingsDialog::~UpdateSettingsDialog()
 {
     LOG(LS_INFO) << "Dtor";

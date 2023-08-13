@@ -44,6 +44,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 ClientWindow::ClientWindow(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -127,13 +128,16 @@ ClientWindow::ClientWindow(QWidget* parent)
     combo_address->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientWindow::~ClientWindow() = default;
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     QApplication::quit();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
@@ -151,6 +155,7 @@ void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
@@ -163,21 +168,25 @@ void ClientWindow::onLanguageChanged(QAction* action)
     reloadSessionTypes();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onSettings()
 {
     ClientSettingsDialog(this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onAbout()
 {
     common::AboutDialog(tr("Aspia Client"), this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::sessionTypeChanged(int item_index)
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
@@ -198,6 +207,7 @@ void ClientWindow::sessionTypeChanged(int item_index)
     Application::instance()->settings().setSessionType(session_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::sessionConfigButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
@@ -235,6 +245,7 @@ void ClientWindow::sessionConfigButtonPressed()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::connectToHost()
 {
     RouterConfig router_config = RouterConfigStorage().routerConfig();
@@ -348,6 +359,7 @@ void ClientWindow::connectToHost()
         session_window->close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
@@ -356,6 +368,7 @@ void ClientWindow::onCheckUpdates()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -375,6 +388,7 @@ void ClientWindow::createLanguageMenu(const QString& current_locale)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::reloadSessionTypes()
 {
     proto::SessionType current_session_type = Application::instance()->settings().sessionType();

@@ -30,6 +30,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isDoubleEqual(double first, double second)
 {
     return (std::fabs(first - second) < std::numeric_limits<double>::epsilon());
@@ -70,6 +71,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -80,6 +82,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -87,6 +90,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetMonitors::SysInfoWidgetMonitors(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -117,13 +121,16 @@ SysInfoWidgetMonitors::SysInfoWidgetMonitors(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetMonitors::~SysInfoWidgetMonitors() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetMonitors::category() const
 {
     return common::kSystemInfo_Monitors;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -253,11 +260,13 @@ void SysInfoWidgetMonitors::setSystemInfo(const proto::system_info::SystemInfo& 
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetMonitors::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetMonitors::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);
@@ -274,6 +283,7 @@ void SysInfoWidgetMonitors::onContextMenu(const QPoint& point)
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetMonitors::inputSignalTypeToString(
     proto::system_info::Monitors::Monitor::InputSignalType value)

@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -69,13 +70,16 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetDevices::~SysInfoWidgetDevices() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetDevices::category() const
 {
     return common::kSystemInfo_Devices;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -119,11 +123,13 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& s
     ui.tree->setColumnWidth(4, 200);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetDevices::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDevices::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

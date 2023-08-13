@@ -56,6 +56,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 QSize scaledSize(const QSize& source_size, int scale)
 {
     if (scale == -1)
@@ -69,6 +70,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
                                  const proto::DesktopConfig& desktop_config,
                                  QWidget* parent)
@@ -255,11 +257,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     desktop_->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 QtDesktopWindow::~QtDesktopWindow()
 {
     desktop_window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtDesktopWindow::createClient()
 {
     std::unique_ptr<ClientDesktop> client = std::make_unique<ClientDesktop>(
@@ -271,6 +275,7 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
     return std::move(client);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::showWindow(
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
 {
@@ -283,6 +288,7 @@ void QtDesktopWindow::showWindow(
     panel_->enableTextChat(peer_version_ >= base::Version(2, 4, 0));
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::configRequired()
 {
     if (!(video_encodings_ & common::kSupportedVideoEncodings))
@@ -313,6 +319,7 @@ void QtDesktopWindow::configRequired()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t video_encodings)
 {
     video_encodings_ = video_encodings;
@@ -338,11 +345,13 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     panel_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
 {
     panel_->setScreenList(screen_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     base::Frame* frame = desktop_->desktopFrame();
@@ -362,18 +371,21 @@ void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_posi
     desktop_->update();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     if (system_info_)
         system_info_->setSystemInfo(system_info);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setTaskManager(const proto::task_manager::HostToClient& message)
 {
     if (task_manager_)
         task_manager_->readMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     if (!statistics_dialog_)
@@ -393,17 +405,20 @@ void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
     statistics_dialog_->setMetrics(metrics);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<FrameFactory> QtDesktopWindow::frameFactory()
 {
     return std::make_unique<FrameFactoryQImage>();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setFrameError(proto::VideoErrorCode error_code)
 {
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setFrame(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
@@ -427,12 +442,14 @@ void QtDesktopWindow::setFrame(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::drawFrame()
 {
     desktop_->drawDesktopFrame();
     panel_->update();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     base::Point local_dpi(base::MouseCursor::kDefaultDpiX, base::MouseCursor::kDefaultDpiY);
@@ -482,11 +499,13 @@ void QtDesktopWindow::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cu
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
     desktop_control_proxy_->onSystemInfoRequest(request);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
     int panel_width = panel_->width();
@@ -507,6 +526,7 @@ void QtDesktopWindow::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::leaveEvent(QEvent* event)
 {
     if (scroll_timer_->isActive())
@@ -515,6 +535,7 @@ void QtDesktopWindow::leaveEvent(QEvent* event)
     QWidget::leaveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::WindowStateChange)
@@ -564,12 +585,14 @@ void QtDesktopWindow::changeEvent(QEvent* event)
     QWidget::changeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 {
     desktop_->userLeftFromWindow();
     QWidget::focusOutEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
 {
     if (system_info_)
@@ -579,6 +602,7 @@ void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
         task_manager_->close();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == desktop_)
@@ -677,6 +701,7 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
@@ -759,11 +784,13 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
 {
     desktop_control_proxy_->onKeyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::changeSettings()
 {
     DesktopConfigDialog* dialog = new DesktopConfigDialog(
@@ -776,6 +803,7 @@ void QtDesktopWindow::changeSettings()
     dialog->activateWindow();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config)
 {
     desktop_config_ = desktop_config;
@@ -786,6 +814,7 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
         desktop_->setCursorShape(QPixmap(), QPoint());
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::autosizeWindow()
 {
     if (screen_size_.isEmpty())
@@ -812,6 +841,7 @@ void QtDesktopWindow::autosizeWindow()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::takeScreenshot()
 {
     QString selected_filter;
@@ -841,6 +871,7 @@ void QtDesktopWindow::takeScreenshot()
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::scaleDesktop()
 {
     if (screen_size_.isEmpty())
@@ -865,6 +896,7 @@ void QtDesktopWindow::scaleDesktop()
     resize_timer_->start(std::chrono::milliseconds(500));
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onResizeTimer()
 {
     QSize desktop_size = desktop_->size();
@@ -879,6 +911,7 @@ void QtDesktopWindow::onResizeTimer()
     resize_timer_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onScrollTimer()
 {
     if (scroll_delta_.x() != 0)
@@ -906,6 +939,7 @@ void QtDesktopWindow::onScrollTimer()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onPasteKeystrokes()
 {
     QClipboard* clipboard = QApplication::clipboard();
@@ -929,6 +963,7 @@ void QtDesktopWindow::onPasteKeystrokes()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onShowHidePanel()
 {
     QSize start_panel_size = panel_->size();

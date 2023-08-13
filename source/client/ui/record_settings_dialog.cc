@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -60,8 +61,10 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 RecordSettingsDialog::~RecordSettingsDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 void RecordSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);

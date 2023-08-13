@@ -57,6 +57,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -67,6 +68,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -74,6 +76,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetNetAdapters::SysInfoWidgetNetAdapters(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -104,13 +107,16 @@ SysInfoWidgetNetAdapters::SysInfoWidgetNetAdapters(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetNetAdapters::~SysInfoWidgetNetAdapters() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetNetAdapters::category() const
 {
     return common::kSystemInfo_NetworkAdapters;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -193,11 +199,13 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetNetAdapters::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetAdapters::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

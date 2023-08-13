@@ -62,6 +62,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -72,6 +73,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -79,6 +81,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetSummary::SysInfoWidgetSummary(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -109,13 +112,16 @@ SysInfoWidgetSummary::SysInfoWidgetSummary(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetSummary::~SysInfoWidgetSummary() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetSummary::category() const
 {
     return common::kSystemInfo_Summary;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -326,11 +332,13 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetSummary::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

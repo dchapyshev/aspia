@@ -26,6 +26,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 QtTextChatWindow::QtTextChatWindow(QWidget* parent)
     : SessionWindow(parent),
       ui(std::make_unique<Ui::TextChatWindow>()),
@@ -66,12 +67,14 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 QtTextChatWindow::~QtTextChatWindow()
 {
     LOG(LS_INFO) << "Dtor";
     text_chat_window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtTextChatWindow::createClient()
 {
     std::unique_ptr<ClientTextChat> client = std::make_unique<ClientTextChat>(
@@ -82,6 +85,7 @@ std::unique_ptr<Client> QtTextChatWindow::createClient()
     return std::move(client);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy)
 {
     text_chat_control_proxy_ = std::move(text_chat_control_proxy);
@@ -91,6 +95,7 @@ void QtTextChatWindow::start(std::shared_ptr<TextChatControlProxy> text_chat_con
     activateWindow();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())

@@ -360,6 +360,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -506,6 +507,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 TaskManagerWindow::~TaskManagerWindow()
 {
     LOG(LS_INFO) << "Dtor";
@@ -522,6 +524,7 @@ TaskManagerWindow::~TaskManagerWindow()
         settings.setUpdateSpeed(std::chrono::milliseconds(update_timer_->interval()));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& message)
 {
     if (message.has_process_list())
@@ -542,11 +545,13 @@ void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& mes
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::closeEvent(QCloseEvent* event)
 {
     QMainWindow::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 {
     QHeaderView* header = ui.tree_processes->header();
@@ -567,6 +572,7 @@ void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 {
     QHeaderView* header = ui.tree_services->header();
@@ -587,6 +593,7 @@ void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 {
     QHeaderView* header = ui.tree_users->header();
@@ -607,6 +614,7 @@ void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onProcessContextMenu(const QPoint& pos)
 {
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->itemAt(pos));
@@ -620,6 +628,7 @@ void TaskManagerWindow::onProcessContextMenu(const QPoint& pos)
     menu.exec(ui.tree_processes->viewport()->mapToGlobal(pos));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
 {
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->itemAt(pos));
@@ -651,6 +660,7 @@ void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
     menu.exec(ui.tree_services->viewport()->mapToGlobal(pos));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onUserContextMenu(const QPoint& pos)
 {
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->itemAt(pos));
@@ -665,6 +675,7 @@ void TaskManagerWindow::onUserContextMenu(const QPoint& pos)
     menu.exec(ui.tree_users->viewport()->mapToGlobal(pos));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onEndProcess()
 {
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
@@ -686,6 +697,7 @@ void TaskManagerWindow::onEndProcess()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onStartService()
 {
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
@@ -693,6 +705,7 @@ void TaskManagerWindow::onStartService()
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_START);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onStopService()
 {
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
@@ -700,6 +713,7 @@ void TaskManagerWindow::onStopService()
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_STOP);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onDisconnectUser()
 {
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
@@ -722,6 +736,7 @@ void TaskManagerWindow::onDisconnectUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onLogoffUser()
 {
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
@@ -744,6 +759,7 @@ void TaskManagerWindow::onLogoffUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendProcessListRequest(uint32_t flags)
 {
     proto::task_manager::ClientToHost message;
@@ -751,6 +767,7 @@ void TaskManagerWindow::sendProcessListRequest(uint32_t flags)
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendEndProcessRequest(uint64_t process_id)
 {
     proto::task_manager::ClientToHost message;
@@ -758,6 +775,7 @@ void TaskManagerWindow::sendEndProcessRequest(uint64_t process_id)
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendServiceListRequest()
 {
     proto::task_manager::ClientToHost message;
@@ -765,6 +783,7 @@ void TaskManagerWindow::sendServiceListRequest()
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendServiceRequest(
     const std::string& name, proto::task_manager::ServiceRequest::Command command)
 {
@@ -777,6 +796,7 @@ void TaskManagerWindow::sendServiceRequest(
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendUserListRequest()
 {
     proto::task_manager::ClientToHost message;
@@ -784,6 +804,7 @@ void TaskManagerWindow::sendUserListRequest()
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::sendUserRequest(
     uint32_t session_id, proto::task_manager::UserRequest::Command command)
 {
@@ -796,6 +817,7 @@ void TaskManagerWindow::sendUserRequest(
     emit sig_sendMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& process_list)
 {
     // Remove dead processes from the list.
@@ -855,6 +877,7 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
     setMemoryUsage(process_list.memory_usage());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& service_list)
 {
     ui.tree_services->clear();
@@ -870,6 +893,7 @@ void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& 
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::readUserList(const proto::task_manager::UserList& user_list)
 {
     // Remove dead sessions from the list.
@@ -918,21 +942,25 @@ void TaskManagerWindow::readUserList(const proto::task_manager::UserList& user_l
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::setProcessCount(int count)
 {
     label_process_->setText(tr("Processes: %1").arg(count));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::setCpuUsage(int usage)
 {
     label_cpu_->setText(tr("CPU loading: %1%").arg(usage));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::setMemoryUsage(int usage)
 {
     label_memory_->setText(tr("Physical memory: %1%").arg(usage));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::addUpdateItems(QMenu* parent_menu)
 {
     QMenu* update_menu = parent_menu->addMenu(tr("Update Speed"));

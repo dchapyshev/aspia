@@ -22,6 +22,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterConfigStorage::RouterConfigStorage()
     : storage_(base::JsonSettings::Scope::USER,
                "aspia",
@@ -31,18 +32,22 @@ RouterConfigStorage::RouterConfigStorage()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterConfigStorage::~RouterConfigStorage() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool RouterConfigStorage::isEnabled() const
 {
     return storage_.get<bool>("enabled", false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterConfigStorage::setEnabled(bool enable)
 {
     storage_.set("enabled", enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterConfig RouterConfigStorage::routerConfig() const
 {
     RouterConfig config;
@@ -55,6 +60,7 @@ RouterConfig RouterConfigStorage::routerConfig() const
     return config;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterConfigStorage::setRouterConfig(const RouterConfig& config)
 {
     if (!config.isValid())

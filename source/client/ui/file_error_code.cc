@@ -22,6 +22,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 QString fileErrorToString(proto::FileError error_code)
 {
     const char* message;

@@ -35,6 +35,7 @@ const QString kPauseAudioParam = QStringLiteral("Desktop/PauseAudio");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopSettings::DesktopSettings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
@@ -44,6 +45,7 @@ DesktopSettings::DesktopSettings()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 int DesktopSettings::scale() const
 {
     int result = settings_.value(kScaleParam, -1).toInt();
@@ -64,31 +66,37 @@ int DesktopSettings::scale() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setScale(int value)
 {
     settings_.setValue(kScaleParam, value);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::autoScrolling() const
 {
     return settings_.value(kAutoScrollingParam, true).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setAutoScrolling(bool enable)
 {
     settings_.setValue(kAutoScrollingParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::sendKeyCombinations() const
 {
     return settings_.value(kSendKeyCombinationsParam, true).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setSendKeyCombinations(bool enable)
 {
     settings_.setValue(kSendKeyCombinationsParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString DesktopSettings::recordingPath() const
 {
     QString default_path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) +
@@ -96,46 +104,55 @@ QString DesktopSettings::recordingPath() const
     return settings_.value(kRecordingPathParam, default_path).toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setRecordingPath(const QString& path)
 {
     settings_.setValue(kRecordingPathParam, path);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::recordSessions() const
 {
     return settings_.value(kRecordSessionsParam, false).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setRecordSessions(bool enable)
 {
     settings_.setValue(kRecordSessionsParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::isToolBarPinned() const
 {
     return settings_.value(kToolBarPinnedParam, false).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setToolBarPinned(bool enable)
 {
     settings_.setValue(kToolBarPinnedParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::pauseVideoWhenMinimizing() const
 {
     return settings_.value(kPauseVideoParam, true).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setPauseVideoWhenMinimizing(bool enable)
 {
     settings_.setValue(kPauseVideoParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopSettings::pauseAudioWhenMinimizing() const
 {
     return settings_.value(kPauseAudioParam, true).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSettings::setPauseAudioWhenMinimizing(bool enable)
 {
     settings_.setValue(kPauseAudioParam, enable);

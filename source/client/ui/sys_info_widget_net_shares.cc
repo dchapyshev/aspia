@@ -57,6 +57,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -69,6 +70,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetNetShares::SysInfoWidgetNetShares(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -99,13 +101,16 @@ SysInfoWidgetNetShares::SysInfoWidgetNetShares(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetNetShares::~SysInfoWidgetNetShares() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetNetShares::category() const
 {
     return common::kSystemInfo_NetworkShares;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetShares::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -153,11 +158,13 @@ void SysInfoWidgetNetShares::setSystemInfo(const proto::system_info::SystemInfo&
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetNetShares::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetShares::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

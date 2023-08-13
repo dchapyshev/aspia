@@ -27,6 +27,7 @@ const QString kWindowStateParam = QStringLiteral("FileManager/WindowState");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileManagerSettings::FileManagerSettings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
@@ -36,21 +37,25 @@ FileManagerSettings::FileManagerSettings()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray FileManagerSettings::windowGeometry() const
 {
     return settings_.value(kWindowGeometryParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerSettings::setWindowGeometry(const QByteArray& geometry)
 {
     settings_.setValue(kWindowGeometryParam, geometry);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray FileManagerSettings::windowState() const
 {
     return settings_.value(kWindowStateParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerSettings::setWindowState(const QByteArray& state)
 {
     settings_.setValue(kWindowStateParam, state);

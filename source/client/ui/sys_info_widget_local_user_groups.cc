@@ -28,6 +28,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetLocalUserGroups::SysInfoWidgetLocalUserGroups(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -58,13 +59,16 @@ SysInfoWidgetLocalUserGroups::SysInfoWidgetLocalUserGroups(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetLocalUserGroups::~SysInfoWidgetLocalUserGroups() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetLocalUserGroups::category() const
 {
     return common::kSystemInfo_LocalUserGroups;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUserGroups::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -97,11 +101,13 @@ void SysInfoWidgetLocalUserGroups::setSystemInfo(const proto::system_info::Syste
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetLocalUserGroups::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUserGroups::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

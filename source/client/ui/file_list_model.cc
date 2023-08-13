@@ -36,6 +36,7 @@ enum Column
     COLUMN_COUNT      = 4
 };
 
+//--------------------------------------------------------------------------------------------------
 template<class T>
 void sortByName(T& list, Qt::SortOrder order)
 {
@@ -52,6 +53,7 @@ void sortByName(T& list, Qt::SortOrder order)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 template<class T>
 void sortBySize(T& list, Qt::SortOrder order)
 {
@@ -65,6 +67,7 @@ void sortBySize(T& list, Qt::SortOrder order)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 template<class T>
 void sortByType(T& list, Qt::SortOrder order)
 {
@@ -78,6 +81,7 @@ void sortByType(T& list, Qt::SortOrder order)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 template<class T>
 void sortByTime(T& list, Qt::SortOrder order)
 {
@@ -93,6 +97,7 @@ void sortByTime(T& list, Qt::SortOrder order)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileListModel::FileListModel(QObject* parent)
     : QAbstractItemModel(parent),
       dir_icon_(common::FilePlatformUtil::directoryIcon()),
@@ -101,11 +106,13 @@ FileListModel::FileListModel(QObject* parent)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::setMimeType(const QString& mime_type)
 {
     mime_type_ = mime_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::setFileList(const proto::FileList& list)
 {
     clear();
@@ -147,12 +154,14 @@ void FileListModel::setFileList(const proto::FileList& list)
     endInsertRows();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::setSortOrder(int column, Qt::SortOrder order)
 {
     current_column_ = column;
     current_order_ = order;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::clear()
 {
     if (folder_items_.isEmpty() && file_items_.isEmpty())
@@ -166,11 +175,13 @@ void FileListModel::clear()
     endRemoveRows();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileListModel::isFolder(const QModelIndex& index) const
 {
     return index.row() < folder_items_.count();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString FileListModel::nameAt(const QModelIndex& index) const
 {
     if (isFolder(index))
@@ -179,6 +190,7 @@ QString FileListModel::nameAt(const QModelIndex& index) const
     return file_items_.at(index.row() - folder_items_.count()).name;
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t FileListModel::sizeAt(const QModelIndex& index) const
 {
     if (isFolder(index))
@@ -187,6 +199,7 @@ int64_t FileListModel::sizeAt(const QModelIndex& index) const
     return file_items_.at(index.row() - folder_items_.count()).size;
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex FileListModel::createFolder()
 {
     int row = folder_items_.count();
@@ -205,6 +218,7 @@ QModelIndex FileListModel::createFolder()
     return createIndex(row, COLUMN_NAME);
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex FileListModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (row < 0 || column < 0 || row >= rowCount(parent) || column >= columnCount(parent))
@@ -213,21 +227,25 @@ QModelIndex FileListModel::index(int row, int column, const QModelIndex& parent)
     return createIndex(row, column);
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex FileListModel::parent(const QModelIndex& /* child */) const
 {
     return QModelIndex();
 }
 
+//--------------------------------------------------------------------------------------------------
 int FileListModel::rowCount(const QModelIndex& /* parent */) const
 {
     return folder_items_.count() + file_items_.count();
 }
 
+//--------------------------------------------------------------------------------------------------
 int FileListModel::columnCount(const QModelIndex& /* parent */) const
 {
     return COLUMN_COUNT;
 }
 
+//--------------------------------------------------------------------------------------------------
 QVariant FileListModel::data(const QModelIndex& index, int role) const
 {
     int column = index.column();
@@ -317,6 +335,7 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (!index.isValid() || (folder_items_.count() + file_items_.count()) <= index.row())
@@ -347,6 +366,7 @@ bool FileListModel::setData(const QModelIndex& index, const QVariant& value, int
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 QVariant FileListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
@@ -374,11 +394,13 @@ QVariant FileListModel::headerData(int section, Qt::Orientation orientation, int
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QStringList FileListModel::mimeTypes() const
 {
     return QStringList() << mime_type_;
 }
 
+//--------------------------------------------------------------------------------------------------
 QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
 {
     std::vector<FileTransfer::Item> file_list;
@@ -400,6 +422,7 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
     return mime_data;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileListModel::canDropMimeData(const QMimeData* data, Qt::DropAction /* action */,
                                     int /* row */, int /* column */,
                                     const QModelIndex& /* parent */) const
@@ -419,6 +442,7 @@ bool FileListModel::canDropMimeData(const QMimeData* data, Qt::DropAction /* act
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileListModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
                                  int row, int column, const QModelIndex& parent)
 {
@@ -437,16 +461,19 @@ bool FileListModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 Qt::DropActions FileListModel::supportedDropActions() const
 {
     return Qt::CopyAction;
 }
 
+//--------------------------------------------------------------------------------------------------
 Qt::DropActions FileListModel::supportedDragActions() const
 {
     return Qt::CopyAction;
 }
 
+//--------------------------------------------------------------------------------------------------
 Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
@@ -475,12 +502,14 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::sort(int column, Qt::SortOrder order)
 {
     sortItems(column, order);
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileListModel::sortItems(int column, Qt::SortOrder order)
 {
     current_order_ = order;
@@ -511,6 +540,7 @@ void FileListModel::sortItems(int column, Qt::SortOrder order)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString FileListModel::sizeToString(int64_t size)
 {
@@ -553,6 +583,7 @@ QString FileListModel::sizeToString(int64_t size)
         .arg(units);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString FileListModel::timeToString(time_t time)
 {

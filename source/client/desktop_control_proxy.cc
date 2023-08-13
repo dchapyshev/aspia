@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                                          DesktopControl* desktop_control)
     : io_task_runner_(std::move(io_task_runner)),
@@ -34,12 +35,14 @@ DesktopControlProxy::DesktopControlProxy(std::shared_ptr<base::TaskRunner> io_ta
     DCHECK(desktop_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopControlProxy::~DesktopControlProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach desktop control";
@@ -47,6 +50,7 @@ void DesktopControlProxy::dettach()
     desktop_control_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setDesktopConfig(const proto::DesktopConfig& desktop_config)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -60,6 +64,7 @@ void DesktopControlProxy::setDesktopConfig(const proto::DesktopConfig& desktop_c
         desktop_control_->setDesktopConfig(desktop_config);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setCurrentScreen(const proto::Screen& screen)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -73,6 +78,7 @@ void DesktopControlProxy::setCurrentScreen(const proto::Screen& screen)
         desktop_control_->setCurrentScreen(screen);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setPreferredSize(int width, int height)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -86,6 +92,7 @@ void DesktopControlProxy::setPreferredSize(int width, int height)
         desktop_control_->setPreferredSize(width, height);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setVideoPause(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -99,6 +106,7 @@ void DesktopControlProxy::setVideoPause(bool enable)
         desktop_control_->setVideoPause(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setAudioPause(bool enable)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -112,6 +120,7 @@ void DesktopControlProxy::setAudioPause(bool enable)
         desktop_control_->setAudioPause(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::setVideoRecording(bool enable, const std::filesystem::path& file_path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -125,6 +134,7 @@ void DesktopControlProxy::setVideoRecording(bool enable, const std::filesystem::
         desktop_control_->setVideoRecording(enable, file_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -138,6 +148,7 @@ void DesktopControlProxy::onKeyEvent(const proto::KeyEvent& event)
         desktop_control_->onKeyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onTextEvent(const proto::TextEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -151,6 +162,7 @@ void DesktopControlProxy::onTextEvent(const proto::TextEvent& event)
         desktop_control_->onTextEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -164,6 +176,7 @@ void DesktopControlProxy::onMouseEvent(const proto::MouseEvent& event)
         desktop_control_->onMouseEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onPowerControl(proto::PowerControl::Action action)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -177,6 +190,7 @@ void DesktopControlProxy::onPowerControl(proto::PowerControl::Action action)
         desktop_control_->onPowerControl(action);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onRemoteUpdate()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -190,6 +204,7 @@ void DesktopControlProxy::onRemoteUpdate()
         desktop_control_->onRemoteUpdate();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -203,6 +218,7 @@ void DesktopControlProxy::onSystemInfoRequest(const proto::system_info::SystemIn
         desktop_control_->onSystemInfoRequest(request);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onTaskManager(const proto::task_manager::ClientToHost& message)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -216,6 +232,7 @@ void DesktopControlProxy::onTaskManager(const proto::task_manager::ClientToHost&
         desktop_control_->onTaskManager(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopControlProxy::onMetricsRequest()
 {
     if (!io_task_runner_->belongsToCurrentThread())

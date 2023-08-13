@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
@@ -42,6 +43,7 @@ Application::Application(int& argc, char* argv[])
     setLocale(settings_.locale());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Application* Application::instance()
 {

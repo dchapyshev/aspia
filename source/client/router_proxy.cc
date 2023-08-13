@@ -47,6 +47,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 RouterProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
                         std::unique_ptr<Router> router)
     : io_task_runner_(std::move(io_task_runner)),
@@ -55,11 +56,13 @@ RouterProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
     DCHECK(io_task_runner_ && router_);
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterProxy::Impl::~Impl()
 {
     DCHECK(!router_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::connectToRouter(const std::u16string& address, uint16_t port)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -73,6 +76,7 @@ void RouterProxy::Impl::connectToRouter(const std::u16string& address, uint16_t 
         router_->connectToRouter(address, port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::disconnectFromRouter()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -85,6 +89,7 @@ void RouterProxy::Impl::disconnectFromRouter()
     router_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::refreshSessionList()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -97,6 +102,7 @@ void RouterProxy::Impl::refreshSessionList()
         router_->refreshSessionList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::stopSession(int64_t session_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -109,6 +115,7 @@ void RouterProxy::Impl::stopSession(int64_t session_id)
         router_->stopSession(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::refreshUserList()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -121,6 +128,7 @@ void RouterProxy::Impl::refreshUserList()
         router_->refreshUserList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::addUser(const proto::User& user)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -133,6 +141,7 @@ void RouterProxy::Impl::addUser(const proto::User& user)
         router_->addUser(user);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::modifyUser(const proto::User& user)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -145,6 +154,7 @@ void RouterProxy::Impl::modifyUser(const proto::User& user)
         router_->modifyUser(user);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::deleteUser(int64_t entry_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -157,6 +167,7 @@ void RouterProxy::Impl::deleteUser(int64_t entry_id)
         router_->deleteUser(entry_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::Impl::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -170,6 +181,7 @@ void RouterProxy::Impl::disconnectPeerSession(int64_t relay_session_id, uint64_t
         router_->disconnectPeerSession(relay_session_id, peer_session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterProxy::RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::unique_ptr<Router> router)
     : impl_(std::make_shared<Impl>(std::move(io_task_runner), std::move(router)))
@@ -177,51 +189,61 @@ RouterProxy::RouterProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterProxy::~RouterProxy()
 {
     impl_->disconnectFromRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::connectToRouter(const std::u16string& address, uint16_t port)
 {
     impl_->connectToRouter(address, port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::disconnectFromRouter()
 {
     impl_->disconnectFromRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::refreshSessionList()
 {
     impl_->refreshSessionList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::stopSession(int64_t session_id)
 {
     impl_->stopSession(session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::refreshUserList()
 {
     impl_->refreshUserList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::addUser(const proto::User& user)
 {
     impl_->addUser(user);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::modifyUser(const proto::User& user)
 {
     impl_->modifyUser(user);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::deleteUser(int64_t entry_id)
 {
     impl_->deleteUser(entry_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterProxy::disconnectPeerSession(int64_t relay_session_id, uint64_t peer_session_id)
 {
     impl_->disconnectPeerSession(relay_session_id, peer_session_id);

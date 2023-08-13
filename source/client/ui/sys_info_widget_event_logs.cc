@@ -54,6 +54,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -144,13 +145,16 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetEventLogs::~SysInfoWidgetEventLogs() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetEventLogs::category() const
 {
     return common::kSystemInfo_EventLogs;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::request() const
 {
     proto::system_info::EventLogs::Event::Type type =
@@ -159,6 +163,7 @@ proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::request() const
     return createRequest(type, start_record_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -245,11 +250,13 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
         ui.tree->setCurrentItem(ui.tree->topLevelItem(0));
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetEventLogs::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);
@@ -265,6 +272,7 @@ void SysInfoWidgetEventLogs::onContextMenu(const QPoint& point)
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetEventLogs::onPageActivated(int index)
 {
     start_record_ = static_cast<uint32_t>(index) * kRecordsPerPage;
@@ -272,6 +280,7 @@ void SysInfoWidgetEventLogs::onPageActivated(int index)
     emit systemInfoRequest(request());
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
     proto::system_info::EventLogs::Event::Type type, uint32_t start) const
 {
@@ -291,6 +300,7 @@ proto::system_info::SystemInfoRequest SysInfoWidgetEventLogs::createRequest(
     return system_info_request;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetEventLogs::levelToString(proto::system_info::EventLogs::Event::Level value)
 {

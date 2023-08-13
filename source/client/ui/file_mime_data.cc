@@ -22,25 +22,30 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileMimeData::~FileMimeData() = default;
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString FileMimeData::createMimeType()
 {
     return QString("application/%1").arg(QUuid::createUuid().toString());
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileMimeData::setMimeType(const QString& mime_type)
 {
     mime_type_ = mime_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileMimeData::setFileList(const std::vector<FileTransfer::Item>& file_list)
 {
     file_list_ = file_list;
     setData(mimeType(), QByteArray());
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileMimeData::setSource(const FileListModel* source)
 {
     source_ = source;

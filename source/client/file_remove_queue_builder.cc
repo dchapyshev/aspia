@@ -26,6 +26,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(
     std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
     common::FileTask::Target target)
@@ -37,11 +38,13 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(
     task_factory_ = std::make_unique<common::FileTaskFactory>(task_producer_proxy_, target);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::~FileRemoveQueueBuilder()
 {
     task_producer_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::start(
     const FileRemover::TaskList& items, const FinishCallback& callback)
 {
@@ -53,11 +56,13 @@ void FileRemoveQueueBuilder::start(
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemover::TaskList FileRemoveQueueBuilder::takeQueue()
 {
     return std::move(tasks_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     const proto::FileRequest& request = task->request();
@@ -88,6 +93,7 @@ void FileRemoveQueueBuilder::onTaskDone(std::shared_ptr<common::FileTask> task)
     doPendingTasks();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::doPendingTasks()
 {
     while (!pending_tasks_.empty())
@@ -105,6 +111,7 @@ void FileRemoveQueueBuilder::doPendingTasks()
     callback_(proto::FILE_ERROR_SUCCESS);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveQueueBuilder::onAborted(proto::FileError error_code)
 {
     pending_tasks_.clear();

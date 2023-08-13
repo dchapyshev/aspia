@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetServices::SysInfoWidgetServices(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -56,13 +57,16 @@ SysInfoWidgetServices::SysInfoWidgetServices(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetServices::~SysInfoWidgetServices() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetServices::category() const
 {
     return common::kSystemInfo_Services;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -102,11 +106,13 @@ void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& 
     ui.tree->setColumnWidth(6, 200);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetServices::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetServices::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);
@@ -122,6 +128,7 @@ void SysInfoWidgetServices::onContextMenu(const QPoint& point)
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetServices::statusToString(proto::system_info::Services::Service::Status status)
 {
@@ -153,6 +160,7 @@ QString SysInfoWidgetServices::statusToString(proto::system_info::Services::Serv
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetServices::startupTypeToString(
     proto::system_info::Services::Service::StartupType startup_type)

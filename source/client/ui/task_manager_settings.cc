@@ -32,6 +32,7 @@ const QString kUpdateSpeedParam = QStringLiteral("TaskManager/UpdateSpeed");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 TaskManagerSettings::TaskManagerSettings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
@@ -41,51 +42,61 @@ TaskManagerSettings::TaskManagerSettings()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray TaskManagerSettings::windowState() const
 {
     return settings_.value(kWindowStateParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerSettings::setWindowState(const QByteArray& state)
 {
     settings_.setValue(kWindowStateParam, state);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray TaskManagerSettings::processColumnState() const
 {
     return settings_.value(kProcessColumnStateParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerSettings::setProcessColumnState(const QByteArray& state)
 {
     settings_.setValue(kProcessColumnStateParam, state);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray TaskManagerSettings::serviceColumnState() const
 {
     return settings_.value(kServiceColumnStateParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerSettings::setServiceColumnState(const QByteArray& state)
 {
     settings_.setValue(kServiceColumnStateParam, state);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray TaskManagerSettings::userColumnState() const
 {
     return settings_.value(kUserColumnStateParam).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerSettings::setUserColumnState(const QByteArray& state)
 {
     settings_.setValue(kUserColumnStateParam, state);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::chrono::milliseconds TaskManagerSettings::updateSpeed() const
 {
     return std::chrono::milliseconds(settings_.value(kUpdateSpeedParam, 1000).toInt());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManagerSettings::setUpdateSpeed(const std::chrono::milliseconds& speed)
 {
     settings_.setValue(kUpdateSpeedParam, static_cast<int>(speed.count()));

@@ -64,6 +64,7 @@ private:
     base::WaitableTimer timer_;
 };
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::Instance(
     int computer_id, const std::u16string& address, uint16_t port,
     std::shared_ptr<base::TaskRunner> task_runner)
@@ -79,6 +80,7 @@ OnlineCheckerDirect::Instance::Instance(
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::~Instance()
 {
     finish_callback_ = nullptr;
@@ -86,6 +88,7 @@ OnlineCheckerDirect::Instance::~Instance()
     channel_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
 {
     finish_callback_ = std::move(finish_callback);
@@ -99,6 +102,7 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     channel_->connect(address_, port_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to " << address_ << ":" << port_
@@ -114,6 +118,7 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
     channel_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpDisconnected(
     base::NetworkChannel::ErrorCode /* error_code */)
 {
@@ -121,6 +126,7 @@ void OnlineCheckerDirect::Instance::onTcpDisconnected(
     onFinished(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpMessageReceived(
     uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
@@ -149,12 +155,14 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpMessageWritten(
     uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(bool online)
 {
     if (finish_callback_)
@@ -168,6 +176,7 @@ void OnlineCheckerDirect::Instance::onFinished(bool online)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -175,6 +184,7 @@ OnlineCheckerDirect::OnlineCheckerDirect(std::shared_ptr<base::TaskRunner> task_
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::~OnlineCheckerDirect()
 {
     LOG(LS_INFO) << "Dtor";
@@ -184,6 +194,7 @@ OnlineCheckerDirect::~OnlineCheckerDirect()
     work_queue_.clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegate)
 {
     pending_queue_ = computers;
@@ -219,6 +230,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers, Delegate* delegat
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onChecked(int computer_id, bool online)
 {
     if (delegate_)
@@ -265,6 +277,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onFinished(const base::Location& location)
 {
     LOG(LS_INFO) << "Finished (from: " << location.toString() << ")";

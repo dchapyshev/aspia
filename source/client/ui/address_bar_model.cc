@@ -38,6 +38,7 @@ enum Column
     COLUMN_COUNT       = 4
 };
 
+//--------------------------------------------------------------------------------------------------
 QString normalizePath(const QString& path)
 {
     if (path.isEmpty())
@@ -55,12 +56,14 @@ QString normalizePath(const QString& path)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AddressBarModel::AddressBarModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBarModel::setDriveList(const proto::DriveList& list)
 {
     drives_.clear();
@@ -97,6 +100,7 @@ void AddressBarModel::setDriveList(const proto::DriveList& list)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 {
     QModelIndex index;
@@ -145,16 +149,19 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
     return index;
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBarModel::pathAt(const QModelIndex& index) const
 {
     return data(index, Qt::UserRole).toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBarModel::isComputerPath(const QString& path) const
 {
     return path == computerPath();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBarModel::isDrivePath(const QString& path) const
 {
     QString normalized_path = normalizePath(path);
@@ -168,6 +175,7 @@ bool AddressBarModel::isDrivePath(const QString& path) const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::computerIndex() const
 {
     if (isDrivePath(current_path_) || isComputerPath(current_path_))
@@ -176,6 +184,7 @@ QModelIndex AddressBarModel::computerIndex() const
         return createIndex(1, 0, kComputerItem);
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::currentFolderIndex() const
 {
     if (isDrivePath(current_path_) || isComputerPath(current_path_))
@@ -184,6 +193,7 @@ QModelIndex AddressBarModel::currentFolderIndex() const
     return createIndex(0, 0, kCurrentFolderItem);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QString& AddressBarModel::computerPath()
 {
@@ -191,6 +201,7 @@ const QString& AddressBarModel::computerPath()
     return kComputerPath;
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!parent.isValid())
@@ -220,6 +231,7 @@ QModelIndex AddressBarModel::index(int row, int column, const QModelIndex& paren
     return createIndex(row, column, kDriveItem);
 }
 
+//--------------------------------------------------------------------------------------------------
 QModelIndex AddressBarModel::parent(const QModelIndex& child) const
 {
     if (!child.isValid())
@@ -231,6 +243,7 @@ QModelIndex AddressBarModel::parent(const QModelIndex& child) const
     return QModelIndex();
 }
 
+//--------------------------------------------------------------------------------------------------
 int AddressBarModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
@@ -250,11 +263,13 @@ int AddressBarModel::rowCount(const QModelIndex& parent) const
     return drives_.count();
 }
 
+//--------------------------------------------------------------------------------------------------
 int AddressBarModel::columnCount(const QModelIndex& /* parent */) const
 {
     return COLUMN_COUNT;
 }
 
+//--------------------------------------------------------------------------------------------------
 QVariant AddressBarModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -364,6 +379,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBarModel::setData(const QModelIndex& /* index */, const QVariant& value, int role)
 {
     if (role != Qt::EditRole)
@@ -377,6 +393,7 @@ bool AddressBarModel::setData(const QModelIndex& /* index */, const QVariant& va
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 QVariant AddressBarModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
@@ -404,6 +421,7 @@ QVariant AddressBarModel::headerData(int section, Qt::Orientation orientation, i
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 Qt::ItemFlags AddressBarModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
@@ -417,11 +435,13 @@ Qt::ItemFlags AddressBarModel::flags(const QModelIndex& index) const
     return default_flags | Qt::ItemNeverHasChildren;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBarModel::insertRows(int /* row */, int /* count */, const QModelIndex& /* parent */)
 {
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString AddressBarModel::typeToString(proto::DriveList::Item::Type type)
 {
@@ -456,6 +476,7 @@ QString AddressBarModel::typeToString(proto::DriveList::Item::Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString AddressBarModel::sizeToString(int64_t size)
 {

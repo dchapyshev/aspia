@@ -56,6 +56,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -68,6 +69,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetVideoAdapters::SysInfoWidgetVideoAdapters(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -98,13 +100,16 @@ SysInfoWidgetVideoAdapters::SysInfoWidgetVideoAdapters(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetVideoAdapters::~SysInfoWidgetVideoAdapters() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetVideoAdapters::category() const
 {
     return common::kSystemInfo_VideoAdapters;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -162,11 +167,13 @@ void SysInfoWidgetVideoAdapters::setSystemInfo(const proto::system_info::SystemI
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetVideoAdapters::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetVideoAdapters::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

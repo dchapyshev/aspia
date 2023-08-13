@@ -91,12 +91,14 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileItemDelegate::FileItemDelegate(QObject* parent)
     : QStyledItemDelegate(parent)
 {
     connect(this, &FileItemDelegate::closeEditor, this, &FileItemDelegate::editFinished);
 }
 
+//--------------------------------------------------------------------------------------------------
 QWidget* FileItemDelegate::createEditor(QWidget* parent,
                                         const QStyleOptionViewItem& /* option */,
                                         const QModelIndex& index) const
@@ -106,6 +108,7 @@ QWidget* FileItemDelegate::createEditor(QWidget* parent,
     return editor;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
     Editor* edit = dynamic_cast<Editor*>(editor);
@@ -115,6 +118,7 @@ void FileItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index) 
     edit->setText(index.data(Qt::EditRole).toString());
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileItemDelegate::setModelData(QWidget* editor,
                                     QAbstractItemModel* model,
                                     const QModelIndex& index) const
@@ -126,6 +130,7 @@ void FileItemDelegate::setModelData(QWidget* editor,
     model->setData(index, edit->text(), Qt::EditRole);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileItemDelegate::updateEditorGeometry(QWidget* editor,
                                             const QStyleOptionViewItem& option,
                                             const QModelIndex& /* index */) const

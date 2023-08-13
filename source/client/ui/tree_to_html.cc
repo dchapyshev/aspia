@@ -26,6 +26,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void beginDocument(QXmlStreamWriter* writer)
 {
     QString style = QLatin1String(
@@ -56,12 +57,14 @@ void beginDocument(QXmlStreamWriter* writer)
     writer->writeStartElement(QLatin1String("body"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void endDocument(QXmlStreamWriter* writer)
 {
     writer->writeEndElement(); // body
     writer->writeEndElement(); // html
 }
 
+//--------------------------------------------------------------------------------------------------
 void tableHeader(QXmlStreamWriter* writer, const QTreeWidget* tree)
 {
     writer->writeStartElement(QLatin1String("tr"));
@@ -77,6 +80,7 @@ void tableHeader(QXmlStreamWriter* writer, const QTreeWidget* tree)
     writer->writeEndElement(); // tr
 }
 
+//--------------------------------------------------------------------------------------------------
 void tableRow(QXmlStreamWriter* writer,
               const QTreeWidget* tree,
               const QTreeWidgetItem* item,
@@ -115,6 +119,7 @@ void tableRow(QXmlStreamWriter* writer,
         tableRow(writer, tree, item->child(i), padding + 15);
 }
 
+//--------------------------------------------------------------------------------------------------
 void treeToHtml(const QTreeWidget* tree, QXmlStreamWriter* writer)
 {
     beginDocument(writer);
@@ -136,6 +141,7 @@ void treeToHtml(const QTreeWidget* tree, QXmlStreamWriter* writer)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 QString treeToHtmlString(const QTreeWidget* tree)
 {
     QString string;
@@ -150,6 +156,7 @@ QString treeToHtmlString(const QTreeWidget* tree)
     return string;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* error_string)
 {
     QFile file(file_path);

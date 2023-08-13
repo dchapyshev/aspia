@@ -64,6 +64,7 @@ public:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileList::FileList(QWidget* parent)
     : QTreeView(parent)
 {
@@ -78,6 +79,7 @@ FileList::FileList(QWidget* parent)
     connect(model_, &FileListModel::fileListDropped, this, &FileList::fileListDropped);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::showDriveList(AddressBarModel* model)
 {
     saveColumnsState();
@@ -90,6 +92,7 @@ void FileList::showDriveList(AddressBarModel* model)
     header()->restoreState(drive_list_state_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::showFileList(const proto::FileList& file_list)
 {
     saveColumnsState();
@@ -105,21 +108,25 @@ void FileList::showFileList(const proto::FileList& file_list)
     model_->setFileList(file_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::setMimeType(const QString& mime_type)
 {
     model_->setMimeType(mime_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileList::isDriveListShown() const
 {
     return model() != model_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileList::isFileListShown() const
 {
     return model() == model_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::createFolder()
 {
     selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
@@ -132,6 +139,7 @@ void FileList::createFolder()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
@@ -146,6 +154,7 @@ void FileList::restoreState(const QByteArray& state)
         header()->restoreState(file_list_state_);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray FileList::saveState() const
 {
     QByteArray buffer;
@@ -169,6 +178,7 @@ QByteArray FileList::saveState() const
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_F2)
@@ -184,6 +194,7 @@ void FileList::keyPressEvent(QKeyEvent* event)
     QTreeView::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::MouseButton::RightButton)
@@ -195,6 +206,7 @@ void FileList::mouseDoubleClickEvent(QMouseEvent* event)
     QTreeView::mouseDoubleClickEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileList::saveColumnsState()
 {
     QByteArray state = header()->saveState();

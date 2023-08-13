@@ -22,6 +22,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FrameQImage::FrameQImage(QImage&& img)
     : Frame(base::Size(img.size().width(), img.size().height()),
             base::PixelFormat::ARGB(),
@@ -33,6 +34,7 @@ FrameQImage::FrameQImage(QImage&& img)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameQImage> FrameQImage::create(const base::Size& size)
 {
@@ -43,12 +45,14 @@ std::unique_ptr<FrameQImage> FrameQImage::create(const base::Size& size)
         new FrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameQImage> FrameQImage::create(const QPixmap& pixmap)
 {
     return std::unique_ptr<FrameQImage>(new FrameQImage(pixmap.toImage()));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameQImage> FrameQImage::create(QImage&& image)
 {

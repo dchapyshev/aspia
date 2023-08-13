@@ -27,6 +27,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterUserDialog::RouterUserDialog(const base::User& user,
                                    const std::vector<std::u16string>& users,
                                    QWidget* parent)
@@ -89,13 +90,16 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterUserDialog::~RouterUserDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 const base::User& RouterUserDialog::user() const
 {
     return user_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -112,6 +116,7 @@ bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
@@ -248,6 +253,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterUserDialog::setAccountChanged(bool changed)
 {
     account_changed_ = changed;
@@ -287,6 +293,7 @@ void RouterUserDialog::setAccountChanged(bool changed)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString RouterUserDialog::sessionTypeToString(proto::RouterSession session_type)
 {

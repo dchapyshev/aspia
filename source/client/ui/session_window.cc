@@ -28,6 +28,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SessionWindow::SessionWindow(QWidget* parent)
     : QWidget(parent),
       status_window_proxy_(
@@ -36,12 +37,14 @@ SessionWindow::SessionWindow(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 SessionWindow::~SessionWindow()
 {
     LOG(LS_INFO) << "Dtor";
     status_window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool SessionWindow::connectToHost(Config config)
 {
     LOG(LS_INFO) << "Connecting to host";
@@ -97,11 +100,13 @@ bool SessionWindow::connectToHost(Config config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 Config SessionWindow::config() const
 {
     return client_proxy_->config();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(LS_INFO) << "Close event";
@@ -118,6 +123,7 @@ void SessionWindow::closeEvent(QCloseEvent* /* event */)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onStarted(const std::u16string& address_or_id)
 {
     LOG(LS_INFO) << "Attempt to establish a connection";
@@ -132,12 +138,14 @@ void SessionWindow::onStarted(const std::u16string& address_or_id)
     status_dialog_->addMessageAndActivate(tr("Attempt to connect to %1.").arg(address_or_id));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onStopped()
 {
     LOG(LS_INFO) << "Connection stopped";
     status_dialog_->close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onConnected()
 {
     LOG(LS_INFO) << "Connection established";
@@ -146,12 +154,14 @@ void SessionWindow::onConnected()
     status_dialog_->hide();
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Network error";
     onErrorOccurred(netErrorToString(error_code));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onVersionMismatch(const base::Version& host, const base::Version& client)
 {
     QString host_version = QString::fromStdString(host.toString());
@@ -163,12 +173,14 @@ void SessionWindow::onVersionMismatch(const base::Version& host, const base::Ver
            .arg(host_version).arg(client_version));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Authentication error";
     onErrorOccurred(authErrorToString(error_code));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onRouterError(const RouterController::Error& error)
 {
     LOG(LS_INFO) << "Router error";
@@ -201,6 +213,7 @@ void SessionWindow::onRouterError(const RouterController::Error& error)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::setClientTitle(const Config& config)
 {
     QString session_name;
@@ -244,6 +257,7 @@ void SessionWindow::setClientTitle(const Config& config)
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
 }
 
+//--------------------------------------------------------------------------------------------------
 void SessionWindow::onErrorOccurred(const QString& message)
 {
     hide();
@@ -258,6 +272,7 @@ void SessionWindow::onErrorOccurred(const QString& message)
     status_dialog_->addMessageAndActivate(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
 {
@@ -316,6 +331,7 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
     return tr(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SessionWindow::authErrorToString(base::ClientAuthenticator::ErrorCode error_code)
 {
@@ -351,6 +367,7 @@ QString SessionWindow::authErrorToString(base::ClientAuthenticator::ErrorCode er
     return tr(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SessionWindow::routerErrorToString(RouterController::ErrorCode error_code)
 {

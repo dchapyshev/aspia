@@ -37,6 +37,7 @@ namespace client {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 QString parentPath(const QString& path)
 {
     int from = -1;
@@ -52,6 +53,7 @@ QString parentPath(const QString& path)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
@@ -86,6 +88,7 @@ FilePanel::FilePanel(QWidget* parent)
     ui.list->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onDriveList(proto::FileError error_code, const proto::DriveList& drive_list)
 {
     if (error_code != proto::FILE_ERROR_SUCCESS)
@@ -101,6 +104,7 @@ void FilePanel::onDriveList(proto::FileError error_code, const proto::DriveList&
     setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onFileList(proto::FileError error_code, const proto::FileList& file_list)
 {
     if (error_code != proto::FILE_ERROR_SUCCESS)
@@ -125,6 +129,7 @@ void FilePanel::onFileList(proto::FileError error_code, const proto::FileList& f
     setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onCreateDirectory(proto::FileError error_code)
 {
     if (error_code != proto::FILE_ERROR_SUCCESS)
@@ -136,6 +141,7 @@ void FilePanel::onCreateDirectory(proto::FileError error_code)
     setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onRename(proto::FileError error_code)
 {
     if (error_code != proto::FILE_ERROR_SUCCESS)
@@ -147,6 +153,7 @@ void FilePanel::onRename(proto::FileError error_code)
     setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onPathChanged(const QString& path)
 {
     emit pathChanged(this, ui.address_bar->currentPath());
@@ -170,43 +177,51 @@ void FilePanel::onPathChanged(const QString& path)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::setPanelName(const QString& name)
 {
     ui.label_name->setText(name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::setMimeType(const QString& mime_type)
 {
     ui.list->setMimeType(mime_type);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::setTransferAllowed(bool allowed)
 {
     transfer_allowed_ = allowed;
     ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::setTransferEnabled(bool enabled)
 {
     transfer_enabled_ = enabled;
     ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray FilePanel::saveState() const
 {
     return ui.list->saveState();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::restoreState(const QByteArray& state)
 {
     ui.list->restoreState(state);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::refresh()
 {
     emit driveList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::keyPressEvent(QKeyEvent* event)
 {
     switch (event->key())
@@ -238,6 +253,7 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onListItemActivated(const QModelIndex& index)
 {
     if (ui.list->isFileListShown())
@@ -252,6 +268,7 @@ void FilePanel::onListItemActivated(const QModelIndex& index)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onListSelectionChanged()
 {
     QItemSelectionModel* selection_model = ui.list->selectionModel();
@@ -271,6 +288,7 @@ void FilePanel::onListSelectionChanged()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_name)
 {
     if (new_name.isEmpty())
@@ -289,6 +307,7 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onCreateFolderRequest(const QString& name)
 {
     if (name.isEmpty())
@@ -307,6 +326,7 @@ void FilePanel::onCreateFolderRequest(const QString& name)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::onListContextMenu(const QPoint& point)
 {
     if (!ui.address_bar->hasCurrentPath())
@@ -348,6 +368,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
         addFolder();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::toChildFolder(const QString& child_name)
 {
     LOG(LS_INFO) << "toChildFolder called: " << child_name.toStdString();
@@ -356,6 +377,7 @@ void FilePanel::toChildFolder(const QString& child_name)
     ui.action_up->setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::toParentFolder()
 {
     LOG(LS_INFO) << "toParentFolder called";
@@ -367,12 +389,14 @@ void FilePanel::toParentFolder()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::addFolder()
 {
     if (ui.action_add_folder->isEnabled())
         ui.list->createFolder();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::removeSelected()
 {
     if (!ui.action_delete->isEnabled())
@@ -408,6 +432,7 @@ void FilePanel::removeSelected()
     emit removeItems(this, items);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::sendSelected()
 {
     if (!ui.action_send->isEnabled())
@@ -430,6 +455,7 @@ void FilePanel::sendSelected()
     emit sendItems(this, items);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePanel::showError(const QString& message)
 {
     QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);

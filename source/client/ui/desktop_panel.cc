@@ -31,6 +31,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent),
       session_type_(session_type)
@@ -112,6 +113,7 @@ DesktopPanel::DesktopPanel(proto::SessionType session_type, QWidget* parent)
     adjustSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopPanel::~DesktopPanel()
 {
     DesktopSettings settings;
@@ -126,6 +128,7 @@ DesktopPanel::~DesktopPanel()
         settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableScreenSelect(bool /* enable */)
 {
     // By default, we disable the monitor selection menu. Selection will be enabled when receiving
@@ -133,6 +136,7 @@ void DesktopPanel::enableScreenSelect(bool /* enable */)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enablePowerControl(bool enable)
 {
     ui.action_power_control->setVisible(enable);
@@ -166,6 +170,7 @@ void DesktopPanel::enablePowerControl(bool enable)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableSystemInfo(bool enable)
 {
     ui.action_system_info->setVisible(enable);
@@ -173,6 +178,7 @@ void DesktopPanel::enableSystemInfo(bool enable)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableTextChat(bool enable)
 {
     ui.action_text_chat->setVisible(enable);
@@ -180,6 +186,7 @@ void DesktopPanel::enableTextChat(bool enable)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableRemoteUpdate(bool enable)
 {
     ui.action_update->setVisible(enable);
@@ -187,6 +194,7 @@ void DesktopPanel::enableRemoteUpdate(bool enable)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableTaskManager(bool enable)
 {
     ui.action_task_manager->setVisible(enable);
@@ -194,18 +202,21 @@ void DesktopPanel::enableTaskManager(bool enable)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableVideoPauseFeature(bool enable)
 {
     ui.action_pause_video->setVisible(enable);
     ui.action_pause_video->setEnabled(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::enableAudioPauseFeature(bool enable)
 {
     ui.action_pause_audio->setVisible(enable);
     ui.action_pause_audio->setEnabled(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
 {
     LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()
@@ -323,6 +334,7 @@ void DesktopPanel::setScreenList(const proto::ScreenList& screen_list)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::startRecording(bool enable)
 {
     if (enable)
@@ -340,36 +352,43 @@ void DesktopPanel::startRecording(bool enable)
     emit recordingStateChanged(enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::autoScrolling() const
 {
     return ui.action_autoscroll->isChecked();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::sendKeyCombinations() const
 {
     return ui.action_send_key_combinations->isChecked();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::isPanelHidden() const
 {
     return ui.toolbar->isHidden();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::isPanelPinned() const
 {
     return ui.action_pin->isChecked();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::isVideoPauseEnabled() const
 {
     return ui.action_pause_video->isChecked();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DesktopPanel::isAudioPauseEnabled() const
 {
     return ui.action_pause_audio->isChecked();
 }
 
+//--------------------------------------------------------------------------------------------------
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void DesktopPanel::enterEvent(QEvent* /* event */)
 #else
@@ -393,6 +412,7 @@ void DesktopPanel::enterEvent(QEnterEvent* /* event */)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::leaveEvent(QEvent* /* event */)
 {
     leaved_ = true;
@@ -401,6 +421,7 @@ void DesktopPanel::leaveEvent(QEvent* /* event */)
         delayedHide();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onHideTimer()
 {
     hide_timer_->stop();
@@ -413,6 +434,7 @@ void DesktopPanel::onHideTimer()
     adjustSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onFullscreenButton(bool checked)
 {
     if (checked)
@@ -425,6 +447,7 @@ void DesktopPanel::onFullscreenButton(bool checked)
     emit switchToFullscreen(checked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onAutosizeButton()
 {
     if (ui.action_fullscreen->isChecked())
@@ -438,11 +461,13 @@ void DesktopPanel::onAutosizeButton()
     emit switchToAutosize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onCtrlAltDel()
 {
     emit keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onPowerControl(QAction* action)
 {
     if (action == ui.action_shutdown)
@@ -522,6 +547,7 @@ void DesktopPanel::onPowerControl(QAction* action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onChangeResolutionAction(QAction* action)
 {
     QSize resolution = action->data().toSize();
@@ -537,6 +563,7 @@ void DesktopPanel::onChangeResolutionAction(QAction* action)
     emit screenSelected(screen);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onChangeScreenAction(QAction* action)
 {
     const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
@@ -548,11 +575,13 @@ void DesktopPanel::onChangeScreenAction(QAction* action)
     emit screenSelected(screen);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onMenuShow()
 {
     allow_hide_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onMenuHide()
 {
     allow_hide_ = true;
@@ -570,11 +599,13 @@ void DesktopPanel::onMenuHide()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::onShowRecordSettings()
 {
     RecordSettingsDialog(this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
 {
     // Create a menu and add actions to it.
@@ -691,6 +722,7 @@ void DesktopPanel::createAdditionalMenu(proto::SessionType session_type)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::showFullScreenButtons(bool show)
 {
     ui.action_minimize->setVisible(show);
@@ -714,6 +746,7 @@ void DesktopPanel::showFullScreenButtons(bool show)
     updateSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::updateScaleMenu()
 {
     if (scale_ == -1)
@@ -746,12 +779,14 @@ void DesktopPanel::updateScaleMenu()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::updateSize()
 {
     ui.toolbar->adjustSize();
     adjustSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopPanel::delayedHide()
 {
     if (!ui.action_pin->isChecked() && !hide_timer_->isActive())

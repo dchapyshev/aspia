@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetDrivers::SysInfoWidgetDrivers(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -56,13 +57,16 @@ SysInfoWidgetDrivers::SysInfoWidgetDrivers(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetDrivers::~SysInfoWidgetDrivers() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetDrivers::category() const
 {
     return common::kSystemInfo_Drivers;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -100,11 +104,13 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& s
     ui.tree->setColumnWidth(5, 200);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetDrivers::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDrivers::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);
@@ -120,6 +126,7 @@ void SysInfoWidgetDrivers::onContextMenu(const QPoint& point)
     menu.exec(ui.tree->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetDrivers::statusToString(proto::system_info::Drivers::Driver::Status status)
 {
@@ -151,6 +158,7 @@ QString SysInfoWidgetDrivers::statusToString(proto::system_info::Drivers::Driver
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString SysInfoWidgetDrivers::startupTypeToString(
     proto::system_info::Drivers::Driver::StartupType startup_type)

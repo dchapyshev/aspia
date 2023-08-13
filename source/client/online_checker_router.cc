@@ -32,6 +32,7 @@ const std::chrono::seconds kTimeout { 30 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config,
                                          std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
@@ -47,12 +48,14 @@ OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 OnlineCheckerRouter::~OnlineCheckerRouter()
 {
     LOG(LS_INFO) << "Dtor";
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegate)
 {
     computers_ = computers;
@@ -73,6 +76,7 @@ void OnlineCheckerRouter::start(const ComputerList& computers, Delegate* delegat
     channel_->connect(router_config_.address, router_config_.port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
@@ -114,6 +118,7 @@ void OnlineCheckerRouter::onTcpConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
@@ -121,6 +126,7 @@ void OnlineCheckerRouter::onTcpDisconnected(base::NetworkChannel::ErrorCode erro
     onFinished(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpMessageReceived(
     uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
@@ -151,11 +157,13 @@ void OnlineCheckerRouter::onTcpMessageReceived(
     checkNextComputer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::checkNextComputer()
 {
     if (computers_.empty())
@@ -175,6 +183,7 @@ void OnlineCheckerRouter::checkNextComputer()
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
     if (!delegate_)

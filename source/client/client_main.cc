@@ -37,6 +37,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -50,6 +51,7 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
+//--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
 {
     QMessageBox::warning(
@@ -59,6 +61,7 @@ void onInvalidValue(const QString& arg, const QString& values)
         QMessageBox::Ok);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCodecValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -85,6 +88,7 @@ bool parseCodecValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -119,6 +123,7 @@ bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -138,6 +143,7 @@ bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseAudioValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -160,6 +166,7 @@ bool parseAudioValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -182,6 +189,7 @@ bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -204,6 +212,7 @@ bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -226,6 +235,7 @@ bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -248,6 +258,7 @@ bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -270,6 +281,7 @@ bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -292,6 +304,7 @@ bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -314,6 +327,7 @@ bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -336,6 +350,7 @@ bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -358,6 +373,7 @@ bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 int clientMain(int argc, char* argv[])
 {
 #if !defined(I18L_DISABLED)

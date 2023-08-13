@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                      StatusWindow* status_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -31,12 +32,14 @@ StatusWindowProxy::StatusWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_r
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 StatusWindowProxy::~StatusWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!status_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach status window";
@@ -44,6 +47,7 @@ void StatusWindowProxy::dettach()
     status_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onStarted(const std::u16string& address_or_id)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -57,6 +61,7 @@ void StatusWindowProxy::onStarted(const std::u16string& address_or_id)
         status_window_->onStarted(address_or_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onStopped()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -72,6 +77,7 @@ void StatusWindowProxy::onStopped()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onConnected()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -84,6 +90,7 @@ void StatusWindowProxy::onConnected()
         status_window_->onConnected();
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -97,6 +104,7 @@ void StatusWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
         status_window_->onDisconnected(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onVersionMismatch(const base::Version& host, const base::Version& client)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -110,6 +118,7 @@ void StatusWindowProxy::onVersionMismatch(const base::Version& host, const base:
         status_window_->onVersionMismatch(host, client);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -123,6 +132,7 @@ void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode erro
         status_window_->onAccessDenied(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusWindowProxy::onRouterError(const RouterController::Error& error)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

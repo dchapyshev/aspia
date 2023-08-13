@@ -57,6 +57,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -67,6 +68,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -74,6 +76,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetPrinters::SysInfoWidgetPrinters(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -104,13 +107,16 @@ SysInfoWidgetPrinters::SysInfoWidgetPrinters(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetPrinters::~SysInfoWidgetPrinters() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetPrinters::category() const
 {
     return common::kSystemInfo_Printers;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -158,11 +164,13 @@ void SysInfoWidgetPrinters::setSystemInfo(const proto::system_info::SystemInfo& 
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetPrinters::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPrinters::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

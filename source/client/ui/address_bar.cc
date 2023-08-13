@@ -27,6 +27,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 AddressBar::AddressBar(QWidget* parent)
     : QComboBox(parent)
 {
@@ -65,37 +66,44 @@ AddressBar::AddressBar(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBar::setDriveList(const proto::DriveList& list)
 {
     model_->setDriveList(list);
     emit pathChanged(currentPath());
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBar::setCurrentPath(const QString& path)
 {
     onPathIndexChanged(model_->setCurrentPath(path));
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBar::currentPath() const
 {
     return currentData().toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBar::previousPath() const
 {
     return model_->previousPath();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBar::pathAt(const QModelIndex& index) const
 {
     return model_->pathAt(index);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBar::hasCurrentPath() const
 {
     return currentPath() != AddressBarModel::computerPath();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBar::showPopup()
 {
     setRootModelIndex(QModelIndex());
@@ -109,6 +117,7 @@ void AddressBar::showPopup()
     QComboBox::showPopup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBar::onPathIndexChanged(const QModelIndex& index)
 {
     setRootModelIndex(index.parent());

@@ -87,6 +87,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     : SessionWindow(parent),
       ui(std::make_unique<Ui::SystemInfoWindow>()),
@@ -371,12 +372,14 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     layout_->addWidget(sys_info_widgets_[current_widget_]);
 }
 
+//--------------------------------------------------------------------------------------------------
 QtSystemInfoWindow::~QtSystemInfoWindow()
 {
     LOG(LS_INFO) << "Dtor";
     system_info_window_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Client> QtSystemInfoWindow::createClient()
 {
     std::unique_ptr<ClientSystemInfo> client = std::make_unique<ClientSystemInfo>(
@@ -387,6 +390,7 @@ std::unique_ptr<Client> QtSystemInfoWindow::createClient()
     return std::move(client);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy)
 {
     system_info_control_proxy_ = std::move(system_info_control_proxy);
@@ -395,6 +399,7 @@ void QtSystemInfoWindow::start(std::shared_ptr<SystemInfoControlProxy> system_in
     onRefresh();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)
@@ -418,6 +423,7 @@ void QtSystemInfoWindow::setSystemInfo(const proto::system_info::SystemInfo& sys
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);
@@ -461,6 +467,7 @@ void QtSystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* col
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtSystemInfoWindow::onRefresh()
 {
     for (int i = 0; i < sys_info_widgets_.count(); ++i)

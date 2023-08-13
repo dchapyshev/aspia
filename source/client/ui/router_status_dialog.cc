@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterStatusDialog::RouterStatusDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -43,8 +44,10 @@ RouterStatusDialog::RouterStatusDialog(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterStatusDialog::~RouterStatusDialog() = default;
 
+//--------------------------------------------------------------------------------------------------
 void RouterStatusDialog::setStatus(const QString& message)
 {
     ui.label->setText(message);

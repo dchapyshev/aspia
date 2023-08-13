@@ -38,6 +38,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileTransferDialog::FileTransferDialog(QWidget* parent)
     : QDialog(parent),
       transfer_window_proxy_(std::make_shared<FileTransferWindowProxy>(
@@ -73,6 +74,7 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     label_metrics_ = std::make_unique<QFontMetrics>(ui.label_source->font());
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransferDialog::~FileTransferDialog()
 {
     transfer_window_proxy_->dettach();
@@ -85,6 +87,7 @@ FileTransferDialog::~FileTransferDialog()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::start(std::shared_ptr<FileTransferProxy> transfer_proxy)
 {
     transfer_proxy_ = std::move(transfer_proxy);
@@ -94,12 +97,14 @@ void FileTransferDialog::start(std::shared_ptr<FileTransferProxy> transfer_proxy
     activateWindow();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::stop()
 {
     finished_ = true;
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::setCurrentItem(
     const std::string& source_path, const std::string& target_path)
 {
@@ -133,6 +138,7 @@ void FileTransferDialog::setCurrentItem(
     ui.label_target->setText(target_text);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::setCurrentProgress(int total, int current)
 {
     ui.progress_total->setValue(total);
@@ -146,6 +152,7 @@ void FileTransferDialog::setCurrentProgress(int total, int current)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -227,6 +234,7 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::keyPressEvent(QKeyEvent* event)
 {
     // If the user presses the Esc key in a dialog, QDialog::reject() will be called. This will
@@ -242,6 +250,7 @@ void FileTransferDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::closeEvent(QCloseEvent* event)
 {
     if (finished_)
@@ -265,6 +274,7 @@ void FileTransferDialog::closeEvent(QCloseEvent* event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
 {
     switch (error.type())

@@ -44,6 +44,7 @@ constexpr uint32_t kWheelMask = proto::MouseEvent::WHEEL_DOWN | proto::MouseEven
 
 std::set<uint32_t> g_local_pressed_keys;
 
+//--------------------------------------------------------------------------------------------------
 bool isNumLockActivated()
 {
 #if defined(OS_WIN)
@@ -70,6 +71,7 @@ bool isNumLockActivated()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isCapsLockActivated()
 {
 #if defined(OS_WIN)
@@ -96,6 +98,7 @@ bool isCapsLockActivated()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isModifierKey(int key)
 {
     return key == Qt::Key_Control || key == Qt::Key_Alt ||
@@ -104,6 +107,7 @@ bool isModifierKey(int key)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopWidget::DesktopWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -127,21 +131,25 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopWidget::~DesktopWidget()
 {
     enableKeyHooks(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 base::Frame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame>& frame)
 {
     frame_ = std::move(frame);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
 {
     if (last_error_code_ == error_code)
@@ -174,6 +182,7 @@ void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
     error_timer_->start(std::chrono::milliseconds(1500));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::drawDesktopFrame()
 {
     if (error_timer_)
@@ -188,6 +197,7 @@ void DesktopWidget::drawDesktopFrame()
     update();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot)
 {
     remote_cursor_shape_ = std::move(cursor_shape);
@@ -203,6 +213,7 @@ void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::setCursorPosition(const QPoint& cursor_position)
 {
     remote_cursor_pos_ = cursor_position;
@@ -220,6 +231,7 @@ void DesktopWidget::setCursorPosition(const QPoint& cursor_position)
         remote_cursor_pos_.setY(widget_size.height());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::doMouseEvent(QEvent::Type event_type,
                                  const Qt::MouseButtons& buttons,
                                  const QPoint& pos,
@@ -295,6 +307,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::doKeyEvent(QKeyEvent* event)
 {
     int key = event->key();
@@ -327,6 +340,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     executeKeyEvent(usb_keycode, flags);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::executeKeyCombination(int key_sequence)
 {
     const uint32_t kUsbCodeLeftAlt = 0x0700e2;
@@ -404,23 +418,27 @@ void DesktopWidget::executeKeyCombination(int key_sequence)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::enableKeyCombinations(bool enable)
 {
     enable_key_sequenses_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::enableRemoteCursorPosition(bool enable)
 {
     enable_remote_cursor_pos_ = enable;
     update();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::userLeftFromWindow()
 {
     releaseMouseButtons();
     releaseKeyboardButtons();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
     painter_.begin(this);
@@ -519,36 +537,43 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     painter_.end();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::mousePressEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::mouseReleaseEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::mouseDoubleClickEvent(QMouseEvent* event)
 {
     doMouseEvent(event->type(), event->buttons(), event->pos());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::keyPressEvent(QKeyEvent* event)
 {
     doKeyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
 {
     doKeyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::leaveEvent(QEvent* event)
 {
     // When the mouse cursor leaves the widget area, release all the mouse buttons.
@@ -556,17 +581,20 @@ void DesktopWidget::leaveEvent(QEvent* event)
     QWidget::leaveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::focusInEvent(QFocusEvent* event)
 {
     QWidget::focusInEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::focusOutEvent(QFocusEvent* event)
 {
     userLeftFromWindow();
     QWidget::focusOutEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
     if (flags & proto::KeyEvent::PRESSED)
@@ -581,6 +609,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     emit sig_keyEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::enableKeyHooks(bool enable)
 {
 #if defined(OS_WIN)
@@ -593,6 +622,7 @@ void DesktopWidget::enableKeyHooks(bool enable)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::releaseMouseButtons()
 {
     if (prev_mask_ == 0)
@@ -606,6 +636,7 @@ void DesktopWidget::releaseMouseButtons()
     prev_mask_ = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::releaseKeyboardButtons()
 {
     if (remote_pressed_keys_.empty())
@@ -628,6 +659,7 @@ void DesktopWidget::releaseKeyboardButtons()
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 // static
 LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
 {

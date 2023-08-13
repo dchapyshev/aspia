@@ -22,10 +22,13 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FrameFactoryQImage::FrameFactoryQImage() = default;
 
+//--------------------------------------------------------------------------------------------------
 FrameFactoryQImage::~FrameFactoryQImage() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<base::Frame> FrameFactoryQImage::allocateFrame(const base::Size& size)
 {
     return std::shared_ptr<base::Frame>(FrameQImage::create(size).release());

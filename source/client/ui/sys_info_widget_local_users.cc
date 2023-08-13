@@ -65,6 +65,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Item);
 };
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const QString& value)
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -75,6 +76,7 @@ QTreeWidgetItem* mk(const QString& param, const QString& value)
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidgetItem* mk(const QString& param, const std::string& value)
 {
     return mk(param, QString::fromStdString(value));
@@ -82,6 +84,7 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetLocalUsers::SysInfoWidgetLocalUsers(QWidget* parent)
     : SysInfoWidget(parent)
 {
@@ -112,13 +115,16 @@ SysInfoWidgetLocalUsers::SysInfoWidgetLocalUsers(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 SysInfoWidgetLocalUsers::~SysInfoWidgetLocalUsers() = default;
 
+//--------------------------------------------------------------------------------------------------
 std::string SysInfoWidgetLocalUsers::category() const
 {
     return common::kSystemInfo_LocalUsers;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     ui.tree->clear();
@@ -188,11 +194,13 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
     ui.tree->resizeColumnToContents(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetLocalUsers::treeWidget()
 {
     return ui.tree;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUsers::onContextMenu(const QPoint& point)
 {
     QTreeWidgetItem* current_item = ui.tree->itemAt(point);

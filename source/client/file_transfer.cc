@@ -84,6 +84,7 @@ struct ActionsMap
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                            std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                            std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
@@ -99,12 +100,14 @@ FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::~FileTransfer()
 {
     task_producer_proxy_->dettach();
     transfer_proxy_->dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::start(const std::string& source_path,
                          const std::string& target_path,
                          const std::vector<Item>& items,
@@ -165,6 +168,7 @@ void FileTransfer::start(const std::string& source_path,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::stop()
 {
     if (queue_builder_)
@@ -179,11 +183,13 @@ void FileTransfer::stop()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::setActionForErrorType(Error::Type error_type, Error::Action action)
 {
     actions_.insert_or_assign(error_type, action);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     if (type_ == Type::DOWNLOADER)
@@ -216,11 +222,13 @@ void FileTransfer::onTaskDone(std::shared_ptr<common::FileTask> task)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task& FileTransfer::frontTask()
 {
     return tasks_.front();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::targetReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (tasks_.empty())
@@ -308,6 +316,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::FileReply& reply)
 {
     if (tasks_.empty())
@@ -342,6 +351,7 @@ void FileTransfer::sourceReply(const proto::FileRequest& request, const proto::F
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::setAction(Error::Type error_type, Error::Action action)
 {
     switch (action)
@@ -376,6 +386,7 @@ void FileTransfer::setAction(Error::Type error_type, Error::Action action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::doFrontTask(bool overwrite)
 {
     task_percentage_ = 0;
@@ -398,6 +409,7 @@ void FileTransfer::doFrontTask(bool overwrite)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::doNextTask()
 {
     if (is_canceled_)
@@ -424,6 +436,7 @@ void FileTransfer::doNextTask()
     doFrontTask(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onError(Error::Type type, proto::FileError code, const std::string& path)
 {
     auto default_action = actions_.find(type);
@@ -436,6 +449,7 @@ void FileTransfer::onError(Error::Type type, proto::FileError code, const std::s
     transfer_window_proxy_->errorOccurred(Error(type, code, path));
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onFinished()
 {
     FinishCallback callback;
@@ -448,6 +462,7 @@ void FileTransfer::onFinished()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t FileTransfer::Error::availableActions() const
 {
     for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
@@ -459,6 +474,7 @@ uint32_t FileTransfer::Error::availableActions() const
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
 {
     for (size_t i = 0; i < sizeof(kActions) / sizeof(kActions[0]); ++i)
@@ -470,6 +486,7 @@ FileTransfer::Error::Action FileTransfer::Error::defaultAction() const
     return Action::ACTION_ABORT;
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
                          bool is_directory, int64_t size)
     : source_path_(std::move(source_path)),
@@ -480,6 +497,7 @@ FileTransfer::Task::Task(std::string&& source_path, std::string&& target_path,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task::Task(Task&& other) noexcept
     : source_path_(std::move(other.source_path_)),
       target_path_(std::move(other.target_path_)),
@@ -489,6 +507,7 @@ FileTransfer::Task::Task(Task&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransfer::Task& FileTransfer::Task::operator=(Task&& other) noexcept
 {
     source_path_ = std::move(other.source_path_);

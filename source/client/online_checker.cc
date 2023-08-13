@@ -24,18 +24,21 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
     : ui_task_runner_(std::move(ui_task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 OnlineChecker::~OnlineChecker()
 {
     LOG(LS_INFO) << "Dtor";
     io_thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
                                    const ComputerList& computers,
                                    Delegate* delegate)
@@ -73,6 +76,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
     io_thread_.start(base::MessageLoop::Type::ASIO, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "Starting new I/O thread";
@@ -115,6 +119,7 @@ void OnlineChecker::onBeforeThreadRunning()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onAfterThreadRunning()
 {
     delegate_ = nullptr;
@@ -124,6 +129,7 @@ void OnlineChecker::onAfterThreadRunning()
     LOG(LS_INFO) << "I/O thread stopped";
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 {
     ui_task_runner_.postTask([=]()
@@ -140,6 +146,7 @@ void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onDirectCheckerFinished()
 {
     direct_finished_ = true;
@@ -162,6 +169,7 @@ void OnlineChecker::onDirectCheckerFinished()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 {
     ui_task_runner_.postTask([=]()
@@ -178,6 +186,7 @@ void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void OnlineChecker::onRouterCheckerFinished()
 {
     router_finished_ = true;
