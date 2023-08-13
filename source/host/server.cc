@@ -192,6 +192,14 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
         session_info.channel->setChannelIdSupport(true);
     }
 
+    base::Version host_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
+                               ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+    if (host_version > session_info.version)
+    {
+        LOG(LS_WARNING) << "Version mismatch (host: " << host_version.toString()
+                        << " client: " << session_info.version.toString();
+    }
+
     std::unique_ptr<ClientSession> session = ClientSession::create(
         static_cast<proto::SessionType>(session_info.session_type),
         std::move(session_info.channel),

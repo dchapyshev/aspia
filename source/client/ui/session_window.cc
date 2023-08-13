@@ -152,6 +152,17 @@ void SessionWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
     onErrorOccurred(netErrorToString(error_code));
 }
 
+void SessionWindow::onVersionMismatch(const base::Version& host, const base::Version& client)
+{
+    QString host_version = QString::fromStdString(host.toString());
+    QString client_version = QString::fromStdString(client.toString());
+
+    onErrorOccurred(
+        tr("The Host version is newer than the Client version (%1 > %2)."
+           "Please update the application.")
+           .arg(host_version).arg(client_version));
+}
+
 void SessionWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Authentication error";

@@ -295,20 +295,32 @@ void Client::startAuthentication()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            const base::Version& host_version = authenticator_->peerVersion();
+            if (host_version >= base::Version(2, 6, 0))
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            status_window_proxy_->onConnected();
+            base::Version client_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
+                                         ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+            if (host_version > client_version)
+            {
+                LOG(LS_WARNING) << "Version mismatch (host: " << host_version.toString()
+                                << " client: " << client_version.toString();
+                status_window_proxy_->onVersionMismatch(host_version, client_version);
+            }
+            else
+            {
+                status_window_proxy_->onConnected();
 
-            // Signal that everything is ready to start the session (connection established,
-            // authentication passed).
-            onSessionStarted(authenticator_->peerVersion());
+                // Signal that everything is ready to start the session (connection established,
+                // authentication passed).
+                onSessionStarted(host_version);
 
-            // Now the session will receive incoming messages.
-            channel_->resume();
+                // Now the session will receive incoming messages.
+                channel_->resume();
+            }
         }
         else
         {

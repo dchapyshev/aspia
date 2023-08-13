@@ -66,6 +66,7 @@ protected:
     void onStopped() override;
     void onConnected() override;
     void onDisconnected(base::TcpChannel::ErrorCode error_code) override;
+    void onVersionMismatch(const base::Version& host, const base::Version& client) override;
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code) override;
     void onRouterError(const RouterController::Error& error) override;
 

@@ -97,6 +97,19 @@ void StatusWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
         status_window_->onDisconnected(error_code);
 }
 
+void StatusWindowProxy::onVersionMismatch(const base::Version& host, const base::Version& client)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&StatusWindowProxy::onVersionMismatch, shared_from_this(), host, client));
+        return;
+    }
+
+    if (status_window_)
+        status_window_->onVersionMismatch(host, client);
+}
+
 void StatusWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
