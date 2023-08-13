@@ -131,10 +131,10 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (account_changed_)
         {
-            std::u16string name = ui.edit_username->text().toStdU16String();
+            std::u16string username = ui.edit_username->text().toStdU16String();
             std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!base::User::isValidUserName(name))
+            if (!base::User::isValidUserName(username))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -146,7 +146,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (exist_names_.contains(name, Qt::CaseInsensitive))
+            if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -213,7 +213,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user_ = base::User::create(name, password);
+            user_ = base::User::create(username, password);
             if (!user_.isValid())
             {
                 QMessageBox::warning(this,
