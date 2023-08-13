@@ -42,6 +42,7 @@ const int kMaxFileNameLength = (kMaxPathLength - 5);
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
@@ -50,18 +51,21 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
     return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")), mime_type.comment());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::computerIcon()
 {
     return QIcon(QStringLiteral(":/img/computer.png"));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::directoryIcon()
 {
     return QIcon(QStringLiteral(":/img/folder.png"));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 {
@@ -99,6 +103,7 @@ QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
     return QIcon(icon_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
 {
@@ -107,6 +112,7 @@ const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
 {
@@ -114,6 +120,7 @@ const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidPath(const QString& path)
 {
@@ -133,6 +140,7 @@ bool FilePlatformUtil::isValidPath(const QString& path)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidFileName(const QString& file_name)
 {

@@ -22,22 +22,26 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 FileTaskConsumerProxy::FileTaskConsumerProxy(FileTaskConsumer* task_consumer)
     : task_consumer_(task_consumer)
 {
     DCHECK(task_consumer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTaskConsumerProxy::~FileTaskConsumerProxy()
 {
     DCHECK(!task_consumer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTaskConsumerProxy::dettach()
 {
     task_consumer_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTaskConsumerProxy::doTask(std::shared_ptr<FileTask> task)
 {
     if (task_consumer_)

@@ -24,6 +24,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 // static
 UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
 {
@@ -74,6 +75,7 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
     return update_info;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UpdateInfo::hasUpdate() const
 {
     return !version_.isValid() && !url_.empty();

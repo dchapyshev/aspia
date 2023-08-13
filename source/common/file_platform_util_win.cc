@@ -46,6 +46,7 @@ const int kMinFileNameLength = 1;
 // We use FAT variant: 255 characters long.
 const int kMaxFileNameLength = (MAX_PATH - 5);
 
+//--------------------------------------------------------------------------------------------------
 QIcon stockIcon(SHSTOCKICONID icon_id)
 {
     SHSTOCKICONINFO icon_info;
@@ -69,6 +70,7 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
@@ -98,18 +100,21 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                                      reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::computerIcon()
 {
     return stockIcon(SIID_DESKTOPPC);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::directoryIcon()
 {
     return stockIcon(SIID_FOLDER);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 {
@@ -144,6 +149,7 @@ QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
 {
@@ -152,6 +158,7 @@ const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
 {
@@ -159,6 +166,7 @@ const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidPath(const QString& path)
 {
@@ -178,6 +186,7 @@ bool FilePlatformUtil::isValidPath(const QString& path)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidFileName(const QString& file_name)
 {

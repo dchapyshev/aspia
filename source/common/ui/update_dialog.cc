@@ -38,6 +38,7 @@ namespace common {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 QString makeUrl(const QUrl& url)
 {
     return QString("<a href='%1'>%1</a>").arg(url.toString());
@@ -45,6 +46,7 @@ QString makeUrl(const QUrl& url)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(std::string_view update_server,
                            std::string_view package_name,
                            QWidget* parent)
@@ -64,6 +66,7 @@ UpdateDialog::UpdateDialog(std::string_view update_server,
     checker_->start(qt_base::Application::uiTaskRunner(), this);
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
@@ -77,11 +80,13 @@ UpdateDialog::UpdateDialog(const UpdateInfo& update_info, QWidget* parent)
     ui->button_update->setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 UpdateDialog::~UpdateDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
@@ -93,6 +98,7 @@ void UpdateDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::closeEvent(QCloseEvent* event)
 {
     if (checker_)
@@ -105,6 +111,7 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     UpdateInfo update_info = UpdateInfo::fromXml(result);
@@ -144,6 +151,7 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateNow()
 {
 #if defined(OS_WIN)
@@ -218,6 +226,7 @@ void UpdateDialog::onUpdateNow()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::initialize()
 {
     ui->setupUi(this);

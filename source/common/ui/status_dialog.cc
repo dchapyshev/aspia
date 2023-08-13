@@ -27,6 +27,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 StatusDialog::StatusDialog(QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::StatusDialog>())
@@ -45,17 +46,20 @@ StatusDialog::StatusDialog(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 StatusDialog::~StatusDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusDialog::addMessage(const QString& message)
 {
     ui->edit_status->appendPlainText(
         QTime::currentTime().toString() + QLatin1Char(' ') + message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusDialog::addMessageAndActivate(const QString& message)
 {
     if (isHidden())
@@ -67,6 +71,7 @@ void StatusDialog::addMessageAndActivate(const QString& message)
     addMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusDialog::retranslateUi()
 {
     ui->retranslateUi(this);

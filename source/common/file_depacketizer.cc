@@ -22,6 +22,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
                                    std::ofstream&& file_stream)
     : file_path_(file_path),
@@ -30,6 +31,7 @@ FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileDepacketizer::~FileDepacketizer()
 {
     // If the file is opened, it was not completely written.
@@ -43,6 +45,7 @@ FileDepacketizer::~FileDepacketizer()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
     const std::filesystem::path& file_path, bool overwrite)
@@ -62,6 +65,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
         new FileDepacketizer(file_path, std::move(file_stream)));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
 {
     DCHECK(file_stream_.is_open());

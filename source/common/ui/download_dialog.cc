@@ -27,6 +27,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* parent)
     : QDialog(parent),
       downloader_(std::make_unique<HttpFileDownloader>()),
@@ -47,6 +48,7 @@ DownloadDialog::DownloadDialog(std::string_view url, QFile& file, QWidget* paren
     downloader_->start(url, qt_base::Application::uiTaskRunner(), this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderError(int error_code)
 {
     QMessageBox::warning(this,
@@ -57,6 +59,7 @@ void DownloadDialog::onFileDownloaderError(int error_code)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderCompleted()
 {
     const base::ByteArray& buffer = downloader_->data();
@@ -68,6 +71,7 @@ void DownloadDialog::onFileDownloaderCompleted()
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderProgress(int percentage)
 {
     ui.progress_bar->setValue(percentage);

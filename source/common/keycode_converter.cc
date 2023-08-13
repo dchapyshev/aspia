@@ -45,24 +45,28 @@ const size_t kKeycodeMapEntries = std::size(usb_keycode_map);
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 int KeycodeConverter::invalidNativeKeycode()
 {
     return usb_keycode_map[0].native_keycode;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint32_t KeycodeConverter::invalidUsbKeycode()
 {
     return usb_keycode_map[0].usb_keycode;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int KeycodeConverter::invalidQtKeycode()
 {
     return usb_keycode_map[0].qt_keycode;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int KeycodeConverter::usbKeycodeToNativeKeycode(uint32_t usb_keycode)
 {
@@ -83,6 +87,7 @@ int KeycodeConverter::usbKeycodeToNativeKeycode(uint32_t usb_keycode)
     return invalidNativeKeycode();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint32_t KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
 {
@@ -95,6 +100,7 @@ uint32_t KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
     return invalidUsbKeycode();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint32_t KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
 {

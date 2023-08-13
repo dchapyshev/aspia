@@ -94,11 +94,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Runner);
 };
 
+//--------------------------------------------------------------------------------------------------
 HttpFileDownloader::HttpFileDownloader()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 HttpFileDownloader::~HttpFileDownloader()
 {
     LOG(LS_INFO) << "Dtor";
@@ -111,6 +113,7 @@ HttpFileDownloader::~HttpFileDownloader()
     thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::start(std::string_view url,
                                std::shared_ptr<base::TaskRunner> owner_task_runner,
                                Delegate* delegate)
@@ -120,6 +123,7 @@ void HttpFileDownloader::start(std::string_view url,
     thread_.start(std::bind(&HttpFileDownloader::run, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void HttpFileDownloader::run()
 {
     base::ScopedCURL curl;
@@ -186,6 +190,7 @@ void HttpFileDownloader::run()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t HttpFileDownloader::writeDataCallback(
     void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self)
@@ -207,6 +212,7 @@ size_t HttpFileDownloader::writeDataCallback(
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 int HttpFileDownloader::progressCallback(
     HttpFileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)
