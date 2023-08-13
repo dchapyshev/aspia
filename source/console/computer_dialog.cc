@@ -43,6 +43,7 @@ enum ItemType
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialog::ComputerDialog(QWidget* parent,
                                Mode mode,
                                const QString& parent_name,
@@ -130,6 +131,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     ui.tree->expandAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialog::~ComputerDialog()
 {
     LOG(LS_INFO) << "Dtor";
@@ -140,6 +142,7 @@ ComputerDialog::~ComputerDialog()
     base::memZero(computer_.mutable_comment());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::closeEvent(QCloseEvent* event)
 {
     settings_.setComputerDialogGeometry(saveGeometry());
@@ -147,6 +150,7 @@ void ComputerDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
@@ -161,6 +165,7 @@ bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::keyPressEvent(QKeyEvent* event)
 {
     if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
@@ -175,12 +180,14 @@ void ComputerDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
         showTab(current->type());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
@@ -198,6 +205,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::showTab(int type)
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
@@ -210,6 +218,7 @@ void ComputerDialog::showTab(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerDialog::saveChanges()
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)

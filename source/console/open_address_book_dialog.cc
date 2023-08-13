@@ -22,6 +22,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
                                              const QString& file_path,
                                              proto::address_book::EncryptionType encryption_type)
@@ -61,16 +62,19 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 OpenAddressBookDialog::~OpenAddressBookDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 QString OpenAddressBookDialog::password() const
 {
     return ui.edit_password->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 void OpenAddressBookDialog::showPasswordButtonToggled(bool checked)
 {
     if (checked)
@@ -86,6 +90,7 @@ void OpenAddressBookDialog::showPasswordButtonToggled(bool checked)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void OpenAddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)

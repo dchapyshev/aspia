@@ -39,6 +39,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 FastConnectDialog::FastConnectDialog(QWidget* parent,
                                      const QString& address_book_guid,
                                      const proto::address_book::ComputerGroupConfig& default_config,
@@ -135,12 +136,14 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 FastConnectDialog::~FastConnectDialog()
 {
     LOG(LS_INFO) << "Dtor";
     writeState();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionTypeChanged(int item_index)
 {
     state_.session_type = static_cast<proto::SessionType>(
@@ -165,6 +168,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionConfigButtonPressed()
 {
     proto::SessionType session_type = static_cast<proto::SessionType>(
@@ -201,6 +205,7 @@ void FastConnectDialog::sessionConfigButtonPressed()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Cancel)
@@ -348,6 +353,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::readState()
 {
     QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
@@ -391,6 +397,7 @@ void FastConnectDialog::readState()
     ui.checkbox_use_session_params->setChecked(session_params_from_address_book);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FastConnectDialog::writeState()
 {
     QByteArray buffer;

@@ -49,6 +49,7 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerTree::ComputerTree(QWidget* parent)
     : QTreeWidget(parent),
       mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
@@ -59,6 +60,7 @@ ComputerTree::ComputerTree(QWidget* parent)
             this, &ComputerTree::onHeaderContextMenu);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
@@ -67,6 +69,7 @@ void ComputerTree::mousePressEvent(QMouseEvent* event)
     QTreeWidget::mousePressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->buttons() & Qt::LeftButton)
@@ -83,22 +86,26 @@ void ComputerTree::mouseMoveEvent(QMouseEvent* event)
     QTreeWidget::mouseMoveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::dragEnterEvent(QDragEnterEvent* /* event */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::dragMoveEvent(QDragMoveEvent* event)
 {
     event->ignore();
     QWidget::dragMoveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::dropEvent(QDropEvent* /* event */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::startDrag(Qt::DropActions supported_actions)
 {
     ComputerItem* computer_item = reinterpret_cast<ComputerItem*>(itemAt(start_pos_));
@@ -115,6 +122,7 @@ void ComputerTree::startDrag(Qt::DropActions supported_actions)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerTree::onHeaderContextMenu(const QPoint& pos)
 {
     QMenu menu;

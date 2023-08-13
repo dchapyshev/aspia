@@ -43,6 +43,7 @@ namespace console {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void cleanupComputer(proto::address_book::Computer* computer)
 {
     if (!computer)
@@ -55,6 +56,7 @@ void cleanupComputer(proto::address_book::Computer* computer)
     base::memZero(computer->mutable_comment());
 }
 
+//--------------------------------------------------------------------------------------------------
 void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
 {
     if (!computer_group)
@@ -75,6 +77,7 @@ void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void cleanupData(proto::address_book::Data* data)
 {
     if (!data)
@@ -83,6 +86,7 @@ void cleanupData(proto::address_book::Data* data)
     cleanupComputerGroup(data->mutable_root_group());
 }
 
+//--------------------------------------------------------------------------------------------------
 void cleanupFile(proto::address_book::File* file)
 {
     if (!file)
@@ -94,6 +98,7 @@ void cleanupFile(proto::address_book::File* file)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AddressBookTab::AddressBookTab(const QString& file_path,
                                proto::address_book::File&& file,
                                proto::address_book::Data&& data,
@@ -176,6 +181,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
             this, &AddressBookTab::onComputerItemDoubleClicked);
 }
 
+//--------------------------------------------------------------------------------------------------
 AddressBookTab::~AddressBookTab()
 {
     LOG(LS_INFO) << "Dtor";
@@ -189,6 +195,7 @@ AddressBookTab::~AddressBookTab()
     settings.setAddressBookState(saveState());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 {
@@ -209,6 +216,7 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
     return tab;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* parent)
 {
@@ -298,21 +306,25 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
                               parent);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBookTab::addressBookName() const
 {
     return QString::fromStdString(data_.root_group().name());
 }
 
+//--------------------------------------------------------------------------------------------------
 QString AddressBookTab::addressBookGuid() const
 {
     return QString::fromStdString(data_.guid());
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerItem* AddressBookTab::currentComputer() const
 {
     return dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
 {
     ComputerGroupItem* current_item =
@@ -323,11 +335,13 @@ proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
     return current_item->computerGroup();
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroup* AddressBookTab::rootComputerGroup()
 {
     return data_.mutable_root_group();
 }
 
+//--------------------------------------------------------------------------------------------------
 AddressBookTab* AddressBookTab::duplicateTab() const
 {
     return new AddressBookTab(filePath(),
@@ -337,21 +351,25 @@ AddressBookTab* AddressBookTab::duplicateTab() const
                               static_cast<QWidget*>(parent()));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookTab::save()
 {
     return saveToFile(file_path_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookTab::saveAs()
 {
     return saveToFile(QString());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookTab::isRouterEnabled() const
 {
     return data_.enable_router();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
 {
     if (!data_.enable_router())
@@ -368,6 +386,7 @@ std::optional<client::RouterConfig> AddressBookTab::routerConfig() const
     return std::move(router_config);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::addComputerGroup()
 {
     stopOnlineChecker();
@@ -406,6 +425,7 @@ void AddressBookTab::addComputerGroup()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::addComputer()
 {
     stopOnlineChecker();
@@ -433,6 +453,7 @@ void AddressBookTab::addComputer()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::copyComputer()
 {
     stopOnlineChecker();
@@ -464,6 +485,7 @@ void AddressBookTab::copyComputer()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyAddressBook()
 {
     stopOnlineChecker();
@@ -483,6 +505,7 @@ void AddressBookTab::modifyAddressBook()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyComputerGroup()
 {
     stopOnlineChecker();
@@ -523,6 +546,7 @@ void AddressBookTab::modifyComputerGroup()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::modifyComputer()
 {
     stopOnlineChecker();
@@ -543,6 +567,7 @@ void AddressBookTab::modifyComputer()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::removeComputerGroup()
 {
     stopOnlineChecker();
@@ -577,6 +602,7 @@ void AddressBookTab::removeComputerGroup()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::removeComputer()
 {
     stopOnlineChecker();
@@ -610,6 +636,7 @@ void AddressBookTab::removeComputer()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::startOnlineChecker()
 {
     stopOnlineChecker();
@@ -639,6 +666,7 @@ void AddressBookTab::startOnlineChecker()
     online_checker_->checkComputers(routerConfig(), computers, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::stopOnlineChecker()
 {
     online_checker_.reset();
@@ -655,6 +683,7 @@ void AddressBookTab::stopOnlineChecker()
     emit updateStateForComputers(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
@@ -666,6 +695,7 @@ void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
     updateComputerList(current_item);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupContextMenu(const QPoint& point)
 {
     ComputerGroupItem* current_item =
@@ -680,6 +710,7 @@ void AddressBookTab::onGroupContextMenu(const QPoint& point)
     emit computerGroupContextMenu(ui.tree_group->viewport()->mapToGlobal(point), is_root);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
 {
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
@@ -690,6 +721,7 @@ void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
 {
     ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
@@ -700,6 +732,7 @@ void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onGroupItemDropped()
 {
     ComputerGroupItem* current_item =
@@ -712,6 +745,7 @@ void AddressBookTab::onGroupItemDropped()
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
@@ -721,6 +755,7 @@ void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column 
     emit computerActivated(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerContextMenu(const QPoint& point)
 {
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->itemAt(point));
@@ -733,6 +768,7 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
     emit computerContextMenu(current_item, ui.tree_computer->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* column */)
 {
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
@@ -742,6 +778,7 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
     emit computerDoubleClicked(current_item->computerToConnect());
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::showEvent(QShowEvent* event)
 {
     ComputerGroupItem* current_group =
@@ -766,6 +803,7 @@ void AddressBookTab::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::keyPressEvent(QKeyEvent* event)
 {
     QWidget* focus_widget = QApplication::focusWidget();
@@ -832,6 +870,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 {
     ComputerItem* item = nullptr;
@@ -870,6 +909,7 @@ void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
     item->setText(ComputerItem::COLUMN_INDEX_STATUS, status);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::onOnlineCheckerFinished()
 {
     QTimer::singleShot(0, this, [this]()
@@ -879,12 +919,14 @@ void AddressBookTab::onOnlineCheckerFinished()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::setChanged(bool value)
 {
     is_changed_ = value;
     emit addressBookChanged(value);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::retranslateUi()
 {
     ui.retranslateUi(this);
@@ -898,6 +940,7 @@ void AddressBookTab::retranslateUi()
         onGroupItemClicked(current, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray AddressBookTab::saveState()
 {
     QByteArray buffer;
@@ -913,6 +956,7 @@ QByteArray AddressBookTab::saveState()
     return buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
@@ -942,6 +986,7 @@ void AddressBookTab::restoreState(const QByteArray& state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
     online_checker_.reset();
@@ -952,6 +997,7 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
     ui.tree_computer->addTopLevelItems(computer_group->ComputerList());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
     std::string serialized_data = data_.SerializeAsString();
@@ -1019,6 +1065,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem* AddressBookTab::rootComputerGroupItem()
 {
     ComputerGroupItem* root_item = nullptr;
@@ -1033,6 +1080,7 @@ ComputerGroupItem* AddressBookTab::rootComputerGroupItem()
     return root_item;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QString AddressBookTab::parentName(ComputerGroupItem* item)
 {
@@ -1042,6 +1090,7 @@ QString AddressBookTab::parentName(ComputerGroupItem* item)
     return QString::fromStdString(item->computerGroup()->name());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
 {
@@ -1056,6 +1105,7 @@ void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
     dialog.exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AddressBookTab::showSaveError(QWidget* parent, const QString& message)
 {

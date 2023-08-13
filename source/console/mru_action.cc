@@ -20,6 +20,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 MruAction::MruAction(const QString& file, QObject* parent)
     : QAction(file, parent),
     file_path_(file)

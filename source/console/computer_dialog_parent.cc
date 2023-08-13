@@ -20,6 +20,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialogParent::ComputerDialogParent(int type, QWidget* parent)
     : ComputerDialogTab(type, parent)
 {

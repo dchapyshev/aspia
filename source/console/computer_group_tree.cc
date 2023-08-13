@@ -25,6 +25,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupTree::ComputerGroupTree(QWidget* parent)
     : QTreeWidget(parent),
       computer_group_mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
@@ -34,16 +35,19 @@ ComputerGroupTree::ComputerGroupTree(QWidget* parent)
     setAcceptDrops(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::setComputerMimeType(const QString& mime_type)
 {
     computer_mime_type_ = mime_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupTree::dragging() const
 {
     return dragging_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
@@ -52,6 +56,7 @@ void ComputerGroupTree::mousePressEvent(QMouseEvent* event)
     QTreeWidget::mousePressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->buttons() & Qt::LeftButton)
@@ -68,6 +73,7 @@ void ComputerGroupTree::mouseMoveEvent(QMouseEvent* event)
     QTreeWidget::mouseMoveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
@@ -81,12 +87,14 @@ void ComputerGroupTree::dragEnterEvent(QDragEnterEvent* event)
     dragging_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::dragLeaveEvent(QDragLeaveEvent* event)
 {
     dragging_ = false;
     QTreeWidget::dragLeaveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
 {
     event->ignore();
@@ -134,6 +142,7 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
     QWidget::dragMoveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::dropEvent(QDropEvent* event)
 {
     const QMimeData* mime_data = event->mimeData();
@@ -208,6 +217,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
     dragging_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item)
 {
     if (!target || !item)
@@ -239,6 +249,7 @@ bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerG
     return !is_child_item(item, target);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
 {
     ComputerGroupItem* computer_group = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));

@@ -27,6 +27,7 @@ namespace {
 // Maximum number of entries in the list.
 const int kMaxMruSize = 10;
 
+//--------------------------------------------------------------------------------------------------
 QString normalizedFilePath(const QString& file)
 {
     QString normalized(file);
@@ -34,6 +35,7 @@ QString normalizedFilePath(const QString& file)
     return normalized;
 }
 
+//--------------------------------------------------------------------------------------------------
 QStringList normalizedFileList(const QStringList& source_list)
 {
     QStringList result;
@@ -46,6 +48,7 @@ QStringList normalizedFileList(const QStringList& source_list)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void Mru::setRecentOpen(const QStringList& list)
 {
     recent_list_ = normalizedFileList(list);
@@ -55,11 +58,13 @@ void Mru::setRecentOpen(const QStringList& list)
         recent_list_.pop_back();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mru::setPinnedFiles(const QStringList& list)
 {
     pinned_list_ = normalizedFileList(list);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mru::addRecentFile(const QString& file_path)
 {
     QString normalized_path = normalizedFilePath(file_path);
@@ -91,6 +96,7 @@ bool Mru::addRecentFile(const QString& file_path)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mru::pinFile(const QString& file_path)
 {
     QString normalized_path = normalizedFilePath(file_path);
@@ -101,6 +107,7 @@ void Mru::pinFile(const QString& file_path)
     pinned_list_.push_back(normalized_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mru::unpinFile(const QString& file_path)
 {
     QString normalized_path = normalizedFilePath(file_path);
@@ -111,6 +118,7 @@ void Mru::unpinFile(const QString& file_path)
     pinned_list_.removeAll(normalized_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Mru::isPinnedFile(const QString& file_path) const
 {
     QString normalized_path = normalizedFilePath(file_path);
@@ -122,6 +130,7 @@ bool Mru::isPinnedFile(const QString& file_path) const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void Mru::clearRecentOpen()
 {
     recent_list_.clear();

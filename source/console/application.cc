@@ -32,6 +32,7 @@ const char kOpenFile[] = "open_file:";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
@@ -70,17 +71,20 @@ Application::Application(int& argc, char* argv[])
     setLocale(settings_.locale());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::activateWindow()
 {
     sendMessage(kActivateWindow);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::openFile(const QString& file_path)
 {
     QByteArray message(kOpenFile);

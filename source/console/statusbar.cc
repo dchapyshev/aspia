@@ -22,6 +22,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent),
       animation_timer_(new QTimer(this))
@@ -66,6 +67,7 @@ StatusBar::StatusBar(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::setCurrentComputerGroup(
     const proto::address_book::ComputerGroup& computer_group)
 {
@@ -101,6 +103,7 @@ void StatusBar::setCurrentComputerGroup(
     status_label_->setVisible(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::clear()
 {
     animation_timer_->stop();
@@ -115,6 +118,7 @@ void StatusBar::clear()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void StatusBar::setUpdateState(bool enable)
 {
     if (status_label_)

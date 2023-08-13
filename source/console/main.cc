@@ -27,6 +27,7 @@
 
 #include <QCommandLineParser>
 
+//--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
 #if !defined(I18L_DISABLED)

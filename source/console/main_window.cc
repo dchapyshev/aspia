@@ -44,6 +44,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(const QString& file_path)
 {
     LOG(LS_INFO) << "Ctor";
@@ -233,11 +234,13 @@ MainWindow::MainWindow(const QString& file_path)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::showConsole()
 {
     LOG(LS_INFO) << "Show console";
@@ -254,6 +257,7 @@ void MainWindow::showConsole()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::openAddressBook(const QString& file_path)
 {
     LOG(LS_INFO) << "Open address book: " << file_path;
@@ -288,11 +292,13 @@ void MainWindow::openAddressBook(const QString& file_path)
     addAddressBookTab(tab);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onNew()
 {
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onOpen()
 {
     Settings& settings = Application::instance()->settings();
@@ -309,6 +315,7 @@ void MainWindow::onOpen()
     openAddressBook(file_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSave()
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -325,6 +332,7 @@ void MainWindow::onSave()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSaveAs()
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -361,6 +369,7 @@ void MainWindow::onSaveAs()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSaveAll()
 {
     LOG(LS_INFO) << "Save All called";
@@ -376,12 +385,14 @@ void MainWindow::onSaveAll()
         ui.action_save_all->setEnabled(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onClose()
 {
     LOG(LS_INFO) << "Close called";
     onCloseTab(ui.tab_widget->currentIndex());
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCloseAll()
 {
     LOG(LS_INFO) << "Close All called";
@@ -390,6 +401,7 @@ void MainWindow::onCloseAll()
         onCloseTab(i);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAddressBookProperties()
 {
     LOG(LS_INFO) << "Open address book properties";
@@ -399,6 +411,7 @@ void MainWindow::onAddressBookProperties()
         tab->modifyAddressBook();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAddComputer()
 {
     LOG(LS_INFO) << "Add Computer called";
@@ -408,6 +421,7 @@ void MainWindow::onAddComputer()
         tab->addComputer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCopyComputer()
 {
     LOG(LS_INFO) << "Copy Computer called";
@@ -417,6 +431,7 @@ void MainWindow::onCopyComputer()
         tab->copyComputer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onModifyComputer()
 {
     LOG(LS_INFO) << "Modify Computer called";
@@ -426,6 +441,7 @@ void MainWindow::onModifyComputer()
         tab->modifyComputer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onDeleteComputer()
 {
     LOG(LS_INFO) << "Delete Computer called";
@@ -435,6 +451,7 @@ void MainWindow::onDeleteComputer()
         tab->removeComputer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAddComputerGroup()
 {
     LOG(LS_INFO) << "Add Computer Group called";
@@ -444,6 +461,7 @@ void MainWindow::onAddComputerGroup()
         tab->addComputerGroup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onModifyComputerGroup()
 {
     LOG(LS_INFO) << "Modify Computer Group called";
@@ -453,6 +471,7 @@ void MainWindow::onModifyComputerGroup()
         tab->modifyComputerGroup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onDeleteComputerGroup()
 {
     LOG(LS_INFO) << "Delete Computer Group called";
@@ -462,6 +481,7 @@ void MainWindow::onDeleteComputerGroup()
         tab->removeComputerGroup();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onUpdateStatus()
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -474,11 +494,13 @@ void MainWindow::onUpdateStatus()
     tab->startOnlineChecker();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onOnlineHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCheckUpdates()
 {
 #if defined(OS_WIN)
@@ -488,11 +510,13 @@ void MainWindow::onCheckUpdates()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
     common::AboutDialog(tr("Aspia Console"), this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onFastConnect()
 {
     LOG(LS_INFO) << "Fast Connect called";
@@ -502,6 +526,7 @@ void MainWindow::onFastConnect()
         FastConnectDialog(this, tab->addressBookGuid(), tab->rootComputerGroup()->config(), tab->routerConfig()).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onDesktopManageConnect()
 {
     LOG(LS_INFO) << "Connect to desktop manage session";
@@ -519,6 +544,7 @@ void MainWindow::onDesktopManageConnect()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onDesktopViewConnect()
 {
     LOG(LS_INFO) << "Connect to desktop view session";
@@ -536,6 +562,7 @@ void MainWindow::onDesktopViewConnect()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onFileTransferConnect()
 {
     LOG(LS_INFO) << "Connect to file transfer session";
@@ -553,6 +580,7 @@ void MainWindow::onFileTransferConnect()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSystemInfoConnect()
 {
     LOG(LS_INFO) << "Connect to system info session";
@@ -570,6 +598,7 @@ void MainWindow::onSystemInfoConnect()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onTextChatConnect()
 {
     LOG(LS_INFO) << "Connect to text chat session";
@@ -587,6 +616,7 @@ void MainWindow::onTextChatConnect()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCurrentTabChanged(int index)
 {
     LOG(LS_INFO) << "Current tab changed to: " << index;
@@ -632,6 +662,7 @@ void MainWindow::onCurrentTabChanged(int index)
         ui.status_bar->clear();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCloseTab(int index)
 {
     LOG(LS_INFO) << "Close tab: " << index;
@@ -692,6 +723,7 @@ void MainWindow::onCloseTab(int index)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAddressBookChanged(bool changed)
 {
     ui.action_save->setEnabled(changed);
@@ -715,6 +747,7 @@ void MainWindow::onAddressBookChanged(bool changed)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
 {
     ui.action_add_computer_group->setEnabled(activated);
@@ -751,6 +784,7 @@ void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onComputerActivated(bool activated)
 {
     ui.action_modify_computer->setEnabled(activated);
@@ -758,6 +792,7 @@ void MainWindow::onComputerActivated(bool activated)
     ui.action_delete_computer->setEnabled(activated);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root)
 {
     QMenu menu;
@@ -779,6 +814,7 @@ void MainWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root)
     menu.exec(point);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint& point)
 {
     QMenu menu;
@@ -803,6 +839,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
     menu.exec(point);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& computer)
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -844,6 +881,7 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
     connectToComputer(computer_to_connect, tab->routerConfig());
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onTabContextMenu(const QPoint& pos)
 {
     QTabBar* tab_bar = ui.tab_widget->tabBar();
@@ -952,6 +990,7 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onLanguageChanged(QAction* action)
 {
     Application* application = Application::instance();
@@ -969,6 +1008,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     rebuildMruMenu();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onRecentOpenTriggered(QAction* action)
 {
     if (action == ui.action_clear_mru ||
@@ -1009,6 +1049,7 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onShowHideToTray()
 {
     if (isHidden())
@@ -1037,6 +1078,7 @@ void MainWindow::onShowHideToTray()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::WindowStateChange && ui.action_minimize_to_tray->isChecked())
@@ -1048,6 +1090,7 @@ void MainWindow::changeEvent(QEvent* event)
     QMainWindow::changeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     LOG(LS_INFO) << "Close event detected";
@@ -1111,6 +1154,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
@@ -1128,6 +1172,7 @@ void MainWindow::onUpdateCheckedFinished(const base::ByteArray& result)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -1147,6 +1192,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::rebuildMruMenu()
 {
     for (QAction* action : ui.menu_recent_open->actions())
@@ -1169,6 +1215,7 @@ void MainWindow::rebuildMruMenu()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::showTrayIcon(bool show)
 {
     if (show)
@@ -1199,6 +1246,7 @@ void MainWindow::showTrayIcon(bool show)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
 {
     if (!new_tab)
@@ -1259,6 +1307,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.tab_widget->setCurrentIndex(index);
 }
 
+//--------------------------------------------------------------------------------------------------
 AddressBookTab* MainWindow::currentAddressBookTab()
 {
     int current_tab = ui.tab_widget->currentIndex();
@@ -1268,6 +1317,7 @@ AddressBookTab* MainWindow::currentAddressBookTab()
     return dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MainWindow::hasChangedTabs() const
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -1280,6 +1330,7 @@ bool MainWindow::hasChangedTabs() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MainWindow::hasUnpinnedTabs() const
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -1292,6 +1343,7 @@ bool MainWindow::hasUnpinnedTabs() const
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectToComputer(const proto::address_book::Computer& computer,
                                    const std::optional<client::RouterConfig>& router_config)
 {
@@ -1370,6 +1422,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         session_window->close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectToRouter()
 {
     AddressBookTab* tab = currentAddressBookTab();

@@ -46,6 +46,7 @@ enum ItemType
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
                                          Mode mode,
                                          const QString& parent_name,
@@ -131,17 +132,20 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     ui.tree_category->expandAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialog::~ComputerGroupDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)
 {
     settings_.setComputerGroupDialogGeometry(saveGeometry());
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
@@ -156,6 +160,7 @@ bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::keyPressEvent(QKeyEvent* event)
 {
     if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
@@ -170,6 +175,7 @@ void ComputerGroupDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
@@ -187,17 +193,20 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
         showTab(current->type());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showTab(int type)
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
@@ -210,6 +219,7 @@ void ComputerGroupDialog::showTab(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialog::saveChanges()
 {
     QString name = ui.edit_name->text();

@@ -26,6 +26,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerItem::ComputerItem(proto::address_book::Computer* computer,
                            ComputerGroupItem* parent_group_item)
     : computer_(computer),
@@ -39,6 +40,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     updateItem();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerItem::updateItem()
 {
     QString address_title = QString::fromStdString(computer_->address());
@@ -78,6 +80,7 @@ void ComputerItem::updateItem()
     setText(COLUMN_INDEX_MODIFIED, modify_time);
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::Computer ComputerItem::computerToConnect()
 {
     proto::address_book::Computer computer(*computer_);
@@ -118,11 +121,13 @@ proto::address_book::Computer ComputerItem::computerToConnect()
     return computer;
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem* ComputerItem::parentComputerGroupItem()
 {
     return parent_group_item_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerItem::operator<(const QTreeWidgetItem& other) const
 {
     switch (treeWidget()->sortColumn())
