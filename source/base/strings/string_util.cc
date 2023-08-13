@@ -21,6 +21,8 @@
 #include "base/strings/string_util_constants.h"
 #include "base/strings/unicode.h"
 
+#include <cstdint>
+
 namespace base {
 
 namespace {
