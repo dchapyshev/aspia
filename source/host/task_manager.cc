@@ -28,6 +28,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 TaskManager::TaskManager(Delegate* delegate)
     : process_monitor_(std::make_unique<ProcessMonitor>()),
       delegate_(delegate)
@@ -36,11 +37,13 @@ TaskManager::TaskManager(Delegate* delegate)
     DCHECK(delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 TaskManager::~TaskManager()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 {
     if (message.has_process_list_request())
@@ -165,6 +168,7 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManager::sendProcessList(uint32_t flags)
 {
     proto::task_manager::HostToClient message;
@@ -208,6 +212,7 @@ void TaskManager::sendProcessList(uint32_t flags)
     delegate_->onTaskManagerMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManager::sendServiceList()
 {
     proto::task_manager::HostToClient message;
@@ -288,6 +293,7 @@ void TaskManager::sendServiceList()
     delegate_->onTaskManagerMessage(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TaskManager::sendUserList()
 {
     proto::task_manager::HostToClient message;

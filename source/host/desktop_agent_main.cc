@@ -37,6 +37,7 @@
 #include <wrl/client.h>
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 void desktopAgentMain(int argc, const char* const* argv)
 {
 #if defined(OS_WIN)

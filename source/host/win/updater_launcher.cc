@@ -35,6 +35,7 @@ namespace {
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
+//--------------------------------------------------------------------------------------------------
 bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle user_token;
@@ -90,6 +91,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 {
     STARTUPINFOW startup_info;
@@ -140,6 +142,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 bool launchUpdater(base::SessionId session_id)
 {
     if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
@@ -170,6 +173,7 @@ bool launchUpdater(base::SessionId session_id)
     return createProcessWithToken(user_token, command_line);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool launchSilentUpdater()
 {
     std::filesystem::path file_path;

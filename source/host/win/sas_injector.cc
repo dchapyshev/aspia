@@ -48,6 +48,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedSasPolicy);
 };
 
+//--------------------------------------------------------------------------------------------------
 ScopedSasPolicy::ScopedSasPolicy()
 {
     LONG status = key_.create(HKEY_LOCAL_MACHINE,
@@ -80,6 +81,7 @@ ScopedSasPolicy::ScopedSasPolicy()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedSasPolicy::~ScopedSasPolicy()
 {
     if (!key_.isValid())
@@ -96,6 +98,7 @@ ScopedSasPolicy::~ScopedSasPolicy()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void injectSAS()
 {
     HMODULE sas_dll = LoadLibraryExW(L"sas.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);

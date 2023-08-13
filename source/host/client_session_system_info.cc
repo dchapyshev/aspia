@@ -27,22 +27,26 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionSystemInfo::ClientSessionSystemInfo(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_SYSTEM_INFO, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionSystemInfo::~ClientSessionSystemInfo()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onStarted()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
 #if defined(OS_WIN)
@@ -61,6 +65,7 @@ void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::B
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionSystemInfo::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing

@@ -33,6 +33,7 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(task_runner),
       peer_manager_(std::make_unique<base::RelayPeerManager>(task_runner, this)),
@@ -41,11 +42,13 @@ RouterController::RouterController(std::shared_ptr<base::TaskRunner> task_runner
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterController::~RouterController()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
 {
     router_info_ = router_info;
@@ -63,6 +66,7 @@ void RouterController::start(const RouterInfo& router_info, Delegate* delegate)
     connectToRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::hostIdRequest(const std::string& session_name)
 {
     LOG(LS_INFO) << "Started ID request for session '" << session_name << "'";
@@ -98,6 +102,7 @@ void RouterController::hostIdRequest(const std::string& session_name)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::resetHostId(base::HostId host_id)
 {
     LOG(LS_INFO) << "ResetHostId request: " << host_id;
@@ -113,6 +118,7 @@ void RouterController::resetHostId(base::HostId host_id)
     channel_->send(proto::ROUTER_CHANNEL_ID_SESSION, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpConnected()
 {
     DCHECK(channel_);
@@ -162,6 +168,7 @@ void RouterController::onTcpConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
@@ -171,6 +178,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
     delayedConnectToRouter();
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     proto::RouterToPeer in_message;
@@ -261,11 +269,13 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New peer connected";
@@ -280,6 +290,7 @@ void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> chan
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
@@ -291,12 +302,14 @@ void RouterController::connectToRouter()
     channel_->connect(router_info_.address, router_info_.port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::delayedConnectToRouter()
 {
     LOG(LS_INFO) << "Reconnect after " << kReconnectTimeout.count() << " seconds";
     reconnect_timer_.start(kReconnectTimeout, std::bind(&RouterController::connectToRouter, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::routerStateChanged(proto::internal::RouterState::State state)
 {
     LOG(LS_INFO) << "Router state changed: " << routerStateToString(state);
@@ -316,6 +329,7 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
     delegate_->onRouterStateChanged(router_state);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* RouterController::routerStateToString(proto::internal::RouterState::State state)
 {

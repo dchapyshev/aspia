@@ -40,6 +40,7 @@ namespace host {
 namespace {
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle user_token;
@@ -131,6 +132,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Worker);
 };
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::Worker::Worker(
     base::SessionId session_id, std::shared_ptr<base::TcpChannelProxy> channel_proxy)
     : session_id_(session_id),
@@ -139,18 +141,21 @@ ClientSessionFileTransfer::Worker::Worker(
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::Worker::~Worker()
 {
     LOG(LS_INFO) << "Dtor";
     thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::Worker::start()
 {
     LOG(LS_INFO) << "Start worker";
     thread_.start(base::MessageLoop::Type::DEFAULT, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileRequest> request)
 {
     if (impl_)
@@ -168,6 +173,7 @@ void ClientSessionFileTransfer::Worker::postRequest(std::unique_ptr<proto::FileR
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "After thread running";
@@ -192,6 +198,7 @@ void ClientSessionFileTransfer::Worker::onBeforeThreadRunning()
     impl_ = std::make_unique<common::FileWorker>(thread_.taskRunner());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "Before thread running";
@@ -213,27 +220,32 @@ void ClientSessionFileTransfer::Worker::onAfterThreadRunning()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::Worker::onTaskDone(std::shared_ptr<common::FileTask> task)
 {
     channel_proxy_->send(proto::HOST_CHANNEL_ID_SESSION, base::serialize(task->reply()));
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::ClientSessionFileTransfer(std::unique_ptr<base::TcpChannel> channel)
     : ClientSession(proto::SESSION_TYPE_FILE_TRANSFER, std::move(channel))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onStarted()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     std::unique_ptr<proto::FileRequest> request = std::make_unique<proto::FileRequest>();
@@ -255,6 +267,7 @@ void ClientSessionFileTransfer::onReceived(uint8_t /* channel_id */, const base:
     worker_->postRequest(std::move(request));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing

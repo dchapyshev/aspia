@@ -192,6 +192,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedPrivilege);
 };
 
+//--------------------------------------------------------------------------------------------------
 std::string userNameByHandle(HANDLE process)
 {
     base::win::ScopedHandle token;
@@ -249,6 +250,7 @@ std::string userNameByHandle(HANDLE process)
     return base::utf8FromWide(user_buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
@@ -263,6 +265,7 @@ std::string filePathByHandle(HANDLE process)
     return base::utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
 {
     int64_t cpu_ratio =
@@ -272,6 +275,7 @@ int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
     return static_cast<int32_t>(cpu_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS_INFORMATION& info,
                    int64_t total_time, bool update_only)
 {
@@ -323,6 +327,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::ProcessMonitor()
 {
     memset(&prev_cpu_idle_time_, 0, sizeof(prev_cpu_idle_time_));
@@ -385,12 +390,14 @@ ProcessMonitor::ProcessMonitor()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::~ProcessMonitor()
 {
     if (ntdll_library_)
         FreeLibrary(reinterpret_cast<HMODULE>(ntdll_library_));
 }
 
+//--------------------------------------------------------------------------------------------------
 const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
 {
     if (reset_cache)
@@ -405,6 +412,7 @@ const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
     return table_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcCpuUsage()
 {
     NtQuerySystemInformationFunc nt_query_system_information_func =
@@ -458,6 +466,7 @@ int ProcessMonitor::calcCpuUsage()
     return current_cpu_usage;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcMemoryUsage()
 {
     NtQuerySystemInformationFunc nt_query_system_information_func =
@@ -485,6 +494,7 @@ int ProcessMonitor::calcMemoryUsage()
     return current_memory_usage;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::endProcess(ProcessId process_id)
 {
     auto result = table_.find(process_id);
@@ -526,6 +536,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::updateSnapshot()
 {
     while (true)
@@ -552,6 +563,7 @@ bool ProcessMonitor::updateSnapshot()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ProcessMonitor::updateTable()
 {
     OWN_SYSTEM_PROCESS_INFORMATION* current;

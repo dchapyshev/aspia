@@ -80,6 +80,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SessionTreeItem);
 };
 
+//--------------------------------------------------------------------------------------------------
 QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QString& tooltip)
 {
     static const QString kStyle = QStringLiteral("\
@@ -112,6 +113,7 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 NotifierWindow::NotifierWindow(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
@@ -160,11 +162,13 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::updateWindowPosition);
 }
 
+//--------------------------------------------------------------------------------------------------
 NotifierWindow::~NotifierWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<uint32_t> NotifierWindow::sessions(proto::SessionType session_type)
 {
     std::vector<uint32_t> result;
@@ -179,6 +183,7 @@ std::vector<uint32_t> NotifierWindow::sessions(proto::SessionType session_type)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!clients.empty())
@@ -234,17 +239,20 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onVoiceChat()
 {
     is_voice_chat_ = !is_voice_chat_;
     emit voiceChat(is_voice_chat_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onTextChat()
 {
     emit textChat();
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onLockMouse()
 {
     is_mouse_locked_ = !is_mouse_locked_;
@@ -269,6 +277,7 @@ void NotifierWindow::onLockMouse()
     emit lockMouse(is_mouse_locked_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onLockKeyboard()
 {
     is_keyboard_locked_ = !is_keyboard_locked_;
@@ -293,6 +302,7 @@ void NotifierWindow::onLockKeyboard()
     emit lockKeyboard(is_keyboard_locked_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onPause()
 {
     is_paused_ = !is_paused_;
@@ -317,6 +327,7 @@ void NotifierWindow::onPause()
     emit pause(is_paused_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onStop()
 {
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
@@ -330,17 +341,20 @@ void NotifierWindow::onStop()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::retranslateUi()
 {
     ui.retranslateUi(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::closeNotifier()
 {
     should_be_close_ = true;
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui.label_title || object == ui.label_connections)
@@ -384,11 +398,13 @@ bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::hideEvent(QHideEvent* event)
 {
     event->ignore();
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_close_)
@@ -400,12 +416,14 @@ void NotifierWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::moveEvent(QMoveEvent* event)
 {
     LOG(LS_INFO) << "Notifier moved to: " << event->pos() << " (from: " << event->oldPos() << ")";
     QWidget::moveEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
@@ -414,6 +432,7 @@ void NotifierWindow::onShowHidePressed()
         showNotifier();
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::updateWindowPosition()
 {
     showNotifier();
@@ -430,6 +449,7 @@ void NotifierWindow::updateWindowPosition()
     move(x, y);
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::showNotifier()
 {
     LOG(LS_INFO) << "showNotifier called";
@@ -456,6 +476,7 @@ void NotifierWindow::showNotifier()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void NotifierWindow::hideNotifier()
 {
     LOG(LS_INFO) << "hideNotifier called";
@@ -479,6 +500,7 @@ void NotifierWindow::hideNotifier()
     ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-right-gray.png")));
 }
 
+//--------------------------------------------------------------------------------------------------
 QRect NotifierWindow::currentAvailableRect()
 {
 #if defined(OS_WIN)

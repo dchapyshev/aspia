@@ -27,6 +27,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
       exist_names_(exist_names),
@@ -92,11 +93,13 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::~UserDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -113,18 +116,21 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckAllButtonPressed()
 {
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckNoneButtonPressed()
 {
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
@@ -249,6 +255,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::setAccountChanged(bool changed)
 {
     account_changed_ = changed;

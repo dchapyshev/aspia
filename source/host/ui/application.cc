@@ -51,6 +51,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(EventFilter);
 };
 
+//--------------------------------------------------------------------------------------------------
 // static
 EventFilter* EventFilter::instance()
 {
@@ -58,6 +59,7 @@ EventFilter* EventFilter::instance()
     return &event_filter;
 }
 
+//--------------------------------------------------------------------------------------------------
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
 #else
@@ -78,6 +80,7 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
@@ -112,17 +115,20 @@ Application::Application(int& argc, char* argv[])
     setLocale(settings_.locale());
 }
 
+//--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::activate()
 {
     LOG(LS_INFO) << "Sending activate message";

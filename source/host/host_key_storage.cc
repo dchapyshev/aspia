@@ -25,6 +25,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string sessionKey(std::string_view session_name)
 {
     base::ByteArray session_hash =
@@ -32,6 +33,7 @@ std::string sessionKey(std::string_view session_name)
     return base::strCat({ "session/", base::toHex(session_hash) });
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string sessionKeyForHostId(std::string_view session_name)
 {
     base::ByteArray session_hash =
@@ -41,14 +43,17 @@ std::string sessionKeyForHostId(std::string_view session_name)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 HostKeyStorage::HostKeyStorage()
     : impl_(base::JsonSettings::Scope::SYSTEM, "aspia", "host_key")
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 HostKeyStorage::~HostKeyStorage() = default;
 
+//--------------------------------------------------------------------------------------------------
 base::ByteArray HostKeyStorage::key(std::string_view session_name) const
 {
     if (session_name.empty())
@@ -57,6 +62,7 @@ base::ByteArray HostKeyStorage::key(std::string_view session_name) const
     return impl_.get<base::ByteArray>(sessionKey(session_name));
 }
 
+//--------------------------------------------------------------------------------------------------
 void HostKeyStorage::setKey(std::string_view session_name, const base::ByteArray& key)
 {
     if (session_name.empty())
@@ -67,6 +73,7 @@ void HostKeyStorage::setKey(std::string_view session_name, const base::ByteArray
     impl_.flush();
 }
 
+//--------------------------------------------------------------------------------------------------
 base::HostId HostKeyStorage::lastHostId(std::string_view session_name) const
 {
     if (session_name.empty())
@@ -75,6 +82,7 @@ base::HostId HostKeyStorage::lastHostId(std::string_view session_name) const
     return impl_.get<base::HostId>(sessionKeyForHostId(session_name));
 }
 
+//--------------------------------------------------------------------------------------------------
 void HostKeyStorage::setLastHostId(std::string_view session_name, base::HostId host_id)
 {
     if (session_name.empty())

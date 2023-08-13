@@ -43,6 +43,7 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool waitForValidInputDesktop()
 {
 #if defined(OS_WIN)
@@ -80,6 +81,7 @@ bool waitForValidInputDesktop()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 int hostMain(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);

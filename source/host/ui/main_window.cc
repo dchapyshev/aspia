@@ -55,6 +55,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       window_proxy_(std::make_shared<UserSessionWindowProxy>(
@@ -125,11 +126,13 @@ MainWindow::MainWindow(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::connectToService()
 {
     if (agent_proxy_)
@@ -148,6 +151,7 @@ void MainWindow::connectToService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::activateHost()
 {
     LOG(LS_INFO) << "Activating host";
@@ -157,6 +161,7 @@ void MainWindow::activateHost()
     connectToService();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::hideToTray()
 {
     LOG(LS_INFO) << "Hide application to system tray";
@@ -165,6 +170,7 @@ void MainWindow::hideToTray()
     setVisible(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
@@ -189,6 +195,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onStatusChanged(UserSessionAgent::Status status)
 {
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
@@ -215,6 +222,7 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!notifier_)
@@ -331,6 +339,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
 {
     ui.button_new_password->setEnabled(true);
@@ -353,6 +362,7 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
     updateTrayIconTooltip();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 {
     last_state_ = state.state();
@@ -425,6 +435,7 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
     status_dialog_->addMessage(status);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onConnectConfirmationRequest(
     const proto::internal::ConnectConfirmationRequest& request)
 {
@@ -435,6 +446,7 @@ void MainWindow::onConnectConfirmationRequest(
         agent_proxy_->connectConfirmation(request.id(), accept);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onVideoRecordingStateChanged(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
@@ -454,6 +466,7 @@ void MainWindow::onVideoRecordingStateChanged(
     tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/main.ico"), 1200);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onTextChat(const proto::TextChat& text_chat)
 {
     if (text_chat.has_chat_message())
@@ -477,6 +490,7 @@ void MainWindow::onTextChat(const proto::TextChat& text_chat)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::realClose()
 {
     LOG(LS_INFO) << "realClose called";
@@ -485,6 +499,7 @@ void MainWindow::realClose()
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
@@ -516,6 +531,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
 #if defined(OS_WIN)
@@ -588,6 +604,7 @@ void MainWindow::onSettings()
     LOG(LS_INFO) << "Settings dialog close";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onShowHide()
 {
     if (isVisible())
@@ -602,11 +619,13 @@ void MainWindow::onShowHide()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onHelp()
 {
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onAbout()
 {
     LOG(LS_INFO) << "About dialog open";
@@ -614,6 +633,7 @@ void MainWindow::onAbout()
     LOG(LS_INFO) << "About dialog close";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onExit()
 {
     // If the connection to the service is not established, then exit immediately.
@@ -650,12 +670,14 @@ void MainWindow::onExit()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettingsChanged()
 {
     SystemSettings settings;
     ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onKillSession(uint32_t session_id)
 {
     if (agent_proxy_)
@@ -669,6 +691,7 @@ void MainWindow::onKillSession(uint32_t session_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -688,6 +711,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::updateStatusBar()
 {
     QString message;
@@ -724,6 +748,7 @@ void MainWindow::updateStatusBar()
     ui.button_status->setIcon(QIcon(icon));
 }
 
+//--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
     QString ip;

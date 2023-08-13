@@ -31,6 +31,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string powerEventToString(uint32_t event)
 {
     const char* name;
@@ -67,17 +68,20 @@ std::string powerEventToString(uint32_t event)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Service::Service()
     : base::Service(kHostServiceName, base::MessageLoop::Type::ASIO)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
@@ -101,6 +105,7 @@ void Service::onStart()
     server_->start();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
     LOG(LS_INFO) << "Service stopping...";
@@ -108,6 +113,7 @@ void Service::onStop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event detected (status: " << base::win::sessionStatusToString(status)
@@ -117,6 +123,7 @@ void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId se
         server_->setSessionEvent(status, session_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(uint32_t event)
 {
     LOG(LS_INFO) << "Power event detected: " << powerEventToString(event);

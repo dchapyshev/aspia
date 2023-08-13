@@ -20,18 +20,21 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserTreeItem::UserTreeItem(const base::User& user)
     : user_(user)
 {
     updateData();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserTreeItem::setUser(const base::User& user)
 {
     user_ = user;
     updateData();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserTreeItem::updateData()
 {
     if (user_.flags & base::User::ENABLED)

@@ -34,6 +34,7 @@ namespace {
 // From third_party/WebKit/Source/web/gtk/WebInputEventFactory.cpp .
 const float kWheelTicksPerPixel = 3.0f / 160.0f;
 
+//--------------------------------------------------------------------------------------------------
 bool ignoreXServerGrabs(Display* display, bool ignore)
 {
     int test_event_base = 0;
@@ -48,6 +49,7 @@ bool ignoreXServerGrabs(Display* display, bool ignore)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isModifierKey(uint32_t usbKeycode)
 {
     return usbKeycode == 0x0700e0 || // Left Control
@@ -62,11 +64,13 @@ bool isModifierKey(uint32_t usbKeycode)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorX11::InputInjectorX11()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorX11::~InputInjectorX11()
 {
     LOG(LS_INFO) << "Dtor";
@@ -78,6 +82,7 @@ InputInjectorX11::~InputInjectorX11()
         XCloseDisplay(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<InputInjectorX11> InputInjectorX11::create()
 {
@@ -88,16 +93,19 @@ std::unique_ptr<InputInjectorX11> InputInjectorX11::create()
     return instance;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::setScreenOffset(const base::Point& offset)
 {
     screen_offset_ = offset;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::setBlockInput(bool /* enable */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
 {
     int keycode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
@@ -151,11 +159,13 @@ void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
     XFlush(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::injectTextEvent(const proto::TextEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
 {
     base::Point pos(event.x(), event.y());
@@ -250,6 +260,7 @@ void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
     XFlush(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool InputInjectorX11::init()
 {
     display_ = XOpenDisplay(nullptr);
@@ -277,6 +288,7 @@ bool InputInjectorX11::init()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::initMouseButtonMap()
 {
     // Do not touch global pointer mapping, since this may affect the local user. Instead, try to
@@ -364,6 +376,7 @@ void InputInjectorX11::initMouseButtonMap()
     XCloseDevice(display_, device);
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::setLockStates(bool caps, bool num)
 {
     // The lock bits associated with each lock key.
@@ -385,6 +398,7 @@ void InputInjectorX11::setLockStates(bool caps, bool num)
     XkbLockModifiers(display_, XkbUseCoreKbd, update_mask, lock_values);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool InputInjectorX11::isLockKey(int keycode)
 {
     XkbStateRec state;
@@ -399,6 +413,7 @@ bool InputInjectorX11::isLockKey(int keycode)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool InputInjectorX11::isAutoRepeatEnabled()
 {
     XKeyboardState state;
@@ -411,6 +426,7 @@ bool InputInjectorX11::isAutoRepeatEnabled()
     return state.global_auto_repeat == AutoRepeatModeOn;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::setAutoRepeatEnabled(bool enable)
 {
     if (!display_)
@@ -423,6 +439,7 @@ void InputInjectorX11::setAutoRepeatEnabled(bool enable)
     XFlush(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorX11::releasePressedKeys()
 {
     if (!pressed_keys_.empty())

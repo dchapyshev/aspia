@@ -42,6 +42,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* routerStateToString(proto::internal::RouterState::State state)
 {
     switch (state)
@@ -61,6 +62,7 @@ const char* routerStateToString(proto::internal::RouterState::State state)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
                          base::SessionId session_id,
                          std::unique_ptr<base::IpcChannel> channel,
@@ -107,6 +109,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     auto_confirmation_interval_ = settings.autoConnConfirmInterval();
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSession::~UserSession()
 {
     LOG(LS_INFO) << "Dtor (sid: " << session_id_
@@ -114,6 +117,7 @@ UserSession::~UserSession()
                  << " state: " << stateToString(state_) << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* UserSession::typeToString(Type type)
 {
@@ -130,6 +134,7 @@ const char* UserSession::typeToString(Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* UserSession::stateToString(State state)
 {
@@ -149,6 +154,7 @@ const char* UserSession::stateToString(State state)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::start(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "User session started "
@@ -184,6 +190,7 @@ void UserSession::start(const proto::internal::RouterState& router_state)
     sendHostIdRequest(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
 {
     channel_ = std::move(channel);
@@ -230,6 +237,7 @@ void UserSession::restart(std::unique_ptr<base::IpcChannel> channel)
     setState(FROM_HERE, State::STARTED);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<std::string> UserSession::sessionName() const
 {
     LOG(LS_INFO) << "Session name request (sid: " << session_id_
@@ -311,6 +319,7 @@ std::optional<std::string> UserSession::sessionName() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 base::User UserSession::user() const
 {
     if (host_id_ == base::kInvalidHostId)
@@ -334,12 +343,14 @@ base::User UserSession::user() const
     return user;
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t UserSession::clientsCount() const
 {
     return desktop_clients_.size() + file_transfer_clients_.size() + system_info_clients_.size() +
            text_chat_clients_.size();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
     DCHECK(client_session);
@@ -411,6 +422,7 @@ void UserSession::onClientSession(std::unique_ptr<ClientSession> client_session)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     std::string status_str;
@@ -506,6 +518,7 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state updated (sid: " << session_id_ << ")";
@@ -523,12 +536,14 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onHostIdChanged(base::HostId host_id)
 {
     host_id_ = host_id;
     sendCredentials(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onSettingsChanged()
 {
     SystemSettings settings;
@@ -559,6 +574,7 @@ void UserSession::onSettingsChanged()
     auto_confirmation_interval_ = settings.autoConnConfirmInterval();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onDisconnected()
 {
     desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
@@ -570,6 +586,7 @@ void UserSession::onDisconnected()
     onSessionDettached(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
@@ -712,6 +729,7 @@ void UserSession::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onDesktopSessionStarted()
 {
     LOG(LS_INFO) << "Desktop session is connected (sid: " << session_id_ << ")";
@@ -733,6 +751,7 @@ void UserSession::onDesktopSessionStarted()
     onClientSessionConfigured();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onDesktopSessionStopped()
 {
     LOG(LS_INFO) << "Desktop session is disconnected (sid: " << session_id_ << ")";
@@ -748,30 +767,35 @@ void UserSession::onDesktopSessionStopped()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onScreenCaptured(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->encodeScreen(frame, cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onScreenCaptureError(proto::VideoErrorCode error_code)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->setVideoErrorCode(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->encodeAudio(audio_packet);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->setCursorPosition(cursor_position);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onScreenListChanged(const proto::ScreenList& list)
 {
     LOG(LS_INFO) << "Screen list changed (sid: " << session_id_ << ")";
@@ -796,12 +820,14 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
         static_cast<ClientSessionDesktop*>(client.get())->setScreenList(list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     for (const auto& client : desktop_clients_)
         static_cast<ClientSessionDesktop*>(client.get())->injectClipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onUnconfirmedSessionAccept(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is accepted (sid: " << session_id_ << ")";
@@ -822,6 +848,7 @@ void UserSession::onUnconfirmedSessionAccept(uint32_t id)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onUnconfirmedSessionReject(uint32_t id)
 {
     LOG(LS_INFO) << "Client session '" << id << "' is rejected (sid: " << session_id_ << ")";
@@ -839,11 +866,13 @@ void UserSession::onUnconfirmedSessionReject(uint32_t id)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionConfigured()
 {
     mergeAndSendConfiguration();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionFinished()
 {
     auto delete_finished = [this](ClientSessionList* list)
@@ -896,6 +925,7 @@ void UserSession::onClientSessionFinished()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionVideoRecording(
     const std::string& computer_name, const std::string& user_name, bool started)
 {
@@ -916,6 +946,7 @@ void UserSession::onClientSessionVideoRecording(
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& text_chat)
 {
     if (!channel_)
@@ -940,6 +971,7 @@ void UserSession::onClientSessionTextChat(uint32_t id, const proto::TextChat& te
 
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onSessionDettached(const base::Location& location)
 {
     if (state_ == State::DETTACHED)
@@ -1004,6 +1036,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     LOG(LS_INFO) << "Session dettached (sid: " << session_id_ << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
     if (!channel_)
@@ -1032,6 +1065,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::sendDisconnectEvent(uint32_t session_id)
 {
     if (!channel_)
@@ -1048,6 +1082,7 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::updateCredentials(const base::Location& location)
 {
     LOG(LS_INFO) << "Updating credentials (sid: " << session_id_
@@ -1083,6 +1118,7 @@ void UserSession::updateCredentials(const base::Location& location)
     delegate_->onUserSessionCredentialsChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::sendCredentials(const base::Location& location)
 {
     LOG(LS_INFO) << "Send credentials for host ID: " << host_id_
@@ -1109,6 +1145,7 @@ void UserSession::sendCredentials(const base::Location& location)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::killClientSession(uint32_t id)
 {
     auto stop_by_id = [](ClientSessionList* list, uint32_t id)
@@ -1131,6 +1168,7 @@ void UserSession::killClientSession(uint32_t id)
     stop_by_id(&text_chat_clients_, id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::sendRouterState(const base::Location& location)
 {
     LOG(LS_INFO) << "Sending router state to UI (sid: " << session_id_
@@ -1150,6 +1188,7 @@ void UserSession::sendRouterState(const base::Location& location)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::sendHostIdRequest(const base::Location& location)
 {
     LOG(LS_INFO) << "Send host id request (sid: " << session_id_
@@ -1166,6 +1205,7 @@ void UserSession::sendHostIdRequest(const base::Location& location)
         delegate_->onUserSessionHostIdRequest(*session_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_session)
 {
     DCHECK(client_session);
@@ -1243,6 +1283,7 @@ void UserSession::addNewClientSession(std::unique_ptr<ClientSession> client_sess
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::setState(const base::Location& location, State state)
 {
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
@@ -1250,6 +1291,7 @@ void UserSession::setState(const base::Location& location, State state)
     state_ = state;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatHasUser(const base::Location& location, bool has_user)
 {
     LOG(LS_INFO) << "User state changed: " << has_user << " (sid: " << session_id_
@@ -1269,6 +1311,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionStarted(uint32_t id)
 {
     outgoing_message_.Clear();
@@ -1311,6 +1354,7 @@ void UserSession::onTextChatSessionStarted(uint32_t id)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::onTextChatSessionFinished(uint32_t id)
 {
     outgoing_message_.Clear();
@@ -1350,6 +1394,7 @@ void UserSession::onTextChatSessionFinished(uint32_t id)
     channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSession::mergeAndSendConfiguration()
 {
     if (desktop_clients_.empty())
