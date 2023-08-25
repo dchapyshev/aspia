@@ -290,10 +290,16 @@ std::string SmbiosMemoryDevice::type() const
         "LPDDR",
         "LPDDR2",
         "LPDDR3",
-        "LPDDR4" // 0x1E
+        "LPDDR4",
+        "Logical non-volatile device",
+        "HBM (High Bandwidth Memory)",
+        "HBM2 (High Bandwidth Memory Generation 2)",
+        "DDR5",
+        "LPDDR5",
+        "HBM3 (High Bandwidth Memory Generation 3)" // 0x24
     };
 
-    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x1E)
+    if (table_->memory_type >= 0x01 && table_->memory_type <= 0x24)
         return kType[table_->memory_type - 0x01];
 
     return std::string();
