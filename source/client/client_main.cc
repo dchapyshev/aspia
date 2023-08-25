@@ -25,7 +25,7 @@
 #include "client/ui/client_settings.h"
 #include "client/ui/client_window.h"
 #include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/qt_file_manager_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "qt_base/scoped_qt_logging.h"

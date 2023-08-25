@@ -109,10 +109,6 @@ list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
 
 list(APPEND SOURCE_CLIENT_CORE_UI
-    ui/address_bar.cc
-    ui/address_bar.h
-    ui/address_bar_model.cc
-    ui/address_bar_model.h
     ui/application.cc
     ui/application.h
     ui/authorization_dialog.cc
@@ -126,32 +122,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_settings_dialog.cc
     ui/client_settings_dialog.h
     ui/client_settings_dialog.ui
-    ui/file_error_code.cc
-    ui/file_error_code.h
-    ui/file_item_delegate.cc
-    ui/file_item_delegate.h
-    ui/file_list.cc
-    ui/file_list.h
-    ui/file_list_model.cc
-    ui/file_list_model.h
-    ui/file_manager_settings.cc
-    ui/file_manager_settings.h
-    ui/file_mime_data.cc
-    ui/file_mime_data.h
-    ui/file_name_validator.cc
-    ui/file_name_validator.h
-    ui/file_panel.cc
-    ui/file_panel.h
-    ui/file_panel.ui
-    ui/file_remove_dialog.cc
-    ui/file_remove_dialog.h
-    ui/file_remove_dialog.ui
-    ui/file_transfer_dialog.cc
-    ui/file_transfer_dialog.h
-    ui/file_transfer_dialog.ui
-    ui/qt_file_manager_window.cc
-    ui/qt_file_manager_window.h
-    ui/qt_file_manager_window.ui
     ui/qt_text_chat_window.cc
     ui/qt_text_chat_window.h
     ui/qt_text_chat_window.ui
@@ -199,6 +169,38 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/statistics_dialog.cc
     ui/desktop/statistics_dialog.h
     ui/desktop/statistics_dialog.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
+    ui/file_transfer/address_bar.cc
+    ui/file_transfer/address_bar.h
+    ui/file_transfer/address_bar_model.cc
+    ui/file_transfer/address_bar_model.h
+    ui/file_transfer/file_error_code.cc
+    ui/file_transfer/file_error_code.h
+    ui/file_transfer/file_item_delegate.cc
+    ui/file_transfer/file_item_delegate.h
+    ui/file_transfer/file_list.cc
+    ui/file_transfer/file_list.h
+    ui/file_transfer/file_list_model.cc
+    ui/file_transfer/file_list_model.h
+    ui/file_transfer/file_manager_settings.cc
+    ui/file_transfer/file_manager_settings.h
+    ui/file_transfer/file_mime_data.cc
+    ui/file_transfer/file_mime_data.h
+    ui/file_transfer/file_name_validator.cc
+    ui/file_transfer/file_name_validator.h
+    ui/file_transfer/file_panel.cc
+    ui/file_transfer/file_panel.h
+    ui/file_transfer/file_panel.ui
+    ui/file_transfer/file_remove_dialog.cc
+    ui/file_transfer/file_remove_dialog.h
+    ui/file_transfer/file_remove_dialog.ui
+    ui/file_transfer/file_transfer_dialog.cc
+    ui/file_transfer/file_transfer_dialog.h
+    ui/file_transfer/file_transfer_dialog.ui
+    ui/file_transfer/qt_file_manager_window.cc
+    ui/file_transfer/qt_file_manager_window.h
+    ui/file_transfer/qt_file_manager_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/qt_system_info_window.cc
@@ -273,6 +275,7 @@ source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
+source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 
 add_library(aspia_client_core STATIC
@@ -280,6 +283,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_RESOURCES}
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
+    ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 target_link_libraries(aspia_client_core
     aspia_base

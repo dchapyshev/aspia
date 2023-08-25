@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_panel.h"
+#include "client/ui/file_transfer/file_panel.h"
 
 #include "base/logging.h"
 #include "client/file_remover.h"
-#include "client/ui/address_bar_model.h"
-#include "client/ui/file_error_code.h"
-#include "client/ui/file_item_delegate.h"
-#include "client/ui/file_list_model.h"
+#include "client/ui/file_transfer/address_bar_model.h"
+#include "client/ui/file_transfer/file_error_code.h"
+#include "client/ui/file_transfer/file_item_delegate.h"
+#include "client/ui/file_transfer/file_list_model.h"
 #include "common/file_platform_util.h"
 
 #include <QAbstractButton>

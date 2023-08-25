@@ -689,77 +689,77 @@
 <context>
     <name>FileError</name>
     <message>
-        <location filename="../ui/file_error_code.cc" line="33"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
         <translation>Completato con successo</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="37"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
         <translation>Richiesta non valida</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="41"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
         <translation>Cartella o nome file non validi</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="45"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="45"/>
         <source>Path not found</source>
         <translation>Cartella non trovata</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="49"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
         <translation>La cartellla esiste già</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="53"/>
         <source>No drives found</source>
         <translation>Nessun disco trovato</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="57"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="57"/>
         <source>Disk full</source>
         <translation>Disco pieno</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="61"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="61"/>
         <source>Access denied</source>
         <translation>Accesso rifiutato</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="65"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
         <translation>Non è stato possibile aprire il file in lettura</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="69"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
         <translation>Non è stato possibile creare o sostituire il file</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="73"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
         <translation>Non è  stato possibile scrivere il file</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="77"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
         <translation>Non è stato possibile leggere il file</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="81"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
         <translation>Disco non pronto</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="85"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
         <translation>Nessun utente connesso</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="89"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
         <translation>Codice errore sconosciuto</translation>
     </message>
@@ -767,7 +767,7 @@
 <context>
     <name>FileNameEditor</name>
     <message>
-        <location filename="../ui/file_item_delegate.cc" line="56"/>
+        <location filename="../ui/file_transfer/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
         <translation>Il nome non può contenere i caratteri %1.</translation>
     </message>
@@ -775,52 +775,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="165"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="165"/>
         <source>Up</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="168"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Visualizza cartella padre (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="177"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="177"/>
         <source>Refresh</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="180"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="180"/>
         <source>Refresh (F5)</source>
         <translation>Aggiorna (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="192"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="192"/>
         <source>New Folder</source>
         <translation>Nuova Cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="195"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="195"/>
         <source>Create a new folder</source>
         <translation>Crea nuova cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="207"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="207"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="210"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Elimina oggetto/i selezionato/i (Delete)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="222"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="222"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="225"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="225"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Invia oggetto/i selezionato/i (F11)</translation>
     </message>
@@ -828,12 +828,12 @@
 <context>
     <name>FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
         <translation>Eliminazione Elementi</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="20"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
         <translation>Generazione elenco files da eliminare...</translation>
     </message>
@@ -841,37 +841,37 @@
 <context>
     <name>FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="14"/>
         <source>File Transfer</source>
         <translation>Trasferimento File</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="26"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>Attività Corrente: Creazione elenco files da copiare...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="33"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
         <translation>Da: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="40"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
         <translation>A: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="50"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
         <translation>Progresso</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="58"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
         <translation>Totale:</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="65"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
         <translation>Elemento:</translation>
     </message>
@@ -2259,12 +2259,12 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="58"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="58"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="59"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="59"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>E&apos; stato inserito un percorso di cartella non valido.</translation>
     </message>
@@ -2272,103 +2272,103 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="85"/>
-        <location filename="../ui/address_bar_model.cc" line="466"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
         <source>Home Folder</source>
         <translation>Cartella Home</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="89"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
         <source>Desktop</source>
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="293"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
         <source>Computer</source>
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="408"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="408"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="411"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="414"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
         <translation>Spazio Totale</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="417"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
         <source>Free Space</source>
         <translation>Spazio Libero</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="451"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
         <source>Optical Drive</source>
         <translation>Disco Ottico</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="454"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
         <source>Removable Drive</source>
         <translation>Disco Rimovibile</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="457"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
         <source>Fixed Drive</source>
         <translation>Disco Fisso</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="460"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
         <source>Network Drive</source>
         <translation>Disco di Rete</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="463"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
         <source>RAM Drive</source>
         <translation>Disco in Memoria</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="469"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
         <source>Desktop Folder</source>
         <translation>Cartella Desktop</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="472"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
         <source>Root Directory</source>
         <translation>Cartella Radice</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="475"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
         <source>Unknown Drive</source>
         <translation>Disco Sconosciuto</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="493"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="498"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="503"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="508"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="513"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -2675,52 +2675,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="104"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="105"/>
         <source>Folder</source>
         <translation>Cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="381"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="382"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="384"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="385"/>
         <source>Size</source>
         <translation>Dimensione</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="387"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="388"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="390"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="391"/>
         <source>Modified</source>
         <translation>Modificato</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="557"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="558"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="562"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="563"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="567"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="568"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="572"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="573"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="577"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="578"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -2728,79 +2728,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="459"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="459"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="96"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="96"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Non sono riuscito ad acquisire l&apos;elenco dei dischi: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="112"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="112"/>
         <source>Failed to get list of files: %1</source>
         <translation>Non sono riuscito ad acquisire l&apos;elenco dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="137"/>
         <source>Failed to create directory: %1</source>
         <translation>Non sono riuscito a creare la cartella: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="149"/>
         <source>Failed to rename item: %1</source>
         <translation>Non sono riuscito a rinominare l&apos;elemento: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="276"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="276"/>
         <source>%1 object(s) selected</source>
         <translation>%1 oggetto/i selezionato/i</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="296"/>
-        <location filename="../ui/file_panel.cc" line="315"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="296"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="315"/>
         <source>Folder name can not be empty.</source>
         <translation>Il nome della cartella non può essere vuoto.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="302"/>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="302"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="321"/>
         <source>Name contains invalid characters.</source>
         <translation>Il contiene dei caratteri non validi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="342"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="342"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Invia\tF11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="343"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="343"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Elimina\tElimina</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="353"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="353"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Crea Cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="418"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="419"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Sei sicuro di voler cancellare gli elementi selezionati ?</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="422"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -2808,42 +2808,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="53"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="106"/>
         <source>Deleting: %1</source>
         <translation>Cancellazione: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="137"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Si è verificato un errore durante l&apos;acquisizione della lista dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="142"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Non sono riuscito a cancellare &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="157"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="157"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
@@ -2851,92 +2851,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="52"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="114"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="114"/>
         <source>Current Task: Copying items.</source>
         <translation>Attività Corrente: Copia elementi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="128"/>
         <source>From: %1</source>
         <translation>Da: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="133"/>
         <source>To: %1</source>
         <translation>A: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="167"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="179"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="179"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="182"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="182"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="185"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="185"/>
         <source>Replace</source>
         <translation>Sostituisci</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="188"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="188"/>
         <source>Replace All</source>
         <translation>Sostituisci Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="191"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="191"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="269"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="269"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Attività Corrente: Interruzione trasferimento dei files.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="284"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="284"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Si è verificato un errore durante la generazione della coda di copia dei files</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="289"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare la cartella &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="297"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="304"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito ad aprire il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="311"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a scrivere il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="318"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a leggere &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="325"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="325"/>
         <source>Unknown error type while copying files</source>
         <translation>Errore sconosciuto durante la copia dei files</translation>
     </message>
@@ -2979,22 +2979,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="53"/>
         <source>Local Computer</source>
         <translation>Computer Locale</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="54"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="54"/>
         <source>Remote Computer</source>
         <translation>Computer Remoto</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="91"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="91"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="92"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="92"/>
         <source>Session error: %1</source>
         <translation>Errore sessione: %1</translation>
     </message>

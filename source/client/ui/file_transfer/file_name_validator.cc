@@ -16,39 +16,51 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_mime_data.h"
+#include "client/ui/file_transfer/file_name_validator.h"
 
-#include <QUuid>
+#include "common/file_platform_util.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-FileMimeData::~FileMimeData() = default;
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString FileMimeData::createMimeType()
+FileNameValidator::FileNameValidator(QObject* parent)
+    : QValidator(parent)
 {
-    return QString("application/%1").arg(QUuid::createUuid().toString());
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileMimeData::setMimeType(const QString& mime_type)
+FileNameValidator::State FileNameValidator::validate(QString& input, int& /* pos */) const
 {
-    mime_type_ = mime_type;
+    if (!input.isEmpty())
+    {
+        const QList<QChar>& invalid_characters =
+            common::FilePlatformUtil::invalidFileNameCharacters();
+
+        for (const auto& character : input)
+        {
+            if (invalid_characters.contains(character))
+            {
+                emit sig_invalidNameEntered();
+                return Invalid;
+            }
+        }
+    }
+
+    return Acceptable;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileMimeData::setFileList(const std::vector<FileTransfer::Item>& file_list)
+void FileNameValidator::fixup(QString& input) const
 {
-    file_list_ = file_list;
-    setData(mimeType(), QByteArray());
-}
+    const QList<QChar>& invalid_characters =
+        common::FilePlatformUtil::invalidFileNameCharacters();
 
-//--------------------------------------------------------------------------------------------------
-void FileMimeData::setSource(const FileListModel* source)
-{
-    source_ = source;
+    for (auto it = input.begin(); it != input.end(); ++it)
+    {
+        if (invalid_characters.contains(*it))
+            input.remove(*it);
+    }
 }
 
 } // namespace client

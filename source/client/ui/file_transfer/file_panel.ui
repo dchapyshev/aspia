@@ -230,12 +230,12 @@
   <customwidget>
    <class>client::AddressBar</class>
    <extends>QComboBox</extends>
-   <header>client/ui/address_bar.h</header>
+   <header>client/ui/file_transfer/address_bar.h</header>
   </customwidget>
   <customwidget>
    <class>client::FileList</class>
    <extends>QTreeView</extends>
-   <header>client/ui/file_list.h</header>
+   <header>client/ui/file_transfer/file_list.h</header>
   </customwidget>
  </customwidgets>
  <resources>

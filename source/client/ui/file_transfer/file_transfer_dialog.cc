@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_transfer_dialog.h"
+#include "client/ui/file_transfer/file_transfer_dialog.h"
 
 #include "base/logging.h"
 #include "client/file_transfer_proxy.h"
 #include "client/file_transfer_window_proxy.h"
-#include "client/ui/file_error_code.h"
+#include "client/ui/file_transfer/file_error_code.h"
 #include "qt_base/application.h"
 
 #include <QCloseEvent>

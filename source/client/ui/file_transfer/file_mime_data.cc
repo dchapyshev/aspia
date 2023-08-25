@@ -16,49 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_manager_settings.h"
+#include "client/ui/file_transfer/file_mime_data.h"
+
+#include <QUuid>
 
 namespace client {
 
-namespace {
-
-const QString kWindowGeometryParam = QStringLiteral("FileManager/WindowGeometry");
-const QString kWindowStateParam = QStringLiteral("FileManager/WindowState");
-
-} // namespace
+//--------------------------------------------------------------------------------------------------
+FileMimeData::~FileMimeData() = default;
 
 //--------------------------------------------------------------------------------------------------
-FileManagerSettings::FileManagerSettings()
-    : settings_(QSettings::IniFormat,
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("client"))
+// static
+QString FileMimeData::createMimeType()
 {
-    // Nothing
+    return QString("application/%1").arg(QUuid::createUuid().toString());
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray FileManagerSettings::windowGeometry() const
+void FileMimeData::setMimeType(const QString& mime_type)
 {
-    return settings_.value(kWindowGeometryParam).toByteArray();
+    mime_type_ = mime_type;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileManagerSettings::setWindowGeometry(const QByteArray& geometry)
+void FileMimeData::setFileList(const std::vector<FileTransfer::Item>& file_list)
 {
-    settings_.setValue(kWindowGeometryParam, geometry);
+    file_list_ = file_list;
+    setData(mimeType(), QByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray FileManagerSettings::windowState() const
+void FileMimeData::setSource(const FileListModel* source)
 {
-    return settings_.value(kWindowStateParam).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileManagerSettings::setWindowState(const QByteArray& state)
-{
-    settings_.setValue(kWindowStateParam, state);
+    source_ = source;
 }
 
 } // namespace client

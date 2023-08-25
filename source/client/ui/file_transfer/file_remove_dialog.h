@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_FILE_REMOVE_DIALOG_H
-#define CLIENT_UI_FILE_REMOVE_DIALOG_H
+#ifndef CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H
+#define CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H
 
 #include "build/build_config.h"
 #include "client/file_remove_window.h"
@@ -77,4 +77,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_FILE_REMOVE_DIALOG_H
+#endif // CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_DIALOG_H

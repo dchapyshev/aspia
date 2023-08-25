@@ -673,77 +673,77 @@
 <context>
     <name>FileError</name>
     <message>
-        <location filename="../ui/file_error_code.cc" line="33"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
         <translation>已完成</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="37"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
         <translation>無效的要求</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="41"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
         <translation>無效的資料夾或檔案名稱</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="45"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="45"/>
         <source>Path not found</source>
         <translation>找不到路徑</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="49"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
         <translation>路徑已存在</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="53"/>
         <source>No drives found</source>
         <translation>找不到磁碟</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="57"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="57"/>
         <source>Disk full</source>
         <translation>磁碟已滿</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="61"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="61"/>
         <source>Access denied</source>
         <translation>存取被拒</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="65"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
         <translation>無法打開檔案進行讀取</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="69"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
         <translation>無法建立或取代檔案</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="73"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
         <translation>無法寫入檔案</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="77"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
         <translation>無法讀取檔案</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="81"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
         <translation>磁碟尚未就緒</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="85"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
         <translation>無登入的使用者</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="89"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
         <translation>未知的錯誤碼</translation>
     </message>
@@ -751,7 +751,7 @@
 <context>
     <name>FileNameEditor</name>
     <message>
-        <location filename="../ui/file_item_delegate.cc" line="56"/>
+        <location filename="../ui/file_transfer/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
         <translation>名稱不能包含 %1 字元。</translation>
     </message>
@@ -759,52 +759,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="165"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="165"/>
         <source>Up</source>
         <translation>上一層</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="168"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>瀏覽到父資料夾（倒退鍵）</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="177"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="177"/>
         <source>Refresh</source>
         <translation>重新整理</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="180"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="180"/>
         <source>Refresh (F5)</source>
         <translation>重新整理（F5）</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="192"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="192"/>
         <source>New Folder</source>
         <translation>建立資料夾</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="195"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="195"/>
         <source>Create a new folder</source>
         <translation>建立新資料夾</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="207"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="207"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="210"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>刪除選擇物件（DEL 鍵）</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="222"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="222"/>
         <source>Send</source>
         <translation>發送</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="225"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="225"/>
         <source>Send selected object(s) (F11)</source>
         <translation>發送指定物件（F11）</translation>
     </message>
@@ -812,12 +812,12 @@
 <context>
     <name>FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
         <translation>刪除項目</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="20"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
         <translation>建立要刪除的檔案清單...</translation>
     </message>
@@ -825,37 +825,37 @@
 <context>
     <name>FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="14"/>
         <source>File Transfer</source>
         <translation>檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="26"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>目前工作：建立要複製的檔案清單...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="33"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
         <translation>從：...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="40"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
         <translation>到：...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="50"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
         <translation>進度</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="58"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
         <translation>總進度：</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="65"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
         <translation>項目：</translation>
     </message>
@@ -2307,12 +2307,12 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="58"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="58"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="59"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="59"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>輸入的資料夾路徑不正確。</translation>
     </message>
@@ -2320,103 +2320,103 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="85"/>
-        <location filename="../ui/address_bar_model.cc" line="466"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
         <source>Home Folder</source>
         <translation>家目錄</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="89"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="293"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
         <source>Computer</source>
         <translation>電腦</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="408"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="408"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="411"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="414"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
         <translation>總空間</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="417"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
         <source>Free Space</source>
         <translation>可用空間</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="451"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
         <source>Optical Drive</source>
         <translation>光碟機</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="454"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
         <source>Removable Drive</source>
         <translation>可移除式磁碟機</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="457"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
         <source>Fixed Drive</source>
         <translation>固定式磁碟機</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="460"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
         <source>Network Drive</source>
         <translation>網路磁碟機</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="463"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
         <source>RAM Drive</source>
         <translation>記憶體</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="469"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
         <source>Desktop Folder</source>
         <translation>桌面資料夾</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="472"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
         <source>Root Directory</source>
         <translation>根目錄</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="475"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
         <source>Unknown Drive</source>
         <translation>未知磁碟機</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="493"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="498"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="503"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="508"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="513"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -2711,52 +2711,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="104"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="105"/>
         <source>Folder</source>
         <translation>資料夾</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="381"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="382"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="384"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="385"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="387"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="388"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="390"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="391"/>
         <source>Modified</source>
         <translation>修改日期</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="557"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="558"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="562"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="563"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="567"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="568"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="572"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="573"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="577"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="578"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -2764,79 +2764,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="96"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="96"/>
         <source>Failed to get list of drives: %1</source>
         <translation>無法取得磁碟機列表：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="112"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="112"/>
         <source>Failed to get list of files: %1</source>
         <translation>無法取得檔案列表：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="137"/>
         <source>Failed to create directory: %1</source>
         <translation>無法建立資料夾：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="149"/>
         <source>Failed to rename item: %1</source>
         <translation>無法重新命名項目：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="276"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="276"/>
         <source>%1 object(s) selected</source>
         <translation>已選擇 %1 個物件</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="296"/>
-        <location filename="../ui/file_panel.cc" line="315"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="296"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="315"/>
         <source>Folder name can not be empty.</source>
         <translation>資料夾名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="302"/>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="302"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="321"/>
         <source>Name contains invalid characters.</source>
         <translation>名稱包含無效字元。</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="342"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="342"/>
         <source>&amp;Send	F11</source>
         <translation>發送（&amp;S）	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="343"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="343"/>
         <source>&amp;Delete	Delete</source>
         <translation>刪除（&amp;D）	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="353"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="353"/>
         <source>&amp;Create Folder</source>
         <translation>建立資料夾 （&amp;C）</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="418"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="419"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>您是否確定要刪除所選項目？</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="459"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="459"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="422"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
@@ -2844,42 +2844,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="106"/>
         <source>Deleting: %1</source>
         <translation>正在刪除：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="137"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>檢索檔案清單時發生錯誤：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="142"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>無法刪除 &quot;%1&quot;：%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="157"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="157"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="53"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2887,92 +2887,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="114"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="114"/>
         <source>Current Task: Copying items.</source>
         <translation>目前工作：正在複製項目。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="128"/>
         <source>From: %1</source>
         <translation>從：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="133"/>
         <source>To: %1</source>
         <translation>到：%1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="167"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="179"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="179"/>
         <source>Skip</source>
         <translation>略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="182"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="182"/>
         <source>Skip All</source>
         <translation>全部略過</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="185"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="185"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="188"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="188"/>
         <source>Replace All</source>
         <translation>全部取代</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="191"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="191"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="269"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="269"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>目前工作：取消檔案傳輸。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="284"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="284"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>建立用於複製的檔案佇列時出錯</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="289"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>無法建立資料夾 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="297"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>無法建立檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="304"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>無法開啟檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="311"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>無法寫入檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="318"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>無法讀取檔案 &quot;%1&quot;：%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="325"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="325"/>
         <source>Unknown error type while copying files</source>
         <translation>複製檔案時出現未知錯誤類型</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="52"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3038,22 +3038,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="53"/>
         <source>Local Computer</source>
         <translation>本地電腦</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="54"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="54"/>
         <source>Remote Computer</source>
         <translation>遠端電腦</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="91"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="91"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="92"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="92"/>
         <source>Session error: %1</source>
         <translation>工作階段錯誤：%1</translation>
     </message>

@@ -16,8 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_list_model.h"
-#include "client/ui/file_mime_data.h"
+#include "client/ui/file_transfer/file_list_model.h"
+
+#include "client/ui/file_transfer/file_mime_data.h"
 #include "common/file_platform_util.h"
 
 #include <QDateTime>

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/address_bar_model.h"
+#include "client/ui/file_transfer/address_bar_model.h"
 
 #include "base/logging.h"
 #include "common/file_platform_util.h"

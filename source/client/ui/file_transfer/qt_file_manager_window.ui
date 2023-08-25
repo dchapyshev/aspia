@@ -47,7 +47,7 @@
   <customwidget>
    <class>client::FilePanel</class>
    <extends>QWidget</extends>
-   <header>client/ui/file_panel.h</header>
+   <header>client/ui/file_transfer/file_panel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

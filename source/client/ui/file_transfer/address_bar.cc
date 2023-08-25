@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/address_bar.h"
+#include "client/ui/file_transfer/address_bar.h"
 
-#include "client/ui/address_bar_model.h"
+#include "client/ui/file_transfer/address_bar_model.h"
 
 #include <QLineEdit>
 #include <QMessageBox>

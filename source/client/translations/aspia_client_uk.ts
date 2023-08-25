@@ -693,77 +693,77 @@
 <context>
     <name>FileError</name>
     <message>
-        <location filename="../ui/file_error_code.cc" line="33"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
         <translation>Завершено успішно</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="37"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
         <translation>Невірний запит</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="41"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
         <translation>Невірний каталог або ім&apos;я файлу</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="45"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="45"/>
         <source>Path not found</source>
         <translation>Шлях не знайдено</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="49"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
         <translation>Шлях вже існує</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="53"/>
         <source>No drives found</source>
         <translation>Дисків не знайдено</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="57"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="57"/>
         <source>Disk full</source>
         <translation>Диск заповнено</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="61"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="61"/>
         <source>Access denied</source>
         <translation>Доступ заборонено</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="65"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
         <translation>Неможливо відкрити файл для читання</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="69"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
         <translation>Неможливо відкрити або замінити файл</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="73"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
         <translation>Неможливо записати до файлу</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="77"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
         <translation>Неможливо прочитати файл</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="81"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
         <translation>Диск не готовий</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="85"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
         <translation>Немає активного користувача</translation>
     </message>
     <message>
-        <location filename="../ui/file_error_code.cc" line="89"/>
+        <location filename="../ui/file_transfer/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
         <translation>Невідомий код помилки</translation>
     </message>
@@ -771,7 +771,7 @@
 <context>
     <name>FileNameEditor</name>
     <message>
-        <location filename="../ui/file_item_delegate.cc" line="56"/>
+        <location filename="../ui/file_transfer/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
         <translation>Ім&apos;я не може містити символи %1.</translation>
     </message>
@@ -779,52 +779,52 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.ui" line="165"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="165"/>
         <source>Up</source>
         <translation>Вгору</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="168"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="168"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Повернутись на каталог вище (Backspace)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="177"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="177"/>
         <source>Refresh</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="180"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="180"/>
         <source>Refresh (F5)</source>
         <translation>Оновити (F5)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="192"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="192"/>
         <source>New Folder</source>
         <translation>Новий каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="195"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="195"/>
         <source>Create a new folder</source>
         <translation>Створити новий каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="207"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="207"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="210"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="210"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Видалити обрані об&apos;єкти (Delete)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="225"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="225"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Надіслати обрані об&apos;єкти (F11)</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.ui" line="222"/>
+        <location filename="../ui/file_transfer/file_panel.ui" line="222"/>
         <source>Send</source>
         <translation>Надіслати</translation>
     </message>
@@ -832,12 +832,12 @@
 <context>
     <name>FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
         <translation>Видалення об&apos;єктів</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.ui" line="20"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.ui" line="20"/>
         <source>Creating a list of files to delete...</source>
         <translation>Створення списку об&apos;єктів для видалення...</translation>
     </message>
@@ -845,37 +845,37 @@
 <context>
     <name>FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="14"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="14"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="26"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="26"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>Поточне завдання: створення списку файлів для копіювання...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="33"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="33"/>
         <source>From: ...</source>
         <translation>З: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="40"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="40"/>
         <source>To: ...</source>
         <translation>До: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="50"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="50"/>
         <source>Progress</source>
         <translation>Виконано</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="58"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="58"/>
         <source>Total:</source>
         <translation>Всього:</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.ui" line="65"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
         <source>Item:</source>
         <translation>Поточний об&apos;єкт:</translation>
     </message>
@@ -2447,12 +2447,12 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/address_bar.cc" line="58"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="58"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar.cc" line="59"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="59"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>Введено невірний шлях до папки.</translation>
     </message>
@@ -2460,103 +2460,103 @@
 <context>
     <name>client::AddressBarModel</name>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="85"/>
-        <location filename="../ui/address_bar_model.cc" line="466"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="85"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="466"/>
         <source>Home Folder</source>
         <translation>Домашній каталог</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="89"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="89"/>
         <source>Desktop</source>
         <translation>Робочий стіл</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="293"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="293"/>
         <source>Computer</source>
         <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="408"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="408"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="411"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="411"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="414"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="414"/>
         <source>Total Space</source>
         <translation>Загальний простір</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="417"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="417"/>
         <source>Free Space</source>
         <translation>Вільний простір</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="451"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="451"/>
         <source>Optical Drive</source>
         <translation>Оптичний диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="454"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="454"/>
         <source>Removable Drive</source>
         <translation>Знімний диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="457"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="457"/>
         <source>Fixed Drive</source>
         <translation>Фіксований диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="460"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="460"/>
         <source>Network Drive</source>
         <translation>Мережевий диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="463"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="463"/>
         <source>RAM Drive</source>
         <translation>RAM диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="469"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="469"/>
         <source>Desktop Folder</source>
         <translation>Каталог робочого стола</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="472"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="472"/>
         <source>Root Directory</source>
         <translation>Корінний каталог</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="475"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="475"/>
         <source>Unknown Drive</source>
         <translation>Невідомий диск</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="493"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="493"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="498"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="498"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="503"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="503"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="508"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="508"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/address_bar_model.cc" line="513"/>
+        <location filename="../ui/file_transfer/address_bar_model.cc" line="513"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -2863,52 +2863,52 @@
 <context>
     <name>client::FileListModel</name>
     <message>
-        <location filename="../ui/file_list_model.cc" line="104"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="105"/>
         <source>Folder</source>
         <translation>Каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="381"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="382"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="384"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="385"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="387"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="388"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="390"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="391"/>
         <source>Modified</source>
         <translation>Змінено</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="557"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="558"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="562"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="563"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="567"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="568"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="572"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="573"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/file_list_model.cc" line="577"/>
+        <location filename="../ui/file_transfer/file_list_model.cc" line="578"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -2916,79 +2916,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="459"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="459"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="96"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="96"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="112"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="112"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="137"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="149"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="276"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="276"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="296"/>
-        <location filename="../ui/file_panel.cc" line="315"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="296"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="315"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="302"/>
-        <location filename="../ui/file_panel.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="302"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="321"/>
         <source>Name contains invalid characters.</source>
         <translation>Ім&apos;я містить недійсні символи.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="342"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="342"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="343"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="343"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="353"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="353"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="418"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="419"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="422"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="422"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
@@ -2996,42 +2996,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="53"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="106"/>
         <source>Deleting: %1</source>
         <translation>Видалення: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="137"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Трапилася помилка під час отримання списку файлів: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="142"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не вдалося видалити &quot;%1&quot;:%2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="157"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="157"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>
@@ -3039,92 +3039,92 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="52"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="52"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="114"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="114"/>
         <source>Current Task: Copying items.</source>
         <translation>Поточне завдання: Копіювання файлів.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="128"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="128"/>
         <source>From: %1</source>
         <translation>З: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="133"/>
         <source>To: %1</source>
         <translation>До: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="167"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="167"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="179"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="179"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="182"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="182"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="185"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="185"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="188"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="188"/>
         <source>Replace All</source>
         <translation>Замінити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="191"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="191"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="269"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="269"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Поточне завдання: Відміна передачі файлів.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="284"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="284"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Виникла помилка під час створення файлової черги для копіювання</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="289"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="289"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити каталог &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="297"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="297"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="304"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="304"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="311"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="311"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="318"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer_dialog.cc" line="325"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="325"/>
         <source>Unknown error type while copying files</source>
         <translation>Невідомий тип помилки під час копіювання файлів</translation>
     </message>
@@ -3190,22 +3190,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="53"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="53"/>
         <source>Local Computer</source>
         <translation>Локальний комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="54"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="54"/>
         <source>Remote Computer</source>
         <translation>Віддалений комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="91"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="91"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/qt_file_manager_window.cc" line="92"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="92"/>
         <source>Session error: %1</source>
         <translation>Помилка сесії: %1</translation>
     </message>

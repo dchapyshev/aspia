@@ -27,7 +27,7 @@
 #include "client/ui/client_settings_dialog.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/qt_file_manager_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "client/ui/update_settings_dialog.h"

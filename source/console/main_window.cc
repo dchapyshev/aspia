@@ -21,7 +21,7 @@
 #include "base/strings/unicode.h"
 #include "build/build_config.h"
 #include "client/ui/desktop/qt_desktop_window.h"
-#include "client/ui/qt_file_manager_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "client/ui/router_manager_window.h"

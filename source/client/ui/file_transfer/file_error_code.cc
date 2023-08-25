@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_error_code.h"
+#include "client/ui/file_transfer/file_error_code.h"
 
 #include <QCoreApplication>
 

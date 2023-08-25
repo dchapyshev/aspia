@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_FILE_LIST_MODEL_H
-#define CLIENT_UI_FILE_LIST_MODEL_H
+#ifndef CLIENT_UI_FILE_TRANSFER_FILE_LIST_MODEL_H
+#define CLIENT_UI_FILE_TRANSFER_FILE_LIST_MODEL_H
 
 #include "client/file_transfer.h"
 
@@ -104,4 +104,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_FILE_LIST_MODEL_H
+#endif // CLIENT_UI_FILE_TRANSFER_FILE_LIST_MODEL_H

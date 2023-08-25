@@ -16,19 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/qt_file_manager_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
 
 #include "ui_qt_file_manager_window.h"
 #include "base/logging.h"
 #include "client/file_control_proxy.h"
 #include "client/file_manager_window_proxy.h"
 #include "client/client_file_transfer.h"
-#include "client/ui/address_bar_model.h"
-#include "client/ui/file_error_code.h"
-#include "client/ui/file_remove_dialog.h"
-#include "client/ui/file_transfer_dialog.h"
-#include "client/ui/file_manager_settings.h"
-#include "client/ui/file_mime_data.h"
+#include "client/ui/file_transfer/address_bar_model.h"
+#include "client/ui/file_transfer/file_error_code.h"
+#include "client/ui/file_transfer/file_remove_dialog.h"
+#include "client/ui/file_transfer/file_transfer_dialog.h"
+#include "client/ui/file_transfer/file_manager_settings.h"
+#include "client/ui/file_transfer/file_mime_data.h"
 #include "qt_base/application.h"
 
 #include <QMessageBox>

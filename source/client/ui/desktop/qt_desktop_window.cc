@@ -29,7 +29,7 @@
 #include "client/ui/desktop/desktop_toolbar.h"
 #include "client/ui/desktop/frame_factory_qimage.h"
 #include "client/ui/desktop/frame_qimage.h"
-#include "client/ui/qt_file_manager_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "client/ui/desktop/statistics_dialog.h"

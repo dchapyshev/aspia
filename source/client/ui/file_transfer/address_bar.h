@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_ADDRESS_BAR_H
-#define CLIENT_UI_ADDRESS_BAR_H
+#ifndef CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
+#define CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
 
 #include "base/macros_magic.h"
 #include "proto/file_transfer.pb.h"
@@ -64,4 +64,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_ADDRESS_BAR_H
+#endif // CLIENT_UI_FILE_TRANSFER_ADDRESS_BAR_H
