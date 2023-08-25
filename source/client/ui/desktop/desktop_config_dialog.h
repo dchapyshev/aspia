@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_CONFIG_DIALOG_H
-#define CLIENT_UI_DESKTOP_CONFIG_DIALOG_H
+#ifndef CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H
+#define CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H
 
 #include "base/macros_magic.h"
 #include "proto/common.pb.h"
@@ -63,4 +63,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_DESKTOP_CONFIG_DIALOG_H
+#endif // CLIENT_UI_DESKTOP_DESKTOP_CONFIG_DIALOG_H

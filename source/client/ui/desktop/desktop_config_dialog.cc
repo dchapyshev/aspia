@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop_config_dialog.h"
+#include "client/ui/desktop/desktop_config_dialog.h"
 
 #include "base/logging.h"
 #include "base/desktop/pixel_format.h"

@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop_widget.h"
+#include "client/ui/desktop/desktop_widget.h"
 
 #include "base/logging.h"
 #include "common/keycode_converter.h"
-#include "client/ui/frame_qimage.h"
+#include "client/ui/desktop/frame_qimage.h"
 
 #include <QApplication>
 #include <QWheelEvent>

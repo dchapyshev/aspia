@@ -126,18 +126,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_settings_dialog.cc
     ui/client_settings_dialog.h
     ui/client_settings_dialog.ui
-    ui/desktop_config_dialog.cc
-    ui/desktop_config_dialog.h
-    ui/desktop_config_dialog.ui
-    ui/desktop_toolbar.cc
-    ui/desktop_toolbar.h
-    ui/desktop_toolbar.ui
-    ui/desktop_widget.cc
-    ui/desktop_widget.h
     ui/file_error_code.cc
     ui/file_error_code.h
-    ui/desktop_settings.cc
-    ui/desktop_settings.h
     ui/file_item_delegate.cc
     ui/file_item_delegate.h
     ui/file_list.cc
@@ -159,21 +149,12 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/file_transfer_dialog.cc
     ui/file_transfer_dialog.h
     ui/file_transfer_dialog.ui
-    ui/frame_factory_qimage.cc
-    ui/frame_factory_qimage.h
-    ui/frame_qimage.cc
-    ui/frame_qimage.h
-    ui/qt_desktop_window.cc
-    ui/qt_desktop_window.h
     ui/qt_file_manager_window.cc
     ui/qt_file_manager_window.h
     ui/qt_file_manager_window.ui
     ui/qt_text_chat_window.cc
     ui/qt_text_chat_window.h
     ui/qt_text_chat_window.ui
-    ui/record_settings_dialog.cc
-    ui/record_settings_dialog.h
-    ui/record_settings_dialog.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui
@@ -183,12 +164,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/router_user_dialog.cc
     ui/router_user_dialog.h
     ui/router_user_dialog.ui
-    ui/select_screen_action.h
     ui/session_window.cc
     ui/session_window.h
-    ui/statistics_dialog.cc
-    ui/statistics_dialog.h
-    ui/statistics_dialog.ui
     ui/task_manager_settings.cc
     ui/task_manager_settings.h
     ui/task_manager_window.cc
@@ -197,6 +174,31 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/update_settings_dialog.cc
     ui/update_settings_dialog.h
     ui/update_settings_dialog.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
+    ui/desktop/desktop_config_dialog.cc
+    ui/desktop/desktop_config_dialog.h
+    ui/desktop/desktop_config_dialog.ui
+    ui/desktop/desktop_toolbar.cc
+    ui/desktop/desktop_toolbar.h
+    ui/desktop/desktop_toolbar.ui
+    ui/desktop/desktop_widget.cc
+    ui/desktop/desktop_widget.h
+    ui/desktop/desktop_settings.cc
+    ui/desktop/desktop_settings.h
+    ui/desktop/frame_factory_qimage.cc
+    ui/desktop/frame_factory_qimage.h
+    ui/desktop/frame_qimage.cc
+    ui/desktop/frame_qimage.h
+    ui/desktop/qt_desktop_window.cc
+    ui/desktop/qt_desktop_window.h
+    ui/desktop/record_settings_dialog.cc
+    ui/desktop/record_settings_dialog.h
+    ui/desktop/record_settings_dialog.ui
+    ui/desktop/select_screen_action.h
+    ui/desktop/statistics_dialog.cc
+    ui/desktop/statistics_dialog.h
+    ui/desktop/statistics_dialog.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/qt_system_info_window.cc
@@ -270,12 +272,14 @@ list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
+source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
     ${SOURCE_CLIENT_CORE_RESOURCES}
     ${SOURCE_CLIENT_CORE_UI}
+    ${SOURCE_CLIENT_CORE_UI_DESKTOP}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 target_link_libraries(aspia_client_core
     aspia_base

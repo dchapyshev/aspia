@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/qt_desktop_window.h"
+#include "client/ui/desktop/qt_desktop_window.h"
 
 #include "base/logging.h"
 #include "base/stl_util.h"
@@ -25,14 +25,14 @@
 #include "client/client_desktop.h"
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window_proxy.h"
-#include "client/ui/desktop_config_dialog.h"
-#include "client/ui/desktop_toolbar.h"
-#include "client/ui/frame_factory_qimage.h"
-#include "client/ui/frame_qimage.h"
+#include "client/ui/desktop/desktop_config_dialog.h"
+#include "client/ui/desktop/desktop_toolbar.h"
+#include "client/ui/desktop/frame_factory_qimage.h"
+#include "client/ui/desktop/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
-#include "client/ui/statistics_dialog.h"
+#include "client/ui/desktop/statistics_dialog.h"
 #include "client/ui/task_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"

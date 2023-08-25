@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_QT_DESKTOP_WINDOW_H
-#define CLIENT_UI_QT_DESKTOP_WINDOW_H
+#ifndef CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
+#define CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H
 
 #include "base/version.h"
 #include "client/client_desktop.h"
 #include "client/desktop_window.h"
 #include "client/system_info_control.h"
 #include "client/ui/session_window.h"
-#include "client/ui/desktop_widget.h"
+#include "client/ui/desktop/desktop_widget.h"
 
 #include <QPointer>
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_QT_DESKTOP_WINDOW_H
+#endif // CLIENT_UI_DESKTOP_QT_DESKTOP_WINDOW_H

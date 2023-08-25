@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_TOOLBAR_H
-#define CLIENT_UI_DESKTOP_TOOLBAR_H
+#ifndef CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
+#define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
 #include "base/macros_magic.h"
-#include "client/ui/desktop_settings.h"
+#include "client/ui/desktop/desktop_settings.h"
 #include "proto/common.pb.h"
 #include "proto/desktop_extensions.pb.h"
 #include "ui_desktop_toolbar.h"
@@ -139,4 +139,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_DESKTOP_TOOLBAR_H
+#endif // CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H

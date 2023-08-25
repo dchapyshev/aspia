@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop_settings.h"
+#include "client/ui/desktop/desktop_settings.h"
 
 #include <QStandardPaths>
 

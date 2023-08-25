@@ -16,32 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_RECORDING_SETTINGS_DIALOG_H
-#define CLIENT_UI_RECORDING_SETTINGS_DIALOG_H
+#ifndef CLIENT_UI_DESKTOP_FRAME_QIMAGE_H
+#define CLIENT_UI_DESKTOP_FRAME_QIMAGE_H
 
-#include "ui_record_settings_dialog.h"
+#include "base/desktop/frame.h"
 
-#include <QDialog>
+#include <QImage>
 
-class QAbstractButton;
+#include <memory>
 
 namespace client {
 
-class RecordSettingsDialog : public QDialog
+class FrameQImage : public base::Frame
 {
-    Q_OBJECT
-
 public:
-    explicit RecordSettingsDialog(QWidget* parent = nullptr);
-    ~RecordSettingsDialog() override;
+    ~FrameQImage() override = default;
 
-private slots:
-    void onButtonBoxClicked(QAbstractButton* button);
+    static std::unique_ptr<FrameQImage> create(const base::Size& size);
+    static std::unique_ptr<FrameQImage> create(const QPixmap& pixmap);
+    static std::unique_ptr<FrameQImage> create(QImage&& image);
+
+    const QImage& constImage() const { return image_; }
+    QImage* image() { return &image_; }
 
 private:
-    Ui::RecordSettingsDialog ui;
+    FrameQImage(QImage&& img);
+
+    QImage image_;
+
+    DISALLOW_COPY_AND_ASSIGN(FrameQImage);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_RECORDING_SETTINGS_DIALOG_H
+#endif // CLIENT_UI_DESKTOP_FRAME_QIMAGE_H

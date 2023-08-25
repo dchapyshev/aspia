@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/desktop_toolbar.h"
+#include "client/ui/desktop/desktop_toolbar.h"
 
 #include "base/logging.h"
-#include "client/ui/desktop_settings.h"
-#include "client/ui/record_settings_dialog.h"
-#include "client/ui/select_screen_action.h"
+#include "client/ui/desktop/desktop_settings.h"
+#include "client/ui/desktop/record_settings_dialog.h"
+#include "client/ui/desktop/select_screen_action.h"
 
 #include <QActionGroup>
 #include <QMenu>

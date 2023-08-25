@@ -16,22 +16,26 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/frame_factory_qimage.h"
+#ifndef CLIENT_UI_DESKTOP_FRAME_FACTORY_QIMAGE_H
+#define CLIENT_UI_DESKTOP_FRAME_FACTORY_QIMAGE_H
 
-#include "client/ui/frame_qimage.h"
+#include "base/macros_magic.h"
+#include "client/frame_factory.h"
 
 namespace client {
 
-//--------------------------------------------------------------------------------------------------
-FrameFactoryQImage::FrameFactoryQImage() = default;
-
-//--------------------------------------------------------------------------------------------------
-FrameFactoryQImage::~FrameFactoryQImage() = default;
-
-//--------------------------------------------------------------------------------------------------
-std::shared_ptr<base::Frame> FrameFactoryQImage::allocateFrame(const base::Size& size)
+class FrameFactoryQImage : public FrameFactory
 {
-    return std::shared_ptr<base::Frame>(FrameQImage::create(size).release());
-}
+public:
+    FrameFactoryQImage();
+    ~FrameFactoryQImage() override;
+
+    std::shared_ptr<base::Frame> allocateFrame(const base::Size& size) override;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(FrameFactoryQImage);
+};
 
 } // namespace client
+
+#endif // CLIENT_UI_DESKTOP_FRAME_FACTORY_QIMAGE_H

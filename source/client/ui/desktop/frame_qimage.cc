@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/frame_qimage.h"
+#include "client/ui/desktop/frame_qimage.h"
 
 #include <QPixmap>
 

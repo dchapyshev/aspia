@@ -16,9 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/record_settings_dialog.h"
+#include "client/ui/desktop/record_settings_dialog.h"
 
-#include "client/ui/desktop_settings.h"
+#include "client/ui/desktop/desktop_settings.h"
 
 #include <QFileDialog>
 #include <QTimer>

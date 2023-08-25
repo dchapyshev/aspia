@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/statistics_dialog.h"
+#include "client/ui/desktop/statistics_dialog.h"
 
 #include "base/desktop/screen_capturer.h"
 
