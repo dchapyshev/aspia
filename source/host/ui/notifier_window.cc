@@ -43,23 +43,23 @@ public:
         switch (client.session_type)
         {
             case proto::SESSION_TYPE_DESKTOP_MANAGE:
-                setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+                setIcon(0, QIcon(":/img/monitor-keyboard.png"));
                 break;
 
             case proto::SESSION_TYPE_DESKTOP_VIEW:
-                setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+                setIcon(0, QIcon(":/img/monitor.png"));
                 break;
 
             case proto::SESSION_TYPE_FILE_TRANSFER:
-                setIcon(0, QIcon(QStringLiteral(":/img/folder-stand.png")));
+                setIcon(0, QIcon(":/img/folder-stand.png"));
                 break;
 
             case proto::SESSION_TYPE_SYSTEM_INFO:
-                setIcon(0, QIcon(QStringLiteral(":/img/computer_info.png")));
+                setIcon(0, QIcon(":/img/computer_info.png"));
                 break;
 
             case proto::SESSION_TYPE_TEXT_CHAT:
-                setIcon(0, QIcon(QStringLiteral(":/img/text-chat.png")));
+                setIcon(0, QIcon(":/img/text-chat.png"));
                 break;
 
             default:
@@ -211,7 +211,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
             QToolButton* stop_button =
                 createSessionButton(ui.tree,
-                                    QStringLiteral(":/img/control-stop.png"),
+                                    ":/img/control-stop.png",
                                     tr("Disconnect"));
             connect(stop_button, &QToolButton::clicked, this, [=]()
             {
@@ -262,12 +262,12 @@ void NotifierWindow::onLockMouse()
 
     if (is_mouse_locked_)
     {
-        icon = QStringLiteral(":/img/mouse-lock.png");
+        icon = ":/img/mouse-lock.png";
         tooltip = tr("Unlock mouse");
     }
     else
     {
-        icon = QStringLiteral(":/img/mouse-unlock.png");
+        icon = ":/img/mouse-unlock.png";
         tooltip = tr("Lock mouse");
     }
 
@@ -287,12 +287,12 @@ void NotifierWindow::onLockKeyboard()
 
     if (is_keyboard_locked_)
     {
-        icon = QStringLiteral(":/img/keyboard-lock.png");
+        icon = ":/img/keyboard-lock.png";
         tooltip = tr("Unlock keyboard");
     }
     else
     {
-        icon = QStringLiteral(":/img/keyboard.png");
+        icon = ":/img/keyboard.png";
         tooltip = tr("Lock keyboard");
     }
 
@@ -312,12 +312,12 @@ void NotifierWindow::onPause()
 
     if (is_paused_)
     {
-        icon = QStringLiteral(":/img/control-start.png");
+        icon = ":/img/control-start.png";
         tooltip = tr("Resume");
     }
     else
     {
-        icon = QStringLiteral(":/img/control-pause.png");
+        icon = ":/img/control-pause.png";
         tooltip = tr("Pause");
     }
 
@@ -468,7 +468,7 @@ void NotifierWindow::showNotifier()
         move(window_pos);
         setFixedSize(window_size);
 
-        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-left-gray.png")));
+        ui.button_show_hide->setIcon(QIcon(":/img/arrow-left-gray.png"));
     }
     else
     {
@@ -497,7 +497,7 @@ void NotifierWindow::hideNotifier()
     move(window_pos);
     setFixedSize(window_size);
 
-    ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/img/arrow-right-gray.png")));
+    ui.button_show_hide->setIcon(QIcon(":/img/arrow-right-gray.png"));
 }
 
 //--------------------------------------------------------------------------------------------------

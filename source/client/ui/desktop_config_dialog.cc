@@ -88,13 +88,13 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
     QComboBox* combo_codec = ui->combo_codec;
 
     if (video_encodings & proto::VIDEO_ENCODING_VP9)
-        combo_codec->addItem(QStringLiteral("VP9"), proto::VIDEO_ENCODING_VP9);
+        combo_codec->addItem("VP9", proto::VIDEO_ENCODING_VP9);
 
     if (video_encodings & proto::VIDEO_ENCODING_VP8)
-        combo_codec->addItem(QStringLiteral("VP8"), proto::VIDEO_ENCODING_VP8);
+        combo_codec->addItem("VP8", proto::VIDEO_ENCODING_VP8);
 
     if (video_encodings & proto::VIDEO_ENCODING_ZSTD)
-        combo_codec->addItem(QStringLiteral("ZSTD"), proto::VIDEO_ENCODING_ZSTD);
+        combo_codec->addItem("ZSTD", proto::VIDEO_ENCODING_ZSTD);
 
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)

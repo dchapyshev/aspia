@@ -78,7 +78,7 @@ void SysInfoWidgetRoutes::setSystemInfo(const proto::system_info::SystemInfo& sy
     }
 
     const proto::system_info::Routes& routes = system_info.routes();
-    QIcon item_icon(QStringLiteral(":/img/servers-network.png"));
+    QIcon item_icon(":/img/servers-network.png");
 
     for (int i = 0; i < routes.route_size(); ++i)
     {

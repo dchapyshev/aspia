@@ -962,12 +962,12 @@ void MainWindow::onTabContextMenu(const QPoint& pos)
                     return;
             }
 
-            ui.tab_widget->setTabIcon(tab_index, QIcon(QStringLiteral(":/img/address-book-pinned.png")));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book-pinned.png"));
             mru_.pinFile(current_path);
         }
         else
         {
-            ui.tab_widget->setTabIcon(tab_index, QIcon(QStringLiteral(":/img/address-book.png")));
+            ui.tab_widget->setTabIcon(tab_index, QIcon(":/img/address-book.png"));
             mru_.unpinFile(current_path);
         }
 
@@ -1225,7 +1225,7 @@ void MainWindow::showTrayIcon(bool show)
         tray_menu_->addAction(ui.action_exit);
 
         tray_icon_.reset(new QSystemTrayIcon(this));
-        tray_icon_->setIcon(QIcon(QStringLiteral(":/img/main.ico")));
+        tray_icon_->setIcon(QIcon(":/img/main.ico"));
         tray_icon_->setToolTip(tr("Aspia Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();
@@ -1276,8 +1276,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             ui.status_bar, &StatusBar::setUpdateState);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?
-        QIcon(QStringLiteral(":/img/address-book-pinned.png")) :
-        QIcon(QStringLiteral(":/img/address-book.png"));
+        QIcon(":/img/address-book-pinned.png") : QIcon(":/img/address-book.png");
 
     int index = ui.tab_widget->addTab(new_tab, icon, new_tab->addressBookName());
 

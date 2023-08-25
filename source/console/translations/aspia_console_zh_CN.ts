@@ -1053,53 +1053,53 @@
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="900"/>
+        <location filename="../address_book_tab.cc" line="899"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="905"/>
+        <location filename="../address_book_tab.cc" line="904"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1033"/>
+        <location filename="../address_book_tab.cc" line="1032"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1035"/>
+        <location filename="../address_book_tab.cc" line="1034"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1045"/>
+        <location filename="../address_book_tab.cc" line="1044"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1058"/>
+        <location filename="../address_book_tab.cc" line="1057"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1088"/>
+        <location filename="../address_book_tab.cc" line="1087"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1100"/>
-        <location filename="../address_book_tab.cc" line="1115"/>
+        <location filename="../address_book_tab.cc" line="1099"/>
+        <location filename="../address_book_tab.cc" line="1114"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1102"/>
+        <location filename="../address_book_tab.cc" line="1101"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1117"/>
+        <location filename="../address_book_tab.cc" line="1116"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -1371,7 +1371,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="197"/>
-        <location filename="../main_window.cc" line="1365"/>
+        <location filename="../main_window.cc" line="1364"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1471,7 +1471,7 @@
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1366"/>
+        <location filename="../main_window.cc" line="1365"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>

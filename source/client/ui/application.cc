@@ -29,16 +29,16 @@ namespace client {
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Client"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Client");
+    setApplicationVersion(ASPIA_VERSION_STRING);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 #endif
-    setWindowIcon(QIcon(QStringLiteral(":/img/main.ico")));
+    setWindowIcon(QIcon(":/img/main.ico"));
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }

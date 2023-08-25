@@ -139,7 +139,7 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
 
     CategoryItem* summary_category = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/computer.png"),
+        ":/img/computer.png",
         tr("Summary"),
         common::kSystemInfo_Summary);
 
@@ -148,35 +148,35 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* hardware_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/motherboard.png"), tr("Hardware"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/motherboard.png", tr("Hardware"));
 
     CategoryItem* devices = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/graphic-card.png"),
+        ":/img/graphic-card.png",
         tr("Devices"),
         common::kSystemInfo_Devices);
 
     CategoryItem* video_adapters = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/graphic-card.png"),
+        ":/img/graphic-card.png",
         tr("Video Adapters"),
         common::kSystemInfo_VideoAdapters);
 
     CategoryItem* monitors = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/monitor.png"),
+        ":/img/monitor.png",
         tr("Monitors"),
         common::kSystemInfo_Monitors);
 
     CategoryItem* printers = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/printer.png"),
+        ":/img/printer.png",
         tr("Printers"),
         common::kSystemInfo_Printers);
 
     CategoryItem* power_options = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/power-supply.png"),
+        ":/img/power-supply.png",
         tr("Power Options"),
         common::kSystemInfo_PowerOptions);
 
@@ -191,35 +191,35 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* software_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/operating-system.png"), tr("Software"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/operating-system.png", tr("Software"));
 
     CategoryItem* applications = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/applications.png"),
+        ":/img/applications.png",
         tr("Applications"),
         common::kSystemInfo_Applications);
 
     CategoryItem* drivers = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/graphic-card.png"),
+        ":/img/graphic-card.png",
         tr("Drivers"),
         common::kSystemInfo_Drivers);
 
     CategoryItem* services = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/gear.png"),
+        ":/img/gear.png",
         tr("Services"),
         common::kSystemInfo_Services);
 
     CategoryItem* processes = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/application.png"),
+        ":/img/application.png",
         tr("Processes"),
         common::kSystemInfo_Processes);
 
     CategoryItem* licenses = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/license-key.png"),
+        ":/img/license-key.png",
         tr("Licenses"),
         common::kSystemInfo_Licenses);
 
@@ -234,35 +234,35 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* network_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/graphic-card.png"), tr("Network"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/graphic-card.png", tr("Network"));
 
     CategoryItem* network_adapters = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/graphic-card.png"),
+        ":/img/graphic-card.png",
         tr("Network Adapters"),
         common::kSystemInfo_NetworkAdapters);
 
     CategoryItem* routes = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/servers-network.png"),
+        ":/img/servers-network.png",
         tr("Routes"),
         common::kSystemInfo_Routes);
 
     CategoryItem* connections = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/servers-network.png"),
+        ":/img/servers-network.png",
         tr("Connections"),
         common::kSystemInfo_Connections);
 
     CategoryItem* network_shares = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/folder-share.png"),
+        ":/img/folder-share.png",
         tr("Network Shares"),
         common::kSystemInfo_NetworkShares);
 
     CategoryItem* open_files = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/folder-share.png"),
+        ":/img/folder-share.png",
         tr("Open Files"),
         common::kSystemInfo_OpenFiles);
 
@@ -277,29 +277,29 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
     //----------------------------------------------------------------------------------------------
 
     CategoryItem* os_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, QStringLiteral(":/img/operating-system.png"), tr("Operating System"));
+        CategoryItem::Type::ROOT_ITEM, ":/img/operating-system.png", tr("Operating System"));
 
     CategoryItem* env_vars = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/block.png"),
+        ":/img/block.png",
         tr("Environment Variables"),
         common::kSystemInfo_EnvironmentVariables);
 
     CategoryItem* event_logs = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/document-list.png"),
+        ":/img/document-list.png",
         tr("Event Logs"),
         common::kSystemInfo_EventLogs);
 
     CategoryItem* local_users = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/user.png"),
+        ":/img/user.png",
         tr("Users"),
         common::kSystemInfo_LocalUsers);
 
     CategoryItem* local_user_groups = new CategoryItem(
         CategoryItem::Type::CATEGORY_ITEM,
-        QStringLiteral(":/img/users.png"),
+        ":/img/users.png",
         tr("User Groups"),
         common::kSystemInfo_LocalUserGroups);
 

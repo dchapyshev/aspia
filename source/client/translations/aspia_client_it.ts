@@ -2728,7 +2728,7 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="461"/>
+        <location filename="../ui/file_panel.cc" line="459"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
@@ -2770,37 +2770,37 @@
         <translation>Il contiene dei caratteri non validi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="343"/>
+        <location filename="../ui/file_panel.cc" line="342"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Invia\tF11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="345"/>
+        <location filename="../ui/file_panel.cc" line="343"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Elimina\tElimina</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="355"/>
+        <location filename="../ui/file_panel.cc" line="353"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Crea Cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="420"/>
+        <location filename="../ui/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Sei sicuro di voler cancellare gli elementi selezionati ?</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="424"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="425"/>
+        <location filename="../ui/file_panel.cc" line="423"/>
         <source>No</source>
         <translation>No</translation>
     </message>

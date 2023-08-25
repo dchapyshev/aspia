@@ -1057,53 +1057,53 @@
         <translation>Tem certeza que deseja excluir o computador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="900"/>
+        <location filename="../address_book_tab.cc" line="899"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="905"/>
+        <location filename="../address_book_tab.cc" line="904"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1033"/>
+        <location filename="../address_book_tab.cc" line="1032"/>
         <source>Save Address Book</source>
         <translation>Salvar Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1035"/>
+        <location filename="../address_book_tab.cc" line="1034"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Cátalog de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1045"/>
+        <location filename="../address_book_tab.cc" line="1044"/>
         <source>Unable to create or open address book file.</source>
         <translation>Não foi possível criar ou abrir o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1058"/>
+        <location filename="../address_book_tab.cc" line="1057"/>
         <source>Unable to write address book file.</source>
         <translation>Não foi possível gravar o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1088"/>
+        <location filename="../address_book_tab.cc" line="1087"/>
         <source>Root Group</source>
         <translation>Raiz do Grupo</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1100"/>
-        <location filename="../address_book_tab.cc" line="1115"/>
+        <location filename="../address_book_tab.cc" line="1099"/>
+        <location filename="../address_book_tab.cc" line="1114"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1102"/>
+        <location filename="../address_book_tab.cc" line="1101"/>
         <source>Could not open address book</source>
         <translation>Não foi possível abrir o catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1117"/>
+        <location filename="../address_book_tab.cc" line="1116"/>
         <source>Failed to save address book</source>
         <translation>Falha ao salvar o catálogo de endereços</translation>
     </message>
@@ -1393,7 +1393,7 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="197"/>
-        <location filename="../main_window.cc" line="1365"/>
+        <location filename="../main_window.cc" line="1364"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -1493,7 +1493,7 @@
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1366"/>
+        <location filename="../main_window.cc" line="1365"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

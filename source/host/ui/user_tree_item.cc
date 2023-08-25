@@ -38,9 +38,9 @@ void UserTreeItem::setUser(const base::User& user)
 void UserTreeItem::updateData()
 {
     if (user_.flags & base::User::ENABLED)
-        setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
+        setIcon(0, QIcon(":/img/user.png"));
     else
-        setIcon(0, QIcon(QStringLiteral(":/img/user-disabled.png")));
+        setIcon(0, QIcon(":/img/user-disabled.png"));
 
     setText(0, QString::fromStdU16String(user_.name));
 }

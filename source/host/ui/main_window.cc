@@ -70,15 +70,15 @@ MainWindow::MainWindow(QWidget* parent)
     ui.setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
-    ui.edit_id->setText(QStringLiteral("-"));
-    ui.edit_password->setText(QStringLiteral("-"));
+    ui.edit_id->setText("-");
+    ui.edit_password->setText("-");
 
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui.action_show_hide);
     tray_menu_.addAction(ui.action_exit);
 
-    tray_icon_.setIcon(QIcon(QStringLiteral(":/img/main.ico")));
+    tray_icon_.setIcon(QIcon(":/img/main.ico"));
     tray_icon_.setContextMenu(&tray_menu_);
     tray_icon_.show();
 
@@ -389,8 +389,8 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
         ui.label_icon_password->setEnabled(false);
         ui.button_new_password->setEnabled(false);
 
-        ui.edit_id->setText(QStringLiteral("-"));
-        ui.edit_password->setText(QStringLiteral("-"));
+        ui.edit_id->setText("-");
+        ui.edit_password->setText("-");
     }
     else
     {
@@ -721,22 +721,22 @@ void MainWindow::updateStatusBar()
     {
         case proto::internal::RouterState::DISABLED:
             message = tr("Router is disabled");
-            icon = QStringLiteral(":/img/cross-script.png");
+            icon = ":/img/cross-script.png";
             break;
 
         case proto::internal::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
-            icon = QStringLiteral(":/img/arrow-circle-double.png");
+            icon = ":/img/arrow-circle-double.png";
             break;
 
         case proto::internal::RouterState::CONNECTED:
             message = tr("Connected to a router");
-            icon = QStringLiteral(":/img/tick.png");
+            icon = ":/img/tick.png";
             break;
 
         case proto::internal::RouterState::FAILED:
             message = tr("Connection error");
-            icon = QStringLiteral(":/img/cross-script.png");
+            icon = ":/img/cross-script.png";
             break;
 
         default:

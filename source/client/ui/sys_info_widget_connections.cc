@@ -78,7 +78,7 @@ void SysInfoWidgetConnections::setSystemInfo(const proto::system_info::SystemInf
     }
 
     const proto::system_info::Connections& connections = system_info.connections();
-    QIcon item_icon(QStringLiteral(":/img/servers-network.png"));
+    QIcon item_icon(":/img/servers-network.png");
 
     for (int i = 0; i < connections.connection_size(); ++i)
     {

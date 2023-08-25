@@ -205,9 +205,9 @@ void SysInfoWidgetEventLogs::setSystemInfo(const proto::system_info::SystemInfo&
 
     ui.combobox_page->setCurrentIndex(current_page);
 
-    QIcon error_icon(QStringLiteral(":/img/error.png"));
-    QIcon warning_icon(QStringLiteral(":/img/warning.png"));
-    QIcon info_icon(QStringLiteral(":/img/information.png"));
+    QIcon error_icon(":/img/error.png");
+    QIcon warning_icon(":/img/warning.png");
+    QIcon info_icon(":/img/information.png");
 
     for (int i = 0; i < event_logs.event_size(); ++i)
     {

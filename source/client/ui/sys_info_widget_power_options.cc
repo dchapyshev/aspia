@@ -140,7 +140,7 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
     }
 
     const proto::system_info::PowerOptions& power_options = system_info.power_options();
-    QIcon item_icon(QStringLiteral(":/img/power-supply.png"));
+    QIcon item_icon(":/img/power-supply.png");
 
     ui.tree->addTopLevelItem(
         new Item(item_icon, tr("Power Source"), powerSourceToString(power_options.power_source())));

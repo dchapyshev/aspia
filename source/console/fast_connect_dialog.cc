@@ -83,11 +83,11 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
                                        QVariant(session_type));
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
 
     int current_session_type = ui.combo_session_type->findData(QVariant(state_.session_type));
     if (current_session_type != -1)

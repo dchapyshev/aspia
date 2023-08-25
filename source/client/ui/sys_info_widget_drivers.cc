@@ -78,7 +78,7 @@ void SysInfoWidgetDrivers::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::Drivers& drivers = system_info.drivers();
-    QIcon item_icon(QStringLiteral(":/img/graphic-card.png"));
+    QIcon item_icon(":/img/graphic-card.png");
 
     for (int i = 0; i < drivers.driver_size(); ++i)
     {

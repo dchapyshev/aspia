@@ -129,7 +129,7 @@ void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo&
     }
 
     const proto::system_info::Processes& processes = system_info.processes();
-    QIcon item_icon(QStringLiteral(":/img/application.png"));
+    QIcon item_icon(":/img/application.png");
 
     for (int i = 0; i < processes.process_size(); ++i)
     {
@@ -153,7 +153,7 @@ void SysInfoWidgetProcesses::setSystemInfo(const proto::system_info::SystemInfo&
 
         QString user_name;
         if (process.pid() == 0)
-            user_name = QStringLiteral("SYSTEM");
+            user_name = "SYSTEM";
         else
             user_name = QString::fromStdString(process.user());
 

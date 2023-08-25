@@ -2866,7 +2866,7 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_panel.cc" line="461"/>
+        <location filename="../ui/file_panel.cc" line="459"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -2908,37 +2908,37 @@
         <translation>名称包含无效字符。</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="343"/>
+        <location filename="../ui/file_panel.cc" line="342"/>
         <source>&amp;Send	F11</source>
         <translation>发送（&amp;S）	F11</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="345"/>
+        <location filename="../ui/file_panel.cc" line="343"/>
         <source>&amp;Delete	Delete</source>
         <translation>删除（&amp;D）	Delete</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="355"/>
+        <location filename="../ui/file_panel.cc" line="353"/>
         <source>&amp;Create Folder</source>
         <translation>创建文件夹 （&amp;C）</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="420"/>
+        <location filename="../ui/file_panel.cc" line="418"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="421"/>
+        <location filename="../ui/file_panel.cc" line="419"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>是否确定要删除所选项目？</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="424"/>
+        <location filename="../ui/file_panel.cc" line="422"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/file_panel.cc" line="425"/>
+        <location filename="../ui/file_panel.cc" line="423"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>

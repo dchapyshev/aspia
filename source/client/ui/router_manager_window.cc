@@ -913,10 +913,10 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     QMenu menu;
 
     QAction* modify_action = menu.addAction(tr("Modify"));
-    modify_action->setIcon(QIcon(QStringLiteral(":/img/pencil.png")));
+    modify_action->setIcon(QIcon(":/img/pencil.png"));
 
     QAction* delete_action = menu.addAction(tr("Delete"));
-    delete_action->setIcon(QIcon(QStringLiteral(":/img/minus.png")));
+    delete_action->setIcon(QIcon(":/img/minus.png"));
 
     QTreeWidgetItem* current_item = ui->tree_users->itemAt(pos);
     if (!current_item)
@@ -930,10 +930,10 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     }
 
     QAction* add_action = menu.addAction(tr("Add"));
-    add_action->setIcon(QIcon(QStringLiteral(":/img/plus.png")));
+    add_action->setIcon(QIcon(":/img/plus.png"));
 
     QAction* refresh_action = menu.addAction(tr("Refresh"));
-    refresh_action->setIcon(QIcon(QStringLiteral(":/img/arrow-circle-double.png")));
+    refresh_action->setIcon(QIcon(":/img/arrow-circle-double.png"));
 
     QAction* action = menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
     if (action == modify_action)

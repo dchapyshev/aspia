@@ -236,24 +236,24 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 #if defined(OS_WIN)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("DXGI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
+        "DXGI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
 
     ui.combo_video_capturer->addItem(
-        QStringLiteral("GDI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
+        "GDI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
 
     // Mirror screen capture is available only in Windows 7/2008 R2.
     if (base::win::windowsVersion() == base::win::VERSION_WIN7)
     {
         ui.combo_video_capturer->addItem(
-            QStringLiteral("MIRROR"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
+            "MIRROR", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
     }
 
 #elif defined(OS_LINUX)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("X11"), static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
+        "X11", static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
 #elif defined(OS_MAC)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("MACOSX"), static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
+        "MACOSX", static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
 #else
 #error Platform support not implemented
 #endif

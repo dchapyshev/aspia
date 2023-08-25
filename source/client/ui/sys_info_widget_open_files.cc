@@ -78,7 +78,7 @@ void SysInfoWidgetOpenFiles::setSystemInfo(const proto::system_info::SystemInfo&
     }
 
     const proto::system_info::OpenFiles& open_files = system_info.open_files();
-    QIcon item_icon(QStringLiteral(":/img/folder-share.png"));
+    QIcon item_icon(":/img/folder-share.png");
 
     for (int i = 0; i < open_files.open_file_size(); ++i)
     {

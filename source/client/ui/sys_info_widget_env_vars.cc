@@ -76,7 +76,7 @@ void SysInfoWidgetEnvVars::setSystemInfo(const proto::system_info::SystemInfo& s
     }
 
     const proto::system_info::EnvironmentVariables& variables = system_info.env_vars();
-    QIcon item_icon(QStringLiteral(":/img/block.png"));
+    QIcon item_icon(":/img/block.png");
 
     for (int i = 0; i < variables.variable_size(); ++i)
     {

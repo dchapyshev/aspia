@@ -675,8 +675,7 @@ void AddressBookTab::stopOnlineChecker()
     {
         ComputerItem* computer_item = static_cast<ComputerItem*>(ui.tree_computer->topLevelItem(i));
 
-        computer_item->setIcon(ComputerItem::COLUMN_INDEX_NAME,
-                               QIcon(QStringLiteral(":/img/computer.png")));
+        computer_item->setIcon(ComputerItem::COLUMN_INDEX_NAME, QIcon(":/img/computer.png"));
         computer_item->setText(ComputerItem::COLUMN_INDEX_STATUS, QString());
     }
 
@@ -896,12 +895,12 @@ void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 
     if (online)
     {
-        icon = QIcon(QStringLiteral(":/img/computer-online.png"));
+        icon = QIcon(":/img/computer-online.png");
         status = tr("Online");
     }
     else
     {
-        icon = QIcon(QStringLiteral(":/img/computer-offline.png"));
+        icon = QIcon(":/img/computer-offline.png");
         status = tr("Offline");
     }
 

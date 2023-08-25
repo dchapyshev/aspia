@@ -223,22 +223,22 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     });
 
     QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setIcon(0, QIcon(":/img/computer.png"));
     general_item->setText(0, tr("General"));
 
     QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setIcon(0, QIcon(":/img/settings.png"));
     sessions_item->setText(0, tr("Sessions"));
 
     ui.tree_category->addTopLevelItem(general_item);
     ui.tree_category->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
     desktop_manage_item->setText(0, tr("Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
     desktop_view_item->setText(0, tr("View"));
 
     sessions_item->addChild(desktop_manage_item);

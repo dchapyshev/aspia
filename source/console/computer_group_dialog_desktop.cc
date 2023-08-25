@@ -120,9 +120,9 @@ void ComputerGroupDialogDesktop::restoreSettings(
     }
 
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem(QStringLiteral("VP9"), proto::VIDEO_ENCODING_VP9);
-    combo_codec->addItem(QStringLiteral("VP8"), proto::VIDEO_ENCODING_VP8);
-    combo_codec->addItem(QStringLiteral("ZSTD"), proto::VIDEO_ENCODING_ZSTD);
+    combo_codec->addItem("VP9", proto::VIDEO_ENCODING_VP9);
+    combo_codec->addItem("VP8", proto::VIDEO_ENCODING_VP8);
+    combo_codec->addItem("ZSTD", proto::VIDEO_ENCODING_ZSTD);
 
     QComboBox* combo_color_depth = ui.combobox_color_depth;
     combo_color_depth->addItem(tr("True color (32 bit)"), COLOR_DEPTH_ARGB);

@@ -339,12 +339,12 @@ void DesktopToolBar::startRecording(bool enable)
 {
     if (enable)
     {
-        ui.action_start_recording->setIcon(QIcon(QStringLiteral(":/img/control-stop.png")));
+        ui.action_start_recording->setIcon(QIcon(":/img/control-stop.png"));
         ui.action_start_recording->setText(tr("Stop recording"));
     }
     else
     {
-        ui.action_start_recording->setIcon(QIcon(QStringLiteral(":/img/control-record.png")));
+        ui.action_start_recording->setIcon(QIcon(":/img/control-record.png"));
         ui.action_start_recording->setText(tr("Start recording"));
     }
 
@@ -438,9 +438,9 @@ void DesktopToolBar::onHideTimer()
 void DesktopToolBar::onFullscreenButton(bool checked)
 {
     if (checked)
-        ui.action_fullscreen->setIcon(QIcon(QStringLiteral(":/img/application-resize-actual.png")));
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-actual.png"));
     else
-        ui.action_fullscreen->setIcon(QIcon(QStringLiteral(":/img/application-resize-full.png")));
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
 
     showFullScreenButtons(checked);
 
@@ -452,7 +452,7 @@ void DesktopToolBar::onAutosizeButton()
 {
     if (ui.action_fullscreen->isChecked())
     {
-        ui.action_fullscreen->setIcon(QIcon(QStringLiteral(":/img/application-resize-full.png")));
+        ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
         ui.action_fullscreen->setChecked(false);
 
         showFullScreenButtons(false);
