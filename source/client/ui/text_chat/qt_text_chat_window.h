@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_QT_TEXT_CHAT_WINDOW_H
-#define CLIENT_UI_QT_TEXT_CHAT_WINDOW_H
+#ifndef CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
+#define CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H
 
 #include "base/macros_magic.h"
 #include "client/text_chat_window_proxy.h"
@@ -65,4 +65,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_QT_TEXT_CHAT_WINDOW_H
+#endif // CLIENT_UI_TEXT_CHAT_QT_TEXT_CHAT_WINDOW_H

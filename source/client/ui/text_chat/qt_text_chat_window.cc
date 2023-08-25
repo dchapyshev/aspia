@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/qt_text_chat_window.h"
+#include "client/ui/text_chat/qt_text_chat_window.h"
 
 #include "base/logging.h"
 #include "client/client_text_chat.h"

@@ -122,9 +122,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_settings_dialog.cc
     ui/client_settings_dialog.h
     ui/client_settings_dialog.ui
-    ui/qt_text_chat_window.cc
-    ui/qt_text_chat_window.h
-    ui/qt_text_chat_window.ui
     ui/router_manager_window.cc
     ui/router_manager_window.h
     ui/router_manager_window.ui
@@ -271,12 +268,18 @@ list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/tree_to_html.cc
     ui/sys_info/tree_to_html.h)
 
+list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
+    ui/text_chat/qt_text_chat_window.cc
+    ui/text_chat/qt_text_chat_window.h
+    ui/text_chat/qt_text_chat_window.ui)
+
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
+source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
@@ -284,7 +287,8 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
     ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
-    ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
+    ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
+    ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 target_link_libraries(aspia_client_core
     aspia_base
     aspia_common

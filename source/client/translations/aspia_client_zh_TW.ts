@@ -2168,52 +2168,52 @@
 <context>
     <name>TextChatWindow</name>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="14"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="14"/>
         <source>System Information</source>
         <translation type="unfinished">系統訊息</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="42"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="42"/>
         <source>Save</source>
         <translation type="unfinished">儲存</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="45"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
         <translation type="unfinished">儲存 (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="57"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="57"/>
         <source>Print</source>
         <translation type="unfinished">列印</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="60"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
         <translation type="unfinished">列印 (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="68"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="68"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="73"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="73"/>
         <source>Copy Name</source>
         <translation type="unfinished">複製名稱</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="78"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="78"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="87"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="87"/>
         <source>Refresh</source>
         <translation type="unfinished">重新整理</translation>
     </message>
     <message>
-        <location filename="../ui/qt_text_chat_window.ui" line="90"/>
+        <location filename="../ui/text_chat/qt_text_chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
         <translation type="unfinished">重新整理（F5）</translation>
     </message>
