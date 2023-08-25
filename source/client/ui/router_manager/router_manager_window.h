@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_ROUTER_MANAGER_WINDOW_H
-#define CLIENT_UI_ROUTER_MANAGER_WINDOW_H
+#ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
+#define CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 
 #include "client/router_config.h"
 #include "client/router_window.h"
@@ -118,4 +118,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_ROUTER_MANAGER_WINDOW_H
+#endif // CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H

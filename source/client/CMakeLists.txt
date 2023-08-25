@@ -122,15 +122,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/client_settings_dialog.cc
     ui/client_settings_dialog.h
     ui/client_settings_dialog.ui
-    ui/router_manager_window.cc
-    ui/router_manager_window.h
-    ui/router_manager_window.ui
-    ui/router_status_dialog.cc
-    ui/router_status_dialog.h
-    ui/router_status_dialog.ui
-    ui/router_user_dialog.cc
-    ui/router_user_dialog.h
-    ui/router_user_dialog.ui
     ui/session_window.cc
     ui/session_window.h
     ui/update_settings_dialog.cc
@@ -198,6 +189,17 @@ list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
     ui/file_transfer/qt_file_manager_window.cc
     ui/file_transfer/qt_file_manager_window.h
     ui/file_transfer/qt_file_manager_window.ui)
+
+list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
+    ui/router_manager/router_manager_window.cc
+    ui/router_manager/router_manager_window.h
+    ui/router_manager/router_manager_window.ui
+    ui/router_manager/router_status_dialog.cc
+    ui/router_manager/router_status_dialog.h
+    ui/router_manager/router_status_dialog.ui
+    ui/router_manager/router_user_dialog.cc
+    ui/router_manager/router_user_dialog.h
+    ui/router_manager/router_user_dialog.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/qt_system_info_window.cc
@@ -278,6 +280,7 @@ source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
+source_group(ui\\router_manager FILES ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 
@@ -287,6 +290,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
     ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
+    ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
     ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 target_link_libraries(aspia_client_core

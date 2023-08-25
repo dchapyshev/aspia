@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_status_dialog.h"
+#include "client/ui/router_manager/router_status_dialog.h"
 
 #include <QAbstractButton>
 #include <QPushButton>

@@ -833,29 +833,29 @@
 <context>
     <name>RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="20"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="20"/>
         <source>Router Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="41"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="41"/>
         <source>Hosts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="49"/>
-        <location filename="../ui/router_manager_window.ui" line="163"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="49"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="163"/>
         <source>Connections count:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="82"/>
-        <location filename="../ui/router_manager_window.ui" line="195"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="82"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="195"/>
         <source>Connect Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="77"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="77"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -864,119 +864,119 @@
         <translation type="obsolete">Name</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="92"/>
-        <location filename="../ui/router_manager_window.ui" line="205"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="92"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="205"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="72"/>
-        <location filename="../ui/router_manager_window.ui" line="210"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="72"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="210"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="97"/>
-        <location filename="../ui/router_manager_window.ui" line="215"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="97"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="215"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="127"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="127"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="87"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="87"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="120"/>
-        <location filename="../ui/router_manager_window.ui" line="301"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="120"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="301"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="134"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="134"/>
         <source>Disconnect All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="141"/>
-        <location filename="../ui/router_manager_window.ui" line="308"/>
-        <location filename="../ui/router_manager_window.ui" line="378"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="141"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="308"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="378"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="155"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="155"/>
         <source>Relay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="190"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="190"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="200"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="200"/>
         <source>Pool Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="254"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="254"/>
         <source>Host Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="249"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="249"/>
         <source>Host ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="259"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="259"/>
         <source>Client Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="264"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="264"/>
         <source>Transferred</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="269"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="269"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="274"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="274"/>
         <source>Idle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="322"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="322"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="330"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="330"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="347"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="347"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="364"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="364"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.ui" line="244"/>
-        <location filename="../ui/router_manager_window.ui" line="411"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="244"/>
+        <location filename="../ui/router_manager/router_manager_window.ui" line="411"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -984,7 +984,7 @@
 <context>
     <name>RouterStatusDialog</name>
     <message>
-        <location filename="../ui/router_status_dialog.ui" line="14"/>
+        <location filename="../ui/router_manager/router_status_dialog.ui" line="14"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -992,32 +992,32 @@
 <context>
     <name>RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="14"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="27"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="27"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="34"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="34"/>
         <source>Password:</source>
         <translation type="unfinished">Kennwort:</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="41"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="41"/>
         <source>Password (retry):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="73"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.ui" line="80"/>
+        <location filename="../ui/router_manager/router_user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3048,200 +3048,200 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="409"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="409"/>
         <source>Connecting to %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="436"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="436"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="458"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="458"/>
         <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="462"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="462"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="466"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="466"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="470"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="470"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="474"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="474"/>
         <source>Remote host closed the connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="478"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="478"/>
         <source>Host address was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="482"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="482"/>
         <source>Socket operation timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="486"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="486"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="490"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="490"/>
         <source>Address specified does not belong to the host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="500"/>
-        <location filename="../ui/router_manager_window.cc" line="537"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="500"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="537"/>
         <source>An unknown error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="505"/>
-        <location filename="../ui/router_manager_window.cc" line="541"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="505"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="541"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="517"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="517"/>
         <source>Authentication successfully completed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="521"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="521"/>
         <source>Network authentication error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="525"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="525"/>
         <source>Violation of the data exchange protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="529"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="529"/>
         <source>An error occured while authenticating: wrong user name or password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="533"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="533"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="664"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="664"/>
         <source>Invalid request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="668"/>
-        <location filename="../ui/router_manager_window.cc" line="709"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="668"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="709"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="672"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="672"/>
         <source>Invalid session ID was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="744"/>
-        <location filename="../ui/router_manager_window.cc" line="803"/>
-        <location filename="../ui/router_manager_window.cc" line="856"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="744"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="803"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="856"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="748"/>
-        <location filename="../ui/router_manager_window.cc" line="805"/>
-        <location filename="../ui/router_manager_window.cc" line="858"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="748"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="805"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="858"/>
         <source>Disconnect All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="749"/>
-        <location filename="../ui/router_manager_window.cc" line="806"/>
-        <location filename="../ui/router_manager_window.cc" line="935"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="749"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="806"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="935"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="753"/>
-        <location filename="../ui/router_manager_window.cc" line="808"/>
-        <location filename="../ui/router_manager_window.cc" line="860"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="753"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="808"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="860"/>
         <source>Copy Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="754"/>
-        <location filename="../ui/router_manager_window.cc" line="809"/>
-        <location filename="../ui/router_manager_window.cc" line="861"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="754"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="809"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="861"/>
         <source>Copy Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="758"/>
-        <location filename="../ui/router_manager_window.cc" line="811"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="758"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="811"/>
         <source>Save to file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="915"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="915"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="918"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="918"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="932"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="932"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1147"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1147"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1354"/>
-        <location filename="../ui/router_manager_window.cc" line="1427"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1354"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1427"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1356"/>
-        <location filename="../ui/router_manager_window.cc" line="1429"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1356"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1429"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1366"/>
-        <location filename="../ui/router_manager_window.cc" line="1439"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1366"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1439"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1416"/>
-        <location filename="../ui/router_manager_window.cc" line="1508"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1416"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1508"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1587"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1587"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3249,7 +3249,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1588"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1588"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3257,7 +3257,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1589"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1589"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3265,7 +3265,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_manager_window.cc" line="1613"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1613"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3273,109 +3273,109 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1636"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1636"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1641"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1641"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1646"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1646"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1651"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1651"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1656"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1656"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1120"/>
-        <location filename="../ui/router_manager_window.cc" line="1176"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1120"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1176"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="284"/>
-        <location filename="../ui/router_manager_window.cc" line="1058"/>
-        <location filename="../ui/router_manager_window.cc" line="1098"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="284"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1058"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1098"/>
         <source>Active peers: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="676"/>
-        <location filename="../ui/router_manager_window.cc" line="721"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="676"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="721"/>
         <source>Unknown error type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="680"/>
-        <location filename="../ui/router_manager_window.cc" line="725"/>
-        <location filename="../ui/router_manager_window.cc" line="1291"/>
-        <location filename="../ui/router_manager_window.cc" line="1365"/>
-        <location filename="../ui/router_manager_window.cc" line="1415"/>
-        <location filename="../ui/router_manager_window.cc" line="1438"/>
-        <location filename="../ui/router_manager_window.cc" line="1507"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="680"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="725"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1291"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1365"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1415"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1438"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1507"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="713"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="713"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="717"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="717"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1119"/>
-        <location filename="../ui/router_manager_window.cc" line="1146"/>
-        <location filename="../ui/router_manager_window.cc" line="1175"/>
-        <location filename="../ui/router_manager_window.cc" line="1202"/>
-        <location filename="../ui/router_manager_window.cc" line="1296"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1119"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1146"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1175"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1202"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1296"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1124"/>
-        <location filename="../ui/router_manager_window.cc" line="1150"/>
-        <location filename="../ui/router_manager_window.cc" line="1180"/>
-        <location filename="../ui/router_manager_window.cc" line="1206"/>
-        <location filename="../ui/router_manager_window.cc" line="1301"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1124"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1150"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1180"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1206"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1301"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1125"/>
-        <location filename="../ui/router_manager_window.cc" line="1151"/>
-        <location filename="../ui/router_manager_window.cc" line="1181"/>
-        <location filename="../ui/router_manager_window.cc" line="1207"/>
-        <location filename="../ui/router_manager_window.cc" line="1302"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1125"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1151"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1181"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1207"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1302"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1203"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1203"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1291"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1291"/>
         <source>You cannot delete a built-in user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_manager_window.cc" line="1297"/>
+        <location filename="../ui/router_manager/router_manager_window.cc" line="1297"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3383,7 +3383,7 @@
 <context>
     <name>client::RouterStatusDialog</name>
     <message>
-        <location filename="../ui/router_status_dialog.cc" line="34"/>
+        <location filename="../ui/router_manager/router_status_dialog.cc" line="34"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3391,37 +3391,37 @@
 <context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="42"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="42"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="137"/>
-        <location filename="../ui/router_user_dialog.cc" line="152"/>
-        <location filename="../ui/router_user_dialog.cc" line="165"/>
-        <location filename="../ui/router_user_dialog.cc" line="179"/>
-        <location filename="../ui/router_user_dialog.cc" line="202"/>
-        <location filename="../ui/router_user_dialog.cc" line="230"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="137"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="152"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="165"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="179"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="202"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="230"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="138"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="138"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="153"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="153"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="166"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="166"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="180"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="180"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3429,12 +3429,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="192"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="192"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/router_user_dialog.cc" line="195"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="195"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3442,37 +3442,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="199"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="199"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="206"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="206"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="207"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="207"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="231"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="231"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="280"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="280"/>
         <source>Double-click to change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="305"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="305"/>
         <source>Administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/router_user_dialog.cc" line="309"/>
+        <location filename="../ui/router_manager/router_user_dialog.cc" line="309"/>
         <source>Client</source>
         <translation type="unfinished"></translation>
     </message>

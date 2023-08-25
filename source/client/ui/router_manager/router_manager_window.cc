@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_manager_window.h"
+#include "client/ui/router_manager/router_manager_window.h"
 
 #include "base/logging.h"
 #include "base/peer/user.h"
@@ -25,8 +25,8 @@
 #include "client/router_proxy.h"
 #include "client/router_window_proxy.h"
 #include "client/ui/client_settings.h"
-#include "client/ui/router_user_dialog.h"
-#include "client/ui/router_status_dialog.h"
+#include "client/ui/router_manager/router_user_dialog.h"
+#include "client/ui/router_manager/router_status_dialog.h"
 #include "ui_router_manager_window.h"
 
 #include <QClipboard>

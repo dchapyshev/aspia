@@ -24,7 +24,7 @@
 #include "client/ui/file_transfer/qt_file_manager_window.h"
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/text_chat/qt_text_chat_window.h"
-#include "client/ui/router_manager_window.h"
+#include "client/ui/router_manager/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "console/address_book_tab.h"

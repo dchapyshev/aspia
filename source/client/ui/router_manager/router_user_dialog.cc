@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_user_dialog.h"
+#include "client/ui/router_manager/router_user_dialog.h"
 
 #include "base/peer/user.h"
 #include "base/strings/string_util.h"
