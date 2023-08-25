@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/task_manager_window.h"
+#include "client/ui/desktop/task_manager_window.h"
 
 #include "base/logging.h"
-#include "client/ui/task_manager_settings.h"
+#include "client/ui/desktop/task_manager_settings.h"
 
 #include <QAction>
 #include <QActionGroup>

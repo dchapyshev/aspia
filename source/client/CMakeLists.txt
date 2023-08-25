@@ -133,11 +133,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/router_user_dialog.ui
     ui/session_window.cc
     ui/session_window.h
-    ui/task_manager_settings.cc
-    ui/task_manager_settings.h
-    ui/task_manager_window.cc
-    ui/task_manager_window.h
-    ui/task_manager_window.ui
     ui/update_settings_dialog.cc
     ui/update_settings_dialog.h
     ui/update_settings_dialog.ui)
@@ -165,7 +160,12 @@ list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/select_screen_action.h
     ui/desktop/statistics_dialog.cc
     ui/desktop/statistics_dialog.h
-    ui/desktop/statistics_dialog.ui)
+    ui/desktop/statistics_dialog.ui
+    ui/desktop/task_manager_settings.cc
+    ui/desktop/task_manager_settings.h
+    ui/desktop/task_manager_window.cc
+    ui/desktop/task_manager_window.h
+    ui/desktop/task_manager_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
     ui/file_transfer/address_bar.cc

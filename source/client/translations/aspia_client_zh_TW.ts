@@ -883,12 +883,12 @@
         <translation type="obsolete">B</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="88"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="88"/>
         <source>System Idle Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="90"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="90"/>
         <source>Unknown Process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1110,68 +1110,68 @@
 <context>
     <name>ServiceItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="198"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="198"/>
         <source>Continue Pending</source>
         <translation type="unfinished">繼續延遲</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="201"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="201"/>
         <source>Pause Pending</source>
         <translation type="unfinished">延遲暫停</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="204"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="204"/>
         <source>Paused</source>
         <translation type="unfinished">已暫停</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="207"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="207"/>
         <source>Running</source>
         <translation type="unfinished">正在執行</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="210"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="210"/>
         <source>Start Pending</source>
         <translation type="unfinished">延遲啟動</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="213"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="213"/>
         <source>Stop Pending</source>
         <translation type="unfinished">延遲停止</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="216"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="216"/>
         <source>Stopped</source>
         <translation type="unfinished">已停止</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="219"/>
-        <location filename="../ui/task_manager_window.cc" line="244"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="219"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="244"/>
         <source>Unknown</source>
         <translation type="unfinished">未知</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="229"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="229"/>
         <source>Auto Start</source>
         <translation type="unfinished">自動啟動</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="232"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="232"/>
         <source>Demand Start</source>
         <translation type="unfinished">依需求啟動</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="235"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="235"/>
         <source>Disabled</source>
         <translation type="unfinished">已停用</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="238"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="238"/>
         <source>Boot Start</source>
         <translation type="unfinished">由 OS loader 啟動 (Boot Start)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="241"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="241"/>
         <source>System Start</source>
         <translation type="unfinished">系統初始化期間啟動 (System Start)</translation>
     </message>
@@ -1964,24 +1964,24 @@
         <translation type="obsolete">系統訊息</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="37"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="65"/>
-        <location filename="../ui/task_manager_window.ui" line="188"/>
-        <location filename="../ui/task_manager_window.ui" line="237"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="65"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="188"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
         <translation type="unfinished">名稱</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="80"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
         <translation type="unfinished">使用者名稱</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="85"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="85"/>
         <source>CPU</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1990,8 +1990,8 @@
         <translation type="obsolete">記憶體</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="153"/>
-        <location filename="../ui/task_manager_window.ui" line="308"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="153"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2032,135 +2032,135 @@
         <translation type="obsolete">重新整理（F5）</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="70"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="75"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="163"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
         <translation type="unfinished">服務</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="203"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="203"/>
         <source>Description</source>
         <translation type="unfinished">描述</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="193"/>
-        <location filename="../ui/task_manager_window.ui" line="247"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="193"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
         <translation type="unfinished">狀態</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="212"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="242"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="242"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="252"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="283"/>
-        <location filename="../ui/task_manager_window.ui" line="323"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="283"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
         <translation type="unfinished">中斷連線</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="90"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="98"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="106"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="114"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="14"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="198"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="257"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="122"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
         <translation type="unfinished">執行緒數</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="357"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="357"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="313"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="318"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="318"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="127"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="293"/>
-        <location filename="../ui/task_manager_window.ui" line="328"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="293"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
         <translation type="unfinished">登出</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="336"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
         <translation type="unfinished">高</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="344"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="352"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
         <translation type="unfinished">低</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="365"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
         <translation type="unfinished">已停用</translation>
     </message>
@@ -2244,62 +2244,62 @@
 <context>
     <name>UserItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="337"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="337"/>
         <source>Unknown</source>
         <translation type="unfinished">未知</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="307"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="307"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="310"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="310"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="313"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="313"/>
         <source>Connect Query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="316"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="316"/>
         <source>Shadow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="319"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="319"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="322"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="322"/>
         <source>Idle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="325"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="325"/>
         <source>Listen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="328"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="328"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="331"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="331"/>
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="334"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="334"/>
         <source>Init</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="272"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="272"/>
         <source>&lt;no user&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4993,58 +4993,58 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="954"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="954"/>
         <source>CPU loading: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="685"/>
-        <location filename="../ui/task_manager_window.cc" line="723"/>
-        <location filename="../ui/task_manager_window.cc" line="746"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="685"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="723"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="746"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="686"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="686"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="747"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="747"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="948"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="948"/>
         <source>Processes: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="960"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="960"/>
         <source>Physical memory: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="966"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="966"/>
         <source>Update Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="724"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="724"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="690"/>
-        <location filename="../ui/task_manager_window.cc" line="728"/>
-        <location filename="../ui/task_manager_window.cc" line="751"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="690"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="728"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="751"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="691"/>
-        <location filename="../ui/task_manager_window.cc" line="729"/>
-        <location filename="../ui/task_manager_window.cc" line="752"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="691"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="729"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="752"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>

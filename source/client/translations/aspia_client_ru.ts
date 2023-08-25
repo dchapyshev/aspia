@@ -946,12 +946,12 @@
         <translation type="obsolete">Б</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="88"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="88"/>
         <source>System Idle Process</source>
         <translation>Бездействие системы</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="90"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="90"/>
         <source>Unknown Process</source>
         <translation>Неизвестный процесс</translation>
     </message>
@@ -1201,68 +1201,68 @@
 <context>
     <name>ServiceItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="198"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="198"/>
         <source>Continue Pending</source>
         <translation>Возобновление</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="201"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="201"/>
         <source>Pause Pending</source>
         <translation>Приостановка</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="204"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="204"/>
         <source>Paused</source>
         <translation>Простановлено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="207"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="207"/>
         <source>Running</source>
         <translation>Запущено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="210"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="210"/>
         <source>Start Pending</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="213"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="213"/>
         <source>Stop Pending</source>
         <translation>Остановка</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="216"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="216"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="219"/>
-        <location filename="../ui/task_manager_window.cc" line="244"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="219"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="244"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="229"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="229"/>
         <source>Auto Start</source>
         <translation>Автоматически</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="232"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="232"/>
         <source>Demand Start</source>
         <translation>По требованию</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="235"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="235"/>
         <source>Disabled</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="238"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="238"/>
         <source>Boot Start</source>
         <translation>При загрузке</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="241"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="241"/>
         <source>System Start</source>
         <translation>При старте системы</translation>
     </message>
@@ -2182,24 +2182,24 @@
         <translation type="obsolete">Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="37"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
         <translation>Процессы</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="65"/>
-        <location filename="../ui/task_manager_window.ui" line="188"/>
-        <location filename="../ui/task_manager_window.ui" line="237"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="65"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="188"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="80"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="85"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="85"/>
         <source>CPU</source>
         <translation>ЦП</translation>
     </message>
@@ -2208,145 +2208,145 @@
         <translation type="obsolete">Память</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="70"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
         <translation>ID процесса</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="14"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
         <translation>Диспетчер задач</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="75"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
         <translation>Код сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="90"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
         <translation>Память (частный рабочий набор)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="98"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
         <translation>Память (рабочий набор)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="106"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
         <translation>Память (пиковый рабочий набор)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="114"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
         <translation>Память (дельта рабочего набора)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="122"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
         <translation>Потоков</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="127"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
         <translation>Путь к образу</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="153"/>
-        <location filename="../ui/task_manager_window.ui" line="308"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="153"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
         <translation>Завершить задачу</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="163"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
         <translation>Службы</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="198"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
         <translation>Тип запуска</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="203"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="203"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="293"/>
-        <location filename="../ui/task_manager_window.ui" line="328"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="293"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
         <translation>Завершение сеанса</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="313"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="318"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="318"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="365"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
         <translatorcomment>Update speed</translatorcomment>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="193"/>
-        <location filename="../ui/task_manager_window.ui" line="247"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="193"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="336"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
         <translatorcomment>Update speed</translatorcomment>
         <translation>Высокая</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="344"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
         <translatorcomment>Update speed</translatorcomment>
         <translation>Нормальная</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="352"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
         <translatorcomment>Update speed</translatorcomment>
         <translation>Низкая</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="357"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="357"/>
         <source>Update</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="212"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="242"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="242"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="252"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
         <translation>Имя клиента</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="257"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
         <translation>Имя сессии</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.ui" line="283"/>
-        <location filename="../ui/task_manager_window.ui" line="323"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="283"/>
+        <location filename="../ui/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -2466,62 +2466,62 @@
 <context>
     <name>UserItem</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="272"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="272"/>
         <source>&lt;no user&gt;</source>
         <translation>&lt;нет&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="307"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="307"/>
         <source>Active</source>
         <translation>Активен</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="310"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="310"/>
         <source>Connected</source>
         <translation>Подключен</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="313"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="313"/>
         <source>Connect Query</source>
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="316"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="316"/>
         <source>Shadow</source>
         <translation>Теневой</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="319"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="319"/>
         <source>Disconnected</source>
         <translation>Отключен</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="322"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="322"/>
         <source>Idle</source>
         <translation>Простой</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="325"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="325"/>
         <source>Listen</source>
         <translation>Прослушивание</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="328"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="328"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="331"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="331"/>
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="334"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="334"/>
         <source>Init</source>
         <translation>Инициализация</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="337"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="337"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -6094,53 +6094,53 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="948"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="948"/>
         <source>Processes: %1</source>
         <translation>Процессов: %1</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="685"/>
-        <location filename="../ui/task_manager_window.cc" line="723"/>
-        <location filename="../ui/task_manager_window.cc" line="746"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="685"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="723"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="746"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="966"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="966"/>
         <source>Update Speed</source>
         <translation>Скорость обновления</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="686"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="686"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
         <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="690"/>
-        <location filename="../ui/task_manager_window.cc" line="728"/>
-        <location filename="../ui/task_manager_window.cc" line="751"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="690"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="728"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="751"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="691"/>
-        <location filename="../ui/task_manager_window.cc" line="729"/>
-        <location filename="../ui/task_manager_window.cc" line="752"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="691"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="729"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="752"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="724"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="724"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="747"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="747"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
         <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="960"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="960"/>
         <source>Physical memory: %1%</source>
         <translation>Физическая память: %1%</translation>
     </message>
@@ -6149,7 +6149,7 @@
         <translation type="vanished">Процессов: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/task_manager_window.cc" line="954"/>
+        <location filename="../ui/desktop/task_manager_window.cc" line="954"/>
         <source>CPU loading: %1%</source>
         <translation>Загрузка ЦП: %1%</translation>
     </message>

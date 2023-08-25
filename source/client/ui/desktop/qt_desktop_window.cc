@@ -33,7 +33,7 @@
 #include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/text_chat/qt_text_chat_window.h"
 #include "client/ui/desktop/statistics_dialog.h"
-#include "client/ui/task_manager_window.h"
+#include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
 
