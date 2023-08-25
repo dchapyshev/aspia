@@ -395,180 +395,315 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="126"/>
         <source>Lock toolbar</source>
-        <translation>Закрепить панель инструментов</translation>
+        <translation type="vanished">Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="138"/>
         <source>Session configuration</source>
-        <translation>Параметры сессии</translation>
+        <translation type="vanished">Параметры сессии</translation>
     </message>
     <message>
         <source>Monitor selection</source>
         <translation type="vanished">Выбор монитора</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="150"/>
+        <source>Automatic window size</source>
+        <translation type="vanished">Автоматический размер окна</translation>
+    </message>
+    <message>
+        <source>Switch to full screen mode or back</source>
+        <translation type="vanished">Переключиться на полный экран (или назад)</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling</source>
+        <translation type="vanished">Автоматическая прокрутка</translation>
+    </message>
+    <message>
+        <source>Advanced menu</source>
+        <translation type="vanished">Расширенное меню</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="vanished">Масштаб</translation>
+    </message>
+    <message>
+        <source>Send key combinations</source>
+        <translation type="vanished">Отправлять комбинации клавиш</translation>
+    </message>
+    <message>
+        <source>Power control</source>
+        <translation type="vanished">Управление питанием</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation type="vanished">Выключение</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="vanished">Перезагрузка</translation>
+    </message>
+    <message>
+        <source>Logoff</source>
+        <translation type="vanished">Завершение сеанса</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation type="vanished">Блокировка</translation>
+    </message>
+    <message>
+        <source>Remote Update</source>
+        <translation type="vanished">Удаленное обновление</translation>
+    </message>
+    <message>
+        <source>System Information</source>
+        <translation type="vanished">Информация о системе</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="vanished">Закрыть</translation>
+    </message>
+    <message>
+        <source>Close session</source>
+        <translation type="vanished">Закрыть сессию</translation>
+    </message>
+    <message>
+        <source>Fit window</source>
+        <translation type="vanished">По размеру окна</translation>
+    </message>
+    <message>
+        <source>Minimize</source>
+        <translation type="vanished">Свернуть</translation>
+    </message>
+    <message>
+        <source>Minimize window</source>
+        <translation type="vanished">Свернуть окно</translation>
+    </message>
+    <message>
+        <source>Statistics</source>
+        <translation type="vanished">Статистика</translation>
+    </message>
+    <message>
+        <source>Reboot (Safe mode)</source>
+        <translation type="vanished">Перезагрузка (безопасный режим)</translation>
+    </message>
+    <message>
+        <source>Reboot in safe mode</source>
+        <translation type="vanished">Перезагрузка в безопасном режиме</translation>
+    </message>
+    <message>
+        <source>Paste clipboard as keystrokes</source>
+        <translation type="vanished">Вставить буфер обмена как нажатия клавиш</translation>
+    </message>
+    <message>
+        <source>Text Chat</source>
+        <translation type="vanished">Текстовый чат</translation>
+    </message>
+    <message>
+        <source>Recording settings...</source>
+        <translation type="vanished">Параметры записи...</translation>
+    </message>
+    <message>
+        <source>Start recording</source>
+        <translation type="vanished">Начать запись</translation>
+    </message>
+    <message>
+        <source>Task Manager</source>
+        <translation type="vanished">Диспетчер задач</translation>
+    </message>
+    <message>
+        <source>Pause video when minimizing</source>
+        <translation type="vanished">Приостанавливать видео при сворачивании</translation>
+    </message>
+    <message>
+        <source>Pause audio when minimizing</source>
+        <translation type="vanished">Приостанавливать звук при сворачивании</translation>
+    </message>
+    <message>
+        <source>Save screenshot...</source>
+        <translation type="vanished">Сохранить снимок экрана...</translation>
+    </message>
+    <message>
+        <source>File transfer</source>
+        <translation type="vanished">Передача файлов</translation>
+    </message>
+    <message>
+        <source>Send Ctrl+Alt+Delete</source>
+        <translation type="vanished">Отправить Ctrl+Alt+Delete</translation>
+    </message>
+</context>
+<context>
+    <name>DesktopToolBar</name>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="126"/>
+        <source>Lock toolbar</source>
+        <translation>Закрепить панель инструментов</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="138"/>
+        <source>Session configuration</source>
+        <translation>Параметры сессии</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="150"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="165"/>
+        <location filename="../ui/desktop_toolbar.ui" line="165"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="176"/>
+        <location filename="../ui/desktop_toolbar.ui" line="176"/>
         <source>Automatic scrolling</source>
         <translation>Автоматическая прокрутка</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="200"/>
+        <location filename="../ui/desktop_toolbar.ui" line="188"/>
+        <source>Send Ctrl+Alt+Delete</source>
+        <translation>Отправить Ctrl+Alt+Delete</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="200"/>
         <source>Advanced menu</source>
         <translation>Расширенное меню</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="231"/>
-        <source>Scale</source>
-        <translation>Масштаб</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="242"/>
-        <source>Send key combinations</source>
-        <translation>Отправлять комбинации клавиш</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="251"/>
-        <location filename="../ui/desktop_panel.ui" line="254"/>
-        <source>Power control</source>
-        <translation>Управление питанием</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="262"/>
-        <source>Shutdown</source>
-        <translation>Выключение</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="267"/>
-        <source>Reboot</source>
-        <translation>Перезагрузка</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="272"/>
-        <source>Logoff</source>
-        <translation>Завершение сеанса</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="277"/>
-        <source>Lock</source>
-        <translation>Блокировка</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="286"/>
-        <source>Remote Update</source>
-        <translation>Удаленное обновление</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="298"/>
-        <source>System Information</source>
-        <translation>Информация о системе</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="310"/>
-        <source>Close</source>
-        <translation>Закрыть</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="313"/>
-        <source>Close session</source>
-        <translation>Закрыть сессию</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="372"/>
-        <source>Fit window</source>
-        <translation>По размеру окна</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="381"/>
-        <source>Minimize</source>
-        <translation>Свернуть</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="384"/>
-        <source>Minimize window</source>
-        <translation>Свернуть окно</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="389"/>
-        <location filename="../ui/desktop_panel.ui" line="392"/>
-        <source>Statistics</source>
-        <translation>Статистика</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="397"/>
-        <source>Reboot (Safe mode)</source>
-        <translation>Перезагрузка (безопасный режим)</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="400"/>
-        <source>Reboot in safe mode</source>
-        <translation>Перезагрузка в безопасном режиме</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="405"/>
-        <source>Paste clipboard as keystrokes</source>
-        <translation>Вставить буфер обмена как нажатия клавиш</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="414"/>
-        <location filename="../ui/desktop_panel.ui" line="417"/>
-        <source>Text Chat</source>
-        <translation>Текстовый чат</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="425"/>
-        <source>Recording settings...</source>
-        <translation>Параметры записи...</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="434"/>
-        <location filename="../ui/desktop_panel.ui" line="437"/>
-        <source>Start recording</source>
-        <translation>Начать запись</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="446"/>
-        <location filename="../ui/desktop_panel.ui" line="449"/>
-        <source>Task Manager</source>
-        <translation>Диспетчер задач</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="463"/>
-        <source>Pause video when minimizing</source>
-        <translation>Приостанавливать видео при сворачивании</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="474"/>
-        <source>Pause audio when minimizing</source>
-        <translation>Приостанавливать звук при сворачивании</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.ui" line="205"/>
-        <location filename="../ui/desktop_panel.ui" line="208"/>
-        <location filename="../ui/desktop_panel.ui" line="211"/>
+        <location filename="../ui/desktop_toolbar.ui" line="205"/>
+        <location filename="../ui/desktop_toolbar.ui" line="208"/>
+        <location filename="../ui/desktop_toolbar.ui" line="211"/>
         <source>Save screenshot...</source>
         <translation>Сохранить снимок экрана...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="223"/>
+        <location filename="../ui/desktop_toolbar.ui" line="223"/>
         <source>File transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="188"/>
-        <source>Send Ctrl+Alt+Delete</source>
-        <translation>Отправить Ctrl+Alt+Delete</translation>
+        <location filename="../ui/desktop_toolbar.ui" line="231"/>
+        <source>Scale</source>
+        <translation>Масштаб</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="242"/>
+        <source>Send key combinations</source>
+        <translation>Отправлять комбинации клавиш</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="251"/>
+        <location filename="../ui/desktop_toolbar.ui" line="254"/>
+        <source>Power control</source>
+        <translation>Управление питанием</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="262"/>
+        <source>Shutdown</source>
+        <translation>Выключение</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="267"/>
+        <source>Reboot</source>
+        <translation>Перезагрузка</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="272"/>
+        <source>Logoff</source>
+        <translation>Завершение сеанса</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="277"/>
+        <source>Lock</source>
+        <translation>Блокировка</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="286"/>
+        <source>Remote Update</source>
+        <translation>Удаленное обновление</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="298"/>
+        <source>System Information</source>
+        <translation>Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="310"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="313"/>
+        <source>Close session</source>
+        <translation>Закрыть сессию</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="372"/>
+        <source>Fit window</source>
+        <translation>По размеру окна</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="381"/>
+        <source>Minimize</source>
+        <translation>Свернуть</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="384"/>
+        <source>Minimize window</source>
+        <translation>Свернуть окно</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="389"/>
+        <location filename="../ui/desktop_toolbar.ui" line="392"/>
+        <source>Statistics</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="397"/>
+        <source>Reboot (Safe mode)</source>
+        <translation>Перезагрузка (безопасный режим)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="400"/>
+        <source>Reboot in safe mode</source>
+        <translation>Перезагрузка в безопасном режиме</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="405"/>
+        <source>Paste clipboard as keystrokes</source>
+        <translation>Вставить буфер обмена как нажатия клавиш</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="414"/>
+        <location filename="../ui/desktop_toolbar.ui" line="417"/>
+        <source>Text Chat</source>
+        <translation>Текстовый чат</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="425"/>
+        <source>Recording settings...</source>
+        <translation>Параметры записи...</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="434"/>
+        <location filename="../ui/desktop_toolbar.ui" line="437"/>
+        <source>Start recording</source>
+        <translation>Начать запись</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="446"/>
+        <location filename="../ui/desktop_toolbar.ui" line="449"/>
+        <source>Task Manager</source>
+        <translation>Диспетчер задач</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="463"/>
+        <source>Pause video when minimizing</source>
+        <translation>Приостанавливать видео при сворачивании</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="474"/>
+        <source>Pause audio when minimizing</source>
+        <translation>Приостанавливать звук при сворачивании</translation>
     </message>
 </context>
 <context>
@@ -2657,80 +2792,131 @@
         <translation type="vanished">Монитор %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="301"/>
         <source>Resolution selection</source>
-        <translation>Выбор разрешения</translation>
+        <translation type="vanished">Выбор разрешения</translation>
     </message>
     <message>
         <source>Resolution</source>
         <translation type="vanished">Разрешение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="476"/>
-        <location filename="../ui/desktop_panel.cc" line="491"/>
-        <location filename="../ui/desktop_panel.cc" line="506"/>
-        <location filename="../ui/desktop_panel.cc" line="521"/>
-        <location filename="../ui/desktop_panel.cc" line="536"/>
         <source>Confirmation</source>
-        <translation>Подтверждение</translation>
+        <translation type="vanished">Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="477"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
+        <translation type="vanished">Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="480"/>
-        <location filename="../ui/desktop_panel.cc" line="495"/>
-        <location filename="../ui/desktop_panel.cc" line="510"/>
-        <location filename="../ui/desktop_panel.cc" line="525"/>
-        <location filename="../ui/desktop_panel.cc" line="540"/>
         <source>Yes</source>
-        <translation>Да</translation>
+        <translation type="vanished">Да</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="481"/>
-        <location filename="../ui/desktop_panel.cc" line="496"/>
-        <location filename="../ui/desktop_panel.cc" line="511"/>
-        <location filename="../ui/desktop_panel.cc" line="526"/>
-        <location filename="../ui/desktop_panel.cc" line="541"/>
         <source>No</source>
-        <translation>Нет</translation>
+        <translation type="vanished">Нет</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="492"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
+        <translation type="vanished">Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="507"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
+        <translation type="vanished">Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="522"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
+        <translation type="vanished">Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="537"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
+        <translation type="vanished">Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="625"/>
         <source>Scale</source>
-        <translation>Масштаб</translation>
+        <translation type="vanished">Масштаб</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <source>Stop recording</source>
+        <translation type="vanished">Остановить запись</translation>
+    </message>
+    <message>
+        <source>Start recording</source>
+        <translation type="vanished">Начать запись</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopToolBar</name>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="301"/>
+        <source>Resolution selection</source>
+        <translation>Выбор разрешения</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="343"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="348"/>
+        <location filename="../ui/desktop_toolbar.cc" line="348"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="476"/>
+        <location filename="../ui/desktop_toolbar.cc" line="491"/>
+        <location filename="../ui/desktop_toolbar.cc" line="506"/>
+        <location filename="../ui/desktop_toolbar.cc" line="521"/>
+        <location filename="../ui/desktop_toolbar.cc" line="536"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="477"/>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="480"/>
+        <location filename="../ui/desktop_toolbar.cc" line="495"/>
+        <location filename="../ui/desktop_toolbar.cc" line="510"/>
+        <location filename="../ui/desktop_toolbar.cc" line="525"/>
+        <location filename="../ui/desktop_toolbar.cc" line="540"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="481"/>
+        <location filename="../ui/desktop_toolbar.cc" line="496"/>
+        <location filename="../ui/desktop_toolbar.cc" line="511"/>
+        <location filename="../ui/desktop_toolbar.cc" line="526"/>
+        <location filename="../ui/desktop_toolbar.cc" line="541"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="492"/>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="507"/>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="522"/>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="537"/>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="625"/>
+        <source>Scale</source>
+        <translation>Масштаб</translation>
     </message>
 </context>
 <context>

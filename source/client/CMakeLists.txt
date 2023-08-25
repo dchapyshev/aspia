@@ -129,11 +129,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/desktop_config_dialog.cc
     ui/desktop_config_dialog.h
     ui/desktop_config_dialog.ui
-    ui/file_name_validator.cc
-    ui/file_name_validator.h
-    ui/desktop_panel.cc
-    ui/desktop_panel.h
-    ui/desktop_panel.ui
+    ui/desktop_toolbar.cc
+    ui/desktop_toolbar.h
+    ui/desktop_toolbar.ui
     ui/desktop_widget.cc
     ui/desktop_widget.h
     ui/file_error_code.cc
@@ -150,6 +148,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/file_manager_settings.h
     ui/file_mime_data.cc
     ui/file_mime_data.h
+    ui/file_name_validator.cc
+    ui/file_name_validator.h
     ui/file_panel.cc
     ui/file_panel.h
     ui/file_panel.ui

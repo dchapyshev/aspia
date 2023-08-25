@@ -38,7 +38,7 @@ class Frame;
 namespace client {
 
 class DesktopConfigDialog;
-class DesktopPanel;
+class DesktopToolBar;
 class DesktopWindowProxy;
 class QtSystemInfoWindow;
 class StatisticsDialog;
@@ -112,7 +112,7 @@ private:
 
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;
-    DesktopPanel* panel_ = nullptr;
+    DesktopToolBar* toolbar_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
 
     QPointer<QtSystemInfoWindow> system_info_;

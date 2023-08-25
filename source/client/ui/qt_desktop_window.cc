@@ -26,7 +26,7 @@
 #include "client/desktop_control_proxy.h"
 #include "client/desktop_window_proxy.h"
 #include "client/ui/desktop_config_dialog.h"
-#include "client/ui/desktop_panel.h"
+#include "client/ui/desktop_toolbar.h"
 #include "client/ui/frame_factory_qimage.h"
 #include "client/ui/frame_qimage.h"
 #include "client/ui/qt_file_manager_window.h"
@@ -97,8 +97,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(session_type_, scroll_area_);
-    panel_->installEventFilter(this);
+    toolbar_ = new DesktopToolBar(session_type_, scroll_area_);
+    toolbar_->installEventFilter(this);
 
     resize_timer_ = new QTimer(this);
     connect(resize_timer_, &QTimer::timeout, this, &QtDesktopWindow::onResizeTimer);
@@ -106,46 +106,46 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     scroll_timer_ = new QTimer(this);
     connect(scroll_timer_, &QTimer::timeout, this, &QtDesktopWindow::onScrollTimer);
 
-    desktop_->enableKeyCombinations(panel_->sendKeyCombinations());
+    desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
 
-    connect(panel_, &DesktopPanel::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
-    connect(panel_, &DesktopPanel::settingsButton, this, &QtDesktopWindow::changeSettings);
-    connect(panel_, &DesktopPanel::switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
-    connect(panel_, &DesktopPanel::takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
-    connect(panel_, &DesktopPanel::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
-    connect(panel_, &DesktopPanel::minimizeSession, this, &QtDesktopWindow::showMinimized);
-    connect(panel_, &DesktopPanel::closeSession, this, &QtDesktopWindow::close);
-    connect(panel_, &DesktopPanel::showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
+    connect(toolbar_, &DesktopToolBar::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
+    connect(toolbar_, &DesktopToolBar::settingsButton, this, &QtDesktopWindow::changeSettings);
+    connect(toolbar_, &DesktopToolBar::switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
+    connect(toolbar_, &DesktopToolBar::takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
+    connect(toolbar_, &DesktopToolBar::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
+    connect(toolbar_, &DesktopToolBar::minimizeSession, this, &QtDesktopWindow::showMinimized);
+    connect(toolbar_, &DesktopToolBar::closeSession, this, &QtDesktopWindow::close);
+    connect(toolbar_, &DesktopToolBar::showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
 
-    enable_video_pause_ = panel_->isVideoPauseEnabled();
-    connect(panel_, &DesktopPanel::videoPauseChanged, this, [this](bool enable)
+    enable_video_pause_ = toolbar_->isVideoPauseEnabled();
+    connect(toolbar_, &DesktopToolBar::videoPauseChanged, this, [this](bool enable)
     {
         enable_video_pause_ = enable;
     });
 
-    enable_audio_pause_ = panel_->isAudioPauseEnabled();
-    connect(panel_, &DesktopPanel::audioPauseChanged, this, [this](bool enable)
+    enable_audio_pause_ = toolbar_->isAudioPauseEnabled();
+    connect(toolbar_, &DesktopToolBar::audioPauseChanged, this, [this](bool enable)
     {
         enable_audio_pause_ = enable;
     });
 
-    connect(panel_, &DesktopPanel::screenSelected, this, [this](const proto::Screen& screen)
+    connect(toolbar_, &DesktopToolBar::screenSelected, this, [this](const proto::Screen& screen)
     {
         desktop_control_proxy_->setCurrentScreen(screen);
     });
 
-    connect(panel_, &DesktopPanel::powerControl, this, [this](proto::PowerControl::Action action)
+    connect(toolbar_, &DesktopToolBar::powerControl, this, [this](proto::PowerControl::Action action)
     {
         desktop_control_proxy_->onPowerControl(action);
     });
 
-    connect(panel_, &DesktopPanel::startRemoteUpdate, this, [this]()
+    connect(toolbar_, &DesktopToolBar::startRemoteUpdate, this, [this]()
     {
         desktop_control_proxy_->onRemoteUpdate();
     });
 
-    connect(panel_, &DesktopPanel::startSystemInfo, this, [this]()
+    connect(toolbar_, &DesktopToolBar::startSystemInfo, this, [this]()
     {
         if (!system_info_)
         {
@@ -162,7 +162,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         system_info_->start(nullptr);
     });
 
-    connect(panel_, &DesktopPanel::startTaskManager, this, [this]()
+    connect(toolbar_, &DesktopToolBar::startTaskManager, this, [this]()
     {
         if (!task_manager_)
         {
@@ -180,13 +180,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         task_manager_->activateWindow();
     });
 
-    connect(panel_, &DesktopPanel::startStatistics, this, [this]()
+    connect(toolbar_, &DesktopToolBar::startStatistics, this, [this]()
     {
         desktop_control_proxy_->onMetricsRequest();
     });
 
-    connect(panel_, &DesktopPanel::pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
-    connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
+    connect(toolbar_, &DesktopToolBar::pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
+    connect(toolbar_, &DesktopToolBar::switchToFullscreen, this, [this](bool fullscreen)
     {
         if (fullscreen)
         {
@@ -202,13 +202,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         }
     });
 
-    connect(panel_, &DesktopPanel::keyCombinationsChanged,
+    connect(toolbar_, &DesktopToolBar::keyCombinationsChanged,
             desktop_, &DesktopWidget::enableKeyCombinations);
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    connect(panel_, &DesktopPanel::startSession, this, [this](proto::SessionType session_type)
+    connect(toolbar_, &DesktopToolBar::startSession, this, [this](proto::SessionType session_type)
     {
         client::Config session_config = config();
         session_config.session_type = session_type;
@@ -238,7 +238,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             session_window->close();
     });
 
-    connect(panel_, &DesktopPanel::recordingStateChanged, this, [this](bool enable)
+    connect(toolbar_, &DesktopToolBar::recordingStateChanged, this, [this](bool enable)
     {
         std::filesystem::path file_path;
 
@@ -285,7 +285,7 @@ void QtDesktopWindow::showWindow(
     show();
     activateWindow();
 
-    panel_->enableTextChat(peer_version_ >= base::Version(2, 4, 0));
+    toolbar_->enableTextChat(peer_version_ >= base::Version(2, 4, 0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -329,26 +329,26 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
         extensions, ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
 
     // By default, remote update is disabled.
-    panel_->enableRemoteUpdate(false);
+    toolbar_->enableRemoteUpdate(false);
 
     if (base::contains(extensions_list, common::kRemoteUpdateExtension))
     {
         if (Client::version() > peer_version_)
-            panel_->enableRemoteUpdate(true);
+            toolbar_->enableRemoteUpdate(true);
     }
 
-    panel_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
-    panel_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
-    panel_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
-    panel_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
-    panel_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
-    panel_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
+    toolbar_->enablePowerControl(base::contains(extensions_list, common::kPowerControlExtension));
+    toolbar_->enableScreenSelect(base::contains(extensions_list, common::kSelectScreenExtension));
+    toolbar_->enableSystemInfo(base::contains(extensions_list, common::kSystemInfoExtension));
+    toolbar_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
+    toolbar_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
+    toolbar_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
 }
 
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
 {
-    panel_->setScreenList(screen_list);
+    toolbar_->setScreenList(screen_list);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -438,7 +438,7 @@ void QtDesktopWindow::setFrame(
         // start recording.
         DesktopSettings settings;
         if (settings.recordSessions())
-            panel_->startRecording(true);
+            toolbar_->startRecording(true);
     }
 }
 
@@ -446,7 +446,7 @@ void QtDesktopWindow::setFrame(
 void QtDesktopWindow::drawFrame()
 {
     desktop_->drawDesktopFrame();
-    panel_->update();
+    toolbar_->update();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,7 +508,7 @@ void QtDesktopWindow::onSystemInfoRequest(const proto::system_info::SystemInfoRe
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::resizeEvent(QResizeEvent* event)
 {
-    int panel_width = panel_->width();
+    int panel_width = toolbar_->width();
     int window_width = width();
 
     QPoint new_pos;
@@ -520,7 +520,7 @@ void QtDesktopWindow::resizeEvent(QResizeEvent* event)
     else if (new_pos.x() > (window_width - panel_width))
         new_pos.setX(window_width - panel_width);
 
-    panel_->move(new_pos);
+    toolbar_->move(new_pos);
     scaleDesktop();
 
     QWidget::resizeEvent(event);
@@ -633,11 +633,11 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
             return true;
         }
     }
-    else if (object == panel_)
+    else if (object == toolbar_)
     {
         if (event->type() == QEvent::Resize)
         {
-            int panel_width = panel_->width();
+            int panel_width = toolbar_->width();
             int window_width = width();
 
             QPoint new_pos;
@@ -649,13 +649,13 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
             else if (new_pos.x() > (window_width - panel_width))
                 new_pos.setX(window_width - panel_width);
 
-            panel_->move(new_pos);
+            toolbar_->move(new_pos);
         }
         else if (event->type() == QEvent::Leave)
         {
             desktop_->setFocus();
         }
-        else if (!panel_->isPanelHidden())
+        else if (!toolbar_->isPanelHidden())
         {
             if (event->type() == QEvent::MouseButtonPress)
             {
@@ -681,8 +681,8 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
                 if ((mouse_event->buttons() & Qt::RightButton) && start_panel_pos_.has_value())
                 {
                     QPoint diff = mouse_event->pos() - *start_panel_pos_;
-                    QPoint new_pos = QPoint(panel_->pos().x() + diff.x(), 0);
-                    int panel_width = panel_->width();
+                    QPoint new_pos = QPoint(toolbar_->pos().x() + diff.x(), 0);
+                    int panel_width = toolbar_->width();
                     int window_width = width();
 
                     if (new_pos.x() < 0)
@@ -691,7 +691,7 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
                         new_pos.setX(window_width - panel_width);
 
                     panel_pos_x_ = ((new_pos.x() + (panel_width / 2)) * 100) / window_width;
-                    panel_->move(new_pos);
+                    toolbar_->move(new_pos);
                     return true;
                 }
             }
@@ -706,7 +706,7 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
 
-    if (panel_->autoScrolling() && panel_->scale() != -1)
+    if (toolbar_->autoScrolling() && toolbar_->scale() != -1)
     {
         QPoint cursor = desktop_->mapTo(scroll_area_, pos);
         QRect client_area = scroll_area_->rect();
@@ -777,10 +777,10 @@ void QtDesktopWindow::onMouseEvent(const proto::MouseEvent& event)
     }
 
     // In MacOS event Leave does not always come to the widget when the mouse leaves its area.
-    if (!panel_->isPanelHidden() && !panel_->isPanelPinned())
+    if (!toolbar_->isPanelHidden() && !toolbar_->isPanelPinned())
     {
-        if (!panel_->rect().contains(pos))
-            QApplication::postEvent(panel_, new QEvent(QEvent::Leave));
+        if (!toolbar_->rect().contains(pos))
+            QApplication::postEvent(toolbar_, new QEvent(QEvent::Leave));
     }
 }
 
@@ -827,7 +827,7 @@ void QtDesktopWindow::autosizeWindow()
     if (window_size.width() < local_screen_rect.width() &&
         window_size.height() < local_screen_rect.height())
     {
-        QSize remote_screen_size = scaledSize(screen_size_, panel_->scale());
+        QSize remote_screen_size = scaledSize(screen_size_, toolbar_->scale());
 
         showNormal();
 
@@ -883,7 +883,7 @@ void QtDesktopWindow::scaleDesktop()
     QSize source_size(screen_size_);
     QSize target_size(size());
 
-    int scale = panel_->scale();
+    int scale = toolbar_->scale();
     if (scale != -1)
         target_size = scaledSize(source_size, scale);
 
@@ -966,13 +966,13 @@ void QtDesktopWindow::onPasteKeystrokes()
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onShowHidePanel()
 {
-    QSize start_panel_size = panel_->size();
-    QSize end_panel_size = panel_->sizeHint();
+    QSize start_panel_size = toolbar_->size();
+    QSize end_panel_size = toolbar_->sizeHint();
 
     int start_x = ((width() * panel_pos_x_) / 100) - (start_panel_size.width() / 2);
     int end_x = ((width() * panel_pos_x_) / 100) - (end_panel_size.width() / 2);
 
-    QPropertyAnimation* animation = new QPropertyAnimation(panel_, QByteArrayLiteral("geometry"));
+    QPropertyAnimation* animation = new QPropertyAnimation(toolbar_, QByteArrayLiteral("geometry"));
     animation->setStartValue(QRect(QPoint(start_x, 0), start_panel_size));
     animation->setEndValue(QRect(QPoint(end_x, 0), end_panel_size));
     animation->setDuration(150);

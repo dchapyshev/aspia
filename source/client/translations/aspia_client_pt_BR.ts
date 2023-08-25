@@ -387,178 +387,285 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="126"/>
         <source>Lock toolbar</source>
-        <translation>Bloquear barra de ferramentas</translation>
+        <translation type="vanished">Bloquear barra de ferramentas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="138"/>
         <source>Session configuration</source>
-        <translation>Configuração da sessão</translation>
+        <translation type="vanished">Configuração da sessão</translation>
     </message>
     <message>
         <source>Monitor selection</source>
         <translation type="vanished">Seleção do monitor</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="150"/>
         <source>Automatic window size</source>
-        <translation>Tamanho da janela automático</translation>
+        <translation type="vanished">Tamanho da janela automático</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="165"/>
         <source>Switch to full screen mode or back</source>
-        <translation>Trocar para o modo de tela cheia</translation>
+        <translation type="vanished">Trocar para o modo de tela cheia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="176"/>
         <source>Automatic scrolling</source>
-        <translation>Rolagem automática</translation>
+        <translation type="vanished">Rolagem automática</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="188"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation>Enviar CTRL+ALT+DEL</translation>
+        <translation type="vanished">Enviar CTRL+ALT+DEL</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="200"/>
         <source>Advanced menu</source>
-        <translation>Menu avançado</translation>
+        <translation type="vanished">Menu avançado</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="205"/>
-        <location filename="../ui/desktop_panel.ui" line="208"/>
-        <location filename="../ui/desktop_panel.ui" line="211"/>
         <source>Save screenshot...</source>
-        <translation>Salvar captura de tela...</translation>
+        <translation type="vanished">Salvar captura de tela...</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="223"/>
         <source>File transfer</source>
-        <translation>Transferência de arquivos</translation>
+        <translation type="vanished">Transferência de arquivos</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="231"/>
         <source>Scale</source>
-        <translation>Escala</translation>
+        <translation type="vanished">Escala</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="242"/>
         <source>Send key combinations</source>
-        <translation>Enviar combinação de teclas</translation>
+        <translation type="vanished">Enviar combinação de teclas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="251"/>
-        <location filename="../ui/desktop_panel.ui" line="254"/>
         <source>Power control</source>
-        <translation>Controle de energia</translation>
+        <translation type="vanished">Controle de energia</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="262"/>
         <source>Shutdown</source>
-        <translation>Desligar</translation>
+        <translation type="vanished">Desligar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="267"/>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation type="vanished">Reiniciar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="272"/>
         <source>Logoff</source>
-        <translation>Logoff</translation>
+        <translation type="vanished">Logoff</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="277"/>
         <source>Lock</source>
-        <translation>Bloquear</translation>
+        <translation type="vanished">Bloquear</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="286"/>
         <source>Remote Update</source>
-        <translation>Atualização remota</translation>
+        <translation type="vanished">Atualização remota</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="298"/>
         <source>System Information</source>
-        <translation>Informações do Sistema</translation>
+        <translation type="vanished">Informações do Sistema</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="310"/>
         <source>Close</source>
-        <translation>Fechar</translation>
+        <translation type="vanished">Fechar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="313"/>
         <source>Close session</source>
-        <translation>Fechar sessão</translation>
+        <translation type="vanished">Fechar sessão</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="372"/>
         <source>Fit window</source>
-        <translation>Ajustar a janela</translation>
+        <translation type="vanished">Ajustar a janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="381"/>
         <source>Minimize</source>
-        <translation>Minimizar</translation>
+        <translation type="vanished">Minimizar</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="384"/>
         <source>Minimize window</source>
-        <translation>Minimizar janela</translation>
+        <translation type="vanished">Minimizar janela</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="389"/>
-        <location filename="../ui/desktop_panel.ui" line="392"/>
         <source>Statistics</source>
-        <translation>Estatísticas</translation>
+        <translation type="vanished">Estatísticas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="397"/>
         <source>Reboot (Safe mode)</source>
-        <translation>Reiniciar (Modo seguro)</translation>
+        <translation type="vanished">Reiniciar (Modo seguro)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="400"/>
         <source>Reboot in safe mode</source>
-        <translation>Reiniciar no modo seguro</translation>
+        <translation type="vanished">Reiniciar no modo seguro</translation>
+    </message>
+</context>
+<context>
+    <name>DesktopToolBar</name>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="126"/>
+        <source>Lock toolbar</source>
+        <translation type="unfinished">Bloquear barra de ferramentas</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="405"/>
+        <location filename="../ui/desktop_toolbar.ui" line="138"/>
+        <source>Session configuration</source>
+        <translation type="unfinished">Configuração da sessão</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="150"/>
+        <source>Automatic window size</source>
+        <translation type="unfinished">Tamanho da janela automático</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="165"/>
+        <source>Switch to full screen mode or back</source>
+        <translation type="unfinished">Trocar para o modo de tela cheia</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="176"/>
+        <source>Automatic scrolling</source>
+        <translation type="unfinished">Rolagem automática</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="188"/>
+        <source>Send Ctrl+Alt+Delete</source>
+        <translation type="unfinished">Enviar CTRL+ALT+DEL</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="200"/>
+        <source>Advanced menu</source>
+        <translation type="unfinished">Menu avançado</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="205"/>
+        <location filename="../ui/desktop_toolbar.ui" line="208"/>
+        <location filename="../ui/desktop_toolbar.ui" line="211"/>
+        <source>Save screenshot...</source>
+        <translation type="unfinished">Salvar captura de tela...</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="223"/>
+        <source>File transfer</source>
+        <translation type="unfinished">Transferência de arquivos</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="231"/>
+        <source>Scale</source>
+        <translation type="unfinished">Escala</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="242"/>
+        <source>Send key combinations</source>
+        <translation type="unfinished">Enviar combinação de teclas</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="251"/>
+        <location filename="../ui/desktop_toolbar.ui" line="254"/>
+        <source>Power control</source>
+        <translation type="unfinished">Controle de energia</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="262"/>
+        <source>Shutdown</source>
+        <translation type="unfinished">Desligar</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="267"/>
+        <source>Reboot</source>
+        <translation type="unfinished">Reiniciar</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="272"/>
+        <source>Logoff</source>
+        <translation type="unfinished">Logoff</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="277"/>
+        <source>Lock</source>
+        <translation type="unfinished">Bloquear</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="286"/>
+        <source>Remote Update</source>
+        <translation type="unfinished">Atualização remota</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="298"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="310"/>
+        <source>Close</source>
+        <translation type="unfinished">Fechar</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="313"/>
+        <source>Close session</source>
+        <translation type="unfinished">Fechar sessão</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="372"/>
+        <source>Fit window</source>
+        <translation type="unfinished">Ajustar a janela</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="381"/>
+        <source>Minimize</source>
+        <translation type="unfinished">Minimizar</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="384"/>
+        <source>Minimize window</source>
+        <translation type="unfinished">Minimizar janela</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="389"/>
+        <location filename="../ui/desktop_toolbar.ui" line="392"/>
+        <source>Statistics</source>
+        <translation type="unfinished">Estatísticas</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="397"/>
+        <source>Reboot (Safe mode)</source>
+        <translation type="unfinished">Reiniciar (Modo seguro)</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="400"/>
+        <source>Reboot in safe mode</source>
+        <translation type="unfinished">Reiniciar no modo seguro</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.ui" line="405"/>
         <source>Paste clipboard as keystrokes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="414"/>
-        <location filename="../ui/desktop_panel.ui" line="417"/>
+        <location filename="../ui/desktop_toolbar.ui" line="414"/>
+        <location filename="../ui/desktop_toolbar.ui" line="417"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="425"/>
+        <location filename="../ui/desktop_toolbar.ui" line="425"/>
         <source>Recording settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="434"/>
-        <location filename="../ui/desktop_panel.ui" line="437"/>
+        <location filename="../ui/desktop_toolbar.ui" line="434"/>
+        <location filename="../ui/desktop_toolbar.ui" line="437"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="446"/>
-        <location filename="../ui/desktop_panel.ui" line="449"/>
+        <location filename="../ui/desktop_toolbar.ui" line="446"/>
+        <location filename="../ui/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="463"/>
+        <location filename="../ui/desktop_toolbar.ui" line="463"/>
         <source>Pause video when minimizing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.ui" line="474"/>
+        <location filename="../ui/desktop_toolbar.ui" line="474"/>
         <source>Pause audio when minimizing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2545,76 +2652,115 @@
         <translation type="vanished">Monitor %1</translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="301"/>
+        <source>Confirmation</source>
+        <translation type="vanished">Confirmação</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation type="vanished">Você tem certeza que deseja desligar o computador remoto?</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="obsolete">Sim</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">No</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation type="vanished">Você tem certeza que deseja reiniciar o computador remoto?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation type="vanished">Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation type="vanished">Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation type="vanished">Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="vanished">Escala</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopToolBar</name>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="301"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="476"/>
-        <location filename="../ui/desktop_panel.cc" line="491"/>
-        <location filename="../ui/desktop_panel.cc" line="506"/>
-        <location filename="../ui/desktop_panel.cc" line="521"/>
-        <location filename="../ui/desktop_panel.cc" line="536"/>
-        <source>Confirmation</source>
-        <translation>Confirmação</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="477"/>
-        <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Você tem certeza que deseja desligar o computador remoto?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="480"/>
-        <location filename="../ui/desktop_panel.cc" line="495"/>
-        <location filename="../ui/desktop_panel.cc" line="510"/>
-        <location filename="../ui/desktop_panel.cc" line="525"/>
-        <location filename="../ui/desktop_panel.cc" line="540"/>
-        <source>Yes</source>
-        <translation type="unfinished">Sim</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="481"/>
-        <location filename="../ui/desktop_panel.cc" line="496"/>
-        <location filename="../ui/desktop_panel.cc" line="511"/>
-        <location filename="../ui/desktop_panel.cc" line="526"/>
-        <location filename="../ui/desktop_panel.cc" line="541"/>
-        <source>No</source>
-        <translation type="unfinished">No</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="492"/>
-        <source>Are you sure you want to reboot the remote computer?</source>
-        <translation>Você tem certeza que deseja reiniciar o computador remoto?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="507"/>
-        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation>Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="522"/>
-        <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation>Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="537"/>
-        <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation>Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="625"/>
-        <source>Scale</source>
-        <translation>Escala</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop_panel.cc" line="343"/>
+        <location filename="../ui/desktop_toolbar.cc" line="343"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop_panel.cc" line="348"/>
+        <location filename="../ui/desktop_toolbar.cc" line="348"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="476"/>
+        <location filename="../ui/desktop_toolbar.cc" line="491"/>
+        <location filename="../ui/desktop_toolbar.cc" line="506"/>
+        <location filename="../ui/desktop_toolbar.cc" line="521"/>
+        <location filename="../ui/desktop_toolbar.cc" line="536"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">Confirmação</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="477"/>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation type="unfinished">Você tem certeza que deseja desligar o computador remoto?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="480"/>
+        <location filename="../ui/desktop_toolbar.cc" line="495"/>
+        <location filename="../ui/desktop_toolbar.cc" line="510"/>
+        <location filename="../ui/desktop_toolbar.cc" line="525"/>
+        <location filename="../ui/desktop_toolbar.cc" line="540"/>
+        <source>Yes</source>
+        <translation type="unfinished">Sim</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="481"/>
+        <location filename="../ui/desktop_toolbar.cc" line="496"/>
+        <location filename="../ui/desktop_toolbar.cc" line="511"/>
+        <location filename="../ui/desktop_toolbar.cc" line="526"/>
+        <location filename="../ui/desktop_toolbar.cc" line="541"/>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="492"/>
+        <source>Are you sure you want to reboot the remote computer?</source>
+        <translation type="unfinished">Você tem certeza que deseja reiniciar o computador remoto?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="507"/>
+        <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
+        <translation type="unfinished">Tem certeza de que deseja reiniciar o computador remoto no Modo Seguro?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="522"/>
+        <source>Are you sure you want to end the user session on the remote computer?</source>
+        <translation type="unfinished">Você tem certeza que deseja finalizar a sessão de usuário do computador remoto?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="537"/>
+        <source>Are you sure you want to lock the user session on the remote computer?</source>
+        <translation type="unfinished">Você tem certeza que deseja bloquear a sessão de usuário do computador remoto?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop_toolbar.cc" line="625"/>
+        <source>Scale</source>
+        <translation type="unfinished">Escala</translation>
     </message>
 </context>
 <context>

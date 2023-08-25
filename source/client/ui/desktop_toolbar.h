@@ -16,24 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_DESKTOP_PANEL_H
-#define CLIENT_UI_DESKTOP_PANEL_H
+#ifndef CLIENT_UI_DESKTOP_TOOLBAR_H
+#define CLIENT_UI_DESKTOP_TOOLBAR_H
 
 #include "base/macros_magic.h"
 #include "client/ui/desktop_settings.h"
 #include "proto/common.pb.h"
 #include "proto/desktop_extensions.pb.h"
-#include "ui_desktop_panel.h"
+#include "ui_desktop_toolbar.h"
 
 namespace client {
 
-class DesktopPanel : public QFrame
+class DesktopToolBar : public QFrame
 {
     Q_OBJECT
 
 public:
-    DesktopPanel(proto::SessionType session_type, QWidget* parent);
-    ~DesktopPanel() override;
+    DesktopToolBar(proto::SessionType session_type, QWidget* parent);
+    ~DesktopToolBar() override;
 
     void enableScreenSelect(bool enable);
     void enablePowerControl(bool enable);
@@ -107,7 +107,7 @@ private:
     void updateSize();
     void delayedHide();
 
-    Ui::DesktopPanel ui;
+    Ui::DesktopToolBar ui;
 
     const proto::SessionType session_type_;
     bool is_recording_started_ = false;
@@ -134,9 +134,9 @@ private:
 
     int scale_ = 100;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopPanel);
+    DISALLOW_COPY_AND_ASSIGN(DesktopToolBar);
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_DESKTOP_PANEL_H
+#endif // CLIENT_UI_DESKTOP_TOOLBAR_H
