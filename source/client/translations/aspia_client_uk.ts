@@ -1224,42 +1224,42 @@
 <context>
     <name>SysInfoApplications</name>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="54"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="59"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="64"/>
         <source>Publisher</source>
         <translation>Видавець</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="69"/>
         <source>Install Date</source>
         <translation>Дата встановлення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="74"/>
         <source>Install Location</source>
         <translation>Місце встановлення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="82"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="82"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="87"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="87"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_applications.ui" line="92"/>
+        <location filename="../ui/sys_info/sys_info_widget_applications.ui" line="92"/>
         <source>Search in Google</source>
         <translation>Шукати за допомогою Google</translation>
     </message>
@@ -1275,42 +1275,42 @@
         <translation type="obsolete">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="54"/>
         <source>Process Name</source>
         <translation>Ім&apos;я процесу</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="59"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="64"/>
         <source>Local Address</source>
         <translation>Локальна адреса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="69"/>
         <source>Local Port</source>
         <translation>Локальний порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="74"/>
         <source>Remote Address</source>
         <translation>Віддалена адреса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="79"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="79"/>
         <source>Remote Port</source>
         <translation>Віддалений порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="84"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="84"/>
         <source>State</source>
         <translation>Стан</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="92"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="92"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
@@ -1319,7 +1319,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_connections.ui" line="97"/>
+        <location filename="../ui/sys_info/sys_info_widget_connections.ui" line="97"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1335,37 +1335,37 @@
         <translation type="obsolete">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="54"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="59"/>
         <source>Driver Version</source>
         <translation>Версія драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="64"/>
         <source>Driver Date</source>
         <translation>Дата драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="69"/>
         <source>Driver Vendor</source>
         <translation>Видавець драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="74"/>
         <source>Device ID</source>
         <translation>ID пристрою</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="82"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="82"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="92"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="92"/>
         <source>Search in Google</source>
         <translation>Шукати за допомогою Google</translation>
     </message>
@@ -1374,7 +1374,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_devices.ui" line="87"/>
+        <location filename="../ui/sys_info/sys_info_widget_devices.ui" line="87"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1390,37 +1390,37 @@
         <translation type="obsolete">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="54"/>
         <source>Display Name</source>
         <translation>Ім&apos;я на екрані</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="59"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="64"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="69"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="74"/>
         <source>Startup Type</source>
         <translation>Тип запуску</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="79"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="79"/>
         <source>Executable File</source>
         <translation>Виконуваний файл</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="87"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="87"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
@@ -1429,7 +1429,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.ui" line="92"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.ui" line="92"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1441,27 +1441,27 @@
         <translation type="obsolete">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="51"/>
+        <location filename="../ui/sys_info/sys_info_widget_env_vars.ui" line="51"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="56"/>
+        <location filename="../ui/sys_info/sys_info_widget_env_vars.ui" line="56"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_env_vars.ui" line="64"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_env_vars.ui" line="69"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_env_vars.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_env_vars.ui" line="74"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1481,53 +1481,53 @@
         <translation type="obsolete">Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="130"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="130"/>
         <source>Level</source>
         <translation>Рівень</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="125"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="125"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="53"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>Previous</source>
         <translation>Попередня</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="60"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Next</source>
         <translation>Наступна</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="83"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="83"/>
         <source>Events type</source>
         <translation>Тип події</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="135"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="135"/>
         <source>Category</source>
         <translation>Категорія</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="140"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
         <translation>ID події</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
         <translation>Джерело</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="150"/>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="177"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
@@ -1536,7 +1536,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.ui" line="200"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1544,27 +1544,27 @@
 <context>
     <name>SysInfoLicenses</name>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1572,27 +1572,27 @@
 <context>
     <name>SysInfoLocalUserGroups</name>
     <message>
-        <location filename="../ui/sys_info_widget_local_user_groups.ui" line="48"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_user_groups.ui" line="48"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_user_groups.ui" line="53"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_user_groups.ui" line="53"/>
         <source>Description</source>
         <translation type="unfinished">Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_user_groups.ui" line="61"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_user_groups.ui" line="61"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_user_groups.ui" line="66"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_user_groups.ui" line="66"/>
         <source>Copy Name</source>
         <translation type="unfinished">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_user_groups.ui" line="71"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_user_groups.ui" line="71"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
@@ -1600,27 +1600,27 @@
 <context>
     <name>SysInfoLocalUsers</name>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.ui" line="45"/>
         <source>Parameter</source>
         <translation type="unfinished">Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.ui" line="50"/>
         <source>Value</source>
         <translation type="unfinished">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.ui" line="58"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.ui" line="63"/>
         <source>Copy Name</source>
         <translation type="unfinished">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.ui" line="68"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
@@ -1628,27 +1628,27 @@
 <context>
     <name>SysInfoMonitors</name>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1656,27 +1656,27 @@
 <context>
     <name>SysInfoNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1684,27 +1684,27 @@
 <context>
     <name>SysInfoNetShares</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1712,27 +1712,27 @@
 <context>
     <name>SysInfoOpenFiles</name>
     <message>
-        <location filename="../ui/sys_info_widget_open_files.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="59"/>
         <source>User Name</source>
         <translation>Ім&apos;я користувача</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_open_files.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="64"/>
         <source>Lock Count</source>
         <translation>Блокувань</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_open_files.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="54"/>
         <source>File Path</source>
         <translation>Шлях до файла</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_open_files.ui" line="72"/>
+        <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="72"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_open_files.ui" line="77"/>
+        <location filename="../ui/sys_info/sys_info_widget_open_files.ui" line="77"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1740,27 +1740,27 @@
 <context>
     <name>SysInfoPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="48"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.ui" line="48"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="53"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.ui" line="53"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="61"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.ui" line="61"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="66"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.ui" line="66"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.ui" line="71"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.ui" line="71"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1768,27 +1768,27 @@
 <context>
     <name>SysInfoPrinters</name>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1796,32 +1796,32 @@
 <context>
     <name>SysInfoProcesses</name>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="51"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="51"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="56"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="56"/>
         <source>ID</source>
         <translation type="unfinished">ID</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="61"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="61"/>
         <source>CPU</source>
         <translation type="unfinished">ЦП</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="66"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="66"/>
         <source>Memory</source>
         <translation type="unfinished">Пам&apos;ять</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="71"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="71"/>
         <source>Session ID</source>
         <translation type="unfinished">ID сесії</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="76"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="76"/>
         <source>User Name</source>
         <translation type="unfinished">Ім&apos;я користувача</translation>
     </message>
@@ -1830,22 +1830,22 @@
         <translation type="obsolete">Потоки</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="81"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="81"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="89"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="89"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="94"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="94"/>
         <source>Copy Name</source>
         <translation type="unfinished">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.ui" line="99"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.ui" line="99"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
@@ -1884,27 +1884,27 @@
         <translation type="obsolete">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="54"/>
         <source>Destonation</source>
         <translation>Ціль</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="59"/>
         <source>Mask</source>
         <translation>Маска</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="64"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="69"/>
         <source>Metric</source>
         <translation>Метрика</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="77"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="77"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
@@ -1913,7 +1913,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_routes.ui" line="82"/>
+        <location filename="../ui/sys_info/sys_info_widget_routes.ui" line="82"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1929,42 +1929,42 @@
         <translation type="obsolete">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="54"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="54"/>
         <source>Display Name</source>
         <translation>Ім&apos;я на екрані</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="59"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="59"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="64"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="64"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="69"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="74"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="74"/>
         <source>Startup Type</source>
         <translation>Тип запуску</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="79"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="79"/>
         <source>Account</source>
         <translation>Обліковий запис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="84"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="84"/>
         <source>Executable File</source>
         <translation>Виконуваний файл</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="92"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="92"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
@@ -1973,7 +1973,7 @@
         <translation type="obsolete">Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.ui" line="97"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.ui" line="97"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -1981,27 +1981,27 @@
 <context>
     <name>SysInfoSummary</name>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -2009,27 +2009,27 @@
 <context>
     <name>SysInfoVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="45"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.ui" line="45"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="50"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.ui" line="50"/>
         <source>Value</source>
         <translation>Значення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="58"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.ui" line="58"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="63"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.ui" line="63"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.ui" line="68"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.ui" line="68"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
@@ -2037,7 +2037,7 @@
 <context>
     <name>SystemInfoWindow</name>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="14"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="14"/>
         <source>System Information</source>
         <translation>Системна інформація</translation>
     </message>
@@ -2050,47 +2050,47 @@
         <translation type="vanished">Значення</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="108"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="108"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="111"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="111"/>
         <source>Save (Ctrl+S)</source>
         <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="123"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="123"/>
         <source>Print</source>
         <translation>Друкувати</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="126"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="126"/>
         <source>Print (Ctrl+P)</source>
         <translation>Друкувати (Ctrl+P)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="134"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="134"/>
         <source>Copy Row</source>
         <translation>Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="139"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="139"/>
         <source>Copy Name</source>
         <translation>Копіювати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="144"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="144"/>
         <source>Copy Value</source>
         <translation>Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="153"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="153"/>
         <source>Refresh</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.ui" line="156"/>
+        <location filename="../ui/sys_info/qt_system_info_window.ui" line="156"/>
         <source>Refresh (F5)</source>
         <translation>Оновити (F5)</translation>
     </message>
@@ -3213,142 +3213,142 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="143"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="143"/>
         <source>Summary</source>
         <translation>Загальне</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="151"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="151"/>
         <source>Hardware</source>
         <translation>Обладнання</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="156"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="156"/>
         <source>Devices</source>
         <translation>Пристрої</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="162"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="162"/>
         <source>Video Adapters</source>
         <translation>Відео адаптери</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="168"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="168"/>
         <source>Monitors</source>
         <translation>Монітори</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="174"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="174"/>
         <source>Printers</source>
         <translation>Принтери</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="180"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="180"/>
         <source>Power Options</source>
         <translation>Параметри живлення</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="194"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="194"/>
         <source>Software</source>
         <translation>Програмне забезпечення</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="199"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="199"/>
         <source>Applications</source>
         <translation>Програми</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="205"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="205"/>
         <source>Drivers</source>
         <translation>Драйвери</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="211"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="211"/>
         <source>Services</source>
         <translation>Сервіси</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="217"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="217"/>
         <source>Processes</source>
         <translation type="unfinished">Процеси</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="280"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="280"/>
         <source>Operating System</source>
         <translation type="unfinished">Операційна система</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="285"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="285"/>
         <source>Environment Variables</source>
         <translation>Змінні середовища</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="291"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="291"/>
         <source>Event Logs</source>
         <translation>Журнали подій</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="223"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="223"/>
         <source>Licenses</source>
         <translation>Ліцензії</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="237"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="237"/>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="242"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="242"/>
         <source>Network Adapters</source>
         <translation>Мережеві адаптери</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="248"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="248"/>
         <source>Routes</source>
         <translation>Маршрути</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="254"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="254"/>
         <source>Connections</source>
         <translation>Підключення</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="260"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="260"/>
         <source>Network Shares</source>
         <translation>Мережеві ресурси</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="266"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="266"/>
         <source>Open Files</source>
         <translation>Відкриті файли</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="297"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="297"/>
         <source>Users</source>
         <translation type="unfinished">Користувачі</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="303"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="303"/>
         <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="330"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="330"/>
         <source>HTML File</source>
         <translation>Файл HTML</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="332"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="332"/>
         <source>HTML File (*.html)</source>
         <translation>Файл HTML (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="343"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="343"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/qt_system_info_window.cc" line="344"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="344"/>
         <source>Failed to save file: %1</source>
         <translation>Не вдалося зберегти файл: %1</translation>
     </message>
@@ -4273,32 +4273,32 @@
 <context>
     <name>client::SysInfoWidget</name>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="105"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="105"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="110"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="110"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="115"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="115"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="120"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="120"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="125"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="125"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="142"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -4307,7 +4307,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="143"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="143"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n хвилина</numerusform>
@@ -4316,7 +4316,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="144"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n година</numerusform>
@@ -4325,7 +4325,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/sys_info_widget.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="168"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -4334,22 +4334,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="190"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="190"/>
         <source>Gbps</source>
         <translation>Гб/с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="195"/>
         <source>Mbps</source>
         <translation>Мб/с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="200"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="200"/>
         <source>Kbps</source>
         <translation>Кб/с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget.cc" line="205"/>
+        <location filename="../ui/sys_info/sys_info_widget.cc" line="205"/>
         <source>bps</source>
         <translation>б/с</translation>
     </message>
@@ -4357,68 +4357,68 @@
 <context>
     <name>client::SysInfoWidgetDrivers</name>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Continue Pending</source>
         <translation>Продовжити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="139"/>
         <source>Pause Pending</source>
         <translation>Призупинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Paused</source>
         <translation>Призупинено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="145"/>
         <source>Running</source>
         <translation>Виконується</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="148"/>
         <source>Start Pending</source>
         <translation>Почати очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="151"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="151"/>
         <source>Stop Pending</source>
         <translation>Припинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="154"/>
         <source>Stopped</source>
         <translation>Зупинено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="157"/>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="184"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="169"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="169"/>
         <source>Auto Start</source>
         <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="172"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="172"/>
         <source>Demand Start</source>
         <translation>Запуск вручну</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="175"/>
         <source>Disabled</source>
         <translation>Відключено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="178"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="178"/>
         <source>Boot Start</source>
         <translation>Запускати при увімкненні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_drivers.cc" line="181"/>
+        <location filename="../ui/sys_info/sys_info_widget_drivers.cc" line="181"/>
         <source>System Start</source>
         <translation>Запускати разом із системою</translation>
     </message>
@@ -4426,52 +4426,52 @@
 <context>
     <name>client::SysInfoWidgetEventLogs</name>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="67"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="67"/>
         <source>Application</source>
         <translation>Додаток</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="69"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="69"/>
         <source>Security</source>
         <translation>Безпека</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="71"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="71"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="325"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="325"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="310"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="195"/>
         <source>Page %1/%2</source>
         <translation>Сторінка %1/%2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="313"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="313"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="316"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="319"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="319"/>
         <source>Audit Success</source>
         <translation>Аудит успіху</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_event_logs.cc" line="322"/>
+        <location filename="../ui/sys_info/sys_info_widget_event_logs.cc" line="322"/>
         <source>Audit Failure</source>
         <translation>Аудит відмов</translation>
     </message>
@@ -4479,37 +4479,37 @@
 <context>
     <name>client::SysInfoWidgetLicenses</name>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
         <translation>Тип ліцензії</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="142"/>
         <source>License Version</source>
         <translation>Версія ліцензії</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="146"/>
         <source>Organization</source>
         <translation>Організація</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Owner</source>
         <translation>Власник</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="154"/>
         <source>Product ID</source>
         <translation>ID продукту</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="158"/>
         <source>Product Key</source>
         <translation>Ключ продукту</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_licenses.cc" line="162"/>
+        <location filename="../ui/sys_info/sys_info_widget_licenses.cc" line="162"/>
         <source>Unknown Field</source>
         <translation>Невідоме поле</translation>
     </message>
@@ -4517,85 +4517,85 @@
 <context>
     <name>client::SysInfoWidgetLocalUsers</name>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="149"/>
         <source>Full Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Description</source>
         <translation type="unfinished">Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="155"/>
         <source>Home Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
         <source>Disabled</source>
         <translation type="unfinished">Відключено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="157"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="158"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="159"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="160"/>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="157"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Password Can&apos;t Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="159"/>
         <source>Password Expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="160"/>
         <source>Don&apos;t Expire Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="161"/>
         <source>Lockout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="165"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="165"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="169"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="169"/>
         <source>Last Logon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="170"/>
         <source>Number Logons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="171"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="171"/>
         <source>Bad Password Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_local_users.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_local_users.cc" line="183"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4603,153 +4603,153 @@
 <context>
     <name>client::SysInfoWidgetMonitors</name>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="155"/>
         <source>Monitor Name</source>
         <translation>Ім&apos;я монітора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="158"/>
         <source>Manufacturer Name</source>
         <translation>Ім&apos;я виробника</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="161"/>
         <source>Monitor ID</source>
         <translation>ID монітора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="164"/>
         <source>Serial Number</source>
         <translation>Серійний номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="168"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="168"/>
         <source>EDID Version</source>
         <translation>Версія EDID</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="180"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="180"/>
         <source>Gamma</source>
         <translation>Гамма</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="194"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="194"/>
         <source>Diagonal Size</source>
         <translation>Діагональ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="244"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="244"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="174"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Date Of Manufacture</source>
         <translation>Дата виробництва</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="175"/>
         <source>Week %1 / %2</source>
         <translation>Тиждень %1/%2</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="184"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>Image Size</source>
         <translation>Розмір зображення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="185"/>
         <source>%1x%2 cm</source>
         <translation>%1х%2 см</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="199"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="199"/>
         <source>Resolution</source>
         <translation>Роздільна здатність</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>Horizontal Frequency</source>
         <translation>Горизонтальна частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="207"/>
         <source>%1 - %2 kHz</source>
         <translation>%1 - %2 кГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>Vertical Frequency</source>
         <translation>Вертикальна частота</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="214"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="214"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Гц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
         <source>Pixel Clock</source>
         <translation>Частота пікселів</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="219"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="219"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="222"/>
         <source>Maximum Pixel Clock</source>
         <translation>Максимальна частота пікселів</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="227"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="228"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="229"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="230"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="232"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="227"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="228"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="229"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="230"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="231"/>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="232"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="227"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="229"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="232"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="235"/>
         <source>Supported Features</source>
         <translation>Підтримувані функції</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="248"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="248"/>
         <source>Supported Video Modes</source>
         <translation>Підтримувані відео режими</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="224"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="224"/>
         <source>Input Signal Type</source>
         <translation>Тип вхідного сигналу</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="294"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
         <translation>Цифровий</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="297"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="297"/>
         <source>Analog</source>
         <translation>Аналоговий</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_monitors.cc" line="300"/>
+        <location filename="../ui/sys_info/sys_info_widget_monitors.cc" line="300"/>
         <source>Unknown</source>
         <translation>Невідомий</translation>
     </message>
@@ -4757,67 +4757,67 @@
 <context>
     <name>client::SysInfoWidgetNetAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="139"/>
         <source>Adapter Name</source>
         <translation>Ім&apos;я адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="142"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="142"/>
         <source>Interface Type</source>
         <translation>Тип інтерфейса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="145"/>
         <source>Connection Speed</source>
         <translation>Швидкість з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="148"/>
         <source>MAC Address</source>
         <translation>MAC адреса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>DHCP Enabled</source>
         <translation>DHCP включено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="150"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
         <source>DHCP Server #%1</source>
         <translation>DHCP сервер #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="155"/>
         <source>DHCP Server</source>
         <translation>DHCP сервер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
         <source>Address #%1</source>
         <translation>Адреса #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="167"/>
         <source>Address</source>
         <translation>Адреса</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
         <source>Gateway #%1</source>
         <translation>Шлюз #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_adapters.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_adapters.cc" line="175"/>
         <source>Gateway</source>
         <translation>Шлюз</translation>
     </message>
@@ -4825,32 +4825,32 @@
 <context>
     <name>client::SysInfoWidgetNetShares</name>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="133"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="136"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="139"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
         <translation>Локальний шлях</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
         <translation>Поточні використання</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
         <translation>Необмежено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_net_shares.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
         <translation>Максимум користувачів</translation>
     </message>
@@ -4858,22 +4858,22 @@
 <context>
     <name>client::SysInfoWidgetPowerOptions</name>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="146"/>
         <source>Power Source</source>
         <translation>Джерело живлення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="148"/>
         <source>Battery Status</source>
         <translation>Статус акумулятора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="154"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="154"/>
         <source>Battery Life Percent</source>
         <translation>Відсоток живлення акумулятора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="160"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="160"/>
         <source>Full Battery Life Time</source>
         <translation>Повний заряд акумулятора</translation>
     </message>
@@ -4882,150 +4882,150 @@
         <translation type="vanished">%1 с</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="167"/>
         <source>Remaining Battery Life Time</source>
         <translation>Залишилося заряду акумулятора</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="183"/>
         <source>Device Name</source>
         <translation>Ім&apos;я пристрою</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="186"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="186"/>
         <source>Manufacturer</source>
         <translation>Виробник</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="189"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="189"/>
         <source>Manufacture Date</source>
         <translation>Дата виробництва</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="192"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="192"/>
         <source>Unique Id</source>
         <translation>Унікальний ID</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="195"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="195"/>
         <source>Serial Number</source>
         <translation>Серійний номер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="198"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="198"/>
         <source>Tempareture</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
         <source>Design Capacity</source>
         <translation>Проектна ємність</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="201"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="207"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="201"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>%1 mWh</source>
         <translation>%1 мВт-г</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="204"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="204"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="207"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="207"/>
         <source>Full Charged Capacity</source>
         <translation>Ємність повного заряду</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="210"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="210"/>
         <source>Depreciation</source>
         <translation>Амортизація</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="213"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="213"/>
         <source>Current Capacity</source>
         <translation>Поточна ємність</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>Voltage</source>
         <translation>Вольтаж</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="216"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="216"/>
         <source>%1 mV</source>
         <translation>%1 мВ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="308"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="308"/>
         <source>Charging</source>
         <translation>Заряджається</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="222"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="228"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="222"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="225"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="305"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="225"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="305"/>
         <source>Critical</source>
         <translation>Критичний</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="228"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="228"/>
         <source>Discharging</source>
         <translation>Розряджається</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="231"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="231"/>
         <source>Power OnLine</source>
         <translation>Живлення під&apos;єданно</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="235"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <source>State</source>
         <translation>Стан</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="240"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="240"/>
         <source>Battery #%1</source>
         <translation>Акумулятор #%1</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="281"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="281"/>
         <source>DC Battery</source>
         <translation>акумулятор постійного струму</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="284"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="284"/>
         <source>AC Line</source>
         <translation>Лінія змінного струму</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="287"/>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="314"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="287"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="299"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="299"/>
         <source>High</source>
         <translation>Високий</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="302"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="302"/>
         <source>Low</source>
         <translation>Низький</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_power_options.cc" line="311"/>
+        <location filename="../ui/sys_info/sys_info_widget_power_options.cc" line="311"/>
         <source>No Battery</source>
         <translation>Акумулятор відсутній</translation>
     </message>
@@ -5033,44 +5033,44 @@
 <context>
     <name>client::SysInfoWidgetPrinters</name>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
         <translation>За замовчанням</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="138"/>
-        <location filename="../ui/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
         <translation>Драйвер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
         <translation>Спільне користування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
         <translation>Спільне ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_printers.cc" line="151"/>
+        <location filename="../ui/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
         <translation>Лічильник завдань</translation>
     </message>
@@ -5078,12 +5078,12 @@
 <context>
     <name>client::SysInfoWidgetProcesses</name>
     <message>
-        <location filename="../ui/sys_info_widget_processes.cc" line="145"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="145"/>
         <source>System Idle Process</source>
         <translation type="unfinished">Процес простою системи</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_processes.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_processes.cc" line="147"/>
         <source>Unknown Process</source>
         <translation type="unfinished">Невідомий процес</translation>
     </message>
@@ -5091,68 +5091,68 @@
 <context>
     <name>client::SysInfoWidgetServices</name>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
         <translation>Продовжити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="141"/>
         <source>Pause Pending</source>
         <translation>Призупинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Paused</source>
         <translation>Призупинено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="147"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="147"/>
         <source>Running</source>
         <translation>Виконується</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="150"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Start Pending</source>
         <translation>Почати очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="153"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="153"/>
         <source>Stop Pending</source>
         <translation>Припинити очікування</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="156"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="156"/>
         <source>Stopped</source>
         <translation>Зупинено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="159"/>
-        <location filename="../ui/sys_info_widget_services.cc" line="186"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="159"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="186"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="171"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="171"/>
         <source>Auto Start</source>
         <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="174"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Demand Start</source>
         <translation>Запуск вручну</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="177"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="177"/>
         <source>Disabled</source>
         <translation>Відключено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="180"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="180"/>
         <source>Boot Start</source>
         <translation>Запускати при увімкненні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_services.cc" line="183"/>
+        <location filename="../ui/sys_info/sys_info_widget_services.cc" line="183"/>
         <source>System Start</source>
         <translation>Запускати разом із системою</translation>
     </message>
@@ -5160,157 +5160,157 @@
 <context>
     <name>client::SysInfoWidgetSummary</name>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="135"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="158"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="135"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="158"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="138"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="138"/>
         <source>Domain</source>
         <translation>Домен</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="141"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="141"/>
         <source>Workgroup</source>
         <translation>Робоча група</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="144"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="144"/>
         <source>Uptime</source>
         <translation>Час роботи</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="148"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="148"/>
         <source>Computer</source>
         <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="161"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="233"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="161"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="233"/>
         <source>Version</source>
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="164"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="164"/>
         <source>Architecture</source>
         <translation>Архітектура</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="167"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="167"/>
         <source>License Key</source>
         <translation>Ліцензійний ключ</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="170"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="170"/>
         <source>Install Date</source>
         <translation>Дата встановлення</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="175"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="175"/>
         <source>Operating System</source>
         <translation>Операційна система</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="185"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="257"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="185"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="257"/>
         <source>Manufacturer</source>
         <translation>Виробник</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="188"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="203"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="188"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="193"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="193"/>
         <source>Motherboard</source>
         <translation>Материнська плата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="206"/>
-        <location filename="../ui/sys_info_widget_summary.cc" line="230"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="206"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="230"/>
         <source>Vendor</source>
         <translation>Вендор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="209"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Packages</source>
         <translation>Пакети</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="212"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Cores</source>
         <translation>Ядра</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="215"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="215"/>
         <source>Threads</source>
         <translation>Потоки</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="220"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="220"/>
         <source>Processor</source>
         <translation>Процесор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="236"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="236"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="260"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="260"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
         <source>Speed</source>
         <translation>Швидкість</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="263"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="263"/>
         <source>%1 MHz</source>
         <translation>%1 МГц</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="266"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="266"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="269"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="269"/>
         <source>Form Factor</source>
         <translation>Форм фактор</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="272"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="272"/>
         <source>Part Number</source>
         <translation>Партномер</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Installed</source>
         <translation>Встановлено</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="276"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="286"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Memory</source>
         <translation>Пам&apos;ять</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="315"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="315"/>
         <source>%1 (%2 free)</source>
         <translation>%1 (%2 вільно)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_summary.cc" line="325"/>
+        <location filename="../ui/sys_info/sys_info_widget_summary.cc" line="325"/>
         <source>Logical Drives</source>
         <translation>Логічні диски</translation>
     </message>
@@ -5398,52 +5398,52 @@
 <context>
     <name>client::SysInfoWidgetVideoAdapters</name>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="131"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="131"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="134"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="134"/>
         <source>Adapter String</source>
         <translation>Строка адаптера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="137"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="137"/>
         <source>BIOS String</source>
         <translation>Строка BIOS</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="140"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="140"/>
         <source>Chip Type</source>
         <translation>Тип чіпу</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="143"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="143"/>
         <source>DAC Type</source>
         <translation>Тип ЦАП</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>Memory Size</source>
         <translation>Розмір пам&apos;яті</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="146"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="146"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="149"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="149"/>
         <source>Driver Date</source>
         <translation>Дата драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="152"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="152"/>
         <source>Driver Version</source>
         <translation>Версія драйвера</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info_widget_video_adapters.cc" line="155"/>
+        <location filename="../ui/sys_info/sys_info_widget_video_adapters.cc" line="155"/>
         <source>Driver Provider</source>
         <translation>Постачальник драйвера</translation>
     </message>

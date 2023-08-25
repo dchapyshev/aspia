@@ -22,7 +22,7 @@
 #include "build/build_config.h"
 #include "client/ui/qt_desktop_window.h"
 #include "client/ui/qt_file_manager_window.h"
-#include "client/ui/qt_system_info_window.h"
+#include "client/ui/sys_info/qt_system_info_window.h"
 #include "client/ui/qt_text_chat_window.h"
 #include "client/ui/router_manager_window.h"
 #include "common/ui/about_dialog.h"
