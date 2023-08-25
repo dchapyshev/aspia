@@ -49,7 +49,7 @@ public:
     void showPopup() override;
 
 signals:
-    void pathChanged(const QString& path);
+    void sig_pathChanged(const QString& path);
 
 private slots:
     void onPathIndexChanged(const QModelIndex& index);

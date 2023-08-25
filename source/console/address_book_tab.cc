@@ -168,7 +168,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     connect(ui.tree_group, &ComputerGroupTree::itemExpanded,
             this, &AddressBookTab::onGroupItemExpanded);
 
-    connect(ui.tree_group, &ComputerGroupTree::itemDropped,
+    connect(ui.tree_group, &ComputerGroupTree::sig_itemDropped,
             this, &AddressBookTab::onGroupItemDropped);
 
     connect(ui.tree_computer, &ComputerTree::itemClicked,
@@ -660,7 +660,7 @@ void AddressBookTab::startOnlineChecker()
         return;
     }
 
-    emit updateStateForComputers(true);
+    emit sig_updateStateForComputers(true);
 
     online_checker_ = std::make_unique<client::OnlineChecker>(qt_base::Application::uiTaskRunner());
     online_checker_->checkComputers(routerConfig(), computers, this);
@@ -680,7 +680,7 @@ void AddressBookTab::stopOnlineChecker()
         computer_item->setText(ComputerItem::COLUMN_INDEX_STATUS, QString());
     }
 
-    emit updateStateForComputers(false);
+    emit sig_updateStateForComputers(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -691,7 +691,7 @@ void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
         return;
 
     bool is_root = !current_item->parent();
-    emit computerGroupActivated(true, is_root);
+    emit sig_computerGroupActivated(true, is_root);
     updateComputerList(current_item);
 }
 
@@ -707,7 +707,7 @@ void AddressBookTab::onGroupContextMenu(const QPoint& point)
     onGroupItemClicked(current_item, 0);
 
     bool is_root = !current_item->parent();
-    emit computerGroupContextMenu(ui.tree_group->viewport()->mapToGlobal(point), is_root);
+    emit sig_computerGroupContextMenu(ui.tree_group->viewport()->mapToGlobal(point), is_root);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -752,7 +752,7 @@ void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column 
     if (!current_item)
         return;
 
-    emit computerActivated(true);
+    emit sig_computerActivated(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -765,7 +765,7 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
         onComputerItemClicked(current_item, 0);
     }
 
-    emit computerContextMenu(current_item, ui.tree_computer->viewport()->mapToGlobal(point));
+    emit sig_computerContextMenu(current_item, ui.tree_computer->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -775,7 +775,7 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int /* c
     if (!current_item)
         return;
 
-    emit computerDoubleClicked(current_item->computerToConnect());
+    emit sig_computerDoubleClicked(current_item->computerToConnect());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -785,20 +785,20 @@ void AddressBookTab::showEvent(QShowEvent* event)
         dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_group)
     {
-        emit computerGroupActivated(false, false);
+        emit sig_computerGroupActivated(false, false);
     }
     else
     {
         bool is_root = !current_group->parent();
-        emit computerGroupActivated(true, is_root);
+        emit sig_computerGroupActivated(true, is_root);
     }
 
     ComputerItem* current_computer = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
 
     if (!current_computer)
-        emit computerActivated(false);
+        emit sig_computerActivated(false);
     else
-        emit computerActivated(true);
+        emit sig_computerActivated(true);
 
     QWidget::showEvent(event);
 }
@@ -858,7 +858,7 @@ void AddressBookTab::keyPressEvent(QKeyEvent* event)
                 if (!current_item)
                     break;
 
-                emit computerDoubleClicked(current_item->computerToConnect());
+                emit sig_computerDoubleClicked(current_item->computerToConnect());
             }
         }
         break;
@@ -915,7 +915,7 @@ void AddressBookTab::onOnlineCheckerFinished()
     QTimer::singleShot(0, this, [this]()
     {
         online_checker_.reset();
-        emit updateStateForComputers(false);
+        emit sig_updateStateForComputers(false);
     });
 }
 
@@ -923,7 +923,7 @@ void AddressBookTab::onOnlineCheckerFinished()
 void AddressBookTab::setChanged(bool value)
 {
     is_changed_ = value;
-    emit addressBookChanged(value);
+    emit sig_addressBookChanged(value);
 }
 
 //--------------------------------------------------------------------------------------------------

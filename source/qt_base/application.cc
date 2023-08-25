@@ -354,7 +354,7 @@ void Application::onNewConnection()
     socket->waitForBytesWritten(kWriteTimeoutMs);
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
-    emit messageReceived(message);
+    emit sig_messageReceived(message);
 }
 
 } // namespace qt_base

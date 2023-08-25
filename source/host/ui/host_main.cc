@@ -328,7 +328,7 @@ int hostMain(int argc, char* argv[])
             LOG(LS_INFO) << "Application not running yet";
 
             host::MainWindow window;
-            QObject::connect(&application, &host::Application::activated,
+            QObject::connect(&application, &host::Application::sig_activated,
                              &window, &host::MainWindow::activateHost);
 
             if (is_hidden)

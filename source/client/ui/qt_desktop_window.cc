@@ -109,50 +109,50 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::CURSOR_POSITION);
 
-    connect(toolbar_, &DesktopToolBar::keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
-    connect(toolbar_, &DesktopToolBar::settingsButton, this, &QtDesktopWindow::changeSettings);
-    connect(toolbar_, &DesktopToolBar::switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
-    connect(toolbar_, &DesktopToolBar::takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
-    connect(toolbar_, &DesktopToolBar::scaleChanged, this, &QtDesktopWindow::scaleDesktop);
-    connect(toolbar_, &DesktopToolBar::minimizeSession, this, &QtDesktopWindow::showMinimized);
-    connect(toolbar_, &DesktopToolBar::closeSession, this, &QtDesktopWindow::close);
-    connect(toolbar_, &DesktopToolBar::showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
+    connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
+    connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &QtDesktopWindow::changeSettings);
+    connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
+    connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
+    connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &QtDesktopWindow::scaleDesktop);
+    connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, &QtDesktopWindow::showMinimized);
+    connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &QtDesktopWindow::close);
+    connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
 
     enable_video_pause_ = toolbar_->isVideoPauseEnabled();
-    connect(toolbar_, &DesktopToolBar::videoPauseChanged, this, [this](bool enable)
+    connect(toolbar_, &DesktopToolBar::sig_videoPauseChanged, this, [this](bool enable)
     {
         enable_video_pause_ = enable;
     });
 
     enable_audio_pause_ = toolbar_->isAudioPauseEnabled();
-    connect(toolbar_, &DesktopToolBar::audioPauseChanged, this, [this](bool enable)
+    connect(toolbar_, &DesktopToolBar::sig_audioPauseChanged, this, [this](bool enable)
     {
         enable_audio_pause_ = enable;
     });
 
-    connect(toolbar_, &DesktopToolBar::screenSelected, this, [this](const proto::Screen& screen)
+    connect(toolbar_, &DesktopToolBar::sig_screenSelected, this, [this](const proto::Screen& screen)
     {
         desktop_control_proxy_->setCurrentScreen(screen);
     });
 
-    connect(toolbar_, &DesktopToolBar::powerControl, this, [this](proto::PowerControl::Action action)
+    connect(toolbar_, &DesktopToolBar::sig_powerControl, this, [this](proto::PowerControl::Action action)
     {
         desktop_control_proxy_->onPowerControl(action);
     });
 
-    connect(toolbar_, &DesktopToolBar::startRemoteUpdate, this, [this]()
+    connect(toolbar_, &DesktopToolBar::sig_startRemoteUpdate, this, [this]()
     {
         desktop_control_proxy_->onRemoteUpdate();
     });
 
-    connect(toolbar_, &DesktopToolBar::startSystemInfo, this, [this]()
+    connect(toolbar_, &DesktopToolBar::sig_startSystemInfo, this, [this]()
     {
         if (!system_info_)
         {
             system_info_ = new QtSystemInfoWindow();
             system_info_->setAttribute(Qt::WA_DeleteOnClose);
 
-            connect(system_info_, &QtSystemInfoWindow::systemInfoRequired,
+            connect(system_info_, &QtSystemInfoWindow::sig_systemInfoRequired,
                     this, [this](const proto::system_info::SystemInfoRequest& request)
             {
                 desktop_control_proxy_->onSystemInfoRequest(request);
@@ -162,7 +162,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         system_info_->start(nullptr);
     });
 
-    connect(toolbar_, &DesktopToolBar::startTaskManager, this, [this]()
+    connect(toolbar_, &DesktopToolBar::sig_startTaskManager, this, [this]()
     {
         if (!task_manager_)
         {
@@ -180,13 +180,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         task_manager_->activateWindow();
     });
 
-    connect(toolbar_, &DesktopToolBar::startStatistics, this, [this]()
+    connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, [this]()
     {
         desktop_control_proxy_->onMetricsRequest();
     });
 
-    connect(toolbar_, &DesktopToolBar::pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
-    connect(toolbar_, &DesktopToolBar::switchToFullscreen, this, [this](bool fullscreen)
+    connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes, this, &QtDesktopWindow::onPasteKeystrokes);
+    connect(toolbar_, &DesktopToolBar::sig_switchToFullscreen, this, [this](bool fullscreen)
     {
         if (fullscreen)
         {
@@ -202,13 +202,13 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
         }
     });
 
-    connect(toolbar_, &DesktopToolBar::keyCombinationsChanged,
+    connect(toolbar_, &DesktopToolBar::sig_keyCombinationsChanged,
             desktop_, &DesktopWidget::enableKeyCombinations);
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 
-    connect(toolbar_, &DesktopToolBar::startSession, this, [this](proto::SessionType session_type)
+    connect(toolbar_, &DesktopToolBar::sig_startSession, this, [this](proto::SessionType session_type)
     {
         client::Config session_config = config();
         session_config.session_type = session_type;
@@ -238,7 +238,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
             session_window->close();
     });
 
-    connect(toolbar_, &DesktopToolBar::recordingStateChanged, this, [this](bool enable)
+    connect(toolbar_, &DesktopToolBar::sig_recordingStateChanged, this, [this](bool enable)
     {
         std::filesystem::path file_path;
 
@@ -311,7 +311,7 @@ void QtDesktopWindow::configRequired()
             session_type_, desktop_config_, video_encodings_, this);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(dialog, &DesktopConfigDialog::configChanged, this, &QtDesktopWindow::onConfigChanged);
+        connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &QtDesktopWindow::onConfigChanged);
         connect(dialog, &DesktopConfigDialog::rejected, this, &QtDesktopWindow::close);
 
         dialog->show();
@@ -393,7 +393,7 @@ void QtDesktopWindow::setMetrics(const DesktopWindow::Metrics& metrics)
         statistics_dialog_ = new StatisticsDialog(this);
         statistics_dialog_->setAttribute(Qt::WA_DeleteOnClose);
 
-        connect(statistics_dialog_, &StatisticsDialog::metricsRequired, this, [this]()
+        connect(statistics_dialog_, &StatisticsDialog::sig_metricsRequired, this, [this]()
         {
             desktop_control_proxy_->onMetricsRequest();
         });
@@ -797,7 +797,7 @@ void QtDesktopWindow::changeSettings()
         session_type_, desktop_config_, video_encodings_, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(dialog, &DesktopConfigDialog::configChanged, this, &QtDesktopWindow::onConfigChanged);
+    connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &QtDesktopWindow::onConfigChanged);
 
     dialog->show();
     dialog->activateWindow();

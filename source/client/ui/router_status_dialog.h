@@ -35,7 +35,7 @@ public:
     void setStatus(const QString& message);
 
 signals:
-    void canceled();
+    void sig_canceled();
 
 private:
     Ui::RouterStatusDialog ui;

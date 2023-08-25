@@ -127,13 +127,13 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
         if (i != 0)
             sys_info_widgets_[i]->hide();
 
-        connect(sys_info_widgets_[i], &SysInfoWidget::systemInfoRequest,
+        connect(sys_info_widgets_[i], &SysInfoWidget::sig_systemInfoRequest,
                 this, [=](const proto::system_info::SystemInfoRequest& request)
         {
             if (system_info_control_proxy_)
                 system_info_control_proxy_->onSystemInfoRequest(request);
 
-            emit systemInfoRequired(request);
+            emit sig_systemInfoRequired(request);
         });
     }
 
@@ -477,7 +477,7 @@ void QtSystemInfoWindow::onRefresh()
         if (system_info_control_proxy_)
             system_info_control_proxy_->onSystemInfoRequest(request);
 
-        emit systemInfoRequired(request);
+        emit sig_systemInfoRequired(request);
     }
 }
 

@@ -230,32 +230,32 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         LOG(LS_INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::killSession, this, &MainWindow::onKillSession);
+        connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
 
-        connect(notifier_, &NotifierWindow::voiceChat, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_voiceChat, this, [=](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setVoiceChat(enable);
         });
 
-        connect(notifier_, &NotifierWindow::textChat, this, [=]()
+        connect(notifier_, &NotifierWindow::sig_textChat, this, [=]()
         {
             // TODO
         });
 
-        connect(notifier_, &NotifierWindow::lockMouse, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockMouse, this, [=](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setMouseLock(enable);
         });
 
-        connect(notifier_, &NotifierWindow::lockKeyboard, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, [=](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setKeyboardLock(enable);
         });
 
-        connect(notifier_, &NotifierWindow::pause, this, [=](bool enable)
+        connect(notifier_, &NotifierWindow::sig_pause, this, [=](bool enable)
         {
             if (agent_proxy_)
                 agent_proxy_->setPause(enable);
@@ -293,7 +293,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
             text_chat_widget_ = new common::TextChatWidget();
 
-            connect(text_chat_widget_, &common::TextChatWidget::sendMessage,
+            connect(text_chat_widget_, &common::TextChatWidget::sig_sendMessage,
                     this, [this](const proto::TextChatMessage& message)
             {
                 if (agent_proxy_)
@@ -304,7 +304,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                 }
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::sendStatus,
+            connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
                     this, [this](const proto::TextChatStatus& status)
             {
                 if (agent_proxy_)
@@ -315,7 +315,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
                 }
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::textChatClosed, this, [this]()
+            connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
             {
                 std::vector<uint32_t> sessions = notifier_->sessions(proto::SESSION_TYPE_TEXT_CHAT);
                 for (const auto& session : sessions)
@@ -664,7 +664,7 @@ void MainWindow::onExit()
         else
         {
             LOG(LS_INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
-            connect(notifier_, &NotifierWindow::finished, this, &MainWindow::realClose);
+            connect(notifier_, &NotifierWindow::sig_finished, this, &MainWindow::realClose);
             notifier_->onStop();
         }
     }

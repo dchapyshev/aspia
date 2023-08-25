@@ -40,7 +40,7 @@ public slots:
     void activate();
 
 signals:
-    void activated();
+    void sig_activated();
 
 private:
     UserSettings settings_;

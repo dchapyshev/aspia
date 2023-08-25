@@ -54,7 +54,7 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
 
 signals:
-    void systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
+    void sig_systemInfoRequired(const proto::system_info::SystemInfoRequest& request);
 
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);

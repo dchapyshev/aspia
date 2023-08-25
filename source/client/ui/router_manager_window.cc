@@ -410,7 +410,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     status_dialog_->show();
     status_dialog_->activateWindow();
 
-    connect(status_dialog_, &RouterStatusDialog::canceled, [this]()
+    connect(status_dialog_, &RouterStatusDialog::sig_canceled, [this]()
     {
         router_proxy_.reset();
         close();

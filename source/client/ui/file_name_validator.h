@@ -37,7 +37,7 @@ public:
     void fixup(QString& input) const override;
 
 signals:
-    void invalidNameEntered() const;
+    void sig_invalidNameEntered() const;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FileNameValidator);

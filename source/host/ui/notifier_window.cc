@@ -215,7 +215,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
                                     tr("Disconnect"));
             connect(stop_button, &QToolButton::clicked, this, [=]()
             {
-                emit killSession(tree_item->id());
+                emit sig_killSession(tree_item->id());
             });
 
             ui.tree->setItemWidget(tree_item, 1, stop_button);
@@ -234,7 +234,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
     {
         LOG(LS_INFO) << "Empty session list. Notifier closed";
 
-        emit finished();
+        emit sig_finished();
         closeNotifier();
     }
 }
@@ -243,13 +243,13 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 void NotifierWindow::onVoiceChat()
 {
     is_voice_chat_ = !is_voice_chat_;
-    emit voiceChat(is_voice_chat_);
+    emit sig_voiceChat(is_voice_chat_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onTextChat()
 {
-    emit textChat();
+    emit sig_textChat();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,7 +274,7 @@ void NotifierWindow::onLockMouse()
     ui.button_lock_mouse->setIcon(QIcon(icon));
     ui.button_lock_mouse->setToolTip(tooltip);
 
-    emit lockMouse(is_mouse_locked_);
+    emit sig_lockMouse(is_mouse_locked_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ void NotifierWindow::onLockKeyboard()
     ui.button_lock_keyboard->setIcon(QIcon(icon));
     ui.button_lock_keyboard->setToolTip(tooltip);
 
-    emit lockKeyboard(is_keyboard_locked_);
+    emit sig_lockKeyboard(is_keyboard_locked_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -324,7 +324,7 @@ void NotifierWindow::onPause()
     ui.button_pause->setIcon(QIcon(icon));
     ui.button_pause->setToolTip(tooltip);
 
-    emit pause(is_paused_);
+    emit sig_pause(is_paused_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ void NotifierWindow::onStop()
         if (item)
         {
             LOG(LS_INFO) << "Disconnect session with ID: " << item->id();
-            emit killSession(item->id());
+            emit sig_killSession(item->id());
         }
     }
 }

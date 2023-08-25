@@ -56,28 +56,28 @@ public:
     bool isAudioPauseEnabled() const;
 
 signals:
-    void pasteAsKeystrokes();
-    void keyCombination(int key_secuence);
-    void switchToFullscreen(bool fullscreen);
-    void switchToAutosize();
-    void settingsButton();
-    void screenSelected(const proto::Screen& screen);
-    void scaleChanged();
-    void autoScrollChanged(bool enabled);
-    void keyCombinationsChanged(bool enabled);
-    void takeScreenshot();
-    void startSession(proto::SessionType session_type);
-    void powerControl(proto::PowerControl::Action action);
-    void startRemoteUpdate();
-    void startSystemInfo();
-    void startTaskManager();
-    void startStatistics();
-    void minimizeSession();
-    void closeSession();
-    void showHidePanel();
-    void recordingStateChanged(bool enable);
-    void videoPauseChanged(bool enable);
-    void audioPauseChanged(bool enable);
+    void sig_pasteAsKeystrokes();
+    void sig_keyCombination(int key_secuence);
+    void sig_switchToFullscreen(bool fullscreen);
+    void sig_switchToAutosize();
+    void sig_settingsButton();
+    void sig_screenSelected(const proto::Screen& screen);
+    void sig_scaleChanged();
+    void sig_autoScrollChanged(bool enabled);
+    void sig_keyCombinationsChanged(bool enabled);
+    void sig_takeScreenshot();
+    void sig_startSession(proto::SessionType session_type);
+    void sig_powerControl(proto::PowerControl::Action action);
+    void sig_startRemoteUpdate();
+    void sig_startSystemInfo();
+    void sig_startTaskManager();
+    void sig_startStatistics();
+    void sig_minimizeSession();
+    void sig_closeSession();
+    void sig_showHidePanel();
+    void sig_recordingStateChanged(bool enable);
+    void sig_videoPauseChanged(bool enable);
+    void sig_audioPauseChanged(bool enable);
 
 protected:
     // QFrame implementation.

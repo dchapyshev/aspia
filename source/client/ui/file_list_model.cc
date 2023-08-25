@@ -356,11 +356,11 @@ bool FileListModel::setData(const QModelIndex& index, const QVariant& value, int
         folder_items_.removeLast();
         endRemoveRows();
 
-        emit createFolderRequest(new_name);
+        emit sig_createFolderRequest(new_name);
     }
     else
     {
-        emit nameChangeRequest(old_name, new_name);
+        emit sig_nameChangeRequest(old_name, new_name);
     }
 
     return true;
@@ -457,7 +457,7 @@ bool FileListModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
     if (parent.isValid() && isFolder(parent))
         folder = nameAt(parent);
 
-    emit fileListDropped(folder, mime_data->fileList());
+    emit sig_fileListDropped(folder, mime_data->fileList());
     return true;
 }
 

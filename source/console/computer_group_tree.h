@@ -35,7 +35,7 @@ public:
     bool dragging() const;
 
 signals:
-    void itemDropped();
+    void sig_itemDropped();
 
 protected:
     // QTreeWidget implementation.

@@ -39,7 +39,7 @@ RouterStatusDialog::RouterStatusDialog(QWidget* parent)
         if (standard_button != QDialogButtonBox::Cancel)
             return;
 
-        emit canceled();
+        emit sig_canceled();
         close();
     });
 }

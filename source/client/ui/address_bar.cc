@@ -48,11 +48,11 @@ AddressBar::AddressBar(QWidget* parent)
     setView(view_);
     setModel(model_);
 
-    connect(model_, &AddressBarModel::pathIndexChanged,
+    connect(model_, &AddressBarModel::sig_pathIndexChanged,
             this, &AddressBar::onPathIndexChanged,
             Qt::QueuedConnection);
 
-    connect(model_, &AddressBarModel::invalidPathEntered, this, [this]()
+    connect(model_, &AddressBarModel::sig_invalidPathEntered, this, [this]()
     {
         QMessageBox::warning(this,
                              tr("Warning"),
@@ -70,7 +70,7 @@ AddressBar::AddressBar(QWidget* parent)
 void AddressBar::setDriveList(const proto::DriveList& list)
 {
     model_->setDriveList(list);
-    emit pathChanged(currentPath());
+    emit sig_pathChanged(currentPath());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ void AddressBar::onPathIndexChanged(const QModelIndex& index)
     setRootModelIndex(index.parent());
     setCurrentIndex(index.row());
 
-    emit pathChanged(currentPath());
+    emit sig_pathChanged(currentPath());
 }
 
 } // namespace client

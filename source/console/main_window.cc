@@ -1260,19 +1260,19 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
             rebuildMruMenu();
     }
 
-    connect(new_tab, &AddressBookTab::addressBookChanged,
+    connect(new_tab, &AddressBookTab::sig_addressBookChanged,
             this, &MainWindow::onAddressBookChanged);
-    connect(new_tab, &AddressBookTab::computerGroupActivated,
+    connect(new_tab, &AddressBookTab::sig_computerGroupActivated,
             this, &MainWindow::onComputerGroupActivated);
-    connect(new_tab, &AddressBookTab::computerActivated,
+    connect(new_tab, &AddressBookTab::sig_computerActivated,
             this, &MainWindow::onComputerActivated);
-    connect(new_tab, &AddressBookTab::computerGroupContextMenu,
+    connect(new_tab, &AddressBookTab::sig_computerGroupContextMenu,
             this, &MainWindow::onComputerGroupContextMenu);
-    connect(new_tab, &AddressBookTab::computerContextMenu,
+    connect(new_tab, &AddressBookTab::sig_computerContextMenu,
             this, &MainWindow::onComputerContextMenu);
-    connect(new_tab, &AddressBookTab::computerDoubleClicked,
+    connect(new_tab, &AddressBookTab::sig_computerDoubleClicked,
             this, &MainWindow::onComputerDoubleClicked);
-    connect(new_tab, &AddressBookTab::updateStateForComputers,
+    connect(new_tab, &AddressBookTab::sig_updateStateForComputers,
             ui.status_bar, &StatusBar::setUpdateState);
 
     QIcon icon = mru_.isPinnedFile(file_path) ?

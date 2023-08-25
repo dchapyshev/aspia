@@ -182,7 +182,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
             target_group_item->setExpanded(true);
 
             setCurrentItem(source_group_item);
-            emit itemDropped();
+            emit sig_itemDropped();
         }
     }
     else if (mime_data->hasFormat(computer_mime_type_))
@@ -208,7 +208,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
                 if (computer)
                 {
                     target_group_item->addChildComputer(computer);
-                    emit itemDropped();
+                    emit sig_itemDropped();
                 }
             }
         }

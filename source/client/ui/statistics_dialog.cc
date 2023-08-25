@@ -33,7 +33,7 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     ui.tree->resizeColumnToContents(0);
 
     update_timer_ = new QTimer(this);
-    connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::metricsRequired);
+    connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::sig_metricsRequired);
     update_timer_->start(std::chrono::seconds(1));
 }
 

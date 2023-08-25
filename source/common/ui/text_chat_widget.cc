@@ -191,7 +191,7 @@ void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void TextChatWidget::closeEvent(QCloseEvent* event)
 {
-    emit textChatClosed();
+    emit sig_textChatClosed();
     QWidget::closeEvent(event);
 }
 
@@ -257,7 +257,7 @@ void TextChatWidget::onSendMessage()
     text_chat_message.set_source(host_name_);
     text_chat_message.set_text(message.toStdString());
 
-    emit sendMessage(text_chat_message);
+    emit sig_sendMessage(text_chat_message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ void TextChatWidget::onSendStatus(proto::TextChatStatus::Status status)
     text_chat_status.set_source(host_name_);
     text_chat_status.set_status(status);
 
-    emit sendStatus(text_chat_status);
+    emit sig_sendStatus(text_chat_status);
 }
 
 //--------------------------------------------------------------------------------------------------

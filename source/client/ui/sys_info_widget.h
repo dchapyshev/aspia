@@ -45,7 +45,7 @@ public:
     static void searchInGoogle(const QString& request);
 
 signals:
-    void systemInfoRequest(const proto::system_info::SystemInfoRequest& request);
+    void sig_systemInfoRequest(const proto::system_info::SystemInfoRequest& request);
 
 protected:
     explicit SysInfoWidget(QWidget* parent = nullptr);

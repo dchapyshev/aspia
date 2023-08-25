@@ -40,7 +40,7 @@ public:
     {
         FileNameValidator* validator = new FileNameValidator(this);
 
-        connect(validator, &FileNameValidator::invalidNameEntered, this, [this]()
+        connect(validator, &FileNameValidator::sig_invalidNameEntered, this, [this]()
         {
             QString characters;
 
@@ -95,7 +95,7 @@ private:
 FileItemDelegate::FileItemDelegate(QObject* parent)
     : QStyledItemDelegate(parent)
 {
-    connect(this, &FileItemDelegate::closeEditor, this, &FileItemDelegate::editFinished);
+    connect(this, &FileItemDelegate::closeEditor, this, &FileItemDelegate::sig_editFinished);
 }
 
 //--------------------------------------------------------------------------------------------------

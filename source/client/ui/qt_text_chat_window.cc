@@ -36,7 +36,7 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
     LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
 
-    connect(ui->text_chat_widget, &common::TextChatWidget::sendMessage,
+    connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendMessage,
             this, [this](const proto::TextChatMessage& message)
     {
         if (text_chat_control_proxy_)
@@ -51,7 +51,7 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
         }
     });
 
-    connect(ui->text_chat_widget, &common::TextChatWidget::sendStatus,
+    connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendStatus,
             this, [this](const proto::TextChatStatus& status)
     {
         if (text_chat_control_proxy_)

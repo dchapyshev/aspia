@@ -141,7 +141,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         proto::system_info::EventLogs::Event::Type type =
             static_cast<proto::system_info::EventLogs::Event::Type>(
                 ui.combobox_type->itemData(index).toInt());
-        emit systemInfoRequest(createRequest(type, 0));
+        emit sig_systemInfoRequest(createRequest(type, 0));
     });
 }
 
@@ -277,7 +277,7 @@ void SysInfoWidgetEventLogs::onPageActivated(int index)
 {
     start_record_ = static_cast<uint32_t>(index) * kRecordsPerPage;
     LOG(LS_INFO) << "Page activated: " << index << " (start: " << start_record_ << ")";
-    emit systemInfoRequest(request());
+    emit sig_systemInfoRequest(request());
 }
 
 //--------------------------------------------------------------------------------------------------

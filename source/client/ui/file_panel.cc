@@ -60,14 +60,14 @@ FilePanel::FilePanel(QWidget* parent)
     ui.setupUi(this);
 
     FileItemDelegate* delegate = static_cast<FileItemDelegate*>(ui.list->itemDelegate());
-    connect(delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
+    connect(delegate, &FileItemDelegate::sig_editFinished, this, &FilePanel::refresh);
 
-    connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
+    connect(ui.address_bar, &AddressBar::sig_pathChanged, this, &FilePanel::onPathChanged);
 
     connect(ui.list, &FileList::activated, this, &FilePanel::onListItemActivated);
     connect(ui.list, &FileList::customContextMenuRequested, this, &FilePanel::onListContextMenu);
-    connect(ui.list, &FileList::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
-    connect(ui.list, &FileList::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
+    connect(ui.list, &FileList::sig_nameChangeRequest, this, &FilePanel::onNameChangeRequest);
+    connect(ui.list, &FileList::sig_createFolderRequest, this, &FilePanel::onCreateFolderRequest);
 
     connect(ui.action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
     connect(ui.action_refresh, &QAction::triggered, this, &FilePanel::refresh);
@@ -75,14 +75,14 @@ FilePanel::FilePanel(QWidget* parent)
     connect(ui.action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
     connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
-    connect(ui.list, &FileList::fileListDropped,
+    connect(ui.list, &FileList::sig_fileListDropped,
             this, [this](const QString& folder_name, const std::vector<FileTransfer::Item>& items)
     {
         QString target_folder = currentPath();
         if (!folder_name.isEmpty())
             target_folder += folder_name;
 
-        emit receiveItems(this, target_folder, items);
+        emit sig_receiveItems(this, target_folder, items);
     });
 
     ui.list->setFocus();
@@ -156,7 +156,7 @@ void FilePanel::onRename(proto::FileError error_code)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::onPathChanged(const QString& path)
 {
-    emit pathChanged(this, ui.address_bar->currentPath());
+    emit sig_pathChanged(this, ui.address_bar->currentPath());
 
     ui.action_up->setEnabled(false);
     ui.action_add_folder->setEnabled(false);
@@ -173,7 +173,7 @@ void FilePanel::onPathChanged(const QString& path)
     }
     else
     {
-        emit fileList(path);
+        emit sig_fileList(path);
     }
 }
 
@@ -218,7 +218,7 @@ void FilePanel::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::refresh()
 {
-    emit driveList();
+    emit sig_driveList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -303,7 +303,7 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
             return;
         }
 
-        emit rename(currentPath() + old_name, currentPath() + new_name);
+        emit sig_rename(currentPath() + old_name, currentPath() + new_name);
     }
 }
 
@@ -322,7 +322,7 @@ void FilePanel::onCreateFolderRequest(const QString& name)
             return;
         }
 
-        emit createDirectory(currentPath() + name);
+        emit sig_createDirectory(currentPath() + name);
     }
 }
 
@@ -429,7 +429,7 @@ void FilePanel::removeSelected()
         return;
     }
 
-    emit removeItems(this, items);
+    emit sig_removeItems(this, items);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ void FilePanel::sendSelected()
     if (items.empty())
         return;
 
-    emit sendItems(this, items);
+    emit sig_sendItems(this, items);
 }
 
 //--------------------------------------------------------------------------------------------------

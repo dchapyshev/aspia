@@ -47,7 +47,7 @@ public:
     const proto::DesktopConfig& config() { return config_; }
 
 signals:
-    void configChanged(const proto::DesktopConfig& config);
+    void sig_configChanged(const proto::DesktopConfig& config);
 
 private slots:
     void onCodecChanged(int item_index);

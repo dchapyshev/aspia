@@ -38,7 +38,7 @@ public:
     void setMetrics(const DesktopWindow::Metrics& metrics);
 
 signals:
-    void metricsRequired();
+    void sig_metricsRequired();
 
 private:
     static QString sizeToString(int64_t size);

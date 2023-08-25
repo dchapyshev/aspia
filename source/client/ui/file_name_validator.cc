@@ -40,7 +40,7 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& /* pos
         {
             if (invalid_characters.contains(character))
             {
-                emit invalidNameEntered();
+                emit sig_invalidNameEntered();
                 return Invalid;
             }
         }

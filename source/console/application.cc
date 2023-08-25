@@ -36,20 +36,20 @@ const char kOpenFile[] = "open_file:";
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Console"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Console");
+    setApplicationVersion(ASPIA_VERSION_STRING);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 #endif
     setQuitOnLastWindowClosed(false);
-    setWindowIcon(QIcon(QStringLiteral(":/img/main.ico")));
+    setWindowIcon(QIcon(":/img/main.ico"));
 
-    connect(this, &Application::messageReceived, this, [this](const QByteArray& message)
+    connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {
         if (message.startsWith(kActivateWindow))
         {
-            emit windowActivated();
+            emit sig_windowActivated();
         }
         else if (message.startsWith(kOpenFile))
         {
@@ -57,7 +57,7 @@ Application::Application(int& argc, char* argv[])
             if (file_path.isEmpty())
                 return;
 
-            emit fileOpened(file_path);
+            emit sig_fileOpened(file_path);
         }
         else
         {
@@ -66,7 +66,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }

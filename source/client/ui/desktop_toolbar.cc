@@ -67,16 +67,16 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     ui.action_pause_video->setChecked(settings.pauseVideoWhenMinimizing());
     ui.action_pause_audio->setChecked(settings.pauseAudioWhenMinimizing());
 
-    connect(ui.action_settings, &QAction::triggered, this, &DesktopToolBar::settingsButton);
+    connect(ui.action_settings, &QAction::triggered, this, &DesktopToolBar::sig_settingsButton);
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopToolBar::onAutosizeButton);
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopToolBar::onFullscreenButton);
-    connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopToolBar::autoScrollChanged);
-    connect(ui.action_update, &QAction::triggered, this, &DesktopToolBar::startRemoteUpdate);
-    connect(ui.action_system_info, &QAction::triggered, this, &DesktopToolBar::startSystemInfo);
-    connect(ui.action_task_manager, &QAction::triggered, this, &DesktopToolBar::startTaskManager);
-    connect(ui.action_statistics, &QAction::triggered, this, &DesktopToolBar::startStatistics);
-    connect(ui.action_minimize, &QAction::triggered, this, &DesktopToolBar::minimizeSession);
-    connect(ui.action_close, &QAction::triggered, this, &DesktopToolBar::closeSession);
+    connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopToolBar::sig_autoScrollChanged);
+    connect(ui.action_update, &QAction::triggered, this, &DesktopToolBar::sig_startRemoteUpdate);
+    connect(ui.action_system_info, &QAction::triggered, this, &DesktopToolBar::sig_startSystemInfo);
+    connect(ui.action_task_manager, &QAction::triggered, this, &DesktopToolBar::sig_startTaskManager);
+    connect(ui.action_statistics, &QAction::triggered, this, &DesktopToolBar::sig_startStatistics);
+    connect(ui.action_minimize, &QAction::triggered, this, &DesktopToolBar::sig_minimizeSession);
+    connect(ui.action_close, &QAction::triggered, this, &DesktopToolBar::sig_closeSession);
 
     createAdditionalMenu(session_type);
 
@@ -92,12 +92,12 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
 
     connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
     {
-        emit startSession(proto::SESSION_TYPE_FILE_TRANSFER);
+        emit sig_startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
 
     connect(ui.action_text_chat, &QAction::triggered, this, [this]()
     {
-        emit startSession(proto::SESSION_TYPE_TEXT_CHAT);
+        emit sig_startSession(proto::SESSION_TYPE_TEXT_CHAT);
     });
 
     bool is_pinned = settings.isToolBarPinned();
@@ -349,7 +349,7 @@ void DesktopToolBar::startRecording(bool enable)
     }
 
     is_recording_started_ = enable;
-    emit recordingStateChanged(enable);
+    emit sig_recordingStateChanged(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -407,7 +407,7 @@ void DesktopToolBar::enterEvent(QEnterEvent* /* event */)
             ui.toolbar->show();
             ui.frame->hide();
 
-            emit showHidePanel();
+            emit sig_showHidePanel();
         }
     }
 }
@@ -430,7 +430,7 @@ void DesktopToolBar::onHideTimer()
     ui.toolbar->hide();
     ui.frame->show();
 
-    emit showHidePanel();
+    emit sig_showHidePanel();
     adjustSize();
 }
 
@@ -444,7 +444,7 @@ void DesktopToolBar::onFullscreenButton(bool checked)
 
     showFullScreenButtons(checked);
 
-    emit switchToFullscreen(checked);
+    emit sig_switchToFullscreen(checked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -458,13 +458,13 @@ void DesktopToolBar::onAutosizeButton()
         showFullScreenButtons(false);
     }
 
-    emit switchToAutosize();
+    emit sig_switchToAutosize();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onCtrlAltDel()
 {
-    emit keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
+    emit sig_keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -482,7 +482,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
-            emit powerControl(proto::PowerControl::ACTION_SHUTDOWN);
+            emit sig_powerControl(proto::PowerControl::ACTION_SHUTDOWN);
         }
     }
     else if (action == ui.action_reboot)
@@ -497,7 +497,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
-            emit powerControl(proto::PowerControl::ACTION_REBOOT);
+            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT);
         }
     }
     else if (action == ui.action_reboot_safe_mode)
@@ -512,7 +512,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
-            emit powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
+            emit sig_powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
         }
     }
     else if (action == ui.action_logoff)
@@ -527,7 +527,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
-            emit powerControl(proto::PowerControl::ACTION_LOGOFF);
+            emit sig_powerControl(proto::PowerControl::ACTION_LOGOFF);
         }
     }
     else if (action == ui.action_lock)
@@ -542,7 +542,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
-            emit powerControl(proto::PowerControl::ACTION_LOCK);
+            emit sig_powerControl(proto::PowerControl::ACTION_LOCK);
         }
     }
 }
@@ -560,7 +560,7 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
     screen.mutable_resolution()->set_width(resolution.width());
     screen.mutable_resolution()->set_height(resolution.height());
 
-    emit screenSelected(screen);
+    emit sig_screenSelected(screen);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -572,7 +572,7 @@ void DesktopToolBar::onChangeScreenAction(QAction* action)
     out_screen.set_id(screen.id());
     out_screen.set_title(screen.title());
 
-    emit screenSelected(screen);
+    emit sig_screenSelected(screen);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -655,11 +655,11 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_send_key_combinations, &QAction::triggered,
-                this, &DesktopToolBar::keyCombinationsChanged);
+                this, &DesktopToolBar::sig_keyCombinationsChanged);
     }
 
     connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
-            this, &DesktopToolBar::pasteAsKeystrokes);
+            this, &DesktopToolBar::sig_pasteAsKeystrokes);
 
     connect(scale_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
@@ -678,7 +678,7 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
         else
             return;
 
-        emit scaleChanged();
+        emit sig_scaleChanged();
     });
 
     connect(ui.action_fit_window, &QAction::toggled, this, [this](bool checked)
@@ -706,12 +706,12 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
                 scale_ = 100;
         }
 
-        emit scaleChanged();
+        emit sig_scaleChanged();
     });
 
-    connect(ui.action_pause_video, &QAction::triggered, this, &DesktopToolBar::videoPauseChanged);
-    connect(ui.action_pause_audio, &QAction::triggered, this, &DesktopToolBar::audioPauseChanged);
-    connect(ui.action_screenshot, &QAction::triggered, this, &DesktopToolBar::takeScreenshot);
+    connect(ui.action_pause_video, &QAction::triggered, this, &DesktopToolBar::sig_videoPauseChanged);
+    connect(ui.action_pause_audio, &QAction::triggered, this, &DesktopToolBar::sig_audioPauseChanged);
+    connect(ui.action_screenshot, &QAction::triggered, this, &DesktopToolBar::sig_takeScreenshot);
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
 

@@ -59,8 +59,8 @@ public:
     bool insertRows(int row, int count, const QModelIndex& parent) override;
 
 signals:
-    void pathIndexChanged(const QModelIndex& index);
-    void invalidPathEntered();
+    void sig_pathIndexChanged(const QModelIndex& index);
+    void sig_invalidPathEntered();
 
 protected:
     static QString typeToString(proto::DriveList::Item::Type type);

@@ -86,9 +86,9 @@ Application::Application(int& argc, char* argv[])
 {
     LOG(LS_INFO) << "Ctor";
 
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Host"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Host");
+    setApplicationVersion(ASPIA_VERSION_STRING);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 #endif
@@ -96,12 +96,12 @@ Application::Application(int& argc, char* argv[])
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
         EventFilter::instance());
 
-    connect(this, &Application::messageReceived, this, [this](const QByteArray& message)
+    connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {
         if (message == kActivateMessage)
         {
             LOG(LS_INFO) << "Activate message received";
-            emit activated();
+            emit sig_activated();
         }
         else
         {
@@ -110,7 +110,7 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }

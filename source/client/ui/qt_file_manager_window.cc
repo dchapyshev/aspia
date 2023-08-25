@@ -331,31 +331,31 @@ void QtFileManagerWindow::initPanel(
     panel->setPanelName(title);
     panel->setMimeType(mime_type);
 
-    connect(panel, &FilePanel::driveList, this, [this, target]()
+    connect(panel, &FilePanel::sig_driveList, this, [this, target]()
     {
         file_control_proxy_->driveList(target);
     });
 
-    connect(panel, &FilePanel::fileList, this, [this, target](const QString& path)
+    connect(panel, &FilePanel::sig_fileList, this, [this, target](const QString& path)
     {
         file_control_proxy_->fileList(target, path.toStdString());
     });
 
-    connect(panel, &FilePanel::rename,
+    connect(panel, &FilePanel::sig_rename,
             this, [this, target](const QString& old_path, const QString& new_path)
     {
         file_control_proxy_->rename(target, old_path.toStdString(), new_path.toStdString());
     });
 
-    connect(panel, &FilePanel::createDirectory, this, [this, target](const QString& path)
+    connect(panel, &FilePanel::sig_createDirectory, this, [this, target](const QString& path)
     {
         file_control_proxy_->createDirectory(target, path.toStdString());
     });
 
-    connect(panel, &FilePanel::removeItems, this, &QtFileManagerWindow::removeItems);
-    connect(panel, &FilePanel::sendItems, this, &QtFileManagerWindow::sendItems);
-    connect(panel, &FilePanel::receiveItems, this, &QtFileManagerWindow::receiveItems);
-    connect(panel, &FilePanel::pathChanged, this, &QtFileManagerWindow::onPathChanged);
+    connect(panel, &FilePanel::sig_removeItems, this, &QtFileManagerWindow::removeItems);
+    connect(panel, &FilePanel::sig_sendItems, this, &QtFileManagerWindow::sendItems);
+    connect(panel, &FilePanel::sig_receiveItems, this, &QtFileManagerWindow::receiveItems);
+    connect(panel, &FilePanel::sig_pathChanged, this, &QtFileManagerWindow::onPathChanged);
 }
 
 } // namespace client

@@ -45,7 +45,7 @@ public:
                               const QModelIndex& index) const override;
 
 signals:
-    void editFinished();
+    void sig_editFinished();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FileItemDelegate);

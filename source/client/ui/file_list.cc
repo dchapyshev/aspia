@@ -74,9 +74,9 @@ FileList::FileList(QWidget* parent)
     setStyle(new TreeViewProxyStyle(style()));
     setItemDelegate(new FileItemDelegate(this));
 
-    connect(model_, &FileListModel::nameChangeRequest, this, &FileList::nameChangeRequest);
-    connect(model_, &FileListModel::createFolderRequest, this, &FileList::createFolderRequest);
-    connect(model_, &FileListModel::fileListDropped, this, &FileList::fileListDropped);
+    connect(model_, &FileListModel::sig_nameChangeRequest, this, &FileList::sig_nameChangeRequest);
+    connect(model_, &FileListModel::sig_createFolderRequest, this, &FileList::sig_createFolderRequest);
+    connect(model_, &FileListModel::sig_fileListDropped, this, &FileList::sig_fileListDropped);
 }
 
 //--------------------------------------------------------------------------------------------------
