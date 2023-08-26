@@ -114,7 +114,11 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &QtDesktopWindow::autosizeWindow);
     connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &QtDesktopWindow::takeScreenshot);
     connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &QtDesktopWindow::scaleDesktop);
-    connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, &QtDesktopWindow::showMinimized);
+    connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
+    {
+        is_minimized_from_full_screen_ = true;
+        showMinimized();
+    });
     connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &QtDesktopWindow::close);
     connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &QtDesktopWindow::onShowHidePanel);
 
@@ -583,6 +587,16 @@ void QtDesktopWindow::changeEvent(QEvent* event)
     }
 
     QWidget::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void QtDesktopWindow::showEvent(QShowEvent *event)
+{
+    if (is_minimized_from_full_screen_)
+    {
+        is_minimized_from_full_screen_ = false;
+        showFullScreen();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

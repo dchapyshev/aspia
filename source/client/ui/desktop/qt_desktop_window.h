@@ -84,6 +84,7 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
     void leaveEvent(QEvent* event) override;
     void changeEvent(QEvent* event) override;
+    void showEvent(QShowEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -125,6 +126,7 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
+    bool is_minimized_from_full_screen_ = false;
 
     std::optional<QPoint> start_panel_pos_;
     int panel_pos_x_ = 50;
