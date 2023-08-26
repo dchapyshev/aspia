@@ -460,6 +460,10 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 void DesktopSessionAgent::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "UI thread stopping";
+
+#if defined(OS_WIN)
+    message_window_.reset();
+#endif // defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
