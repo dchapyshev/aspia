@@ -865,17 +865,22 @@
         <translation>До: ...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="50"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="47"/>
+        <source>Speed: ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="57"/>
         <source>Progress</source>
         <translation>Виконано</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="58"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
         <source>Total:</source>
         <translation>Всього:</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="72"/>
         <source>Item:</source>
         <translation>Поточний об&apos;єкт:</translation>
     </message>
@@ -3059,72 +3064,102 @@
         <translation>До: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="168"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="174"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="180"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="186"/>
         <source>Skip</source>
         <translation>Пропустити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="183"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
         <source>Skip All</source>
         <translation>Пропустити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="186"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="195"/>
         <source>Replace All</source>
         <translation>Замінити всі</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="198"/>
         <source>Abort</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="270"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="351"/>
+        <source>TB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="356"/>
+        <source>GB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="361"/>
+        <source>MB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="366"/>
+        <source>kB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="371"/>
+        <source>B/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="159"/>
+        <source>Speed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="276"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Поточне завдання: Відміна передачі файлів.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="285"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="291"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Виникла помилка під час створення файлової черги для копіювання</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="290"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="296"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити каталог &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="298"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="304"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не вдалося створити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="305"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="311"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не вдалося записати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="319"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="325"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="326"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="332"/>
         <source>Unknown error type while copying files</source>
         <translation>Невідомий тип помилки під час копіювання файлів</translation>
     </message>

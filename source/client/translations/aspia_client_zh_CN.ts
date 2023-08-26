@@ -837,17 +837,22 @@
         <translation>到：...</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="50"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="47"/>
+        <source>Speed: ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="57"/>
         <source>Progress</source>
         <translation>进度</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="58"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
         <source>Total:</source>
         <translation>总进度：</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="65"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.ui" line="72"/>
         <source>Item:</source>
         <translation>项目：</translation>
     </message>
@@ -3009,72 +3014,102 @@
         <translation>到: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="168"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="174"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="180"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="186"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="183"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="186"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="195"/>
         <source>Replace All</source>
         <translation>替换所有</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="198"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="270"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="351"/>
+        <source>TB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="356"/>
+        <source>GB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="361"/>
+        <source>MB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="366"/>
+        <source>kB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="371"/>
+        <source>B/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="159"/>
+        <source>Speed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="276"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>当前任务：取消文件传输。</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="285"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="291"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>生成用于复制的文件队列时出错</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="290"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="296"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>创建目录失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="298"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="304"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>未能创建文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="305"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="311"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>无法打开文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="312"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>无法写入文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="319"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="325"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>读取文件失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="326"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="332"/>
         <source>Unknown error type while copying files</source>
         <translation>复制文件时出现未知错误类型</translation>
     </message>
