@@ -108,6 +108,20 @@ void FileTransferWindowProxy::setCurrentProgress(int total, int current)
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileTransferWindowProxy::setCurrentSpeed(int64_t speed)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(std::bind(
+            &FileTransferWindowProxy::setCurrentSpeed, shared_from_this(), speed));
+        return;
+    }
+
+    if (file_transfer_window_)
+        file_transfer_window_->setCurrentSpeed(speed);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindowProxy::errorOccurred(const FileTransfer::Error& error)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

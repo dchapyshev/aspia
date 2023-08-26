@@ -154,6 +154,12 @@ void FileTransferDialog::setCurrentProgress(int total, int current)
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileTransferDialog::setCurrentSpeed(int64_t speed)
+{
+    ui.label_speed->setText(tr("Speed: %1").arg(speedToString(speed)));
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -326,6 +332,49 @@ QString FileTransferDialog::errorToMessage(const FileTransfer::Error& error)
             return tr("Unknown error type while copying files");
         }
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString FileTransferDialog::speedToString(int64_t speed)
+{
+    static const int64_t kKB = 1024LL;
+    static const int64_t kMB = kKB * 1024LL;
+    static const int64_t kGB = kMB * 1024LL;
+    static const int64_t kTB = kGB * 1024LL;
+
+    QString units;
+    int64_t divider;
+
+    if (speed >= kTB)
+    {
+            units = tr("TB/s");
+            divider = kTB;
+    }
+    else if (speed >= kGB)
+    {
+            units = tr("GB/s");
+            divider = kGB;
+    }
+    else if (speed >= kMB)
+    {
+            units = tr("MB/s");
+            divider = kMB;
+    }
+    else if (speed >= kKB)
+    {
+            units = tr("kB/s");
+            divider = kKB;
+    }
+    else
+    {
+            units = tr("B/s");
+            divider = 1;
+    }
+
+    return QString("%1 %2")
+        .arg(static_cast<double>(speed) / static_cast<double>(divider), 0, 'g', 4)
+        .arg(units);
 }
 
 } // namespace client

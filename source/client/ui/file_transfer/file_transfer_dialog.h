@@ -50,6 +50,7 @@ public:
     void stop() override;
     void setCurrentItem(const std::string& source_path, const std::string& target_path) override;
     void setCurrentProgress(int total, int current) override;
+    void setCurrentSpeed(int64_t speed) override;
     void errorOccurred(const FileTransfer::Error& error) override;
 
 protected:
@@ -59,6 +60,7 @@ protected:
 
 private:
     QString errorToMessage(const FileTransfer::Error& error);
+    QString speedToString(int64_t speed);
 
     Ui::FileTransferDialog ui;
 

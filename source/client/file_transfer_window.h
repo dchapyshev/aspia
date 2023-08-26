@@ -33,6 +33,7 @@ public:
 
     virtual void setCurrentItem(const std::string& source_path, const std::string& target_path) = 0;
     virtual void setCurrentProgress(int total, int current) = 0;
+    virtual void setCurrentSpeed(int64_t speed) = 0;
     virtual void errorOccurred(const FileTransfer::Error& error) = 0;
 };
 

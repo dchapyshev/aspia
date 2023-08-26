@@ -82,6 +82,15 @@ struct ActionsMap
     }
 };
 
+//--------------------------------------------------------------------------------------------------
+int64_t calculateSpeed(int64_t last_speed, const FileTransfer::Milliseconds& duration, int64_t bytes)
+{
+    static const double kAlpha = 0.9;
+    return static_cast<int64_t>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -89,13 +98,14 @@ FileTransfer::FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                            std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                            std::shared_ptr<common::FileTaskConsumerProxy> task_consumer_proxy,
                            Type type)
-    : io_task_runner_(io_task_runner),
+    : type_(type),
+      io_task_runner_(io_task_runner),
       transfer_proxy_(std::make_shared<FileTransferProxy>(io_task_runner, this)),
       transfer_window_proxy_(std::move(transfer_window_proxy)),
       task_consumer_proxy_(std::move(task_consumer_proxy)),
       task_producer_proxy_(std::make_shared<common::FileTaskProducerProxy>(this)),
       cancel_timer_(base::WaitableTimer::Type::SINGLE_SHOT, io_task_runner),
-      type_(type)
+      speed_update_timer_(base::WaitableTimer::Type::REPEATED, io_task_runner)
 {
     // Nothing
 }
@@ -141,6 +151,8 @@ void FileTransfer::start(const std::string& source_path,
 
     queue_builder_ = std::make_unique<FileTransferQueueBuilder>(
         task_consumer_proxy_, task_factory_source_->target());
+
+    speed_update_timer_.start(Milliseconds(1000), std::bind(&FileTransfer::doUpdateSpeed, this));
 
     // Start building a list of objects for transfer.
     queue_builder_->start(source_path, target_path, items, [this](proto::FileError error_code)
@@ -283,6 +295,7 @@ void FileTransfer::targetReply(const proto::FileRequest& request, const proto::F
             }
 
             total_transfered_size_ += packet_size;
+            bytes_per_time_ += packet_size;
 
             const int task_percentage =
                 static_cast<int>(task_transfered_size_ * 100 / full_task_size);
@@ -437,6 +450,20 @@ void FileTransfer::doNextTask()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileTransfer::doUpdateSpeed()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_);
+
+    speed_ = calculateSpeed(speed_, duration, bytes_per_time_);
+
+    begin_time_ = current_time;
+    bytes_per_time_ = 0;
+
+    transfer_window_proxy_->setCurrentSpeed(speed_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransfer::onError(Error::Type type, proto::FileError code, const std::string& path)
 {
     auto default_action = actions_.find(type);
@@ -454,6 +481,8 @@ void FileTransfer::onFinished()
 {
     FinishCallback callback;
     callback.swap(finish_callback_);
+
+    speed_update_timer_.stop();
 
     if (callback)
     {
