@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ONLINE_CHECKER_H
-#define CLIENT_ONLINE_CHECKER_H
+#ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
+#define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H
 
 #include "base/macros_magic.h"
 #include "base/scoped_task_runner.h"
 #include "base/threading/thread.h"
-#include "client/online_checker_direct.h"
-#include "client/online_checker_router.h"
+#include "client/online_checker/online_checker_direct.h"
+#include "client/online_checker/online_checker_router.h"
 
 #include <optional>
 #include <mutex>
@@ -96,4 +96,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_ONLINE_CHECKER_H
+#endif // CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_H

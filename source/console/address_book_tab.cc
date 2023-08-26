@@ -24,7 +24,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
 #include "base/strings/unicode.h"
-#include "client/online_checker.h"
+#include "client/online_checker/online_checker.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_factory.h"

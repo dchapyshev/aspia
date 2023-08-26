@@ -70,12 +70,6 @@ list(APPEND SOURCE_CLIENT_CORE
     frame_factory.h
     input_event_filter.cc
     input_event_filter.h
-    online_checker.cc
-    online_checker.h
-    online_checker_direct.cc
-    online_checker_direct.h
-    online_checker_router.cc
-    online_checker_router.h
     router.cc
     router.h
     router_proxy.cc
@@ -107,6 +101,14 @@ list(APPEND SOURCE_CLIENT_CORE
 
 list(APPEND SOURCE_CLIENT_CORE_RESOURCES
     resources/client.qrc)
+
+list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
+    online_checker/online_checker.cc
+    online_checker/online_checker.h
+    online_checker/online_checker_direct.cc
+    online_checker/online_checker_direct.h
+    online_checker/online_checker_router.cc
+    online_checker/online_checker_router.h)
 
 list(APPEND SOURCE_CLIENT_CORE_UI
     ui/application.cc
@@ -277,6 +279,7 @@ list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(resources FILES ${SOURCE_CLIENT_CORE_RESOURCES})
+source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(ui FILES ${SOURCE_CLIENT_CORE_UI})
 source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
@@ -287,6 +290,7 @@ source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
     ${SOURCE_CLIENT_CORE_RESOURCES}
+    ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
     ${SOURCE_CLIENT_CORE_UI}
     ${SOURCE_CLIENT_CORE_UI_DESKTOP}
     ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}

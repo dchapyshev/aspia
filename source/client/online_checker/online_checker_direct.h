@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ONLINE_CHECKER_DIRECT_H
-#define CLIENT_ONLINE_CHECKER_DIRECT_H
+#ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_DIRECT_H
+#define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_DIRECT_H
 
 #include <deque>
 #include <memory>
@@ -69,4 +69,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_ONLINE_CHECKER_DIRECT_H
+#endif // CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_DIRECT_H

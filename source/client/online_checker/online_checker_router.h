@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ONLINE_CHECKER_ROUTER_H
-#define CLIENT_ONLINE_CHECKER_ROUTER_H
+#ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
+#define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
 #include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
@@ -81,4 +81,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_ONLINE_CHECKER_ROUTER_H
+#endif // CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H

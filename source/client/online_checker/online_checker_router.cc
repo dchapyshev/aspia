@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/online_checker_router.h"
+#include "client/online_checker/online_checker_router.h"
 
 #include "base/location.h"
 #include "base/logging.h"
