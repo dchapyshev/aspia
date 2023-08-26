@@ -38,6 +38,7 @@ public:
 
     void onConnected(const base::Version& peer_version);
     void onDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onVersionMismatch(const base::Version& router, const base::Version& client);
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onSessionList(std::shared_ptr<proto::SessionList> session_list);
     void onSessionResult(std::shared_ptr<proto::SessionResult> session_result);

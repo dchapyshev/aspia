@@ -79,6 +79,20 @@ void RouterWindowProxy::onDisconnected(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWindowProxy::onVersionMismatch(const base::Version& router, const base::Version& client)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&RouterWindowProxy::onVersionMismatch, shared_from_this(), router, client));
+        return;
+    }
+
+    if (router_window_)
+        router_window_->onVersionMismatch(router, client);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWindowProxy::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

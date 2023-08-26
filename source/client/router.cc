@@ -180,16 +180,28 @@ void Router::onTcpConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            const base::Version& router_version = authenticator_->peerVersion();
+            if (router_version >= base::Version(2, 6, 0))
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);
             }
 
-            window_proxy_->onConnected(authenticator_->peerVersion());
+            base::Version client_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
+                                         ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+            if (router_version > client_version)
+            {
+                LOG(LS_WARNING) << "Version mismatch (router: " << router_version.toString()
+                                << " client: " << client_version.toString();
+                window_proxy_->onVersionMismatch(router_version, client_version);
+            }
+            else
+            {
+                window_proxy_->onConnected(router_version);
 
-            // Now the session will receive incoming messages.
-            channel_->resume();
+                // Now the session will receive incoming messages.
+                channel_->resume();
+            }
         }
         else
         {

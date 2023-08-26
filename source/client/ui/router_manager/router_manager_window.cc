@@ -507,6 +507,18 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterManagerWindow::onVersionMismatch(const base::Version& router, const base::Version& client)
+{
+    QString router_version = QString::fromStdString(router.toString());
+    QString client_version = QString::fromStdString(client.toString());
+    QString message = tr("The Router version is newer than the Client version (%1 > %2). "
+                         "Please update the application.").arg(router_version).arg(client_version);
+
+    status_dialog_->setStatus(tr("Error: %1").arg(message));
+    status_dialog_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onAccessDenied(base::ClientAuthenticator::ErrorCode error_code)
 {
     const char* message;

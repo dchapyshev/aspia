@@ -168,7 +168,7 @@ void SessionWindow::onVersionMismatch(const base::Version& host, const base::Ver
     QString client_version = QString::fromStdString(client.toString());
 
     onErrorOccurred(
-        tr("The Host version is newer than the Client version (%1 > %2)."
+        tr("The Host version is newer than the Client version (%1 > %2). "
            "Please update the application.")
            .arg(host_version).arg(client_version));
 }
