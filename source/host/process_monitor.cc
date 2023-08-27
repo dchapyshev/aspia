@@ -325,9 +325,6 @@ ProcessMonitor::ProcessMonitor()
     }
     else
     {
-        page_size_ = basic_info.PageSize / 1024;
-        total_physical_pages_ = basic_info.NumberOfPhysicalPages * page_size_;
-
         processor_count_ = static_cast<uint32_t>(basic_info.NumberOfProcessors);
         if (processor_count_ > kMaxCpuCount)
             processor_count_ = kMaxCpuCount;

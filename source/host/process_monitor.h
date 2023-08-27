@@ -80,9 +80,6 @@ private:
     int64_t prev_cpu_idle_time_[kMaxCpuCount];
     int64_t prev_cpu_total_time_[kMaxCpuCount];
 
-    uint32_t page_size_ = 0;
-    uint32_t total_physical_pages_ = 0;
-
     DISALLOW_COPY_AND_ASSIGN(ProcessMonitor);
 };
 
