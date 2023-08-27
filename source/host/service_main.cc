@@ -24,20 +24,24 @@
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
 #include "base/strings/strcat.h"
-#include "base/win/mini_dump_writer.h"
-#include "base/win/service_controller.h"
-#include "base/win/session_info.h"
-#include "base/win/session_enumerator.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
 #include "host/host_key_storage.h"
 #include "host/service.h"
 #include "host/service_constants.h"
 
+#if defined(OS_WIN)
+#include "base/win/mini_dump_writer.h"
+#include "base/win/service_controller.h"
+#include "base/win/session_info.h"
+#include "base/win/session_enumerator.h"
+#endif // defined(OS_WIN)
+
 #include <iostream>
 
 namespace host {
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void startService()
 {
@@ -60,7 +64,9 @@ void startService()
         }
     }
 }
+#endif // defined(OS_WIN)
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void stopService()
 {
@@ -83,7 +89,9 @@ void stopService()
         }
     }
 }
+#endif // defined(OS_WIN)
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void installService()
 {
@@ -108,7 +116,9 @@ void installService()
         }
     }
 }
+#endif // defined(OS_WIN)
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void removeService()
 {
@@ -126,10 +136,12 @@ void removeService()
         std::cout << "The service was successfully deleted." << std::endl;
     }
 }
+#endif // defined(OS_WIN)
 
 //--------------------------------------------------------------------------------------------------
 std::optional<std::string> currentSessionName()
 {
+#if defined(OS_WIN)
     DWORD process_session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &process_session_id))
         return std::nullopt;
@@ -192,14 +204,80 @@ std::optional<std::string> currentSessionName()
         base::utf8FromUtf16(domain), "@", base::numberToString(user_number) });
 
     return std::move(session_name);
+#else
+    return std::nullopt;
+#endif
 }
 
+#if defined(OS_LINUX)
 //--------------------------------------------------------------------------------------------------
-#if defined(OS_WIN)
-int hostServiceMain(int argc, wchar_t* argv[])
-#else
 int hostServiceMain(int argc, char* argv[])
+{
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_LS_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
+
+    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
+    base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
+
+    LOG(LS_INFO) << "Command line: " << command_line->commandLineString();
+    LOG(LS_INFO) << "Version: " << ASPIA_VERSION_STRING;
+#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
+    LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
+    LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(LS_INFO) << "CPU: " << base::SysInfo::processorName()
+                 << " (vendor: " << base::SysInfo::processorVendor()
+                 << " packages: " << base::SysInfo::processorPackages()
+                 << " cores: " << base::SysInfo::processorCores()
+                 << " threads: " << base::SysInfo::processorThreads() << ")";
+
+    LOG(LS_INFO) << "Environment variables";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& variable : base::Environment::list())
+    {
+        LOG(LS_INFO) << variable.first << ": " << variable.second;
+    }
+    LOG(LS_INFO) << "#####################################################";
+
+    if (command_line->hasSwitch(u"version"))
+    {
+        std::cout << ASPIA_VERSION_MAJOR << "." << ASPIA_VERSION_MINOR << "."
+                  << ASPIA_VERSION_PATCH << "." << GIT_COMMIT_COUNT << std::endl;
+    }
+    else if (command_line->hasSwitch(u"host-id"))
+    {
+        std::optional<std::string> session_name = currentSessionName();
+        if (!session_name.has_value())
+            return 0;
+
+        HostKeyStorage storage;
+        std::cout << storage.lastHostId(*session_name) << std::endl;
+    }
+    else if (command_line->hasSwitch(u"help"))
+    {
+        std::cout << "aspia_host_service [switch]" << std::endl
+                  << "Available switches:" << std::endl
+                  << '\t' << "--host-id" << '\t' << "Get current host id" << std::endl
+                  << '\t' << "--version" << '\t' << "Show version information" << std::endl
+                  << '\t' << "--help" << '\t' << "Show help" << std::endl;
+    }
+    else
+    {
+        Service().exec();
+    }
+
+    return 0;
+}
+#endif // defined(OS_LINUX)
+
+#if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
+int hostServiceMain(int argc, wchar_t* argv[])
 {
     (void)argc;
     (void)argv;
@@ -360,5 +438,6 @@ int hostServiceMain(int argc, char* argv[])
 
     return 0;
 }
+#endif // defined(OS_WIN)
 
 } // namespace host
