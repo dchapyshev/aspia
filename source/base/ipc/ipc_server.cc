@@ -38,6 +38,10 @@
 #include <asio/windows/stream_handle.hpp>
 #endif // defined(OS_WIN)
 
+#if defined(OS_POSIX)
+#include <asio/local/stream_protocol.hpp>
+#endif // defined(OS_POSIX)
+
 #include <random>
 
 namespace base {
@@ -60,7 +64,13 @@ public:
     void dettach() { server_ = nullptr; }
 
     bool listen(asio::io_context& io_context, std::u16string_view channel_name);
+
+#if defined(OS_WIN)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
+#elif defined(OS_POSIX)
+    void onNewConnetion(const std::error_code& error_code,
+                        asio::local::stream_protocol::socket socket);
+#endif
 
 private:
     IpcServer* server_;
@@ -70,7 +80,8 @@ private:
     std::unique_ptr<asio::windows::stream_handle> handle_;
     std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
 #elif defined(OS_POSIX)
-    std::unique_ptr<asio::posix::stream_descriptor> handle_;
+    std::unique_ptr<asio::local::stream_protocol::acceptor> acceptor_;
+    std::unique_ptr<asio::local::stream_protocol::socket> handle_;
 #endif
 
     DISALLOW_COPY_AND_ASSIGN(Listener);
@@ -168,11 +179,18 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    NOTIMPLEMENTED();
-    return false;
+    asio::local::stream_protocol::endpoint endpoint(base::utf8FromUtf16(channel_name));
+    acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context, endpoint);
+
+    acceptor_->async_accept(std::bind(&Listener::onNewConnetion,
+                                      shared_from_this(),
+                                      std::placeholders::_1,
+                                      std::placeholders::_2));
+    return true;
 #endif
 }
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
@@ -191,6 +209,28 @@ void IpcServer::Listener::onNewConnetion(
 
     server_->onNewConnection(index_, std::move(channel));
 }
+#endif // defined(OS_WIN)
+
+#if defined(OS_POSIX)
+//--------------------------------------------------------------------------------------------------
+void IpcServer::Listener::onNewConnetion(
+    const std::error_code& error_code, asio::local::stream_protocol::socket socket)
+{
+    if (!server_)
+        return;
+
+    if (error_code)
+    {
+        server_->onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    std::unique_ptr<IpcChannel> channel =
+        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(socket)));
+
+    server_->onNewConnection(index_, std::move(channel));
+}
+#endif // defined(OS_POSIX)
 
 //--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer()

@@ -41,6 +41,10 @@ namespace {
 
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
+#if defined(OS_POSIX)
+const char16_t kLocalSocketPrefix[] = u"aspia_host_";
+#endif // defined(OS_POSIX)
+
 #if defined(OS_WIN)
 
 const char16_t kPipeNamePrefix[] = u"\\\\.\\pipe\\aspia.";
@@ -159,9 +163,9 @@ void IpcChannel::setListener(Listener* listener)
 //--------------------------------------------------------------------------------------------------
 bool IpcChannel::connect(std::u16string_view channel_id)
 {
-#if defined(OS_WIN)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
+#if defined(OS_WIN)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
     channel_name_ = channelName(channel_id);
 
@@ -207,8 +211,17 @@ bool IpcChannel::connect(std::u16string_view channel_id)
     is_connected_ = true;
     return true;
 #else
-    NOTIMPLEMENTED();
-    return false;
+    asio::local::stream_protocol::endpoint endpoint(base::utf8FromUtf16(channel_id));
+    std::error_code error_code;
+    stream_.connect(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    is_connected_ = true;
+    return true;
 #endif
 }
 
@@ -320,8 +333,9 @@ std::u16string IpcChannel::channelName(std::u16string_view channel_id)
     name.append(channel_id);
     return name;
 #else
-    NOTIMPLEMENTED();
-    return std::u16string();
+    std::u16string name(kLocalSocketPrefix);
+    name.append(channel_id);
+    return name;
 #endif
 }
 
