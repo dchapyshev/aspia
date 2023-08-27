@@ -27,6 +27,7 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 bool integrityCheck()
 {
+#if defined(OS_WIN)
     static const char16_t* kFiles[] =
     {
         u"aspia_host.exe",
@@ -93,6 +94,7 @@ bool integrityCheck()
         LOG(LS_ERROR) << "Current executable file was not found in the list of components";
         return false;
     }
+#endif // defined(OS_WIN)
 
     return true;
 }
