@@ -203,7 +203,7 @@ add_subdirectory(relay)
 add_subdirectory(router)
 add_subdirectory(third_party)
 
-if (WIN32)
+if (WIN32 OR LINUX)
     add_subdirectory(host)
 endif()
 

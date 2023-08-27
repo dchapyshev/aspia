@@ -25,12 +25,15 @@
 #include "host/service_constants.h"
 #include "host/server.h"
 
+#if defined(OS_WIN)
 #include <Windows.h>
+#endif // defined(OS_WIN)
 
 namespace host {
 
 namespace {
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 std::string powerEventToString(uint32_t event)
 {
@@ -65,6 +68,7 @@ std::string powerEventToString(uint32_t event)
 
     return base::stringPrintf("%s (%d)", name, static_cast<int>(event));
 }
+#endif // defined(OS_WIN)
 
 } // namespace
 
@@ -86,6 +90,7 @@ void Service::onStart()
 {
     LOG(LS_INFO) << "Service is started";
 
+#if defined(OS_WIN)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
         PLOG(LS_WARNING) << "SetPriorityClass failed";
@@ -100,6 +105,7 @@ void Service::onStart()
     {
         LOG(LS_WARNING) << "Failed to remove service from boot in Safe Mode";
     }
+#endif // defined(OS_WIN)
 
     server_ = std::make_unique<Server>(taskRunner());
     server_->start();
@@ -113,6 +119,7 @@ void Service::onStop()
     LOG(LS_INFO) << "Service is stopped";
 }
 
+#if defined(OS_WIN)
 //--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
@@ -131,5 +138,6 @@ void Service::onPowerEvent(uint32_t event)
     if (server_)
         server_->setPowerEvent(event);
 }
+#endif // defined(OS_WIN)
 
 } // namespace host

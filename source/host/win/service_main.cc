@@ -195,7 +195,11 @@ std::optional<std::string> currentSessionName()
 }
 
 //--------------------------------------------------------------------------------------------------
+#if defined(OS_WIN)
 int hostServiceMain(int argc, wchar_t* argv[])
+#else
+int hostServiceMain(int argc, char* argv[])
+#endif
 {
     (void)argc;
     (void)argv;

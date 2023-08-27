@@ -244,11 +244,13 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
+#if defined(OS_WIN)
     if (session_id == base::kServiceSessionId)
     {
         LOG(LS_WARNING) << "An attempt was detected to start a process in a SERVICES session";
         return nullptr;
     }
+#endif // defined(OS_WIN)
 
     base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);
