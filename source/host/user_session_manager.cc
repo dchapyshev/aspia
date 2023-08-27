@@ -225,7 +225,7 @@ bool UserSessionManager::start(Delegate* delegate)
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(kIpcChannelIdForUI, this))
     {
-        LOG(LS_WARNING) << "Failed to start IPC servcer for UI";
+        LOG(LS_WARNING) << "Failed to start IPC server for UI";
         return false;
     }
 
