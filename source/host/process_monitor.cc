@@ -52,41 +52,6 @@ typedef struct {
 } OWN_SYSTEM_BASIC_INFORMATION;
 
 typedef struct {
-    LARGE_INTEGER IdleProcessTime;
-    LARGE_INTEGER IoReadTransferCount;
-    LARGE_INTEGER IoWriteTransferCount;
-    LARGE_INTEGER IoOtherTransferCount;
-    ULONG IoReadOperationCount;
-    ULONG IoWriteOperationCount;
-    ULONG IoOtherOperationCount;
-    ULONG AvailablePages;
-    ULONG CommittedPages;
-    ULONG CommitLimit;
-    ULONG PeakCommitment;
-    ULONG PageFaultCount;
-    ULONG CopyOnWriteCount;
-    ULONG TransitionCount;
-    ULONG CacheTransitionCount;
-    ULONG DemandZeroCount;
-    ULONG PageReadCount;
-    ULONG PageReadIoCount;
-    ULONG CacheReadCount;
-    ULONG CacheIoCount;
-    ULONG DirtyPagesWriteCount;
-    ULONG DirtyWriteIoCount;
-    ULONG MappedPagesWriteCount;
-    ULONG MappedWriteIoCount;
-    ULONG PagedPoolPages;
-    ULONG NonPagedPoolPages;
-    ULONG PagedPoolAllocs;
-    ULONG PagedPoolFrees;
-    ULONG NonPagedPoolAllocs;
-    ULONG NonPagedPoolFrees;
-    ULONG FreeSystemPtes;
-    BYTE Reserved1[172];
-} OWN_SYSTEM_PERFORMANCE_INFORMATION;
-
-typedef struct {
     ULONG NextEntryOffset;
     ULONG NumberOfThreads;
     LONGLONG WorkingSetPrivateSize;
@@ -469,29 +434,16 @@ int ProcessMonitor::calcCpuUsage()
 //--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcMemoryUsage()
 {
-    NtQuerySystemInformationFunc nt_query_system_information_func =
-        reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
-    if (!nt_query_system_information_func)
-        return 0;
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
 
-    OWN_SYSTEM_PERFORMANCE_INFORMATION perf_info;
-    NTSTATUS status = nt_query_system_information_func(
-        SystemPerformanceInformation, &perf_info, sizeof(perf_info), nullptr);
-    if (!NT_SUCCESS(status))
+    if (!GlobalMemoryStatusEx(&status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
         return 0;
     }
 
-    int current_memory_usage = 0;
-    if (total_physical_pages_)
-    {
-        uint32_t available_physical_pages = perf_info.AvailablePages * page_size_;
-        current_memory_usage = static_cast<int>(
-            100 - (available_physical_pages * 100) / total_physical_pages_);
-    }
-
-    return current_memory_usage;
+    return status.dwMemoryLoad;
 }
 
 //--------------------------------------------------------------------------------------------------
