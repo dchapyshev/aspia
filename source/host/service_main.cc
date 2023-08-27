@@ -218,7 +218,7 @@ int hostServiceMain(int argc, char* argv[])
 
     base::ScopedLogging scoped_logging(logging_settings);
 
-    base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
+    base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
 
     LOG(LS_INFO) << "Command line: " << command_line->commandLineString();

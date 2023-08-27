@@ -59,6 +59,11 @@ protected:
 #endif // defined(OS_WIN)
 
 private:
+#if defined(OS_POSIX)
+    void signalHandlerImpl(int sig);
+    static void signalHandler(int sig);
+#endif // defined(OS_POSIX)
+
     MessageLoop::Type type_;
     std::u16string name_;
     std::unique_ptr<MessageLoop> message_loop_;

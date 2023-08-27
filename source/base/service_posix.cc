@@ -20,25 +20,45 @@
 
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
-#include "base/message_loop/message_loop_task_runner.h"
+
+#include <signal.h>
 
 namespace base {
 
+namespace {
+
+Service* g_self = nullptr;
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
 Service::Service(std::u16string_view name, MessageLoop::Type type)
     : type_(type),
       name_(name)
 {
     LOG(LS_INFO) << "Ctor";
+    g_self = this;
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(LS_INFO) << "Dtor";
+    g_self = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::exec()
 {
     LOG(LS_INFO) << "Begin";
+
+    signal(SIGKILL, signalHandler);
+    signal(SIGTERM, signalHandler);
+    signal(SIGHUP, signalHandler);
+    signal(SIGQUIT, signalHandler);
+    signal(SIGINT, signalHandler);
+    signal(SIGSTOP, signalHandler);
+    signal(SIGABRT, signalHandler);
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
@@ -47,10 +67,48 @@ void Service::exec()
     message_loop_ = std::make_unique<MessageLoop>(type_);
     task_runner_ = message_loop_->taskRunner();
 
+    task_runner_->postTask(std::bind(&Service::onStart, this));
+
     message_loop_->run();
     message_loop_.reset();
 
     LOG(LS_INFO) << "End";
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::signalHandlerImpl(int sig)
+{
+    if (!task_runner_->belongsToCurrentThread())
+    {
+        task_runner_->postTask(std::bind(&Service::signalHandlerImpl, this, sig));
+        return;
+    }
+
+    switch (sig)
+    {
+        case SIGKILL:
+        case SIGTERM:
+        case SIGHUP:
+        case SIGQUIT:
+        case SIGINT:
+        case SIGSTOP:
+        case SIGABRT:
+            onStop();
+            break;
+
+        default:
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Service::signalHandler(int sig)
+{
+    LOG(LS_INFO) << "Signal received: " << sig;
+
+    if (g_self)
+        g_self->signalHandlerImpl(sig);
 }
 
 } // namespace base
