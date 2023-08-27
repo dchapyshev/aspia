@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_WIN_SERVICE_MAIN_H
-#define HOST_WIN_SERVICE_MAIN_H
+#ifndef HOST_SERVICE_MAIN_H
+#define HOST_SERVICE_MAIN_H
 
 #include "host/host_export.h"
 #include "build/build_config.h"
@@ -32,4 +32,4 @@ int HOST_EXPORT hostServiceMain(int argc, char* argv[]);
 
 } // namespace host
 
-#endif // HOST_WIN_SERVICE_MAIN_H
+#endif // HOST_SERVICE_MAIN_H
