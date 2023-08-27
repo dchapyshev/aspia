@@ -62,13 +62,13 @@ public:
         // properly while the object is still alive.
         virtual void cancel() = 0;
 
-    protected:
-        friend class FilePathWatcher;
-
         std::shared_ptr<TaskRunner> taskRunner() const
         {
             return task_runner_;
         }
+
+    protected:
+        friend class FilePathWatcher;
 
         // Must be called before the PlatformDelegate is deleted.
         void setCancelled()
