@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopResizer> DesktopResizer::create()
 {

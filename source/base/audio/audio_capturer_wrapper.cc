@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> channel_proxy)
     : channel_proxy_(std::move(channel_proxy)),
       thread_(std::make_unique<Thread>())
@@ -31,16 +32,19 @@ AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> chan
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::~AudioCapturerWrapper()
 {
     thread_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::start()
 {
     thread_->start(MessageLoop::Type::ASIO, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::onBeforeThreadRunning()
 {
 #if defined(OS_WIN)
@@ -57,6 +61,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::onAfterThreadRunning()
 {
     capturer_.reset();

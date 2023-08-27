@@ -22,6 +22,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpDefault::run(Delegate* delegate)
 {
     DCHECK(keep_running_) << "Quit must have been called outside of Run!";
@@ -92,11 +93,13 @@ void MessagePumpDefault::run(Delegate* delegate)
     keep_running_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpDefault::quit()
 {
     keep_running_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpDefault::scheduleWork()
 {
     {
@@ -108,6 +111,7 @@ void MessagePumpDefault::scheduleWork()
     event_.notify_one();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpDefault::scheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can

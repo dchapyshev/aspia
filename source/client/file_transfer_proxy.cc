@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileTransferProxy::FileTransferProxy(
     std::shared_ptr<base::TaskRunner> io_task_runner, FileTransfer* file_transfer)
     : io_task_runner_(std::move(io_task_runner)),
@@ -33,17 +34,20 @@ FileTransferProxy::FileTransferProxy(
     DCHECK(file_transfer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTransferProxy::~FileTransferProxy()
 {
     DCHECK(!file_transfer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::dettach()
 {
     DCHECK(io_task_runner_->belongsToCurrentThread());
     file_transfer_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::stop()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -56,6 +60,7 @@ void FileTransferProxy::stop()
         file_transfer_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTransferProxy::setAction(
     FileTransfer::Error::Type error_type, FileTransfer::Error::Action action)
 {

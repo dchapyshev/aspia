@@ -29,6 +29,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string_view name)
     : path_(path),
       name_(name)
@@ -36,11 +37,13 @@ WebmFileWriter::WebmFileWriter(const std::filesystem::path& path, std::u16string
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 WebmFileWriter::~WebmFileWriter()
 {
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
 {
     if (packet.encoding() != last_video_encoding_ || packet.has_format())
@@ -116,6 +119,7 @@ void WebmFileWriter::addVideoPacket(const proto::VideoPacket& packet)
     muxer_->writeVideoFrame(packet.data(), timestamp, is_key_frame);
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
 {
     if (packet.encoding() != proto::AUDIO_ENCODING_OPUS ||
@@ -149,6 +153,7 @@ void WebmFileWriter::addAudioPacket(const proto::AudioPacket& packet)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WebmFileWriter::init()
 {
     std::error_code error_code;
@@ -217,6 +222,7 @@ bool WebmFileWriter::init()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WebmFileWriter::close()
 {
     last_video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;

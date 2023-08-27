@@ -22,12 +22,14 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 VideoEncoder::VideoEncoder(proto::VideoEncoding encoding)
     : encoding_(encoding)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void VideoEncoder::fillPacketInfo(const Frame* frame, proto::VideoPacket* packet)
 {
     packet->set_encoding(encoding_);

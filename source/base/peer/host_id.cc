@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 bool isHostIdT(T str)
 {
@@ -43,6 +44,7 @@ bool isHostIdT(T str)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 HostId stringToHostIdT(T str)
 {
@@ -62,26 +64,31 @@ const HostId kInvalidHostId = 0;
 
 static_assert(sizeof(HostId) == 8);
 
+//--------------------------------------------------------------------------------------------------
 bool isHostId(std::u16string_view str)
 {
     return isHostIdT(str);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isHostId(std::string_view str)
 {
     return isHostIdT(str);
 }
 
+//--------------------------------------------------------------------------------------------------
 HostId stringToHostId(std::u16string_view str)
 {
     return stringToHostIdT(str);
 }
 
+//--------------------------------------------------------------------------------------------------
 HostId stringToHostId(std::string_view str)
 {
     return stringToHostIdT(str);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string hostIdToString16(HostId host_id)
 {
     if (host_id == kInvalidHostId)
@@ -90,6 +97,7 @@ std::u16string hostIdToString16(HostId host_id)
     return numberToString16(host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string hostIdToString(HostId host_id)
 {
     if (host_id == kInvalidHostId)

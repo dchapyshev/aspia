@@ -46,6 +46,7 @@ enum ItemType
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
                                          Mode mode,
                                          const QString& parent_name,
@@ -74,22 +75,22 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
 
     QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setIcon(0, QIcon(":/img/computer.png"));
     general_item->setText(0, tr("General"));
 
     QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setIcon(0, QIcon(":/img/settings.png"));
     sessions_item->setText(0, tr("Sessions"));
 
     ui.tree_category->addTopLevelItem(general_item);
     ui.tree_category->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
     desktop_manage_item->setText(0, tr("Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
     desktop_view_item->setText(0, tr("View"));
 
     sessions_item->addChild(desktop_manage_item);
@@ -131,17 +132,20 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     ui.tree_category->expandAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialog::~ComputerGroupDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)
 {
     settings_.setComputerGroupDialogGeometry(saveGeometry());
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
@@ -156,6 +160,7 @@ bool ComputerGroupDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::keyPressEvent(QKeyEvent* event)
 {
     if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
@@ -170,6 +175,7 @@ void ComputerGroupDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
@@ -187,17 +193,20 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
         showTab(current->type());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showTab(int type)
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
@@ -210,6 +219,7 @@ void ComputerGroupDialog::showTab(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialog::saveChanges()
 {
     QString name = ui.edit_name->text();

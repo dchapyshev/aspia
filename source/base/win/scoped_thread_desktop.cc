@@ -22,17 +22,20 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScopedThreadDesktop::ScopedThreadDesktop()
     : initial_(Desktop::threadDesktop())
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedThreadDesktop::~ScopedThreadDesktop()
 {
     revert();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedThreadDesktop::isSame(const Desktop& desktop) const
 {
     if (assigned_.isValid())
@@ -41,6 +44,7 @@ bool ScopedThreadDesktop::isSame(const Desktop& desktop) const
     return initial_.isSame(desktop);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedThreadDesktop::revert()
 {
     if (assigned_.isValid())
@@ -50,6 +54,7 @@ void ScopedThreadDesktop::revert()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedThreadDesktop::setThreadDesktop(Desktop&& desktop)
 {
     revert();

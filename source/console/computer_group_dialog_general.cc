@@ -28,6 +28,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_group, QWidget* parent)
     : ComputerGroupDialogTab(type, is_root_group, parent)
 {
@@ -60,11 +61,13 @@ ComputerGroupDialogGeneral::ComputerGroupDialogGeneral(int type, bool is_root_gr
     ui.edit_username->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupDialogGeneral::~ComputerGroupDialogGeneral()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::restoreSettings(
     const proto::address_book::ComputerGroupConfig& group_config)
 {
@@ -87,6 +90,7 @@ void ComputerGroupDialogGeneral::restoreSettings(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroupConfig* group_config)
 {
     std::u16string username = ui.edit_username->text().toStdU16String();
@@ -112,6 +116,7 @@ bool ComputerGroupDialogGeneral::saveSettings(proto::address_book::ComputerGroup
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
 {
     if (checked)
@@ -129,6 +134,7 @@ void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();

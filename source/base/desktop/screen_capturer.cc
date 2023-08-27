@@ -22,22 +22,26 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenCapturer(Type type)
     : type_(type)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
 {
     return shared_memory_factory_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const char* ScreenCapturer::typeToString(Type type)
 {
     switch (type)
@@ -68,6 +72,7 @@ const char* ScreenCapturer::typeToString(Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::Type ScreenCapturer::type() const
 {
     return type_;

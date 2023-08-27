@@ -41,9 +41,9 @@ public:
     void readStatus(const proto::TextChatStatus& status);
 
 signals:
-    void sendMessage(const proto::TextChatMessage& message);
-    void sendStatus(const proto::TextChatStatus& status);
-    void textChatClosed();
+    void sig_sendMessage(const proto::TextChatMessage& message);
+    void sig_sendStatus(const proto::TextChatStatus& status);
+    void sig_textChatClosed();
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;

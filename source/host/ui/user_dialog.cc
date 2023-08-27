@@ -27,6 +27,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
       exist_names_(exist_names),
@@ -75,11 +76,11 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(QStringLiteral(":/img/monitor-keyboard.png"), proto::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(QStringLiteral(":/img/monitor.png"), proto::SESSION_TYPE_DESKTOP_VIEW);
-    add_session(QStringLiteral(":/img/folder-stand.png"), proto::SESSION_TYPE_FILE_TRANSFER);
-    add_session(QStringLiteral(":/img/computer_info.png"), proto::SESSION_TYPE_SYSTEM_INFO);
-    add_session(QStringLiteral(":/img/text-chat.png"), proto::SESSION_TYPE_TEXT_CHAT);
+    add_session(":/img/monitor-keyboard.png", proto::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(":/img/monitor.png", proto::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(":/img/folder-stand.png", proto::SESSION_TYPE_FILE_TRANSFER);
+    add_session(":/img/computer_info.png", proto::SESSION_TYPE_SYSTEM_INFO);
+    add_session(":/img/text-chat.png", proto::SESSION_TYPE_TEXT_CHAT);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
@@ -92,11 +93,13 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 UserDialog::~UserDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
@@ -113,28 +116,31 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckAllButtonPressed()
 {
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onCheckNoneButtonPressed()
 {
     for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
         if (account_changed_)
         {
-            std::u16string name = ui.edit_username->text().toStdU16String();
+            std::u16string username = ui.edit_username->text().toStdU16String();
             std::u16string password = ui.edit_password->text().toStdU16String();
 
-            if (!base::User::isValidUserName(name))
+            if (!base::User::isValidUserName(username))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -146,7 +152,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (exist_names_.contains(name, Qt::CaseInsensitive))
+            if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
@@ -213,7 +219,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
 
-            user_ = base::User::create(name, password);
+            user_ = base::User::create(username, password);
             if (!user_.isValid())
             {
                 QMessageBox::warning(this,
@@ -249,6 +255,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserDialog::setAccountChanged(bool changed)
 {
     account_changed_ = changed;

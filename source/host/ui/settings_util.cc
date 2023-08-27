@@ -27,6 +27,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
@@ -47,6 +48,7 @@ bool SettingsUtil::importFromFile(const std::filesystem::path& path, bool silent
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, QWidget* parent)
 {
@@ -67,6 +69,7 @@ bool SettingsUtil::exportToFile(const std::filesystem::path& path, bool silent, 
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
                                 const std::filesystem::path& target_path,

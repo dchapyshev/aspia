@@ -25,6 +25,7 @@ namespace common {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 time_t fileTimeToUnixTime(const FILETIME& file_time)
 {
     ULARGE_INTEGER ull;
@@ -35,6 +36,7 @@ time_t fileTimeToUnixTime(const FILETIME& file_time)
     return ull.QuadPart / 10000000ULL - 11644473600ULL;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool shouldSkip(std::wstring_view file_name)
 {
     return file_name == L"." || file_name == L"..";
@@ -44,26 +46,31 @@ bool shouldSkip(std::wstring_view file_name)
 
 // FileEnumerator::FileInfo ----------------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::FileInfo::FileInfo()
 {
     memset(&find_data_, 0, sizeof(find_data_));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileEnumerator::FileInfo::isDirectory() const
 {
     return (find_data_.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::filesystem::path FileEnumerator::FileInfo::name() const
 {
     return std::filesystem::path(find_data_.cFileName);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string FileEnumerator::FileInfo::u8name() const
 {
     return base::utf8FromWide(find_data_.cFileName);
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t FileEnumerator::FileInfo::size() const
 {
     ULARGE_INTEGER size;
@@ -72,6 +79,7 @@ int64_t FileEnumerator::FileInfo::size() const
     return static_cast<int64_t>(size.QuadPart);
 }
 
+//--------------------------------------------------------------------------------------------------
 time_t FileEnumerator::FileInfo::lastWriteTime() const
 {
     return fileTimeToUnixTime(find_data_.ftLastWriteTime);
@@ -79,6 +87,7 @@ time_t FileEnumerator::FileInfo::lastWriteTime() const
 
 // FileEnumerator --------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
 {
     std::filesystem::path filter(root_path);
@@ -125,17 +134,20 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 FileEnumerator::~FileEnumerator()
 {
     if (find_handle_ != INVALID_HANDLE_VALUE)
         FindClose(find_handle_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FileEnumerator::isAtEnd() const
 {
     return find_handle_ == INVALID_HANDLE_VALUE;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileEnumerator::advance()
 {
     while (find_handle_ != INVALID_HANDLE_VALUE)

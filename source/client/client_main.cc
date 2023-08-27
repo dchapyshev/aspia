@@ -24,10 +24,10 @@
 #include "client/ui/application.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/client_window.h"
-#include "client/ui/qt_desktop_window.h"
-#include "client/ui/qt_file_manager_window.h"
-#include "client/ui/qt_system_info_window.h"
-#include "client/ui/qt_text_chat_window.h"
+#include "client/ui/desktop/qt_desktop_window.h"
+#include "client/ui/file_transfer/qt_file_manager_window.h"
+#include "client/ui/sys_info/qt_system_info_window.h"
+#include "client/ui/text_chat/qt_text_chat_window.h"
 #include "qt_base/scoped_qt_logging.h"
 
 #if defined(OS_WIN)
@@ -37,6 +37,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -50,6 +51,7 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
+//--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
 {
     QMessageBox::warning(
@@ -59,25 +61,26 @@ void onInvalidValue(const QString& arg, const QString& values)
         QMessageBox::Ok);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCodecValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("vp8"))
+        if (value == "vp8")
         {
             config.set_video_encoding(proto::VIDEO_ENCODING_VP8);
         }
-        else if (value == QLatin1String("vp9"))
+        else if (value == "vp9")
         {
             config.set_video_encoding(proto::VIDEO_ENCODING_VP9);
         }
-        else if (value == QLatin1String("zstd"))
+        else if (value == "zstd")
         {
             config.set_video_encoding(proto::VIDEO_ENCODING_ZSTD);
         }
         else
         {
-            onInvalidValue(QStringLiteral("codec"), QStringLiteral("vp8, vp9, zstd"));
+            onInvalidValue("codec", "vp8, vp9, zstd");
             return false;
         }
     }
@@ -85,33 +88,34 @@ bool parseCodecValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("32"))
+        if (value == "32")
         {
             serializePixelFormat(base::PixelFormat::ARGB(), config.mutable_pixel_format());
         }
-        else if (value == QLatin1String("16"))
+        else if (value == "16")
         {
             serializePixelFormat(base::PixelFormat::RGB565(), config.mutable_pixel_format());
         }
-        else if (value == QLatin1String("8"))
+        else if (value == "8")
         {
             serializePixelFormat(base::PixelFormat::RGB332(), config.mutable_pixel_format());
         }
-        else if (value == QLatin1String("6"))
+        else if (value == "6")
         {
             serializePixelFormat(base::PixelFormat::RGB222(), config.mutable_pixel_format());
         }
-        else if (value == QLatin1String("3"))
+        else if (value == "3")
         {
             serializePixelFormat(base::PixelFormat::RGB111(), config.mutable_pixel_format());
         }
         else
         {
-            onInvalidValue(QStringLiteral("color-depth"), QStringLiteral("3, 6, 8, 16, 32"));
+            onInvalidValue("color-depth", "3, 6, 8, 16, 32");
             return false;
         }
     }
@@ -119,6 +123,7 @@ bool parseColorDepthValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
@@ -130,7 +135,7 @@ bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
         }
         else
         {
-            onInvalidValue(QStringLiteral("compress-ratio"), QStringLiteral("1-22"));
+            onInvalidValue("compress-ratio", "1-22");
             return false;
         }
     }
@@ -138,21 +143,22 @@ bool parseCompressRatioValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseAudioValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_audio_encoding(proto::AUDIO_ENCODING_UNKNOWN);
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_audio_encoding(proto::AUDIO_ENCODING_OPUS);
         }
         else
         {
-            onInvalidValue(QStringLiteral("audio"), QStringLiteral("0, 1"));
+            onInvalidValue("audio", "0, 1");
             return false;
         }
     }
@@ -160,21 +166,22 @@ bool parseAudioValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CURSOR_SHAPE));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::ENABLE_CURSOR_SHAPE);
         }
         else
         {
-            onInvalidValue(QStringLiteral("cursor-shape"), QStringLiteral("0, 1"));
+            onInvalidValue("cursor-shape", "0, 1");
             return false;
         }
     }
@@ -182,21 +189,22 @@ bool parseCursorShapeValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CURSOR_POSITION));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::CURSOR_POSITION);
         }
         else
         {
-            onInvalidValue(QStringLiteral("cursor-position"), QStringLiteral("0, 1"));
+            onInvalidValue("cursor-position", "0, 1");
             return false;
         }
     }
@@ -204,21 +212,22 @@ bool parseCursorPositionValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::ENABLE_CLIPBOARD));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::ENABLE_CLIPBOARD);
         }
         else
         {
-            onInvalidValue(QStringLiteral("clipboard"), QStringLiteral("0, 1"));
+            onInvalidValue("clipboard", "0, 1");
             return false;
         }
     }
@@ -226,21 +235,22 @@ bool parseClipboardValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() | proto::DISABLE_DESKTOP_EFFECTS);
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_EFFECTS));
         }
         else
         {
-            onInvalidValue(QStringLiteral("desktop-effects"), QStringLiteral("0, 1"));
+            onInvalidValue("desktop-effects", "0, 1");
             return false;
         }
     }
@@ -248,21 +258,22 @@ bool parseDesktopEffectsValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() | proto::DISABLE_DESKTOP_WALLPAPER);
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_DESKTOP_WALLPAPER));
         }
         else
         {
-            onInvalidValue(QStringLiteral("desktop-wallpaper"), QStringLiteral("0, 1"));
+            onInvalidValue("desktop-wallpaper", "0, 1");
             return false;
         }
     }
@@ -270,21 +281,22 @@ bool parseDesktopWallpaperValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() | proto::DISABLE_FONT_SMOOTHING);
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::DISABLE_FONT_SMOOTHING));
         }
         else
         {
-            onInvalidValue(QStringLiteral("font-smoothing"), QStringLiteral("0, 1"));
+            onInvalidValue("font-smoothing", "0, 1");
             return false;
         }
     }
@@ -292,21 +304,22 @@ bool parseFontSmoothingValue(const QString& value, proto::DesktopConfig& config)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::CLEAR_CLIPBOARD));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::CLEAR_CLIPBOARD);
         }
         else
         {
-            onInvalidValue(QStringLiteral("clear-clipboard"), QStringLiteral("0, 1"));
+            onInvalidValue("clear-clipboard", "0, 1");
             return false;
         }
     }
@@ -314,21 +327,22 @@ bool parseClearClipboardValue(const QString& value, proto::DesktopConfig& config
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::LOCK_AT_DISCONNECT));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::LOCK_AT_DISCONNECT);
         }
         else
         {
-            onInvalidValue(QStringLiteral("lock-at-disconnect"), QStringLiteral("0, 1"));
+            onInvalidValue("lock-at-disconnect", "0, 1");
             return false;
         }
     }
@@ -336,21 +350,22 @@ bool parseLockAtDisconnectValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& config)
 {
     if (!value.isEmpty())
     {
-        if (value == QLatin1String("0"))
+        if (value == "0")
         {
             config.set_flags(config.flags() & ~static_cast<uint32_t>(proto::BLOCK_REMOTE_INPUT));
         }
-        else if (value == QLatin1String("1"))
+        else if (value == "1")
         {
             config.set_flags(config.flags() | proto::BLOCK_REMOTE_INPUT);
         }
         else
         {
-            onInvalidValue(QStringLiteral("block-remote-input"), QStringLiteral("0, 1"));
+            onInvalidValue("block-remote-input", "0, 1");
             return false;
         }
     }
@@ -358,6 +373,7 @@ bool parseBlockRemoteInputValue(const QString& value, proto::DesktopConfig& conf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 int clientMain(int argc, char* argv[])
 {
 #if !defined(I18L_DISABLED)
@@ -391,100 +407,100 @@ int clientMain(int argc, char* argv[])
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
-    QCommandLineOption address_option(QStringLiteral("address"),
+    QCommandLineOption address_option("address",
         QApplication::translate("Client", "Remote computer address."),
-        QStringLiteral("address"));
+        "address");
 
-    QCommandLineOption port_option(QStringLiteral("port"),
+    QCommandLineOption port_option("port",
         QApplication::translate("Client", "Remote computer port."),
-        QStringLiteral("port"),
+        "port",
         QString::number(DEFAULT_HOST_TCP_PORT));
 
-    QCommandLineOption name_option(QStringLiteral("name"),
+    QCommandLineOption name_option("name",
         QApplication::translate("Client", "Name of host."),
-        QStringLiteral("name"));
+        "name");
 
-    QCommandLineOption username_option(QStringLiteral("username"),
+    QCommandLineOption username_option("username",
         QApplication::translate("Client", "Name of user."),
-        QStringLiteral("username"));
+        "username");
 
-    QCommandLineOption password_option(QStringLiteral("password"),
+    QCommandLineOption password_option("password",
         QApplication::translate("Client", "Password of user."),
-        QStringLiteral("password"));
+        "password");
 
-    QCommandLineOption session_type_option(QStringLiteral("session-type"),
+    QCommandLineOption session_type_option("session-type",
         QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
                                 "desktop-view, file-transfer, system-info, text-chat."),
-        QStringLiteral("desktop-manage"));
+        "desktop-manage");
 
-    QCommandLineOption codec_option(QStringLiteral("codec"),
+    QCommandLineOption codec_option("codec",
         QApplication::translate("Client", "Type of codec. Possible values: vp8, vp9, zstd."),
-        QStringLiteral("codec"));
+        "codec");
 
-    QCommandLineOption color_depth_option(QStringLiteral("color-depth"),
+    QCommandLineOption color_depth_option("color-depth",
         QApplication::translate("Client", "Color depth. Possible values: 3, 6, 8, 16, 32."),
-        QStringLiteral("color-depth"));
+        "color-depth");
 
-    QCommandLineOption compress_ratio_option(QStringLiteral("compress-ratio"),
+    QCommandLineOption compress_ratio_option("compress-ratio",
         QApplication::translate("Client", "Compression ratio. Possible values: 1-22."),
-        QStringLiteral("compress-ratio"));
+        "compress-ratio");
 
-    QCommandLineOption audio_option(QStringLiteral("audio"),
+    QCommandLineOption audio_option("audio",
         QApplication::translate("Client", "Enable or disable audio. Possible values: 0 or 1."),
-        QStringLiteral("audio"));
+        "audio");
 
-    QCommandLineOption cursor_shape_option(QStringLiteral("cursor-shape"),
+    QCommandLineOption cursor_shape_option("cursor-shape",
         QApplication::translate("Client", "Enable or disable cursor shape. Possible values: 0 or 1."),
-        QStringLiteral("cursor-shape"));
+        "cursor-shape");
 
-    QCommandLineOption cursor_position_option(QStringLiteral("cursor-position"),
+    QCommandLineOption cursor_position_option("cursor-position",
         QApplication::translate("Client", "Enable or disable cursor position. Possible values: 0 or 1."),
-        QStringLiteral("cursor-position"));
+        "cursor-position");
 
-    QCommandLineOption clipboard_option(QStringLiteral("clipboard"),
+    QCommandLineOption clipboard_option("clipboard",
         QApplication::translate("Client", "Enable or disable clipboard. Possible values: 0 or 1."),
-        QStringLiteral("clipboard"));
+        "clipboard");
 
-    QCommandLineOption desktop_effects_option(QStringLiteral("desktop-effects"),
+    QCommandLineOption desktop_effects_option("desktop-effects",
         QApplication::translate("Client", "Enable or disable desktop effects. Possible values: 0 or 1."),
-        QStringLiteral("desktop-effects"));
+        "desktop-effects");
 
-    QCommandLineOption desktop_wallpaper_option(QStringLiteral("desktop-wallpaper"),
+    QCommandLineOption desktop_wallpaper_option("desktop-wallpaper",
         QApplication::translate("Client", "Enable or disable desktop wallpaper. Possible values: 0 or 1."),
-        QStringLiteral("desktop-wallpaper"));
+        "desktop-wallpaper");
 
-    QCommandLineOption font_smoothing_option(QStringLiteral("font-smoothing"),
+    QCommandLineOption font_smoothing_option("font-smoothing",
         QApplication::translate("Client", "Enable or disable font smoothing. Possible values: 0 or 1."),
-        QStringLiteral("font-smoothing"));
+        "font-smoothing");
 
-    QCommandLineOption clear_clipboard_option(QStringLiteral("clear-clipboard"),
+    QCommandLineOption clear_clipboard_option("clear-clipboard",
         QApplication::translate("Client", "Clear clipboard at disconnect. Possible values: 0 or 1."),
-        QStringLiteral("clear-clipboard"));
+        "clear-clipboard");
 
-    QCommandLineOption lock_at_disconnect_option(QStringLiteral("lock-at-disconnect"),
+    QCommandLineOption lock_at_disconnect_option("lock-at-disconnect",
         QApplication::translate("Client", "Lock computer at disconnect. Possible values: 0 or 1."),
-        QStringLiteral("lock-at-disconnect"));
+        "lock-at-disconnect");
 
-    QCommandLineOption block_remote_input_option(QStringLiteral("block-remote-input"),
+    QCommandLineOption block_remote_input_option("block-remote-input",
         QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
-        QStringLiteral("block-remote-input"));
+        "block-remote-input");
 
-   QCommandLineOption router_address_option(QStringLiteral("router-address"),
+   QCommandLineOption router_address_option("router-address",
         QApplication::translate("Client", "Router address."),
-        QStringLiteral("router-address"));
+        "router-address");
 
-    QCommandLineOption router_port_option(QStringLiteral("router-port"),
+    QCommandLineOption router_port_option("router-port",
         QApplication::translate("Client", "Router port."),
-        QStringLiteral("router-port"),
+        "router-port",
         QString::number(8060));
 
-    QCommandLineOption router_username_option(QStringLiteral("router-username"),
+    QCommandLineOption router_username_option("router-username",
         QApplication::translate("Client", "Router name of user."),
-        QStringLiteral("router-username"));
+        "router-username");
 
-    QCommandLineOption router_password_option(QStringLiteral("router-password"),
+    QCommandLineOption router_password_option("router-password",
         QApplication::translate("Client", "Router password of user."),
-        QStringLiteral("router-password"));
+        "router-password");
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
@@ -534,32 +550,32 @@ int clientMain(int argc, char* argv[])
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == QLatin1String("desktop-manage"))
+        if (session_type == "desktop-manage")
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_MANAGE;
             desktop_config = client::ConfigFactory::defaultDesktopManageConfig();
         }
-        else if (session_type == QLatin1String("desktop-view"))
+        else if (session_type == "desktop-view")
         {
             config.session_type = proto::SESSION_TYPE_DESKTOP_VIEW;
             desktop_config = client::ConfigFactory::defaultDesktopViewConfig();
         }
-        else if (session_type == QLatin1String("file-transfer"))
+        else if (session_type == "file-transfer")
         {
             config.session_type = proto::SESSION_TYPE_FILE_TRANSFER;
         }
-        else if (session_type == QLatin1String("system-info"))
+        else if (session_type == "system-info")
         {
             config.session_type = proto::SESSION_TYPE_SYSTEM_INFO;
         }
-        else if (session_type == QLatin1String("text-chat"))
+        else if (session_type == "text-chat")
         {
             config.session_type = proto::SESSION_TYPE_TEXT_CHAT;
         }
         else
         {
-            onInvalidValue(QStringLiteral("session-type"),
-                           QStringLiteral("desktop-manage, desktop-view, file-transfer, system-info, text-chat"));
+            onInvalidValue("session-type",
+                           "desktop-manage, desktop-view, file-transfer, system-info, text-chat");
             return 1;
         }
 

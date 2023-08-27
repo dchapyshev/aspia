@@ -23,6 +23,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionFake::DesktopSessionFake(
     std::shared_ptr<base::TaskRunner> /* task_runner */, Delegate* delegate)
     : delegate_(delegate)
@@ -31,11 +32,13 @@ DesktopSessionFake::DesktopSessionFake(
     DCHECK(delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionFake::~DesktopSessionFake()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::start()
 {
     LOG(LS_INFO) << "Start called for fake session";
@@ -50,12 +53,14 @@ void DesktopSessionFake::start()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::stop()
 {
     LOG(LS_INFO) << "Stop called for fake session";
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "CONTROL with action: " << controlActionToString(action);
@@ -72,42 +77,50 @@ void DesktopSessionFake::control(proto::internal::DesktopControl::Action action)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::configure(const Config& /* config */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::selectScreen(const proto::Screen& /* screen */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::captureScreen()
 {
     if (delegate_)
         delegate_->onScreenCaptureError(proto::VIDEO_ERROR_CODE_TEMPORARY);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::setScreenCaptureFps(int /* fps */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::injectKeyEvent(const proto::KeyEvent& /* event */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::injectTextEvent(const proto::TextEvent& /* event */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::injectMouseEvent(const proto::MouseEvent& /* event */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionFake::injectClipboardEvent(const proto::ClipboardEvent& /* event */)
 {
     // Nothing

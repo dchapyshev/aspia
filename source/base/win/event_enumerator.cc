@@ -29,6 +29,7 @@ namespace base::win {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 void resizeBuffer(ByteArray* buffer, size_t size)
 {
     if (buffer->capacity() < size)
@@ -37,6 +38,7 @@ void resizeBuffer(ByteArray* buffer, size_t size)
     buffer->resize(size);
 }
 
+//--------------------------------------------------------------------------------------------------
 HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* first_record)
 {
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
@@ -61,6 +63,7 @@ HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* fi
     return event_log.release();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool eventLogRecord(HANDLE event_log, DWORD record_offset, ByteArray* record_buffer)
 {
     resizeBuffer(record_buffer, sizeof(EVENTLOGRECORD));
@@ -105,6 +108,7 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, ByteArray* record_buf
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool eventLogMessageFileDLL(
     const wchar_t* log_name, const wchar_t* source, std::wstring* message_file)
 {
@@ -141,6 +145,7 @@ bool eventLogMessageFileDLL(
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 wchar_t* loadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t** arguments)
 {
     HINSTANCE module = LoadLibraryExW(module_name,
@@ -193,6 +198,7 @@ wchar_t* loadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t*
     return message_buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool eventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstring* message)
 {
     wchar_t* source = reinterpret_cast<wchar_t*>(record + 1);
@@ -268,6 +274,7 @@ bool eventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstri
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 EventEnumerator::EventEnumerator(std::wstring_view log_name, uint32_t start, uint32_t count)
     : log_name_(log_name)
 {
@@ -300,13 +307,16 @@ EventEnumerator::EventEnumerator(std::wstring_view log_name, uint32_t start, uin
                  << " pos: " << current_pos_ << " end: " << end_record_;
 }
 
+//--------------------------------------------------------------------------------------------------
 EventEnumerator::~EventEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 uint32_t EventEnumerator::count() const
 {
     return records_count_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool EventEnumerator::isAtEnd() const
 {
     if (!event_log_.isValid())
@@ -325,12 +335,14 @@ bool EventEnumerator::isAtEnd() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void EventEnumerator::advance()
 {
     record_buffer_.clear();
     --current_pos_;
 }
 
+//--------------------------------------------------------------------------------------------------
 EventEnumerator::Type EventEnumerator::type() const
 {
     switch (record()->EventType)
@@ -358,26 +370,31 @@ EventEnumerator::Type EventEnumerator::type() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 int64_t EventEnumerator::time() const
 {
     return record()->TimeGenerated;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string EventEnumerator::category() const
 {
     return numberToString(record()->EventCategory);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t EventEnumerator::eventId() const
 {
     return record()->EventID & 0xFFFF;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string EventEnumerator::source() const
 {
     return utf8FromWide(reinterpret_cast<wchar_t*>(record() + 1));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string EventEnumerator::description() const
 {
     std::wstring desc_wide;
@@ -387,6 +404,7 @@ std::string EventEnumerator::description() const
     return utf8FromWide(desc_wide);
 }
 
+//--------------------------------------------------------------------------------------------------
 EVENTLOGRECORD* EventEnumerator::record() const
 {
     return reinterpret_cast<EVENTLOGRECORD*>(record_buffer_.data());

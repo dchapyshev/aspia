@@ -29,6 +29,7 @@ const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UserSettings::UserSettings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
@@ -38,33 +39,40 @@ UserSettings::UserSettings()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSettings::~UserSettings() = default;
 
+//--------------------------------------------------------------------------------------------------
 QString UserSettings::filePath() const
 {
     return settings_.fileName();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserSettings::isWritable() const
 {
     return settings_.isWritable();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::sync()
 {
     settings_.sync();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString UserSettings::locale() const
 {
     return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserSettings::showIconsInMenus() const
 {
     bool defaultValue;
@@ -78,6 +86,7 @@ bool UserSettings::showIconsInMenus() const
     return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSettings::setShowIconsInMenus(bool enable)
 {
     settings_.setValue(kShowIconsInMenusParam, enable);

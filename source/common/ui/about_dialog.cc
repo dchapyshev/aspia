@@ -84,6 +84,7 @@ const char* kThirdParty[] =
     "Fugue Icons &copy; 2013 Yusuke Kamiyamane; Creative Commons Attribution 3.0 License"
 };
 
+//--------------------------------------------------------------------------------------------------
 QString createList(const QString& title, const char* array[], size_t array_size)
 {
     if (!array_size)
@@ -103,6 +104,7 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     : QDialog(parent),
       ui(new Ui::AboutDialog())
@@ -236,11 +238,13 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     connect(ui->push_button_close, &QPushButton::clicked, this, &AboutDialog::close);
 }
 
+//--------------------------------------------------------------------------------------------------
 AboutDialog::~AboutDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void AboutDialog::onServiceContextMenu(const QPoint& pos)
 {
     QMenu menu;

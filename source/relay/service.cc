@@ -24,14 +24,17 @@
 
 namespace relay {
 
+//--------------------------------------------------------------------------------------------------
 Service::Service()
     : base::Service(kServiceName, base::MessageLoop::Type::ASIO)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Service::~Service() = default;
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStart()
 {
     LOG(LS_INFO) << "Starting service...";
@@ -42,6 +45,7 @@ void Service::onStart()
     LOG(LS_INFO) << "Service started";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
     LOG(LS_INFO) << "Stopping service...";
@@ -52,12 +56,14 @@ void Service::onStop()
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void Service::onSessionEvent(
     base::win::SessionStatus /* event */, base::SessionId /* session_id */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void Service::onPowerEvent(uint32_t /* event */)
 {
     // Nothing

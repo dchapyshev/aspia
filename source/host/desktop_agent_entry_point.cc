@@ -22,6 +22,7 @@
 #if defined(OS_WIN)
 #include <Windows.h>
 
+//--------------------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE /* hInstance */,
                     HINSTANCE /* hPrevInstance */,
                     LPWSTR /* lpCmdLine */,
@@ -33,6 +34,7 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
 
 #else
 
+//--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
     desktopAgentMain(argc, argv);

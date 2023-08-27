@@ -27,6 +27,7 @@
 
 #include <QCommandLineParser>
 
+//--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
 #if !defined(I18L_DISABLED)
@@ -88,10 +89,10 @@ int main(int argc, char *argv[])
     {
         console_window.reset(new console::MainWindow(file_path));
 
-        QObject::connect(&application, &console::Application::windowActivated,
+        QObject::connect(&application, &console::Application::sig_windowActivated,
             console_window.get(), &console::MainWindow::showConsole);
 
-        QObject::connect(&application, &console::Application::fileOpened,
+        QObject::connect(&application, &console::Application::sig_fileOpened,
             console_window.get(), &console::MainWindow::openAddressBook);
 
         console_window->show();

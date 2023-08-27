@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterController::RouterController(const RouterConfig& router_config,
                                    std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
@@ -34,11 +35,13 @@ RouterController::RouterController(const RouterConfig& router_config,
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterController::~RouterController()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
 {
     host_id_ = host_id;
@@ -54,6 +57,7 @@ void RouterController::connectTo(base::HostId host_id, Delegate* delegate)
     channel_->connect(router_config_.address, router_config_.port);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpConnected()
 {
     LOG(LS_INFO) << "Connection to the router is established";
@@ -114,6 +118,7 @@ void RouterController::onTcpConnected()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_INFO) << "Connection to the router is lost ("
@@ -132,6 +137,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
     delegate_->onErrorOccurred(error);
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     Error error;
@@ -201,11 +207,13 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onTcpMessageWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> channel)
 {
     if (delegate_)
@@ -218,6 +226,7 @@ void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> 
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouterController::onRelayConnectionError()
 {
     if (!delegate_)

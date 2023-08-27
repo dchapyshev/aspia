@@ -52,41 +52,6 @@ typedef struct {
 } OWN_SYSTEM_BASIC_INFORMATION;
 
 typedef struct {
-    LARGE_INTEGER IdleProcessTime;
-    LARGE_INTEGER IoReadTransferCount;
-    LARGE_INTEGER IoWriteTransferCount;
-    LARGE_INTEGER IoOtherTransferCount;
-    ULONG IoReadOperationCount;
-    ULONG IoWriteOperationCount;
-    ULONG IoOtherOperationCount;
-    ULONG AvailablePages;
-    ULONG CommittedPages;
-    ULONG CommitLimit;
-    ULONG PeakCommitment;
-    ULONG PageFaultCount;
-    ULONG CopyOnWriteCount;
-    ULONG TransitionCount;
-    ULONG CacheTransitionCount;
-    ULONG DemandZeroCount;
-    ULONG PageReadCount;
-    ULONG PageReadIoCount;
-    ULONG CacheReadCount;
-    ULONG CacheIoCount;
-    ULONG DirtyPagesWriteCount;
-    ULONG DirtyWriteIoCount;
-    ULONG MappedPagesWriteCount;
-    ULONG MappedWriteIoCount;
-    ULONG PagedPoolPages;
-    ULONG NonPagedPoolPages;
-    ULONG PagedPoolAllocs;
-    ULONG PagedPoolFrees;
-    ULONG NonPagedPoolAllocs;
-    ULONG NonPagedPoolFrees;
-    ULONG FreeSystemPtes;
-    BYTE Reserved1[172];
-} OWN_SYSTEM_PERFORMANCE_INFORMATION;
-
-typedef struct {
     ULONG NextEntryOffset;
     ULONG NumberOfThreads;
     LONGLONG WorkingSetPrivateSize;
@@ -192,6 +157,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedPrivilege);
 };
 
+//--------------------------------------------------------------------------------------------------
 std::string userNameByHandle(HANDLE process)
 {
     base::win::ScopedHandle token;
@@ -249,6 +215,7 @@ std::string userNameByHandle(HANDLE process)
     return base::utf8FromWide(user_buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
@@ -263,6 +230,7 @@ std::string filePathByHandle(HANDLE process)
     return base::utf8FromWide(buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
 {
     int64_t cpu_ratio =
@@ -272,6 +240,7 @@ int32_t calcCpuRatio(int64_t cpu_time_delta, int64_t total_time)
     return static_cast<int32_t>(cpu_ratio);
 }
 
+//--------------------------------------------------------------------------------------------------
 void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS_INFORMATION& info,
                    int64_t total_time, bool update_only)
 {
@@ -323,6 +292,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::ProcessMonitor()
 {
     memset(&prev_cpu_idle_time_, 0, sizeof(prev_cpu_idle_time_));
@@ -355,9 +325,6 @@ ProcessMonitor::ProcessMonitor()
     }
     else
     {
-        page_size_ = basic_info.PageSize / 1024;
-        total_physical_pages_ = basic_info.NumberOfPhysicalPages * page_size_;
-
         processor_count_ = static_cast<uint32_t>(basic_info.NumberOfProcessors);
         if (processor_count_ > kMaxCpuCount)
             processor_count_ = kMaxCpuCount;
@@ -385,12 +352,14 @@ ProcessMonitor::ProcessMonitor()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ProcessMonitor::~ProcessMonitor()
 {
     if (ntdll_library_)
         FreeLibrary(reinterpret_cast<HMODULE>(ntdll_library_));
 }
 
+//--------------------------------------------------------------------------------------------------
 const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
 {
     if (reset_cache)
@@ -405,6 +374,7 @@ const ProcessMonitor::ProcessMap& ProcessMonitor::processes(bool reset_cache)
     return table_;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcCpuUsage()
 {
     NtQuerySystemInformationFunc nt_query_system_information_func =
@@ -458,33 +428,22 @@ int ProcessMonitor::calcCpuUsage()
     return current_cpu_usage;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ProcessMonitor::calcMemoryUsage()
 {
-    NtQuerySystemInformationFunc nt_query_system_information_func =
-        reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
-    if (!nt_query_system_information_func)
-        return 0;
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
 
-    OWN_SYSTEM_PERFORMANCE_INFORMATION perf_info;
-    NTSTATUS status = nt_query_system_information_func(
-        SystemPerformanceInformation, &perf_info, sizeof(perf_info), nullptr);
-    if (!NT_SUCCESS(status))
+    if (!GlobalMemoryStatusEx(&status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
         return 0;
     }
 
-    int current_memory_usage = 0;
-    if (total_physical_pages_)
-    {
-        uint32_t available_physical_pages = perf_info.AvailablePages * page_size_;
-        current_memory_usage = static_cast<int>(
-            100 - (available_physical_pages * 100) / total_physical_pages_);
-    }
-
-    return current_memory_usage;
+    return status.dwMemoryLoad;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::endProcess(ProcessId process_id)
 {
     auto result = table_.find(process_id);
@@ -526,6 +485,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ProcessMonitor::updateSnapshot()
 {
     while (true)
@@ -552,6 +512,7 @@ bool ProcessMonitor::updateSnapshot()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ProcessMonitor::updateTable()
 {
     OWN_SYSTEM_PROCESS_INFORMATION* current;

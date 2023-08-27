@@ -25,16 +25,19 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScaleReducer::ScaleReducer()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ScaleReducer::~ScaleReducer()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& target_size)
 {
     DCHECK(source_frame);
@@ -123,6 +126,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     return target_frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 Rect ScaleReducer::scaledRect(const Rect& source_rect)
 {
     int left = static_cast<int>(

@@ -26,11 +26,13 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 ClipboardX11::ClipboardX11()
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ClipboardX11::~ClipboardX11()
 {
     if (display_)
@@ -40,6 +42,7 @@ ClipboardX11::~ClipboardX11()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardX11::init()
 {
     display_ = XOpenDisplay(nullptr);
@@ -62,12 +65,14 @@ void ClipboardX11::init()
     pumpXEvents();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardX11::setData(const std::string& data)
 {
     if (x_server_clipboard_)
         x_server_clipboard_->setClipboard(data);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardX11::pumpXEvents()
 {
     DCHECK(display_ && x_server_clipboard_);

@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void* alignedAlloc(size_t size, size_t alignment)
 {
     DCHECK_GT(size, 0U);

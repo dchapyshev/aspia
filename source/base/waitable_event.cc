@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 WaitableEvent::WaitableEvent(ResetPolicy reset_policy, InitialState initial_state)
     : signal_(initial_state == InitialState::SIGNALED),
       reset_(reset_policy == ResetPolicy::AUTOMATIC)
@@ -27,14 +28,17 @@ WaitableEvent::WaitableEvent(ResetPolicy reset_policy, InitialState initial_stat
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 WaitableEvent::~WaitableEvent() = default;
 
+//--------------------------------------------------------------------------------------------------
 void WaitableEvent::reset()
 {
     std::scoped_lock lock(signal_lock_);
     signal_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableEvent::signal()
 {
     std::scoped_lock lock(signal_lock_);
@@ -42,12 +46,14 @@ void WaitableEvent::signal()
     signal_condition_.notify_all();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WaitableEvent::isSignaled()
 {
     std::scoped_lock lock(signal_lock_);
     return signal_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WaitableEvent::wait(const std::chrono::milliseconds& timeout)
 {
     std::unique_lock lock(signal_lock_);
@@ -65,6 +71,7 @@ bool WaitableEvent::wait(const std::chrono::milliseconds& timeout)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableEvent::wait()
 {
     std::unique_lock lock(signal_lock_);

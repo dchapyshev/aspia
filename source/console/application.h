@@ -41,8 +41,8 @@ public slots:
     void openFile(const QString& file_path);
 
 signals:
-    void windowActivated();
-    void fileOpened(const QString& file_path);
+    void sig_windowActivated();
+    void sig_fileOpened(const QString& file_path);
 
 private:
     Settings settings_;

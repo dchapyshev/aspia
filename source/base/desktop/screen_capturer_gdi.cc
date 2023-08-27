@@ -33,6 +33,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
     // If the cursors are not showing, we do not care the hCursor handle.
@@ -42,6 +43,7 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerGdi::ScreenCapturerGdi()
     : ScreenCapturer(Type::WIN_GDI)
 {
@@ -73,6 +75,7 @@ ScreenCapturerGdi::ScreenCapturerGdi()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerGdi::~ScreenCapturerGdi()
 {
     LOG(LS_INFO) << "Dtor";
@@ -84,16 +87,19 @@ ScreenCapturerGdi::~ScreenCapturerGdi()
         FreeLibrary(dwmapi_dll_);
 }
 
+//--------------------------------------------------------------------------------------------------
 int ScreenCapturerGdi::screenCount()
 {
     return ScreenCaptureUtils::screenCount();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 {
     LOG(LS_INFO) << "Select screen with ID: " << screen_id;
@@ -111,11 +117,13 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerGdi::currentScreen() const
 {
     return current_screen_id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerGdi::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -131,6 +139,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
     return frame;
 }
 
+//--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerGdi::captureCursor()
 {
     if (!desktop_dc_.isValid())
@@ -180,6 +189,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Point ScreenCapturerGdi::cursorPosition()
 {
     Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
@@ -192,6 +202,7 @@ Point ScreenCapturerGdi::cursorPosition()
     return cursor_pos;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.
@@ -199,6 +210,7 @@ void ScreenCapturerGdi::reset()
     memory_dc_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerGdi::captureImage()
 {
     queue_.moveToNextFrame();
@@ -275,6 +287,7 @@ const Frame* ScreenCapturerGdi::captureImage()
     return current;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerGdi::prepareCaptureResources()
 {
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();

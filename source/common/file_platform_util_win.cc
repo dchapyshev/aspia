@@ -46,6 +46,7 @@ const int kMinFileNameLength = 1;
 // We use FAT variant: 255 characters long.
 const int kMaxFileNameLength = (MAX_PATH - 5);
 
+//--------------------------------------------------------------------------------------------------
 QIcon stockIcon(SHSTOCKICONID icon_id)
 {
     SHSTOCKICONINFO icon_info;
@@ -69,8 +70,9 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
-QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
+std::pair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -85,31 +87,34 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
     if (icon.isValid())
     {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        return QPair<QIcon, QString>(QtWin::fromHICON(icon),
+        return std::pair<QIcon, QString>(QtWin::fromHICON(icon),
 #else
-        return QPair<QIcon, QString>(QPixmap::fromImage(QImage::fromHICON(icon)),
+        return std::pair<QIcon, QString>(QPixmap::fromImage(QImage::fromHICON(icon)),
 #endif
-                                     QString::fromUtf16(
-                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
+                                         QString::fromUtf16(
+                                             reinterpret_cast<const ushort*>(file_info.szTypeName)));
     }
 
-    return QPair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
-                                 QString::fromUtf16(
-                                     reinterpret_cast<const ushort*>(file_info.szTypeName)));
+    return std::pair<QIcon, QString>(QIcon(QStringLiteral(":/img/document.png")),
+                                     QString::fromUtf16(
+                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::computerIcon()
 {
     return stockIcon(SIID_DESKTOPPC);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::directoryIcon()
 {
     return stockIcon(SIID_FOLDER);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
 {
@@ -144,6 +149,7 @@ QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
 {
@@ -152,6 +158,7 @@ const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
 {
@@ -159,6 +166,7 @@ const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
     return kInvalidCharacters;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidPath(const QString& path)
 {
@@ -178,6 +186,7 @@ bool FilePlatformUtil::isValidPath(const QString& path)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePlatformUtil::isValidFileName(const QString& file_name)
 {

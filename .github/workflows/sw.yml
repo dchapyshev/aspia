@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'source/**'
+      - '.github/workflows/sw.yml' # for test purposes
   pull_request:
     paths:
       - 'source/**'
+      - '.github/workflows/sw.yml' # for test purposes
 
 jobs:
   windows:
@@ -27,7 +29,7 @@ jobs:
 
   linux:
     runs-on: ubuntu-22.04
-    container: fedora:37
+    container: fedora:38
     steps:
     - uses: actions/checkout@v1
     - name: prepare

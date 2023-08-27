@@ -49,6 +49,7 @@ const wchar_t kExecutableNameForUi[] = L"aspia_host.exe";
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
+//--------------------------------------------------------------------------------------------------
 bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle user_token;
@@ -119,6 +120,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 {
     STARTUPINFOW startup_info;
@@ -185,6 +187,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -195,11 +198,13 @@ UserSessionManager::UserSessionManager(std::shared_ptr<base::TaskRunner> task_ru
     router_state_.set_state(proto::internal::RouterState::DISABLED);
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionManager::~UserSessionManager()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool UserSessionManager::start(Delegate* delegate)
 {
     DCHECK(delegate);
@@ -265,6 +270,7 @@ bool UserSessionManager::start(Delegate* delegate)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionEvent(
     base::win::SessionStatus status, base::SessionId session_id)
 {
@@ -308,6 +314,7 @@ void UserSessionManager::onUserSessionEvent(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "New router state";
@@ -318,6 +325,7 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
         session->onRouterStateChanged(router_state);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onHostIdChanged(const std::string& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "Set host ID for session '" << session_name << "': " << host_id;
@@ -339,6 +347,7 @@ void UserSessionManager::onHostIdChanged(const std::string& session_name, base::
     LOG(LS_WARNING) << "Session '" << session_name << "' NOT found";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onSettingsChanged()
 {
     // Send an event of each session.
@@ -346,6 +355,7 @@ void UserSessionManager::onSettingsChanged()
         session->onSettingsChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_session)
 {
     LOG(LS_INFO) << "Adding a new client connection (user: '" << client_session->userName()
@@ -466,6 +476,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<base::UserList> UserSessionManager::userList() const
 {
     std::unique_ptr<base::UserList> user_list = base::UserList::createEmpty();
@@ -480,6 +491,7 @@ std::unique_ptr<base::UserList> UserSessionManager::userList() const
     return user_list;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
     LOG(LS_INFO) << "New IPC connection";
@@ -513,26 +525,31 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onErrorOccurred()
 {
     // Ignore.
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionHostIdRequest(const std::string& session_name)
 {
     delegate_->onHostIdRequest(session_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionCredentialsChanged()
 {
     delegate_->onUserListChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionDettached()
 {
     delegate_->onUserListChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionFinished()
 {
     scoped_task_runner_->postTask([this]()
@@ -561,6 +578,7 @@ void UserSessionManager::onUserSessionFinished()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::startSessionProcess(
     const base::Location& location, base::SessionId session_id)
 {
@@ -640,6 +658,7 @@ void UserSessionManager::startSessionProcess(
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::addUserSession(
     base::SessionId session_id, std::unique_ptr<base::IpcChannel> channel)
 {

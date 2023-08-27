@@ -22,22 +22,26 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 FileTaskProducerProxy::FileTaskProducerProxy(FileTaskProducer* task_producer)
     : task_producer_(task_producer)
 {
     DCHECK(task_producer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileTaskProducerProxy::~FileTaskProducerProxy()
 {
     DCHECK(!task_producer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTaskProducerProxy::dettach()
 {
     task_producer_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileTaskProducerProxy::onTaskDone(std::shared_ptr<FileTask> task)
 {
     if (task_producer_)

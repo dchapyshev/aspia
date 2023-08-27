@@ -20,8 +20,8 @@
 #define CONSOLE_ADDRESS_BOOK_TAB_H
 
 #include "base/macros_magic.h"
-#include "client/online_checker.h"
 #include "client/router_config.h"
+#include "client/online_checker/online_checker.h"
 #include "proto/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
@@ -76,13 +76,13 @@ public slots:
     void stopOnlineChecker();
 
 signals:
-    void addressBookChanged(bool changed);
-    void computerGroupActivated(bool activated, bool is_root);
-    void computerActivated(bool activated);
-    void computerGroupContextMenu(const QPoint& point, bool is_root);
-    void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
-    void computerDoubleClicked(const proto::address_book::Computer& computer);
-    void updateStateForComputers(bool started);
+    void sig_addressBookChanged(bool changed);
+    void sig_computerGroupActivated(bool activated, bool is_root);
+    void sig_computerActivated(bool activated);
+    void sig_computerGroupContextMenu(const QPoint& point, bool is_root);
+    void sig_computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
+    void sig_computerDoubleClicked(const proto::address_book::Computer& computer);
+    void sig_updateStateForComputers(bool started);
 
 protected:
     // ConsoleTab implementation.

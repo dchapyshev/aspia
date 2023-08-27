@@ -22,6 +22,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool copyUnchangedData(std::string_view in, std::string* out)
 {
     out->assign(in);
@@ -30,11 +31,13 @@ bool copyUnchangedData(std::string_view in, std::string* out)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 bool DataCryptorFake::encrypt(std::string_view in, std::string* out)
 {
     return copyUnchangedData(in, out);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DataCryptorFake::decrypt(std::string_view in, std::string* out)
 {
     return copyUnchangedData(in, out);

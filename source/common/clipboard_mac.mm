@@ -26,14 +26,17 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 ClipboardMac::ClipboardMac()
     : timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner())
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ClipboardMac::~ClipboardMac() = default;
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMac::init()
 {
     // Synchronize local change-count with the pasteboard's. The change-count is used to detect
@@ -45,6 +48,7 @@ void ClipboardMac::init()
     startTimer();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMac::setData(const std::string& data)
 {
     // Write text to clipboard.
@@ -57,12 +61,14 @@ void ClipboardMac::setData(const std::string& data)
     current_change_count_ = [[NSPasteboard generalPasteboard] changeCount];
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMac::startTimer()
 {
     // Restart timer.
     timer_.start(std::chrono::milliseconds(1000), std::bind(&ClipboardMac::checkForChanges, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMac::checkForChanges()
 {
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];

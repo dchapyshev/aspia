@@ -69,8 +69,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Runner);
 };
 
+//--------------------------------------------------------------------------------------------------
 UpdateChecker::UpdateChecker() = default;
 
+//--------------------------------------------------------------------------------------------------
 UpdateChecker::~UpdateChecker()
 {
     if (runner_)
@@ -81,22 +83,26 @@ UpdateChecker::~UpdateChecker()
     thread_.stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::setUpdateServer(std::string_view update_server)
 {
     update_server_ = update_server;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::setPackageName(std::string_view package_name)
 {
     package_name_ = package_name;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::start(std::shared_ptr<base::TaskRunner> owner_task_runner, Delegate* delegate)
 {
     runner_ = std::make_shared<Runner>(std::move(owner_task_runner), delegate);
     thread_.start(std::bind(&UpdateChecker::run, this));
 }
 
+//--------------------------------------------------------------------------------------------------
 static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArray* buffer)
 {
     size_t append_size = size * nmemb;
@@ -104,6 +110,7 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
     return append_size;
 }
 
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
     base::Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);

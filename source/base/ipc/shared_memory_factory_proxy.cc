@@ -23,22 +23,26 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactoryProxy::SharedMemoryFactoryProxy(SharedMemoryFactory* factory)
     : factory_(factory)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 SharedMemoryFactoryProxy::~SharedMemoryFactoryProxy()
 {
     DCHECK(!factory_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedMemoryFactoryProxy::dettach()
 {
     factory_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedMemoryFactoryProxy::onSharedMemoryCreate(int id)
 {
     if (!factory_)
@@ -47,6 +51,7 @@ void SharedMemoryFactoryProxy::onSharedMemoryCreate(int id)
     factory_->onSharedMemoryCreate(id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SharedMemoryFactoryProxy::onSharedMemoryDestroy(int id)
 {
     if (!factory_)

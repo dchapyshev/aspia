@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 TcpChannelProxy::TcpChannelProxy(
     std::shared_ptr<TaskRunner> task_runner, TcpChannel* channel)
     : task_runner_(std::move(task_runner)),
@@ -31,6 +32,7 @@ TcpChannelProxy::TcpChannelProxy(
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
 {
     bool schedule_write;
@@ -48,11 +50,13 @@ void TcpChannelProxy::send(uint8_t channel_id, ByteArray&& buffer)
     task_runner_->postTask(std::bind(&TcpChannelProxy::scheduleWrite, shared_from_this()));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannelProxy::willDestroyCurrentChannel()
 {
     channel_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannelProxy::scheduleWrite()
 {
     if (!channel_)
@@ -64,6 +68,7 @@ void TcpChannelProxy::scheduleWrite()
     channel_->doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannelProxy::reloadWriteQueue(std::queue<WriteTask>* work_queue)
 {
     if (!work_queue->empty())

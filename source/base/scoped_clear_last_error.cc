@@ -26,24 +26,28 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScopedClearLastErrorBase::ScopedClearLastErrorBase()
     : last_errno_(errno)
 {
     errno = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedClearLastErrorBase::~ScopedClearLastErrorBase()
 {
     errno = last_errno_;
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 ScopedClearLastError::ScopedClearLastError()
     : last_error_(GetLastError())
 {
     SetLastError(0);
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedClearLastError::~ScopedClearLastError()
 {
     SetLastError(last_error_);

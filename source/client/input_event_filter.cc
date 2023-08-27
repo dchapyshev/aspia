@@ -22,27 +22,33 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 InputEventFilter::InputEventFilter() = default;
 
+//--------------------------------------------------------------------------------------------------
 InputEventFilter::~InputEventFilter() = default;
 
+//--------------------------------------------------------------------------------------------------
 void InputEventFilter::setSessionType(proto::SessionType session_type)
 {
     LOG(LS_INFO) << "Session type changed: " << session_type;
     session_type_ = session_type;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputEventFilter::setClipboardEnabled(bool enable)
 {
     LOG(LS_INFO) << "Clipboard enabled: " << enable;
     clipboard_enabled_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputEventFilter::setNetworkOverflow(bool enable)
 {
     network_overflow_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::MouseEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -74,6 +80,7 @@ std::optional<proto::MouseEvent> InputEventFilter::mouseEvent(const proto::Mouse
     return std::nullopt;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -86,6 +93,7 @@ std::optional<proto::KeyEvent> InputEventFilter::keyEvent(const proto::KeyEvent&
     return event;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEvent& event)
 {
     if (session_type_ != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -98,6 +106,7 @@ std::optional<proto::TextEvent> InputEventFilter::textEvent(const proto::TextEve
     return event;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(
     const proto::ClipboardEvent& event)
 {
@@ -111,6 +120,7 @@ std::optional<proto::ClipboardEvent> InputEventFilter::readClipboardEvent(
     return event;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<proto::ClipboardEvent> InputEventFilter::sendClipboardEvent(
     const proto::ClipboardEvent& event)
 {

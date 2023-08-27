@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileManagerWindowProxy::FileManagerWindowProxy(
     std::shared_ptr<base::TaskRunner> ui_task_runner, FileManagerWindow* file_manager_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -35,12 +36,14 @@ FileManagerWindowProxy::FileManagerWindowProxy(
     DCHECK(file_manager_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileManagerWindowProxy::~FileManagerWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!file_manager_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach file manager window";
@@ -48,6 +51,7 @@ void FileManagerWindowProxy::dettach()
     file_manager_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_control_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -61,6 +65,7 @@ void FileManagerWindowProxy::start(std::shared_ptr<FileControlProxy> file_contro
         file_manager_window_->start(file_control_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::onErrorOccurred(proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -74,6 +79,7 @@ void FileManagerWindowProxy::onErrorOccurred(proto::FileError error_code)
         file_manager_window_->onErrorOccurred(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::onDriveList(
     common::FileTask::Target target, proto::FileError error_code, const proto::DriveList& drive_list)
 {
@@ -91,6 +97,7 @@ void FileManagerWindowProxy::onDriveList(
         file_manager_window_->onDriveList(target, error_code, drive_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::onFileList(
     common::FileTask::Target target, proto::FileError error_code, const proto::FileList& file_list)
 {
@@ -108,6 +115,7 @@ void FileManagerWindowProxy::onFileList(
         file_manager_window_->onFileList(target, error_code, file_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::onCreateDirectory(
     common::FileTask::Target target, proto::FileError error_code)
 {
@@ -124,6 +132,7 @@ void FileManagerWindowProxy::onCreateDirectory(
         file_manager_window_->onCreateDirectory(target, error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileManagerWindowProxy::onRename(common::FileTask::Target target, proto::FileError error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

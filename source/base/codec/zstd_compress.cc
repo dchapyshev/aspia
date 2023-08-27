@@ -28,6 +28,7 @@ namespace {
 
 const uint32_t kMaxDataSize = 64 * 1024 * 1024; // 64 MB
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 T compressT(const T& source, int compress_level)
 {
@@ -84,6 +85,7 @@ T compressT(const T& source, int compress_level)
     return target;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 T decompressT(const T& source)
 {
@@ -132,24 +134,28 @@ T decompressT(const T& source)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string ZstdCompress::compress(const std::string& source, int compress_level)
 {
     return compressT(source, compress_level);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray ZstdCompress::compress(const ByteArray& source, int compress_level)
 {
     return compressT(source, compress_level);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string ZstdCompress::decompress(const std::string& source)
 {
     return decompressT(source);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray ZstdCompress::decompress(const ByteArray& source)
 {

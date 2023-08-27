@@ -34,6 +34,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel()
     : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
       io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
@@ -45,6 +46,7 @@ TcpChannel::TcpChannel()
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
     : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
       io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
@@ -57,6 +59,7 @@ TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket)
     DCHECK(socket_.is_open());
 }
 
+//--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
     LOG(LS_INFO) << "Dtor";
@@ -68,26 +71,31 @@ TcpChannel::~TcpChannel()
     disconnect();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<TcpChannelProxy> TcpChannel::channelProxy()
 {
     return proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::setListener(Listener* listener)
 {
     listener_ = listener;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string TcpChannel::peerAddress() const
 {
     if (!socket_.is_open())
@@ -96,6 +104,7 @@ std::u16string TcpChannel::peerAddress() const
     return utf16FromLocal8Bit(socket_.remote_endpoint().address().to_string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::connect(std::u16string_view address, uint16_t port)
 {
     if (connected_ || !resolver_)
@@ -129,21 +138,25 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::isConnected() const
 {
     return connected_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::isPaused() const
 {
     return paused_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::pause()
 {
     paused_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::resume()
 {
     if (!connected_ || !paused_)
@@ -171,11 +184,13 @@ void TcpChannel::resume()
     doReadSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::send(uint8_t channel_id, ByteArray&& buffer)
 {
     addWriteTask(WriteTask::Type::USER_DATA, channel_id, std::move(buffer));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::setNoDelay(bool enable)
 {
     asio::ip::tcp::no_delay option(enable);
@@ -193,6 +208,7 @@ bool TcpChannel::setNoDelay(bool enable)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Seconds& timeout)
 {
     if (enable && keep_alive_timer_)
@@ -240,16 +256,19 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::setChannelIdSupport(bool enable)
 {
     is_channel_id_supported_ = enable;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::hasChannelIdSupport() const
 {
     return is_channel_id_supported_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::setReadBufferSize(size_t size)
 {
     asio::socket_base::receive_buffer_size option(static_cast<int>(size));
@@ -267,6 +286,7 @@ bool TcpChannel::setReadBufferSize(size_t size)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool TcpChannel::setWriteBufferSize(size_t size)
 {
     asio::socket_base::send_buffer_size option(static_cast<int>(size));
@@ -284,6 +304,7 @@ bool TcpChannel::setWriteBufferSize(size_t size)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::disconnect()
 {
     if (!connected_)
@@ -297,6 +318,7 @@ void TcpChannel::disconnect()
     socket_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
@@ -324,6 +346,7 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
     onErrorOccurred(location, error);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Connection finished with error " << errorToString(error_code)
@@ -338,12 +361,14 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageWritten(uint8_t channel_id)
 {
     if (listener_)
         listener_->onTcpMessageWritten(channel_id, write_queue_.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageReceived()
 {
     uint8_t* read_data = read_buffer_.data();
@@ -387,6 +412,7 @@ void TcpChannel::onMessageReceived()
         listener_->onTcpMessageReceived(header.channel_id, decrypt_buffer_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArray&& data)
 {
     const bool schedule_write = write_queue_.empty();
@@ -398,6 +424,7 @@ void TcpChannel::addWriteTask(WriteTask::Type type, uint8_t channel_id, ByteArra
         doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::doWrite()
 {
     const WriteTask& task = write_queue_.front();
@@ -469,6 +496,7 @@ void TcpChannel::doWrite()
                                 std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transferred)
 {
     if (error_code)
@@ -499,6 +527,7 @@ void TcpChannel::onWrite(const std::error_code& error_code, size_t bytes_transfe
         doWrite();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
@@ -510,6 +539,7 @@ void TcpChannel::doReadSize()
                                std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onReadSize(const std::error_code& error_code, size_t bytes_transferred)
 {
     if (error_code)
@@ -549,6 +579,7 @@ void TcpChannel::onReadSize(const std::error_code& error_code, size_t bytes_tran
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadUserData(size_t length)
 {
     resizeBuffer(&read_buffer_, length);
@@ -562,6 +593,7 @@ void TcpChannel::doReadUserData(size_t length)
                                std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onReadUserData(const std::error_code& error_code, size_t bytes_transferred)
 {
     DCHECK_EQ(state_, ReadState::READ_USER_DATA);
@@ -594,6 +626,7 @@ void TcpChannel::onReadUserData(const std::error_code& error_code, size_t bytes_
     doReadSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadServiceHeader()
 {
     resizeBuffer(&read_buffer_, sizeof(ServiceHeader));
@@ -607,6 +640,7 @@ void TcpChannel::doReadServiceHeader()
                                std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onReadServiceHeader(const std::error_code& error_code, size_t bytes_transferred)
 {
     DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
@@ -649,6 +683,7 @@ void TcpChannel::onReadServiceHeader(const std::error_code& error_code, size_t b
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::doReadServiceData(size_t length)
 {
     DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
@@ -668,6 +703,7 @@ void TcpChannel::doReadServiceData(size_t length)
                                std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t bytes_transferred)
 {
     DCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
@@ -753,6 +789,7 @@ void TcpChannel::onReadServiceData(const std::error_code& error_code, size_t byt
     doReadSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
@@ -785,6 +822,7 @@ void TcpChannel::onKeepAliveInterval(const std::error_code& error_code)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onKeepAliveTimeout(const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
@@ -799,6 +837,7 @@ void TcpChannel::onKeepAliveTimeout(const std::error_code& error_code)
     onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::sendKeepAlive(uint8_t flags, const void* data, size_t size)
 {
     ServiceHeader header;

@@ -40,6 +40,7 @@ const QString kRouterManagerStateParam = QStringLiteral("RouterManagerState");
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ClientSettings::ClientSettings()
     : settings_(QSettings::IniFormat,
                 QSettings::UserScope,
@@ -49,37 +50,44 @@ ClientSettings::ClientSettings()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 QString ClientSettings::locale() const
 {
     return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 QStringList ClientSettings::addressList() const
 {
     return settings_.value(kAddressListParam).toStringList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setAddressList(const QStringList& list)
 {
     settings_.setValue(kAddressListParam, list);
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::SessionType ClientSettings::sessionType() const
 {
     return static_cast<proto::SessionType>(
         settings_.value(kSessionTypeParam, proto::SESSION_TYPE_DESKTOP_MANAGE).toUInt());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setSessionType(proto::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, static_cast<uint32_t>(session_type));
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::DesktopConfig ClientSettings::desktopManageConfig() const
 {
     QByteArray buffer = settings_.value(kDesktopManageConfigParam).toByteArray();
@@ -93,6 +101,7 @@ proto::DesktopConfig ClientSettings::desktopManageConfig() const
     return ConfigFactory::defaultDesktopManageConfig();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setDesktopManageConfig(const proto::DesktopConfig& config)
 {
     QByteArray buffer;
@@ -102,6 +111,7 @@ void ClientSettings::setDesktopManageConfig(const proto::DesktopConfig& config)
     settings_.setValue(kDesktopManageConfigParam, buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::DesktopConfig ClientSettings::desktopViewConfig() const
 {
     QByteArray buffer = settings_.value(kDesktopViewConfigParam).toByteArray();
@@ -115,6 +125,7 @@ proto::DesktopConfig ClientSettings::desktopViewConfig() const
     return ConfigFactory::defaultDesktopViewConfig();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setDesktopViewConfig(const proto::DesktopConfig& config)
 {
     QByteArray buffer;
@@ -124,6 +135,7 @@ void ClientSettings::setDesktopViewConfig(const proto::DesktopConfig& config)
     settings_.setValue(kDesktopViewConfigParam, buffer);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientSettings::showIconsInMenus() const
 {
     bool defaultValue;
@@ -137,46 +149,55 @@ bool ClientSettings::showIconsInMenus() const
     return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setShowIconsInMenus(bool enable)
 {
     settings_.setValue(kShowIconsInMenusParam, enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientSettings::checkUpdates() const
 {
     return settings_.value(kCheckUpdatesParam, true).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setCheckUpdates(bool check)
 {
     settings_.setValue(kCheckUpdatesParam, check);
 }
 
+//--------------------------------------------------------------------------------------------------
 QString ClientSettings::updateServer() const
 {
     return settings_.value(kUpdateServerParam, DEFAULT_UPDATE_SERVER).toString().toLower();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setUpdateServer(const QString& server)
 {
     settings_.setValue(kUpdateServerParam, server.toLower());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClientSettings::isOneTimePasswordChecked() const
 {
     return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setOneTimePasswordChecked(bool check)
 {
     settings_.setValue(kOneTimePasswordCheckedParam, check);
 }
 
+//--------------------------------------------------------------------------------------------------
 QByteArray ClientSettings::routerManagerState() const
 {
     return settings_.value(kRouterManagerStateParam, false).toByteArray();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSettings::setRouterManagerState(const QByteArray& state)
 {
     settings_.setValue(kRouterManagerStateParam, state);

@@ -27,8 +27,10 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 ClipboardWin::ClipboardWin() = default;
 
+//--------------------------------------------------------------------------------------------------
 ClipboardWin::~ClipboardWin()
 {
     if (!window_)
@@ -38,6 +40,7 @@ ClipboardWin::~ClipboardWin()
     window_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::init()
 {
     if (window_)
@@ -61,6 +64,7 @@ void ClipboardWin::init()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::setData(const std::string& data)
 {
     if (!window_)
@@ -108,6 +112,7 @@ void ClipboardWin::setData(const std::string& data)
     clipboard.setData(CF_UNICODETEXT, text_global);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ClipboardWin::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
@@ -124,6 +129,7 @@ bool ClipboardWin::onMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardWin::onClipboardUpdate()
 {
     if (!IsClipboardFormatAvailable(CF_UNICODETEXT))

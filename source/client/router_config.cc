@@ -23,17 +23,20 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 RouterConfig::RouterConfig()
     : port(DEFAULT_ROUTER_TCP_PORT)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 RouterConfig::~RouterConfig()
 {
     base::memZero(&password);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
     return !address.empty() && port && !username.empty() && !password.empty();

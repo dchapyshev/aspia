@@ -44,6 +44,7 @@ const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -51,6 +52,7 @@ Server::Server(std::shared_ptr<base::TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 Server::~Server()
 {
     LOG(LS_INFO) << "Dtor";
@@ -66,6 +68,7 @@ Server::~Server()
     LOG(LS_INFO) << "Server is stopped";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::start()
 {
     if (server_)
@@ -113,6 +116,7 @@ void Server::start()
     LOG(LS_INFO) << "Host server is started successfully";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId session_id)
 {
     LOG(LS_INFO) << "Session event (status: " << static_cast<int>(status)
@@ -128,6 +132,7 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::setPowerEvent(uint32_t power_event)
 {
 #if defined(OS_WIN)
@@ -158,30 +163,35 @@ void Server::setPowerEvent(uint32_t power_event)
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewConnection(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New DIRECT connection";
     startAuthentication(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(LS_INFO) << "Router state changed";
     user_session_manager_->onRouterStateChanged(router_state);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostIdAssigned(const std::string& session_name, base::HostId host_id)
 {
     LOG(LS_INFO) << "New host ID assigned: " << host_id << " ('" << session_name << "')";
     user_session_manager_->onHostIdChanged(session_name, host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onClientConnected(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "New RELAY connection";
     startAuthentication(std::move(channel));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& session_info)
 {
     LOG(LS_INFO) << "New client session";
@@ -190,6 +200,14 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     {
         LOG(LS_INFO) << "Using channel id support";
         session_info.channel->setChannelIdSupport(true);
+    }
+
+    base::Version host_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
+                               ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+    if (host_version > session_info.version)
+    {
+        LOG(LS_WARNING) << "Version mismatch (host: " << host_version.toString()
+                        << " client: " << session_info.version.toString();
     }
 
     std::unique_ptr<ClientSession> session = ClientSession::create(
@@ -219,6 +237,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onHostIdRequest(const std::string& session_name)
 {
     if (!router_controller_)
@@ -231,6 +250,7 @@ void Server::onHostIdRequest(const std::string& session_name)
     router_controller_->hostIdRequest(session_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onResetHostId(base::HostId host_id)
 {
     if (!router_controller_)
@@ -243,12 +263,14 @@ void Server::onResetHostId(base::HostId host_id)
     router_controller_->resetHostId(host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onUserListChanged()
 {
     LOG(LS_INFO) << "User list changed";
     reloadUserList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onUpdateCheckedFinished(const base::ByteArray& result)
 {
     common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
@@ -276,12 +298,14 @@ void Server::onUpdateCheckedFinished(const base::ByteArray& result)
     task_runner_->deleteSoon(std::move(update_checker_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
     LOG(LS_WARNING) << "Unable to download update: " << error_code;
     task_runner_->deleteSoon(std::move(update_downloader_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderCompleted()
 {
 #if defined(OS_WIN)
@@ -332,11 +356,13 @@ void Server::onFileDownloaderCompleted()
     task_runner_->deleteSoon(std::move(update_downloader_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderProgress(int percentage)
 {
     LOG(LS_INFO) << "Update downloading progress: " << percentage << "%";
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
 {
     LOG(LS_INFO) << "Start authentication";
@@ -356,6 +382,7 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::addFirewallRules()
 {
 #if defined(OS_WIN)
@@ -385,6 +412,7 @@ void Server::addFirewallRules()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::deleteFirewallRules()
 {
 #if defined(OS_WIN)
@@ -407,6 +435,7 @@ void Server::deleteFirewallRules()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::updateConfiguration(const std::filesystem::path& path, bool error)
 {
     LOG(LS_INFO) << "Configuration file change detected";
@@ -487,6 +516,7 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::reloadUserList()
 {
     LOG(LS_INFO) << "Reloading user list";
@@ -501,6 +531,7 @@ void Server::reloadUserList()
     authenticator_manager_->setUserList(std::move(user_list));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::connectToRouter()
 {
     LOG(LS_INFO) << "Connecting to router...";
@@ -519,6 +550,7 @@ void Server::connectToRouter()
     router_controller_->start(router_info, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::disconnectFromRouter()
 {
     LOG(LS_INFO) << "Disconnect from router";
@@ -534,6 +566,7 @@ void Server::disconnectFromRouter()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Server::checkForUpdates()
 {
 #if defined(OS_WIN)

@@ -27,6 +27,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string ipToString(DWORD ip)
 {
     char buffer[46 + 1];
@@ -39,6 +40,7 @@ std::string ipToString(DWORD ip)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 RouteEnumerator::RouteEnumerator()
 {
     ULONG buffer_size = sizeof(MIB_IPFORWARDTABLE);
@@ -68,18 +70,22 @@ RouteEnumerator::RouteEnumerator()
     num_entries_ = forward_table->dwNumEntries;
 }
 
+//--------------------------------------------------------------------------------------------------
 RouteEnumerator::~RouteEnumerator() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool RouteEnumerator::isAtEnd() const
 {
     return pos_ >= num_entries_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void RouteEnumerator::advance()
 {
     ++pos_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string RouteEnumerator::destonation() const
 {
     PMIB_IPFORWARDTABLE forward_table =
@@ -90,6 +96,7 @@ std::string RouteEnumerator::destonation() const
     return ipToString(forward_table->table[pos_].dwForwardDest);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string RouteEnumerator::mask() const
 {
     PMIB_IPFORWARDTABLE forward_table =
@@ -100,6 +107,7 @@ std::string RouteEnumerator::mask() const
     return ipToString(forward_table->table[pos_].dwForwardMask);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string RouteEnumerator::gateway() const
 {
     PMIB_IPFORWARDTABLE forward_table =
@@ -110,6 +118,7 @@ std::string RouteEnumerator::gateway() const
     return ipToString(forward_table->table[pos_].dwForwardNextHop);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t RouteEnumerator::metric() const
 {
     PMIB_IPFORWARDTABLE forward_table =

@@ -19,6 +19,7 @@
 #ifndef BASE_GUID_H
 #define BASE_GUID_H
 
+#include <cstdint>
 #include <string>
 
 namespace base {

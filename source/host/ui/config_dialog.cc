@@ -48,6 +48,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ConfigDialog::ConfigDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -235,24 +236,24 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 #if defined(OS_WIN)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("DXGI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
+        "DXGI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_DXGI));
 
     ui.combo_video_capturer->addItem(
-        QStringLiteral("GDI"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
+        "GDI", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_GDI));
 
     // Mirror screen capture is available only in Windows 7/2008 R2.
     if (base::win::windowsVersion() == base::win::VERSION_WIN7)
     {
         ui.combo_video_capturer->addItem(
-            QStringLiteral("MIRROR"), static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
+            "MIRROR", static_cast<uint32_t>(base::ScreenCapturer::Type::WIN_MIRROR));
     }
 
 #elif defined(OS_LINUX)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("X11"), static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
+        "X11", static_cast<uint32_t>(base::ScreenCapturer::Type::LINUX_X11));
 #elif defined(OS_MAC)
     ui.combo_video_capturer->addItem(
-        QStringLiteral("MACOSX"), static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
+        "MACOSX", static_cast<uint32_t>(base::ScreenCapturer::Type::MACOSX));
 #else
 #error Platform support not implemented
 #endif
@@ -274,11 +275,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     QTimer::singleShot(0, this, &ConfigDialog::adjustSize);
 }
 
+//--------------------------------------------------------------------------------------------------
 ConfigDialog::~ConfigDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onOneTimeStateChanged(int state)
 {
     bool enable = (state == Qt::Checked);
@@ -293,6 +296,7 @@ void ConfigDialog::onOneTimeStateChanged(int state)
     setConfigChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onConnConfirmStateChanged(int state)
 {
     bool enable = (state == Qt::Checked);
@@ -305,6 +309,7 @@ void ConfigDialog::onConnConfirmStateChanged(int state)
     setConfigChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onUserContextMenu(const QPoint& point)
 {
     QMenu menu;
@@ -323,6 +328,7 @@ void ConfigDialog::onUserContextMenu(const QPoint& point)
     menu.exec(ui.tree_users->viewport()->mapToGlobal(point));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onCurrentUserChanged(
     QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
@@ -333,6 +339,7 @@ void ConfigDialog::onCurrentUserChanged(
     ui.action_delete->setEnabled(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onAddUser()
 {
     QStringList exist_names;
@@ -348,6 +355,7 @@ void ConfigDialog::onAddUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onModifyUser()
 {
     UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
@@ -372,6 +380,7 @@ void ConfigDialog::onModifyUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onDeleteUser()
 {
     UserTreeItem* user_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
@@ -400,6 +409,7 @@ void ConfigDialog::onDeleteUser()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onServiceInstallRemove()
 {
     switch (service_state_)
@@ -428,6 +438,7 @@ void ConfigDialog::onServiceInstallRemove()
     reloadServiceStatus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onServiceStartStop()
 {
     switch (service_state_)
@@ -447,6 +458,7 @@ void ConfigDialog::onServiceStartStop()
     reloadServiceStatus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onPassProtectClicked()
 {
     SystemSettings settings;
@@ -487,6 +499,7 @@ void ConfigDialog::onPassProtectClicked()
     QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onChangePassClicked()
 {
     ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this);
@@ -513,6 +526,7 @@ void ConfigDialog::onChangePassClicked()
     QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onImport()
 {
     QString file_path =
@@ -547,6 +561,7 @@ void ConfigDialog::onImport()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onExport()
 {
     QString file_path =
@@ -557,6 +572,7 @@ void ConfigDialog::onExport()
     SettingsUtil::exportToFile(file_path.toStdU16String(), false, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
@@ -690,6 +706,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::setConfigChanged(bool changed)
 {
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
@@ -702,6 +719,7 @@ void ConfigDialog::setConfigChanged(bool changed)
     apply_button->setEnabled(changed);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::isConfigChanged() const
 {
     QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
@@ -714,6 +732,7 @@ bool ConfigDialog::isConfigChanged() const
     return apply_button->isEnabled();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::reloadAll()
 {
     SystemSettings settings;
@@ -802,6 +821,7 @@ void ConfigDialog::reloadAll()
     setConfigChanged(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::reloadUserList(const base::UserList& user_list)
 {
     ui.tree_users->clear();
@@ -816,6 +836,7 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
     ui.action_delete->setEnabled(false);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConfigDialog::reloadServiceStatus()
 {
 #if defined(OS_WIN)
@@ -870,6 +891,7 @@ void ConfigDialog::reloadServiceStatus()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::isServiceStarted()
 {
 #if defined(OS_WIN)
@@ -880,6 +902,7 @@ bool ConfigDialog::isServiceStarted()
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::installService()
 {
 #if defined(OS_WIN)
@@ -912,6 +935,7 @@ bool ConfigDialog::installService()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::removeService()
 {
 #if defined(OS_WIN)
@@ -930,6 +954,7 @@ bool ConfigDialog::removeService()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::startService()
 {
 #if defined(OS_WIN)
@@ -960,6 +985,7 @@ bool ConfigDialog::startService()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::stopService()
 {
 #if defined(OS_WIN)
@@ -990,6 +1016,7 @@ bool ConfigDialog::stopService()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ConfigDialog::restartService()
 {
     if (!stopService())

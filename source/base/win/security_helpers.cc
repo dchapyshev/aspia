@@ -29,6 +29,7 @@ namespace base::win {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                           ScopedSd* absolute_sd,
                           ScopedAcl* dacl,
@@ -95,6 +96,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 bool initializeComSecurity(const wchar_t* security_descriptor,
                            const wchar_t* mandatory_label,
                            bool activate_as_activator)
@@ -151,6 +153,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedSd convertSddlToSd(const std::wstring& sddl)
 {
     ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
@@ -169,6 +172,7 @@ ScopedSd convertSddlToSd(const std::wstring& sddl)
     return sd;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool userSidString(std::wstring* user_sid)
 {
     // Get the current token.

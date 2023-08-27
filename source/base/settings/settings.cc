@@ -26,12 +26,14 @@ namespace base {
 
 const std::string_view Settings::kSeparator = { "/" };
 
+//--------------------------------------------------------------------------------------------------
 Settings::Settings(const Settings& other)
     : map_(other.map_)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings& Settings::operator=(const Settings& other)
 {
     if (&other != this)
@@ -40,18 +42,21 @@ Settings& Settings::operator=(const Settings& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::Settings(const Map& map)
     : map_(map)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::Settings(Map&& map) noexcept
     : map_(std::move(map))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings::Array Settings::getArray(std::string_view key) const
 {
     const size_t array_size = get<size_t>(strCat({ key, kSeparator, "size" }));
@@ -66,6 +71,7 @@ Settings::Array Settings::getArray(std::string_view key) const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setArray(std::string_view key, const Array& array)
 {
     for (size_t i = 0; i < array.size(); ++i)
@@ -74,6 +80,7 @@ void Settings::setArray(std::string_view key, const Array& array)
     set(strCat({ key, kSeparator, "size" }), array.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 Settings Settings::getGroup(std::string_view key) const
 {
     const std::string prefix = strCat({ key, kSeparator });
@@ -88,6 +95,7 @@ Settings Settings::getGroup(std::string_view key) const
     return Settings(std::move(map));
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::setGroup(std::string_view key, const Settings& group)
 {
     const Map& array_map = group.constMap();
@@ -98,6 +106,7 @@ void Settings::setGroup(std::string_view key, const Settings& group)
     setChanged(true);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Settings::remove(std::string_view key)
 {
     const std::string prefix = strCat({ key, kSeparator });

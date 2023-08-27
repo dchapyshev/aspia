@@ -43,6 +43,7 @@ public:
     void onStopped();
     void onConnected();
     void onDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onVersionMismatch(const base::Version& host, const base::Version& client);
     void onAccessDenied(base::ClientAuthenticator::ErrorCode error_code);
     void onRouterError(const RouterController::Error& error);
 

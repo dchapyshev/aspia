@@ -29,6 +29,7 @@ namespace {
 
 const size_t kMaxHostNameLength = 64;
 
+//--------------------------------------------------------------------------------------------------
 bool isValidHostNameChar(const char16_t c)
 {
     if (std::iswalnum(c))
@@ -40,6 +41,7 @@ bool isValidHostNameChar(const char16_t c)
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isValidHostName(std::u16string_view host)
 {
     if (host.empty())
@@ -70,11 +72,13 @@ bool isValidHostName(std::u16string_view host)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isValidPort(uint16_t port)
 {
     return port != 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isValidPort(std::u16string_view str)
 {
     uint16_t value;
@@ -91,6 +95,7 @@ struct AddressParts
     std::u16string port;
 };
 
+//--------------------------------------------------------------------------------------------------
 bool setHostAndPort(std::u16string_view::const_iterator first,
                     std::u16string_view::const_iterator last,
                     std::u16string_view::const_iterator last_colon,
@@ -115,6 +120,7 @@ bool setHostAndPort(std::u16string_view::const_iterator first,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool parse(std::u16string_view::const_iterator& it,
            std::u16string_view::const_iterator last,
            AddressParts* parts)
@@ -212,12 +218,14 @@ bool parse(std::u16string_view::const_iterator& it,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Address::Address(uint16_t default_port)
     : default_port_(default_port)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Address::Address(std::u16string&& host, uint16_t port, uint16_t default_port)
     : host_(std::move(host)),
       port_(port),
@@ -226,6 +234,7 @@ Address::Address(std::u16string&& host, uint16_t port, uint16_t default_port)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Address::Address(const Address& other)
     : host_(other.host_),
       port_(other.port_),
@@ -234,6 +243,7 @@ Address::Address(const Address& other)
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Address& Address::operator=(const Address& other)
 {
     if (this != &other)
@@ -246,6 +256,7 @@ Address& Address::operator=(const Address& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 Address::Address(Address&& other) noexcept
     : host_(std::move(other.host_)),
       port_(other.port_),
@@ -254,6 +265,7 @@ Address::Address(Address&& other) noexcept
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Address& Address::operator=(Address&& other) noexcept
 {
     if (this != &other)
@@ -266,6 +278,7 @@ Address& Address::operator=(Address&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Address Address::fromString(std::u16string_view str, uint16_t default_port)
 {
@@ -291,6 +304,7 @@ Address Address::fromString(std::u16string_view str, uint16_t default_port)
     return Address(default_port);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string Address::toString() const
 {
     if (!isValidPort(port_))
@@ -319,26 +333,31 @@ std::u16string Address::toString() const
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Address::setHost(std::u16string_view host)
 {
     host_ = host;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string Address::host() const
 {
     return host_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Address::setPort(uint16_t port)
 {
     port_ = port;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t Address::port() const
 {
     return port_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Address::isValid() const
 {
     if (!isValidPort(port_))
@@ -354,16 +373,19 @@ bool Address::isValid() const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Address::isEqual(const Address& other)
 {
     return host_ == other.host_ && port_ == other.port_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Address::operator==(const Address& other)
 {
     return isEqual(other);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Address::operator!=(const Address& other)
 {
     return !isEqual(other);

@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::VideoEncoding encoding)
 {

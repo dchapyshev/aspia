@@ -39,14 +39,17 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);
 };
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner)
     : FilePathWatcher::PlatformDelegate(std::move(task_runner))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcherImpl::~FilePathWatcherImpl() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool FilePathWatcherImpl::watch(const std::filesystem::path& /* path */,
                                 bool /* recursive */,
                                 const FilePathWatcher::Callback& /* callback */)
@@ -55,6 +58,7 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& /* path */,
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePathWatcherImpl::cancel()
 {
     NOTIMPLEMENTED();
@@ -62,6 +66,7 @@ void FilePathWatcherImpl::cancel()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner> task_runner)
 {
     impl_ = std::make_unique<FilePathWatcherImpl>(std::move(task_runner));

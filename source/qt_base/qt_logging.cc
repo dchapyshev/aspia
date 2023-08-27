@@ -24,6 +24,7 @@ namespace qt_base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
 {
     switch (type)
@@ -41,6 +42,7 @@ base::LoggingSeverity messageTypeToSeverity(QtMsgType type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void messageHandler(QtMsgType type,
                     const QMessageLogContext& context,
                     const QString& msg)
@@ -59,6 +61,7 @@ void messageHandler(QtMsgType type,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void initQtLogging()
 {
     qInstallMessageHandler(messageHandler);
@@ -66,16 +69,19 @@ void initQtLogging()
 
 } // namespace qt_base
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QByteArray& qbytearray)
 {
     return out << "QByteArray(" << qbytearray.toHex().toStdString() << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QPoint& qpoint)
 {
     return out << "QPoint(" << qpoint.x() << ' ' << qpoint.y() << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QRect& qrect)
 {
     return out << "QRect("
@@ -84,16 +90,19 @@ std::ostream& operator<<(std::ostream& out, const QRect& qrect)
                << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QSize& qsize)
 {
     return out << "QSize(" << qsize.width() << ' ' << qsize.height() << ')';
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QString& qstr)
 {
     return out << qstr.toStdString();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const QStringList& qstrlist)
 {
     out << "QStringList(";

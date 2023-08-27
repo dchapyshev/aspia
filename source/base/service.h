@@ -26,6 +26,9 @@
 #include "base/win/session_status.h"
 #endif // defined(OS_WIN)
 
+#include <string_view>
+#include <string>
+
 namespace base {
 
 namespace {

@@ -33,17 +33,20 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 ClipboardMonitor::ClipboardMonitor()
     : thread_(std::make_unique<base::Thread>())
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ClipboardMonitor::~ClipboardMonitor()
 {
     thread_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runner,
                              common::Clipboard::Delegate* delegate)
 {
@@ -68,6 +71,7 @@ void ClipboardMonitor::start(std::shared_ptr<base::TaskRunner> caller_task_runne
     thread_->start(message_loop_type, this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (!self_task_runner_)
@@ -84,6 +88,7 @@ void ClipboardMonitor::injectClipboardEvent(const proto::ClipboardEvent& event)
         clipboard_->injectClipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::clearClipboard()
 {
     if (!self_task_runner_)
@@ -99,6 +104,7 @@ void ClipboardMonitor::clearClipboard()
         clipboard_->clearClipboard();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onBeforeThreadRunning()
 {
     self_task_runner_ = thread_->taskRunner();
@@ -116,11 +122,13 @@ void ClipboardMonitor::onBeforeThreadRunning()
     clipboard_->start(this);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onAfterThreadRunning()
 {
     clipboard_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (!caller_task_runner_->belongsToCurrentThread())

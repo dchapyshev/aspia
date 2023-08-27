@@ -19,6 +19,7 @@
 #ifndef BASE_CRYPTO_SRP_CONSTANTS_H
 #define BASE_CRYPTO_SRP_CONSTANTS_H
 
+#include <cstdint>
 #include <optional>
 #include <string_view>
 

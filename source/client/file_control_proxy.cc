@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileControlProxy::FileControlProxy(
     std::shared_ptr<base::TaskRunner> io_task_runner, FileControl* file_control)
     : io_task_runner_(std::move(io_task_runner)),
@@ -33,12 +34,14 @@ FileControlProxy::FileControlProxy(
     DCHECK(file_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileControlProxy::~FileControlProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!file_control_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach file control";
@@ -46,6 +49,7 @@ void FileControlProxy::dettach()
     file_control_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::driveList(common::FileTask::Target target)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -59,6 +63,7 @@ void FileControlProxy::driveList(common::FileTask::Target target)
         file_control_->driveList(target);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::fileList(common::FileTask::Target target, const std::string& path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -72,6 +77,7 @@ void FileControlProxy::fileList(common::FileTask::Target target, const std::stri
         file_control_->fileList(target, path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::createDirectory(common::FileTask::Target target, const std::string& path)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -85,6 +91,7 @@ void FileControlProxy::createDirectory(common::FileTask::Target target, const st
         file_control_->createDirectory(target, path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::rename(
     common::FileTask::Target target, const std::string& old_path, const std::string& new_path)
 {
@@ -99,6 +106,7 @@ void FileControlProxy::rename(
         file_control_->rename(target, old_path, new_path);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::remove(common::FileTask::Target target,
                               std::shared_ptr<FileRemoveWindowProxy> remove_window_proxy,
                               const FileRemover::TaskList& items)
@@ -114,6 +122,7 @@ void FileControlProxy::remove(common::FileTask::Target target,
         file_control_->remove(target, remove_window_proxy, items);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileControlProxy::transfer(std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
                                 FileTransfer::Type transfer_type,
                                 const std::string& source_path,

@@ -27,12 +27,14 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 MonitorEnumerator::MonitorEnumerator()
     : DeviceEnumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<Edid> MonitorEnumerator::edid() const
 {
     std::wstring key_path =

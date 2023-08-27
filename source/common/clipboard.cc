@@ -35,12 +35,14 @@ const int kCompressionRatio = 8;
 // Smaller data will not be compressed.
 const size_t kMinSizeToCompress = 512;
 
+//--------------------------------------------------------------------------------------------------
 uint8_t* outputBuffer(std::string* out, size_t size)
 {
     out->resize(size);
     return reinterpret_cast<uint8_t*>(out->data());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool compress(const std::string& in, std::string* out)
 {
     if (in.empty())
@@ -64,6 +66,7 @@ bool compress(const std::string& in, std::string* out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool decompress(const std::string& in, std::string* out)
 {
     if (in.empty())
@@ -100,6 +103,7 @@ bool decompress(const std::string& in, std::string* out)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void Clipboard::start(Delegate* delegate)
 {
     delegate_ = delegate;
@@ -107,6 +111,7 @@ void Clipboard::start(Delegate* delegate)
     init();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (event.mime_type() == kMimeTypeCompressedTextUtf8)
@@ -132,11 +137,13 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     setData(last_data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Clipboard::clearClipboard()
 {
     setData(std::string());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Clipboard::onData(const std::string& data)
 {
     if (last_data_ == data)

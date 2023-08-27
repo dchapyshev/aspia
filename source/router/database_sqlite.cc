@@ -29,6 +29,7 @@ namespace router {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* columnTypeToString(int type)
 {
     switch (type)
@@ -53,6 +54,7 @@ const char* columnTypeToString(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
 {
     int error_code = sqlite3_bind_text(
@@ -67,6 +69,7 @@ bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeBlob(sqlite3_stmt* statement, const base::ByteArray& blob, int column)
 {
     int error_code = sqlite3_bind_blob(statement, column, blob.data(), blob.size(), SQLITE_STATIC);
@@ -80,6 +83,7 @@ bool writeBlob(sqlite3_stmt* statement, const base::ByteArray& blob, int column)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeInt(sqlite3_stmt* statement, int number, int column)
 {
     int error_code = sqlite3_bind_int(statement, column, number);
@@ -93,6 +97,7 @@ bool writeInt(sqlite3_stmt* statement, int number, int column)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool writeInt64(sqlite3_stmt* statement, int64_t number, int column)
 {
     int error_code = sqlite3_bind_int64(statement, column, number);
@@ -106,6 +111,7 @@ bool writeInt64(sqlite3_stmt* statement, int64_t number, int column)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename T>
 std::optional<T> readInteger(sqlite3_stmt* statement, int column)
 {
@@ -120,6 +126,7 @@ std::optional<T> readInteger(sqlite3_stmt* statement, int column)
     return static_cast<T>(sqlite3_column_int64(statement, column));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<base::ByteArray> readBlob(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
@@ -147,6 +154,7 @@ std::optional<base::ByteArray> readBlob(sqlite3_stmt* statement, int column)
     return base::fromData(blob, static_cast<size_t>(blob_size));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<std::string> readText(sqlite3_stmt* statement, int column)
 {
     int column_type = sqlite3_column_type(statement, column);
@@ -174,6 +182,7 @@ std::optional<std::string> readText(sqlite3_stmt* statement, int column)
     return std::string(reinterpret_cast<const char*>(string), static_cast<size_t>(string_size));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
 {
     std::optional<std::string> str = readText(statement, column);
@@ -183,6 +192,7 @@ std::optional<std::u16string> readText16(sqlite3_stmt* statement, int column)
     return base::utf16FromUtf8(*str);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<base::User> readUser(sqlite3_stmt* statement)
 {
     std::optional<int64_t> entry_id = readInteger<int64_t>(statement, 0);
@@ -249,17 +259,20 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DatabaseSqlite::DatabaseSqlite(sqlite3* db)
     : db_(db)
 {
     DCHECK(db_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DatabaseSqlite::~DatabaseSqlite()
 {
     sqlite3_close(db_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 {
@@ -335,6 +348,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     return db;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
 {
@@ -361,6 +375,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
     return std::unique_ptr<DatabaseSqlite>(new DatabaseSqlite(db));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path DatabaseSqlite::filePath()
 {
@@ -372,6 +387,7 @@ std::filesystem::path DatabaseSqlite::filePath()
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::vector<base::User> DatabaseSqlite::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
@@ -401,6 +417,7 @@ std::vector<base::User> DatabaseSqlite::userList() const
     return users;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DatabaseSqlite::addUser(const base::User& user)
 {
     if (!user.isValid())
@@ -461,6 +478,7 @@ bool DatabaseSqlite::addUser(const base::User& user)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DatabaseSqlite::modifyUser(const base::User& user)
 {
     if (!user.isValid())
@@ -524,6 +542,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DatabaseSqlite::removeUser(int64_t entry_id)
 {
     static const char kQuery[] = "DELETE FROM users WHERE id=?";
@@ -559,6 +578,7 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 base::User DatabaseSqlite::findUser(std::u16string_view username)
 {
     const char kQuery[] = "SELECT * FROM users WHERE name=?";
@@ -591,6 +611,7 @@ base::User DatabaseSqlite::findUser(std::u16string_view username)
     return user.value_or(base::User::kInvalidUser);
 }
 
+//--------------------------------------------------------------------------------------------------
 Database::ErrorCode DatabaseSqlite::hostId(
     const base::ByteArray& key_hash, base::HostId* host_id) const
 {
@@ -651,6 +672,7 @@ Database::ErrorCode DatabaseSqlite::hostId(
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
 {
     if (keyHash.empty())
@@ -693,6 +715,7 @@ bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path DatabaseSqlite::databaseDirectory()
 {

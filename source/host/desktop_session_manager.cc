@@ -36,6 +36,7 @@ const std::chrono::minutes kSessionAttachTimeout { 1 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionManager::DesktopSessionManager(
     std::shared_ptr<base::TaskRunner> task_runner, DesktopSession::Delegate* delegate)
     : task_runner_(task_runner),
@@ -46,6 +47,7 @@ DesktopSessionManager::DesktopSessionManager(
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionManager::~DesktopSessionManager()
 {
     LOG(LS_INFO) << "Dtor";
@@ -54,6 +56,7 @@ DesktopSessionManager::~DesktopSessionManager()
     dettachSession(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::attachSession(
     const base::Location& location, base::SessionId session_id)
 {
@@ -105,6 +108,7 @@ void DesktopSessionManager::attachSession(
                  << " channel_id: " << channel_id << ")";
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::dettachSession(const base::Location& location)
 {
     if (state_ == State::STOPPED || state_ == State::DETACHED)
@@ -140,11 +144,13 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
     session_proxy_->attachAndStart(session_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 base::local_shared_ptr<DesktopSessionProxy> DesktopSessionManager::sessionProxy() const
 {
     return session_proxy_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> channel)
 {
     if (DesktopSessionProcess::filePath() != channel->peerFilePath())
@@ -170,6 +176,7 @@ void DesktopSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> ch
     session_proxy_->attachAndStart(session_.get());
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onErrorOccurred()
 {
     if (state_ == State::STOPPED || state_ == State::STOPPING)
@@ -180,47 +187,56 @@ void DesktopSessionManager::onErrorOccurred()
     setState(FROM_HERE, State::STOPPED);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStarted()
 {
     delegate_->onDesktopSessionStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onDesktopSessionStopped()
 {
     dettachSession(FROM_HERE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenCaptured(
     const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
     delegate_->onScreenCaptured(frame, mouse_cursor);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenCaptureError(proto::VideoErrorCode error_code)
 {
     delegate_->onScreenCaptureError(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     delegate_->onAudioCaptured(audio_packet);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     delegate_->onCursorPositionChanged(cursor_position);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 {
     delegate_->onScreenListChanged(list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     delegate_->onClipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::setState(const base::Location& location, State state)
 {
     LOG(LS_INFO) << "State changed from " << stateToString(state_) << " to " << stateToString(state)
@@ -228,6 +244,7 @@ void DesktopSessionManager::setState(const base::Location& location, State state
     state_ = state;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* DesktopSessionManager::stateToString(State state)
 {

@@ -26,6 +26,7 @@ namespace base {
 // such messages creates a continuous task pump).
 static const UINT kMsgHaveWork = WM_USER + 1;
 
+//--------------------------------------------------------------------------------------------------
 MessagePumpForWin::MessagePumpForWin()
 {
     LOG(LS_INFO) << "Ctor";
@@ -37,22 +38,26 @@ MessagePumpForWin::MessagePumpForWin()
     DCHECK(succeeded);
 }
 
+//--------------------------------------------------------------------------------------------------
 MessagePumpForWin::~MessagePumpForWin()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::run(Delegate* delegate)
 {
     runWithDispatcher(delegate, nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::quit()
 {
     DCHECK(state_);
     state_->should_quit = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::scheduleWork()
 {
     if (InterlockedExchange(&work_state_, HAVE_WORK) != READY)
@@ -74,6 +79,7 @@ void MessagePumpForWin::scheduleWork()
     InterlockedExchange(&work_state_, READY);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
 {
     // We would *like* to provide high resolution timers. Windows timers using SetTimer() have a
@@ -105,6 +111,7 @@ void MessagePumpForWin::scheduleDelayedWork(const TimePoint& delayed_work_time)
              nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::runWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher)
 {
     LOG(LS_INFO) << "Pump with custom dispatcher: " << (dispatcher != nullptr ? "YES" : "NO");
@@ -123,6 +130,7 @@ void MessagePumpForWin::runWithDispatcher(Delegate* delegate, MessagePumpDispatc
     state_ = previous_state;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessagePumpForWin::onMessage(
     UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& /* result */)
 {
@@ -143,6 +151,7 @@ bool MessagePumpForWin::onMessage(
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::doRunLoop()
 {
     LOG(LS_INFO) << "Started";
@@ -206,6 +215,7 @@ void MessagePumpForWin::doRunLoop()
     LOG(LS_INFO) << "Stopped";
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::waitForWork()
 {
     DWORD wait_flags = MWMO_INPUTAVAILABLE;
@@ -246,6 +256,7 @@ void MessagePumpForWin::waitForWork()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::handleWorkMessage()
 {
     // If we are being called outside of the context of Run, then don't try to do any work. This
@@ -268,6 +279,7 @@ void MessagePumpForWin::handleWorkMessage()
         scheduleWork();
 }
 
+//--------------------------------------------------------------------------------------------------
 void MessagePumpForWin::handleTimerMessage()
 {
     KillTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this));
@@ -285,6 +297,7 @@ void MessagePumpForWin::handleTimerMessage()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessagePumpForWin::processNextWindowsMessage()
 {
     // If there are sent messages in the queue then PeekMessage internally dispatches the message
@@ -305,6 +318,7 @@ bool MessagePumpForWin::processNextWindowsMessage()
     return sent_messages_in_queue;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessagePumpForWin::processMessageHelper(const MSG& msg)
 {
     if (msg.message == WM_QUIT)
@@ -334,6 +348,7 @@ bool MessagePumpForWin::processMessageHelper(const MSG& msg)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessagePumpForWin::processPumpReplacementMessage()
 {
     // When we encounter a kMsgHaveWork message, this method is called to peek and process a
@@ -368,6 +383,7 @@ bool MessagePumpForWin::processPumpReplacementMessage()
     return processMessageHelper(msg);
 }
 
+//--------------------------------------------------------------------------------------------------
 int MessagePumpForWin::currentDelay() const
 {
     if (delayed_work_time_ == TimePoint())

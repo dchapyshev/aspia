@@ -49,27 +49,27 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../ui/session_type.cc" line="30"/>
+        <location filename="../ui/session_type.cc" line="31"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="33"/>
+        <location filename="../ui/session_type.cc" line="34"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="36"/>
+        <location filename="../ui/session_type.cc" line="37"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="39"/>
+        <location filename="../ui/session_type.cc" line="40"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../ui/session_type.cc" line="42"/>
+        <location filename="../ui/session_type.cc" line="43"/>
         <source>Text Chat</source>
         <translation>Текстовый чат</translation>
     </message>
@@ -189,152 +189,152 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../ui/about_dialog.cc" line="114"/>
+        <location filename="../ui/about_dialog.cc" line="116"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="118"/>
+        <location filename="../ui/about_dialog.cc" line="120"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="119"/>
+        <location filename="../ui/about_dialog.cc" line="121"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="124"/>
+        <location filename="../ui/about_dialog.cc" line="126"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="128"/>
+        <location filename="../ui/about_dialog.cc" line="130"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="129"/>
+        <location filename="../ui/about_dialog.cc" line="131"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="130"/>
+        <location filename="../ui/about_dialog.cc" line="132"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="133"/>
+        <location filename="../ui/about_dialog.cc" line="135"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="135"/>
+        <location filename="../ui/about_dialog.cc" line="137"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="137"/>
+        <location filename="../ui/about_dialog.cc" line="139"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="158"/>
+        <location filename="../ui/about_dialog.cc" line="160"/>
         <source>Path: %1</source>
         <translation>Путь: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="159"/>
+        <location filename="../ui/about_dialog.cc" line="161"/>
         <source>Compilation date: %1</source>
         <translation>Дата компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="160"/>
+        <location filename="../ui/about_dialog.cc" line="162"/>
         <source>Compilation time: %1</source>
         <translation>Время компиляции: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="163"/>
+        <location filename="../ui/about_dialog.cc" line="165"/>
         <source>Git branch: %1</source>
         <translation>Ветка Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="164"/>
+        <location filename="../ui/about_dialog.cc" line="166"/>
         <source>Git commit: %1</source>
         <translation>Коммит Git: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="175"/>
+        <location filename="../ui/about_dialog.cc" line="177"/>
         <source>Display &apos;%1&apos;</source>
         <translation>Экран &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="176"/>
+        <location filename="../ui/about_dialog.cc" line="178"/>
         <source>Pixel ratio: %1</source>
         <translation>Соотношение пикселей: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="177"/>
+        <location filename="../ui/about_dialog.cc" line="179"/>
         <source>Logical DPI: %1x%2</source>
         <translation>Логический DPI: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="180"/>
+        <location filename="../ui/about_dialog.cc" line="182"/>
         <source>Physical DPI: %1x%2</source>
         <translation>Физический DPI: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="185"/>
+        <location filename="../ui/about_dialog.cc" line="187"/>
         <source>Size: %1x%2</source>
         <translation>Размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="188"/>
+        <location filename="../ui/about_dialog.cc" line="190"/>
         <source>Available size: %1x%2</source>
         <translation>Доступный размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="192"/>
+        <location filename="../ui/about_dialog.cc" line="194"/>
         <source>Virtual size: %1x%2</source>
         <translation>Виртуальный размер: %1x%2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="195"/>
+        <location filename="../ui/about_dialog.cc" line="197"/>
         <source>Depth: %1</source>
         <translation>Глубина цвета: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="196"/>
+        <location filename="../ui/about_dialog.cc" line="198"/>
         <source>Refresh rate: %1</source>
         <translation>Частота обновления: %1</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="201"/>
+        <location filename="../ui/about_dialog.cc" line="203"/>
         <source>%1 version: %2</source>
         <translation>Версия %1: %2</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="248"/>
+        <location filename="../ui/about_dialog.cc" line="252"/>
         <source>Save to file...</source>
         <translation>Сохранить в файл...</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="254"/>
+        <location filename="../ui/about_dialog.cc" line="258"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="256"/>
+        <location filename="../ui/about_dialog.cc" line="260"/>
         <source>TXT files (*.txt)</source>
         <translation>Файлы TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="265"/>
+        <location filename="../ui/about_dialog.cc" line="269"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/about_dialog.cc" line="266"/>
+        <location filename="../ui/about_dialog.cc" line="270"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
@@ -342,17 +342,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../ui/download_dialog.cc" line="39"/>
+        <location filename="../ui/download_dialog.cc" line="40"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="53"/>
+        <location filename="../ui/download_dialog.cc" line="55"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/download_dialog.cc" line="54"/>
+        <location filename="../ui/download_dialog.cc" line="56"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Произошла ошибка при загрузке обновления: %1</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation type="vanished">Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/status_dialog.cc" line="39"/>
+        <location filename="../ui/status_dialog.cc" line="40"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -379,12 +379,12 @@
 <context>
     <name>common::TextChatWidget</name>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="62"/>
+        <location filename="../ui/text_chat_widget.cc" line="63"/>
         <source>Save chat...</source>
         <translation>Сохранить чат...</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="63"/>
+        <location filename="../ui/text_chat_widget.cc" line="64"/>
         <source>Clear chat</source>
         <translation>Очистить чат</translation>
     </message>
@@ -393,7 +393,7 @@
         <translation type="vanished">Текстовый чат запущен (%1)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="116"/>
+        <location filename="../ui/text_chat_widget.cc" line="120"/>
         <source>%1 is typing...</source>
         <translation>%1 печатает...</translation>
     </message>
@@ -406,33 +406,33 @@
         <translation type="obsolete">Пользователь %1 завершил чат.</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="122"/>
+        <location filename="../ui/text_chat_widget.cc" line="126"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Пользователь %1 вошел в чат (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="129"/>
+        <location filename="../ui/text_chat_widget.cc" line="133"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Пользователь %1 покинул чат (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="136"/>
+        <location filename="../ui/text_chat_widget.cc" line="140"/>
         <source>User %1 is logged in (%2)</source>
         <translation>Пользователь %1 вошел в систему (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="143"/>
+        <location filename="../ui/text_chat_widget.cc" line="147"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>Пользователь %1 не в системе (%2)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="232"/>
-        <location filename="../ui/text_chat_widget.cc" line="285"/>
+        <location filename="../ui/text_chat_widget.cc" line="242"/>
+        <location filename="../ui/text_chat_widget.cc" line="298"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/text_chat_widget.cc" line="233"/>
+        <location filename="../ui/text_chat_widget.cc" line="243"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Введенное сообщение слишком длинное. Максимальная длина сообщения %n символ.</numerusform>
@@ -441,17 +441,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="274"/>
+        <location filename="../ui/text_chat_widget.cc" line="287"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="276"/>
+        <location filename="../ui/text_chat_widget.cc" line="289"/>
         <source>TXT files (*.txt)</source>
         <translation>Файлы TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../ui/text_chat_widget.cc" line="286"/>
+        <location filename="../ui/text_chat_widget.cc" line="299"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
@@ -506,72 +506,72 @@
 <context>
     <name>common::UpdateDialog</name>
     <message>
-        <location filename="../ui/update_dialog.cc" line="57"/>
+        <location filename="../ui/update_dialog.cc" line="59"/>
         <source>Receiving information...</source>
         <translation>Получение информации...</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="100"/>
+        <location filename="../ui/update_dialog.cc" line="106"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Отмена проверки обновлений. Пожалуйста, подождите.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="113"/>
+        <location filename="../ui/update_dialog.cc" line="120"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="114"/>
+        <location filename="../ui/update_dialog.cc" line="121"/>
         <source>Error retrieving update information.</source>
         <translation>Ошибка при получении информации об обновлении.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="135"/>
+        <location filename="../ui/update_dialog.cc" line="142"/>
         <source>No updates available.</source>
         <translation>Нет доступных обновлений.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="150"/>
+        <location filename="../ui/update_dialog.cc" line="158"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Обновление будет загружено. После завершения скачивания обновления, приложение будет автоматически закрыто.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="152"/>
+        <location filename="../ui/update_dialog.cc" line="160"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Все подключенные сессии будут завершены. Вы не сможете установить подключение до завершения обновления.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="154"/>
+        <location filename="../ui/update_dialog.cc" line="162"/>
         <source>All unsaved data will be lost.</source>
         <translation>Все несохраненные данные будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="155"/>
+        <location filename="../ui/update_dialog.cc" line="163"/>
         <source>Continue?</source>
         <translation>Продолжить?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="158"/>
+        <location filename="../ui/update_dialog.cc" line="166"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="163"/>
+        <location filename="../ui/update_dialog.cc" line="171"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="164"/>
+        <location filename="../ui/update_dialog.cc" line="172"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="172"/>
+        <location filename="../ui/update_dialog.cc" line="180"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="173"/>
+        <location filename="../ui/update_dialog.cc" line="181"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Произошла ошибка при установке обновления: %1</translation>
     </message>

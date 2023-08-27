@@ -31,17 +31,20 @@ constexpr size_t kMaxCacheSize = 30;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 CursorDecoder::CursorDecoder()
     : stream_(ZSTD_createDStream())
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 CursorDecoder::~CursorDecoder()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape) const
 {
     const std::string& data = cursor_shape.data();
@@ -89,6 +92,7 @@ ByteArray CursorDecoder::decompressCursor(const proto::CursorShape& cursor_shape
     return image;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cursor_shape)
 {
     size_t cache_index;
@@ -178,11 +182,13 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::CursorShape& cur
     return cache_[cache_index];
 }
 
+//--------------------------------------------------------------------------------------------------
 int CursorDecoder::cachedCursors() const
 {
     return static_cast<int>(cache_.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 int CursorDecoder::takenCursorsFromCache() const
 {
     return taken_from_cache_;

@@ -24,6 +24,7 @@ namespace base::win {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool constexpr isEqual(SessionStatus status1, DWORD status2)
 {
     return static_cast<DWORD>(status1) == status2;
@@ -43,6 +44,7 @@ static_assert(isEqual(SessionStatus::SESSION_TERMINATE, WTS_SESSION_TERMINATE));
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionStatusToString(SessionStatus status)
 {
     switch (status)

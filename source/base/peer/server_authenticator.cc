@@ -36,6 +36,7 @@ namespace {
 
 constexpr size_t kIvSize = 12;
 
+//--------------------------------------------------------------------------------------------------
 const char* identifyToString(proto::Identify identify)
 {
     switch (identify)
@@ -53,23 +54,27 @@ const char* identifyToString(proto::Identify identify)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ServerAuthenticator::ServerAuthenticator(std::shared_ptr<TaskRunner> task_runner)
     : Authenticator(std::move(task_runner))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ServerAuthenticator::~ServerAuthenticator()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::setUserList(base::local_shared_ptr<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
 {
     // The method must be called before calling start().
@@ -99,6 +104,7 @@ bool ServerAuthenticator::setPrivateKey(const ByteArray& private_key)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServerAuthenticator::setAnonymousAccess(
     AnonymousAccess anonymous_access, uint32_t session_types)
 {
@@ -132,6 +138,7 @@ bool ServerAuthenticator::setAnonymousAccess(
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ServerAuthenticator::onStarted()
 {
     internal_state_ = InternalState::READ_CLIENT_HELLO;
@@ -172,6 +179,7 @@ bool ServerAuthenticator::onStarted()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onReceived(const ByteArray& buffer)
 {
     switch (internal_state_)
@@ -198,6 +206,7 @@ void ServerAuthenticator::onReceived(const ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onWritten()
 {
     switch (internal_state_)
@@ -254,6 +263,7 @@ void ServerAuthenticator::onWritten()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientHello(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientHello";
@@ -373,6 +383,7 @@ void ServerAuthenticator::onClientHello(const ByteArray& buffer)
     sendMessage(*server_hello);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onIdentify(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: Identify";
@@ -479,6 +490,7 @@ void ServerAuthenticator::onIdentify(const ByteArray& buffer)
     sendMessage(*server_key_exchange);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: ClientKeyExchange";
@@ -537,6 +549,7 @@ void ServerAuthenticator::onClientKeyExchange(const ByteArray& buffer)
     doSessionChallenge();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::doSessionChallenge()
 {
     std::unique_ptr<proto::SessionChallenge> session_challenge =
@@ -557,6 +570,7 @@ void ServerAuthenticator::doSessionChallenge()
     sendMessage(*session_challenge);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
 {
     LOG(LS_INFO) << "Received: SessionResponse";
@@ -597,6 +611,7 @@ void ServerAuthenticator::onSessionResponse(const ByteArray& buffer)
     finish(FROM_HERE, ErrorCode::SUCCESS);
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray ServerAuthenticator::createSrpKey()
 {
     if (!SrpMath::verify_A_mod_N(A_, N_))

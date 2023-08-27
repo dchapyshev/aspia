@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 template <typename InputT, typename OutputT>
 OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 {
@@ -58,12 +59,14 @@ OutputT hashT(PasswordHash::Type type, std::string_view password, InputT salt)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray PasswordHash::hash(Type type, std::string_view password, const ByteArray& salt)
 {
     return hashT<const ByteArray, ByteArray>(type, password, salt);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string PasswordHash::hash(Type type, std::string_view password, std::string_view salt)
 {

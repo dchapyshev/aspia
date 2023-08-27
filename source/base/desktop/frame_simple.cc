@@ -20,17 +20,20 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FrameSimple::FrameSimple(const Size& size, const PixelFormat& format, uint8_t* data)
     : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FrameSimple::~FrameSimple()
 {
     free(data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameSimple> FrameSimple::create(const Size& size, const PixelFormat& format)
 {

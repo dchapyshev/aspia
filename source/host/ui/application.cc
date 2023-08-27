@@ -51,6 +51,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(EventFilter);
 };
 
+//--------------------------------------------------------------------------------------------------
 // static
 EventFilter* EventFilter::instance()
 {
@@ -58,6 +59,7 @@ EventFilter* EventFilter::instance()
     return &event_filter;
 }
 
+//--------------------------------------------------------------------------------------------------
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message, long* result)
 #else
@@ -78,14 +80,15 @@ bool EventFilter::nativeEventFilter(const QByteArray& event_type, void* message,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : qt_base::Application(argc, argv)
 {
     LOG(LS_INFO) << "Ctor";
 
-    setOrganizationName(QStringLiteral("Aspia"));
-    setApplicationName(QStringLiteral("Host"));
-    setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    setOrganizationName("Aspia");
+    setApplicationName("Host");
+    setApplicationVersion(ASPIA_VERSION_STRING);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 #endif
@@ -93,12 +96,12 @@ Application::Application(int& argc, char* argv[])
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
         EventFilter::instance());
 
-    connect(this, &Application::messageReceived, this, [this](const QByteArray& message)
+    connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {
         if (message == kActivateMessage)
         {
             LOG(LS_INFO) << "Activate message received";
-            emit activated();
+            emit sig_activated();
         }
         else
         {
@@ -107,22 +110,25 @@ Application::Application(int& argc, char* argv[])
     });
 
     if (!hasLocale(settings_.locale()))
-        settings_.setLocale(QStringLiteral(DEFAULT_LOCALE));
+        settings_.setLocale(DEFAULT_LOCALE);
 
     setLocale(settings_.locale());
 }
 
+//--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::activate()
 {
     LOG(LS_INFO) << "Sending activate message";

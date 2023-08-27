@@ -20,14 +20,17 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioVolumeFilter::AudioVolumeFilter(int silence_threshold)
     : silence_detector_(silence_threshold)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioVolumeFilter::~AudioVolumeFilter() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool AudioVolumeFilter::apply(int16_t* data, size_t frames)
 {
     if (frames == 0)
@@ -54,6 +57,7 @@ bool AudioVolumeFilter::apply(int16_t* data, size_t frames)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioVolumeFilter::initialize(int sampling_rate, int channels)
 {
     silence_detector_.reset(sampling_rate, channels);

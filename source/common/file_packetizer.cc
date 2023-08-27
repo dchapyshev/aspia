@@ -25,6 +25,7 @@ namespace common {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 char* outputBuffer(proto::FilePacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
@@ -33,6 +34,7 @@ char* outputBuffer(proto::FilePacket* packet, size_t size)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     : file_stream_(std::move(file_stream))
 {
@@ -42,6 +44,7 @@ FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
     left_size_ = file_size_;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::path& file_path)
 {
     std::ifstream file_stream;
@@ -53,6 +56,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::pa
     return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     const proto::FilePacketRequest& request)
 {

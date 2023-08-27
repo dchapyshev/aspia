@@ -28,6 +28,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirmationRequest& request,
                                            QWidget* parent)
     : QDialog(parent),
@@ -86,11 +87,13 @@ ConnectConfirmDialog::ConnectConfirmDialog(const proto::internal::ConnectConfirm
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::~ConnectConfirmDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
@@ -108,6 +111,7 @@ void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onTimeout()
 {
     time_seconds_ -= 1;
@@ -127,6 +131,7 @@ void ConnectConfirmDialog::onTimeout()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::updateMessage()
 {
     QString timeout_string;

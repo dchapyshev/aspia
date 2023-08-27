@@ -56,18 +56,21 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 TcpServer::Impl::Impl(asio::io_context& io_context)
     : io_context_(io_context)
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 TcpServer::Impl::~Impl()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!acceptor_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
     delegate_ = delegate;
@@ -92,28 +95,33 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
     doAccept();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::stop()
 {
     delegate_ = nullptr;
     acceptor_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string TcpServer::Impl::listenInterface() const
 {
     return listen_interface_;
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t TcpServer::Impl::port() const
 {
     return port_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::doAccept()
 {
     acceptor_->async_accept(
         std::bind(&Impl::onAccept, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp::socket socket)
 {
     if (!delegate_)
@@ -149,38 +157,45 @@ void TcpServer::Impl::onAccept(const std::error_code& error_code, asio::ip::tcp:
     doAccept();
 }
 
+//--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer()
     : impl_(base::make_local_shared<Impl>(MessageLoop::current()->pumpAsio()->ioContext()))
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 TcpServer::~TcpServer()
 {
     LOG(LS_INFO) << "Dtor";
     impl_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::start(std::u16string_view listen_interface, uint16_t port, Delegate* delegate)
 {
     impl_->start(listen_interface, port, delegate);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TcpServer::stop()
 {
     impl_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 std::u16string TcpServer::listenInterface() const
 {
     return impl_->listenInterface();
 }
 
+//--------------------------------------------------------------------------------------------------
 uint16_t TcpServer::port() const
 {
     return impl_->port();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool TcpServer::isValidListenInterface(std::u16string_view interface)
 {

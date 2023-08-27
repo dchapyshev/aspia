@@ -26,6 +26,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 bool isDebuggerPresent()
 {
 #if defined(OS_WIN)
@@ -36,6 +37,7 @@ bool isDebuggerPresent()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void debugPrint(const char* str)
 {
 #if defined(OS_WIN)
@@ -45,6 +47,7 @@ void debugPrint(const char* str)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 void debugBreak()
 {
 #if defined(ARCH_CPU_X86_FAMILY)

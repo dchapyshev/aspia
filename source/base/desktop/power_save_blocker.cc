@@ -26,6 +26,7 @@ namespace {
 
 #if defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& description)
 {
     REASON_CONTEXT context;
@@ -51,6 +52,7 @@ HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& desc
     return handle.release();
 }
 
+//--------------------------------------------------------------------------------------------------
 // Takes ownership of the |handle|.
 void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 {
@@ -71,6 +73,7 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 PowerSaveBlocker::PowerSaveBlocker()
 {
     LOG(LS_INFO) << "Ctor";
@@ -85,6 +88,7 @@ PowerSaveBlocker::PowerSaveBlocker()
 #endif // defined(OS_*)
 }
 
+//--------------------------------------------------------------------------------------------------
 PowerSaveBlocker::~PowerSaveBlocker()
 {
     LOG(LS_INFO) << "Dtor";

@@ -89,6 +89,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcherImpl);
 };
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner)
     : FilePathWatcher::PlatformDelegate(task_runner),
       watcher_(task_runner)
@@ -96,6 +97,7 @@ FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcherImpl::~FilePathWatcherImpl()
 {
     DCHECK(!taskRunner() || taskRunner()->belongsToCurrentThread());
@@ -104,6 +106,7 @@ FilePathWatcherImpl::~FilePathWatcherImpl()
         *was_deleted_ptr_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
                                 bool recursive,
                                 const FilePathWatcher::Callback& callback)
@@ -135,6 +138,7 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePathWatcherImpl::cancel()
 {
     if (!callback_)
@@ -153,6 +157,7 @@ void FilePathWatcherImpl::cancel()
     callback_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePathWatcherImpl::onObjectSignaled(HANDLE object)
 {
     DCHECK(taskRunner()->belongsToCurrentThread());
@@ -227,6 +232,7 @@ void FilePathWatcherImpl::onObjectSignaled(HANDLE object)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePathWatcherImpl::setupWatchHandle(const std::filesystem::path& dir,
                                            bool recursive,
@@ -270,6 +276,7 @@ bool FilePathWatcherImpl::setupWatchHandle(const std::filesystem::path& dir,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FilePathWatcherImpl::updateWatch()
 {
     if (handle_ != INVALID_HANDLE_VALUE)
@@ -331,6 +338,7 @@ bool FilePathWatcherImpl::updateWatch()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FilePathWatcherImpl::destroyWatch()
 {
     watcher_.stopWatching();
@@ -344,6 +352,7 @@ void FilePathWatcherImpl::destroyWatch()
 
 }  // namespace
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner> task_runner)
 {
     impl_ = std::make_unique<FilePathWatcherImpl>(std::move(task_runner));

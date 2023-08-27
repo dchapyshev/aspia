@@ -22,6 +22,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void readApplicationsInformation(proto::system_info::Applications* /* applications */)
 {
     NOTIMPLEMENTED();

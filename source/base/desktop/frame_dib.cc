@@ -25,6 +25,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FrameDib::FrameDib(const Size& size,
                    const PixelFormat& format,
                    int stride,
@@ -38,6 +39,7 @@ FrameDib::FrameDib(const Size& size,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
                                            const PixelFormat& format,

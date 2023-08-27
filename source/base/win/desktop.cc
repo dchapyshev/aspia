@@ -22,6 +22,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Desktop::Desktop(Desktop&& other) noexcept
 {
     desktop_ = other.desktop_;
@@ -30,18 +31,21 @@ Desktop::Desktop(Desktop&& other) noexcept
     other.desktop_ = nullptr;
 }
 
-Desktop::Desktop(HDESK desktop, bool own) :
-    desktop_(desktop),
-    own_(own)
+//--------------------------------------------------------------------------------------------------
+Desktop::Desktop(HDESK desktop, bool own)
+    : desktop_(desktop),
+      own_(own)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Desktop::~Desktop()
 {
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::desktop(const wchar_t* desktop_name)
 {
@@ -61,6 +65,7 @@ Desktop Desktop::desktop(const wchar_t* desktop_name)
     return Desktop(desktop, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::inputDesktop()
 {
@@ -76,6 +81,7 @@ Desktop Desktop::inputDesktop()
     return Desktop(desktop, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Desktop Desktop::threadDesktop()
 {
@@ -89,6 +95,7 @@ Desktop Desktop::threadDesktop()
     return Desktop(desktop, false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::name(wchar_t* name, DWORD length) const
 {
     if (!desktop_)
@@ -103,6 +110,7 @@ bool Desktop::name(wchar_t* name, DWORD length) const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::isSame(const Desktop& other) const
 {
     wchar_t this_name[128];
@@ -118,6 +126,7 @@ bool Desktop::isSame(const Desktop& other) const
     return wcscmp(this_name, other_name) == 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::setThreadDesktop() const
 {
     if (!SetThreadDesktop(desktop_))
@@ -129,11 +138,13 @@ bool Desktop::setThreadDesktop() const
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Desktop::isValid() const
 {
     return (desktop_ != nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Desktop::close()
 {
     if (own_ && desktop_)
@@ -147,6 +158,7 @@ void Desktop::close()
     desktop_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Desktop& Desktop::operator=(Desktop&& other) noexcept
 {
     close();

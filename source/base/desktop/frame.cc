@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Frame::Frame(const Size& size,
              const PixelFormat& format,
              int stride,
@@ -39,11 +40,13 @@ Frame::Frame(const Size& size,
     DCHECK(size_.height() >= 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Frame::contains(int x, int y) const
 {
     return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
 }
 
+//--------------------------------------------------------------------------------------------------
 void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect& dest_rect)
 {
     DCHECK(Rect::makeSize(size()).containsRect(dest_rect));
@@ -59,21 +62,25 @@ void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Frame::copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect)
 {
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t* Frame::frameDataAtPos(const Point& pos) const
 {
     return frameDataAtPos(pos.x(), pos.y());
 }
 
+//--------------------------------------------------------------------------------------------------
 uint8_t* Frame::frameDataAtPos(int x, int y) const
 {
     return frameData() + stride() * y + format_.bytesPerPixel() * x;
 }
 
+//--------------------------------------------------------------------------------------------------
 void Frame::copyFrameInfoFrom(const Frame& other)
 {
     updated_region_ = other.updated_region_;
@@ -82,6 +89,7 @@ void Frame::copyFrameInfoFrom(const Frame& other)
     capturer_type_ = other.capturer_type_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 size_t Frame::calcMemorySize(const Size& size, int bytes_per_pixel)
 {

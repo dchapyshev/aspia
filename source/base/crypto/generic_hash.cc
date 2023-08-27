@@ -24,6 +24,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 GenericHash::GenericHash(Type type)
 {
     ctxt_ = EVP_MD_CTX_new();
@@ -67,12 +68,14 @@ GenericHash::GenericHash(Type type)
     reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 GenericHash::~GenericHash()
 {
     DCHECK(ctxt_);
     EVP_MD_CTX_free(ctxt_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray GenericHash::hash(Type type, const void* data, size_t size)
 {
@@ -81,18 +84,21 @@ ByteArray GenericHash::hash(Type type, const void* data, size_t size)
     return generic_hash.result();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray GenericHash::hash(Type type, std::string_view data)
 {
     return hash(type, data.data(), data.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray GenericHash::hash(Type type, const ByteArray& data)
 {
     return hash(type, data.data(), data.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 void GenericHash::addData(const void* data, size_t size)
 {
     DCHECK(ctxt_);
@@ -100,16 +106,19 @@ void GenericHash::addData(const void* data, size_t size)
     CHECK_EQ(ret, 1);
 }
 
+//--------------------------------------------------------------------------------------------------
 void GenericHash::addData(std::string_view data)
 {
     addData(data.data(), data.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 void GenericHash::addData(const ByteArray& data)
 {
     addData(data.data(), data.size());
 }
 
+//--------------------------------------------------------------------------------------------------
 ByteArray GenericHash::result() const
 {
     DCHECK(ctxt_);
@@ -127,6 +136,7 @@ ByteArray GenericHash::result() const
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 void GenericHash::reset()
 {
     int ret = EVP_DigestInit(ctxt_, md_);

@@ -33,6 +33,7 @@ namespace {
 
 const size_t kGUIDLength = 36U;
 
+//--------------------------------------------------------------------------------------------------
 bool isHexDigit(char c)
 {
     return (c >= '0' && c <= '9') ||
@@ -40,11 +41,13 @@ bool isHexDigit(char c)
            (c >= 'a' && c <= 'f');
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isLowerHexDigit(char c)
 {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
 }
 
+//--------------------------------------------------------------------------------------------------
 void numberToHex(char*& target, const char* source, size_t source_count)
 {
     static const char kTable[] = "0123456789abcdef";
@@ -56,6 +59,7 @@ void numberToHex(char*& target, const char* source, size_t source_count)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isValidGUIDInternal(std::string_view guid, bool strict)
 {
     if (guid.length() != kGUIDLength)
@@ -79,6 +83,7 @@ bool isValidGUIDInternal(std::string_view guid, bool strict)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <class T>
 T randomDataToGUIDStringT(const uint64_t bytes[2])
 {
@@ -107,18 +112,21 @@ T randomDataToGUIDStringT(const uint64_t bytes[2])
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Guid::Guid()
     : bytes_{0, 0}
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Guid::Guid(const Guid& other)
 {
     bytes_[0] = other.bytes_[0];
     bytes_[1] = other.bytes_[1];
 }
 
+//--------------------------------------------------------------------------------------------------
 Guid& Guid::operator=(const Guid& other)
 {
     if (this != &other)
@@ -130,17 +138,20 @@ Guid& Guid::operator=(const Guid& other)
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 Guid::Guid(const uint64_t bytes[2])
 {
     bytes_[0] = bytes[0];
     bytes_[1] = bytes[1];
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Guid::isNull() const
 {
     return !bytes_[0] || !bytes_[1];
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Guid Guid::create()
 {
@@ -176,23 +187,27 @@ Guid Guid::create()
     return Guid(sixteen_bytes);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Guid::isValidGuidString(std::string_view guid)
 {
     return isValidGUIDInternal(guid, false /* strict */);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Guid::isStrictValidGuidString(std::string_view guid)
 {
     return isValidGUIDInternal(guid, true /* strict */);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string Guid::toStdString() const
 {
     return randomDataToGUIDStringT<std::string>(bytes_);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Guid::operator==(const Guid& other) const
 {
     return bytes_[0] == other.bytes_[0] && bytes_[1] == other.bytes_[1];

@@ -63,14 +63,17 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 FileWorker::Impl::Impl(std::shared_ptr<base::TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileWorker::Impl::~Impl() = default;
 
+//--------------------------------------------------------------------------------------------------
 void FileWorker::Impl::doTask(std::shared_ptr<FileTask> task)
 {
     auto self = shared_from_this();
@@ -80,6 +83,7 @@ void FileWorker::Impl::doTask(std::shared_ptr<FileTask> task)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doRequest(const proto::FileRequest& request)
 {
 #if defined(OS_WIN)
@@ -132,6 +136,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRequest(const proto::FileR
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
@@ -217,6 +222,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDriveListRequest()
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doFileListRequest(
     const proto::FileListRequest& request)
 {
@@ -259,6 +265,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doFileListRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doCreateDirectoryRequest(
     const proto::CreateDirectoryRequest& request)
 {
@@ -283,6 +290,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doCreateDirectoryRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doRenameRequest(
     const proto::RenameRequest& request)
 {
@@ -333,6 +341,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRenameRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doRemoveRequest(
     const proto::RemoveRequest& request)
 {
@@ -368,6 +377,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRemoveRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doDownloadRequest(
     const proto::DownloadRequest& request)
 {
@@ -382,6 +392,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doDownloadRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doUploadRequest(
     const proto::UploadRequest& request)
 {
@@ -415,6 +426,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doUploadRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacketRequest(
     const proto::FilePacketRequest& request)
 {
@@ -447,6 +459,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacketRequest(
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacket(const proto::FilePacket& packet)
 {
     std::unique_ptr<proto::FileReply> reply = std::make_unique<proto::FileReply>();
@@ -476,19 +489,23 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacket(const proto::FilePa
     return reply;
 }
 
+//--------------------------------------------------------------------------------------------------
 FileWorker::FileWorker(std::shared_ptr<base::TaskRunner> task_runner)
     : impl_(std::make_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FileWorker::~FileWorker() = default;
 
+//--------------------------------------------------------------------------------------------------
 void FileWorker::doTask(std::shared_ptr<FileTask> task)
 {
     impl_->doTask(std::move(task));
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<base::TaskRunner> FileWorker::taskRunner()
 {
     return impl_->taskRunner();

@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 TextChatWindowProxy::TextChatWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                          TextChatWindow* text_chat_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -33,12 +34,14 @@ TextChatWindowProxy::TextChatWindowProxy(std::shared_ptr<base::TaskRunner> ui_ta
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 TextChatWindowProxy::~TextChatWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!text_chat_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach text chat window";
@@ -46,6 +49,7 @@ void TextChatWindowProxy::dettach()
     text_chat_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWindowProxy::start(std::shared_ptr<TextChatControlProxy> text_chat_control_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -59,6 +63,7 @@ void TextChatWindowProxy::start(std::shared_ptr<TextChatControlProxy> text_chat_
         text_chat_window_->start(text_chat_control_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatWindowProxy::onTextChatMessage(const proto::TextChat& text_chat)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

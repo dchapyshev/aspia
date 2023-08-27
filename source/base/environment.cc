@@ -40,6 +40,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool getImpl(std::string_view variable_name, std::string* result)
 {
 #if defined(OS_WIN)
@@ -67,6 +68,7 @@ bool getImpl(std::string_view variable_name, std::string* result)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool setImpl(std::string_view variable_name, const std::string& new_value)
 {
 #if defined(OS_WIN)
@@ -79,6 +81,7 @@ bool setImpl(std::string_view variable_name, const std::string& new_value)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 bool unSetImpl(std::string_view variable_name)
 {
 #if defined(OS_WIN)
@@ -102,6 +105,7 @@ const char kHome[] = "HOME";
 
 }  // namespace env_vars
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Environment::get(std::string_view variable_name, std::string* result)
 {
@@ -124,24 +128,28 @@ bool Environment::get(std::string_view variable_name, std::string* result)
     return getImpl(alternate_case_var, result);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Environment::has(std::string_view variable_name)
 {
     return get(variable_name, nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Environment::set(std::string_view variable_name, const std::string& new_value)
 {
     return setImpl(variable_name, new_value);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Environment::unSet(std::string_view variable_name)
 {
     return unSetImpl(variable_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::vector<std::pair<std::string, std::string>> Environment::list()
 {

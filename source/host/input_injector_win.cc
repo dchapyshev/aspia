@@ -34,6 +34,7 @@ const uint32_t kUsbCodeRightCtrl = 0x0700e4;
 const uint32_t kUsbCodeLeftAlt = 0x0700e2;
 const uint32_t kUsbCodeRightAlt = 0x0700e6;
 
+//--------------------------------------------------------------------------------------------------
 void sendKeyboardScancode(WORD scancode, DWORD flags)
 {
     INPUT input;
@@ -58,6 +59,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 {
     INPUT input;
@@ -75,6 +77,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 {
     INPUT input;
@@ -93,11 +96,13 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorWin::InputInjectorWin()
 {
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 InputInjectorWin::~InputInjectorWin()
 {
     LOG(LS_INFO) << "Dtor";
@@ -118,11 +123,13 @@ InputInjectorWin::~InputInjectorWin()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::setScreenOffset(const base::Point& offset)
 {
     screen_offset_ = offset;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::setBlockInput(bool enable)
 {
     beforeInput();
@@ -130,6 +137,7 @@ void InputInjectorWin::setBlockInput(bool enable)
     BlockInput(!!enable);
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
 {
     if (event.flags() & proto::KeyEvent::PRESSED)
@@ -189,6 +197,7 @@ void InputInjectorWin::injectKeyEvent(const proto::KeyEvent& event)
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
 {
     std::u16string text = base::utf16FromUtf8(event.text());
@@ -212,6 +221,7 @@ void InputInjectorWin::injectTextEvent(const proto::TextEvent& event)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
 {
     beforeInput();
@@ -314,6 +324,7 @@ void InputInjectorWin::injectMouseEvent(const proto::MouseEvent& event)
     last_mouse_mask_ = mask;
 }
 
+//--------------------------------------------------------------------------------------------------
 void InputInjectorWin::beforeInput()
 {
     BlockInput(!!block_input_);
@@ -323,6 +334,7 @@ void InputInjectorWin::beforeInput()
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool InputInjectorWin::isCtrlAndAltPressed()
 {
     bool ctrl_pressed = false;

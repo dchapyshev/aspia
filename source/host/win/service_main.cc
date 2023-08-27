@@ -38,6 +38,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 void startService()
 {
     base::win::ServiceController controller =
@@ -60,6 +61,7 @@ void startService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void stopService()
 {
     base::win::ServiceController controller =
@@ -82,6 +84,7 @@ void stopService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void installService()
 {
     std::filesystem::path file_path;
@@ -106,6 +109,7 @@ void installService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void removeService()
 {
     if (base::win::ServiceController::isRunning(host::kHostServiceName))
@@ -123,6 +127,7 @@ void removeService()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::optional<std::string> currentSessionName()
 {
     DWORD process_session_id = 0;
@@ -189,6 +194,7 @@ std::optional<std::string> currentSessionName()
     return std::move(session_name);
 }
 
+//--------------------------------------------------------------------------------------------------
 int hostServiceMain(int argc, wchar_t* argv[])
 {
     (void)argc;

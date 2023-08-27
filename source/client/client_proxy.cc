@@ -40,6 +40,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 ClientProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
                         std::unique_ptr<Client> client)
     : io_task_runner_(std::move(io_task_runner)),
@@ -48,11 +49,13 @@ ClientProxy::Impl::Impl(std::shared_ptr<base::TaskRunner> io_task_runner,
     DCHECK(io_task_runner_ && client_);
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientProxy::Impl::~Impl()
 {
     DCHECK(!client_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientProxy::Impl::start(const Config& config)
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -65,6 +68,7 @@ void ClientProxy::Impl::start(const Config& config)
         client_->start(config);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientProxy::Impl::stop()
 {
     if (!io_task_runner_->belongsToCurrentThread())
@@ -80,6 +84,7 @@ void ClientProxy::Impl::stop()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientProxy::ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
                          std::unique_ptr<Client> client,
                          const Config& config)
@@ -89,16 +94,19 @@ ClientProxy::ClientProxy(std::shared_ptr<base::TaskRunner> io_task_runner,
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientProxy::~ClientProxy()
 {
     impl_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientProxy::start()
 {
     impl_->start(config_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientProxy::stop()
 {
     impl_->stop();

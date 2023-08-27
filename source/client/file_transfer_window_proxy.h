@@ -43,6 +43,7 @@ public:
     void setCurrentItem(const std::string& source_path,
                         const std::string& target_path);
     void setCurrentProgress(int total, int current);
+    void setCurrentSpeed(int64_t speed);
     void errorOccurred(const FileTransfer::Error& error);
 
 private:

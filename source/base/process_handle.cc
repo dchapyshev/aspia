@@ -21,12 +21,14 @@
 namespace base {
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 ProcessHandle currentProcessHandle()
 {
     return GetCurrentProcess();
 }
 #endif
 
+//--------------------------------------------------------------------------------------------------
 ProcessId currentProcessId()
 {
 #if defined(OS_WIN)

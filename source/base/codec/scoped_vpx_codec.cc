@@ -25,6 +25,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
 {
     if (codec)

@@ -317,6 +317,7 @@ const SrpNgPair kSrpNgPair_8192 =
     { reinterpret_cast<const char*>(kSrpGenerator_19), sizeof(kSrpGenerator_19) }
 };
 
+//--------------------------------------------------------------------------------------------------
 std::optional<SrpNgPair> pairByGroup(std::string_view group)
 {
     if (group == "8192")

@@ -41,6 +41,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Watcher);
 };
 
+//--------------------------------------------------------------------------------------------------
 FileDescriptorWatcher::Watcher::Watcher(int fd, Mode mode, const Callback& callback)
     : asio::posix::descriptor(base::MessageLoop::current()->pumpAsio()->ioContext()),
       callback_(callback)
@@ -66,6 +67,7 @@ FileDescriptorWatcher::Watcher::Watcher(int fd, Mode mode, const Callback& callb
     assign(fd, ignored_error);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileDescriptorWatcher::Watcher::~Watcher()
 {
     // We do not own the descriptor and should not close it. We cancel the asynchronous operation
@@ -74,6 +76,7 @@ FileDescriptorWatcher::Watcher::~Watcher()
     release();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileDescriptorWatcher::Watcher::start()
 {
     async_wait(wait_type_, [this](const std::error_code& error_code)
@@ -95,9 +98,13 @@ void FileDescriptorWatcher::Watcher::start()
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 FileDescriptorWatcher::FileDescriptorWatcher() = default;
+
+//--------------------------------------------------------------------------------------------------
 FileDescriptorWatcher::~FileDescriptorWatcher() = default;
 
+//--------------------------------------------------------------------------------------------------
 void FileDescriptorWatcher::startWatching(int fd, Mode mode, const Callback& callback)
 {
     impl_ = std::make_unique<Watcher>(fd, mode, callback);

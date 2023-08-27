@@ -20,6 +20,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotspot, const Point& dpi)
     : image_(std::move(image)),
       size_(size),
@@ -29,11 +30,13 @@ MouseCursor::MouseCursor(ByteArray&& image, const Size& size, const Point& hotsp
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 MouseCursor::MouseCursor(MouseCursor&& other) noexcept
 {
     *this = std::move(other);
 }
 
+//--------------------------------------------------------------------------------------------------
 MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
 {
     if (&other != this)
@@ -51,11 +54,13 @@ MouseCursor& MouseCursor::operator=(MouseCursor&& other) noexcept
     return *this;
 }
 
+//--------------------------------------------------------------------------------------------------
 int MouseCursor::stride() const
 {
     return size_.width() * static_cast<int>(sizeof(uint32_t));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MouseCursor::equals(const MouseCursor& other)
 {
     return size_.equals(other.size_) &&

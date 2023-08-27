@@ -22,17 +22,20 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FrameAligned::FrameAligned(const Size& size, const PixelFormat& format, uint8_t* data)
     : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FrameAligned::~FrameAligned()
 {
     alignedFree(data_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<FrameAligned> FrameAligned::create(
     const Size& size, const PixelFormat& format, size_t alignment)

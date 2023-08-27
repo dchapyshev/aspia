@@ -27,6 +27,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ClientSession::ClientSession(
     proto::SessionType session_type, std::unique_ptr<base::TcpChannel> channel)
     : session_type_(session_type),
@@ -42,11 +43,13 @@ ClientSession::ClientSession(
     LOG(LS_INFO) << "Ctor: " << id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSession::~ClientSession()
 {
     LOG(LS_INFO) << "Dtor: " << id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_type,
                                                      std::unique_ptr<base::TcpChannel> channel,
@@ -83,6 +86,7 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::start(Delegate* delegate)
 {
     LOG(LS_INFO) << "Starting client session";
@@ -98,6 +102,7 @@ void ClientSession::start(Delegate* delegate)
     onStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::stop()
 {
     LOG(LS_INFO) << "Stop client session";
@@ -106,46 +111,55 @@ void ClientSession::stop()
     delegate_->onClientSessionFinished();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::setVersion(const base::Version& version)
 {
     version_ = version;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::setUserName(std::string_view username)
 {
     username_ = username;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::setComputerName(std::string_view computer_name)
 {
     computer_name_ = computer_name;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::string ClientSession::computerName() const
 {
     return computer_name_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::setSessionId(base::SessionId session_id)
 {
     session_id_ = session_id;
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<base::TcpChannelProxy> ClientSession::channelProxy()
 {
     return channel_->channelProxy();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(uint8_t channel_id, base::ByteArray&& buffer)
 {
     channel_->send(channel_id, std::move(buffer));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpConnected()
 {
     NOTREACHED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
     LOG(LS_WARNING) << "Client disconnected with error: "
@@ -155,6 +169,7 @@ void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code
     delegate_->onClientSessionFinished();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buffer)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
@@ -171,6 +186,7 @@ void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArr
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
 {
     if (channel_id == proto::HOST_CHANNEL_ID_SESSION)
@@ -187,6 +203,7 @@ void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 size_t ClientSession::pendingMessages() const
 {
     return channel_->pendingMessages();

@@ -28,6 +28,7 @@ namespace {
 
 const int kDefCompressRatio = 8;
 
+//--------------------------------------------------------------------------------------------------
 void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.bitsPerPixel());
@@ -43,6 +44,7 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
@@ -61,6 +63,7 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::DesktopConfig* config
     serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
 {
     DCHECK(config);
@@ -78,6 +81,7 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::DesktopConfig* config)
     serializePixelFormat(base::PixelFormat::RGB332(), config->mutable_pixel_format());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 proto::address_book::Computer ComputerFactory::defaultComputer()
 {

@@ -30,6 +30,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                        DesktopWindow* desktop_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -39,12 +40,14 @@ DesktopWindowProxy::DesktopWindowProxy(std::shared_ptr<base::TaskRunner> ui_task
     frame_factory_ = desktop_window_->frameFactory();
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopWindowProxy::~DesktopWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!desktop_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach desktop window";
@@ -52,6 +55,7 @@ void DesktopWindowProxy::dettach()
     desktop_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::configRequired()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -65,6 +69,7 @@ void DesktopWindowProxy::configRequired()
         desktop_window_->configRequired();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setCapabilities(
     const std::string& extensions, uint32_t video_encodings)
 {
@@ -81,6 +86,7 @@ void DesktopWindowProxy::setCapabilities(
         desktop_window_->setCapabilities(extensions, video_encodings);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setScreenList(const proto::ScreenList& screen_list)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -94,6 +100,7 @@ void DesktopWindowProxy::setScreenList(const proto::ScreenList& screen_list)
         desktop_window_->setScreenList(screen_list);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -107,6 +114,7 @@ void DesktopWindowProxy::setCursorPosition(const proto::CursorPosition& cursor_p
         desktop_window_->setCursorPosition(cursor_position);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -120,6 +128,7 @@ void DesktopWindowProxy::setSystemInfo(const proto::system_info::SystemInfo& sys
         desktop_window_->setSystemInfo(system_info);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setTaskManager(const proto::task_manager::HostToClient& message)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -133,6 +142,7 @@ void DesktopWindowProxy::setTaskManager(const proto::task_manager::HostToClient&
         desktop_window_->setTaskManager(message);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -146,11 +156,13 @@ void DesktopWindowProxy::setMetrics(const DesktopWindow::Metrics& metrics)
         desktop_window_->setMetrics(metrics);
 }
 
+//--------------------------------------------------------------------------------------------------
 std::shared_ptr<base::Frame> DesktopWindowProxy::allocateFrame(const base::Size& size)
 {
     return frame_factory_->allocateFrame(size);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::showWindow(
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
 {
@@ -167,6 +179,7 @@ void DesktopWindowProxy::showWindow(
         desktop_window_->showWindow(desktop_control_proxy, peer_version);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setFrameError(proto::VideoErrorCode error_code)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -181,6 +194,7 @@ void DesktopWindowProxy::setFrameError(proto::VideoErrorCode error_code)
         desktop_window_->setFrameError(error_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setFrame(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
@@ -195,6 +209,7 @@ void DesktopWindowProxy::setFrame(
         desktop_window_->setFrame(screen_size, frame);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::drawFrame()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -207,6 +222,7 @@ void DesktopWindowProxy::drawFrame()
         desktop_window_->drawFrame();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setMouseCursor(std::shared_ptr<base::MouseCursor> mouse_cursor)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

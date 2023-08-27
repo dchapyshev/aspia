@@ -67,64 +67,77 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 QtTaskRunner::Impl::Impl()
     : current_thread_(QThread::currentThreadId())
 {
     DCHECK(QApplication::instance());
 }
 
+//--------------------------------------------------------------------------------------------------
 QtTaskRunner::Impl::~Impl() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool QtTaskRunner::Impl::belongsToCurrentThread() const
 {
     return QThread::currentThreadId() == current_thread_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::Impl::postTask(Callback&& callback, int priority)
 {
     QApplication::postEvent(this, new TaskEvent(std::move(callback)), priority);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::Impl::customEvent(QEvent* event)
 {
     if (event->type() == TaskEvent::kType)
         reinterpret_cast<TaskEvent*>(event)->callback();
 }
 
+//--------------------------------------------------------------------------------------------------
 QtTaskRunner::QtTaskRunner()
     : impl_(std::make_unique<Impl>())
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 QtTaskRunner::~QtTaskRunner() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool QtTaskRunner::belongsToCurrentThread() const
 {
     return impl_->belongsToCurrentThread();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::postTask(Callback callback)
 {
     impl_->postTask(std::move(callback), Qt::NormalEventPriority);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::postDelayedTask(Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::postNonNestableTask(Callback callback)
 {
     impl_->postTask(std::move(callback), Qt::LowEventPriority);
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::postNonNestableDelayedTask(
     Callback /* callback */, const Milliseconds& /* delay */)
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void QtTaskRunner::postQuit()
 {
     NOTIMPLEMENTED();

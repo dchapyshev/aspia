@@ -22,12 +22,14 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 void memZero(void* data, size_t data_size)
 {
     if (data && data_size)
         OPENSSL_cleanse(data, data_size);
 }
 
+//--------------------------------------------------------------------------------------------------
 void memZero(std::string* str)
 {
     if (!str)
@@ -36,6 +38,7 @@ void memZero(std::string* str)
     memZero(str->data(), str->length() * sizeof(char));
 }
 
+//--------------------------------------------------------------------------------------------------
 void memZero(std::u16string* str)
 {
     if (!str)
@@ -44,6 +47,7 @@ void memZero(std::u16string* str)
     memZero(str->data(), str->length() * sizeof(char16_t));
 }
 
+//--------------------------------------------------------------------------------------------------
 void memZero(ByteArray* str)
 {
     if (!str)

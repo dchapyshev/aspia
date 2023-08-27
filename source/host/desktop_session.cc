@@ -20,6 +20,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 // static
 const char* DesktopSession::controlActionToString(proto::internal::DesktopControl::Action action)
 {

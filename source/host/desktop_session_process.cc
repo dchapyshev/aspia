@@ -41,6 +41,7 @@ const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent";
 const char16_t kDefaultDesktopName[] = u"winsta0\\default";
 const char16_t kDesktopAgentFile[] = u"aspia_desktop_agent.exe";
 
+//--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle process_token;
@@ -67,6 +68,7 @@ bool copyProcessToken(DWORD desired_access, base::win::ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createPrivilegedToken(base::win::ScopedHandle* token_out)
 {
     base::win::ScopedHandle privileged_token;
@@ -101,6 +103,7 @@ bool createPrivilegedToken(base::win::ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
 bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
@@ -149,6 +152,7 @@ bool createSessionToken(DWORD session_id, base::win::ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool startProcessWithToken(HANDLE token,
                            const base::CommandLine& command_line,
                            base::win::ScopedHandle* process,
@@ -207,6 +211,7 @@ bool startProcessWithToken(HANDLE token,
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 #if defined(OS_WIN)
 DesktopSessionProcess::DesktopSessionProcess(
     base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread)
@@ -222,11 +227,13 @@ DesktopSessionProcess::DesktopSessionProcess()
 }
 #endif
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionProcess::~DesktopSessionProcess()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     base::SessionId session_id, std::u16string_view channel_id)
@@ -271,6 +278,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::filesystem::path DesktopSessionProcess::filePath()
 {
@@ -285,6 +293,7 @@ std::filesystem::path DesktopSessionProcess::filePath()
     return file_path;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionProcess::kill()
 {
 #if defined(OS_WIN)

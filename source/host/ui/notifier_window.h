@@ -46,13 +46,13 @@ public slots:
     void closeNotifier();
 
 signals:
-    void killSession(uint32_t id);
-    void voiceChat(bool enable);
-    void textChat();
-    void lockMouse(bool enable);
-    void lockKeyboard(bool enable);
-    void pause(bool enable);
-    void finished();
+    void sig_killSession(uint32_t id);
+    void sig_voiceChat(bool enable);
+    void sig_textChat();
+    void sig_lockMouse(bool enable);
+    void sig_lockKeyboard(bool enable);
+    void sig_pause(bool enable);
+    void sig_finished();
 
 protected:
     // QWidget implementation.

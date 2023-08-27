@@ -28,6 +28,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -47,11 +48,13 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 CheckPasswordDialog::~CheckPasswordDialog()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);

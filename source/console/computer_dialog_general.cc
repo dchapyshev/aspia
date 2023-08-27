@@ -33,6 +33,7 @@ constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
 
+//--------------------------------------------------------------------------------------------------
 bool isHostId(const QString& str)
 {
     bool host_id_entered = true;
@@ -51,6 +52,7 @@ bool isHostId(const QString& str)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
     : ComputerDialogTab(type, parent)
 {
@@ -82,6 +84,7 @@ ComputerDialogGeneral::ComputerDialogGeneral(int type, QWidget* parent)
     ui.edit_address->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
                                             const proto::address_book::Computer& computer)
 {
@@ -121,6 +124,7 @@ void ComputerDialogGeneral::restoreSettings(const QString& parent_name,
         ui.edit_name->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer)
 {
     QString name = ui.edit_name->text();
@@ -189,6 +193,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialogGeneral::showPasswordButtonToggled(bool checked)
 {
     if (checked)
@@ -206,6 +211,7 @@ void ComputerDialogGeneral::showPasswordButtonToggled(bool checked)
     ui.edit_password->setFocus();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialogGeneral::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();

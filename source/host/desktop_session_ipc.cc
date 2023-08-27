@@ -69,6 +69,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(SharedBuffer);
 };
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
                                      Delegate* delegate)
     : channel_(std::move(channel)),
@@ -82,11 +83,13 @@ DesktopSessionIpc::DesktopSessionIpc(std::unique_ptr<base::IpcChannel> channel,
     DCHECK(delegate_);
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionIpc::~DesktopSessionIpc()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::start()
 {
     LOG(LS_INFO) << "Start IPC desktop session";
@@ -103,12 +106,14 @@ void DesktopSessionIpc::start()
     delegate_->onDesktopSessionStarted();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::stop()
 {
     LOG(LS_INFO) << "Stop IPC desktop session";
     delegate_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
 {
     LOG(LS_INFO) << "Send CONTROL with action: " << controlActionToString(action);
@@ -118,6 +123,7 @@ void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::configure(const Config& config)
 {
     LOG(LS_INFO) << "Send CONFIGURE";
@@ -136,6 +142,7 @@ void DesktopSessionIpc::configure(const Config& config)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
 {
     LOG(LS_INFO) << "Send SELECT_SCREEN";
@@ -145,6 +152,7 @@ void DesktopSessionIpc::selectScreen(const proto::Screen& screen)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::captureScreen()
 {
     if (last_frame_)
@@ -178,6 +186,7 @@ void DesktopSessionIpc::captureScreen()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
     if (fps > 60 || fps < 1)
@@ -189,6 +198,7 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
     update_interval_ = std::chrono::milliseconds(1000 / fps);
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
 {
     outgoing_message_->Clear();
@@ -196,6 +206,7 @@ void DesktopSessionIpc::injectKeyEvent(const proto::KeyEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
 {
     outgoing_message_->Clear();
@@ -203,6 +214,7 @@ void DesktopSessionIpc::injectTextEvent(const proto::TextEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
 {
     outgoing_message_->Clear();
@@ -210,6 +222,7 @@ void DesktopSessionIpc::injectMouseEvent(const proto::MouseEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_->Clear();
@@ -217,6 +230,7 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
@@ -231,6 +245,7 @@ void DesktopSessionIpc::onDisconnected()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
 {
     if (!delegate_)
@@ -292,6 +307,7 @@ void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
     const base::Frame* frame = nullptr;
@@ -364,6 +380,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cursor_position)
 {
     if (delegate_)
@@ -376,6 +393,7 @@ void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cur
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
 {
     if (delegate_)
@@ -388,6 +406,7 @@ void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
 {
     LOG(LS_INFO) << "Shared memory created: " << shared_buffer_id;
@@ -404,6 +423,7 @@ void DesktopSessionIpc::onCreateSharedBuffer(int shared_buffer_id)
     shared_buffers_.emplace(shared_buffer_id, SharedBuffer::wrap(std::move(shared_memory)));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << shared_buffer_id;
@@ -417,6 +437,7 @@ void DesktopSessionIpc::onReleaseSharedBuffer(int shared_buffer_id)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<DesktopSessionIpc::SharedBuffer> DesktopSessionIpc::sharedBuffer(
     int shared_buffer_id)
 {

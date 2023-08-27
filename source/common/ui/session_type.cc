@@ -22,6 +22,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 const char* sessionTypeToString(proto::SessionType session_type)
 {
     switch (session_type)
@@ -46,6 +47,7 @@ const char* sessionTypeToString(proto::SessionType session_type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QString sessionTypeToLocalizedString(proto::SessionType session_type)
 {
     return QCoreApplication::translate("SessionType", sessionTypeToString(session_type));

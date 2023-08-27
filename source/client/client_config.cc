@@ -23,6 +23,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 Config::Config()
     : port(DEFAULT_HOST_TCP_PORT),
       session_type(proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -30,6 +31,7 @@ Config::Config()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 Config::~Config()
 {
     base::memZero(&password);

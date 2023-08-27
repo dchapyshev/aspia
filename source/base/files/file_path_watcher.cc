@@ -23,11 +23,13 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcher::~FilePathWatcher()
 {
     impl_->cancel();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool FilePathWatcher::recursiveWatchAvailable()
 {
@@ -40,6 +42,7 @@ bool FilePathWatcher::recursiveWatchAvailable()
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcher::PlatformDelegate::PlatformDelegate(std::shared_ptr<TaskRunner> task_runner)
     : task_runner_(std::move(task_runner)),
       cancelled_(false)
@@ -47,11 +50,13 @@ FilePathWatcher::PlatformDelegate::PlatformDelegate(std::shared_ptr<TaskRunner> 
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 FilePathWatcher::PlatformDelegate::~PlatformDelegate()
 {
     DCHECK(isCancelled());
 }
 
+//--------------------------------------------------------------------------------------------------
 bool FilePathWatcher::watch(const std::filesystem::path& path,
                             bool recursive,
                             const Callback& callback)

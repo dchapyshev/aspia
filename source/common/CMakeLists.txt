@@ -152,3 +152,9 @@ if(Qt5LinguistTools_FOUND)
     create_translation(TS_COMMON_UPDATE ${COMMON_TR_SOURCES} ${COMMON_TS_FILES})
     add_custom_target(aspia_common_ts_update DEPENDS ${TS_COMMON_UPDATE})
 endif()
+
+# File about_dialog.cc contains macro __TIME__ containing the build time. To ensure that the time is
+# updated with each build, we rebuild the file each time.
+add_custom_target(build_time_updater
+    COMMAND ${CMAKE_COMMAND} -E touch_nocreate ${PROJECT_SOURCE_DIR}/source/common/ui/about_dialog.cc)
+add_dependencies(aspia_common build_time_updater)

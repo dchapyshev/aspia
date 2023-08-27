@@ -43,6 +43,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 const char* controlActionToString(proto::internal::DesktopControl::Action action)
 {
     switch (action)
@@ -66,6 +67,7 @@ const char* controlActionToString(proto::internal::DesktopControl::Action action
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_runner)
     : io_task_runner_(std::move(task_runner)),
       incoming_message_(std::make_unique<proto::internal::ServiceToDesktop>()),
@@ -96,6 +98,7 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::~DesktopSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
@@ -105,6 +108,7 @@ DesktopSessionAgent::~DesktopSessionAgent()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::start(std::u16string_view channel_id)
 {
     LOG(LS_INFO) << "Starting with channel id: " << channel_id.data();
@@ -121,6 +125,7 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
     channel_->resume();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
@@ -129,6 +134,7 @@ void DesktopSessionAgent::onDisconnected()
     io_task_runner_->postQuit();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
@@ -263,6 +269,7 @@ void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryCreate(int id)
 {
     LOG(LS_INFO) << "Shared memory created: " << id;
@@ -276,6 +283,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onSharedMemoryDestroy(int id)
 {
     LOG(LS_INFO) << "Shared memory destroyed: " << id;
@@ -289,6 +297,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
@@ -330,6 +339,7 @@ void DesktopSessionAgent::onScreenListChanged(
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenCaptured(
     const base::Frame* frame, const base::MouseCursor* mouse_cursor)
 {
@@ -392,6 +402,7 @@ void DesktopSessionAgent::onScreenCaptured(
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error)
 {
     outgoing_message_->Clear();
@@ -415,6 +426,7 @@ void DesktopSessionAgent::onScreenCaptureError(base::ScreenCapturer::Error error
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 {
     outgoing_message_->Clear();
@@ -426,6 +438,7 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";
@@ -443,11 +456,17 @@ void DesktopSessionAgent::onBeforeThreadRunning()
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onAfterThreadRunning()
 {
     LOG(LS_INFO) << "UI thread stopping";
+
+#if defined(OS_WIN)
+    message_window_.reset();
+#endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     outgoing_message_->Clear();
@@ -455,6 +474,7 @@ void DesktopSessionAgent::onClipboardEvent(const proto::ClipboardEvent& event)
     channel_->send(base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::setEnabled(bool enable)
 {
     LOG(LS_INFO) << "Enable session: " << enable;
@@ -539,6 +559,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::captureBegin()
 {
     if (!capture_scheduler_ || !screen_capturer_)
@@ -548,6 +569,7 @@ void DesktopSessionAgent::captureBegin()
     screen_capturer_->captureFrame();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_interval)
 {
     if (!capture_scheduler_)
@@ -575,6 +597,7 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 bool DesktopSessionAgent::onWindowsMessage(
     UINT message, WPARAM /* wparam */, LPARAM /* lparam */, LRESULT& result)
 {

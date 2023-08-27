@@ -45,6 +45,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 WaitableTimer::Impl::Impl(Type type,
                           TimeoutCallback signal_callback,
                           std::shared_ptr<TaskRunner> task_runner)
@@ -55,22 +56,26 @@ WaitableTimer::Impl::Impl(Type type,
     DCHECK(signal_callback_ && task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 WaitableTimer::Impl::~Impl()
 {
     dettach();
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableTimer::Impl::start(const std::chrono::milliseconds& time_delta)
 {
     time_delta_ = time_delta;
     task_runner_->postDelayedTask(std::bind(&Impl::onSignal, shared_from_this()), time_delta);
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableTimer::Impl::dettach()
 {
     signal_callback_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableTimer::Impl::onSignal()
 {
     if (!signal_callback_)
@@ -82,6 +87,7 @@ void WaitableTimer::Impl::onSignal()
         start(time_delta_);
 }
 
+//--------------------------------------------------------------------------------------------------
 WaitableTimer::WaitableTimer(Type type, std::shared_ptr<TaskRunner> task_runner)
     : type_(type),
       task_runner_(std::move(task_runner))
@@ -89,11 +95,13 @@ WaitableTimer::WaitableTimer(Type type, std::shared_ptr<TaskRunner> task_runner)
     DCHECK(task_runner_);
 }
 
+//--------------------------------------------------------------------------------------------------
 WaitableTimer::~WaitableTimer()
 {
     stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
@@ -103,6 +111,7 @@ void WaitableTimer::start(const std::chrono::milliseconds& time_delta,
     impl_->start(time_delta);
 }
 
+//--------------------------------------------------------------------------------------------------
 void WaitableTimer::stop()
 {
     if (!impl_)
@@ -112,6 +121,7 @@ void WaitableTimer::stop()
     impl_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool WaitableTimer::isActive() const
 {
     return impl_ != nullptr;

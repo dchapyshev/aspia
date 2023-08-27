@@ -25,6 +25,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 ScopedCryptoInitializer::ScopedCryptoInitializer()
 {
     int ret = OPENSSL_add_all_algorithms_noconf();
@@ -37,6 +38,7 @@ ScopedCryptoInitializer::ScopedCryptoInitializer()
     initialized_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedCryptoInitializer::~ScopedCryptoInitializer()
 {
     OPENSSL_cleanup();

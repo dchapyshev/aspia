@@ -25,6 +25,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 SystemInfoWindowProxy::SystemInfoWindowProxy(std::shared_ptr<base::TaskRunner> ui_task_runner,
                                              SystemInfoWindow* system_info_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -33,12 +34,14 @@ SystemInfoWindowProxy::SystemInfoWindowProxy(std::shared_ptr<base::TaskRunner> u
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 SystemInfoWindowProxy::~SystemInfoWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!system_info_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SystemInfoWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach system info window";
@@ -46,6 +49,7 @@ void SystemInfoWindowProxy::dettach()
     system_info_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void SystemInfoWindowProxy::start(std::shared_ptr<SystemInfoControlProxy> system_info_control_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -59,6 +63,7 @@ void SystemInfoWindowProxy::start(std::shared_ptr<SystemInfoControlProxy> system
         system_info_window_->start(system_info_control_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void SystemInfoWindowProxy::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

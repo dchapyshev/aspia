@@ -33,6 +33,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
 {
     std::unique_ptr<MirrorHelper> helper = Mv2Helper::create(screen_rect);
@@ -42,6 +43,7 @@ std::unique_ptr<MirrorHelper> createHelper(const Rect& screen_rect)
     return helper;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
     // If the cursors are not showing, we do not care the hCursor handle.
@@ -51,6 +53,7 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::ScreenCapturerMirror()
     : ScreenCapturer(Type::WIN_MIRROR)
 {
@@ -60,11 +63,13 @@ ScreenCapturerMirror::ScreenCapturerMirror()
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::~ScreenCapturerMirror()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::isSupported()
 {
     DWORD session_id;
@@ -87,16 +92,19 @@ bool ScreenCapturerMirror::isSupported()
     return helper_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 int ScreenCapturerMirror::screenCount()
 {
     return ScreenCaptureUtils::screenCount();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
 {
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
@@ -111,11 +119,13 @@ bool ScreenCapturerMirror::selectScreen(ScreenId screen_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerMirror::currentScreen() const
 {
     return current_screen_id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerMirror::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -144,6 +154,7 @@ const Frame* ScreenCapturerMirror::captureFrame(Error* error)
     return frame_.get();
 }
 
+//--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerMirror::captureCursor()
 {
     if (!desktop_dc_.isValid())
@@ -200,6 +211,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 Point ScreenCapturerMirror::cursorPosition()
 {
     Point cursor_pos(curr_cursor_info_.ptScreenPos.x, curr_cursor_info_.ptScreenPos.y);
@@ -207,6 +219,7 @@ Point ScreenCapturerMirror::cursorPosition()
     return cursor_pos;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMirror::reset()
 {
     desktop_dc_.close();
@@ -214,6 +227,7 @@ void ScreenCapturerMirror::reset()
     frame_.reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMirror::updateExcludeRegion()
 {
     exclude_region_.clear();
@@ -248,6 +262,7 @@ void ScreenCapturerMirror::updateExcludeRegion()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 {
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();

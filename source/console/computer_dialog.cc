@@ -43,6 +43,7 @@ enum ItemType
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialog::ComputerDialog(QWidget* parent,
                                Mode mode,
                                const QString& parent_name,
@@ -75,22 +76,22 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &ComputerDialog::buttonBoxClicked);
 
     QTreeWidgetItem* general_item = new QTreeWidgetItem(ITEM_TYPE_GENERAL);
-    general_item->setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    general_item->setIcon(0, QIcon(":/img/computer.png"));
     general_item->setText(0, tr("General"));
 
     QTreeWidgetItem* sessions_item = new QTreeWidgetItem(ITEM_TYPE_PARENT);
-    sessions_item->setIcon(0, QIcon(QStringLiteral(":/img/settings.png")));
+    sessions_item->setIcon(0, QIcon(":/img/settings.png"));
     sessions_item->setText(0, tr("Sessions"));
 
     ui.tree->addTopLevelItem(general_item);
     ui.tree->addTopLevelItem(sessions_item);
 
     QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor-keyboard.png")));
+    desktop_manage_item->setIcon(0, QIcon(":/img/monitor-keyboard.png"));
     desktop_manage_item->setText(0, tr("Manage"));
 
     QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, QIcon(QStringLiteral(":/img/monitor.png")));
+    desktop_view_item->setIcon(0, QIcon(":/img/monitor.png"));
     desktop_view_item->setText(0, tr("View"));
 
     sessions_item->addChild(desktop_manage_item);
@@ -130,6 +131,7 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     ui.tree->expandAll();
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerDialog::~ComputerDialog()
 {
     LOG(LS_INFO) << "Dtor";
@@ -140,6 +142,7 @@ ComputerDialog::~ComputerDialog()
     base::memZero(computer_.mutable_comment());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::closeEvent(QCloseEvent* event)
 {
     settings_.setComputerDialogGeometry(saveGeometry());
@@ -147,6 +150,7 @@ void ComputerDialog::closeEvent(QCloseEvent* event)
     QDialog::closeEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.widget && event->type() == QEvent::Resize)
@@ -161,6 +165,7 @@ bool ComputerDialog::eventFilter(QObject* watched, QEvent* event)
     return QDialog::eventFilter(watched, event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::keyPressEvent(QKeyEvent* event)
 {
     if ((event->key() == Qt::Key_Return) && (event->modifiers() & Qt::ControlModifier))
@@ -175,12 +180,14 @@ void ComputerDialog::keyPressEvent(QKeyEvent* event)
     QDialog::keyPressEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::onTabChanged(QTreeWidgetItem* current)
 {
     if (current)
         showTab(current->type());
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
@@ -198,6 +205,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     close();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerDialog::showTab(int type)
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)
@@ -210,6 +218,7 @@ void ComputerDialog::showTab(int type)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerDialog::saveChanges()
 {
     for (auto it = tabs_.begin(); it != tabs_.end(); ++it)

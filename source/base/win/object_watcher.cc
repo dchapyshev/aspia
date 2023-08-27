@@ -63,6 +63,7 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Impl);
 };
 
+//--------------------------------------------------------------------------------------------------
 ObjectWatcher::Impl::Impl(std::shared_ptr<TaskRunner> task_runner)
     : task_runner_(std::move(task_runner))
 {
@@ -70,11 +71,13 @@ ObjectWatcher::Impl::Impl(std::shared_ptr<TaskRunner> task_runner)
     DCHECK(task_runner_->belongsToCurrentThread());
 }
 
+//--------------------------------------------------------------------------------------------------
 ObjectWatcher::Impl::~Impl()
 {
     stopWatching();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::Impl::startWatching(HANDLE object, Delegate* delegate, bool execute_only_once)
 {
     DCHECK(delegate);
@@ -114,6 +117,7 @@ bool ObjectWatcher::Impl::startWatching(HANDLE object, Delegate* delegate, bool 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::Impl::stopWatching()
 {
     if (!wait_object_)
@@ -131,16 +135,19 @@ bool ObjectWatcher::Impl::stopWatching()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::Impl::isWatching() const
 {
     return object_ != nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 HANDLE ObjectWatcher::Impl::watchedObject() const
 {
     return object_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ObjectWatcher::Impl::signal(Delegate* delegate)
 {
     if (!isWatching())
@@ -157,6 +164,7 @@ void ObjectWatcher::Impl::signal(Delegate* delegate)
     delegate->onObjectSignaled(object);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ObjectWatcher::Impl::reset()
 {
     callback_ = nullptr;
@@ -166,6 +174,7 @@ void ObjectWatcher::Impl::reset()
     run_once_ = true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void CALLBACK ObjectWatcher::Impl::doneWaiting(PVOID context, BOOLEAN timed_out)
 {
@@ -181,37 +190,44 @@ void CALLBACK ObjectWatcher::Impl::doneWaiting(PVOID context, BOOLEAN timed_out)
         self->callback_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 ObjectWatcher::ObjectWatcher(std::shared_ptr<TaskRunner> task_runner)
     : impl_(base::make_local_shared<Impl>(std::move(task_runner)))
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 ObjectWatcher::~ObjectWatcher()
 {
     impl_->stopWatching();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::startWatchingMultipleTimes(HANDLE object, Delegate* delegate)
 {
     return impl_->startWatching(object, delegate, false);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::startWatchingOnce(HANDLE object, Delegate* delegate)
 {
     return impl_->startWatching(object, delegate, true);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::stopWatching()
 {
     return impl_->stopWatching();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ObjectWatcher::isWatching() const
 {
     return impl_->isWatching();
 }
 
+//--------------------------------------------------------------------------------------------------
 HANDLE ObjectWatcher::watchedObject() const
 {
     return impl_->watchedObject();

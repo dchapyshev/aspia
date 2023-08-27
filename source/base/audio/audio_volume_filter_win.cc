@@ -22,14 +22,17 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioVolumeFilterWin::AudioVolumeFilterWin(int silence_threshold)
     : AudioVolumeFilter(silence_threshold)
 {
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioVolumeFilterWin::~AudioVolumeFilterWin() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
 {
     DCHECK(mm_device);
@@ -45,6 +48,7 @@ bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 float AudioVolumeFilterWin::audioLevel()
 {
     if (!audio_volume_)

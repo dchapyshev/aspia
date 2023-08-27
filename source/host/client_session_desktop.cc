@@ -45,6 +45,7 @@ namespace host {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 {
     return base::PixelFormat(
@@ -59,6 +60,7 @@ base::PixelFormat parsePixelFormat(const proto::PixelFormat& format)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
                                            std::unique_ptr<base::TcpChannel> channel,
                                            std::shared_ptr<base::TaskRunner> task_runner)
@@ -70,11 +72,13 @@ ClientSessionDesktop::ClientSessionDesktop(proto::SessionType session_type,
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ClientSessionDesktop::~ClientSessionDesktop()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setDesktopSessionProxy(
     base::local_shared_ptr<DesktopSessionProxy> desktop_session_proxy)
 {
@@ -82,6 +86,7 @@ void ClientSessionDesktop::setDesktopSessionProxy(
     DCHECK(desktop_session_proxy_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onStarted()
 {
     max_fps_ = desktop_session_proxy_->maxScreenCaptureFps();
@@ -131,6 +136,7 @@ void ClientSessionDesktop::onStarted()
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
@@ -193,12 +199,14 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onWritten(uint8_t /* channel_id */, size_t /* pending */)
 {
     // Nothing
 }
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     outgoing_message_->Clear();
@@ -211,6 +219,7 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
 }
 #endif // defined(OS_WIN)
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     if (critical_overflow_)
@@ -300,6 +309,7 @@ void ClientSessionDesktop::encodeScreen(const base::Frame* frame, const base::Mo
         sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
 {
     if (critical_overflow_)
@@ -316,6 +326,7 @@ void ClientSessionDesktop::encodeAudio(const proto::AudioPacket& audio_packet)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
 {
     CHECK_NE(error_code, proto::VIDEO_ERROR_CODE_OK);
@@ -325,6 +336,7 @@ void ClientSessionDesktop::setVideoErrorCode(proto::VideoErrorCode error_code)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     if (!desktop_session_config_.cursor_position)
@@ -344,6 +356,7 @@ void ClientSessionDesktop::setCursorPosition(const proto::CursorPosition& cursor
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 {
     outgoing_message_->Clear();
@@ -354,6 +367,7 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -368,6 +382,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
@@ -412,6 +427,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 {
     switch (config.video_encoding())
@@ -492,6 +508,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
     delegate_->onClientSessionConfigured();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
 {
     LOG(LS_INFO) << "Select screen request";
@@ -508,6 +525,7 @@ void ClientSessionDesktop::readSelectScreenExtension(const std::string& data)
     preferred_size_ = base::Size();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
 {
     proto::PreferredSize preferred_size;
@@ -535,6 +553,7 @@ void ClientSessionDesktop::readPreferredSizeExtension(const std::string& data)
     desktop_session_proxy_->captureScreen();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
 {
     proto::Pause pause;
@@ -560,6 +579,7 @@ void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
 {
     proto::Pause pause;
@@ -574,6 +594,7 @@ void ClientSessionDesktop::readAudioPauseExtension(const std::string& data)
     LOG(LS_INFO) << "Audio paused: " << is_audio_paused_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
@@ -665,6 +686,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 {
 #if defined(OS_WIN)
@@ -681,6 +703,7 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 {
 #if defined(OS_WIN)
@@ -706,6 +729,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 {
     proto::VideoRecording video_recording;
@@ -736,6 +760,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
     delegate_->onClientSessionVideoRecording(computerName(), userName(), started);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 {
 #if defined(OS_WIN)
@@ -754,6 +779,7 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::onOverflowDetectionTimer()
 {
     // Maximum value of messages in the queue for sending.
@@ -820,6 +846,7 @@ void ClientSessionDesktop::onOverflowDetectionTimer()
     last_pending_count_ = pending;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::downStepOverflow()
 {
     int fps = desktop_session_proxy_->screenCaptureFps();
@@ -884,6 +911,7 @@ void ClientSessionDesktop::downStepOverflow()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::upStepOverflow()
 {
     int fps = desktop_session_proxy_->screenCaptureFps();

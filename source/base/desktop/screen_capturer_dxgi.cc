@@ -28,6 +28,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
                                ScreenCapturer::ScreenList* screen_list)
 {
@@ -85,6 +86,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstring>& device_names)
 {
     ScreenCapturer::ScreenList screen_list;
@@ -112,6 +114,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerDxgi::ScreenCapturerDxgi()
     : ScreenCapturer(Type::WIN_DXGI),
       controller_(base::make_local_shared<DxgiDuplicatorController>()),
@@ -120,28 +123,33 @@ ScreenCapturerDxgi::ScreenCapturerDxgi()
     LOG(LS_INFO) << "Ctor";
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturerDxgi::~ScreenCapturerDxgi()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::isSupported()
 {
     // Forwards isSupported() function call to DxgiDuplicatorController.
     return controller_->isSupported();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool ScreenCapturerDxgi::isCurrentSessionSupported()
 {
     return DxgiDuplicatorController::isCurrentSessionSupported();
 }
 
+//--------------------------------------------------------------------------------------------------
 int ScreenCapturerDxgi::screenCount()
 {
     return controller_->screenCount();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 {
     std::vector<std::wstring> device_names;
@@ -165,6 +173,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
     return result;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
 {
     LOG(LS_INFO) << "Select screen with ID: " << screen_id;
@@ -195,11 +204,13 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerDxgi::currentScreen() const
 {
     return current_screen_id_;
 }
 
+//--------------------------------------------------------------------------------------------------
 const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
@@ -274,6 +285,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerDxgi::captureCursor()
 {
     MouseCursor* mouse_cursor = cursor_->mouseCursor();
@@ -296,11 +308,13 @@ const MouseCursor* ScreenCapturerDxgi::captureCursor()
     return mouse_cursor;
 }
 
+//--------------------------------------------------------------------------------------------------
 Point ScreenCapturerDxgi::cursorPosition()
 {
     return cursor_->position();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerDxgi::reset()
 {
     queue_.reset();

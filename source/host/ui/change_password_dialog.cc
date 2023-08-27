@@ -28,6 +28,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
       mode_(mode)
@@ -58,21 +59,25 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::~ChangePasswordDialog()
 {
     LOG(LS_INFO) << "ChangePasswordDialog Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 QString ChangePasswordDialog::oldPassword() const
 {
     return ui.edit_old_pass->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString ChangePasswordDialog::newPassword() const
 {
     return ui.edit_new_pass->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);

@@ -27,6 +27,7 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 bool isProcessElevated()
 {
     ScopedHandle token;
@@ -49,11 +50,13 @@ bool isProcessElevated()
     return elevation.TokenIsElevated != 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createProcess(const CommandLine& command_line, ProcessExecuteMode mode)
 {
     return createProcess(command_line.program(), command_line.argumentsString(), mode);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createProcess(const std::filesystem::path& program,
                    std::u16string_view arguments,
                    ProcessExecuteMode mode)
@@ -77,6 +80,7 @@ bool createProcess(const std::filesystem::path& program,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 {
     ScopedHandle process_token;
@@ -103,6 +107,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool createPrivilegedToken(ScopedHandle* token_out)
 {
     ScopedHandle privileged_token;
@@ -137,6 +142,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isProcessStartedFromService()
 {
     ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));

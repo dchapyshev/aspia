@@ -60,6 +60,7 @@ const int kMaxExpectedTimerLag = 30;
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioCapturerWin::AudioCapturerWin()
     : sampling_rate_(proto::AudioPacket::SAMPLING_RATE_INVALID),
       capture_timer_(MessageLoop::current()->pumpAsio()->ioContext()),
@@ -69,12 +70,14 @@ AudioCapturerWin::AudioCapturerWin()
     // Nothing
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioCapturerWin::~AudioCapturerWin()
 {
     DCHECK(thread_checker_.calledOnValidThread());
     deinitialize();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
 {
     callback_ = callback;
@@ -91,6 +94,7 @@ bool AudioCapturerWin::start(const PacketCapturedCallback& callback)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::resetAndInitialize()
 {
     deinitialize();
@@ -102,6 +106,7 @@ bool AudioCapturerWin::resetAndInitialize()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWin::deinitialize()
 {
     LOG(LS_INFO) << "Deinitialize audio capturer";
@@ -116,6 +121,7 @@ void AudioCapturerWin::deinitialize()
     mm_device_.Reset();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::initialize()
 {
     LOG(LS_INFO) << "Audio capturer initializing";
@@ -264,12 +270,14 @@ bool AudioCapturerWin::initialize()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioCapturerWin::isInitialized() const
 {
     // All Com components should be initialized / deinitialized together.
     return !!audio_client_;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWin::doCapture()
 {
     DCHECK(AudioCapturer::isValidSampleRate(sampling_rate_));
@@ -338,6 +346,7 @@ void AudioCapturerWin::doCapture()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioCapturerWin::onCaptureTimeout(const std::error_code& error_code)
 {
     if (error_code)
@@ -353,6 +362,7 @@ void AudioCapturerWin::onCaptureTimeout(const std::error_code& error_code)
         std::bind(&AudioCapturerWin::onCaptureTimeout, this, std::placeholders::_1));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioCapturer::isSupported()
 {
     return true;

@@ -24,6 +24,7 @@
 
 namespace client {
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveWindowProxy::FileRemoveWindowProxy(
     std::shared_ptr<base::TaskRunner> ui_task_runner, FileRemoveWindow* remove_window)
     : ui_task_runner_(std::move(ui_task_runner)),
@@ -35,12 +36,14 @@ FileRemoveWindowProxy::FileRemoveWindowProxy(
     DCHECK(remove_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 FileRemoveWindowProxy::~FileRemoveWindowProxy()
 {
     LOG(LS_INFO) << "Dtor";
     DCHECK(!remove_window_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWindowProxy::dettach()
 {
     LOG(LS_INFO) << "Dettach file remove window";
@@ -48,6 +51,7 @@ void FileRemoveWindowProxy::dettach()
     remove_window_ = nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWindowProxy::start(std::shared_ptr<FileRemoverProxy> remover_proxy)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -61,6 +65,7 @@ void FileRemoveWindowProxy::start(std::shared_ptr<FileRemoverProxy> remover_prox
         remove_window_->start(remover_proxy);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWindowProxy::stop()
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -73,6 +78,7 @@ void FileRemoveWindowProxy::stop()
         remove_window_->stop();
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWindowProxy::setCurrentProgress(const std::string& name, int percentage)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
@@ -86,6 +92,7 @@ void FileRemoveWindowProxy::setCurrentProgress(const std::string& name, int perc
         remove_window_->setCurrentProgress(name, percentage);
 }
 
+//--------------------------------------------------------------------------------------------------
 void FileRemoveWindowProxy::errorOccurred(const std::string& path,
                                           proto::FileError error_code,
                                           uint32_t available_actions)

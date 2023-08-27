@@ -22,16 +22,19 @@
 
 namespace base::win {
 
+//--------------------------------------------------------------------------------------------------
 ScopedCOMInitializer::ScopedCOMInitializer()
 {
     initialize(COINIT_APARTMENTTHREADED);
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedCOMInitializer::ScopedCOMInitializer(SelectMTA /* mta */)
 {
     initialize(COINIT_MULTITHREADED);
 }
 
+//--------------------------------------------------------------------------------------------------
 ScopedCOMInitializer::~ScopedCOMInitializer()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -39,11 +42,13 @@ ScopedCOMInitializer::~ScopedCOMInitializer()
         CoUninitialize();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ScopedCOMInitializer::isSucceeded() const
 {
     return SUCCEEDED(hr_);
 }
 
+//--------------------------------------------------------------------------------------------------
 void ScopedCOMInitializer::initialize(COINIT init)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);

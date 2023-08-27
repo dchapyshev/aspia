@@ -23,6 +23,7 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_reinitialize)
 {
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enumerator;
@@ -52,6 +53,7 @@ Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_re
     return device_enumerator;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Retrieve an audio device specified by |device_id| or a default device
 // specified by data-flow direction and role if |device_id| is default.
 Microsoft::WRL::ComPtr<IMMDevice> createDevice()
@@ -89,6 +91,7 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     return audio_endpoint_device;
 }
 
+//--------------------------------------------------------------------------------------------------
 // Creates and activates an IAudioClient COM object given the selected endpoint device.
 Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
 {
@@ -106,6 +109,7 @@ Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device)
     return audio_client;
 }
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* client)
 {
     DCHECK(client);
@@ -122,6 +126,7 @@ Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* clie
     return audio_render_client;
 }
 
+//--------------------------------------------------------------------------------------------------
 Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioClient* client)
 {
     DCHECK(client);
@@ -136,6 +141,7 @@ Microsoft::WRL::ComPtr<IAudioSessionControl> createAudioSessionControl(IAudioCli
     return audio_session_control;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool sharedModeInitialize(IAudioClient* client,
                           const WAVEFORMATEXTENSIBLE* format,
                           HANDLE event_handle,
@@ -223,6 +229,7 @@ bool sharedModeInitialize(IAudioClient* client,
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isFormatSupported(IAudioClient* client,
                        AUDCLNT_SHAREMODE share_mode,
                        const WAVEFORMATEXTENSIBLE* format)
@@ -263,6 +270,7 @@ bool isFormatSupported(IAudioClient* client,
     return (hr == S_OK);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClient* render_client)
 {
     DCHECK(client);
@@ -312,6 +320,7 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isMMCSSSupported()
 {
     static const wchar_t* const kAvrtDLL = L"%WINDIR%\\system32\\Avrt.dll";
@@ -321,6 +330,7 @@ bool isMMCSSSupported()
     return (LoadLibraryExW(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH) != nullptr);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool isDeviceActive(IMMDevice* device)
 {
     DWORD state = DEVICE_STATE_DISABLED;

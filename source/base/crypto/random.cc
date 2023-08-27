@@ -26,6 +26,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 template <class ContainerT>
 ContainerT generateBuffer(size_t size)
 {
@@ -38,6 +39,7 @@ ContainerT generateBuffer(size_t size)
     return random_buffer;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename NumberT>
 NumberT generateNumber()
 {
@@ -51,6 +53,7 @@ NumberT generateNumber()
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool Random::fillBuffer(void* buffer, size_t size)
 {
@@ -60,24 +63,28 @@ bool Random::fillBuffer(void* buffer, size_t size)
     return RAND_bytes(reinterpret_cast<uint8_t*>(buffer), static_cast<int>(size)) > 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 ByteArray Random::byteArray(size_t size)
 {
     return generateBuffer<ByteArray>(size);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::string Random::string(size_t size)
 {
     return generateBuffer<std::string>(size);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint32_t Random::number32()
 {
     return generateNumber<uint32_t>();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 uint64_t Random::number64()
 {

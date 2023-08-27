@@ -22,39 +22,47 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 XAtomCache::XAtomCache(::Display* display)
     : display_(display)
 {
     DCHECK(display_);
 }
 
+//--------------------------------------------------------------------------------------------------
 XAtomCache::~XAtomCache() = default;
 
+//--------------------------------------------------------------------------------------------------
 ::Display* XAtomCache::display() const
 {
     return display_;
 }
 
+//--------------------------------------------------------------------------------------------------
 Atom XAtomCache::wmState()
 {
     return createIfNotExist(&wm_state_, "WM_STATE");
 }
 
+//--------------------------------------------------------------------------------------------------
 Atom XAtomCache::windowType()
 {
     return createIfNotExist(&window_type_, "_NET_WM_WINDOW_TYPE");
 }
 
+//--------------------------------------------------------------------------------------------------
 Atom XAtomCache::windowTypeNormal()
 {
     return createIfNotExist(&window_type_normal_, "_NET_WM_WINDOW_TYPE_NORMAL");
 }
 
+//--------------------------------------------------------------------------------------------------
 Atom XAtomCache::iccProfile()
 {
     return createIfNotExist(&icc_profile_, "_ICC_PROFILE");
 }
 
+//--------------------------------------------------------------------------------------------------
 Atom XAtomCache::createIfNotExist(Atom* atom, const char* name)
 {
     DCHECK(atom);

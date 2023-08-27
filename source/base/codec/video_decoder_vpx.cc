@@ -32,6 +32,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
@@ -75,18 +76,21 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
 {
     return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP8));
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 {
     return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::VIDEO_ENCODING_VP9));
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 {
     LOG(LS_INFO) << "VPX(" << encoding << ") Ctor";
@@ -119,11 +123,13 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
     CHECK_EQ(ret, VPX_CODEC_OK);
 }
 
+//--------------------------------------------------------------------------------------------------
 VideoDecoderVPX::~VideoDecoderVPX()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
 {
     // Do the actual decoding.

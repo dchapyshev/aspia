@@ -29,6 +29,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 std::string featureLevelToString(D3D_FEATURE_LEVEL feature_level)
 {
     switch (feature_level)
@@ -72,13 +73,25 @@ std::string featureLevelToString(D3D_FEATURE_LEVEL feature_level)
 
 using Microsoft::WRL::ComPtr;
 
+//--------------------------------------------------------------------------------------------------
 D3dDevice::D3dDevice() = default;
+
+//--------------------------------------------------------------------------------------------------
 D3dDevice::D3dDevice(const D3dDevice& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 D3dDevice& D3dDevice::operator=(const D3dDevice& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 D3dDevice::D3dDevice(D3dDevice&& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 D3dDevice& D3dDevice::operator=(D3dDevice&& other) = default;
+
+//--------------------------------------------------------------------------------------------------
 D3dDevice::~D3dDevice() = default;
 
+//--------------------------------------------------------------------------------------------------
 bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
 {
     dxgi_adapter_ = adapter;
@@ -142,6 +155,7 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::vector<D3dDevice> D3dDevice::enumDevices()
 {

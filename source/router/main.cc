@@ -41,6 +41,7 @@
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
 {
     base::KeyPair key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
@@ -62,6 +63,7 @@ bool generateKeys(base::ByteArray* private_key, base::ByteArray* public_key)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void generateAndPrintKeys()
 {
     base::ByteArray private_key;
@@ -74,6 +76,7 @@ void generateAndPrintKeys()
     std::cout << "Public key: " << base::toHex(public_key) << std::endl;
 }
 
+//--------------------------------------------------------------------------------------------------
 void createConfig()
 {
     std::cout << "Creation of initial configuration started." << std::endl;
@@ -206,6 +209,7 @@ void createConfig()
     std::cout << "Public key file: " << public_key_file << std::endl;
 }
 
+//--------------------------------------------------------------------------------------------------
 void showHelp()
 {
     std::cout << "aspia_router [switch]" << std::endl
@@ -224,6 +228,7 @@ void showHelp()
 } // namespace
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 int wmain()
 {
     base::installFailureHandler(L"aspia_router");
@@ -272,6 +277,7 @@ int wmain()
     return 0;
 }
 #else
+//--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
     base::initLogging();

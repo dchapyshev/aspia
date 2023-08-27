@@ -23,6 +23,7 @@
 
 namespace common {
 
+//--------------------------------------------------------------------------------------------------
 TextChatOutgoingMessage::TextChatOutgoingMessage(QWidget* parent)
     : TextChatMessage(TextChatMessage::Direction::OUTGOING, parent)
 {
@@ -32,24 +33,29 @@ TextChatOutgoingMessage::TextChatOutgoingMessage(QWidget* parent)
     ui.label_time->setText(time);
 }
 
+//--------------------------------------------------------------------------------------------------
 TextChatOutgoingMessage::~TextChatOutgoingMessage() = default;
 
+//--------------------------------------------------------------------------------------------------
 void TextChatOutgoingMessage::setMessageText(const QString& text)
 {
     ui.label_message->setText(text);
     adjustSize();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString TextChatOutgoingMessage::messageText() const
 {
     return ui.label_message->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 QString TextChatOutgoingMessage::messageTime() const
 {
     return ui.label_time->text();
 }
 
+//--------------------------------------------------------------------------------------------------
 void TextChatOutgoingMessage::resizeEvent(QResizeEvent* /* event */)
 {
     adjustSize();

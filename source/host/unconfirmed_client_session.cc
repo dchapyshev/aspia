@@ -30,6 +30,7 @@ const std::chrono::seconds kRejectInterval { 60 };
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession> client_session,
                                                    std::shared_ptr<base::TaskRunner> task_runner,
                                                    Delegate* delegate)
@@ -46,11 +47,13 @@ UnconfirmedClientSession::UnconfirmedClientSession(std::unique_ptr<ClientSession
     id_ = client_session_->id();
 }
 
+//--------------------------------------------------------------------------------------------------
 UnconfirmedClientSession::~UnconfirmedClientSession()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeout)
 {
     if (timeout <= std::chrono::milliseconds(0))
@@ -74,11 +77,13 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 std::unique_ptr<ClientSession> UnconfirmedClientSession::takeClientSession()
 {
     return std::move(client_session_);
 }
 
+//--------------------------------------------------------------------------------------------------
 uint32_t UnconfirmedClientSession::id() const
 {
     return id_;

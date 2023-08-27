@@ -33,6 +33,7 @@ static std::atomic_bool _class_registered = false;
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 MessageWindow::~MessageWindow()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -44,6 +45,7 @@ MessageWindow::~MessageWindow()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool MessageWindow::create(MessageCallback message_callback)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
@@ -82,11 +84,13 @@ bool MessageWindow::create(MessageCallback message_callback)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 HWND MessageWindow::hwnd() const
 {
     return hwnd_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 LRESULT CALLBACK MessageWindow::windowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -139,6 +143,7 @@ LRESULT CALLBACK MessageWindow::windowProc(HWND window, UINT msg, WPARAM wParam,
     return DefWindowProcW(window, msg, wParam, lParam);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 bool MessageWindow::registerWindowClass(HINSTANCE instance)
 {

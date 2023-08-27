@@ -24,6 +24,7 @@
 
 namespace host {
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> window_proxy)
     : window_proxy_(std::move(window_proxy))
 {
@@ -39,11 +40,13 @@ UserSessionAgent::UserSessionAgent(std::shared_ptr<UserSessionWindowProxy> windo
 #endif // defined(OS_WIN)
 }
 
+//--------------------------------------------------------------------------------------------------
 UserSessionAgent::~UserSessionAgent()
 {
     LOG(LS_INFO) << "Dtor";
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::start()
 {
     LOG(LS_INFO) << "Starting user session agent";
@@ -66,12 +69,14 @@ void UserSessionAgent::start()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconncted";
     window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
@@ -143,6 +148,7 @@ void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
     LOG(LS_INFO) << "Update credentials request: " << request_type;
@@ -152,6 +158,7 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::killClient(uint32_t id)
 {
     LOG(LS_INFO) << "Kill client request: " << id;
@@ -165,6 +172,7 @@ void UserSessionAgent::killClient(uint32_t id)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
 {
     LOG(LS_INFO) << "Connect confirmation (id: " << id << " accept: " << accept << ")";
@@ -178,6 +186,7 @@ void UserSessionAgent::connectConfirmation(uint32_t id, bool accept)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::setVoiceChat(bool enable)
 {
     LOG(LS_INFO) << "Voice chat: " << enable;
@@ -191,6 +200,7 @@ void UserSessionAgent::setVoiceChat(bool enable)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::setMouseLock(bool enable)
 {
     LOG(LS_INFO) << "Mouse lock: " << enable;
@@ -204,6 +214,7 @@ void UserSessionAgent::setMouseLock(bool enable)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::setKeyboardLock(bool enable)
 {
     LOG(LS_INFO) << "Keyboard lock: " << enable;
@@ -217,6 +228,7 @@ void UserSessionAgent::setKeyboardLock(bool enable)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::setPause(bool enable)
 {
     LOG(LS_INFO) << "Pause: " << enable;
@@ -230,6 +242,7 @@ void UserSessionAgent::setPause(bool enable)
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onTextChat(const proto::TextChat& text_chat)
 {
     outgoing_message_.Clear();

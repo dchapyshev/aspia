@@ -24,6 +24,7 @@
 
 namespace console {
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                                      ComputerGroupItem* parent_item)
     : QTreeWidgetItem(parent_item),
@@ -38,6 +39,7 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
     proto::address_book::ComputerGroup* computer_group)
 {
@@ -48,6 +50,7 @@ ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
     return item;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_group_item)
 {
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
@@ -63,6 +66,7 @@ bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_gro
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     ComputerGroupItem* computer_group_item)
 {
@@ -85,11 +89,13 @@ proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     return computer_group;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::addChildComputer(proto::address_book::Computer* computer)
 {
     computer_group_->mutable_computer()->AddAllocated(computer);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::deleteChildComputer(proto::address_book::Computer* computer)
 {
     for (int i = 0; i < computer_group_->computer_size(); ++i)
@@ -104,6 +110,7 @@ bool ComputerGroupItem::deleteChildComputer(proto::address_book::Computer* compu
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     proto::address_book::Computer* computer)
 {
@@ -123,6 +130,7 @@ proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     return nullptr;
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::updateItem()
 {
     bool has_parent = parent() != nullptr;
@@ -132,16 +140,19 @@ void ComputerGroupItem::updateItem()
         setText(0, QApplication::translate("ComputerGroupItem", "Root Group"));
 }
 
+//--------------------------------------------------------------------------------------------------
 bool ComputerGroupItem::IsExpanded() const
 {
     return computer_group_->expanded();
 }
 
+//--------------------------------------------------------------------------------------------------
 void ComputerGroupItem::SetExpanded(bool expanded)
 {
     computer_group_->set_expanded(expanded);
 }
 
+//--------------------------------------------------------------------------------------------------
 QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
 {
     QList<QTreeWidgetItem*> list;
@@ -152,6 +163,7 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
 proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
 {
     proto::address_book::ComputerGroupConfig result;

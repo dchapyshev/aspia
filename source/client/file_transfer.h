@@ -154,6 +154,9 @@ public:
 
     using TaskList = std::deque<Task>;
     using FinishCallback = std::function<void()>;
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
 
     FileTransfer(std::shared_ptr<base::TaskRunner> io_task_runner,
                  std::shared_ptr<FileTransferWindowProxy> transfer_window_proxy,
@@ -179,9 +182,12 @@ private:
     void sourceReply(const proto::FileRequest& request, const proto::FileReply& reply);
     void doFrontTask(bool overwrite);
     void doNextTask();
+    void doUpdateSpeed();
     void onError(Error::Type type, proto::FileError code, const std::string& path = std::string());
     void setActionForErrorType(Error::Type error_type, Error::Action action);
     void onFinished();
+
+    const Type type_;
 
     std::shared_ptr<base::TaskRunner> io_task_runner_;
     std::shared_ptr<FileTransferProxy> transfer_proxy_;
@@ -197,7 +203,6 @@ private:
     std::map<Error::Type, Error::Action> actions_;
     std::unique_ptr<FileTransferQueueBuilder> queue_builder_;
     TaskList tasks_;
-    const Type type_;
 
     FinishCallback finish_callback_;
 
@@ -209,6 +214,11 @@ private:
     int task_percentage_ = 0;
 
     bool is_canceled_ = false;
+
+    base::WaitableTimer speed_update_timer_;
+    TimePoint begin_time_;
+    int64_t bytes_per_time_ = 0;
+    int64_t speed_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };

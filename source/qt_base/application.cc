@@ -62,6 +62,7 @@ const int kMaxMessageSize = 1024 * 1024 * 1;
 const char kOkMessage[] = "OK";
 
 #if defined(OS_WIN)
+//--------------------------------------------------------------------------------------------------
 bool isSameApplication(const QLocalSocket* socket)
 {
     ULONG process_id;
@@ -105,6 +106,7 @@ bool isSameApplication(const QLocalSocket* socket)
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : QApplication(argc, argv)
 {
@@ -146,6 +148,7 @@ Application::Application(int& argc, char* argv[])
     ui_task_runner_ = std::make_shared<QtTaskRunner>();
 }
 
+//--------------------------------------------------------------------------------------------------
 Application::~Application()
 {
     LOG(LS_INFO) << "Dtor";
@@ -163,12 +166,14 @@ Application::~Application()
         QFile::remove(lock_file_name_);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
 {
@@ -179,6 +184,7 @@ std::shared_ptr<base::TaskRunner> Application::uiTaskRunner()
     return application->ui_task_runner_;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
 {
@@ -189,6 +195,7 @@ std::shared_ptr<base::TaskRunner> Application::ioTaskRunner()
     return application->io_task_runner_;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Application::isRunning()
 {
     if (!lock_file_->tryLock())
@@ -212,21 +219,25 @@ bool Application::isRunning()
     return false;
 }
 
+//--------------------------------------------------------------------------------------------------
 Application::LocaleList Application::localeList() const
 {
     return locale_loader_->localeList();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::setLocale(const QString& locale)
 {
     locale_loader_->installTranslators(locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool Application::hasLocale(const QString& locale)
 {
     return locale_loader_->contains(locale);
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::sendMessage(const QByteArray& message)
 {
     if (server_)
@@ -278,6 +289,7 @@ void Application::sendMessage(const QByteArray& message)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void Application::onNewConnection()
 {
     DCHECK(server_);
@@ -342,7 +354,7 @@ void Application::onNewConnection()
     socket->waitForBytesWritten(kWriteTimeoutMs);
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
-    emit messageReceived(message);
+    emit sig_messageReceived(message);
 }
 
 } // namespace qt_base
