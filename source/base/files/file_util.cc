@@ -28,6 +28,9 @@ namespace {
 template <class Container>
 bool readFileT(const std::filesystem::path& filename, Container* buffer)
 {
+    if (!buffer)
+        return false;
+
     std::ifstream stream;
     stream.open(filename, std::ifstream::binary | std::ifstream::in);
     if (!stream.is_open())
@@ -42,6 +45,9 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
     if (!size)
         return true;
 
+    if (size >= buffer->max_size())
+        return false;
+
     buffer->resize(size);
 
     stream.read(reinterpret_cast<char*>(buffer->data()), buffer->size());
@@ -53,6 +59,9 @@ bool readFileT(const std::filesystem::path& filename, Container* buffer)
 //--------------------------------------------------------------------------------------------------
 bool writeFile(const std::filesystem::path& filename, const void* data, size_t size)
 {
+    if (!data)
+        return false;
+
     std::ofstream stream;
     stream.open(filename, std::ofstream::binary | std::ofstream::out | std::ofstream::trunc);
     if (!stream.is_open())
@@ -79,13 +88,13 @@ bool writeFile(const std::filesystem::path& filename, std::string_view buffer)
 //--------------------------------------------------------------------------------------------------
 bool readFile(const std::filesystem::path& filename, ByteArray* buffer)
 {
-    return readFileT(filename, buffer);
+    return readFileT<ByteArray>(filename, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool readFile(const std::filesystem::path& filename, std::string* buffer)
 {
-    return readFileT(filename, buffer);
+    return readFileT<std::string>(filename, buffer);
 }
 
 } // namespace base
