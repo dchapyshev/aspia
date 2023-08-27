@@ -59,6 +59,8 @@ list(APPEND SOURCE_HOST_CORE
     service.h
     service_constants.cc
     service_constants.h
+    service_main.cc
+    service_main.h
     system_settings.cc
     system_settings.h
     unconfirmed_client_session.cc
@@ -140,8 +142,6 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
         win/sas_injector.cc
         win/sas_injector.h
-        win/service_main.cc
-        win/service_main.h
         win/updater_launcher.cc
         win/updater_launcher.h)
 endif()
@@ -226,7 +226,7 @@ endif()
 target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
 
 # Aspia Host Service
-add_executable(aspia_host_service win/service_entry_point.cc win/service.rc)
+add_executable(aspia_host_service service_entry_point.cc service.rc)
 if (WIN32)
     set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()

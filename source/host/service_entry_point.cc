@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_main.h"
+#include "host/service_main.h"
 
 #include "build/build_config.h"
 

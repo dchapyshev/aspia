@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/win/service_main.h"
+#include "host/service_main.h"
 
 #include "base/command_line.h"
 #include "base/environment.h"
@@ -46,7 +46,7 @@ void startService()
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
-            << std::endl;
+                  << std::endl;
     }
     else
     {
@@ -69,7 +69,7 @@ void stopService()
     if (!controller.isValid())
     {
         std::cout << "Failed to access the service. Not enough rights or service not installed."
-            << std::endl;
+                  << std::endl;
     }
     else
     {

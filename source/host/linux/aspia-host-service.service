@@ -7,9 +7,9 @@ Conflicts=shutdown.target
 [Service]
 WorkingDirectory=/usr/bin
 #EnvironmentFile=/usr/bin/env.sh
-#Environment=SVC=aspia-host
+#Environment=SVC=aspia-host-service
 Restart=always
-ExecStart=/usr/bin/aspia_host
+ExecStart=/usr/bin/aspia_host_service
 RestartSec=5000ms
 
 [Install]
