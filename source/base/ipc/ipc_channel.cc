@@ -165,6 +165,12 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
+    if (channel_id.empty())
+    {
+        LOG(LS_ERROR) << "Empty channel id";
+        return false;
+    }
+
 #if defined(OS_WIN)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
     channel_name_ = channelName(channel_id);

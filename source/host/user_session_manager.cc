@@ -28,8 +28,8 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "host/client_session.h"
+#include "host/host_ipc_storage.h"
 #include "host/user_session.h"
-#include "host/user_session_constants.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
@@ -222,8 +222,12 @@ bool UserSessionManager::start(Delegate* delegate)
 
     ipc_server_ = std::make_unique<base::IpcServer>();
 
+    std::u16string ipc_channel_for_ui = base::IpcServer::createUniqueId();
+    HostIpcStorage ipc_storage;
+    ipc_storage.setChannelIdForUI(ipc_channel_for_ui);
+
     // Start the server which will accept incoming connections from UI processes in user sessions.
-    if (!ipc_server_->start(kIpcChannelIdForUI, this))
+    if (!ipc_server_->start(ipc_channel_for_ui, this))
     {
         LOG(LS_WARNING) << "Failed to start IPC server for UI";
         return false;

@@ -16,13 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_USER_SESSION_CONSTANTS_H
-#define HOST_USER_SESSION_CONSTANTS_H
+#ifndef HOST_HOST_IPC_STORAGE_H
+#define HOST_HOST_IPC_STORAGE_H
+
+#include "base/macros_magic.h"
+#include "base/settings/json_settings.h"
 
 namespace host {
 
-extern const char16_t kIpcChannelIdForUI[];
+class HostIpcStorage
+{
+public:
+    HostIpcStorage();
+    ~HostIpcStorage();
+
+    std::u16string channelIdForUI() const;
+    void setChannelIdForUI(const std::u16string& channel_id);
+
+private:
+    base::JsonSettings impl_;
+
+    DISALLOW_COPY_AND_ASSIGN(HostIpcStorage);
+};
 
 } // namespace host
 
-#endif // HOST_USER_SESSION_CONSTANTS_H
+#endif // HOST_HOST_IPC_STORAGE_H
