@@ -19,7 +19,7 @@
 #include "host/user_session_agent.h"
 
 #include "base/logging.h"
-#include "host/host_ipc_storage.h".h"
+#include "host/host_ipc_storage.h"
 #include "host/user_session_window_proxy.h"
 
 namespace host {
