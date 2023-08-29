@@ -90,7 +90,29 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
     }
 
     asio::ip::tcp::endpoint endpoint(listen_address, port);
-    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_, endpoint);
+    acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_);
+
+    acceptor_->open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->open failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
+
+    acceptor_->bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->bind failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+    }
+
+    acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->listen failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+    }
 
     doAccept();
 }

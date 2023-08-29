@@ -19,7 +19,7 @@
 #include "host/user_session_agent.h"
 
 #include "base/logging.h"
-#include "host/user_session_constants.h"
+#include "host/host_ipc_storage.h".h"
 #include "host/user_session_window_proxy.h"
 
 namespace host {
@@ -54,7 +54,7 @@ void UserSessionAgent::start()
     ipc_channel_ = std::make_unique<base::IpcChannel>();
     ipc_channel_->setListener(this);
 
-    if (ipc_channel_->connect(kIpcChannelIdForUI))
+    if (ipc_channel_->connect(HostIpcStorage().channelIdForUI()))
     {
         LOG(LS_INFO) << "IPC channel connected";
 

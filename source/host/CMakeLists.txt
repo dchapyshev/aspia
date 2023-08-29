@@ -46,6 +46,8 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_proxy.cc
     desktop_session_proxy.h
     host_export.h
+    host_ipc_storage.cc
+    host_ipc_storage.h
     host_key_storage.cc
     host_key_storage.h
     input_injector.h
@@ -71,8 +73,6 @@ list(APPEND SOURCE_HOST_CORE
     user_session_agent.h
     user_session_agent_proxy.cc
     user_session_agent_proxy.h
-    user_session_constants.cc
-    user_session_constants.h
     user_session_manager.cc
     user_session_manager.h
     user_session_window.h
