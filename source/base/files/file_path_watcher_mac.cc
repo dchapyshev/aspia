@@ -69,7 +69,7 @@ void FilePathWatcherImpl::cancel()
 //--------------------------------------------------------------------------------------------------
 FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner> task_runner)
 {
-    impl_ = std::make_unique<FilePathWatcherImpl>(std::move(task_runner));
+    impl_ = std::make_shared<FilePathWatcherImpl>(std::move(task_runner));
 }
 
 } // namespace base

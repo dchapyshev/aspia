@@ -105,7 +105,7 @@ public:
     bool watch(const std::filesystem::path& path, bool recursive, const Callback& callback);
 
 private:
-    std::unique_ptr<PlatformDelegate> impl_;
+    std::shared_ptr<PlatformDelegate> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(FilePathWatcher);
 };

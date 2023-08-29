@@ -207,7 +207,7 @@ class FilePathWatcherImpl
       public FilePathWatcher::PlatformDelegate
 {
 public:
-    FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
+    explicit FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner);
     ~FilePathWatcherImpl() override;
 
     // Called for each event coming from the watch on the original thread. |fired_watch| identifies
@@ -443,8 +443,10 @@ void InotifyReader::onInotifyEvent(const inotify_event* event)
     for (const auto& entry : watcher_map)
     {
         auto& watcher_entry = entry.second;
+        std::shared_ptr<FilePathWatcherImpl> watcher = watcher_entry.watcher.lock();
+
         auto task = std::bind(&FilePathWatcherImpl::onFilePathChanged,
-                              watcher_entry.watcher.lock(),
+                              watcher,
                               event->wd,
                               child,
                               event->mask & (IN_CREATE | IN_MOVED_TO),
@@ -476,7 +478,10 @@ FilePathWatcherImpl::FilePathWatcherImpl(std::shared_ptr<TaskRunner> task_runner
 }
 
 //--------------------------------------------------------------------------------------------------
-FilePathWatcherImpl::~FilePathWatcherImpl() = default;
+FilePathWatcherImpl::~FilePathWatcherImpl()
+{
+    DCHECK(!taskRunner() || taskRunner()->belongsToCurrentThread());
+}
 
 //--------------------------------------------------------------------------------------------------
 void FilePathWatcherImpl::onFilePathChanged(InotifyReader::Watch fired_watch,
@@ -613,7 +618,7 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
     recursive_watch_ = recursive;
 
     for (auto it = target_.begin(); it != target_.end(); ++it)
-        watches_.emplace_back(*it);
+        watches_.emplace_back(it->native());
 
     watches_.emplace_back(std::filesystem::path::string_type());
 
@@ -632,11 +637,12 @@ void FilePathWatcherImpl::cancel()
 {
     if (!callback_)
     {
-        // Watch() was never called.
+        // watch() was never called.
         setCancelled();
         return;
     }
 
+    DCHECK(taskRunner()->belongsToCurrentThread());
     DCHECK(!isCancelled());
 
     setCancelled();
@@ -668,6 +674,7 @@ bool FilePathWatcherImpl::wouldExceedWatchLimit() const
 bool FilePathWatcherImpl::updateWatches()
 {
     // Ensure this runs on the task_runner() exclusively in order to avoid concurrency issues.
+    DCHECK(taskRunner()->belongsToCurrentThread());
     DCHECK(hasValidWatchVector());
 
     // Walk the list of watches and update them as we go.
@@ -678,8 +685,10 @@ bool FilePathWatcherImpl::updateWatches()
         watch_entry.watch = InotifyReader::kInvalidWatch;
         watch_entry.linkname.clear();
         watch_entry.watch = InotifyReader::instance().addWatch(path, this);
+
         if (watch_entry.watch == InotifyReader::kWatchLimitExceeded)
             return false;
+
         if (watch_entry.watch == InotifyReader::kInvalidWatch)
         {
             // Ignore the error code (beyond symlink handling) to attempt to add
@@ -692,8 +701,10 @@ bool FilePathWatcherImpl::updateWatches()
                     return false;
             }
         }
+
         if (old_watch != watch_entry.watch)
             InotifyReader::instance().removeWatch(old_watch, this);
+
         path = path.append(watch_entry.subdir);
     }
 
@@ -730,6 +741,7 @@ bool FilePathWatcherImpl::updateRecursiveWatches(InotifyReader::Watch fired_watc
 
     auto start_it = recursive_watches_by_path_.lower_bound(changed_dir);
     auto end_it = start_it;
+
     for (; end_it != recursive_watches_by_path_.end(); ++end_it)
     {
         const std::filesystem::path& cur_path = end_it->first;
@@ -751,6 +763,7 @@ bool FilePathWatcherImpl::updateRecursiveWatches(InotifyReader::Watch fired_watc
         // Keep it in sync with |recursive_watches_by_path_| crbug.com/995196.
         recursive_paths_by_watch_.erase(end_it->second);
     }
+
     recursive_watches_by_path_.erase(start_it, end_it);
     return updateRecursiveWatchesForPath(changed_dir);
 }
@@ -764,6 +777,7 @@ bool FilePathWatcherImpl::updateRecursiveWatchesForPath(const std::filesystem::p
     std::error_code ignored_error;
     std::filesystem::recursive_directory_iterator iterator(
         path, std::filesystem::directory_options::follow_directory_symlink, ignored_error);
+
     for (const std::filesystem::directory_entry& current : iterator)
     {
         if (!current.is_directory())
@@ -775,6 +789,7 @@ bool FilePathWatcherImpl::updateRecursiveWatchesForPath(const std::filesystem::p
             InotifyReader::Watch watch = InotifyReader::instance().addWatch(current, this);
             if (watch == InotifyReader::kWatchLimitExceeded)
                 return false;
+
             trackWatchForRecursion(watch, current);
         }
         else
@@ -783,8 +798,10 @@ bool FilePathWatcherImpl::updateRecursiveWatchesForPath(const std::filesystem::p
             InotifyReader::Watch old_watch = recursive_watches_by_path_[current];
             DCHECK_NE(InotifyReader::kInvalidWatch, old_watch);
             InotifyReader::Watch watch = InotifyReader::instance().addWatch(current, this);
+
             if (watch == InotifyReader::kWatchLimitExceeded)
                 return false;
+
             if (watch != old_watch)
             {
                 InotifyReader::instance().removeWatch(old_watch, this);
@@ -881,7 +898,7 @@ bool FilePathWatcherImpl::hasValidWatchVector() const
 //--------------------------------------------------------------------------------------------------
 FilePathWatcher::FilePathWatcher(std::shared_ptr<TaskRunner> task_runner)
 {
-    impl_ = std::make_unique<FilePathWatcherImpl>(std::move(task_runner));
+    impl_ = std::make_shared<FilePathWatcherImpl>(std::move(task_runner));
 }
 
 } // namespace base
