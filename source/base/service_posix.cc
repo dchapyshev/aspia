@@ -29,6 +29,27 @@ namespace {
 
 Service* g_self = nullptr;
 
+const char* sigToString(int sig)
+{
+    switch (sig)
+    {
+        case SIGKILL:
+            return "SIGKILL";
+        case SIGTERM:
+            return "SIGTERM";
+        case SIGHUP:
+            return "SIGHUP";
+        case SIGQUIT:
+            return "SIGQUIT";
+        case SIGINT:
+            return "SIGINT";
+        case SIGSTOP:
+            return "SIGSTOP";
+        default:
+            return "unknown";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +79,6 @@ void Service::exec()
     signal(SIGQUIT, signalHandler);
     signal(SIGINT, signalHandler);
     signal(SIGSTOP, signalHandler);
-    signal(SIGABRT, signalHandler);
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
@@ -92,9 +112,13 @@ void Service::signalHandlerImpl(int sig)
         case SIGQUIT:
         case SIGINT:
         case SIGSTOP:
-        case SIGABRT:
+        {
             onStop();
-            break;
+
+            // A message loop termination command was received.
+            task_runner_->postQuit();
+        }
+        break;
 
         default:
             break;
@@ -105,7 +129,7 @@ void Service::signalHandlerImpl(int sig)
 // static
 void Service::signalHandler(int sig)
 {
-    LOG(LS_INFO) << "Signal received: " << sig;
+    LOG(LS_INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
 
     if (g_self)
         g_self->signalHandlerImpl(sig);
