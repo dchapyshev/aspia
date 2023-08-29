@@ -42,7 +42,7 @@ namespace {
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(OS_POSIX)
-const char16_t kLocalSocketPrefix[] = u"aspia_host_";
+const char16_t kLocalSocketPrefix[] = u"aspia_";
 #endif // defined(OS_POSIX)
 
 #if defined(OS_WIN)
