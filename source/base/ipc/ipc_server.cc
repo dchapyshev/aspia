@@ -180,7 +180,32 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     return true;
 #else
     asio::local::stream_protocol::endpoint endpoint(base::utf8FromUtf16(channel_name));
-    acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context, endpoint);
+    acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
+
+    std::error_code error_code;
+    acceptor_->open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->open failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    acceptor_->bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->bind failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
+
+    acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
+    if (error_code)
+    {
+        LOG(LS_WARNING) << "acceptor_->listen failed: "
+                        << base::utf16FromLocal8Bit(error_code.message());
+        return false;
+    }
 
     acceptor_->async_accept(std::bind(&Listener::onNewConnetion,
                                       shared_from_this(),
@@ -289,7 +314,7 @@ bool IpcServer::start(std::u16string_view channel_id, Delegate* delegate)
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
     DCHECK(delegate);
 
-    LOG(LS_INFO) << "Starting IPC server";
+    LOG(LS_INFO) << "Starting IPC server (channel_id: " << channel_id.data() << ")";
 
     if (channel_id.empty())
     {
