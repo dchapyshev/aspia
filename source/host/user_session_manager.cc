@@ -672,7 +672,7 @@ void UserSessionManager::startSessionProcess(
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_WARNING) << "Unable to open pile";
+        LOG(LS_WARNING) << "Unable to open pipe";
         return;
     }
 
