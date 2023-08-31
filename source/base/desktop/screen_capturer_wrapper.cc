@@ -31,7 +31,7 @@
 #include "base/desktop/screen_capturer_mirror.h"
 #include "base/win/windows_version.h"
 #elif defined(OS_LINUX)
-// TODO
+#include "base/desktop/screen_capturer_x11.h"
 #elif defined(OS_MAC)
 // TODO
 #else
@@ -104,6 +104,12 @@ ScreenCapturerWrapper::~ScreenCapturerWrapper()
 void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, const Size& resolution)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+    if (!screen_capturer_)
+    {
+        LOG(LS_WARNING) << "Screen capturer not initialized";
+        return;
+    }
 
     if (screen_id == screen_capturer_->currentScreen())
     {
@@ -320,6 +326,12 @@ void ScreenCapturerWrapper::enableCursorPosition(bool enable)
 //--------------------------------------------------------------------------------------------------
 ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
+    if (!screen_capturer_)
+    {
+        LOG(LS_WARNING) << "Screen capturer not initialized";
+        return ScreenCapturer::kInvalidScreenId;
+    }
+
     ScreenCapturer::ScreenList screen_list;
     if (screen_capturer_->screenList(&screen_list))
     {
@@ -415,7 +427,12 @@ void ScreenCapturerWrapper::selectCapturer()
     }
 
 #elif defined(OS_LINUX)
-    NOTIMPLEMENTED();
+    screen_capturer_ = ScreenCapturerX11::create();
+    if (!screen_capturer_)
+    {
+        LOG(LS_WARNING) << "Unable to create X11 screen capturer";
+        return;
+    }
 #elif defined(OS_MAC)
     NOTIMPLEMENTED();
 #else

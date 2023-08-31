@@ -46,7 +46,7 @@ public:
     ScreenCapturerX11();
     ~ScreenCapturerX11() override;
 
-    std::unique_ptr<ScreenCapturerX11> create();
+    static std::unique_ptr<ScreenCapturerX11> create();
 
     // ScreenCapturer implementation.
     int screenCount() override;
