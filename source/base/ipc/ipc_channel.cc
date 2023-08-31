@@ -42,7 +42,7 @@ namespace {
 const uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(OS_POSIX)
-const char16_t kLocalSocketPrefix[] = u"aspia_";
+const char16_t kLocalSocketPrefix[] = u"/tmp/aspia_";
 #endif // defined(OS_POSIX)
 
 #if defined(OS_WIN)
@@ -171,9 +171,10 @@ bool IpcChannel::connect(std::u16string_view channel_id)
         return false;
     }
 
+    channel_name_ = channelName(channel_id);
+
 #if defined(OS_WIN)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
-    channel_name_ = channelName(channel_id);
 
     win::ScopedHandle handle;
 
@@ -217,7 +218,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
     is_connected_ = true;
     return true;
 #else
-    asio::local::stream_protocol::endpoint endpoint(base::utf8FromUtf16(channel_id));
+    asio::local::stream_protocol::endpoint endpoint(base::local8BitFromUtf16(channel_name_));
     std::error_code error_code;
     stream_.connect(endpoint, error_code);
     if (error_code)

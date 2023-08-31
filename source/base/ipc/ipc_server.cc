@@ -179,7 +179,9 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    asio::local::stream_protocol::endpoint endpoint(base::utf8FromUtf16(channel_name));
+    std::string channel_file = base::local8BitFromUtf16(channel_name);
+
+    asio::local::stream_protocol::endpoint endpoint(channel_file);
     acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
 
     std::error_code error_code;
@@ -198,6 +200,11 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
                         << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
+
+    std::string command_line = base::stringPrintf("chmod 777 %s", channel_file.data());
+
+    LOG(LS_INFO) << "Set security attributes: " << command_line;
+    system(command_line.c_str());
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
