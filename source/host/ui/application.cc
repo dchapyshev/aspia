@@ -24,6 +24,7 @@
 
 #include <QAbstractEventDispatcher>
 #include <QAbstractNativeEventFilter>
+#include <QIcon>
 
 namespace host {
 
@@ -92,6 +93,7 @@ Application::Application(int& argc, char* argv[])
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 #endif
+    setWindowIcon(QIcon(":/img/main.ico"));
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(
         EventFilter::instance());
