@@ -117,7 +117,7 @@ void DesktopSessionManager::dettachSession(const base::Location& location)
         return;
     }
 
-    LOG(LS_INFO) << "Dettach session. Current state: << " << stateToString(state_)
+    LOG(LS_INFO) << "Dettach session. Current state: " << stateToString(state_)
                  << " (from: " << location.toString() << ")";
 
     if (state_ != State::STOPPING)
