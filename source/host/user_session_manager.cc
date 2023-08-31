@@ -690,7 +690,7 @@ void UserSessionManager::startSessionProcess(
             {
                 std::string user_name = base::local8BitFromUtf16(splitted.front());
                 std::string command_line =
-                    base::stringPrintf("sudo DISPLAY=':0' FONTCONDIG_PATH=/etc/fonts "
+                    base::stringPrintf("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
                                        "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %s)/bus "
                                        "-u %s ./aspia_host --hidden &",
                                        user_name.data(),
