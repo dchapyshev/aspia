@@ -22,11 +22,14 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/scoped_task_runner.h"
+#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/files/base_paths.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/string_split.h"
 #include "host/client_session.h"
 #include "host/host_ipc_storage.h"
 #include "host/user_session.h"
@@ -656,6 +659,46 @@ void UserSessionManager::startSessionProcess(
     {
         LOG(LS_WARNING) << "Failed to start process with user token (sid: " << session_id
                         << " cmd: " << command_line.commandLineString() << ")";
+    }
+#elif defined(OS_LINUX)
+    std::error_code ignored_error;
+    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
+    if (it == std::filesystem::end(it))
+    {
+        LOG(LS_WARNING) << "No X11 sessions";
+        return;
+    }
+
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
+    if (!pipe)
+    {
+        LOG(LS_WARNING) << "Unable to open pile";
+        return;
+    }
+
+    std::array<char, 512> buffer;
+    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    {
+        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+
+        if (base::contains(line, u":0") || base::contains(line, u"tty2"))
+        {
+            std::vector<std::u16string_view> splitted = base::splitStringView(
+                line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+
+            if (!splitted.empty())
+            {
+                std::string user_name = base::local8BitFromUtf16(splitted.front());
+                std::string command_line =
+                    base::stringPrintf("sudo DISPLAY=':0' FONTCONDIG_PATH=/etc/fonts "
+                                       "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %s)/bus "
+                                       "-u %s ./aspia_host --hidden &",
+                                       user_name.data(),
+                                       user_name.data());
+
+                system(command_line.c_str());
+            }
+        }
     }
 #else
     NOTIMPLEMENTED();
