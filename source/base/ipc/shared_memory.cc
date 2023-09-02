@@ -288,16 +288,21 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
             open_flags |= O_RDWR;
         }
 
-        int fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
+        fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
         if (fd == -1)
         {
             PLOG(LS_WARNING) << "shm_open failed";
             continue;
         }
+
+        break;
     }
 
     if (fd == -1)
+    {
+        LOG(LS_WARNING) << "Unable to create shared memory";
         return nullptr;
+    }
 
     if (ftruncate(fd, size) == -1)
     {
