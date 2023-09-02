@@ -46,6 +46,10 @@ namespace host {
 
 namespace {
 
+#if defined(OS_POSIX)
+const char kExecutableNameForUi[] = "aspia_host";
+#endif // defined(OS_POSIX)
+
 #if defined(OS_WIN)
 const wchar_t kExecutableNameForUi[] = L"aspia_host.exe";
 
@@ -689,14 +693,26 @@ void UserSessionManager::startSessionProcess(
             if (!splitted.empty())
             {
                 std::string user_name = base::local8BitFromUtf16(splitted.front());
+
+                std::filesystem::path file_path;
+                if (!base::BasePaths::currentExecDir(&file_path))
+                {
+                    LOG(LS_WARNING) << "Failed to get current exec directory (sid: " << session_id << ")";
+                    return;
+                }
+
+                file_path.append(kExecutableNameForUi);
+
                 std::string command_line =
                     base::stringPrintf("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
                                        "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %s)/bus "
-                                       "-u %s ./aspia_host --hidden &",
-                                       user_name.data(),
-                                       user_name.data());
+                                       "-u %s %s --hidden &",
+                                       user_name.c_str(),
+                                       user_name.c_str(),
+                                       file_path.c_str());
 
-                system(command_line.c_str());
+                int ret = system(command_line.c_str());
+                LOG(LS_INFO) << "system result: " << ret;
             }
         }
     }
