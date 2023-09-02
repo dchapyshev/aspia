@@ -214,7 +214,17 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    set(HOST_PLATFORM_LIBS stdc++fs ${XFIXES_LIB} ${XDAMAGE_LIB} ${XRANDR_LIB} ${XTST_LIB} ${XI_LIB} ICU::uc ICU::dt)
+    set(HOST_PLATFORM_LIBS
+        stdc++fs
+        ${XFIXES_LIB}
+        ${XDAMAGE_LIB}
+        ${XRANDR_LIB}
+        ${XTST_LIB}
+        ${XI_LIB}
+        ${X11_LIB}
+        ${XEXT_LIB}
+        ICU::uc
+        ICU::dt)
 endif()
 
 # Aspia Host (GUI)
@@ -235,6 +245,6 @@ target_link_libraries(aspia_host_service aspia_host_core ${HOST_PLATFORM_LIBS})
 # Aspia Desktop Agent
 add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
 if (WIN32)
-set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+    set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})

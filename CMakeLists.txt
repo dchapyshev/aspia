@@ -83,6 +83,12 @@ if (LINUX)
 
     find_library(XI_LIB NAMES libXi Xi REQUIRED)
     message(STATUS "Xi library: ${XI_LIB}")
+
+    find_library(X11_LIB NAMES libX11 X11 REQUIRED)
+    message(STATUS "X11 library: ${X11_LIB}")
+
+    find_library(XEXT_LIB NAMES libXext Xext REQUIRED)
+    message(STATUS "Xext library: ${XEXT_LIB}")
 endif()
 
 if (APPLE)
