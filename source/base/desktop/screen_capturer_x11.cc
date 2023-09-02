@@ -19,8 +19,8 @@
 #include "base/desktop/screen_capturer_x11.h"
 
 #include "base/logging.h"
-#include "base/desktop/frame_simple.h"
 #include "base/desktop/mouse_cursor.h"
+#include "base/desktop/shared_memory_frame.h"
 #include "base/desktop/x11/x_error_trap.h"
 #include "base/memory/byte_array.h"
 
@@ -158,7 +158,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     // Process XEvents for XDamage and cursor shape tracking.
     display_->processPendingXEvents();
 
-    // ProcessPendingXEvents() may call screenConfigurationChanged() which reinitializes
+    // processPendingXEvents() may call screenConfigurationChanged() which reinitializes
     // |m_xServerPixelBuffer|. Check if the pixel buffer is still in a good shape.
     if (!x_server_pixel_buffer_.isInitialized())
     {
@@ -170,8 +170,13 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 
     if (!queue_.currentFrame())
     {
-        std::unique_ptr<FrameSimple> frame =
-            FrameSimple::create(selected_monitor_rect_.size(), PixelFormat::ARGB());
+        std::unique_ptr<Frame> frame = SharedMemoryFrame::create(
+            selected_monitor_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory());
+        if (!frame)
+        {
+            LOG(LS_WARNING) << "Unable to create frame";
+            return nullptr;
+        }
 
         // We set the top-left of the frame so the mouse cursor will be composited
         // properly, and our frame buffer will not be overrun while blitting.
@@ -198,19 +203,25 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 //--------------------------------------------------------------------------------------------------
 const MouseCursor* ScreenCapturerX11::captureCursor()
 {
+    if (!has_xfixes_)
+        return nullptr;
+
     XFixesCursorImage* x_image = nullptr;
     {
         XErrorTrap error_trap(display());
         x_image = XFixesGetCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
+        {
+            LOG(LS_WARNING) << "XFixesGetCursorImage failed";
             return nullptr;
+        }
     }
 
     Size size(x_image->width, x_image->height);
     Point hotspot(std::min(x_image->xhot, x_image->width),
                   std::min(x_image->yhot, x_image->height));
 
-    if (!size.width() || !size.height())
+    if (size.width() <= 0 || size.height() <= 0)
     {
         LOG(LS_ERROR) << "Invalid cursor size: " << size;
         return nullptr;
@@ -222,11 +233,11 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
     image_data.resize(image_size * MouseCursor::kBytesPerPixel);
 
     unsigned long* src = x_image->pixels;
-    unsigned long* dst = reinterpret_cast<unsigned long*>(image_data.data());
-    unsigned long* dst_end = dst + image_size;
+    uint32_t* dst = reinterpret_cast<uint32_t*>(image_data.data());
+    uint32_t* dst_end = dst + image_size;
 
     while (dst < dst_end)
-        *dst++ = *src++;
+        *dst++ = static_cast<uint32_t>(*src++);
 
     XFree(x_image);
 
@@ -302,6 +313,7 @@ bool ScreenCapturerX11::init()
     // of XDamage.
     if (XFixesQueryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
     {
+        LOG(LS_INFO) << "X server supports XFixes";
         has_xfixes_ = true;
     }
     else
@@ -330,7 +342,12 @@ bool ScreenCapturerX11::init()
     initXrandr();
 
     // Default source set here so that selected_monitor_rect_ is sized correctly.
-    selectScreen(kFullDesktopScreenId);
+    if (!selectScreen(kFullDesktopScreenId))
+    {
+        LOG(LS_WARNING) << "Unable select screen";
+    }
+
+    LOG(LS_INFO) << "X11 screen capturer is initialized!";
     return true;
 }
 

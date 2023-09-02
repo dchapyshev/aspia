@@ -265,7 +265,10 @@ bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
 
     XWindowAttributes attributes;
     if (!getWindowRect(display_, window, &window_rect_, &attributes))
+    {
+        LOG(LS_WARNING) << "getWindowRect failed";
         return false;
+    }
 
     window_ = window;
     initShm(attributes);
@@ -284,7 +287,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 
     if (!XShmQueryVersion(display_, &major, &minor, &have_pixmaps))
     {
-        // Shared memory not supported. CaptureRect will use the XImage API instead.
+        LOG(LS_INFO) << "Shared memory not supported. captureRect will use the XImage API instead";
         return;
     }
 
@@ -348,8 +351,12 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 //--------------------------------------------------------------------------------------------------
 bool XServerPixelBuffer::initPixmaps(int depth)
 {
-    if (XShmPixmapFormat(display_) != ZPixmap)
+    int format = XShmPixmapFormat(display_);
+    if (format != ZPixmap)
+    {
+        LOG(LS_WARNING) << "Unsupported format: " << format;
         return false;
+    }
 
     {
         XErrorTrap error_trap(display_);
@@ -359,6 +366,8 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         XSync(display_, False);
         if (error_trap.lastErrorAndDisable() != 0)
         {
+            LOG(LS_WARNING) << "XShmCreatePixmap failed";
+
             // |shm_pixmap_| is not not valid because the request was not processed by the X Server,
             // so zero it.
             shm_pixmap_ = 0;
@@ -378,6 +387,8 @@ bool XServerPixelBuffer::initPixmaps(int depth)
 
         if (error_trap.lastErrorAndDisable() != 0)
         {
+            LOG(LS_WARNING) << "XCreateGC failed";
+
             XFreePixmap(display_, shm_pixmap_);
             shm_pixmap_ = 0;
             shm_gc_ = 0;  // See shm_pixmap_ comment above.

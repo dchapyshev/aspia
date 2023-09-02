@@ -27,6 +27,87 @@
 
 namespace base {
 
+namespace {
+
+const char* eventTypeToString(int event)
+{
+    switch (event)
+    {
+        case KeyPress:
+            return "KeyPress";
+        case KeyRelease:
+            return "KeyRelease";
+        case ButtonPress:
+            return "ButtonPress";
+        case ButtonRelease:
+            return "ButtonRelease";
+        case MotionNotify:
+            return "MotionNotify";
+        case EnterNotify:
+            return "EnterNotify";
+        case LeaveNotify:
+            return "LeaveNotify";
+        case FocusIn:
+            return "FocusIn";
+        case FocusOut:
+            return "FocusOut";
+        case KeymapNotify:
+            return "KeymapNotify";
+        case Expose:
+            return "Expose";
+        case GraphicsExpose:
+            return "GraphicsExpose";
+        case NoExpose:
+            return "NoExpose";
+        case VisibilityNotify:
+            return "VisibilityNotify";
+        case CreateNotify:
+            return "CreateNotify";
+        case DestroyNotify:
+            return "DestroyNotify";
+        case UnmapNotify:
+            return "UnmapNotify";
+        case MapNotify:
+            return "MapNotify";
+        case MapRequest:
+            return "MapRequest";
+        case ReparentNotify:
+            return "ReparentNotify";
+        case ConfigureNotify:
+            return "ConfigureNotify";
+        case ConfigureRequest:
+            return "ConfigureRequest";
+        case GravityNotify:
+            return "GravityNotify";
+        case ResizeRequest:
+            return "ResizeRequest";
+        case CirculateNotify:
+            return "CirculateNotify";
+        case CirculateRequest:
+            return "CirculateRequest";
+        case PropertyNotify:
+            return "PropertyNotify";
+        case SelectionClear:
+            return "SelectionClear";
+        case SelectionRequest:
+            return "SelectionRequest";
+        case SelectionNotify:
+            return "SelectionNotify";
+        case ColormapNotify:
+            return "ColormapNotify";
+        case ClientMessage:
+            return "ClientMessage";
+        case MappingNotify:
+            return "MappingNotify";
+        case GenericEvent:
+            return "GenericEvent";
+        default:
+            return "Unknown";
+    }
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 SharedXDisplay::SharedXDisplay(Display* display)
     : display_(display)
@@ -65,12 +146,15 @@ base::local_shared_ptr<SharedXDisplay> SharedXDisplay::createDefault()
 //--------------------------------------------------------------------------------------------------
 void SharedXDisplay::addEventHandler(int type, XEventHandler* handler)
 {
+    LOG(LS_INFO) << "Added event handler: " << eventTypeToString(type) << " (" << type << ")";
     event_handlers_[type].push_back(handler);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
 {
+    LOG(LS_INFO) << "Removed event handler: " << eventTypeToString(type) << " (" << type << ")";
+
     EventHandlersMap::iterator handlers = event_handlers_.find(type);
     if (handlers == event_handlers_.end())
         return;
