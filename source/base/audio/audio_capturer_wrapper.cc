@@ -18,6 +18,7 @@
 
 #include "base/audio/audio_capturer_wrapper.h"
 
+#include "base/logging.h"
 #include "base/audio/audio_capturer.h"
 #include "base/ipc/ipc_channel_proxy.h"
 #include "build/build_config.h"
@@ -29,18 +30,20 @@ AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> chan
     : channel_proxy_(std::move(channel_proxy)),
       thread_(std::make_unique<Thread>())
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::~AudioCapturerWrapper()
 {
+    LOG(LS_INFO) << "Dtor";
     thread_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AudioCapturerWrapper::start()
 {
+    LOG(LS_INFO) << "Starting audio capturer";
     thread_->start(MessageLoop::Type::ASIO, this);
 }
 
@@ -49,11 +52,15 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
 {
 #if defined(OS_WIN)
     thread_->setPriority(Thread::Priority::HIGHEST);
-#else
-#warning Not implemented
-#endif
+#endif // defined(OS_WIN)
 
     capturer_ = AudioCapturer::create();
+    if (!capturer_)
+    {
+        LOG(LS_WARNING) << "Unable to create audio capturer";
+        return;
+    }
+
     capturer_->start([this](std::unique_ptr<proto::AudioPacket> packet)
     {
         outgoing_message_.set_allocated_audio_packet(packet.release());
