@@ -51,6 +51,8 @@ public:
 private:
 #if defined(OS_WIN)
     DesktopSessionProcess(base::win::ScopedHandle&& process, base::win::ScopedHandle&& thread);
+#elif defined(OS_LINUX)
+    explicit DesktopSessionProcess(pid_t pid);
 #else
     DesktopSessionProcess();
 #endif
@@ -59,6 +61,10 @@ private:
     base::win::ScopedHandle process_;
     base::win::ScopedHandle thread_;
 #endif // defined(OS_WIN)
+
+#if defined(OS_LINUX)
+    const pid_t pid_;
+#endif // defined(OS_LINUX)
 
     DISALLOW_COPY_AND_ASSIGN(DesktopSessionProcess);
 };

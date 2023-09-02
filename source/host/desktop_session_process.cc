@@ -20,13 +20,23 @@
 
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "base/stl_util.h"
 #include "base/files/base_paths.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/string_util.h"
+#include "base/strings/string_split.h"
+#include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_impersonator.h"
 
 #include <UserEnv.h>
 #endif // defined(OS_WIN)
+
+#if defined(OS_LINUX)
+#include <signal.h>
+#include <spawn.h>
+#endif // defined(OS_LINUX)
 
 namespace host {
 
@@ -220,6 +230,12 @@ DesktopSessionProcess::DesktopSessionProcess(
 {
     LOG(LS_INFO) << "Ctor";
 }
+#elif defined(OS_LINUX)
+DesktopSessionProcess::DesktopSessionProcess(pid_t pid)
+    : pid_(pid)
+{
+    LOG(LS_INFO) << "Ctor";
+}
 #else
 DesktopSessionProcess::DesktopSessionProcess()
 {
@@ -250,12 +266,10 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         LOG(LS_WARNING) << "An attempt was detected to start a process in a SERVICES session";
         return nullptr;
     }
-#endif // defined(OS_WIN)
 
     base::CommandLine command_line(filePath());
     command_line.appendSwitch(u"channel_id", channel_id);
 
-#if defined(OS_WIN)
     base::win::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
@@ -274,6 +288,59 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     return std::unique_ptr<DesktopSessionProcess>(
         new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
+#elif defined(OS_LINUX)
+    std::error_code ignored_error;
+    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
+    if (it == std::filesystem::end(it))
+    {
+        LOG(LS_WARNING) << "No X11 sessions";
+        return nullptr;
+    }
+
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
+    if (!pipe)
+    {
+        LOG(LS_WARNING) << "Unable to open pipe";
+        return nullptr;
+    }
+
+    std::array<char, 512> buffer;
+    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    {
+        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+        if (!base::contains(line, u":0"))
+            continue;
+
+        std::vector<std::u16string_view> splitted = base::splitStringView(
+            line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+        if (splitted.empty())
+            continue;
+
+        std::string user_name = base::local8BitFromUtf16(splitted.front());
+        std::string command_line =
+            base::stringPrintf("sudo DISPLAY=':0' -u %s %s --channel_id=%s &",
+                               user_name.c_str(),
+                               filePath().c_str(),
+                               base::local8BitFromUtf16(channel_id).c_str());
+
+        LOG(LS_INFO) << "Start desktop session agent: " << command_line;
+
+        char sh_name[] = "sh";
+        char sh_arguments[] = "-c";
+        char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
+
+        pid_t pid;
+        if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
+        {
+            LOG(LS_WARNING) << "Unable to start process";
+            return nullptr;
+        }
+
+        return std::unique_ptr<DesktopSessionProcess>(new DesktopSessionProcess(pid));
+    }
+
+    LOG(LS_WARNING) << "Connected X sessions not found";
+    return nullptr;
 #else
     NOTIMPLEMENTED();
     return std::unique_ptr<DesktopSessionProcess>();
@@ -308,6 +375,11 @@ void DesktopSessionProcess::kill()
     if (!TerminateProcess(process_, 0))
     {
         PLOG(LS_WARNING) << "TerminateProcess failed";
+    }
+#elif defined(OS_LINUX)
+    if (::kill(pid_, SIGKILL) != 0)
+    {
+        PLOG(LS_WARNING) << "kill failed";
     }
 #else
     NOTIMPLEMENTED();
