@@ -237,10 +237,17 @@ message DesktopCapabilities
         OS_TYPE_MACOSX  = 2;
     }
 
+    message Flag
+    {
+        string name = 1;
+        bool value  = 2;
+    }
+
     string extensions      = 1;
     uint32 video_encodings = 2;
     uint32 audio_encodings = 3;
     OsType os_type         = 4;
+    repeated Flag flag     = 5;
 }
 
 enum DesktopFlags

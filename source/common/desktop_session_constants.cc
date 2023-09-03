@@ -50,4 +50,16 @@ const uint32_t kSupportedVideoEncodings =
     proto::VIDEO_ENCODING_VP8 | proto::VIDEO_ENCODING_VP9 | proto::VIDEO_ENCODING_ZSTD;
 const uint32_t kSupportedAudioEncodings = proto::AUDIO_ENCODING_OPUS;
 
+const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
+const char kFlagDisableAudio[] = "disable_audio";
+const char kFlagDisableClipboard[] = "disable_clipboard";
+const char kFlagDisableCursorShape[] = "disable_cursor_shape";
+const char kFlagDisableCursorPosition[] = "disable_cursor_position";
+const char kFlagDisableDesktopEffects[] = "disable_desktop_effects";
+const char kFlagDisableDesktopWallpaper[] = "disable_desktop_wallpaper";
+const char kFlagDisableFontSmoothing[] = "disable_font_smoothing";
+const char kFlagDisableClearClipboard[] = "disable_clear_clipboard";
+const char kFlagDisableLockAtDisconnect[] = "disable_lock_at_disconnect";
+const char kFlagDisableBlockInput[] = "disable_block_input";
+
 } // namespace common

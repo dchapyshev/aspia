@@ -191,6 +191,66 @@ DesktopConfigDialog::DesktopConfigDialog(proto::SessionType session_type,
 DesktopConfigDialog::~DesktopConfigDialog() = default;
 
 //--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableAudioFeature(bool enable)
+{
+    ui->checkbox_audio->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableClipboardFeature(bool enable)
+{
+    ui->checkbox_clipboard->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableCursorShapeFeature(bool enable)
+{
+    ui->checkbox_cursor_shape->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableCursorPositionFeature(bool enable)
+{
+    ui->checkbox_enable_cursor_pos->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableDesktopEffectsFeature(bool enable)
+{
+    ui->checkbox_desktop_effects->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableDesktopWallpaperFeature(bool enable)
+{
+    ui->checkbox_desktop_wallpaper->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableFontSmoothingFeature(bool enable)
+{
+    ui->checkbox_font_smoothing->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableClearClipboardFeature(bool enable)
+{
+    ui->checkbox_clear_clipboard->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableLockAtDisconnectFeature(bool enable)
+{
+    ui->checkbox_lock_at_disconnect->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopConfigDialog::enableBlockInputFeature(bool enable)
+{
+    ui->checkbox_block_remote_input->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =

@@ -136,6 +136,17 @@ private:
     bool enable_audio_pause_ = true;
     bool audio_pause_last_ = false;
 
+    bool disable_feature_audio_ = false;
+    bool disable_feature_clipboard_ = false;
+    bool disable_feature_cursor_shape_ = false;
+    bool disable_feature_cursor_position_ = false;
+    bool disable_feature_desktop_effects_ = false;
+    bool disable_feature_desktop_wallpaper_ = false;
+    bool disable_feature_font_smoothing_ = false;
+    bool disable_feature_clear_clipboard_ = false;
+    bool disable_feature_lock_at_disconnect_ = false;
+    bool disable_feature_block_input_ = false;
+
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };
 

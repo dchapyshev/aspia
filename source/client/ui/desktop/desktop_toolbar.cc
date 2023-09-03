@@ -217,10 +217,17 @@ void DesktopToolBar::enableAudioPauseFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableCtrlAltDel(bool enable)
+void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
     ui.action_cad->setVisible(enable);
     ui.action_cad->setEnabled(enable);
+    updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
+{
+    ui.action_paste_clipboard_as_keystrokes->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,6 +323,9 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
             ui.toolbar->widgetForAction(resolution_select_action));
         if (button)
             button->setPopupMode(QToolButton::InstantPopup);
+
+        if (screen_list.resolution_size() < 1)
+            resolution_select_action->setVisible(false);
     }
 
     if (screen_list.resolution_size() > 0 && !is_full_desktop)
