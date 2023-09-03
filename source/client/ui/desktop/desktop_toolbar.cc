@@ -217,6 +217,13 @@ void DesktopToolBar::enableAudioPauseFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enableCtrlAltDel(bool enable)
+{
+    ui.action_cad->setVisible(enable);
+    ui.action_cad->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
 {
     LOG(LS_INFO) << "Setting up a new list of screens (screens: " << screen_list.screen_size()

@@ -119,18 +119,29 @@ void ClientSessionDesktop::onStarted()
         extensions = common::kSupportedExtensionsForView;
     }
 
-    // Create a configuration request.
-    proto::DesktopConfigRequest* request = outgoing_message_->mutable_config_request();
+    // Create a capabilities.
+    proto::DesktopCapabilities* capabilities = outgoing_message_->mutable_capabilities();
 
     // Add supported extensions and video encodings.
-    request->set_extensions(extensions);
-    request->set_video_encodings(common::kSupportedVideoEncodings);
-    request->set_audio_encodings(common::kSupportedAudioEncodings);
+    capabilities->set_extensions(extensions);
+    capabilities->set_video_encodings(common::kSupportedVideoEncodings);
+    capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
+
+#if defined(OS_WIN)
+    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+#elif defined(OS_LINUX)
+    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
+#elif defined(OS_MACOS)
+    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_MACOSX);
+#else
+#warning Not implemented
+#endif
 
     LOG(LS_INFO) << "Sending config request";
-    LOG(LS_INFO) << "Supported extensions: " << request->extensions();
-    LOG(LS_INFO) << "Supported video encodings: " << request->video_encodings();
-    LOG(LS_INFO) << "Supported audio encodings: " << request->audio_encodings();
+    LOG(LS_INFO) << "Supported extensions: " << capabilities->extensions();
+    LOG(LS_INFO) << "Supported video encodings: " << capabilities->video_encodings();
+    LOG(LS_INFO) << "Supported audio encodings: " << capabilities->audio_encodings();
+    LOG(LS_INFO) << "OS type: " << capabilities->os_type();
 
     // Send the request.
     sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));

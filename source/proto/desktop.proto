@@ -228,11 +228,19 @@ message DesktopExtension
     bytes data  = 2;
 }
 
-message DesktopConfigRequest
+message DesktopCapabilities
 {
+    enum OsType
+    {
+        OS_TYPE_WINDOWS = 0;
+        OS_TYPE_LINUX   = 1;
+        OS_TYPE_MACOSX  = 2;
+    }
+
     string extensions      = 1;
     uint32 video_encodings = 2;
     uint32 audio_encodings = 3;
+    OsType os_type         = 4;
 }
 
 enum DesktopFlags
@@ -262,13 +270,13 @@ message DesktopConfig
 
 message HostToClient
 {
-    VideoPacket video_packet            = 1;
-    AudioPacket audio_packet            = 2;
-    CursorShape cursor_shape            = 3;
-    ClipboardEvent clipboard_event      = 4;
-    DesktopExtension extension          = 5;
-    DesktopConfigRequest config_request = 6;
-    CursorPosition cursor_position      = 7;
+    VideoPacket video_packet         = 1;
+    AudioPacket audio_packet         = 2;
+    CursorShape cursor_shape         = 3;
+    ClipboardEvent clipboard_event   = 4;
+    DesktopExtension extension       = 5;
+    DesktopCapabilities capabilities = 6;
+    CursorPosition cursor_position   = 7;
 }
 
 message ClientToHost

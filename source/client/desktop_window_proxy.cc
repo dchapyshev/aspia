@@ -70,20 +70,18 @@ void DesktopWindowProxy::configRequired()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindowProxy::setCapabilities(
-    const std::string& extensions, uint32_t video_encodings)
+void DesktopWindowProxy::setCapabilities(const proto::DesktopCapabilities& capabilities)
 {
     if (!ui_task_runner_->belongsToCurrentThread())
     {
         ui_task_runner_->postTask(std::bind(&DesktopWindowProxy::setCapabilities,
                                             shared_from_this(),
-                                            extensions,
-                                            video_encodings));
+                                            capabilities));
         return;
     }
 
     if (desktop_window_)
-        desktop_window_->setCapabilities(extensions, video_encodings);
+        desktop_window_->setCapabilities(capabilities);
 }
 
 //--------------------------------------------------------------------------------------------------

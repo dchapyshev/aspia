@@ -64,7 +64,7 @@ public:
     void showWindow(std::shared_ptr<DesktopControlProxy> desktop_control_proxy,
                     const base::Version& peer_version) override;
     void configRequired() override;
-    void setCapabilities(const std::string& extensions, uint32_t video_encodings) override;
+    void setCapabilities(const proto::DesktopCapabilities& capabilities) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
     void setCursorPosition(const proto::CursorPosition& cursor_position) override;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
