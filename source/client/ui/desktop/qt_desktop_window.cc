@@ -347,7 +347,63 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
     toolbar_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
     toolbar_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
     toolbar_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
-    toolbar_->enableCtrlAltDel(capabilities.os_type() == proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::DesktopCapabilities::OS_TYPE_WINDOWS);
+
+    for (int i = 0; i < capabilities.flag_size(); ++i)
+    {
+        const proto::DesktopCapabilities::Flag& flag = capabilities.flag(i);
+        const std::string& name = flag.name();
+        bool value = flag.value();
+
+        if (name == common::kFlagDisablePasteAsKeystrokes)
+        {
+            toolbar_->enablePasteAsKeystrokesFeature(!value);
+        }
+        else if (name == common::kFlagDisableAudio)
+        {
+            disable_feature_audio_ = value;
+        }
+        else if (name == common::kFlagDisableClipboard)
+        {
+            disable_feature_clipboard_ = value;
+        }
+        else if (name == common::kFlagDisableCursorShape)
+        {
+            disable_feature_cursor_shape_ = value;
+        }
+        else if (name == common::kFlagDisableCursorPosition)
+        {
+            disable_feature_cursor_position_ = value;
+        }
+        else if (name == common::kFlagDisableDesktopEffects)
+        {
+            disable_feature_desktop_effects_ = value;
+        }
+        else if (name == common::kFlagDisableDesktopWallpaper)
+        {
+            disable_feature_desktop_wallpaper_ = value;
+        }
+        else if (name == common::kFlagDisableFontSmoothing)
+        {
+            disable_feature_font_smoothing_ = value;
+        }
+        else if (name == common::kFlagDisableClearClipboard)
+        {
+            disable_feature_clear_clipboard_ = value;
+        }
+        else if (name == common::kFlagDisableLockAtDisconnect)
+        {
+            disable_feature_lock_at_disconnect_ = value;
+        }
+        else if (name == common::kFlagDisableBlockInput)
+        {
+            disable_feature_block_input_ = value;
+        }
+        else
+        {
+            LOG(LS_WARNING) << "Unknown flag '" << name << "' with value: " << value;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -811,6 +867,17 @@ void QtDesktopWindow::changeSettings()
     DesktopConfigDialog* dialog = new DesktopConfigDialog(
         session_type_, desktop_config_, video_encodings_, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    dialog->enableAudioFeature(!disable_feature_audio_);
+    dialog->enableClipboardFeature(!disable_feature_clipboard_);
+    dialog->enableCursorShapeFeature(!disable_feature_cursor_shape_);
+    dialog->enableCursorPositionFeature(!disable_feature_cursor_position_);
+    dialog->enableDesktopEffectsFeature(!disable_feature_desktop_effects_);
+    dialog->enableDesktopWallpaperFeature(!disable_feature_desktop_wallpaper_);
+    dialog->enableFontSmoothingFeature(!disable_feature_font_smoothing_);
+    dialog->enableClearClipboardFeature(!disable_feature_clear_clipboard_);
+    dialog->enableLockAtDisconnectFeature(!disable_feature_lock_at_disconnect_);
+    dialog->enableBlockInputFeature(!disable_feature_block_input_);
 
     connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &QtDesktopWindow::onConfigChanged);
 

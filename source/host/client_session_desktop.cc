@@ -127,10 +127,25 @@ void ClientSessionDesktop::onStarted()
     capabilities->set_video_encodings(common::kSupportedVideoEncodings);
     capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
 
+    auto add_flag = [capabilities](const char* name, bool value)
+    {
+        proto::DesktopCapabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
 #if defined(OS_WIN)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_WINDOWS);
 #elif defined(OS_LINUX)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_LINUX);
+
+    add_flag(common::kFlagDisablePasteAsKeystrokes, true);
+    add_flag(common::kFlagDisableAudio, true);
+    add_flag(common::kFlagDisableBlockInput, true);
+    add_flag(common::kFlagDisableDesktopEffects, true);
+    add_flag(common::kFlagDisableDesktopWallpaper, true);
+    add_flag(common::kFlagDisableLockAtDisconnect, true);
+    add_flag(common::kFlagDisableFontSmoothing, true);
 #elif defined(OS_MACOS)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_MACOSX);
 #else

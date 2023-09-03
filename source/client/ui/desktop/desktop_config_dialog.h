@@ -44,6 +44,17 @@ public:
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog() override;
 
+    void enableAudioFeature(bool enable);
+    void enableClipboardFeature(bool enable);
+    void enableCursorShapeFeature(bool enable);
+    void enableCursorPositionFeature(bool enable);
+    void enableDesktopEffectsFeature(bool enable);
+    void enableDesktopWallpaperFeature(bool enable);
+    void enableFontSmoothingFeature(bool enable);
+    void enableClearClipboardFeature(bool enable);
+    void enableLockAtDisconnectFeature(bool enable);
+    void enableBlockInputFeature(bool enable);
+
     const proto::DesktopConfig& config() { return config_; }
 
 signals:
