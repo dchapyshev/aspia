@@ -22,10 +22,13 @@
 // OS detection.
 #if defined(_WIN32)
 #define OS_WIN 1
+#define OS_WINDOWS 1
 #elif defined(linux) || defined(__linux__)
 #define OS_LINUX 1
 #elif defined(__APPLE__)
 #define OS_MAC 1
+#define OS_MACOS 1
+#define OS_MACOSX 1
 #else
 #error Unknown OS
 #endif

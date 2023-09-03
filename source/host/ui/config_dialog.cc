@@ -66,6 +66,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // General Tab
     //---------------------------------------------------------------------------------------------
 
+#if defined(OS_LINUX) || defined(OS_MACOS)
+    ui.widget_service->setVisible(false);
+    ui.groupbox_update_server->setVisible(false);
+#endif // defined(OS_LINUX)
+
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
 
