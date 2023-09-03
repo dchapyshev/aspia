@@ -42,6 +42,7 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QNetworkInterface>
+#include <QProcess>
 #include <QTimer>
 #include <QUrl>
 
@@ -582,6 +583,34 @@ void MainWindow::onSettings()
         return;
     }
 #endif
+
+#if defined(OS_LINUX)
+    uid_t self_uid = getuid();
+    uid_t effective_uid = geteuid();
+
+    if (self_uid != 0 && self_uid == effective_uid)
+    {
+        LOG(LS_INFO) << "Start settings dialog as super user";
+
+        QProcess* process = new QProcess(this);
+
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
+        {
+            LOG(LS_INFO) << "Process finished with exit code: " << exit_code
+                         << " (status: " << exit_status << ")";
+
+            process->deleteLater();
+            ui.action_settings->setEnabled(true);
+            onSettingsChanged();
+        });
+
+        ui.action_settings->setEnabled(false);
+        process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
+            << QApplication::applicationFilePath() << "--config");
+        return;
+    }
+#endif // defined(OS_LINUX)
 
     LOG(LS_INFO) << "Settings dialog open";
 
