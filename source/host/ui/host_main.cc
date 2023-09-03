@@ -19,7 +19,6 @@
 #include "host/ui/host_main.h"
 
 #include "base/command_line.h"
-#include "base/environment.h"
 #include "base/sys_info.h"
 #include "build/version.h"
 #include "host/integrity_check.h"
@@ -40,6 +39,7 @@
 #endif // defined(OS_WIN)
 
 #include <QMessageBox>
+#include <QProcess>
 
 namespace {
 
@@ -192,15 +192,16 @@ int hostMain(int argc, char* argv[])
     LOG(LS_INFO) << "Process elevated: " << (base::win::isProcessElevated() ? "Yes" : "No");
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+#endif
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
-    for (const auto& variable : base::Environment::list())
+    QStringList env = QProcess::systemEnvironment();
+    for (int i = 0; i < env.size(); ++i)
     {
-        LOG(LS_INFO) << variable.first << ": " << variable.second;
+        LOG(LS_INFO) << env[i];
     }
     LOG(LS_INFO) << "#####################################################";
-#endif
 
     bool is_hidden = command_line.hasSwitch(u"hidden");
     if (is_hidden)
