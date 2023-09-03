@@ -2550,7 +2550,7 @@
         <translation>8 色 (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="210"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="270"/>
         <source>Compression ratio: %1</source>
         <translation>壓縮率：%1</translation>
     </message>
@@ -2618,74 +2618,74 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="308"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="315"/>
         <source>Resolution selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="350"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="360"/>
         <source>Stop recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="365"/>
         <source>Start recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="483"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="498"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="493"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="508"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="523"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="538"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="553"/>
         <source>Confirmation</source>
         <translation type="unfinished">確認</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="484"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="494"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">您是否確定要關閉遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="487"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="502"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="517"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="532"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="497"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="512"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="542"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="557"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="488"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="503"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="518"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="533"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="548"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="498"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="558"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="499"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="509"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="514"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="524"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">您是否確定要重新啟動遠端電腦至安全模式？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="529"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="539"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要結束遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="544"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="554"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">您是否確定要鎖定遠端電腦的使用者工作階段？</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="632"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="642"/>
         <source>Scale</source>
         <translation type="unfinished">縮放</translation>
     </message>
@@ -3040,7 +3040,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="301"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="886"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -3055,17 +3055,17 @@
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="864"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="931"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="866"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="933"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="886"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>

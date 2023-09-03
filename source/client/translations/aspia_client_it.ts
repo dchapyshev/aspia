@@ -2507,7 +2507,7 @@
         <translation>8 colori (3 bit)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_config_dialog.cc" line="210"/>
+        <location filename="../ui/desktop/desktop_config_dialog.cc" line="270"/>
         <source>Compression ratio: %1</source>
         <translation>Rapporto di compressione: %1</translation>
     </message>
@@ -2582,74 +2582,74 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="308"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="315"/>
         <source>Resolution selection</source>
         <translation type="unfinished">Selezione risoluzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="350"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="360"/>
         <source>Stop recording</source>
         <translation type="unfinished">Arresta registrazione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="365"/>
         <source>Start recording</source>
         <translation type="unfinished">Avvia registrazione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="483"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="498"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="493"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="508"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="523"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="538"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="553"/>
         <source>Confirmation</source>
         <translation type="unfinished">Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="484"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="494"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler spegnere il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="487"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="502"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="517"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="532"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="547"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="497"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="512"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="542"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="557"/>
         <source>Yes</source>
         <translation type="unfinished">Sì</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="488"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="503"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="518"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="533"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="548"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="498"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="558"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="499"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="509"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="514"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="524"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto in Modalità Sicura ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="529"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="539"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler chiudere la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="544"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="554"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="632"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="642"/>
         <source>Scale</source>
         <translation type="unfinished">Scala</translation>
     </message>
@@ -2981,7 +2981,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="301"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="886"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
@@ -2996,17 +2996,17 @@
         <translation>La modalità di codifica video attiva non è supportata dall&apos;host. Per cortesia selezionare un codifica video diversa.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="864"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="931"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="866"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="933"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="886"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
         <source>Could not save image</source>
         <translation>Non è stato possibile salvare l&apos;immagine</translation>
     </message>
