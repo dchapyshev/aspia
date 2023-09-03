@@ -258,28 +258,28 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host_main.cc" line="228"/>
-        <location filename="../host_main.cc" line="247"/>
+        <location filename="../host_main.cc" line="229"/>
+        <location filename="../host_main.cc" line="248"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="229"/>
+        <location filename="../host_main.cc" line="230"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>應用程式完整性檢查失敗。組件有缺少或損壞。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="248"/>
+        <location filename="../host_main.cc" line="249"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同時指定匯出和匯入參數。</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="282"/>
+        <location filename="../host_main.cc" line="283"/>
         <source>Aspia Host</source>
         <translation type="unfinished">Aspia Host</translation>
     </message>
     <message>
-        <location filename="../host_main.cc" line="283"/>
+        <location filename="../host_main.cc" line="284"/>
         <source>Application version: %1.%2.%3.%4.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -859,101 +859,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="466"/>
-        <location filename="../main_window.cc" line="632"/>
-        <location filename="../main_window.cc" line="789"/>
+        <location filename="../main_window.cc" line="467"/>
+        <location filename="../main_window.cc" line="661"/>
+        <location filename="../main_window.cc" line="818"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="169"/>
-        <location filename="../main_window.cc" line="612"/>
+        <location filename="../main_window.cc" line="170"/>
+        <location filename="../main_window.cc" line="641"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="352"/>
+        <location filename="../main_window.cc" line="353"/>
         <source>Not available</source>
         <translation>無法使用</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="405"/>
-        <location filename="../main_window.cc" line="723"/>
+        <location filename="../main_window.cc" line="406"/>
+        <location filename="../main_window.cc" line="752"/>
         <source>Router is disabled</source>
         <translation>已停用路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="409"/>
+        <location filename="../main_window.cc" line="410"/>
         <source>Connecting to a router %1...</source>
         <translation>正在連線到路由器 %1...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="413"/>
+        <location filename="../main_window.cc" line="414"/>
         <source>Connected to a router %1</source>
         <translation>已連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="417"/>
+        <location filename="../main_window.cc" line="418"/>
         <source>Failed to connect to router %1</source>
         <translation>無法連線到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="617"/>
+        <location filename="../main_window.cc" line="646"/>
         <source>Hide</source>
         <translation>隱藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="648"/>
+        <location filename="../main_window.cc" line="677"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="649"/>
+        <location filename="../main_window.cc" line="678"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>如果您離開 Aspia，在您再次手動開啟電腦或 Aspia 之前，將無法連線到此電腦。您真的要離開應用程式嗎？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="728"/>
+        <location filename="../main_window.cc" line="757"/>
         <source>Connecting to a router...</source>
         <translation>正在連線到路由器...</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="733"/>
+        <location filename="../main_window.cc" line="762"/>
         <source>Connected to a router</source>
         <translation>已連線到路由器</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="738"/>
+        <location filename="../main_window.cc" line="767"/>
         <source>Connection error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="790"/>
+        <location filename="../main_window.cc" line="819"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="786"/>
+        <location filename="../main_window.cc" line="815"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="457"/>
+        <location filename="../main_window.cc" line="458"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="462"/>
+        <location filename="../main_window.cc" line="463"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="654"/>
+        <location filename="../main_window.cc" line="683"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="655"/>
+        <location filename="../main_window.cc" line="684"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
