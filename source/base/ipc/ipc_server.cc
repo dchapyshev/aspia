@@ -203,8 +203,8 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
 
     std::string command_line = base::stringPrintf("chmod 777 %s", channel_file.data());
 
-    LOG(LS_INFO) << "Set security attributes: " << command_line;
-    system(command_line.c_str());
+    int ret = system(command_line.c_str());
+    LOG(LS_INFO) << "Set security attributes: " << command_line << " (ret: " << ret << ")";
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
