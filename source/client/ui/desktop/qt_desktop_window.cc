@@ -324,13 +324,13 @@ void QtDesktopWindow::configRequired()
 }
 
 //--------------------------------------------------------------------------------------------------
-void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t video_encodings)
+void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabilities)
 {
-    video_encodings_ = video_encodings;
+    video_encodings_ = capabilities.video_encodings();
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
     std::vector<std::string_view> extensions_list = base::splitStringView(
-        extensions, ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+        capabilities.extensions(), ";", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
 
     // By default, remote update is disabled.
     toolbar_->enableRemoteUpdate(false);
@@ -347,6 +347,7 @@ void QtDesktopWindow::setCapabilities(const std::string& extensions, uint32_t vi
     toolbar_->enableTaskManager(base::contains(extensions_list, common::kTaskManagerExtension));
     toolbar_->enableVideoPauseFeature(base::contains(extensions_list, common::kVideoPauseExtension));
     toolbar_->enableAudioPauseFeature(base::contains(extensions_list, common::kAudioPauseExtension));
+    toolbar_->enableCtrlAltDel(capabilities.os_type() == proto::DesktopCapabilities::OS_TYPE_WINDOWS);
 }
 
 //--------------------------------------------------------------------------------------------------

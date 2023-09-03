@@ -128,9 +128,9 @@ void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     {
         readClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incoming_message_->has_config_request())
+    else if (incoming_message_->has_capabilities())
     {
-        readConfigRequest(incoming_message_->config_request());
+        readCapabilities(incoming_message_->capabilities());
     }
     else if (incoming_message_->has_extension())
     {
@@ -486,17 +486,16 @@ void ClientDesktop::onMetricsRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readConfigRequest(const proto::DesktopConfigRequest& config_request)
+void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilities)
 {
-    LOG(LS_INFO) << "Config request received";
+    LOG(LS_INFO) << "Capabilities received";
 
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
-    desktop_window_proxy_->setCapabilities(
-        config_request.extensions(), config_request.video_encodings());
+    desktop_window_proxy_->setCapabilities(capabilities);
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
+    if (!(capabilities.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
     {
         LOG(LS_WARNING) << "Current video encoding not supported";
 

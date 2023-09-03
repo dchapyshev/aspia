@@ -43,6 +43,7 @@ public:
     void enableTaskManager(bool enable);
     void enableVideoPauseFeature(bool enable);
     void enableAudioPauseFeature(bool enable);
+    void enableCtrlAltDel(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);
     void startRecording(bool enable);
