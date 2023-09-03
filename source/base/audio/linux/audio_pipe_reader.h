@@ -62,12 +62,13 @@ public:
                                                     const std::filesystem::path& pipe_path,
                                                     Delegate* delegate);
 
+    void start();
+
 private:
     AudioPipeReader(std::shared_ptr<TaskRunner> task_runner,
                     const std::filesystem::path& pipe_path,
                     Delegate* delegate);
 
-    void startOnAudioThread();
     void onDirectoryChanged(const std::filesystem::path& path, bool error);
     void tryOpenPipe();
     void startTimer();

@@ -58,6 +58,8 @@ bool AudioCapturerLinux::start(const PacketCapturedCallback& callback)
     }
 
     silence_detector_.reset(AudioPipeReader::kSamplingRate, AudioPipeReader::kChannels);
+
+    pipe_reader_->start();
     return true;
 }
 
@@ -72,7 +74,7 @@ void AudioCapturerLinux::onDataRead(const std::string& data)
         return;
     }
 
-    std::unique_ptr<proto::AudioPacket> packet(new proto::AudioPacket());
+    std::unique_ptr<proto::AudioPacket> packet = std::make_unique<proto::AudioPacket>();
     packet->add_data(data);
     packet->set_encoding(proto::AUDIO_ENCODING_RAW);
     packet->set_sampling_rate(AudioPipeReader::kSamplingRate);

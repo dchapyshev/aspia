@@ -85,13 +85,12 @@ local_shared_ptr<AudioPipeReader> AudioPipeReader::create(std::shared_ptr<TaskRu
     DCHECK(delegate);
 
     local_shared_ptr<AudioPipeReader> pipe_reader(
-        new AudioPipeReader(task_runner, pipe_path, delegate));
-    task_runner->postTask(std::bind(&AudioPipeReader::startOnAudioThread, pipe_reader));
+        new AudioPipeReader(std::move(task_runner), pipe_path, delegate));
     return pipe_reader;
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioPipeReader::startOnAudioThread()
+void AudioPipeReader::start()
 {
     DCHECK(task_runner_->belongsToCurrentThread());
 

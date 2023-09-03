@@ -31,6 +31,7 @@ AudioCapturerWrapper::AudioCapturerWrapper(std::shared_ptr<IpcChannelProxy> chan
       thread_(std::make_unique<Thread>())
 {
     LOG(LS_INFO) << "Ctor";
+    DCHECK(channel_proxy_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,6 +45,8 @@ AudioCapturerWrapper::~AudioCapturerWrapper()
 void AudioCapturerWrapper::start()
 {
     LOG(LS_INFO) << "Starting audio capturer";
+    DCHECK(thread_);
+
     thread_->start(MessageLoop::Type::ASIO, this);
 }
 
