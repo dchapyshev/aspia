@@ -65,184 +65,184 @@
         <translation>連入通訊埠：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="114"/>
+        <location filename="../config_dialog.ui" line="120"/>
         <source>Update Server</source>
         <translation>更新伺服器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="141"/>
+        <location filename="../config_dialog.ui" line="147"/>
         <source>Use custom update server</source>
         <translation>使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="150"/>
+        <location filename="../config_dialog.ui" line="156"/>
         <source>Server:</source>
         <translation>伺服器：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="184"/>
+        <location filename="../config_dialog.ui" line="190"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="196"/>
-        <location filename="../config_dialog.ui" line="385"/>
+        <location filename="../config_dialog.ui" line="202"/>
+        <location filename="../config_dialog.ui" line="391"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="215"/>
+        <location filename="../config_dialog.ui" line="221"/>
         <source>Import settings</source>
         <translation>匯入設定</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="222"/>
+        <location filename="../config_dialog.ui" line="228"/>
         <source>Export settings</source>
         <translation>匯出設定</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="246"/>
+        <location filename="../config_dialog.ui" line="252"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="252"/>
+        <location filename="../config_dialog.ui" line="258"/>
         <source>Password Protection of Settings</source>
         <translation>以密碼保護設定</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="271"/>
+        <location filename="../config_dialog.ui" line="277"/>
         <source>Change password</source>
         <translation>變更密碼</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="288"/>
+        <location filename="../config_dialog.ui" line="294"/>
         <source>One-time Password</source>
         <translation>一次性密碼</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="294"/>
+        <location filename="../config_dialog.ui" line="300"/>
         <source>Enable one-time password</source>
         <translation>啟用一次性密碼</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="303"/>
+        <location filename="../config_dialog.ui" line="309"/>
         <source>Change password:</source>
         <translation>變更密碼：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="313"/>
+        <location filename="../config_dialog.ui" line="319"/>
         <source>Characters:</source>
         <translation>字元：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="323"/>
+        <location filename="../config_dialog.ui" line="329"/>
         <source>Characters count:</source>
         <translation>字元長度：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="345"/>
+        <location filename="../config_dialog.ui" line="351"/>
         <source>Connection Confirmation</source>
         <translation>連線確認</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="351"/>
+        <location filename="../config_dialog.ui" line="357"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>連線到電腦時要求確認</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="360"/>
+        <location filename="../config_dialog.ui" line="366"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>在超過此時間後自動接受連線：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="370"/>
+        <location filename="../config_dialog.ui" line="376"/>
         <source>If there is no active user:</source>
         <translation>若無正在活動的使用者：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="391"/>
+        <location filename="../config_dialog.ui" line="397"/>
         <source>Disable Aspia shutdown</source>
         <translation>停用 Aspia 關閉</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="415"/>
+        <location filename="../config_dialog.ui" line="421"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="421"/>
+        <location filename="../config_dialog.ui" line="427"/>
         <source>Enable the use of a router</source>
         <translation>啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="433"/>
+        <location filename="../config_dialog.ui" line="439"/>
         <source>Address:</source>
         <translation>位址：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="452"/>
+        <location filename="../config_dialog.ui" line="458"/>
         <source>Public Key:</source>
         <translation>公開金鑰：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="466"/>
+        <location filename="../config_dialog.ui" line="472"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="483"/>
-        <location filename="../config_dialog.ui" line="576"/>
+        <location filename="../config_dialog.ui" line="489"/>
+        <location filename="../config_dialog.ui" line="582"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="497"/>
+        <location filename="../config_dialog.ui" line="503"/>
         <source>Add new user</source>
         <translation>新增使用者</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="517"/>
+        <location filename="../config_dialog.ui" line="523"/>
         <source>Edit user</source>
         <translation>編輯使用者</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="537"/>
+        <location filename="../config_dialog.ui" line="543"/>
         <source>Delete user</source>
         <translation>刪除使用者</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="585"/>
+        <location filename="../config_dialog.ui" line="591"/>
         <source>Advanced</source>
         <translation>進階</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="593"/>
+        <location filename="../config_dialog.ui" line="599"/>
         <source>Preffered video capturer:</source>
         <translation>偏好的視訊擷取器：</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="633"/>
+        <location filename="../config_dialog.ui" line="639"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="642"/>
+        <location filename="../config_dialog.ui" line="648"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="651"/>
+        <location filename="../config_dialog.ui" line="657"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="120"/>
+        <location filename="../config_dialog.ui" line="126"/>
         <source>Automatic checking and installation of updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.ui" line="129"/>
+        <location filename="../config_dialog.ui" line="135"/>
         <source>Check for updates:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -545,237 +545,237 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="128"/>
+        <location filename="../config_dialog.cc" line="133"/>
         <source>On reboot</source>
         <translation>重開機時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="129"/>
+        <location filename="../config_dialog.cc" line="134"/>
         <source>Every 5 minutes</source>
         <translation>每 5 分鐘</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="130"/>
+        <location filename="../config_dialog.cc" line="135"/>
         <source>Every 30 minutes</source>
         <translation>每 30 分鐘</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="131"/>
+        <location filename="../config_dialog.cc" line="136"/>
         <source>Every 1 hour</source>
         <translation>每 1 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="132"/>
+        <location filename="../config_dialog.cc" line="137"/>
         <source>Every 6 hours</source>
         <translation>每 6 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="133"/>
+        <location filename="../config_dialog.cc" line="138"/>
         <source>Every 12 hours</source>
         <translation>每 12 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="134"/>
+        <location filename="../config_dialog.cc" line="139"/>
         <source>Every 24 hours</source>
         <translation>每 24 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="142"/>
+        <location filename="../config_dialog.cc" line="147"/>
         <source>Letters and digits</source>
         <translation>字母及數字</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="145"/>
+        <location filename="../config_dialog.cc" line="150"/>
         <source>Letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="147"/>
+        <location filename="../config_dialog.cc" line="152"/>
         <source>Digits</source>
         <translation>數字</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="164"/>
+        <location filename="../config_dialog.cc" line="169"/>
         <source>Never</source>
         <translation>永不</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="165"/>
+        <location filename="../config_dialog.cc" line="170"/>
         <source>15 seconds</source>
         <translation>15 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="166"/>
+        <location filename="../config_dialog.cc" line="171"/>
         <source>30 seconds</source>
         <translation>30 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="167"/>
+        <location filename="../config_dialog.cc" line="172"/>
         <source>45 seconds</source>
         <translation>45 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="168"/>
+        <location filename="../config_dialog.cc" line="173"/>
         <source>60 seconds</source>
         <translation>60 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="176"/>
+        <location filename="../config_dialog.cc" line="181"/>
         <source>Accept connection</source>
         <translation>接受連線</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="178"/>
+        <location filename="../config_dialog.cc" line="183"/>
         <source>Reject connection</source>
         <translation>拒絕連線</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="235"/>
+        <location filename="../config_dialog.cc" line="240"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="391"/>
-        <location filename="../config_dialog.cc" line="547"/>
-        <location filename="../config_dialog.cc" line="606"/>
+        <location filename="../config_dialog.cc" line="396"/>
+        <location filename="../config_dialog.cc" line="552"/>
+        <location filename="../config_dialog.cc" line="611"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="392"/>
+        <location filename="../config_dialog.cc" line="397"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您確定要刪除使用者「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="477"/>
-        <location filename="../config_dialog.cc" line="514"/>
-        <location filename="../config_dialog.cc" line="591"/>
-        <location filename="../config_dialog.cc" line="627"/>
-        <location filename="../config_dialog.cc" line="640"/>
-        <location filename="../config_dialog.cc" line="921"/>
-        <location filename="../config_dialog.cc" line="945"/>
-        <location filename="../config_dialog.cc" line="965"/>
-        <location filename="../config_dialog.cc" line="975"/>
-        <location filename="../config_dialog.cc" line="996"/>
-        <location filename="../config_dialog.cc" line="1006"/>
+        <location filename="../config_dialog.cc" line="482"/>
+        <location filename="../config_dialog.cc" line="519"/>
+        <location filename="../config_dialog.cc" line="596"/>
+        <location filename="../config_dialog.cc" line="632"/>
+        <location filename="../config_dialog.cc" line="645"/>
+        <location filename="../config_dialog.cc" line="926"/>
+        <location filename="../config_dialog.cc" line="950"/>
+        <location filename="../config_dialog.cc" line="970"/>
+        <location filename="../config_dialog.cc" line="980"/>
+        <location filename="../config_dialog.cc" line="1001"/>
+        <location filename="../config_dialog.cc" line="1011"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="478"/>
-        <location filename="../config_dialog.cc" line="515"/>
+        <location filename="../config_dialog.cc" line="483"/>
+        <location filename="../config_dialog.cc" line="520"/>
         <source>An error occurred while processing the password.</source>
         <translation>處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="533"/>
+        <location filename="../config_dialog.cc" line="538"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="533"/>
-        <location filename="../config_dialog.cc" line="568"/>
+        <location filename="../config_dialog.cc" line="538"/>
+        <location filename="../config_dialog.cc" line="573"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="542"/>
-        <location filename="../config_dialog.cc" line="601"/>
+        <location filename="../config_dialog.cc" line="547"/>
+        <location filename="../config_dialog.cc" line="606"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>服務配置已更改。要使變更生效，您必須重新啟動服務。是否現在重啟服務？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="568"/>
+        <location filename="../config_dialog.cc" line="573"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="588"/>
+        <location filename="../config_dialog.cc" line="593"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>無法寫入配置。請確認您有足夠的寫入權限。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="628"/>
+        <location filename="../config_dialog.cc" line="633"/>
         <source>Incorrect router address entered.</source>
         <translation>輸入了不正確的路由器位址。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="641"/>
+        <location filename="../config_dialog.cc" line="646"/>
         <source>Incorrect router public key entered.</source>
         <translation>輸入了不正確的公開金鑰。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="810"/>
-        <location filename="../config_dialog.cc" line="885"/>
+        <location filename="../config_dialog.cc" line="815"/>
+        <location filename="../config_dialog.cc" line="890"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="815"/>
-        <location filename="../config_dialog.cc" line="850"/>
+        <location filename="../config_dialog.cc" line="820"/>
+        <location filename="../config_dialog.cc" line="855"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="859"/>
+        <location filename="../config_dialog.cc" line="864"/>
         <source>Started</source>
         <translation>已啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="860"/>
+        <location filename="../config_dialog.cc" line="865"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="865"/>
+        <location filename="../config_dialog.cc" line="870"/>
         <source>Not started</source>
         <translation>未啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="866"/>
-        <location filename="../config_dialog.cc" line="873"/>
-        <location filename="../config_dialog.cc" line="886"/>
+        <location filename="../config_dialog.cc" line="871"/>
+        <location filename="../config_dialog.cc" line="878"/>
+        <location filename="../config_dialog.cc" line="891"/>
         <source>Start</source>
         <translation>啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="872"/>
+        <location filename="../config_dialog.cc" line="877"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="883"/>
+        <location filename="../config_dialog.cc" line="888"/>
         <source>Not installed</source>
         <translation>未安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="890"/>
+        <location filename="../config_dialog.cc" line="895"/>
         <source>Current service state: %1</source>
         <translation>目前服務狀態：%1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="922"/>
+        <location filename="../config_dialog.cc" line="927"/>
         <source>The service could not be installed.</source>
         <translation>無法安裝服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="946"/>
+        <location filename="../config_dialog.cc" line="951"/>
         <source>The service could not be removed.</source>
         <translation>無法移除服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="966"/>
-        <location filename="../config_dialog.cc" line="997"/>
+        <location filename="../config_dialog.cc" line="971"/>
+        <location filename="../config_dialog.cc" line="1002"/>
         <source>Could not access the service.</source>
         <translation>無法存取服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="976"/>
+        <location filename="../config_dialog.cc" line="981"/>
         <source>The service could not be started.</source>
         <translation>無法啟動服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1007"/>
+        <location filename="../config_dialog.cc" line="1012"/>
         <source>The service could not be stopped.</source>
         <translation>無法停止服務。</translation>
     </message>
@@ -790,31 +790,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="80"/>
+        <location filename="../config_dialog.cc" line="85"/>
         <source>Once a day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="81"/>
+        <location filename="../config_dialog.cc" line="86"/>
         <source>Once a week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="82"/>
+        <location filename="../config_dialog.cc" line="87"/>
         <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="396"/>
-        <location filename="../config_dialog.cc" line="551"/>
-        <location filename="../config_dialog.cc" line="610"/>
+        <location filename="../config_dialog.cc" line="401"/>
+        <location filename="../config_dialog.cc" line="556"/>
+        <location filename="../config_dialog.cc" line="615"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="397"/>
-        <location filename="../config_dialog.cc" line="552"/>
-        <location filename="../config_dialog.cc" line="611"/>
+        <location filename="../config_dialog.cc" line="402"/>
+        <location filename="../config_dialog.cc" line="557"/>
+        <location filename="../config_dialog.cc" line="616"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
