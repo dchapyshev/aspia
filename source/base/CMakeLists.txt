@@ -151,10 +151,14 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE_AUDIO
+        audio/audio_capturer_linux.cc
+        audio/audio_capturer_linux.h
         audio/audio_output_pulse.cc
         audio/audio_output_pulse.h)
 
     list(APPEND SOURCE_BASE_AUDIO_LINUX
+        audio/linux/audio_pipe_reader.cc
+        audio/linux/audio_pipe_reader.h
         audio/linux/late_binding_symbol_table.cc
         audio/linux/late_binding_symbol_table.h
         audio/linux/pulseaudio_symbol_table.cc
@@ -573,6 +577,11 @@ list(APPEND SOURCE_BASE_PEER
     peer/user_list.h
     peer/user_list_base.h)
 
+if (UNIX)
+    list(APPEND SOURCE_BASE_POSIX
+        posix/eintr_wrapper.h)
+endif()
+
 list(APPEND SOURCE_BASE_SETTINGS
     settings/json_settings.cc
     settings/json_settings.h
@@ -732,12 +741,14 @@ source_group(threading FILES ${SOURCE_BASE_THREADING})
 if (WIN32)
     source_group(audio\\win FILES ${SOURCE_BASE_AUDIO_WIN})
     source_group(desktop\\win FILES ${SOURCE_BASE_DESKTOP_WIN} ${SOURCE_BASE_DESKTOP_WIN_TESTS})
+    source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
 endif()
 
 if (LINUX)
     source_group(audio\\linux FILES ${SOURCE_BASE_AUDIO_LINUX})
     source_group(desktop\\x11 FILES ${SOURCE_BASE_DESKTOP_X11})
+    source_group(posix FILES ${SOURCE_BASE_POSIX})
     source_group(x11 FILES ${SOURCE_BASE_X11})
 endif()
 
@@ -762,6 +773,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_NET}
     ${SOURCE_BASE_PEER}
+    ${SOURCE_BASE_POSIX}
     ${SOURCE_BASE_SETTINGS}
     ${SOURCE_BASE_STRINGS}
     ${SOURCE_BASE_THREADING}

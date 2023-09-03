@@ -19,6 +19,7 @@
 #include "base/files/file_path_watcher.h"
 
 #include "base/logging.h"
+#include "base/posix/eintr_wrapper.h"
 #include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/threading/simple_thread.h"
@@ -64,15 +65,6 @@ constexpr size_t kDefaultInotifyMaxUserWatches = 8192u;
 
 // Used by test to override inotify watcher limit.
 size_t g_override_max_inotify_watches = 0u;
-
-#define HANDLE_EINTR(x) ({ \
-    decltype(x) eintr_wrapper_result; \
-    do \
-    { \
-        eintr_wrapper_result = (x); \
-    } while (eintr_wrapper_result == -1 && errno == EINTR); \
-    eintr_wrapper_result; \
-})
 
 bool isLink(const std::filesystem::path& file_path)
 {
