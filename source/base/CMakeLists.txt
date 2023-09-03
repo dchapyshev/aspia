@@ -348,6 +348,8 @@ if (LINUX)
     list(APPEND SOURCE_BASE_DESKTOP
         desktop/desktop_environment_linux.cc
         desktop/desktop_environment_linux.h
+        desktop/desktop_resizer_x11.cc
+        desktop/desktop_resizer_x11.h
         desktop/screen_capturer_x11.cc
         desktop/screen_capturer_x11.h)
 endif()

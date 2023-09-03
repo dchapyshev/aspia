@@ -16,33 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#ifndef BASE_DESKTOP_DESKTOP_RESIZER_X11_H
+#define BASE_DESKTOP_DESKTOP_RESIZER_X11_H
+
+#include "base/macros_magic.h"
 #include "base/desktop/desktop_resizer.h"
-
-#include "build/build_config.h"
-#include "base/logging.h"
-
-#if defined(OS_WIN)
-#include "base/desktop/desktop_resizer_win.h"
-#endif // defined(OS_WIN)
-
-#if defined(OS_LINUX)
-#include "base/desktop/desktop_resizer_x11.h"
-#endif // defined(OS_LINUX)
 
 namespace base {
 
-//--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<DesktopResizer> DesktopResizer::create()
+class DesktopResizerX11 : public DesktopResizer
 {
-#if defined(OS_WIN)
-    return std::make_unique<DesktopResizerWin>();
-#elif defined(OS_LINUX)
-    return std::make_unique<DesktopResizerX11>();
-#else
-    NOTIMPLEMENTED();
-    return nullptr;
-#endif
-}
+public:
+    DesktopResizerX11();
+    ~DesktopResizerX11() override;
+
+    // DesktopResizer implementation.
+    std::vector<Size> supportedResolutions(ScreenId screen_id) override;
+    bool setResolution(ScreenId screen_id, const Size& resolution) override;
+    void restoreResolution(ScreenId screen_id) override;
+    void restoreResulution() override;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(DesktopResizerX11);
+};
 
 } // namespace base
+
+#endif // BASE_DESKTOP_DESKTOP_RESIZER_X11_H
