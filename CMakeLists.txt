@@ -43,6 +43,8 @@ if (WIN32)
     message(STATUS "Windows detected")
 endif()
 
+set(CMAKE_SKIP_BUILD_RPATH ON)
+
 message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "Host system processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
