@@ -2113,12 +2113,12 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../ui/file_transfer/address_bar.cc" line="58"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="56"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/address_bar.cc" line="59"/>
+        <location filename="../ui/file_transfer/address_bar.cc" line="57"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation type="unfinished"></translation>
     </message>
