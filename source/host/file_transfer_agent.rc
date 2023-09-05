@@ -20,9 +20,9 @@
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-1 RT_MANIFEST "service.manifest"
+1 RT_MANIFEST "file_transfer_agent.manifest"
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_file_transfer_agent.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia File Transfer Agent"
 
 #include "build/version.rc"

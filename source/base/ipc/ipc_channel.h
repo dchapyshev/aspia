@@ -50,8 +50,8 @@ public:
     public:
         virtual ~Listener() = default;
 
-        virtual void onDisconnected() = 0;
-        virtual void onMessageReceived(uint32_t id, const ByteArray& buffer) = 0;
+        virtual void onIpcDisconnected() = 0;
+        virtual void onIpcMessageReceived(const ByteArray& buffer) = 0;
     };
 
     std::shared_ptr<IpcChannelProxy> channelProxy();
@@ -71,7 +71,7 @@ public:
     void pause();
     void resume();
 
-    void send(ByteArray&& buffer, uint32_t id = 0);
+    void send(ByteArray&& buffer);
 
     ProcessId peerProcessId() const { return peer_process_id_; }
     SessionId peerSessionId() const { return peer_session_id_; }
@@ -87,21 +87,13 @@ private:
     using Stream = asio::local::stream_protocol::socket;
 #endif
 
-    using WriteTask = std::pair<uint32_t, ByteArray>;
-
     IpcChannel(std::u16string_view channel_name, Stream&& stream);
     static std::u16string channelName(std::u16string_view channel_id);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void doWrite();
     void doReadMessage();
-    void onMessageReceived(uint32_t id);
-
-    struct Header
-    {
-        uint32_t size;
-        uint32_t id;
-    };
+    void onMessageReceived();
 
     std::u16string channel_name_;
     Stream stream_;
@@ -112,10 +104,10 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    std::queue<WriteTask> write_queue_;
-    Header write_header_;
+    std::queue<ByteArray> write_queue_;
+    uint32_t write_size_ = 0;
 
-    Header read_header_;
+    uint32_t read_size_ = 0;
     ByteArray read_buffer_;
 
     ProcessId peer_process_id_ = kNullProcessId;

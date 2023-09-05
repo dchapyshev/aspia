@@ -16,13 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include <Windows.h>
+#ifndef HOST_FILE_TRANSFER_AGENT_MAIN_H
+#define HOST_FILE_TRANSFER_AGENT_MAIN_H
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#include "host/host_export.h"
 
-1 RT_MANIFEST "service.manifest"
+void HOST_EXPORT fileTransferAgentMain(int argc, const char* const* argv);
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
-
-#include "build/version.rc"
+#endif // HOST_FILE_TRANSFER_AGENT_MAIN_H

@@ -16,13 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "build/build_config.h"
+#include "host/file_transfer_agent_main.h"
+
+#if defined(OS_WIN)
 #include <Windows.h>
 
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+//--------------------------------------------------------------------------------------------------
+int WINAPI wWinMain(HINSTANCE /* hInstance */,
+                    HINSTANCE /* hPrevInstance */,
+                    LPWSTR /* lpCmdLine */,
+                    int /* nCmdShow */)
+{
+    fileTransferAgentMain(0, nullptr); // On Windows ignores arguments.
+    return 0;
+}
 
-1 RT_MANIFEST "service.manifest"
+#else
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_service.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Host Service"
+//--------------------------------------------------------------------------------------------------
+int main(int argc, char *argv[])
+{
+    fileTransferAgentMain(argc, argv);
+    return 0;
+}
 
-#include "build/version.rc"
+#endif

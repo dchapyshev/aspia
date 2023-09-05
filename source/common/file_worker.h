@@ -42,8 +42,8 @@ public:
     std::shared_ptr<base::TaskRunner> taskRunner();
 
 private:
-    class Impl;
-    std::shared_ptr<Impl> impl_;
+    class SharedImpl;
+    std::shared_ptr<SharedImpl> impl_;
 
     DISALLOW_COPY_AND_ASSIGN(FileWorker);
 };

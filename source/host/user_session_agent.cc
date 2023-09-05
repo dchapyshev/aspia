@@ -70,14 +70,14 @@ void UserSessionAgent::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onDisconnected()
+void UserSessionAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconncted";
     window_proxy_->onStatusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onMessageReceived(uint32_t /* id */, const base::ByteArray& buffer)
+void UserSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 

@@ -126,7 +126,7 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onDisconnected()
+void DesktopSessionAgent::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
 
@@ -135,7 +135,7 @@ void DesktopSessionAgent::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onMessageReceived(uint32_t id, const base::ByteArray& buffer)
+void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 
