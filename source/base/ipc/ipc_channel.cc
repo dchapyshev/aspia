@@ -282,24 +282,22 @@ void IpcChannel::resume()
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
-    if (read_header_.size)
-        onMessageReceived(read_header_.id);
+    if (read_size_)
+        onMessageReceived();
 
-    DCHECK_EQ(read_header_.size, 0);
-    DCHECK_EQ(read_header_.id, 0);
-
+    DCHECK_EQ(read_size_, 0);
     doReadMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(ByteArray&& buffer, uint32_t id)
+void IpcChannel::send(ByteArray&& buffer)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(id, std::move(buffer));
+    write_queue_.emplace(std::move(buffer));
 
     if (schedule_write)
         doWrite();
@@ -362,7 +360,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 
     if (listener_)
     {
-        listener_->onDisconnected();
+        listener_->onIpcDisconnected();
         listener_ = nullptr;
     }
     else
@@ -374,18 +372,15 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWrite()
 {
-    const WriteTask& task = write_queue_.front();
+    write_size_ = static_cast<uint32_t>(write_queue_.front().size());
 
-    write_header_.size = static_cast<uint32_t>(task.second.size());
-    write_header_.id = task.first;
-
-    if (!write_header_.size || write_header_.size > kMaxMessageSize)
+    if (!write_size_ || write_size_ > kMaxMessageSize)
     {
         onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
-    asio::async_write(stream_, asio::buffer(&write_header_, sizeof(write_header_)),
+    asio::async_write(stream_, asio::buffer(&write_size_, sizeof(write_size_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -394,10 +389,10 @@ void IpcChannel::doWrite()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(write_header_));
+        DCHECK_EQ(bytes_transferred, sizeof(write_size_));
         DCHECK(!write_queue_.empty());
 
-        const ByteArray& buffer = write_queue_.front().second;
+        const ByteArray& buffer = write_queue_.front();
 
         // Send the buffer to the recipient.
         asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
@@ -409,7 +404,7 @@ void IpcChannel::doWrite()
                 return;
             }
 
-            DCHECK_EQ(bytes_transferred, write_header_.size);
+            DCHECK_EQ(bytes_transferred, write_size_);
             DCHECK(!write_queue_.empty());
 
             // Delete the sent message from the queue.
@@ -427,7 +422,7 @@ void IpcChannel::doWrite()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadMessage()
 {
-    asio::async_read(stream_, asio::buffer(&read_header_, sizeof(read_header_)),
+    asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -436,21 +431,21 @@ void IpcChannel::doReadMessage()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(read_header_));
+        DCHECK_EQ(bytes_transferred, sizeof(read_size_));
 
-        if (!read_header_.size || read_header_.size > kMaxMessageSize)
+        if (!read_size_ || read_size_ > kMaxMessageSize)
         {
             onErrorOccurred(FROM_HERE, asio::error::message_size);
             return;
         }
 
-        if (read_buffer_.capacity() < read_header_.size)
+        if (read_buffer_.capacity() < read_size_)
         {
             read_buffer_.clear();
-            read_buffer_.reserve(read_header_.size);
+            read_buffer_.reserve(read_size_);
         }
 
-        read_buffer_.resize(read_header_.size);
+        read_buffer_.resize(read_size_);
 
         asio::async_read(stream_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
             [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -461,38 +456,35 @@ void IpcChannel::doReadMessage()
                 return;
             }
 
-            DCHECK_EQ(bytes_transferred, read_header_.size);
+            DCHECK_EQ(bytes_transferred, read_size_);
 
             if (is_paused_)
                 return;
 
-            onMessageReceived(read_header_.id);
+            onMessageReceived();
 
             if (is_paused_)
                 return;
 
-            DCHECK_EQ(read_header_.size, 0);
-            DCHECK_EQ(read_header_.id, 0);
-
+            DCHECK_EQ(read_size_, 0);
             doReadMessage();
         });
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::onMessageReceived(uint32_t id)
+void IpcChannel::onMessageReceived()
 {
     if (listener_)
     {
-        listener_->onMessageReceived(id, read_buffer_);
+        listener_->onIpcMessageReceived(read_buffer_);
     }
     else
     {
         LOG(LS_WARNING) << "No listener";
     }
 
-    read_header_.size = 0;
-    read_header_.id = 0;
+    read_size_ = 0;
 }
 
 } // namespace base

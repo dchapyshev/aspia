@@ -28,22 +28,22 @@ class TaskRunner;
 class IpcChannelProxy : public std::enable_shared_from_this<IpcChannelProxy>
 {
 public:
-    void send(ByteArray&& buffer, uint32_t id = 0);
+    void send(ByteArray&& buffer);
 
 private:
     friend class IpcChannel;
     IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcChannel* channel);
 
-    // Called directly by Channel::~Channel.
+    // Called directly by IpcChannel::~IpcChannel.
     void willDestroyCurrentChannel();
 
     void scheduleWrite();
-    bool reloadWriteQueue(std::queue<IpcChannel::WriteTask>* work_queue);
+    bool reloadWriteQueue(std::queue<ByteArray>* work_queue);
 
     std::shared_ptr<TaskRunner> task_runner_;
     IpcChannel* channel_;
 
-    std::queue<IpcChannel::WriteTask> incoming_queue_;
+    std::queue<ByteArray> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
     DISALLOW_COPY_AND_ASSIGN(IpcChannelProxy);

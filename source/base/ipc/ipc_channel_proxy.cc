@@ -32,7 +32,7 @@ IpcChannelProxy::IpcChannelProxy(std::shared_ptr<TaskRunner> task_runner, IpcCha
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannelProxy::send(ByteArray&& buffer, uint32_t id)
+void IpcChannelProxy::send(ByteArray&& buffer)
 {
     bool schedule_write;
 
@@ -40,7 +40,7 @@ void IpcChannelProxy::send(ByteArray&& buffer, uint32_t id)
         std::scoped_lock lock(incoming_queue_lock_);
 
         schedule_write = incoming_queue_.empty();
-        incoming_queue_.emplace(id, std::move(buffer));
+        incoming_queue_.emplace(std::move(buffer));
     }
 
     if (!schedule_write)
@@ -68,7 +68,7 @@ void IpcChannelProxy::scheduleWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannelProxy::reloadWriteQueue(std::queue<IpcChannel::WriteTask>* work_queue)
+bool IpcChannelProxy::reloadWriteQueue(std::queue<ByteArray>* work_queue)
 {
     if (!work_queue->empty())
         return false;

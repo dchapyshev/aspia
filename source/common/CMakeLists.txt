@@ -44,6 +44,8 @@ list(APPEND SOURCE_COMMON
     file_task_producer_proxy.h
     file_worker.cc
     file_worker.h
+    file_worker_impl.cc
+    file_worker_impl.h
     http_file_downloader.cc
     http_file_downloader.h
     keycode_converter.cc

@@ -231,7 +231,7 @@ void DesktopSessionIpc::injectClipboardEvent(const proto::ClipboardEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onDisconnected()
+void DesktopSessionIpc::onIpcDisconnected()
 {
     LOG(LS_INFO) << "IPC channel disconnected";
 
@@ -246,7 +246,7 @@ void DesktopSessionIpc::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onMessageReceived(uint32_t id, const base::ByteArray& buffer)
+void DesktopSessionIpc::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     if (!delegate_)
     {

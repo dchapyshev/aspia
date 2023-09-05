@@ -575,7 +575,7 @@ void UserSession::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onDisconnected()
+void UserSession::onIpcDisconnected()
 {
     desktop_dettach_timer_.start(std::chrono::seconds(5), [this]()
     {
@@ -587,7 +587,7 @@ void UserSession::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onMessageReceived(uint32_t /* id */, const base::ByteArray& buffer)
+void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 

@@ -70,7 +70,7 @@ std::unique_ptr<ClientSession> ClientSession::create(proto::SessionType session_
 
         case proto::SESSION_TYPE_FILE_TRANSFER:
             return std::unique_ptr<ClientSessionFileTransfer>(
-                new ClientSessionFileTransfer(std::move(channel)));
+                new ClientSessionFileTransfer(std::move(channel), std::move(task_runner)));
 
         case proto::SESSION_TYPE_SYSTEM_INFO:
             return std::unique_ptr<ClientSessionSystemInfo>(

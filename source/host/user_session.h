@@ -98,8 +98,8 @@ public:
 
 protected:
     // base::IpcChannel::Listener implementation.
-    void onDisconnected() override;
-    void onMessageReceived(uint32_t id, const base::ByteArray& buffer) override;
+    void onIpcDisconnected() override;
+    void onIpcMessageReceived(const base::ByteArray& buffer) override;
 
     // DesktopSession::Delegate implementation.
     void onDesktopSessionStarted() override;
