@@ -39,7 +39,11 @@
 #endif // defined(OS_WIN)
 
 #include <QMessageBox>
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
 #include <QProcess>
+#else
+#include <QProcessEnvironment>
+#endif
 
 namespace {
 
@@ -196,7 +200,11 @@ int hostMain(int argc, char* argv[])
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
     QStringList env = QProcess::systemEnvironment();
+#else
+    QStringList env = QProcessEnvironment::systemEnvironment().toStringList();
+#endif
     for (int i = 0; i < env.size(); ++i)
     {
         LOG(LS_INFO) << env[i];
