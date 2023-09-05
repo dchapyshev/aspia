@@ -135,7 +135,7 @@ void DesktopSessionAgent::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onMessageReceived(const base::ByteArray& buffer)
+void DesktopSessionAgent::onMessageReceived(uint32_t id, const base::ByteArray& buffer)
 {
     incoming_message_->Clear();
 

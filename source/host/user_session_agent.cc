@@ -77,7 +77,7 @@ void UserSessionAgent::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onMessageReceived(const base::ByteArray& buffer)
+void UserSessionAgent::onMessageReceived(uint32_t /* id */, const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 

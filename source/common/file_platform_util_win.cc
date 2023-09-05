@@ -32,8 +32,8 @@ namespace common {
 
 namespace {
 
-// Minimal path name is 2 characters (for example: "C:").
-const int kMinPathLength = 2;
+// Minimal path name is 1 characters.
+const int kMinPathLength = 1;
 
 // Under Window the length of a full path is 260 characters.
 const int kMaxPathLength = MAX_PATH;

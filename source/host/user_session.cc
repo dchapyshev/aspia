@@ -587,7 +587,7 @@ void UserSession::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onMessageReceived(const base::ByteArray& buffer)
+void UserSession::onMessageReceived(uint32_t /* id */, const base::ByteArray& buffer)
 {
     incoming_message_.Clear();
 

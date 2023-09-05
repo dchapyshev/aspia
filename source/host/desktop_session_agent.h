@@ -64,7 +64,7 @@ public:
 protected:
     // base::IpcChannel::Listener implementation.
     void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageReceived(uint32_t id, const base::ByteArray& buffer) override;
 
     // base::SharedMemoryFactory::Delegate implementation.
     void onSharedMemoryCreate(int id) override;
