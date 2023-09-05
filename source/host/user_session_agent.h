@@ -62,7 +62,7 @@ public:
 protected:
     // ipc::Channel::Listener implementation.
     void onDisconnected() override;
-    void onMessageReceived(const base::ByteArray& buffer) override;
+    void onMessageReceived(uint32_t id, const base::ByteArray& buffer) override;
 
 private:
     friend class UserSessionAgentProxy;

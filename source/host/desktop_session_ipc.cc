@@ -246,7 +246,7 @@ void DesktopSessionIpc::onDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onMessageReceived(const base::ByteArray& buffer)
+void DesktopSessionIpc::onMessageReceived(uint32_t id, const base::ByteArray& buffer)
 {
     if (!delegate_)
     {

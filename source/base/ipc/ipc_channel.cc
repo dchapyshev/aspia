@@ -130,7 +130,7 @@ IpcChannel::IpcChannel(std::u16string_view channel_name, Stream&& stream)
 #if defined(OS_WIN)
     peer_process_id_ = clientProcessIdImpl(stream_.native_handle());
     peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
-#endif
+#endif // defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
     is_connected_ = true;
     return true;
-#else
+#else // defined(OS_WIN)
     asio::local::stream_protocol::endpoint endpoint(base::local8BitFromUtf16(channel_name_));
     std::error_code error_code;
     stream_.connect(endpoint, error_code);
@@ -229,7 +229,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
     is_connected_ = true;
     return true;
-#endif
+#endif // !defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,23 +282,24 @@ void IpcChannel::resume()
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
-    if (read_size_)
-        onMessageReceived();
+    if (read_header_.size)
+        onMessageReceived(read_header_.id);
 
-    DCHECK_EQ(read_size_, 0);
+    DCHECK_EQ(read_header_.size, 0);
+    DCHECK_EQ(read_header_.id, 0);
 
     doReadMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(ByteArray&& buffer)
+void IpcChannel::send(ByteArray&& buffer, uint32_t id)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace(std::move(buffer));
+    write_queue_.emplace(id, std::move(buffer));
 
     if (schedule_write)
         doWrite();
@@ -325,10 +326,10 @@ std::filesystem::path IpcChannel::peerFilePath() const
     }
 
     return buffer;
-#else
+#else // defined(OS_WIN)
     NOTIMPLEMENTED();
     return std::filesystem::path();
-#endif
+#endif // !defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,11 +340,11 @@ std::u16string IpcChannel::channelName(std::u16string_view channel_id)
     std::u16string name(kPipeNamePrefix);
     name.append(channel_id);
     return name;
-#else
+#else // defined(OS_WIN)
     std::u16string name(kLocalSocketPrefix);
     name.append(channel_id);
     return name;
-#endif
+#endif // !defined(OS_WIN)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -373,15 +374,18 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWrite()
 {
-    write_size_ = static_cast<uint32_t>(write_queue_.front().size());
+    const WriteTask& task = write_queue_.front();
 
-    if (!write_size_ || write_size_ > kMaxMessageSize)
+    write_header_.size = static_cast<uint32_t>(task.second.size());
+    write_header_.id = task.first;
+
+    if (!write_header_.size || write_header_.size > kMaxMessageSize)
     {
         onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
-    asio::async_write(stream_, asio::buffer(&write_size_, sizeof(write_size_)),
+    asio::async_write(stream_, asio::buffer(&write_header_, sizeof(write_header_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -390,10 +394,10 @@ void IpcChannel::doWrite()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(write_size_));
+        DCHECK_EQ(bytes_transferred, sizeof(write_header_));
         DCHECK(!write_queue_.empty());
 
-        const ByteArray& buffer = write_queue_.front();
+        const ByteArray& buffer = write_queue_.front().second;
 
         // Send the buffer to the recipient.
         asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
@@ -405,7 +409,7 @@ void IpcChannel::doWrite()
                 return;
             }
 
-            DCHECK_EQ(bytes_transferred, write_size_);
+            DCHECK_EQ(bytes_transferred, write_header_.size);
             DCHECK(!write_queue_.empty());
 
             // Delete the sent message from the queue.
@@ -423,7 +427,7 @@ void IpcChannel::doWrite()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadMessage()
 {
-    asio::async_read(stream_, asio::buffer(&read_size_, sizeof(read_size_)),
+    asio::async_read(stream_, asio::buffer(&read_header_, sizeof(read_header_)),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -432,21 +436,21 @@ void IpcChannel::doReadMessage()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(read_size_));
+        DCHECK_EQ(bytes_transferred, sizeof(read_header_));
 
-        if (!read_size_ || read_size_ > kMaxMessageSize)
+        if (!read_header_.size || read_header_.size > kMaxMessageSize)
         {
             onErrorOccurred(FROM_HERE, asio::error::message_size);
             return;
         }
 
-        if (read_buffer_.capacity() < read_size_)
+        if (read_buffer_.capacity() < read_header_.size)
         {
             read_buffer_.clear();
-            read_buffer_.reserve(read_size_);
+            read_buffer_.reserve(read_header_.size);
         }
 
-        read_buffer_.resize(read_size_);
+        read_buffer_.resize(read_header_.size);
 
         asio::async_read(stream_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
             [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -457,17 +461,18 @@ void IpcChannel::doReadMessage()
                 return;
             }
 
-            DCHECK_EQ(bytes_transferred, read_size_);
+            DCHECK_EQ(bytes_transferred, read_header_.size);
 
             if (is_paused_)
                 return;
 
-            onMessageReceived();
+            onMessageReceived(read_header_.id);
 
             if (is_paused_)
                 return;
 
-            DCHECK_EQ(read_size_, 0);
+            DCHECK_EQ(read_header_.size, 0);
+            DCHECK_EQ(read_header_.id, 0);
 
             doReadMessage();
         });
@@ -475,18 +480,19 @@ void IpcChannel::doReadMessage()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::onMessageReceived()
+void IpcChannel::onMessageReceived(uint32_t id)
 {
     if (listener_)
     {
-        listener_->onMessageReceived(read_buffer_);
+        listener_->onMessageReceived(id, read_buffer_);
     }
     else
     {
         LOG(LS_WARNING) << "No listener";
     }
 
-    read_size_ = 0;
+    read_header_.size = 0;
+    read_header_.id = 0;
 }
 
 } // namespace base
