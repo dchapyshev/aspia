@@ -35,8 +35,6 @@ AddressBar::AddressBar(QWidget* parent)
     view_ = new QTreeView(this);
     model_ = new AddressBarModel(this);
 
-    edit_->setReadOnly(true);
-
     view_->setHeaderHidden(true);
     view_->setRootIsDecorated(false);
     view_->setAllColumnsShowFocus(true);
