@@ -21,8 +21,13 @@
 #include "build/build_config.h"
 #include "base/command_line.h"
 #include "base/logging.h"
+#include "base/stl_util.h"
 #include "base/task_runner.h"
 #include "base/files/base_paths.h"
+#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
+#include "base/strings/string_split.h"
+#include "base/strings/unicode.h"
 #include "proto/file_transfer.pb.h"
 
 #if defined(OS_WIN)
@@ -32,9 +37,18 @@
 #include <WtsApi32.h>
 #endif // defined(OS_WIN)
 
+#if defined(OS_LINUX)
+#include <signal.h>
+#include <spawn.h>
+#endif // defined(OS_LINUX)
+
 namespace host {
 
 namespace {
+
+#if defined(OS_LINUX)
+const char kFileTransferAgentFile[] = "aspia_file_transfer_agent";
+#endif // defined(OS_LINUX)
 
 #if defined(OS_WIN)
 const char16_t kFileTransferAgentFile[] = u"aspia_file_transfer_agent.exe";
@@ -214,12 +228,60 @@ void ClientSessionFileTransfer::onStarted()
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
         LOG(LS_WARNING) << "startProcessWithToken failed";
-        onError(FROM_HERE);
         return;
+    }
+#elif defined(OS_LINUX)
+    std::error_code ignored_error;
+    std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
+    if (it == std::filesystem::end(it))
+    {
+        LOG(LS_WARNING) << "No X11 sessions";
+        return;
+    }
+
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
+    if (!pipe)
+    {
+        LOG(LS_WARNING) << "Unable to open pipe";
+        return;
+    }
+
+    std::array<char, 512> buffer;
+    while (fgets(buffer.data(), buffer.size(), pipe.get()))
+    {
+        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+        if (!base::contains(line, u":0"))
+            continue;
+
+        std::vector<std::u16string_view> splitted = base::splitStringView(
+            line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+        if (splitted.empty())
+            continue;
+
+        std::string user_name = base::local8BitFromUtf16(splitted.front());
+        std::string command_line =
+            base::stringPrintf("sudo -u %s %s --channel_id=%s &",
+                               user_name.c_str(),
+                               agentFilePath().c_str(),
+                               base::local8BitFromUtf16(channel_id).c_str());
+
+        LOG(LS_INFO) << "Start file transfer session agent: " << command_line;
+
+        char sh_name[] = "sh";
+        char sh_arguments[] = "-c";
+        char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
+
+        pid_t pid;
+        if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
+        {
+            LOG(LS_WARNING) << "Unable to start process";
+            return;
+        }
     }
 #else
     NOTIMPLEMENTED();
-    onErrorOccurred();
+    onError(FROM_HERE);
+    return;
 #endif
 
     LOG(LS_INFO) << "Wait for starting agent process";
