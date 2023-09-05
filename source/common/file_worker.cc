@@ -90,7 +90,7 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doRequest(const proto::FileR
     // We send a notification to the system that it is used to prevent the screen saver, going into
     // hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-#endif
+#endif // defined(OS_WIN)
 
     if (request.has_drive_list_request())
     {
@@ -493,11 +493,14 @@ std::unique_ptr<proto::FileReply> FileWorker::Impl::doPacket(const proto::FilePa
 FileWorker::FileWorker(std::shared_ptr<base::TaskRunner> task_runner)
     : impl_(std::make_shared<Impl>(std::move(task_runner)))
 {
-    // Nothing
+    LOG(LS_INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-FileWorker::~FileWorker() = default;
+FileWorker::~FileWorker()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void FileWorker::doTask(std::shared_ptr<FileTask> task)
