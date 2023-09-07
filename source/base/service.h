@@ -60,7 +60,7 @@ protected:
 
 private:
 #if defined(OS_POSIX)
-    void signalHandlerImpl(int sig);
+    void stopHandlerImpl();
     static void signalHandler(int sig);
 #endif // defined(OS_POSIX)
 

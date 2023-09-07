@@ -45,6 +45,8 @@ const char* sigToString(int sig)
             return "SIGINT";
         case SIGSTOP:
             return "SIGSTOP";
+        case SIGABRT:
+            return "SIGABRT";
         default:
             return "unknown";
     }
@@ -79,6 +81,7 @@ void Service::exec()
     signal(SIGQUIT, signalHandler);
     signal(SIGINT, signalHandler);
     signal(SIGSTOP, signalHandler);
+    signal(SIGABRT, signalHandler);
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
@@ -96,33 +99,22 @@ void Service::exec()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::signalHandlerImpl(int sig)
+void Service::stopHandlerImpl()
 {
+    if (!task_runner_)
+        return;
+
     if (!task_runner_->belongsToCurrentThread())
     {
-        task_runner_->postTask(std::bind(&Service::signalHandlerImpl, this, sig));
+        task_runner_->postTask(std::bind(&Service::stopHandlerImpl, this));
         return;
     }
 
-    switch (sig)
-    {
-        case SIGKILL:
-        case SIGTERM:
-        case SIGHUP:
-        case SIGQUIT:
-        case SIGINT:
-        case SIGSTOP:
-        {
-            onStop();
+    onStop();
 
-            // A message loop termination command was received.
-            task_runner_->postQuit();
-        }
-        break;
-
-        default:
-            break;
-    }
+    // A message loop termination command was received.
+    task_runner_->postQuit();
+    task_runner_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -131,8 +123,19 @@ void Service::signalHandler(int sig)
 {
     LOG(LS_INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
 
-    if (g_self)
-        g_self->signalHandlerImpl(sig);
+    switch (sig)
+    {
+        case SIGTERM:
+        case SIGINT:
+        {
+            if (g_self)
+                g_self->stopHandlerImpl();
+        }
+        break;
+
+        default:
+            break;
+    }
 }
 
 } // namespace base
