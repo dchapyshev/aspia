@@ -44,7 +44,8 @@ Windows
 Linux
 -----
 The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have a different distribution kit or its version, then additional steps may be required.
-1. Install the following packages in your package manager (**packages must be installed before installing vcpkg and its packages**):
+1. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
+2. Install the following packages in your package manager (**packages must be installed before installing vcpkg and its packages**):
 * ninja-build
 * autoconf
 * autoconf-archive
@@ -91,7 +92,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * gcc
 * g++
 * qtcreator
-2. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
+3. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
 * asio
 * curl
 * gtest
@@ -106,9 +107,9 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * rapidjson
 * sqlite3
 * zstd
-3. Open **QtCreator -> Tools -> Options -> Kits -> Qt Versions**. Click the Add button and specify the path to **<vcpkg_path>/installed/x64-linux/tools/qt5/bin/qmake**.
-4. Open **QtCreator -> Tools -> Options -> Kits -> Kits**. Click the Add button. Enter a display name for the profile, specify the compilers (gcc/g++), and the Qt profile you added earlier.
-5. Open **CMakeLists.txt** from the Aspia root directory in QtCreator and configure the build using the previously added profile.
+4. Open **QtCreator -> Tools -> Options -> Kits -> Qt Versions**. Click the Add button and specify the path to **<vcpkg_path>/installed/x64-linux/tools/qt5/bin/qmake**.
+5. Open **QtCreator -> Tools -> Options -> Kits -> Kits**. Click the Add button. Enter a display name for the profile, specify the compilers (gcc/g++), and the Qt profile you added earlier.
+6. Open **CMakeLists.txt** from the Aspia root directory in QtCreator and configure the build using the previously added profile.
 
 Alternative instructions (SW build system)
 ------------------------------------------
