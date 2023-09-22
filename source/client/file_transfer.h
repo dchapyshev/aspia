@@ -25,6 +25,7 @@
 #include "proto/file_transfer.pb.h"
 
 #include <deque>
+#include <map>
 
 namespace base {
 class TaskRunner;

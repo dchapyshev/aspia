@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 
+#include <map>
+
 namespace router {
 
 class SharedKeyPool::Impl
