@@ -28,6 +28,7 @@
 #endif // defined(USE_PCG_GENERATOR)
 
 #include <atomic>
+#include <cstring>
 #include <random>
 
 #if defined(OS_WIN)
