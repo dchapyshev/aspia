@@ -125,7 +125,10 @@ public:
     {
         // Nothing
     }
-    ~InotifyReaderThreadDelegate() override = default;
+    ~InotifyReaderThreadDelegate() override
+    {
+        stop();
+    }
 
     void startReader();
 
@@ -307,7 +310,7 @@ void InotifyReaderThreadDelegate::run()
 {
     std::array<pollfd, 1> fdarray{{{inotify_fd_, POLLIN, 0}}};
 
-    while (true)
+    while (!isStopping())
     {
         // Wait until some inotify events are available.
         int poll_result = HANDLE_EINTR(poll(fdarray.data(), fdarray.size(), -1));
