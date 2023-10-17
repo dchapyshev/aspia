@@ -44,6 +44,8 @@
 #include "common/system_info_constants.h"
 #include "host/process_monitor.h"
 
+#include <thread>
+
 namespace host {
 
 namespace {

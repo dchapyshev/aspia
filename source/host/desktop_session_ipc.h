@@ -22,6 +22,8 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session.h"
 
+#include <map>
+
 namespace host {
 
 class DesktopSessionIpc

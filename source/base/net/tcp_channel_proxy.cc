@@ -21,6 +21,8 @@
 #include "base/logging.h"
 #include "base/task_runner.h"
 
+#include <mutex>
+
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
