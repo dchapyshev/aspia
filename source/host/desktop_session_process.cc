@@ -304,10 +304,12 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
+    LOG(LS_INFO) << "WHO:";
     std::array<char, 512> buffer;
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
         std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+        LOG(LS_INFO) << line;
         if (!base::contains(line, u":0"))
             continue;
 
@@ -332,7 +334,7 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         pid_t pid;
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
-            LOG(LS_WARNING) << "Unable to start process";
+            PLOG(LS_WARNING) << "Unable to start process";
             return nullptr;
         }
 
@@ -340,7 +342,26 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     }
 
     LOG(LS_WARNING) << "Connected X sessions not found";
-    return nullptr;
+
+    std::string command_line =
+        base::stringPrintf("sudo DISPLAY=':0' -u root %s --channel_id=%s &",
+                           filePath().c_str(),
+                           base::local8BitFromUtf16(channel_id).c_str());
+
+    LOG(LS_INFO) << "Start desktop session agent: " << command_line;
+
+    char sh_name[] = "sh";
+    char sh_arguments[] = "-c";
+    char* argv[] = { sh_name, sh_arguments, command_line.data(), nullptr };
+
+    pid_t pid;
+    if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
+    {
+        PLOG(LS_WARNING) << "Unable to start process";
+        return nullptr;
+    }
+
+    return std::unique_ptr<DesktopSessionProcess>(new DesktopSessionProcess(pid));
 #else
     NOTIMPLEMENTED();
     return std::unique_ptr<DesktopSessionProcess>();
