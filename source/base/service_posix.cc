@@ -127,6 +127,7 @@ void Service::signalHandler(int sig)
     {
         case SIGTERM:
         case SIGINT:
+        case SIGQUIT:
         {
             if (g_self)
                 g_self->stopHandlerImpl();
