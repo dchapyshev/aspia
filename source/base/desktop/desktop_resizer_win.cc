@@ -228,9 +228,9 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
             candidate_mode.dmDisplayFrequency == current_mode.dmDisplayFrequency;
         if (best_mode_matches_current_frequency && !candidate_mode_matches_current_frequency)
         {
-            LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                         << candidate_mode.dmPelsHeight
-                         << ": mode matching current frequency already found.";
+            //LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
+            //             << candidate_mode.dmPelsHeight
+            //             << ": mode matching current frequency already found.";
             return;
         }
     }
