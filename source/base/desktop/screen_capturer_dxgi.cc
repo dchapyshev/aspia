@@ -28,6 +28,8 @@ namespace base {
 
 namespace {
 
+const int kMaxTemporaryErrorCount = 3;
+
 //--------------------------------------------------------------------------------------------------
 bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
                                ScreenCapturer::ScreenList* screen_list)
@@ -247,6 +249,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     {
         case DuplicateResult::SUCCEEDED:
         {
+            temporary_error_count_ = 0;
             *error = Error::SUCCEEDED;
             return queue_.currentFrame()->frame();
         }
@@ -279,7 +282,19 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
         case DuplicateResult::DUPLICATION_FAILED:
         default:
         {
-            *error = Error::TEMPORARY;
+            ++temporary_error_count_;
+
+            if (temporary_error_count_ >= kMaxTemporaryErrorCount)
+            {
+                LOG(LS_ERROR) << "More than " << kMaxTemporaryErrorCount
+                              << " temporary capture errors detected";
+                *error = Error::PERMANENT;
+            }
+            else
+            {
+                *error = Error::TEMPORARY;
+            }
+
             return nullptr;
         }
     }

@@ -91,7 +91,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     }
 #endif // defined(OS_WIN)
 
-    selectCapturer();
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,11 +225,7 @@ void ScreenCapturerWrapper::captureFrame()
 
             case ScreenCapturer::Error::PERMANENT:
             {
-                ++permanent_error_count_;
-
-                LOG(LS_WARNING) << "Permanent error detected (" << permanent_error_count_ << ")";
-                selectCapturer();
-
+                selectCapturer(ScreenCapturer::Error::PERMANENT);
                 delegate_->onScreenCaptureError(error);
             }
             return;
@@ -238,10 +234,6 @@ void ScreenCapturerWrapper::captureFrame()
                 NOTREACHED();
                 break;
         }
-    }
-    else
-    {
-        permanent_error_count_ = 0;
     }
 
     const MouseCursor* mouse_cursor = nullptr;
@@ -354,7 +346,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::selectCapturer()
+void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -388,13 +380,10 @@ void ScreenCapturerWrapper::selectCapturer()
         }
     };
 
-    static const int kMaxPermanentErrorCount = 5;
-
-    if (permanent_error_count_ >= kMaxPermanentErrorCount)
+    if (last_error == ScreenCapturer::Error::PERMANENT)
     {
-        // Skip other capturer types and using GDI capturer.
-        LOG(LS_INFO) << "Number of permanent errors has been exceeded. Reset to GDI capturer";
-        permanent_error_count_ = 0;
+        LOG(LS_INFO) << "Permanent error. Reset to GDI capturer";
+        screen_capturer_.reset();
     }
     else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
              preferred_type_ == ScreenCapturer::Type::DEFAULT)
