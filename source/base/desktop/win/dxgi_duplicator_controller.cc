@@ -213,16 +213,21 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
         }
     }
 
-    if (monitor_id >= doScreenCount())
+    int screen_count = doScreenCount();
+    if (monitor_id >= screen_count)
     {
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
+        LOG(LS_ERROR) << "Invalid monitor id:" << monitor_id
+                        << " (screen count=" << screen_count << ")";
         return Result::INVALID_MONITOR_ID;
     }
 
     // If the |monitor_id| is valid, but doDuplicateAll() or doDuplicateOne failed, something must
     // be wrong from capturer APIs. We should deinitialize().
     deinitialize();
+
+    LOG(LS_ERROR) << "Unable to duplicate frame";
     return Result::DUPLICATION_FAILED;
 }
 
