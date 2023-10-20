@@ -442,7 +442,7 @@
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../computer_group_item.cc" line="140"/>
+        <location filename="../computer_group_item.cc" line="141"/>
         <source>Root Group</source>
         <translation>Raiz do Grupo</translation>
     </message>
