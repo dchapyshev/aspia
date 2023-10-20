@@ -31,6 +31,11 @@ public:
                       ComputerGroupItem* parent_item);
     virtual ~ComputerGroupItem() override = default;
 
+    enum ColumnIndex
+    {
+        COLUMN_INDEX_NAME = 0
+    };
+
     ComputerGroupItem* addChildComputerGroup(proto::address_book::ComputerGroup* computer_group);
     bool deleteChildComputerGroup(ComputerGroupItem* computer_group_item);
     proto::address_book::ComputerGroup* takeChildComputerGroup(ComputerGroupItem* computer_group_item);
@@ -46,6 +51,9 @@ public:
 
     proto::address_book::ComputerGroup* computerGroup() { return computer_group_; }
     proto::address_book::ComputerGroupConfig defaultConfig();
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const override;
 
 private:
     friend class ComputerGroupTree;
