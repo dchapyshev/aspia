@@ -139,7 +139,7 @@ void ClientDesktop::onSessionMessageReceived(uint8_t /* channel_id */, const bas
     else
     {
         // Unknown messages are ignored.
-        LOG(LS_WARNING) << "Unhandled message from host";
+        LOG(LS_ERROR) << "Unhandled message from host";
     }
 }
 
@@ -497,7 +497,7 @@ void ClientDesktop::readCapabilities(const proto::DesktopCapabilities& capabilit
     // If current video encoding not supported.
     if (!(capabilities.video_encodings() & static_cast<uint32_t>(desktop_config_.video_encoding())))
     {
-        LOG(LS_WARNING) << "Current video encoding not supported";
+        LOG(LS_ERROR) << "Current video encoding not supported";
 
         // We tell the window about the need to change the encoding.
         desktop_window_proxy_->configRequired();
@@ -515,7 +515,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     proto::VideoErrorCode error_code = packet.error_code();
     if (error_code != proto::VIDEO_ERROR_CODE_OK)
     {
-        LOG(LS_WARNING) << "Video error detected: " << error_code;
+        LOG(LS_ERROR) << "Video error detected: " << error_code;
         desktop_window_proxy_->setFrameError(error_code);
         return;
     }
@@ -636,13 +636,13 @@ void ClientDesktop::readCursorShape(const proto::CursorShape& cursor_shape)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(LS_WARNING) << "Cursor shape received not session type not desktop manage";
+        LOG(LS_ERROR) << "Cursor shape received not session type not desktop manage";
         return;
     }
 
     if (!(desktop_config_.flags() & proto::ENABLE_CURSOR_SHAPE))
     {
-        LOG(LS_WARNING) << "Cursor shape received not disabled in client";
+        LOG(LS_ERROR) << "Cursor shape received not disabled in client";
         return;
     }
 
@@ -666,7 +666,7 @@ void ClientDesktop::readCursorPosition(const proto::CursorPosition& cursor_posit
 {
     if (!(desktop_config_.flags() & proto::CURSOR_POSITION))
     {
-        LOG(LS_WARNING) << "Cursor position received not disabled in client";
+        LOG(LS_ERROR) << "Cursor position received not disabled in client";
         return;
     }
 
@@ -680,7 +680,7 @@ void ClientDesktop::readClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (!clipboard_monitor_)
     {
-        LOG(LS_WARNING) << "Clipboard received not disabled in client";
+        LOG(LS_ERROR) << "Clipboard received not disabled in client";
         return;
     }
 
@@ -750,7 +750,7 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
+        LOG(LS_ERROR) << "Unknown extension: " << extension.name();
     }
 }
 

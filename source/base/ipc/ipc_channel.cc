@@ -57,7 +57,7 @@ ProcessId clientProcessIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeClientProcessId(pipe_handle, &process_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeClientProcessId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeClientProcessId failed";
         return kNullProcessId;
     }
 
@@ -71,7 +71,7 @@ ProcessId serverProcessIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeServerProcessId(pipe_handle, &process_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeServerProcessId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeServerProcessId failed";
         return kNullProcessId;
     }
 
@@ -85,7 +85,7 @@ SessionId clientSessionIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeClientSessionId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeClientSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -99,7 +99,7 @@ SessionId serverSessionIdImpl(HANDLE pipe_handle)
 
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
-        PLOG(LS_WARNING) << "GetNamedPipeServerSessionId failed";
+        PLOG(LS_ERROR) << "GetNamedPipeServerSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -194,15 +194,15 @@ bool IpcChannel::connect(std::u16string_view channel_id)
 
         if (error_code != ERROR_PIPE_BUSY)
         {
-            LOG(LS_WARNING) << "Failed to connect to the named pipe: "
-                            << SystemError::toString(error_code);
+            LOG(LS_ERROR) << "Failed to connect to the named pipe: "
+                          << SystemError::toString(error_code);
             return false;
         }
 
         if (!WaitNamedPipeW(reinterpret_cast<const wchar_t*>(channel_name_.c_str()),
                             kConnectTimeout))
         {
-            PLOG(LS_WARNING) << "WaitNamedPipeW failed";
+            PLOG(LS_ERROR) << "WaitNamedPipeW failed";
             return false;
         }
     }
@@ -223,7 +223,7 @@ bool IpcChannel::connect(std::u16string_view channel_id)
     stream_.connect(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to connect: " << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
@@ -311,7 +311,7 @@ std::filesystem::path IpcChannel::peerFilePath() const
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, peer_process_id_));
     if (!process.isValid())
     {
-        PLOG(LS_WARNING) << "OpenProcess failed";
+        PLOG(LS_ERROR) << "OpenProcess failed";
         return std::filesystem::path();
     }
 
@@ -319,7 +319,7 @@ std::filesystem::path IpcChannel::peerFilePath() const
 
     if (!GetModuleFileNameExW(process.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
-        PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
+        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
         return std::filesystem::path();
     }
 
@@ -351,10 +351,10 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     if (error_code == asio::error::operation_aborted)
         return;
 
-    LOG(LS_WARNING) << "Error in IPC channel '" << channel_name_ << "': "
-                    << utf16FromLocal8Bit(error_code.message())
-                    << " (code: " << error_code.value()
-                    << ", location: " << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC channel '" << channel_name_ << "': "
+                  << utf16FromLocal8Bit(error_code.message())
+                  << " (code: " << error_code.value()
+                  << ", location: " << location.toString() << ")";
 
     disconnect();
 
@@ -365,7 +365,7 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
     }
     else
     {
-        LOG(LS_WARNING) << "No listener";
+        LOG(LS_ERROR) << "No listener";
     }
 }
 
@@ -481,7 +481,7 @@ void IpcChannel::onMessageReceived()
     }
     else
     {
-        LOG(LS_WARNING) << "No listener";
+        LOG(LS_ERROR) << "No listener";
     }
 
     read_size_ = 0;

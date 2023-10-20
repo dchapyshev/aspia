@@ -60,7 +60,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
     capturer_ = AudioCapturer::create();
     if (!capturer_)
     {
-        LOG(LS_WARNING) << "Unable to create audio capturer";
+        LOG(LS_ERROR) << "Unable to create audio capturer";
         return;
     }
 

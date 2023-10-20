@@ -102,7 +102,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
 
         if (!createCodec())
         {
-            LOG(LS_WARNING) << "createCodec failed";
+            LOG(LS_ERROR) << "createCodec failed";
             return false;
         }
 
@@ -135,7 +135,7 @@ bool WebmVideoEncoder::encode(const Frame& frame, proto::VideoPacket* packet)
         VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_encode failed";
+        LOG(LS_ERROR) << "vpx_codec_encode failed";
         return false;
     }
 
@@ -212,7 +212,7 @@ bool WebmVideoEncoder::createCodec()
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed";
+        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed";
         return false;
     }
 
@@ -234,7 +234,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -242,14 +242,14 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
         return false;
     }
 
@@ -258,7 +258,7 @@ bool WebmVideoEncoder::createCodec()
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed";
         return false;
     }
 

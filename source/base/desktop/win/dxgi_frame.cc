@@ -78,7 +78,7 @@ bool DxgiFrame::prepare(const Size& size, ScreenCapturer::ScreenId source_id)
 
         if (!frame)
         {
-            LOG(LS_WARNING) << "DxgiFrame cannot create a new Frame";
+            LOG(LS_ERROR) << "DxgiFrame cannot create a new Frame";
             return false;
         }
 

@@ -36,7 +36,7 @@ SessionInfo::SessionInfo(SessionId session_id)
                                      reinterpret_cast<LPWSTR*>(info.recieve()),
                                      &bytes_returned))
     {
-        PLOG(LS_WARNING) << "WTSQuerySessionInformationW failed";
+        PLOG(LS_ERROR) << "WTSQuerySessionInformationW failed";
         return;
     }
 
@@ -164,13 +164,13 @@ std::u16string SessionInfo::clientName16() const
     if (!WTSQuerySessionInformationW(
         WTS_CURRENT_SERVER_HANDLE, sessionId(), WTSClientName, &client_name, &size))
     {
-        LOG(LS_WARNING) << "WTSQuerySessionInformationW() failed: " << ::GetLastError();
+        LOG(LS_ERROR) << "WTSQuerySessionInformationW() failed: " << ::GetLastError();
         return std::u16string();
     }
 
     if (!client_name)
     {
-        LOG(LS_WARNING) << "Invalid client name";
+        LOG(LS_ERROR) << "Invalid client name";
         return std::u16string();
     }
 

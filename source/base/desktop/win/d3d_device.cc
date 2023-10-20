@@ -97,7 +97,7 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
     dxgi_adapter_ = adapter;
     if (!dxgi_adapter_)
     {
-        LOG(LS_WARNING) << "An empty IDXGIAdapter instance has been received";
+        LOG(LS_ERROR) << "An empty IDXGIAdapter instance has been received";
         return false;
     }
 
@@ -113,9 +113,9 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
         context_.GetAddressOf());
     if (error.Error() != S_OK || !d3d_device_ || !context_)
     {
-        LOG(LS_WARNING) << "D3D11CreateDeivce returns error "
-                        << error.ErrorMessage() << " with code "
-                        << error.Error();
+        LOG(LS_ERROR) << "D3D11CreateDeivce returns error "
+                      << error.ErrorMessage() << " with code "
+                      << error.Error();
         return false;
     }
 
@@ -131,13 +131,13 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
     }
     else
     {
-        LOG(LS_WARNING) << "Unable to get adapter description";
+        LOG(LS_ERROR) << "Unable to get adapter description";
     }
 
     if (feature_level < D3D_FEATURE_LEVEL_11_0)
     {
-        LOG(LS_WARNING) << "D3D11CreateDevice returns an instance without DirectX 11 support, level "
-                        << featureLevelToString(feature_level) << ". Following initialization may fail";
+        LOG(LS_ERROR) << "D3D11CreateDevice returns an instance without DirectX 11 support, level "
+                      << featureLevelToString(feature_level) << ". Following initialization may fail";
         // D3D_FEATURE_LEVEL_11_0 is not officially documented on MSDN to be a requirement of Dxgi
         // duplicator APIs.
         return false;
@@ -146,9 +146,9 @@ bool D3dDevice::initialize(int index, const ComPtr<IDXGIAdapter>& adapter)
     error = d3d_device_.As(&dxgi_device_);
     if (error.Error() != S_OK || !dxgi_device_)
     {
-        LOG(LS_WARNING) << "ID3D11Device is not an implementation of IDXGIDevice, this usually "
-                           "means the system does not support DirectX 11. Error "
-                        << error.ErrorMessage() << " with code " << error.Error();
+        LOG(LS_ERROR) << "ID3D11Device is not an implementation of IDXGIDevice, this usually "
+                         "means the system does not support DirectX 11. Error "
+                      << error.ErrorMessage() << " with code " << error.Error();
         return false;
     }
 
@@ -165,8 +165,8 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
                                           reinterpret_cast<void**>(factory.GetAddressOf()));
     if (error.Error() != S_OK || !factory)
     {
-        LOG(LS_WARNING) << "Cannot create IDXGIFactory1. Error "
-                        << error.ErrorMessage() << " with code " << error.Error();
+        LOG(LS_ERROR) << "Cannot create IDXGIFactory1. Error "
+                      << error.ErrorMessage() << " with code " << error.Error();
         return std::vector<D3dDevice>();
     }
 
@@ -232,7 +232,7 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
             }
             else
             {
-                LOG(LS_WARNING) << "Unable to initialize adapter #" << i;
+                LOG(LS_ERROR) << "Unable to initialize adapter #" << i;
                 return std::vector<D3dDevice>();
             }
         }
@@ -243,8 +243,8 @@ std::vector<D3dDevice> D3dDevice::enumDevices()
         }
         else
         {
-            LOG(LS_WARNING) << "IDXGIFactory1::EnumAdapters returns an unexpected error "
-                            << error.ErrorMessage() << " with code " << error.Error();
+            LOG(LS_ERROR) << "IDXGIFactory1::EnumAdapters returns an unexpected error "
+                          << error.ErrorMessage() << " with code " << error.Error();
         }
     }
 

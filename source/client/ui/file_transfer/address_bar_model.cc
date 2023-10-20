@@ -121,7 +121,7 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 
         if (!common::FilePlatformUtil::isValidPath(normalized_path))
         {
-            LOG(LS_WARNING) << "Invalid path entered: " << normalized_path.toStdString();
+            LOG(LS_ERROR) << "Invalid path entered: " << normalized_path.toStdString();
             emit sig_invalidPathEntered();
             return QModelIndex();
         }

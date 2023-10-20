@@ -85,7 +85,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
 
     if (!source_frame_ || !translator_)
     {
-        LOG(LS_WARNING) << "A packet with image information was not received";
+        LOG(LS_ERROR) << "A packet with image information was not received";
         return false;
     }
 
@@ -105,7 +105,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
 
         if (!frame_rect.containsRect(rect))
         {
-            LOG(LS_WARNING) << "The rectangle is outside the screen area";
+            LOG(LS_ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 
@@ -121,7 +121,7 @@ bool VideoDecoderZstd::decode(const proto::VideoPacket& packet, Frame* target_fr
             ret = ZSTD_decompressStream(stream_.get(), &output, &input);
             if (ZSTD_isError(ret))
             {
-                LOG(LS_WARNING) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
+                LOG(LS_ERROR) << "ZSTD_decompressStream failed: " << ZSTD_getErrorName(ret);
                 return false;
             }
 

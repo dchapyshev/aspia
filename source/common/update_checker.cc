@@ -153,7 +153,7 @@ void UpdateChecker::run()
 
         if (mc)
         {
-            LOG(LS_WARNING) << "curl_multi_poll failed: " << mc;
+            LOG(LS_ERROR) << "curl_multi_poll failed: " << mc;
             response.clear();
             break;
         }

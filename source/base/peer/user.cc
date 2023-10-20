@@ -121,14 +121,14 @@ User User::create(std::u16string_view name, std::u16string_view password)
 {
     if (name.empty() || password.empty())
     {
-        LOG(LS_WARNING) << "Empty user name or password";
+        LOG(LS_ERROR) << "Empty user name or password";
         return User();
     }
 
     std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
     {
-        LOG(LS_WARNING) << "Pair not found for group: " << kDefaultGroup;
+        LOG(LS_ERROR) << "Pair not found for group: " << kDefaultGroup;
         return User();
     }
 
@@ -145,7 +145,7 @@ User User::create(std::u16string_view name, std::u16string_view password)
     user.verifier = v.toByteArray();
     if (user.verifier.empty())
     {
-        LOG(LS_WARNING) << "Empty verifier";
+        LOG(LS_ERROR) << "Empty verifier";
         return User();
     }
 

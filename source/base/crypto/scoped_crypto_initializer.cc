@@ -31,7 +31,7 @@ ScopedCryptoInitializer::ScopedCryptoInitializer()
     int ret = OPENSSL_add_all_algorithms_noconf();
     if (ret != 1)
     {
-        LOG(LS_WARNING) << "OPENSSL_init_crypto failed";
+        LOG(LS_ERROR) << "OPENSSL_init_crypto failed";
         return;
     }
 

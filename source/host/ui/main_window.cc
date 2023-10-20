@@ -236,7 +236,7 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     }
     else
     {
-        LOG(LS_WARNING) << "Unandled status code: " << static_cast<int>(status);
+        LOG(LS_ERROR) << "Unandled status code: " << static_cast<int>(status);
     }
 }
 
@@ -504,7 +504,7 @@ void MainWindow::onTextChat(const proto::TextChat& text_chat)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled text chat message";
+        LOG(LS_ERROR) << "Unhandled text chat message";
     }
 }
 
@@ -546,7 +546,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     }
     else
     {
-        LOG(LS_WARNING) << "No agent proxy";
+        LOG(LS_ERROR) << "No agent proxy";
     }
 }
 
@@ -734,7 +734,7 @@ void MainWindow::onKillSession(uint32_t session_id)
     }
     else
     {
-        LOG(LS_WARNING) << "No agent proxy";
+        LOG(LS_ERROR) << "No agent proxy";
     }
 }
 
@@ -752,7 +752,7 @@ void MainWindow::onOneTimeSessionsChanged()
     }
     else
     {
-        LOG(LS_WARNING) << "No agent proxy";
+        LOG(LS_ERROR) << "No agent proxy";
     }
 }
 

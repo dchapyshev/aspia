@@ -171,7 +171,7 @@ std::string SysInfo::operatingSystemName()
                            access);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to open registry key: " << SystemError::toString(status);
+        LOG(LS_ERROR) << "Unable to open registry key: " << SystemError::toString(status);
         return std::string();
     }
 
@@ -180,7 +180,7 @@ std::string SysInfo::operatingSystemName()
     status = key.readValue(L"ProductName", &value);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to read registry key: " << SystemError::toString(status);
+        LOG(LS_ERROR) << "Unable to read registry key: " << SystemError::toString(status);
         return std::string();
     }
 
@@ -309,13 +309,13 @@ uint64_t SysInfo::uptime()
 
     if (!QueryPerformanceCounter(&counter))
     {
-        PLOG(LS_WARNING) << "QueryPerformanceCounter failed";
+        PLOG(LS_ERROR) << "QueryPerformanceCounter failed";
         return 0;
     }
 
     if (!QueryPerformanceFrequency(&frequency))
     {
-        PLOG(LS_WARNING) << "QueryPerformanceFrequency failed";
+        PLOG(LS_ERROR) << "QueryPerformanceFrequency failed";
         return 0;
     }
 
@@ -331,7 +331,7 @@ std::string SysInfo::computerName()
 
     if (!GetComputerNameW(buffer, &buffer_size))
     {
-        PLOG(LS_WARNING) << "GetComputerNameW failed";
+        PLOG(LS_ERROR) << "GetComputerNameW failed";
         return std::string();
     }
 
@@ -347,7 +347,7 @@ std::string SysInfo::computerDomain()
     if (GetComputerNameExW(ComputerNameDnsDomain, nullptr, &buffer_size) ||
         GetLastError() != ERROR_MORE_DATA)
     {
-        LOG(LS_WARNING) << "Unexpected return value";
+        LOG(LS_ERROR) << "Unexpected return value";
         return std::string();
     }
 
@@ -355,7 +355,7 @@ std::string SysInfo::computerDomain()
 
     if (!GetComputerNameExW(ComputerNameDnsDomain, buffer.get(), &buffer_size))
     {
-        PLOG(LS_WARNING) << "GetComputerNameExW failed";
+        PLOG(LS_ERROR) << "GetComputerNameExW failed";
         return std::string();
     }
 
@@ -372,7 +372,7 @@ std::string SysInfo::computerWorkgroup()
     DWORD ret = NetGetJoinInformation(nullptr, &buffer, &buffer_type);
     if (ret != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetGetJoinInformation failed: " << ret;
+        LOG(LS_ERROR) << "NetGetJoinInformation failed: " << ret;
         return std::string();
     }
 

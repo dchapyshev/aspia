@@ -154,7 +154,7 @@ void RelayPeer::onConnected()
             }
             else
             {
-                LOG(LS_WARNING) << "Invalid delegate";
+                LOG(LS_ERROR) << "Invalid delegate";
             }
         });
     });
@@ -174,7 +174,7 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 

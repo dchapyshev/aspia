@@ -60,7 +60,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     base::win::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -73,7 +73,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                              sizeof(elevation_type),
                              &returned_length))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -91,7 +91,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                                      sizeof(linked_token_info),
                                      &returned_length))
             {
-                PLOG(LS_WARNING) << "GetTokenInformation failed";
+                PLOG(LS_ERROR) << "GetTokenInformation failed";
                 return false;
             }
 
@@ -127,8 +127,8 @@ bool startProcessWithToken(HANDLE token,
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-            PLOG(LS_WARNING) << "CreateEnvironmentBlock failed";
-            return false;
+        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        return false;
     }
 
     PROCESS_INFORMATION process_info;
@@ -147,12 +147,12 @@ bool startProcessWithToken(HANDLE token,
                               &startup_info,
                               &process_info))
     {
-            PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
-            if (!DestroyEnvironmentBlock(environment))
-            {
-                PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
-            }
-            return false;
+        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        if (!DestroyEnvironmentBlock(environment))
+        {
+            PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
+        }
+        return false;
     }
 
     thread->reset(process_info.hThread);
@@ -160,7 +160,7 @@ bool startProcessWithToken(HANDLE token,
 
     if (!DestroyEnvironmentBlock(environment))
     {
-            PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -172,8 +172,8 @@ std::filesystem::path agentFilePath()
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-            LOG(LS_WARNING) << "currentExecDir failed";
-            return std::filesystem::path();
+        LOG(LS_ERROR) << "currentExecDir failed";
+        return std::filesystem::path();
     }
 
     file_path.append(kFileTransferAgentFile);
@@ -219,7 +219,7 @@ void ClientSessionFileTransfer::onStarted()
     base::win::ScopedHandle session_token;
     if (!createLoggedOnUserToken(sessionId(), &session_token))
     {
-        LOG(LS_WARNING) << "createSessionToken failed";
+        LOG(LS_ERROR) << "createSessionToken failed";
         return;
     }
 
@@ -227,7 +227,7 @@ void ClientSessionFileTransfer::onStarted()
     base::win::ScopedHandle thread_handle;
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(LS_WARNING) << "startProcessWithToken failed";
+        LOG(LS_ERROR) << "startProcessWithToken failed";
         return;
     }
 #elif defined(OS_LINUX)
@@ -235,14 +235,14 @@ void ClientSessionFileTransfer::onStarted()
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(LS_WARNING) << "No X11 sessions";
+        LOG(LS_ERROR) << "No X11 sessions";
         return;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_WARNING) << "Unable to open pipe";
+        LOG(LS_ERROR) << "Unable to open pipe";
         return;
     }
 
@@ -274,7 +274,7 @@ void ClientSessionFileTransfer::onStarted()
         pid_t pid;
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
-            LOG(LS_WARNING) << "Unable to start process";
+            LOG(LS_ERROR) << "Unable to start process";
             return;
         }
     }
@@ -289,7 +289,7 @@ void ClientSessionFileTransfer::onStarted()
 
     attach_timer_->start(std::chrono::seconds(10), [this]()
     {
-        LOG(LS_WARNING) << "Timeout at the start of the session process";
+        LOG(LS_ERROR) << "Timeout at the start of the session process";
         onError(FROM_HERE);
     });
 }
@@ -362,7 +362,7 @@ void ClientSessionFileTransfer::onIpcMessageReceived(const base::ByteArray& buff
 //--------------------------------------------------------------------------------------------------
 void ClientSessionFileTransfer::onError(const base::Location& location)
 {
-    LOG(LS_WARNING) << "Error occurred (from: " << location.toString() << ")";
+    LOG(LS_ERROR) << "Error occurred (from: " << location.toString() << ")";
     stop();
 }
 

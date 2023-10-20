@@ -1293,7 +1293,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
     }
     else
     {
-        LOG(LS_WARNING) << "No close button";
+        LOG(LS_ERROR) << "No close button";
     }
 
     bool has_unpinned_tabs = hasUnpinnedTabs();

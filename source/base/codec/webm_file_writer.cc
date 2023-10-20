@@ -167,8 +167,8 @@ bool WebmFileWriter::init()
         }
         else
         {
-            LOG(LS_WARNING) << "Unable to create path: "
-                            << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to create path: "
+                          << base::utf16FromLocal8Bit(error_code.message());
             return false;
         }
     }

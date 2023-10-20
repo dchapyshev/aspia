@@ -47,7 +47,7 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid text chat proxy";
+            LOG(LS_ERROR) << "Invalid text chat proxy";
         }
     });
 
@@ -62,7 +62,7 @@ QtTextChatWindow::QtTextChatWindow(QWidget* parent)
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid text chat proxy";
+            LOG(LS_ERROR) << "Invalid text chat proxy";
         }
     });
 }
@@ -111,7 +111,7 @@ void QtTextChatWindow::onTextChatMessage(const proto::TextChat& text_chat)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled text chat message";
+        LOG(LS_ERROR) << "Unhandled text chat message";
     }
 }
 

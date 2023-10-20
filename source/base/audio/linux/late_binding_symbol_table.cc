@@ -62,7 +62,7 @@ DllHandle internalLoadDll(const char dll_name[])
 
     if (handle == kInvalidDllHandle)
     {
-        LOG(LS_WARNING) << "Can't load " << dll_name << " : " << dllError();
+        LOG(LS_ERROR) << "Can't load " << dll_name << " : " << dllError();
     }
     return handle;
 }

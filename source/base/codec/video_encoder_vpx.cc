@@ -212,7 +212,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed: " << ret;
         return false;
     }
 
@@ -226,7 +226,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::VideoPacket* packet)
                            VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_encode failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_encode failed: " << ret;
         return false;
     }
 
@@ -255,7 +255,7 @@ bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
 {
     if (min_quantizer < 10 || min_quantizer > 50)
     {
-        LOG(LS_WARNING) << "Invalid quantizer value: " << min_quantizer;
+        LOG(LS_ERROR) << "Invalid quantizer value: " << min_quantizer;
         return false;
     }
 
@@ -267,7 +267,7 @@ bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
     vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_set failed: " << ret;
         return false;
     }
 
@@ -285,7 +285,7 @@ bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
 {
     if (max_quantizer < 10 || max_quantizer > 60)
     {
-        LOG(LS_WARNING) << "Invalid quantizer value: " << max_quantizer;
+        LOG(LS_ERROR) << "Invalid quantizer value: " << max_quantizer;
         return false;
     }
 
@@ -297,7 +297,7 @@ bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
     vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_set failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_set failed: " << ret;
         return false;
     }
 
@@ -335,7 +335,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed: " << ret;
         return false;
     }
 
@@ -357,7 +357,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -365,14 +365,14 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_SCREEN_CONTENT_MODE) failed: " << ret;
         return false;
     }
 
@@ -381,7 +381,7 @@ bool VideoEncoderVPX::createVp8Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_NOISE_SENSITIVITY) failed: " << ret;
         return false;
     }
 
@@ -399,7 +399,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_config_default failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_config_default failed: " << ret;
         return false;
     }
 
@@ -417,7 +417,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_enc_init failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_enc_init failed: " << ret;
         return false;
     }
 
@@ -426,14 +426,14 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 6);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP8E_SET_CPUUSED) failed: " << ret;
         return false;
     }
 
     ret = vpx_codec_control(codec_.get(), VP9E_SET_TUNE_CONTENT, VP9E_CONTENT_SCREEN);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_TUNE_CONTENT) failed: " << ret;
         return false;
     }
 
@@ -442,7 +442,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP9E_SET_NOISE_SENSITIVITY, 0);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_NOISE_SENSITIVITY) failed: " << ret;
         return false;
     }
 
@@ -450,7 +450,7 @@ bool VideoEncoderVPX::createVp9Codec(const Size& size)
     ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeCyclicRefresh);
     if (ret != VPX_CODEC_OK)
     {
-        LOG(LS_WARNING) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed: " << ret;
+        LOG(LS_ERROR) << "vpx_codec_control(VP9E_SET_AQ_MODE) failed: " << ret;
         return false;
     }
 

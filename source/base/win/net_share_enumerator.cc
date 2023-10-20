@@ -36,7 +36,7 @@ NetShareEnumerator::NetShareEnumerator()
                                     nullptr);
     if (error_code != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetShareEnum failed: " << SystemError(error_code).toString();
+        LOG(LS_ERROR) << "NetShareEnum failed: " << SystemError(error_code).toString();
         total_entries_ = 0;
     }
 }

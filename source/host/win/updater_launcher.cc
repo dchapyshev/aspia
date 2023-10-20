@@ -41,7 +41,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     base::win::ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
-        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -54,7 +54,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                              sizeof(elevation_type),
                              &returned_length))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -72,7 +72,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                                      sizeof(linked_token_info),
                                      &returned_length))
             {
-                PLOG(LS_WARNING) << "GetTokenInformation failed";
+                PLOG(LS_ERROR) << "GetTokenInformation failed";
                 return false;
             }
 
@@ -104,7 +104,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_WARNING) << "CreateEnvironmentBlock failed";
+        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -124,7 +124,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
+        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
         DestroyEnvironmentBlock(environment);
         return false;
     }
@@ -134,7 +134,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -154,14 +154,14 @@ bool launchUpdater(base::SessionId session_id)
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_WARNING) << "createLoggedOnUserToken failed";
+        LOG(LS_ERROR) << "createLoggedOnUserToken failed";
         return false;
     }
 
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecDir failed";
+        LOG(LS_ERROR) << "currentExecDir failed";
         return false;
     }
 
@@ -179,7 +179,7 @@ bool launchSilentUpdater()
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecDir failed";
+        LOG(LS_ERROR) << "currentExecDir failed";
         return false;
     }
 
@@ -209,7 +209,7 @@ bool launchSilentUpdater()
                         &startup_info,
                         &process_info))
     {
-        PLOG(LS_WARNING) << "CreateProcessW failed";
+        PLOG(LS_ERROR) << "CreateProcessW failed";
         return false;
     }
 

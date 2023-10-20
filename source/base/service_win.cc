@@ -198,7 +198,7 @@ void ServiceThread::setStatus(DWORD status)
 
     if (!SetServiceStatus(status_handle_, &status_))
     {
-        PLOG(LS_WARNING) << "SetServiceStatus failed";
+        PLOG(LS_ERROR) << "SetServiceStatus failed";
         return;
     }
 }
@@ -254,8 +254,8 @@ void ServiceThread::run()
         }
         else
         {
-            LOG(LS_WARNING) << "StartServiceCtrlDispatcherW failed: "
-                            << SystemError::toString(error_code);
+            LOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed: "
+                          << SystemError::toString(error_code);
             self->startup_state = State::ERROR_OCCURRED;
         }
 
@@ -296,7 +296,7 @@ void WINAPI ServiceThread::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     if (!self->status_handle_)
     {
-        PLOG(LS_WARNING) << "RegisterServiceCtrlHandlerExW failed";
+        PLOG(LS_ERROR) << "RegisterServiceCtrlHandlerExW failed";
         return;
     }
 

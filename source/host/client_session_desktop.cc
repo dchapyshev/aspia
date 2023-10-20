@@ -220,7 +220,7 @@ void ClientSessionDesktop::onReceived(uint8_t /* channel_id */, const base::Byte
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from client";
+        LOG(LS_ERROR) << "Unhandled message from client";
         return;
     }
 }
@@ -404,7 +404,7 @@ void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& eve
     }
     else
     {
-        LOG(LS_WARNING) << "Clipboard event can only be handled in a desktop manage session";
+        LOG(LS_ERROR) << "Clipboard event can only be handled in a desktop manage session";
     }
 }
 
@@ -449,7 +449,7 @@ void ClientSessionDesktop::readExtension(const proto::DesktopExtension& extensio
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown extension: " << extension.name();
+        LOG(LS_ERROR) << "Unknown extension: " << extension.name();
     }
 }
 
@@ -474,7 +474,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
         default:
         {
             // No supported video encoding.
-            LOG(LS_WARNING) << "Unsupported video encoding: " << config.video_encoding();
+            LOG(LS_ERROR) << "Unsupported video encoding: " << config.video_encoding();
         }
         break;
     }
@@ -493,7 +493,7 @@ void ClientSessionDesktop::readConfig(const proto::DesktopConfig& config)
 
         default:
         {
-            LOG(LS_WARNING) << "Unsupported audio encoding: " << config.audio_encoding();
+            LOG(LS_ERROR) << "Unsupported audio encoding: " << config.audio_encoding();
             audio_encoder_.reset();
         }
         break;
@@ -597,7 +597,7 @@ void ClientSessionDesktop::readVideoPauseExtension(const std::string& data)
     {
         if (!video_encoder_)
         {
-            LOG(LS_WARNING) << "Video encoder not initialized";
+            LOG(LS_ERROR) << "Video encoder not initialized";
             return;
         }
 
@@ -625,7 +625,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 {
     if (sessionType() != proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(LS_WARNING) << "Power management is only accessible from a desktop manage session";
+        LOG(LS_ERROR) << "Power management is only accessible from a desktop manage session";
         return;
     }
 
@@ -645,7 +645,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
             if (!base::PowerController::shutdown())
             {
-                LOG(LS_WARNING) << "Unable to shutdown";
+                LOG(LS_ERROR) << "Unable to shutdown";
             }
         }
         break;
@@ -656,7 +656,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
             if (!base::PowerController::reboot())
             {
-                LOG(LS_WARNING) << "Unable to reboot";
+                LOG(LS_ERROR) << "Unable to reboot";
             }
         }
         break;
@@ -676,17 +676,17 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
 
                     if (!base::PowerController::reboot())
                     {
-                        LOG(LS_WARNING) << "Unable to reboot";
+                        LOG(LS_ERROR) << "Unable to reboot";
                     }
                 }
                 else
                 {
-                    LOG(LS_WARNING) << "Failed to enable boot in Safe Mode";
+                    LOG(LS_ERROR) << "Failed to enable boot in Safe Mode";
                 }
             }
             else
             {
-                LOG(LS_WARNING) << "Failed to add service to start in safe mode";
+                LOG(LS_ERROR) << "Failed to add service to start in safe mode";
             }
 #endif // defined(OS_WIN)
         }
@@ -707,7 +707,7 @@ void ClientSessionDesktop::readPowerControlExtension(const std::string& data)
         break;
 
         default:
-            LOG(LS_WARNING) << "Unhandled power control action: " << power_control.action();
+            LOG(LS_ERROR) << "Unhandled power control action: " << power_control.action();
             break;
     }
 }
@@ -724,7 +724,7 @@ void ClientSessionDesktop::readRemoteUpdateExtension(const std::string& /* data 
     }
     else
     {
-        LOG(LS_WARNING) << "Update can only be launched from a desktop manage session";
+        LOG(LS_ERROR) << "Update can only be launched from a desktop manage session";
     }
 #endif // defined(OS_WIN)
 }
@@ -739,7 +739,7 @@ void ClientSessionDesktop::readSystemInfoExtension(const std::string& data)
     {
         if (!system_info_request.ParseFromString(data))
         {
-            LOG(LS_WARNING) << "Unable to parse system info request";
+            LOG(LS_ERROR) << "Unable to parse system info request";
         }
     }
 
@@ -762,7 +762,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
 
     if (!video_recording.ParseFromString(data))
     {
-        LOG(LS_WARNING) << "Unable to parse video recording extension data";
+        LOG(LS_ERROR) << "Unable to parse video recording extension data";
         return;
     }
 
@@ -779,7 +779,7 @@ void ClientSessionDesktop::readVideoRecordingExtension(const std::string& data)
             break;
 
         default:
-            LOG(LS_WARNING) << "Unknown video recording action: " << video_recording.action();
+            LOG(LS_ERROR) << "Unknown video recording action: " << video_recording.action();
             return;
     }
 
@@ -794,7 +794,7 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
 
     if (!message.ParseFromString(data))
     {
-        LOG(LS_WARNING) << "Unable to parse task manager extension data";
+        LOG(LS_ERROR) << "Unable to parse task manager extension data";
         return;
     }
 

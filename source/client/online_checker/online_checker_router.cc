@@ -108,8 +108,8 @@ void OnlineCheckerRouter::onTcpConnected()
         }
         else
         {
-            LOG(LS_WARNING) << "Authentication failed: "
-                            << base::ClientAuthenticator::errorToString(error_code);
+            LOG(LS_ERROR) << "Authentication failed: "
+                          << base::ClientAuthenticator::errorToString(error_code);
             onFinished(FROM_HERE);
         }
 

@@ -44,19 +44,19 @@ HANDLE openEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* fi
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
     if (!event_log.isValid())
     {
-        PLOG(LS_WARNING) << "OpenEventLogW failed";
+        PLOG(LS_ERROR) << "OpenEventLogW failed";
         return nullptr;
     }
 
     if (!GetNumberOfEventLogRecords(event_log.get(), records_count))
     {
-        PLOG(LS_WARNING) << "GetNumberOfEventLogRecords failed";
+        PLOG(LS_ERROR) << "GetNumberOfEventLogRecords failed";
         return nullptr;
     }
 
     if (!GetOldestEventLogRecord(event_log.get(), first_record))
     {
-        PLOG(LS_WARNING) << "GetOldestEventLogRecord failed";
+        PLOG(LS_ERROR) << "GetOldestEventLogRecord failed";
         return nullptr;
     }
 
@@ -85,7 +85,7 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, ByteArray* record_buf
 
         if (error_code != ERROR_INSUFFICIENT_BUFFER)
         {
-            LOG(LS_WARNING) << "ReadEventLogW failed: " << SystemError(error_code).toString();
+            LOG(LS_ERROR) << "ReadEventLogW failed: " << SystemError(error_code).toString();
             return false;
         }
 
@@ -100,7 +100,7 @@ bool eventLogRecord(HANDLE event_log, DWORD record_offset, ByteArray* record_buf
                            &bytes_read,
                            &bytes_needed))
         {
-            PLOG(LS_WARNING) << "ReadEventLogW failed";
+            PLOG(LS_ERROR) << "ReadEventLogW failed";
             return false;
         }
     }
@@ -119,8 +119,8 @@ bool eventLogMessageFileDLL(
                                  log_name, source);
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "StringCbPrintfW failed: "
-                        << SystemError(static_cast<DWORD>(hr)).toString();
+        LOG(LS_ERROR) << "StringCbPrintfW failed: "
+                      << SystemError(static_cast<DWORD>(hr)).toString();
         return false;
     }
 
@@ -129,8 +129,8 @@ bool eventLogMessageFileDLL(
     LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "key.open failed: "
-                        << SystemError(static_cast<DWORD>(status)).toString();
+        LOG(LS_ERROR) << "key.open failed: "
+                      << SystemError(static_cast<DWORD>(status)).toString();
         return false;
     }
 

@@ -55,7 +55,7 @@ bool convertImage(const proto::VideoPacket& packet, vpx_image_t* image, Frame* f
 
         if (!frame_rect.containsRect(rect))
         {
-            LOG(LS_WARNING) << "The rectangle is outside the screen area";
+            LOG(LS_ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 
@@ -144,7 +144,7 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        LOG(LS_WARNING) << "Decoding failed: " << (error ? error : "(NULL)") << "\n"
+        LOG(LS_ERROR) << "Decoding failed: " << (error ? error : "(NULL)") << "\n"
                         << "Details: " << (error_detail ? error_detail : "(NULL)");
         return false;
     }
@@ -155,13 +155,13 @@ bool VideoDecoderVPX::decode(const proto::VideoPacket& packet, Frame* frame)
     vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
     if (!image)
     {
-        LOG(LS_WARNING) << "No video frame decoded";
+        LOG(LS_ERROR) << "No video frame decoded";
         return false;
     }
 
     if (base::Size(static_cast<int32_t>(image->d_w), static_cast<int32_t>(image->d_h)) != frame->size())
     {
-        LOG(LS_WARNING) << "Size of the encoded frame doesn't match size in the header";
+        LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;
     }
 

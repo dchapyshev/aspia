@@ -56,7 +56,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     // If the monitor is turned off, this call will turn it on.
     if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
     {
-        PLOG(LS_WARNING) << "SetThreadExecutionState failed";
+        PLOG(LS_ERROR) << "SetThreadExecutionState failed";
     }
 
     wchar_t desktop[100] = { 0 };
@@ -77,7 +77,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
                 // Do the keyboard event.
                 if (!SendInput(1, &input, sizeof(input)))
                 {
-                    PLOG(LS_WARNING) << "SendInput failed";
+                    PLOG(LS_ERROR) << "SendInput failed";
                 }
             };
 
@@ -87,7 +87,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     }
     else
     {
-        LOG(LS_WARNING) << "Unable to get name of desktop";
+        LOG(LS_ERROR) << "Unable to get name of desktop";
     }
 #endif // defined(OS_WIN)
 
@@ -107,7 +107,7 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Screen capturer not initialized";
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return;
     }
 
@@ -115,20 +115,20 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     {
         if (resolution.isEmpty())
         {
-            LOG(LS_WARNING) << "Empty resolution";
+            LOG(LS_ERROR) << "Empty resolution";
         }
         else
         {
             if (!resizer_)
             {
-                LOG(LS_WARNING) << "No desktop resizer";
+                LOG(LS_ERROR) << "No desktop resizer";
             }
             else
             {
                 LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
                 if (!resizer_->setResolution(screen_id, resolution))
                 {
-                    LOG(LS_WARNING) << "setResolution failed";
+                    LOG(LS_ERROR) << "setResolution failed";
                     return;
                 }
             }
@@ -279,7 +279,7 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -292,7 +292,7 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -305,7 +305,7 @@ void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -320,7 +320,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Screen capturer not initialized";
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return ScreenCapturer::kInvalidScreenId;
     }
 
@@ -338,7 +338,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
     }
     else
     {
-        LOG(LS_WARNING) << "ScreenCapturer::screenList failed";
+        LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
     }
 
     LOG(LS_INFO) << "Primary screen NOT found";
@@ -419,7 +419,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Unable to create X11 screen capturer";
+        LOG(LS_ERROR) << "Unable to create X11 screen capturer";
         return;
     }
 #elif defined(OS_MAC)
@@ -467,7 +467,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         }
         else
         {
-            LOG(LS_WARNING) << "Desktop environment not initialized";
+            LOG(LS_ERROR) << "Desktop environment not initialized";
         }
     }
 #endif // defined(OS_WIN)

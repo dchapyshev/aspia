@@ -86,7 +86,7 @@ void FileDescriptorWatcher::Watcher::start()
 
         if (error_code)
         {
-            LOG(LS_WARNING) << "FD watcher error: " << error_code.message();
+            LOG(LS_ERROR) << "FD watcher error: " << error_code.message();
         }
         else
         {

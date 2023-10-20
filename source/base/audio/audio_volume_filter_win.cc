@@ -42,7 +42,7 @@ bool AudioVolumeFilterWin::activateBy(IMMDevice* mm_device)
         nullptr, &audio_volume_);
     if (FAILED(hr))
     {
-        LOG(LS_WARNING) << "Failed to get an IAudioEndpointVolume. Error " << hr;
+        LOG(LS_ERROR) << "Failed to get an IAudioEndpointVolume. Error " << hr;
         return false;
     }
     return true;

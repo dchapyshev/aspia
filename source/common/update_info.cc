@@ -40,7 +40,7 @@ UpdateInfo UpdateInfo::fromXml(const base::ByteArray& buffer)
     }
     catch (const rapidxml::parse_error& error)
     {
-        LOG(LS_WARNING) << "Invalid XML for update info: " << error.what();
+        LOG(LS_ERROR) << "Invalid XML for update info: " << error.what();
         return UpdateInfo();
     }
 

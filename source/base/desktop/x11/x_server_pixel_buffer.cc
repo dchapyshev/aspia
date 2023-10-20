@@ -266,7 +266,7 @@ bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
     XWindowAttributes attributes;
     if (!getWindowRect(display_, window, &window_rect_, &attributes))
     {
-        LOG(LS_WARNING) << "getWindowRect failed";
+        LOG(LS_ERROR) << "getWindowRect failed";
         return false;
     }
 
@@ -327,13 +327,13 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
         }
         else
         {
-            LOG(LS_WARNING) << "Failed to get shared memory segment. Performance may be degraded";
+            LOG(LS_ERROR) << "Failed to get shared memory segment. Performance may be degraded";
         }
     }
 
     if (!using_shm)
     {
-        LOG(LS_WARNING) << "Not using shared memory. Performance may be degraded.";
+        LOG(LS_ERROR) << "Not using shared memory. Performance may be degraded.";
         releaseSharedMemorySegment();
         return;
     }
@@ -354,7 +354,7 @@ bool XServerPixelBuffer::initPixmaps(int depth)
     int format = XShmPixmapFormat(display_);
     if (format != ZPixmap)
     {
-        LOG(LS_WARNING) << "Unsupported format: " << format;
+        LOG(LS_ERROR) << "Unsupported format: " << format;
         return false;
     }
 
@@ -366,7 +366,7 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         XSync(display_, False);
         if (error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_WARNING) << "XShmCreatePixmap failed";
+            LOG(LS_ERROR) << "XShmCreatePixmap failed";
 
             // |shm_pixmap_| is not not valid because the request was not processed by the X Server,
             // so zero it.
@@ -387,7 +387,7 @@ bool XServerPixelBuffer::initPixmaps(int depth)
 
         if (error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_WARNING) << "XCreateGC failed";
+            LOG(LS_ERROR) << "XCreateGC failed";
 
             XFreePixmap(display_, shm_pixmap_);
             shm_pixmap_ = 0;

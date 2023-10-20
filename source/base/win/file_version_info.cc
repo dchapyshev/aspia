@@ -123,7 +123,7 @@ std::unique_ptr<FileVersionInfo> FileVersionInfo::createFileVersionInfo(
 
     if (!GetFileVersionInfoW(path, dummy, length, data.data()))
     {
-        PLOG(LS_WARNING) << "GetFileVersionInfoW failed";
+        PLOG(LS_ERROR) << "GetFileVersionInfoW failed";
         return nullptr;
     }
 

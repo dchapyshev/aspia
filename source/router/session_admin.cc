@@ -75,7 +75,7 @@ void SessionAdmin::onSessionMessageReceived(uint8_t /* channel_id */, const base
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from manager";
+        LOG(LS_ERROR) << "Unhandled message from manager";
     }
 }
 
@@ -159,7 +159,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
 
         if (!server().stopSession(session_id))
         {
-            LOG(LS_WARNING) << "Session not found: " << session_id;
+            LOG(LS_ERROR) << "Session not found: " << session_id;
             session_result->set_error_code(proto::SessionResult::INVALID_SESSION_ID);
         }
         else
@@ -170,7 +170,7 @@ void SessionAdmin::doSessionRequest(const proto::SessionRequest& request)
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown session request: " << request.type();
+        LOG(LS_ERROR) << "Unknown session request: " << request.type();
         session_result->set_error_code(proto::SessionResult::INVALID_REQUEST);
     }
 
@@ -184,7 +184,7 @@ void SessionAdmin::doPeerConnectionRequest(const proto::PeerConnectionRequest& r
         dynamic_cast<SessionRelay*>(server().sessionById(request.relay_session_id()));
     if (!relay_session)
     {
-        LOG(LS_WARNING) << "Relay with id " << request.relay_session_id() << " not found";
+        LOG(LS_ERROR) << "Relay with id " << request.relay_session_id() << " not found";
         return;
     }
 

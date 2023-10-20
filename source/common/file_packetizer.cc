@@ -84,7 +84,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::readNextPacket(
     file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())
     {
-        LOG(LS_WARNING) << "Unable to read file";
+        LOG(LS_ERROR) << "Unable to read file";
         return nullptr;
     }
 

@@ -39,7 +39,7 @@ UserGroupEnumerator::UserGroupEnumerator()
                                          nullptr);
     if (error_code != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetLocalGroupEnum failed: " << SystemError(error_code).toString();
+        LOG(LS_ERROR) << "NetLocalGroupEnum failed: " << SystemError(error_code).toString();
         return;
     }
 }

@@ -517,8 +517,8 @@ void AudioOutputPulse::writePlayoutData()
                                       0,
                                       PA_SEEK_RELATIVE) < 0)
             {
-                LOG(LS_WARNING) << "pa_stream_write failed: "
-                                << LATE(pa_context_errno)(pa_context_);
+                LOG(LS_ERROR) << "pa_stream_write failed: "
+                              << LATE(pa_context_errno)(pa_context_);
             }
         }
 

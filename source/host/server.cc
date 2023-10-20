@@ -73,7 +73,7 @@ void Server::start()
 {
     if (server_)
     {
-        DLOG(LS_WARNING) << "An attempt was start an already running server";
+        DLOG(LS_ERROR) << "An attempt was start an already running server";
         return;
     }
 
@@ -85,7 +85,7 @@ void Server::start()
     std::error_code ignored_code;
     if (!std::filesystem::exists(settings_file, ignored_code))
     {
-        LOG(LS_WARNING) << "Configuration file does not exist";
+        LOG(LS_ERROR) << "Configuration file does not exist";
     }
 
     update_timer_ = std::make_unique<base::WaitableTimer>(
@@ -128,7 +128,7 @@ void Server::setSessionEvent(base::win::SessionStatus status, base::SessionId se
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid user session manager";
+        LOG(LS_ERROR) << "Invalid user session manager";
     }
 }
 
@@ -206,8 +206,8 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
                                ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
     if (host_version > session_info.version)
     {
-        LOG(LS_WARNING) << "Version mismatch (host: " << host_version.toString()
-                        << " client: " << session_info.version.toString();
+        LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
+                      << " client: " << session_info.version.toString();
     }
 
     std::unique_ptr<ClientSession> session = ClientSession::create(
@@ -223,7 +223,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid client session";
+        LOG(LS_ERROR) << "Invalid client session";
         return;
     }
 
@@ -233,7 +233,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid user session manager";
+        LOG(LS_ERROR) << "Invalid user session manager";
     }
 }
 
@@ -242,7 +242,7 @@ void Server::onHostIdRequest(const std::string& session_name)
 {
     if (!router_controller_)
     {
-        LOG(LS_WARNING) << "No router controller";
+        LOG(LS_ERROR) << "No router controller";
         return;
     }
 
@@ -255,7 +255,7 @@ void Server::onResetHostId(base::HostId host_id)
 {
     if (!router_controller_)
     {
-        LOG(LS_WARNING) << "No router controller";
+        LOG(LS_ERROR) << "No router controller";
         return;
     }
 
@@ -301,7 +301,7 @@ void Server::onUpdateCheckedFinished(const base::ByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void Server::onFileDownloaderError(int error_code)
 {
-    LOG(LS_WARNING) << "Unable to download update: " << error_code;
+    LOG(LS_ERROR) << "Unable to download update: " << error_code;
     task_runner_->deleteSoon(std::move(update_downloader_));
 }
 
@@ -313,8 +313,8 @@ void Server::onFileDownloaderCompleted()
     std::filesystem::path file_path = std::filesystem::temp_directory_path(error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "Unable to get temp directory: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "Unable to get temp directory: "
+                      << base::utf16FromLocal8Bit(error_code.message());
     }
     else
     {
@@ -322,7 +322,7 @@ void Server::onFileDownloaderCompleted()
 
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
-            LOG(LS_WARNING) << "Unable to write file '" << file_path << "'";
+            LOG(LS_ERROR) << "Unable to write file '" << file_path << "'";
         }
         else
         {
@@ -340,13 +340,13 @@ void Server::onFileDownloaderCompleted()
             }
             else
             {
-                LOG(LS_WARNING) << "Unable to create update process (cmd: " << arguments << ")";
+                LOG(LS_ERROR) << "Unable to create update process (cmd: " << arguments << ")";
 
                 // If the update fails, delete the temporary file.
                 if (!std::filesystem::remove(file_path, error_code))
                 {
-                    LOG(LS_WARNING) << "Unable to remove installer file: "
-                                    << base::utf16FromLocal8Bit(error_code.message());
+                    LOG(LS_ERROR) << "Unable to remove installer file: "
+                                  << base::utf16FromLocal8Bit(error_code.message());
                 }
             }
         }
@@ -378,7 +378,7 @@ void Server::startAuthentication(std::unique_ptr<base::TcpChannel> channel)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid authenticator manager";
+        LOG(LS_ERROR) << "Invalid authenticator manager";
     }
 }
 
@@ -389,14 +389,14 @@ void Server::addFirewallRules()
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecFile failed";
+        LOG(LS_ERROR) << "currentExecFile failed";
         return;
     }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
     {
-        LOG(LS_WARNING) << "Invalid firewall manager";
+        LOG(LS_ERROR) << "Invalid firewall manager";
         return;
     }
 
@@ -404,7 +404,7 @@ void Server::addFirewallRules()
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
     {
-        LOG(LS_WARNING) << "Unable to add firewall rule";
+        LOG(LS_ERROR) << "Unable to add firewall rule";
         return;
     }
 
@@ -419,14 +419,14 @@ void Server::deleteFirewallRules()
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecFile(&file_path))
     {
-        LOG(LS_WARNING) << "currentExecFile failed";
+        LOG(LS_ERROR) << "currentExecFile failed";
         return;
     }
 
     base::FirewallManager firewall(file_path);
     if (!firewall.isValid())
     {
-        LOG(LS_WARNING) << "Invalid firewall manager";
+        LOG(LS_ERROR) << "Invalid firewall manager";
         return;
     }
 
@@ -512,7 +512,7 @@ void Server::updateConfiguration(const std::filesystem::path& path, bool error)
     }
     else
     {
-        LOG(LS_WARNING) << "Error detected";
+        LOG(LS_ERROR) << "Error detected";
     }
 }
 

@@ -100,8 +100,8 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(LS_WARNING) << "Authentication failed: "
-                            << base::ClientAuthenticator::errorToString(error_code);
+            LOG(LS_ERROR) << "Authentication failed: "
+                          << base::ClientAuthenticator::errorToString(error_code);
 
             if (delegate_)
             {
@@ -126,7 +126,7 @@ void RouterController::onTcpDisconnected(base::NetworkChannel::ErrorCode error_c
 
     if (!delegate_)
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
         return;
     }
 
@@ -192,7 +192,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
             }
             else
             {
-                LOG(LS_WARNING) << "Invalid delegate";
+                LOG(LS_ERROR) << "Invalid delegate";
             }
         }
         else
@@ -203,7 +203,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from router";
+        LOG(LS_ERROR) << "Unhandled message from router";
     }
 }
 
@@ -222,7 +222,7 @@ void RouterController::onRelayConnectionReady(std::unique_ptr<base::TcpChannel> 
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 
@@ -231,7 +231,7 @@ void RouterController::onRelayConnectionError()
 {
     if (!delegate_)
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
         return;
     }
 

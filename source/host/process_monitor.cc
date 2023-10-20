@@ -100,7 +100,7 @@ public:
         base::win::ScopedHandle token;
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, token.recieve()))
         {
-            PLOG(LS_WARNING) << "OpenProcessToken failed";
+            PLOG(LS_ERROR) << "OpenProcessToken failed";
             return;
         }
 
@@ -112,7 +112,7 @@ public:
         base::win::ScopedHandle token;
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, token.recieve()))
         {
-            PLOG(LS_WARNING) << "OpenProcessToken failed";
+            PLOG(LS_ERROR) << "OpenProcessToken failed";
             return;
         }
 
@@ -125,7 +125,7 @@ private:
         LUID luid;
         if (!LookupPrivilegeValueW(nullptr, privilege, &luid))
         {
-            PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+            PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
             return false;
         }
 
@@ -139,14 +139,14 @@ private:
 
         if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), nullptr, nullptr))
         {
-            PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+            PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
             return false;
         }
 
         if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
         {
-              LOG(LS_WARNING) << "The token does not have the specified privilege";
-              return false;
+            LOG(LS_ERROR) << "The token does not have the specified privilege";
+            return false;
         }
 
         return true;
@@ -163,7 +163,7 @@ std::string userNameByHandle(HANDLE process)
     base::win::ScopedHandle token;
     if (!OpenProcessToken(process, TOKEN_QUERY, token.recieve()))
     {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return std::string();
     }
 
@@ -175,7 +175,7 @@ std::string userNameByHandle(HANDLE process)
     {
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            PLOG(LS_WARNING) << "GetTokenInformation failed";
+            PLOG(LS_ERROR) << "GetTokenInformation failed";
             return std::string();
         }
 
@@ -187,13 +187,13 @@ std::string userNameByHandle(HANDLE process)
 
     if (!token_user)
     {
-        LOG(LS_WARNING) << "Invalid user token buffer";
+        LOG(LS_ERROR) << "Invalid user token buffer";
         return std::string();
     }
 
     if (!GetTokenInformation(token, TokenUser, token_user, length, &length))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return std::string();
     }
 
@@ -208,7 +208,7 @@ std::string userNameByHandle(HANDLE process)
                            domain_buffer, &domain_buffer_size,
                            &sid_type))
     {
-        PLOG(LS_WARNING) << "LookupAccountSidW failed";
+        PLOG(LS_ERROR) << "LookupAccountSidW failed";
         return std::string();
     }
 
@@ -223,7 +223,7 @@ std::string filePathByHandle(HANDLE process)
 
     if (!QueryFullProcessImageNameW(process, 0, buffer, &buffer_size))
     {
-        LOG(LS_WARNING) << "QueryFullProcessImageNameW failed";
+        LOG(LS_ERROR) << "QueryFullProcessImageNameW failed";
         return std::string();
     }
 
@@ -276,7 +276,7 @@ void updateProcess(ProcessMonitor::ProcessEntry* entry, const OWN_SYSTEM_PROCESS
             base::win::ScopedHandle process(OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_id));
             if (!process.isValid())
             {
-                PLOG(LS_WARNING) << "OpenProcess failed";
+                PLOG(LS_ERROR) << "OpenProcess failed";
             }
             else
             {
@@ -301,7 +301,7 @@ ProcessMonitor::ProcessMonitor()
     ntdll_library_ = LoadLibraryW(L"ntdll.dll");
     if (!ntdll_library_)
     {
-        PLOG(LS_WARNING) << "LoadLibraryW failed";
+        PLOG(LS_ERROR) << "LoadLibraryW failed";
         return;
     }
 
@@ -309,7 +309,7 @@ ProcessMonitor::ProcessMonitor()
         GetProcAddress(reinterpret_cast<HMODULE>(ntdll_library_), "NtQuerySystemInformation"));
     if (!nt_query_system_info_func_)
     {
-        PLOG(LS_WARNING) << "GetProcAddress failed";
+        PLOG(LS_ERROR) << "GetProcAddress failed";
         return;
     }
 
@@ -321,7 +321,7 @@ ProcessMonitor::ProcessMonitor()
         SystemBasicInformation, &basic_info, sizeof(basic_info), nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
     }
     else
     {
@@ -337,7 +337,7 @@ ProcessMonitor::ProcessMonitor()
            nullptr);
         if (!NT_SUCCESS(status))
         {
-            LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+            LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
         }
         else
         {
@@ -391,7 +391,7 @@ int ProcessMonitor::calcCpuUsage()
        nullptr);
     if (!NT_SUCCESS(status))
     {
-        LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+        LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
         return 0;
     }
 
@@ -436,7 +436,7 @@ int ProcessMonitor::calcMemoryUsage()
 
     if (!GlobalMemoryStatusEx(&status))
     {
-        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
         return 0;
     }
 
@@ -449,7 +449,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     auto result = table_.find(process_id);
     if (result == table_.end())
     {
-        LOG(LS_WARNING) << "Process not found in table";
+        LOG(LS_ERROR) << "Process not found in table";
         return false;
     }
 
@@ -462,7 +462,7 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     {
         if (base::compareCaseInsensitive(process_name, kBlackList[i]) == 0)
         {
-            LOG(LS_WARNING) << "Unable to end system process";
+            LOG(LS_ERROR) << "Unable to end system process";
             return false;
         }
     }
@@ -472,13 +472,13 @@ bool ProcessMonitor::endProcess(ProcessId process_id)
     base::win::ScopedHandle process(OpenProcess(PROCESS_TERMINATE, FALSE, process_id));
     if (!process.isValid())
     {
-        PLOG(LS_WARNING) << "OpenProcess failed";
+        PLOG(LS_ERROR) << "OpenProcess failed";
         return false;
     }
 
     if (!TerminateProcess(process, 1))
     {
-        PLOG(LS_WARNING) << "TerminateProcess failed";
+        PLOG(LS_ERROR) << "TerminateProcess failed";
         return false;
     }
 
@@ -502,7 +502,7 @@ bool ProcessMonitor::updateSnapshot()
 
             if (status != STATUS_INFO_LENGTH_MISMATCH)
             {
-                LOG(LS_WARNING) << "NtQuerySystemInformation failed: " << status;
+                LOG(LS_ERROR) << "NtQuerySystemInformation failed: " << status;
                 return false;
             }
         }

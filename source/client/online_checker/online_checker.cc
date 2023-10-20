@@ -138,7 +138,7 @@ void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
 
         if (!delegate_)
         {
-            LOG(LS_WARNING) << "Invalid delegate";
+            LOG(LS_ERROR) << "Invalid delegate";
             return;
         }
 
@@ -160,7 +160,7 @@ void OnlineChecker::onDirectCheckerFinished()
         {
             if (!delegate_)
             {
-                LOG(LS_WARNING) << "Invalid delegate";
+                LOG(LS_ERROR) << "Invalid delegate";
                 return;
             }
 
@@ -178,7 +178,7 @@ void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
 
         if (!delegate_)
         {
-            LOG(LS_WARNING) << "Invalid delegate";
+            LOG(LS_ERROR) << "Invalid delegate";
             return;
         }
 
@@ -200,7 +200,7 @@ void OnlineChecker::onRouterCheckerFinished()
         {
             if (!delegate_)
             {
-                LOG(LS_WARNING) << "Invalid delegate";
+                LOG(LS_ERROR) << "Invalid delegate";
                 return;
             }
 

@@ -74,8 +74,8 @@ void DesktopSessionManager::attachSession(
     {
         session_attach_timer_.start(kSessionAttachTimeout, [this]()
         {
-            LOG(LS_WARNING) << "Session attach timeout (" << kSessionAttachTimeout.count()
-                            << " minutes)";
+            LOG(LS_ERROR) << "Session attach timeout (" << kSessionAttachTimeout.count()
+                          << " minutes)";
             onErrorOccurred();
         });
     }

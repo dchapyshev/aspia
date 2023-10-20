@@ -39,7 +39,7 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
     ScreenCapturer::ScreenList gdi_screens;
     if (!ScreenCaptureUtils::screenList(&gdi_screens))
     {
-        LOG(LS_WARNING) << "screenList failed";
+        LOG(LS_ERROR) << "screenList failed";
         return false;
     }
 
@@ -71,8 +71,8 @@ bool screenListFromDeviceNames(const std::vector<std::wstring>& device_names,
 
         if (!device_found)
         {
-            LOG(LS_WARNING) << "Device '" << device_name << "' NOT found in list ("
-                            << device_index << ")";
+            LOG(LS_ERROR) << "Device '" << device_name << "' NOT found in list ("
+                          << device_index << ")";
 
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
@@ -94,7 +94,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
     ScreenCapturer::ScreenList screen_list;
     if (!screenListFromDeviceNames(device_names, &screen_list))
     {
-        LOG(LS_WARNING) << "screenListFromDeviceNames failed";
+        LOG(LS_ERROR) << "screenListFromDeviceNames failed";
         return -1;
     }
 
@@ -110,7 +110,7 @@ int indexFromScreenId(ScreenCapturer::ScreenId id, const std::vector<std::wstrin
         }
     }
 
-    LOG(LS_WARNING) << "Screen with ID " << id << " NOT found";
+    LOG(LS_ERROR) << "Screen with ID " << id << " NOT found";
     return -1;
 }
 
@@ -158,7 +158,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 
     if (!controller_->deviceNames(&device_names))
     {
-        LOG(LS_WARNING) << "deviceNames failed";
+        LOG(LS_ERROR) << "deviceNames failed";
         return false;
     }
 
@@ -190,14 +190,14 @@ bool ScreenCapturerDxgi::selectScreen(ScreenId screen_id)
     std::vector<std::wstring> device_names;
     if (!controller_->deviceNames(&device_names))
     {
-        LOG(LS_WARNING) << "deviceNames failed";
+        LOG(LS_ERROR) << "deviceNames failed";
         return false;
     }
 
     int index = indexFromScreenId(screen_id, device_names);
     if (index == -1)
     {
-        LOG(LS_WARNING) << "indexFromScreenId failed";
+        LOG(LS_ERROR) << "indexFromScreenId failed";
         return false;
     }
 

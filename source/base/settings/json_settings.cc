@@ -83,7 +83,7 @@ void parseObject(const T& object, std::vector<std::string_view>* segments, Setti
 
             default:
             {
-                LOG(LS_WARNING) << "Unexpected type: " << value.GetType();
+                LOG(LS_ERROR) << "Unexpected type: " << value.GetType();
             }
             break;
         }
@@ -174,7 +174,7 @@ bool JsonSettings::flush()
     }
     else
     {
-        LOG(LS_WARNING) << "Unable to write configuration file: " << path_;
+        LOG(LS_ERROR) << "Unable to write configuration file: " << path_;
         return false;
     }
 
@@ -318,8 +318,8 @@ bool JsonSettings::writeFile(const std::filesystem::path& file, const Map& map, 
     {
         if (error_code)
         {
-            LOG(LS_WARNING) << "create_directories failed: "
-                            << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "create_directories failed: "
+                          << base::utf16FromLocal8Bit(error_code.message());
             return false;
         }
     }

@@ -127,8 +127,8 @@ bool FilePathWatcherImpl::watch(const std::filesystem::path& path,
     }
     else
     {
-        LOG(LS_WARNING) << "std::filesystem::last_write_time failed: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "std::filesystem::last_write_time failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
     }
 
     if (!updateWatch())
@@ -330,7 +330,7 @@ bool FilePathWatcherImpl::updateWatch()
 
         if (!FindCloseChangeNotification(handle_))
         {
-            PLOG(LS_WARNING) << "FindCloseChangeNotification failed";
+            PLOG(LS_ERROR) << "FindCloseChangeNotification failed";
         }
         handle_ = temp_handle;
     }
@@ -345,7 +345,7 @@ void FilePathWatcherImpl::destroyWatch()
 
     if (!FindCloseChangeNotification(handle_))
     {
-        PLOG(LS_WARNING) << "FindCloseChangeNotification failed";
+        PLOG(LS_ERROR) << "FindCloseChangeNotification failed";
     }
     handle_ = INVALID_HANDLE_VALUE;
 }

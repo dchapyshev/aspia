@@ -79,12 +79,12 @@ DesktopSessionAgent::DesktopSessionAgent(std::shared_ptr<base::TaskRunner> task_
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
-        PLOG(LS_WARNING) << "SetProcessShutdownParameters failed";
+        PLOG(LS_ERROR) << "SetProcessShutdownParameters failed";
     }
 
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_WARNING) << "SetPriorityClass failed";
+        PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 #endif // defined(OS_WIN)
 
@@ -117,7 +117,7 @@ void DesktopSessionAgent::start(std::u16string_view channel_id)
 
     if (!channel_->connect(channel_id))
     {
-        LOG(LS_WARNING) << "Connection failed";
+        LOG(LS_ERROR) << "Connection failed";
         return;
     }
 
@@ -243,7 +243,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
             {
                 if (!base::PowerController::logoff())
                 {
-                    LOG(LS_WARNING) << "base::PowerController::logoff failed";
+                    LOG(LS_ERROR) << "base::PowerController::logoff failed";
                 }
             }
             break;
@@ -252,7 +252,7 @@ void DesktopSessionAgent::onIpcMessageReceived(const base::ByteArray& buffer)
             {
                 if (!base::PowerController::lock())
                 {
-                    LOG(LS_WARNING) << "base::PowerController::lock failed";
+                    LOG(LS_ERROR) << "base::PowerController::lock failed";
                 }
             }
             break;
@@ -493,7 +493,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 #elif defined(OS_LINUX)
         input_injector_ = InputInjectorX11::create();
 #else
-        LOG(LS_WARNING) << "Input injector not supported for platform";
+        LOG(LS_ERROR) << "Input injector not supported for platform";
 #endif
 
         // A window is created to monitor the clipboard. We cannot create windows in the current
@@ -530,7 +530,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
             }
             else
             {
-                LOG(LS_WARNING) << "Clipboard monitor not present";
+                LOG(LS_ERROR) << "Clipboard monitor not present";
             }
 
             clear_clipboard_ = false;
@@ -549,7 +549,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
             if (!base::PowerController::lock())
             {
-                LOG(LS_WARNING) << "base::PowerController::lock failed";
+                LOG(LS_ERROR) << "base::PowerController::lock failed";
             }
 
             lock_at_disconnect_ = false;
@@ -574,7 +574,7 @@ void DesktopSessionAgent::captureEnd(const std::chrono::milliseconds& update_int
 {
     if (!capture_scheduler_)
     {
-        LOG(LS_WARNING) << "No capture scheduler";
+        LOG(LS_ERROR) << "No capture scheduler";
         return;
     }
 

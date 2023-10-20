@@ -493,7 +493,7 @@ void AddressBookTab::modifyAddressBook()
     ComputerGroupItem* root_item = rootComputerGroupItem();
     if (!root_item)
     {
-        LOG(LS_WARNING) << "Invalid root item";
+        LOG(LS_ERROR) << "Invalid root item";
         return;
     }
 
@@ -886,7 +886,7 @@ void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 
     if (!item)
     {
-        LOG(LS_WARNING) << "Computer with id " << computer_id << " not found in list";
+        LOG(LS_ERROR) << "Computer with id " << computer_id << " not found in list";
         return;
     }
 

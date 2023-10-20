@@ -160,7 +160,7 @@ void HttpFileDownloader::run()
 
         if (error_code)
         {
-            LOG(LS_WARNING) << "curl_multi_poll failed: " << error_code;
+            LOG(LS_ERROR) << "curl_multi_poll failed: " << error_code;
             break;
         }
 

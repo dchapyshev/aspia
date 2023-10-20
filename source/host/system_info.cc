@@ -1090,7 +1090,7 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
     }
     else
     {
-        LOG(LS_WARNING) << "Unknown system info category: " << category;
+        LOG(LS_ERROR) << "Unknown system info category: " << category;
     }
 }
 

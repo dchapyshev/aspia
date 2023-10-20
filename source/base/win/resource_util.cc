@@ -41,7 +41,7 @@ bool resourceFromModule(HMODULE module,
     HRSRC hres_info = FindResourceW(module, MAKEINTRESOURCEW(resource_id), resource_type);
     if (hres_info == nullptr)
     {
-        PLOG(LS_WARNING) << "FindResourceW failed";
+        PLOG(LS_ERROR) << "FindResourceW failed";
         return false;
     }
 
@@ -49,14 +49,14 @@ bool resourceFromModule(HMODULE module,
     HGLOBAL hres = LoadResource(module, hres_info);
     if (!hres)
     {
-        PLOG(LS_WARNING) << "LoadResource failed";
+        PLOG(LS_ERROR) << "LoadResource failed";
         return false;
     }
 
     void* resource = LockResource(hres);
     if (!resource)
     {
-        PLOG(LS_WARNING) << "LockResource failed";
+        PLOG(LS_ERROR) << "LockResource failed";
         return false;
     }
 

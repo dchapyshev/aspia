@@ -134,7 +134,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
 
     if (!base::parse(buffer, &message))
     {
-        LOG(LS_WARNING) << "Invalid message received";
+        LOG(LS_ERROR) << "Invalid message received";
         return;
     }
 
@@ -149,7 +149,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
 
         default:
         {
-            LOG(LS_WARNING) << "Invalid encryption method: " << message.encryption();
+            LOG(LS_ERROR) << "Invalid encryption method: " << message.encryption();
         }
         return;
     }
@@ -172,7 +172,7 @@ void OnlineCheckerDirect::Instance::onFinished(bool online)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid callback";
+        LOG(LS_ERROR) << "Invalid callback";
     }
 }
 
@@ -239,7 +239,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
         return;
     }
 
@@ -287,7 +287,7 @@ void OnlineCheckerDirect::onFinished(const base::Location& location)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 

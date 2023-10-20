@@ -47,8 +47,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const Size& tar
     const Size& source_size = source_frame->size();
     if (source_size.width() == 0 || source_size.height() == 0)
     {
-        LOG(LS_WARNING) << "Invalid source frame size: "
-                        << source_size.width() << "x" << source_size.height();
+        LOG(LS_ERROR) << "Invalid source frame size: "
+                      << source_size.width() << "x" << source_size.height();
         return nullptr;
     }
 

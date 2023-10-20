@@ -111,7 +111,7 @@ void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
     int keycode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (keycode == common::KeycodeConverter::invalidNativeKeycode())
     {
-        LOG(LS_WARNING) << "Invalid key code: " << event.usb_keycode();
+        LOG(LS_ERROR) << "Invalid key code: " << event.usb_keycode();
         return;
     }
 

@@ -370,7 +370,7 @@ void FileWorkerImpl::doPacketRequest(
     {
         // Set the unknown status of the request. The connection will be closed.
         reply->set_error_code(proto::FILE_ERROR_UNKNOWN);
-        LOG(LS_WARNING) << "Unexpected file packet request";
+        LOG(LS_ERROR) << "Unexpected file packet request";
     }
     else
     {
@@ -398,7 +398,7 @@ void FileWorkerImpl::doPacket(const proto::FilePacket& packet, proto::FileReply*
     {
         // Set the unknown status of the request. The connection will be closed.
         reply->set_error_code(proto::FILE_ERROR_UNKNOWN);
-        LOG(LS_WARNING) << "Unexpected file packet";
+        LOG(LS_ERROR) << "Unexpected file packet";
     }
     else
     {

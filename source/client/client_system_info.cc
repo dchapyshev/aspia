@@ -69,7 +69,7 @@ void ClientSystemInfo::onSessionMessageReceived(
 
     if (!base::parse(buffer, &system_info))
     {
-        LOG(LS_WARNING) << "Unable to parse system info";
+        LOG(LS_ERROR) << "Unable to parse system info";
         return;
     }
 

@@ -158,8 +158,8 @@ void RouterController::onTcpConnected()
         }
         else
         {
-            LOG(LS_WARNING) << "Authentication failed: "
-                            << base::ClientAuthenticator::errorToString(error_code);
+            LOG(LS_ERROR) << "Authentication failed: "
+                          << base::ClientAuthenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 
@@ -218,7 +218,7 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
             }
 
             default:
-                LOG(LS_WARNING) << "Unknown error code: " << host_id_response.error_code();
+                LOG(LS_ERROR) << "Unknown error code: " << host_id_response.error_code();
                 return;
         }
 
@@ -260,12 +260,12 @@ void RouterController::onTcpMessageReceived(uint8_t /* channel_id */, const base
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid connection offer";
+            LOG(LS_ERROR) << "Invalid connection offer";
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from router";
+        LOG(LS_ERROR) << "Unhandled message from router";
     }
 }
 
@@ -286,7 +286,7 @@ void RouterController::onNewPeerConnected(std::unique_ptr<base::TcpChannel> chan
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 

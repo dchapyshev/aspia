@@ -59,19 +59,19 @@ ScreenCapturerGdi::ScreenCapturerGdi()
             GetProcAddress(dwmapi_dll_, "DwmEnableComposition"));
         if (!dwm_enable_composition_func_)
         {
-            PLOG(LS_WARNING) << "Unable to load DwmEnableComposition function";
+            PLOG(LS_ERROR) << "Unable to load DwmEnableComposition function";
         }
 
         dwm_is_composition_enabled_func_ = reinterpret_cast<DwmIsCompositionEnabledFunc>(
             GetProcAddress(dwmapi_dll_, "DwmIsCompositionEnabled"));
         if (!dwm_is_composition_enabled_func_)
         {
-            PLOG(LS_WARNING) << "Unable to load DwmIsCompositionEnabled function";
+            PLOG(LS_ERROR) << "Unable to load DwmIsCompositionEnabled function";
         }
     }
     else
     {
-        PLOG(LS_WARNING) << "Unable to load dwmapi.dll";
+        PLOG(LS_ERROR) << "Unable to load dwmapi.dll";
     }
 }
 
@@ -106,7 +106,7 @@ bool ScreenCapturerGdi::selectScreen(ScreenId screen_id)
 
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
     {
-        LOG(LS_WARNING) << "Invalid screen";
+        LOG(LS_ERROR) << "Invalid screen";
         return false;
     }
 
@@ -163,7 +163,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
                 curr_cursor_info_.hCursor = LoadCursorW(nullptr, IDC_ARROW);
                 if (!curr_cursor_info_.hCursor)
                 {
-                    PLOG(LS_WARNING) << "LoadCursorW failed";
+                    PLOG(LS_ERROR) << "LoadCursorW failed";
                     return nullptr;
                 }
             }
@@ -183,7 +183,7 @@ const MouseCursor* ScreenCapturerGdi::captureCursor()
     }
     else
     {
-        PLOG(LS_WARNING) << "GetCursorInfo failed";
+        PLOG(LS_ERROR) << "GetCursorInfo failed";
     }
 
     return nullptr;
@@ -221,7 +221,7 @@ const Frame* ScreenCapturerGdi::captureImage()
     screen_rect_ = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect_.isEmpty())
     {
-        LOG(LS_WARNING) << "Failed to get screen rect";
+        LOG(LS_ERROR) << "Failed to get screen rect";
         return nullptr;
     }
 
@@ -234,7 +234,7 @@ const Frame* ScreenCapturerGdi::captureImage()
             screen_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory(), memory_dc_);
         if (!frame)
         {
-            LOG(LS_WARNING) << "Failed to create frame buffer";
+            LOG(LS_ERROR) << "Failed to create frame buffer";
             return nullptr;
         }
 
@@ -260,7 +260,7 @@ const Frame* ScreenCapturerGdi::captureImage()
 
             if (count == 0)
             {
-                LOG(LS_WARNING) << "BitBlt failed";
+                LOG(LS_ERROR) << "BitBlt failed";
             }
 
             if (++count > 10)
@@ -326,7 +326,7 @@ bool ScreenCapturerGdi::prepareCaptureResources()
         memory_dc_.reset(CreateCompatibleDC(desktop_dc_));
         if (!memory_dc_)
         {
-            LOG(LS_WARNING) << "CreateCompatibleDC failed";
+            LOG(LS_ERROR) << "CreateCompatibleDC failed";
             return false;
         }
 

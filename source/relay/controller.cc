@@ -145,13 +145,13 @@ bool Controller::start()
 
     if (peer_idle_timeout_ < std::chrono::minutes(1) || peer_idle_timeout_ > std::chrono::minutes(60))
     {
-        LOG(LS_WARNING) << "Invalid peer idle specified";
+        LOG(LS_ERROR) << "Invalid peer idle specified";
         return false;
     }
 
     if (statistics_interval_ < std::chrono::seconds(1) || statistics_interval_ > std::chrono::minutes(60))
     {
-        LOG(LS_WARNING) << "Invalid statistics interval";
+        LOG(LS_ERROR) << "Invalid statistics interval";
         return false;
     }
 
@@ -203,8 +203,8 @@ void Controller::onTcpConnected()
         }
         else
         {
-            LOG(LS_WARNING) << "Authentication failed: "
-                            << base::ClientAuthenticator::errorToString(error_code);
+            LOG(LS_ERROR) << "Authentication failed: "
+                          << base::ClientAuthenticator::errorToString(error_code);
             delayedConnectToRouter();
         }
 
@@ -258,13 +258,13 @@ void Controller::onTcpMessageReceived(uint8_t /* channel_id */, const base::Byte
                 break;
 
             default:
-                LOG(LS_WARNING) << "Unsupported request type: " << request.type();
+                LOG(LS_ERROR) << "Unsupported request type: " << request.type();
                 break;
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from router";
+        LOG(LS_ERROR) << "Unhandled message from router";
     }
 }
 
@@ -297,7 +297,7 @@ void Controller::onSessionFinished()
 
     if (session_count_ < 0)
     {
-        LOG(LS_WARNING) << "Invalid value for session count: " << session_count_;
+        LOG(LS_ERROR) << "Invalid value for session count: " << session_count_;
         session_count_ = 0;
     }
 

@@ -82,7 +82,7 @@ UserSession::UserSession(std::shared_ptr<base::TaskRunner> task_runner,
     base::SessionId console_session_id = base::activeConsoleSessionId();
     if (console_session_id == base::kInvalidSessionId)
     {
-        LOG(LS_WARNING) << "Invalid console session ID (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "Invalid console session ID (sid: " << session_id_ << ")";
     }
 
     if (session_id_ != console_session_id)
@@ -472,8 +472,8 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         {
             if (session_id != session_id_)
             {
-                LOG(LS_WARNING) << "Not equals session IDs (event ID: '" << session_id
-                                << "' current ID: '" << session_id_ << "')";
+                LOG(LS_ERROR) << "Not equals session IDs (event ID: '" << session_id
+                              << "' current ID: '" << session_id_ << "')";
                 return;
             }
 
@@ -490,14 +490,14 @@ void UserSession::onUserSessionEvent(base::win::SessionStatus status, base::Sess
         {
             if (session_id != session_id_)
             {
-                LOG(LS_WARNING) << "Not equals session IDs (event ID: '" << session_id
-                                << "' current ID: '" << session_id_ << "')";
+                LOG(LS_ERROR) << "Not equals session IDs (event ID: '" << session_id
+                              << "' current ID: '" << session_id_ << "')";
                 return;
             }
 
             if (type_ != Type::RDP)
             {
-                LOG(LS_WARNING) << "REMOTE_DISCONNECT not for RDP session (sid: " << session_id_ << ")";
+                LOG(LS_ERROR) << "REMOTE_DISCONNECT not for RDP session (sid: " << session_id_ << ")";
             }
 
             setState(FROM_HERE, State::FINISHED);
@@ -739,7 +739,7 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from UI (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "Unhandled message from UI (sid: " << session_id_ << ")";
     }
 }
 
@@ -1056,7 +1056,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1085,7 +1085,7 @@ void UserSession::sendDisconnectEvent(uint32_t session_id)
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1142,13 +1142,13 @@ void UserSession::sendCredentials(const base::Location& location)
 
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 
     if (host_id_ == base::kInvalidHostId)
     {
-        LOG(LS_WARNING) << "Invalid host ID (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "Invalid host ID (sid: " << session_id_ << ")";
         return;
     }
 
@@ -1192,7 +1192,7 @@ void UserSession::sendRouterState(const base::Location& location)
 
     if (!channel_)
     {
-        LOG(LS_WARNING) << "No active IPC channel (sid: " << session_id_ << ")";
+        LOG(LS_ERROR) << "No active IPC channel (sid: " << session_id_ << ")";
         return;
     }
 

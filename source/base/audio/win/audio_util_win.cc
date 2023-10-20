@@ -84,7 +84,7 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     if (SUCCEEDED(hr) && !audio_endpoint_device.Get() &&
         !isDeviceActive(audio_endpoint_device.Get()))
     {
-        LOG(LS_WARNING) << "Selected endpoint device is not active";
+        LOG(LS_ERROR) << "Selected endpoint device is not active";
         audio_endpoint_device.Reset();
     }
 
@@ -154,11 +154,11 @@ bool sharedModeInitialize(IAudioClient* client,
 
     if (buffer_duration != 0)
     {
-        DLOG(LS_WARNING) << "Non-default buffer size is used";
+        DLOG(LS_ERROR) << "Non-default buffer size is used";
     }
     if (auto_convert_pcm)
     {
-        DLOG(LS_WARNING) << "Sample rate converter can be utilized";
+        DLOG(LS_ERROR) << "Sample rate converter can be utilized";
     }
     // The AUDCLNT_STREAMFLAGS_NOPERSIST flag disables persistence of the volume and mute settings
     // for a session that contains rendering streams. By default, the volume level and muting state
@@ -253,7 +253,7 @@ bool isFormatSupported(IAudioClient* client,
     {
         // Call succeeded with a closest match to the specified format. This log can
         // only be triggered for shared mode.
-        LOG(LS_WARNING) << "Exact format is not supported, but a closest match exists";
+        LOG(LS_ERROR) << "Exact format is not supported, but a closest match exists";
     }
     else if ((hr == AUDCLNT_E_UNSUPPORTED_FORMAT) && (closest_match == nullptr))
     {

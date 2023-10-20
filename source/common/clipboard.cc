@@ -130,7 +130,7 @@ void Clipboard::injectClipboardEvent(const proto::ClipboardEvent& event)
     }
     else
     {
-        LOG(LS_WARNING) << "Unsupported mime type: " << event.mime_type();
+        LOG(LS_ERROR) << "Unsupported mime type: " << event.mime_type();
         return;
     }
 

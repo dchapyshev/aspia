@@ -84,7 +84,7 @@ BatteryEnumerator::BatteryEnumerator()
     device_info_.reset(SetupDiGetClassDevsW(&GUID_DEVCLASS_BATTERY, nullptr, nullptr, flags));
     if (!device_info_.isValid())
     {
-        PLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
+        PLOG(LS_ERROR) << "SetupDiGetClassDevsW failed";
         return;
     }
 }
@@ -110,8 +110,8 @@ bool BatteryEnumerator::isAtEnd() const
 
         if (error_code != ERROR_NO_MORE_ITEMS)
         {
-            DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
-                             << SystemError(error_code).toString();
+            DLOG(LS_ERROR) << "SetupDiEnumDeviceInfo failed: "
+                           << SystemError(error_code).toString();
         }
 
         return true;
@@ -126,7 +126,7 @@ bool BatteryEnumerator::isAtEnd() const
                                          nullptr) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_WARNING) << "Unexpected return value";
+        PLOG(LS_ERROR) << "Unexpected return value";
         return true;
     }
 
@@ -143,7 +143,7 @@ bool BatteryEnumerator::isAtEnd() const
                                           &required_size,
                                           nullptr))
     {
-        PLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW failed";
+        PLOG(LS_ERROR) << "SetupDiGetDeviceInterfaceDetailW failed";
         return true;
     }
 

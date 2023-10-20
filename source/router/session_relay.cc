@@ -81,7 +81,7 @@ void SessionRelay::onSessionMessageReceived(uint8_t /* channel_id */, const base
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from relay server";
+        LOG(LS_ERROR) << "Unhandled message from relay server";
     }
 }
 

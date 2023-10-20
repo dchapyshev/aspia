@@ -57,7 +57,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_WARNING) << "MakeAbsoluteSD failed";
+        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -81,7 +81,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        PLOG(LS_WARNING) << "MakeAbsoluteSD failed";
+        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -110,7 +110,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     ScopedSd relative_sd = convertSddlToSd(sddl);
     if (!relative_sd)
     {
-        LOG(LS_WARNING) << "Failed to create a security descriptor";
+        LOG(LS_ERROR) << "Failed to create a security descriptor";
         return false;
     }
 
@@ -123,7 +123,7 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
     if (!makeScopedAbsoluteSd(relative_sd, &absolute_sd, &dacl,
                               &group, &owner, &sacl))
     {
-        LOG(LS_WARNING) << "MakeScopedAbsoluteSd failed";
+        LOG(LS_ERROR) << "MakeScopedAbsoluteSd failed";
         return false;
     }
 
@@ -145,8 +145,8 @@ bool initializeComSecurity(const wchar_t* security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        LOG(LS_WARNING) << "CoInitializeSecurity failed: "
-                        << SystemError::toString(static_cast<DWORD>(result));
+        LOG(LS_ERROR) << "CoInitializeSecurity failed: "
+                      << SystemError::toString(static_cast<DWORD>(result));
         return false;
     }
 
@@ -162,7 +162,7 @@ ScopedSd convertSddlToSd(const std::wstring& sddl)
     if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
         raw_sd.recieve(), &length))
     {
-        PLOG(LS_WARNING) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
+        PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
         return ScopedSd();
     }
 
@@ -179,7 +179,7 @@ bool userSidString(std::wstring* user_sid)
     ScopedHandle token;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
     {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -190,7 +190,7 @@ bool userSidString(std::wstring* user_sid)
 
     if (!GetTokenInformation(token, TokenUser, user, size, &size))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -202,7 +202,7 @@ bool userSidString(std::wstring* user_sid)
 
     if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
     {
-        PLOG(LS_WARNING) << "ConvertSidToStringSidW failed";
+        PLOG(LS_ERROR) << "ConvertSidToStringSidW failed";
         return false;
     }
 

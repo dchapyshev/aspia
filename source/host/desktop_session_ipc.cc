@@ -96,7 +96,7 @@ void DesktopSessionIpc::start()
 
     if (!delegate_)
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
         return;
     }
 
@@ -175,7 +175,7 @@ void DesktopSessionIpc::captureScreen()
         }
         else
         {
-            LOG(LS_WARNING) << "Invalid delegate";
+            LOG(LS_ERROR) << "Invalid delegate";
         }
     }
     else
@@ -191,7 +191,7 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
 {
     if (fps > 60 || fps < 1)
     {
-        LOG(LS_WARNING) << "Invalid fps: " << fps;
+        LOG(LS_ERROR) << "Invalid fps: " << fps;
         return;
     }
 
@@ -241,7 +241,7 @@ void DesktopSessionIpc::onIpcDisconnected()
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 
@@ -372,7 +372,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 
     outgoing_message_->Clear();
@@ -389,7 +389,7 @@ void DesktopSessionIpc::onCursorPositionChanged(const proto::CursorPosition& cur
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 
@@ -402,7 +402,7 @@ void DesktopSessionIpc::onAudioCaptured(const proto::AudioPacket& audio_packet)
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 

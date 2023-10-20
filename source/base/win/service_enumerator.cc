@@ -29,7 +29,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
     manager_handle_.reset(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ENUMERATE_SERVICE));
     if (!manager_handle_.isValid())
     {
-        PLOG(LS_WARNING) << "OpenSCManagerW failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return;
     }
 
@@ -199,7 +199,7 @@ std::wstring ServiceEnumerator::descriptionW() const
                              &bytes_needed)
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_WARNING) << "QueryServiceConfig2W failed";
+        PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
         return std::wstring();
     }
 
@@ -211,7 +211,7 @@ std::wstring ServiceEnumerator::descriptionW() const
                               bytes_needed,
                               &bytes_needed))
     {
-        PLOG(LS_WARNING) << "QueryServiceConfig2W failed";
+        PLOG(LS_ERROR) << "QueryServiceConfig2W failed";
         return std::wstring();
     }
 
