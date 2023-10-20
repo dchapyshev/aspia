@@ -154,7 +154,24 @@ void UserSessionAgent::updateCredentials(proto::internal::CredentialsRequest::Ty
     LOG(LS_INFO) << "Update credentials request: " << request_type;
 
     outgoing_message_.Clear();
-    outgoing_message_.mutable_credentials_request()->set_type(request_type);
+
+    proto::internal::CredentialsRequest* request = outgoing_message_.mutable_credentials_request();
+    request->set_type(request_type);
+
+    ipc_channel_->send(base::serialize(outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::setOneTimeSessions(uint32_t sessions)
+{
+    LOG(LS_INFO) << "One-time sessions changed: " << sessions;
+
+    outgoing_message_.Clear();
+
+    proto::internal::OneTimeSessions* one_time_sessions =
+        outgoing_message_.mutable_one_time_sessions();
+    one_time_sessions->set_sessions(sessions);
+
     ipc_channel_->send(base::serialize(outgoing_message_));
 }
 

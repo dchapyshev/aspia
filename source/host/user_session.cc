@@ -328,18 +328,20 @@ base::User UserSession::user() const
         return base::User();
     }
 
-    if (password_.empty())
+    if (one_time_password_.empty())
     {
-        LOG(LS_INFO) << "No password for user (sid: " << session_id_ << ")";
+        LOG(LS_INFO) << "No password for user (sid: " << session_id_ << " host_id: " << host_id_ << ")";
         return base::User();
     }
 
     std::u16string username = u'#' + base::numberToString16(host_id_);
-    base::User user = base::User::create(username, base::utf16FromAscii(password_));
+    base::User user = base::User::create(username, base::utf16FromAscii(one_time_password_));
 
-    user.sessions = proto::SESSION_TYPE_ALL;
+    user.sessions = one_time_sessions_;
     user.flags = base::User::ENABLED;
 
+    LOG(LS_INFO) << "One time user '" << username << "' created (host_id: " << host_id_
+                 << " sessions: " << one_time_sessions_ << ")";
     return user;
 }
 
@@ -599,8 +601,8 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
 
     if (incoming_message_.has_credentials_request())
     {
-        proto::internal::CredentialsRequest::Type type =
-            incoming_message_.credentials_request().type();
+        const proto::internal::CredentialsRequest& request = incoming_message_.credentials_request();
+        proto::internal::CredentialsRequest::Type type = request.type();
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
@@ -614,6 +616,18 @@ void UserSession::onIpcMessageReceived(const base::ByteArray& buffer)
         }
 
         sendCredentials(FROM_HERE);
+    }
+    else if (incoming_message_.has_one_time_sessions())
+    {
+        uint32_t one_time_sessions = incoming_message_.one_time_sessions().sessions();
+        if (one_time_sessions != one_time_sessions_)
+        {
+            LOG(LS_INFO) << "One-time sessions changed from " << one_time_sessions_
+                         << " to " << one_time_sessions;
+            one_time_sessions_ = one_time_sessions;
+
+            delegate_->onUserSessionCredentialsChanged();
+        }
     }
     else if (incoming_message_.has_connect_confirmation())
     {
@@ -989,7 +1003,8 @@ void UserSession::onSessionDettached(const base::Location& location)
         task_runner_->deleteSoon(std::move(channel_));
     }
 
-    password_.clear();
+    one_time_sessions_ = 0;
+    one_time_password_.clear();
 
     // Stop one-time desktop clients.
     for (const auto& client : desktop_clients_)
@@ -1094,7 +1109,7 @@ void UserSession::updateCredentials(const base::Location& location)
         generator.setCharacters(password_characters_);
         generator.setLength(static_cast<size_t>(password_length_));
 
-        password_ = generator.result();
+        one_time_password_ = generator.result();
 
         if (password_expire_interval_ > std::chrono::milliseconds(0))
         {
@@ -1112,7 +1127,8 @@ void UserSession::updateCredentials(const base::Location& location)
     else
     {
         password_expire_timer_.stop();
-        password_.clear();
+        one_time_sessions_ = 0;
+        one_time_password_.clear();
     }
 
     delegate_->onUserSessionCredentialsChanged();
@@ -1140,7 +1156,7 @@ void UserSession::sendCredentials(const base::Location& location)
 
     proto::internal::Credentials* credentials = outgoing_message_.mutable_credentials();
     credentials->set_host_id(host_id_);
-    credentials->set_password(password_);
+    credentials->set_password(one_time_password_);
 
     channel_->send(base::serialize(outgoing_message_));
 }

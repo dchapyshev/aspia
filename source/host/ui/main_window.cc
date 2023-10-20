@@ -35,6 +35,7 @@
 #include "host/ui/config_dialog.h"
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
+#include "host/ui/user_settings.h"
 #include "qt_base/qt_logging.h"
 
 #include <QActionGroup>
@@ -64,7 +65,7 @@ MainWindow::MainWindow(QWidget* parent)
 {
     LOG(LS_INFO) << "Ctor";
 
-    UserSettings& user_settings = Application::instance()->settings();
+    UserSettings user_settings;
     Application::instance()->setAttribute(
         Qt::AA_DontShowIconsInMenus, !user_settings.showIconsInMenus());
 
@@ -92,6 +93,16 @@ MainWindow::MainWindow(QWidget* parent)
     tray_tooltip_timer->setInterval(std::chrono::seconds(30));
     tray_tooltip_timer->start();
 
+    uint32_t one_time_sessions = user_settings.oneTimeSessions();
+
+    ui.action_desktop_manage->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_MANAGE);
+    ui.action_desktop_view->setChecked(one_time_sessions & proto::SESSION_TYPE_DESKTOP_VIEW);
+    ui.action_file_transfer->setChecked(one_time_sessions & proto::SESSION_TYPE_FILE_TRANSFER);
+    ui.action_system_info->setChecked(one_time_sessions & proto::SESSION_TYPE_SYSTEM_INFO);
+    ui.action_text_chat->setChecked(one_time_sessions & proto::SESSION_TYPE_TEXT_CHAT);
+
+    connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
+
     createLanguageMenu(user_settings.locale());
     onSettingsChanged();
 
@@ -100,7 +111,9 @@ MainWindow::MainWindow(QWidget* parent)
     {
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-        instance->settings().setShowIconsInMenus(enable);
+
+        UserSettings user_settings;
+        user_settings.setShowIconsInMenus(enable);
     });
 
     connect(&tray_icon_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
@@ -139,6 +152,7 @@ void MainWindow::connectToService()
     if (agent_proxy_)
     {
         LOG(LS_INFO) << "Already connected to service";
+        agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
         agent_proxy_->updateCredentials(proto::internal::CredentialsRequest::REFRESH);
     }
     else
@@ -202,6 +216,9 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
         LOG(LS_INFO) << "The connection to the service was successfully established.";
+
+        if (agent_proxy_)
+            agent_proxy_->setOneTimeSessions(calcOneTimeSessions());
     }
     else if (status == UserSessionAgent::Status::DISCONNECTED_FROM_SERVICE)
     {
@@ -509,7 +526,8 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     Application* application = Application::instance();
 
-    application->settings().setLocale(new_locale);
+    UserSettings user_settings;
+    user_settings.setLocale(new_locale);
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
@@ -721,6 +739,24 @@ void MainWindow::onKillSession(uint32_t session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::onOneTimeSessionsChanged()
+{
+    uint32_t sessions = calcOneTimeSessions();
+
+    UserSettings user_settings;
+    user_settings.setOneTimeSessions(sessions);
+
+    if (agent_proxy_)
+    {
+        agent_proxy_->setOneTimeSessions(sessions);
+    }
+    else
+    {
+        LOG(LS_WARNING) << "No agent proxy";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     QActionGroup* language_group = new QActionGroup(this);
@@ -820,6 +856,29 @@ void MainWindow::updateTrayIconTooltip()
     tooltip += ip;
 
     tray_icon_.setToolTip(tooltip);
+}
+
+//--------------------------------------------------------------------------------------------------
+uint32_t MainWindow::calcOneTimeSessions()
+{
+    uint32_t sessions = 0;
+
+    if (ui.action_desktop_manage->isChecked())
+        sessions |= proto::SESSION_TYPE_DESKTOP_MANAGE;
+
+    if (ui.action_desktop_view->isChecked())
+        sessions |= proto::SESSION_TYPE_DESKTOP_VIEW;
+
+    if (ui.action_file_transfer->isChecked())
+        sessions |= proto::SESSION_TYPE_FILE_TRANSFER;
+
+    if (ui.action_system_info->isChecked())
+        sessions |= proto::SESSION_TYPE_SYSTEM_INFO;
+
+    if (ui.action_text_chat->isChecked())
+        sessions |= proto::SESSION_TYPE_TEXT_CHAT;
+
+    return sessions;
 }
 
 } // namespace host

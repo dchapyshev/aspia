@@ -20,6 +20,7 @@
 
 #include "build/build_config.h"
 #include "build/version.h"
+#include "host/ui/user_settings.h"
 #include "qt_base/qt_logging.h"
 
 #include <QAbstractEventDispatcher>
@@ -111,10 +112,11 @@ Application::Application(int& argc, char* argv[])
         }
     });
 
-    if (!hasLocale(settings_.locale()))
-        settings_.setLocale(DEFAULT_LOCALE);
+    UserSettings user_settings;
+    if (!hasLocale(user_settings.locale()))
+        user_settings.setLocale(DEFAULT_LOCALE);
 
-    setLocale(settings_.locale());
+    setLocale(user_settings.locale());
 }
 
 //--------------------------------------------------------------------------------------------------

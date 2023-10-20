@@ -19,7 +19,6 @@
 #ifndef HOST_UI_APPLICATION_H
 #define HOST_UI_APPLICATION_H
 
-#include "host/ui/user_settings.h"
 #include "qt_base/application.h"
 
 namespace host {
@@ -34,8 +33,6 @@ public:
 
     static Application* instance();
 
-    UserSettings& settings() { return settings_; }
-
 public slots:
     void activate();
 
@@ -43,8 +40,6 @@ signals:
     void sig_activated();
 
 private:
-    UserSettings settings_;
-
     DISALLOW_COPY_AND_ASSIGN(Application);
 };
 
