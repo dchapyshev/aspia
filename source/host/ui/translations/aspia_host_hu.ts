@@ -302,6 +302,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main_window.ui" line="431"/>
+        <source>Desktop Manage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="442"/>
+        <source>Desktop View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="453"/>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="464"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="475"/>
+        <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../main_window.ui" line="333"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
@@ -312,27 +337,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="366"/>
+        <location filename="../main_window.ui" line="358"/>
+        <source>Access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="377"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="375"/>
+        <location filename="../main_window.ui" line="386"/>
         <source>Online Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="387"/>
+        <location filename="../main_window.ui" line="398"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="396"/>
+        <location filename="../main_window.ui" line="407"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="401"/>
+        <location filename="../main_window.ui" line="412"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -347,7 +377,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="409"/>
+        <location filename="../main_window.ui" line="420"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -859,101 +889,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="353"/>
+        <location filename="../main_window.cc" line="370"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="467"/>
-        <location filename="../main_window.cc" line="661"/>
-        <location filename="../main_window.cc" line="818"/>
+        <location filename="../main_window.cc" line="484"/>
+        <location filename="../main_window.cc" line="679"/>
+        <location filename="../main_window.cc" line="854"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="170"/>
-        <location filename="../main_window.cc" line="641"/>
+        <location filename="../main_window.cc" line="184"/>
+        <location filename="../main_window.cc" line="659"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="646"/>
+        <location filename="../main_window.cc" line="664"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="677"/>
+        <location filename="../main_window.cc" line="695"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="678"/>
+        <location filename="../main_window.cc" line="696"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="406"/>
-        <location filename="../main_window.cc" line="752"/>
+        <location filename="../main_window.cc" line="423"/>
+        <location filename="../main_window.cc" line="788"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="757"/>
+        <location filename="../main_window.cc" line="793"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="762"/>
+        <location filename="../main_window.cc" line="798"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="767"/>
+        <location filename="../main_window.cc" line="803"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="414"/>
+        <location filename="../main_window.cc" line="431"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="418"/>
+        <location filename="../main_window.cc" line="435"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="410"/>
+        <location filename="../main_window.cc" line="427"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="458"/>
+        <location filename="../main_window.cc" line="475"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="463"/>
+        <location filename="../main_window.cc" line="480"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="683"/>
+        <location filename="../main_window.cc" line="701"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="684"/>
+        <location filename="../main_window.cc" line="702"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="819"/>
+        <location filename="../main_window.cc" line="855"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="815"/>
+        <location filename="../main_window.cc" line="851"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
