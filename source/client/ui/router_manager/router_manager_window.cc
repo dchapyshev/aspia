@@ -30,6 +30,7 @@
 #include "ui_router_manager_window.h"
 
 #include <QClipboard>
+#include <QCollator>
 #include <QDateTime>
 #include <QFileDialog>
 #include <QJsonArray>
@@ -70,7 +71,7 @@ public:
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(QStringLiteral(":/img/host.png")));
+        setIcon(0, QIcon(":/img/host.png"));
         setText(0, QString::fromStdString(session.computer_name()));
         setText(1, QString::fromStdString(session.ip_address()));
         setText(2, time);
@@ -108,15 +109,26 @@ public:
     }
 
     // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const override
+    bool operator<(const QTreeWidgetItem& other) const override
     {
-        if (treeWidget()->sortColumn() == 2)
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else if (column == 2)
         {
             const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
             return session.timepoint() < other_item->session.timepoint();
         }
-
-        return QTreeWidgetItem::operator<(other);
+        else
+        {
+            return QTreeWidgetItem::operator<(other);
+        }
     }
 
     proto::Session session;
@@ -135,7 +147,7 @@ public:
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
             static_cast<uint>(session.timepoint())), QLocale::ShortFormat);
 
-        setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+        setIcon(0, QIcon(":/img/computer.png"));
         setText(0, QString::fromStdString(session.ip_address()));
         setText(1, time);
 
@@ -183,7 +195,7 @@ public:
     {
         updateItem(connection);
 
-        setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
+        setIcon(0, QIcon(":/img/user.png"));
         setText(0, QString::fromStdString(conn.client_user_name()));
         setText(1, QString::number(conn.host_id()));
         setText(2, QString::fromStdString(conn.host_address()));
@@ -245,9 +257,27 @@ public:
         setText(0, QString::fromStdString(user.name()));
 
         if (user.flags() & base::User::ENABLED)
-            setIcon(0, QIcon(QStringLiteral(":/img/user.png")));
+            setIcon(0, QIcon(":/img/user.png"));
         else
-            setIcon(0, QIcon(QStringLiteral(":/img/user-disabled.png")));
+            setIcon(0, QIcon(":/img/user-disabled.png"));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const override
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else
+        {
+            return QTreeWidgetItem::operator<(other);
+        }
     }
 
     base::User user;

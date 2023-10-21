@@ -22,6 +22,7 @@
 #include "base/macros_magic.h"
 #include "base/peer/user.h"
 
+#include <QCollator>
 #include <QTreeWidget>
 
 namespace host {
@@ -36,6 +37,24 @@ public:
 
     const base::User& user() const { return user_; }
     void setUser(const base::User& user);
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const override
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else
+        {
+            return QTreeWidgetItem::operator<(other);
+        }
+    }
 
 private:
     void updateData();
