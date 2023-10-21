@@ -3804,8 +3804,12 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="379"/>
+        <source>The host with the specified ID is not online.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No host with the specified ID was found.</source>
-        <translation>Non è stato trovato un host con l&apos;ID specificato.</translation>
+        <translation type="vanished">Non è stato trovato un host con l&apos;ID specificato.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="383"/>

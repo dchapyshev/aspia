@@ -4021,8 +4021,12 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="379"/>
+        <source>The host with the specified ID is not online.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No host with the specified ID was found.</source>
-        <translation>Не було знайдено хоста з вказаним ID.</translation>
+        <translation type="vanished">Не було знайдено хоста з вказаним ID.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="383"/>

@@ -3907,8 +3907,12 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="379"/>
+        <source>The host with the specified ID is not online.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No host with the specified ID was found.</source>
-        <translation>未找到具有指定 ID 的主機。</translation>
+        <translation type="vanished">未找到具有指定 ID 的主機。</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="383"/>

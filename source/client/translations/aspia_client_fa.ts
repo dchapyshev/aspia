@@ -3552,7 +3552,7 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="379"/>
-        <source>No host with the specified ID was found.</source>
+        <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

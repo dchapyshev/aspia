@@ -4177,8 +4177,12 @@
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="379"/>
+        <source>The host with the specified ID is not online.</source>
+        <translation>Хост с указанным ID не в сети.</translation>
+    </message>
+    <message>
         <source>No host with the specified ID was found.</source>
-        <translation>Хост с указанным ID не найден.</translation>
+        <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
         <location filename="../ui/session_window.cc" line="383"/>

@@ -376,7 +376,7 @@ QString SessionWindow::routerErrorToString(RouterController::ErrorCode error_cod
     switch (error_code)
     {
         case RouterController::ErrorCode::PEER_NOT_FOUND:
-            message = QT_TR_NOOP("No host with the specified ID was found.");
+            message = QT_TR_NOOP("The host with the specified ID is not online.");
             break;
 
         case RouterController::ErrorCode::KEY_POOL_EMPTY:
