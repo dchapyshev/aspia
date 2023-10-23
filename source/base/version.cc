@@ -327,6 +327,23 @@ Version Version::fromProto(const proto::Version& proto_version)
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+const Version& Version::currentShort()
+{
+    static const Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    return version;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+const Version& Version::currentFull()
+{
+    static const Version version(
+        ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+    return version;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool operator==(const Version& v1, const Version& v2)
 {
     return v1.compareTo(v2) == 0;

@@ -202,8 +202,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
         session_info.channel->setChannelIdSupport(true);
     }
 
-    base::Version host_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
-                               ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+    const base::Version& host_version = base::Version::currentFull();
     if (host_version > session_info.version)
     {
         LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
@@ -273,25 +272,33 @@ void Server::onUserListChanged()
 //--------------------------------------------------------------------------------------------------
 void Server::onUpdateCheckedFinished(const base::ByteArray& result)
 {
-    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
-    if (!update_info.isValid())
+    if (result.empty())
     {
-        LOG(LS_INFO) << "No valid update info";
+        LOG(LS_ERROR) << "Error while retrieving update information";
     }
     else
     {
-        base::Version current_version(
-            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-        base::Version new_version = update_info.version();
-
-        if (new_version > current_version)
+        common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+        if (!update_info.isValid())
         {
-            update_downloader_ = std::make_unique<common::HttpFileDownloader>();
-            update_downloader_->start(update_info.url(), task_runner_, this);
+            LOG(LS_INFO) << "No updates available";
         }
         else
         {
-            LOG(LS_INFO) << "No available updates";
+            const base::Version& current_version = base::Version::currentShort();
+            const base::Version& update_version = update_info.version();
+
+            if (update_version > current_version)
+            {
+                LOG(LS_INFO) << "New version available: " << update_version.toString();
+
+                update_downloader_ = std::make_unique<common::HttpFileDownloader>();
+                update_downloader_->start(update_info.url(), task_runner_, this);
+            }
+            else
+            {
+                LOG(LS_INFO) << "No available updates";
+            }
         }
     }
 

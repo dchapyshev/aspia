@@ -140,14 +140,29 @@ void ClientWindow::closeEvent(QCloseEvent* /* event */)
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onUpdateCheckedFinished(const base::ByteArray& result)
 {
-    common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
-    if (!update_info.isValid() || !update_info.hasUpdate())
-        return;
+    if (result.empty())
+    {
+        LOG(LS_ERROR) << "Error while retrieving update information";
+    }
+    else
+    {
+        common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
+        if (!update_info.isValid())
+        {
+            LOG(LS_INFO) << "No updates available";
+        }
+        else
+        {
+            const base::Version& current_version = base::Version::currentShort();
+            const base::Version& update_version = update_info.version();
 
-    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-
-    if (update_info.version() > current_version)
-        common::UpdateDialog(update_info, this).exec();
+            if (update_version > current_version)
+            {
+                LOG(LS_INFO) << "New version available: " << update_version.toString();
+                common::UpdateDialog(update_info, this).exec();
+            }
+        }
+    }
 
     QTimer::singleShot(0, this, [this]()
     {

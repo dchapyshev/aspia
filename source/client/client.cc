@@ -136,13 +136,6 @@ void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_pr
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-base::Version Client::version()
-{
-    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-}
-
-//--------------------------------------------------------------------------------------------------
 std::u16string Client::computerName() const
 {
     return config_.computer_name;
@@ -322,8 +315,7 @@ void Client::startAuthentication()
                 channel_->setChannelIdSupport(true);
             }
 
-            base::Version client_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
-                                         ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+            const base::Version& client_version = base::Version::currentFull();
             if (host_version > client_version)
             {
                 LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()

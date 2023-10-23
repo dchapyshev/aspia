@@ -113,7 +113,7 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
-    base::Version version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    const base::Version& version = base::Version::currentShort();
 
     std::string url(update_server_);
     url += "/update.php?";

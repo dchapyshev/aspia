@@ -77,6 +77,12 @@ public:
     proto::Version toProto() const;
     static Version fromProto(const proto::Version& proto_version);
 
+    // Returns current version of application (without build number).
+    static const Version& currentShort();
+
+    // Returns current version of application (with build number).
+    static const Version& currentFull();
+
 private:
     std::vector<uint32_t> components_;
 };
