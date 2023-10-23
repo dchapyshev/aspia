@@ -199,4 +199,18 @@ bool PixelFormat::operator!=(const PixelFormat& other) const
     return !isEqual(other);
 }
 
+//--------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& stream, const PixelFormat& pixel_format)
+{
+    return stream << "PixelFormat("
+                  << "bpp=" << pixel_format.bitsPerPixel()
+                  << " red_max=" << pixel_format.redMax()
+                  << " green_max=" << pixel_format.greenMax()
+                  << " blue_max=" << pixel_format.blueMax()
+                  << " red_shift=" << pixel_format.redShift()
+                  << " green_shift=" << pixel_format.greenShift()
+                  << " blue_shift=" << pixel_format.blueShift()
+                  << ")";
+}
+
 } // namespace base

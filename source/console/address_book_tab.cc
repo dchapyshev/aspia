@@ -118,33 +118,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     Settings settings;
     restoreState(settings.addressBookState());
 
-    ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);
-
-    ui.tree_group->addTopLevelItem(group_item);
-    ui.tree_group->setCurrentItem(group_item);
-
-    updateComputerList(group_item);
-
-    group_item->setExpanded(group_item->IsExpanded());
-
-    std::function<void(ComputerGroupItem*)> restore_child = [&](ComputerGroupItem* item)
-    {
-        for (int i = 0; i < item->childCount(); ++i)
-        {
-            ComputerGroupItem* child_item = dynamic_cast<ComputerGroupItem*>(item->child(i));
-            if (child_item)
-            {
-                if (child_item->IsExpanded())
-                    child_item->setExpanded(true);
-
-                restore_child(child_item);
-            }
-        }
-    };
-
-    restore_child(group_item);
-
-    ui.tree_group->sortItems(0, Qt::AscendingOrder);
+    reloadAll();
 
     connect(ui.tree_group, &ComputerGroupTree::itemSelectionChanged, this, [this]()
     {
@@ -361,6 +335,41 @@ bool AddressBookTab::save()
 bool AddressBookTab::saveAs()
 {
     return saveToFile(QString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AddressBookTab::reloadAll()
+{
+    ui.tree_group->clear();
+    ui.tree_computer->clear();
+
+    ComputerGroupItem* group_item = new ComputerGroupItem(data_.mutable_root_group(), nullptr);
+
+    ui.tree_group->addTopLevelItem(group_item);
+    ui.tree_group->setCurrentItem(group_item);
+
+    updateComputerList(group_item);
+
+    group_item->setExpanded(group_item->IsExpanded());
+
+    std::function<void(ComputerGroupItem*)> restore_child = [&](ComputerGroupItem* item)
+    {
+        for (int i = 0; i < item->childCount(); ++i)
+        {
+            ComputerGroupItem* child_item = dynamic_cast<ComputerGroupItem*>(item->child(i));
+            if (child_item)
+            {
+                if (child_item->IsExpanded())
+                    child_item->setExpanded(true);
+
+                restore_child(child_item);
+            }
+        }
+    };
+
+    restore_child(group_item);
+
+    ui.tree_group->sortItems(0, Qt::AscendingOrder);
 }
 
 //--------------------------------------------------------------------------------------------------

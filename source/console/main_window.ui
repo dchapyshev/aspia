@@ -54,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>32</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -94,6 +94,9 @@
     <addaction name="action_copy_computer"/>
     <addaction name="action_modify_computer"/>
     <addaction name="action_delete_computer"/>
+    <addaction name="separator"/>
+    <addaction name="action_import_computers"/>
+    <addaction name="action_export_computers"/>
    </widget>
    <widget class="QMenu" name="menu_session_type">
     <property name="title">
@@ -661,6 +664,36 @@
    </property>
    <property name="shortcut">
     <string>F5</string>
+   </property>
+  </action>
+  <action name="action_import_computers">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/import.png</normaloff>:/img/import.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import Computers/Groups</string>
+   </property>
+   <property name="toolTip">
+    <string>Import computers from file</string>
+   </property>
+  </action>
+  <action name="action_export_computers">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/console.qrc">
+     <normaloff>:/img/export.png</normaloff>:/img/export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export Computer Group</string>
+   </property>
+   <property name="toolTip">
+    <string>Export computer group to file</string>
    </property>
   </action>
  </widget>

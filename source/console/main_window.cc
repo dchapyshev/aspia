@@ -30,6 +30,7 @@
 #include "console/address_book_tab.h"
 #include "console/application.h"
 #include "console/fast_connect_dialog.h"
+#include "console/import_export_util.h"
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
 #include "common/ui/update_dialog.h"
@@ -111,6 +112,9 @@ MainWindow::MainWindow(const QString& file_path)
 
     connect(ui.action_delete_computer_group, &QAction::triggered,
             this, &MainWindow::onDeleteComputerGroup);
+
+    connect(ui.action_import_computers, &QAction::triggered, this, &MainWindow::onImportComputers);
+    connect(ui.action_export_computers, &QAction::triggered, this, &MainWindow::onExportComputers);
 
     connect(ui.action_update_status, &QAction::triggered,
             this, &MainWindow::onUpdateStatus);
@@ -482,6 +486,132 @@ void MainWindow::onDeleteComputerGroup()
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::onImportComputers()
+{
+    LOG(LS_INFO) << "Import Computers called";
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (!tab)
+    {
+        LOG(LS_ERROR) << "No active tab";
+        return;
+    }
+
+    proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
+    if (!computer_group)
+    {
+        LOG(LS_ERROR) << "Unable to get current computer group";
+        return;
+    }
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getOpenFileName(this,
+                                                     tr("Open File"),
+                                                     QString(),
+                                                     tr("JSON files (*.json)"),
+                                                     &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+        return;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not open file for reading."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QByteArray json_buffer = file.readAll();
+    if (json_buffer.isEmpty())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Import file is empty."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QJsonParseError parse_error;
+    QJsonDocument json = QJsonDocument::fromJson(json_buffer, &parse_error);
+    if (parse_error.error != QJsonParseError::NoError)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    importComputersFromJson(json, computer_group);
+
+    tab->reloadAll();
+    tab->setChanged(true);
+
+    QMessageBox::information(this,
+                             tr("Information"),
+                             tr("Import completed successfully."),
+                             QMessageBox::Ok);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onExportComputers()
+{
+    LOG(LS_INFO) << "Export Computers called";
+
+    AddressBookTab* tab = currentAddressBookTab();
+    if (!tab)
+    {
+        LOG(LS_ERROR) << "No active tab";
+        return;
+    }
+
+    proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
+    if (!computer_group)
+    {
+        LOG(LS_ERROR) << "Unable to get current computer group";
+        return;
+    }
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(this,
+                                                     tr("Save File"),
+                                                     QString(),
+                                                     tr("JSON files (*.json)"),
+                                                     &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+        return;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not open file for writing."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QJsonDocument json = exportComputersToJson(*computer_group);
+
+    int64_t written = file.write(json.toJson());
+    if (written <= 0)
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Unable to write file."),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QMessageBox::information(this,
+                             tr("Information"),
+                             tr("Export completed successfully."),
+                             QMessageBox::Ok);
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onUpdateStatus()
 {
     AddressBookTab* tab = currentAddressBookTab();
@@ -629,6 +759,8 @@ void MainWindow::onCurrentTabChanged(int index)
         ui.action_fast_connect->setEnabled(false);
         ui.action_router_manage->setEnabled(false);
         ui.action_update_status->setEnabled(false);
+        ui.action_import_computers->setEnabled(false);
+        ui.action_export_computers->setEnabled(false);
         return;
     }
 
@@ -754,6 +886,9 @@ void MainWindow::onComputerGroupActivated(bool activated, bool is_root)
     ui.action_add_computer->setEnabled(activated);
     ui.action_update_status->setEnabled(activated);
 
+    ui.action_import_computers->setEnabled(activated);
+    ui.action_export_computers->setEnabled(activated);
+
     ui.action_copy_computer->setEnabled(false);
     ui.action_modify_computer->setEnabled(false);
     ui.action_delete_computer->setEnabled(false);
@@ -810,6 +945,9 @@ void MainWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root)
     menu.addSeparator();
     menu.addAction(ui.action_add_computer_group);
     menu.addAction(ui.action_add_computer);
+    menu.addSeparator();
+    menu.addAction(ui.action_import_computers);
+    menu.addAction(ui.action_export_computers);
 
     menu.exec(point);
 }
