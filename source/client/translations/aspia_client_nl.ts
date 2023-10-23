@@ -2611,23 +2611,23 @@
         <translation type="unfinished">Nee</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="186"/>
+        <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="278"/>
-        <location filename="../ui/client_window.cc" line="295"/>
+        <location filename="../ui/client_window.cc" line="293"/>
+        <location filename="../ui/client_window.cc" line="310"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="279"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An invalid computer address was entered.</source>
         <translation>Er is een ongelid computer adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="296"/>
+        <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Er is een host ID ingevoerd, maar de router was niet geconfigureerd. Configureer de router voor het maken van een verbinding.</translation>
     </message>

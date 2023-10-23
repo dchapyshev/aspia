@@ -2376,23 +2376,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="186"/>
+        <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="278"/>
-        <location filename="../ui/client_window.cc" line="295"/>
+        <location filename="../ui/client_window.cc" line="293"/>
+        <location filename="../ui/client_window.cc" line="310"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="279"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="296"/>
+        <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>

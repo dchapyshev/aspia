@@ -431,62 +431,63 @@
         <translation>Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="120"/>
+        <location filename="../ui/update_dialog.cc" line="121"/>
         <source>Unknown</source>
         <translation>Невідомо</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="121"/>
+        <location filename="../ui/update_dialog.cc" line="122"/>
         <source>Error retrieving update information.</source>
         <translation>Виникла помилка під час отримання інформації про оновлення.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="142"/>
+        <location filename="../ui/update_dialog.cc" line="134"/>
+        <location filename="../ui/update_dialog.cc" line="157"/>
         <source>No updates available.</source>
         <translation>Немає доступних оновлень.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="158"/>
+        <location filename="../ui/update_dialog.cc" line="174"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Оновлення буде завантажено. Після завершення завантаження програму буде закрито автоматично.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="160"/>
+        <location filename="../ui/update_dialog.cc" line="176"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Всі підключені сесії буде завершено. Ви не зможете встановити з&apos;єднання до завершення оновлення.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="162"/>
+        <location filename="../ui/update_dialog.cc" line="178"/>
         <source>All unsaved data will be lost.</source>
         <translation>Всі не збережені дані буде втрачено.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="163"/>
+        <location filename="../ui/update_dialog.cc" line="179"/>
         <source>Continue?</source>
         <translation>Продовжити?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="166"/>
+        <location filename="../ui/update_dialog.cc" line="182"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="171"/>
+        <location filename="../ui/update_dialog.cc" line="187"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="172"/>
+        <location filename="../ui/update_dialog.cc" line="188"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="180"/>
+        <location filename="../ui/update_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="197"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Виникла помилка під час встановлення оновлення: %1</translation>
     </message>

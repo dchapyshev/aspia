@@ -2723,23 +2723,23 @@
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="186"/>
+        <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="278"/>
-        <location filename="../ui/client_window.cc" line="295"/>
+        <location filename="../ui/client_window.cc" line="293"/>
+        <location filename="../ui/client_window.cc" line="310"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="279"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="296"/>
+        <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>

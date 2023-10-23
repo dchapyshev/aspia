@@ -1420,7 +1420,7 @@
         <location filename="../main_window.cc" line="541"/>
         <location filename="../main_window.cc" line="590"/>
         <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="1502"/>
+        <location filename="../main_window.cc" line="1517"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1555,13 +1555,13 @@
         <translation>Weergeven</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1503"/>
+        <location filename="../main_window.cc" line="1518"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
         <location filename="../main_window.cc" line="646"/>
-        <location filename="../main_window.cc" line="1367"/>
+        <location filename="../main_window.cc" line="1382"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>

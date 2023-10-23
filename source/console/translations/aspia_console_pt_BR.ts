@@ -1418,7 +1418,7 @@
         <location filename="../main_window.cc" line="541"/>
         <location filename="../main_window.cc" line="590"/>
         <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="1502"/>
+        <location filename="../main_window.cc" line="1517"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -1556,7 +1556,7 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="646"/>
-        <location filename="../main_window.cc" line="1367"/>
+        <location filename="../main_window.cc" line="1382"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
@@ -1571,7 +1571,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1503"/>
+        <location filename="../main_window.cc" line="1518"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
         <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>

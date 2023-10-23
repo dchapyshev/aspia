@@ -2611,23 +2611,23 @@
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="186"/>
+        <location filename="../ui/client_window.cc" line="201"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="278"/>
-        <location filename="../ui/client_window.cc" line="295"/>
+        <location filename="../ui/client_window.cc" line="293"/>
+        <location filename="../ui/client_window.cc" line="310"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="279"/>
+        <location filename="../ui/client_window.cc" line="294"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../ui/client_window.cc" line="296"/>
+        <location filename="../ui/client_window.cc" line="311"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
