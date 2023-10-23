@@ -488,295 +488,315 @@
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="100"/>
+        <location filename="../main_window.ui" line="103"/>
         <source>&amp;Session Type</source>
         <translation>会话类型(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="110"/>
+        <location filename="../main_window.ui" line="113"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="121"/>
+        <location filename="../main_window.ui" line="124"/>
         <source>&amp;View</source>
         <translation>查看(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="125"/>
+        <location filename="../main_window.ui" line="128"/>
         <source>&amp;Language</source>
         <translation>语言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="145"/>
+        <location filename="../main_window.ui" line="148"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="160"/>
-        <location filename="../main_window.ui" line="460"/>
+        <location filename="../main_window.ui" line="163"/>
+        <location filename="../main_window.ui" line="463"/>
         <source>Tool Bar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="208"/>
+        <location filename="../main_window.ui" line="211"/>
         <source>&amp;New address book</source>
         <translation>新建通讯录(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="211"/>
+        <location filename="../main_window.ui" line="214"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="220"/>
+        <location filename="../main_window.ui" line="223"/>
         <source>&amp;Open address book...</source>
         <translation>打开通讯录(&amp;O)...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="223"/>
+        <location filename="../main_window.ui" line="226"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="235"/>
+        <location filename="../main_window.ui" line="238"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="238"/>
+        <location filename="../main_window.ui" line="241"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="246"/>
+        <location filename="../main_window.ui" line="249"/>
         <source>Save &amp;as...</source>
         <translation>另存为(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="249"/>
+        <location filename="../main_window.ui" line="252"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="257"/>
+        <location filename="../main_window.ui" line="260"/>
         <source>&amp;Close</source>
         <translation>关闭(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="260"/>
+        <location filename="../main_window.ui" line="263"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="269"/>
+        <location filename="../main_window.ui" line="272"/>
         <source>&amp;Exit</source>
         <translation>退出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="281"/>
+        <location filename="../main_window.ui" line="284"/>
         <source>Add Computer Group</source>
         <translation>添加计算机组</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="293"/>
+        <location filename="../main_window.ui" line="296"/>
         <source>Modify Computer Group</source>
         <translation>修改计算机组</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="305"/>
+        <location filename="../main_window.ui" line="308"/>
         <source>Delete Computer Group</source>
         <translation>删除计算机组</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="317"/>
+        <location filename="../main_window.ui" line="320"/>
         <source>Add Computer</source>
         <translation>添加计算机</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="329"/>
+        <location filename="../main_window.ui" line="332"/>
         <source>Modify Computer</source>
         <translation>修改计算机</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="341"/>
+        <location filename="../main_window.ui" line="344"/>
         <source>Delete Computer</source>
         <translation>删除计算机</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="356"/>
+        <location filename="../main_window.ui" line="359"/>
         <source>Desktop &amp;Manage</source>
         <translation>桌面管理(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="368"/>
+        <location filename="../main_window.ui" line="371"/>
         <source>Desktop &amp;View</source>
         <translation>桌面查看(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="380"/>
+        <location filename="../main_window.ui" line="383"/>
         <source>&amp;File Transfer</source>
         <translation>文件传输(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="389"/>
+        <location filename="../main_window.ui" line="392"/>
         <source>&amp;Online Help...</source>
         <translation>在线帮助(&amp;O)...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="392"/>
+        <location filename="../main_window.ui" line="395"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="401"/>
+        <location filename="../main_window.ui" line="404"/>
         <source>&amp;About</source>
         <translation>关于(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="413"/>
+        <location filename="../main_window.ui" line="416"/>
         <source>Address Book Properties</source>
         <translation>通讯录属性</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="422"/>
         <location filename="../main_window.ui" line="425"/>
+        <location filename="../main_window.ui" line="428"/>
         <source>Desktop Manage</source>
         <translation>桌面管理</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="434"/>
         <location filename="../main_window.ui" line="437"/>
+        <location filename="../main_window.ui" line="440"/>
         <source>Desktop View</source>
         <translation>桌面查看</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="446"/>
         <location filename="../main_window.ui" line="449"/>
+        <location filename="../main_window.ui" line="452"/>
         <source>File Transfer</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="471"/>
+        <location filename="../main_window.ui" line="474"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="483"/>
+        <location filename="../main_window.ui" line="486"/>
         <source>Fast Connect</source>
         <translation>快速连接</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="486"/>
+        <location filename="../main_window.ui" line="489"/>
         <source>F8</source>
         <translation type="unfinished">F8</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="583"/>
+        <location filename="../main_window.ui" line="586"/>
         <source>Router Manage</source>
         <translation>路由器管理</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="591"/>
+        <location filename="../main_window.ui" line="594"/>
         <source>Show icons in menus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="603"/>
+        <location filename="../main_window.ui" line="606"/>
         <source>&amp;System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="606"/>
-        <location filename="../main_window.ui" line="615"/>
+        <location filename="../main_window.ui" line="609"/>
         <location filename="../main_window.ui" line="618"/>
+        <location filename="../main_window.ui" line="621"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="630"/>
+        <location filename="../main_window.ui" line="633"/>
         <source>&amp;Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="633"/>
-        <location filename="../main_window.ui" line="642"/>
+        <location filename="../main_window.ui" line="636"/>
         <location filename="../main_window.ui" line="645"/>
+        <location filename="../main_window.ui" line="648"/>
         <source>Text Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="657"/>
+        <location filename="../main_window.ui" line="660"/>
         <source>Update Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="660"/>
+        <location filename="../main_window.ui" line="663"/>
         <source>Update the status of computers in the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="663"/>
+        <location filename="../main_window.ui" line="666"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="494"/>
+        <location filename="../main_window.ui" line="678"/>
+        <source>Import Computers/Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="681"/>
+        <source>Import computers from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="693"/>
+        <source>Export Computer Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="696"/>
+        <source>Export computer group to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.ui" line="497"/>
         <source>Show tray icon</source>
         <translation>显示托盘图标</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="502"/>
+        <location filename="../main_window.ui" line="505"/>
         <source>Minimize to tray</source>
         <translation>最小化到托盘</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="507"/>
+        <location filename="../main_window.ui" line="510"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="519"/>
+        <location filename="../main_window.ui" line="522"/>
         <source>Save all</source>
         <translation>全部保存</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="522"/>
+        <location filename="../main_window.ui" line="525"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="530"/>
+        <location filename="../main_window.ui" line="533"/>
         <source>Close all</source>
         <translation>全部关闭</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="533"/>
+        <location filename="../main_window.ui" line="536"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="538"/>
+        <location filename="../main_window.ui" line="541"/>
         <source>Check for updates...</source>
         <translation>检查更新...</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="543"/>
+        <location filename="../main_window.ui" line="546"/>
         <source>Update Settings</source>
         <translation>更新设置</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="548"/>
+        <location filename="../main_window.ui" line="551"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="559"/>
+        <location filename="../main_window.ui" line="562"/>
         <source>Remember latest</source>
         <translation>记住最新的</translation>
     </message>
     <message>
-        <location filename="../main_window.ui" line="571"/>
+        <location filename="../main_window.ui" line="574"/>
         <source>Copy Computer</source>
         <translation>复制计算机</translation>
     </message>
@@ -995,111 +1015,111 @@
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../address_book_tab.cc" line="229"/>
+        <location filename="../address_book_tab.cc" line="203"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
         <translation>无法打开通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="236"/>
+        <location filename="../address_book_tab.cc" line="210"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
         <translation>无法读取通讯录文件 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="245"/>
+        <location filename="../address_book_tab.cc" line="219"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
         <translation>通讯录文件 &quot;%1&quot; 已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="290"/>
+        <location filename="../address_book_tab.cc" line="264"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>无法使用指定的密码解密通讯录。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="296"/>
+        <location filename="../address_book_tab.cc" line="270"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>通讯录文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="283"/>
+        <location filename="../address_book_tab.cc" line="257"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>通讯录文件使用不受支持的加密类型加密。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="585"/>
+        <location filename="../address_book_tab.cc" line="594"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="589"/>
-        <location filename="../address_book_tab.cc" line="618"/>
+        <location filename="../address_book_tab.cc" line="598"/>
+        <location filename="../address_book_tab.cc" line="627"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="593"/>
-        <location filename="../address_book_tab.cc" line="622"/>
+        <location filename="../address_book_tab.cc" line="602"/>
+        <location filename="../address_book_tab.cc" line="631"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="594"/>
-        <location filename="../address_book_tab.cc" line="623"/>
+        <location filename="../address_book_tab.cc" line="603"/>
+        <location filename="../address_book_tab.cc" line="632"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="614"/>
+        <location filename="../address_book_tab.cc" line="623"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="899"/>
+        <location filename="../address_book_tab.cc" line="908"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="904"/>
+        <location filename="../address_book_tab.cc" line="913"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1032"/>
+        <location filename="../address_book_tab.cc" line="1041"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1034"/>
+        <location filename="../address_book_tab.cc" line="1043"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1044"/>
+        <location filename="../address_book_tab.cc" line="1053"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1057"/>
+        <location filename="../address_book_tab.cc" line="1066"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1087"/>
+        <location filename="../address_book_tab.cc" line="1096"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1099"/>
-        <location filename="../address_book_tab.cc" line="1114"/>
+        <location filename="../address_book_tab.cc" line="1108"/>
+        <location filename="../address_book_tab.cc" line="1123"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1101"/>
+        <location filename="../address_book_tab.cc" line="1110"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1116"/>
+        <location filename="../address_book_tab.cc" line="1125"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -1370,108 +1390,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../main_window.cc" line="197"/>
-        <location filename="../main_window.cc" line="1364"/>
+        <location filename="../main_window.cc" line="201"/>
+        <location filename="../main_window.cc" line="520"/>
+        <location filename="../main_window.cc" line="530"/>
+        <location filename="../main_window.cc" line="541"/>
+        <location filename="../main_window.cc" line="590"/>
+        <location filename="../main_window.cc" line="602"/>
+        <location filename="../main_window.cc" line="1502"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="198"/>
+        <location filename="../main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>找不到固定的通讯录文件&quot;%1&quot;。&lt;br/&gt;该文件将被取消固定。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="278"/>
+        <location filename="../main_window.cc" line="282"/>
+        <location filename="../main_window.cc" line="553"/>
+        <location filename="../main_window.cc" line="609"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="279"/>
+        <location filename="../main_window.cc" line="283"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>通讯录&quot;%1&quot;已打开。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="308"/>
+        <location filename="../main_window.cc" line="312"/>
         <source>Open Address Book</source>
         <translation>打开通讯录</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="310"/>
+        <location filename="../main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="685"/>
-        <location filename="../main_window.cc" line="1019"/>
-        <location filename="../main_window.cc" line="1104"/>
+        <location filename="../main_window.cc" line="509"/>
+        <source>Open File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="511"/>
+        <location filename="../main_window.cc" line="581"/>
+        <source>JSON files (*.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="521"/>
+        <source>Could not open file for reading.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="531"/>
+        <source>Import file is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="579"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="591"/>
+        <source>Could not open file for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="603"/>
+        <source>Unable to write file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="610"/>
+        <source>Export completed successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="817"/>
+        <location filename="../main_window.cc" line="1157"/>
+        <location filename="../main_window.cc" line="1242"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="686"/>
-        <location filename="../main_window.cc" line="1105"/>
+        <location filename="../main_window.cc" line="818"/>
+        <location filename="../main_window.cc" line="1243"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="690"/>
-        <location filename="../main_window.cc" line="1023"/>
-        <location filename="../main_window.cc" line="1109"/>
+        <location filename="../main_window.cc" line="822"/>
+        <location filename="../main_window.cc" line="1161"/>
+        <location filename="../main_window.cc" line="1247"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="691"/>
-        <location filename="../main_window.cc" line="1024"/>
-        <location filename="../main_window.cc" line="1110"/>
+        <location filename="../main_window.cc" line="823"/>
+        <location filename="../main_window.cc" line="1162"/>
+        <location filename="../main_window.cc" line="1248"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="692"/>
-        <location filename="../main_window.cc" line="1111"/>
+        <location filename="../main_window.cc" line="824"/>
+        <location filename="../main_window.cc" line="1249"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="913"/>
+        <location filename="../main_window.cc" line="1051"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="920"/>
+        <location filename="../main_window.cc" line="1058"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="921"/>
-        <location filename="../main_window.cc" line="926"/>
+        <location filename="../main_window.cc" line="1059"/>
+        <location filename="../main_window.cc" line="1064"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1020"/>
+        <location filename="../main_window.cc" line="1158"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1057"/>
+        <location filename="../main_window.cc" line="1195"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1072"/>
+        <location filename="../main_window.cc" line="1210"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="516"/>
-        <location filename="../main_window.cc" line="1229"/>
+        <location filename="../main_window.cc" line="646"/>
+        <location filename="../main_window.cc" line="1367"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1365"/>
+        <location filename="../main_window.cc" line="542"/>
+        <source>Failed to parse JSON document: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="554"/>
+        <source>Import completed successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main_window.cc" line="1503"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
