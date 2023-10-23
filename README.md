@@ -26,8 +26,9 @@ Currently supported
 
 System requirements
 -------------------
-- x86 or x86_64 CPU with SSE2 support
-- Windows 7/2008 R2 or higher, Debian 11/Ubuntu 20.04 Linux, MacOSX
+- Windows 7/2008 R2 or higher (x86 or x86_64 CPU)
+- Debian 11/Ubuntu 20.04 Linux (x86_64 CPU)
+- MacOSX (x86_64 or ARM CPU)
 
 Night builds
 ------------
