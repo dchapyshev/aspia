@@ -18,10 +18,10 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [win11-x64]
+        os: [win11]
         arch: [x86]
         include:
-          - os: win11-x64
+          - os: win11
             arch: x86
             triplet: x86-windows-static
 
