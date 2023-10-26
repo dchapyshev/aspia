@@ -1,0 +1,74 @@
+name: aspia-build
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
+  VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
+  VCPKG_BINARY_SOURCES: 'default,readwrite'
+
+jobs:
+  build-all-matrix:
+    name: ${{ matrix.os }}-${{ matrix.triplet }}-build
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push'
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [win11-x64]
+        arch: [x86]
+        include:
+          - os: win11-x64
+            arch: x86
+            triplet: x86-windows-static
+        exclude:
+          # Nothing
+
+    steps:
+      # Step 1
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # Step 2
+      # On Windows runners, let's ensure to have the Developer Command Prompt
+      # environment setup correctly. As used here the Developer Command Prompt
+      # created is targeting x86 and using the default the Windows SDK.
+      - name: Set MSVC x86/x64 parameters
+        uses: ilammy/msvc-dev-cmd@v1
+        if: ${{ runner.os == 'Windows' && matrix.arch != 'amd64_arm64' }}
+        with:
+          arch: ${{ matrix.arch }}
+          toolset: 14.29
+
+      # Step 3
+      - name: Dependencies, build, run tests (Windows/PSh)
+        if: runner.os == 'Windows' 
+        env:
+          # This vars used inside CMake
+          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-${{ matrix.triplet }}
+          VCPKG_TRIPLET: ${{ matrix.triplet }}
+          VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-static
+          VCPKG_DOWNLOADS: C:\vcpkg\downloads
+        run: |
+          # Reuired to prevent override by MSVC for e.g. on Win
+          $env:VCPKG_ROOT=$env:VCPKG_ROOT_PROJECT
+          Get-ChildItem env:
+
+          if (!$env:VCPKG_TRIPLET) { echo "VCPKG_TRIPLET is empty"; exit 1; }
+
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE
+          New-Item -ItemType Directory -Force -Path $env:VCPKG_DOWNLOADS
+
+          # Build vcpkg dependencies
+          cmake --preset ninja-multi-vcpkg-ci
+
+          # Build project
+          cmake --build --preset ninja-multi-vcpkg-ci-release
+
+          # Run tests
+          ctest --preset ninja-multi-vcpkg-ci-release
