@@ -25,9 +25,6 @@ jobs:
             arch: x86
             triplet: x86-windows-static
 
-        exclude:
-          # Nothing
-
     steps:
       # Step 1
       - name: Checkout
