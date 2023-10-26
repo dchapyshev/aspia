@@ -90,7 +90,7 @@
       },
       "environment": {
         "VCPKG_TRIPLET": "x86-windows-static",
-        "VCPKG_DEFAULT_HOST_TRIPLET": "x64-windows-static",
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x86-windows-static",
         "VCPKG_DOWNLOADS": "C:/vcpkg/downloads",
         "VCPKG_DEFAULT_BINARY_CACHE": "C:/vcpkg/bincache-$env{VCPKG_TRIPLET}",
         "NINJAPATH": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"

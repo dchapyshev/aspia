@@ -52,12 +52,12 @@ jobs:
 
       # Step 4
       - name: Dependencies, build, run tests (Windows/PSh)
-        if: runner.os == 'Windows' 
+        if: runner.os == 'Windows'
         env:
           # This vars used inside CMake
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-${{ matrix.triplet }}
           VCPKG_TRIPLET: ${{ matrix.triplet }}
-          VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-static
+          VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DOWNLOADS: C:\vcpkg\downloads
         run: |
           # Reuired to prevent override by MSVC for e.g. on Win
