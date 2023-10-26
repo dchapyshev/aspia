@@ -24,6 +24,7 @@ jobs:
           - os: win11-x64
             arch: x86
             triplet: x86-windows-static
+
         exclude:
           # Nothing
 
