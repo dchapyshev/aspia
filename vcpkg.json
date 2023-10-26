@@ -4,11 +4,11 @@
   "dependencies": [
     "asio",
     "curl",
-    "grpc",
     "gtest",
     "libvpx",
     "libyuv",
     "opus",
+    "protobuf",
     "qt5-base",
     "qt5-translations",
     "qt5-winextras",
