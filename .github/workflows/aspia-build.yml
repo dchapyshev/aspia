@@ -30,9 +30,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          submodules: true
+          submodules: false
 
       # Step 2
+      - name: Checkout submodule vcpkg4aspia
+        uses: actions/checkout@v2
+        with:
+          repository: dchapyshev/vcpkg4aspia
+          path: vcpkg4aspia
+
+      # Step 3
       # On Windows runners, let's ensure to have the Developer Command Prompt
       # environment setup correctly. As used here the Developer Command Prompt
       # created is targeting x86 and using the default the Windows SDK.
@@ -43,7 +50,7 @@ jobs:
           arch: ${{ matrix.arch }}
           toolset: 14.29
 
-      # Step 3
+      # Step 4
       - name: Dependencies, build, run tests (Windows/PSh)
         if: runner.os == 'Windows' 
         env:
