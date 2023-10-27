@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'doc'
 
 env:
   VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
@@ -20,6 +26,7 @@ jobs:
       matrix:
         os: [win11]
         arch: [x86, x64]
+        build_type: [release, debug]
         include:
           - os: win11
             arch: x86
@@ -77,8 +84,13 @@ jobs:
 
           # Build project
           cmake --build --preset ninja-multi-vcpkg-ci-release
-          cmake --build --preset ninja-multi-vcpkg-ci-debug
 
           # Run tests
           ctest --preset ninja-multi-vcpkg-ci-release
-          ctest --preset ninja-multi-vcpkg-ci-debug
+
+      # Step 5
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: ${{ github.workspace }}/artifacts/*
