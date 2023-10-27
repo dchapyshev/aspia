@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.17.0)
+cmake_minimum_required(VERSION 3.21.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
