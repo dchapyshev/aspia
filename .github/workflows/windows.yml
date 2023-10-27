@@ -25,26 +25,26 @@ jobs:
       fail-fast: true
       matrix:
         os: [win11]
-        arch: [x86] # x64
+        arch: [x86, x64]
         build_type: [release, debug]
         include:
           - os: win11
             arch: x86
             triplet: x86-windows-static
-          #- os: win11
-          #  arch: x64
-          #  triplet: x64-windows-static
+          - os: win11
+            arch: x64
+            triplet: x64-windows-static
 
     steps:
       # Step 1
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: false
 
       # Step 2
       - name: Checkout Submodule
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: dchapyshev/vcpkg4aspia
           path: vcpkg4aspia
