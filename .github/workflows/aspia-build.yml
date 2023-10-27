@@ -83,10 +83,10 @@ jobs:
           cmake --preset ninja-multi-vcpkg-ci
 
           # Build project
-          cmake --build --preset ninja-multi-vcpkg-ci-release
+          cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
 
           # Run tests
-          ctest --preset ninja-multi-vcpkg-ci-release
+          ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
 
       # Step 5
       - name: Upload Artifacts
