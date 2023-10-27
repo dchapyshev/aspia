@@ -6,7 +6,7 @@ With Aspia, you can create your own NAT traversal infrastructure (using Router a
 
 |Build Status|
 |:--:|
-|[![Build status](https://github.com/dchapyshev/aspia/actions/workflows/aspia-build.yml/badge.svg?branch=master)](https://github.com/dchapyshev/aspia/actions/workflows/aspia-build.yml)|
+|[![Build status](https://github.com/dchapyshev/aspia/actions/workflows/windows.yml/badge.svg?branch=master)](https://github.com/dchapyshev/aspia/actions/workflows/windows.yml)|
 
 Currently supported
 -------------------

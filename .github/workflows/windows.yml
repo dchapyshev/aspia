@@ -1,4 +1,4 @@
-name: aspia-build
+name: windows
 
 on:
   push:
@@ -92,7 +92,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Artifacts
+          name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
             ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*
             !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.lib
@@ -100,3 +100,4 @@ jobs:
             !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.manifest
             !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/aspia_base_tests*
           if-no-files-found: error
+          retention-days: 14
