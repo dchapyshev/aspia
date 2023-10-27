@@ -74,6 +74,8 @@ jobs:
 
           # Build project
           cmake --build --preset ninja-multi-vcpkg-ci-release
+          cmake --build --preset ninja-multi-vcpkg-ci-debug
 
           # Run tests
           ctest --preset ninja-multi-vcpkg-ci-release
+          ctest --preset ninja-multi-vcpkg-ci-debug
