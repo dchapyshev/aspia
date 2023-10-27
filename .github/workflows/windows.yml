@@ -55,14 +55,13 @@ jobs:
       # created is targeting x86 and using the default the Windows SDK.
       - name: Set MSVC x86/x64 parameters
         uses: ilammy/msvc-dev-cmd@v1
-        if: ${{ runner.os == 'Windows' && matrix.arch != 'amd64_arm64' }}
+        if: matrix.arch != 'amd64_arm64'
         with:
           arch: ${{ matrix.arch }}
           toolset: 14.29
 
       # Step 4
       - name: Dependencies, Build, Tests (Windows/PowerShell)
-        if: runner.os == 'Windows'
         env:
           # This vars used inside CMake
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-${{ matrix.triplet }}
