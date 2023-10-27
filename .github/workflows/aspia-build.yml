@@ -18,22 +18,22 @@ env:
 
 jobs:
   build-all-matrix:
-    name: ${{ matrix.os }}-${{ matrix.triplet }}-build
+    name: ${{ matrix.os }}-${{ matrix.triplet }}-${{ matrix.build_type }}
     runs-on: ${{ matrix.os }}
     if: github.event_name == 'push'
     strategy:
       fail-fast: true
       matrix:
         os: [win11]
-        arch: [x86, x64]
+        arch: [x86] # x64
         build_type: [release, debug]
         include:
           - os: win11
             arch: x86
             triplet: x86-windows-static
-          - os: win11
-            arch: x64
-            triplet: x64-windows-static
+          #- os: win11
+          #  arch: x64
+          #  triplet: x64-windows-static
 
     steps:
       # Step 1
