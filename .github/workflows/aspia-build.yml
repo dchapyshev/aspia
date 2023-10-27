@@ -19,11 +19,14 @@ jobs:
       fail-fast: true
       matrix:
         os: [win11]
-        arch: [x86]
+        arch: [x86, x64]
         include:
           - os: win11
             arch: x86
             triplet: x86-windows-static
+          - os: win11
+            arch: x64
+            triplet: x64-windows-static
 
     steps:
       # Step 1
@@ -33,7 +36,7 @@ jobs:
           submodules: false
 
       # Step 2
-      - name: Checkout submodule vcpkg4aspia
+      - name: Checkout Submodule
         uses: actions/checkout@v2
         with:
           repository: dchapyshev/vcpkg4aspia
@@ -51,7 +54,7 @@ jobs:
           toolset: 14.29
 
       # Step 4
-      - name: Dependencies, build, run tests (Windows/PSh)
+      - name: Dependencies, Build, Tests (Windows/PowerShell)
         if: runner.os == 'Windows'
         env:
           # This vars used inside CMake
