@@ -17,7 +17,7 @@ set SRC_DIR=%ASPIA_SRC_DIR%\installer
 
 if not exist "%TMP_DIR%" (
     echo "Output directory does not exist. Create it."
-    mkdir "%TMP_DIR%"
+    mkdir %TMP_DIR%
 )
 
 echo "##################################################"
@@ -31,10 +31,11 @@ echo "Installer Build Dir: %TMP_DIR%"
 goto :MSI
 
 :USAGE
-echo "Usage: build.cmd [version] [arch] [out_dir]"
+echo "Usage: build.cmd [version] [arch] [aspia_src_dir] [aspia_bin_dir]"
 echo "[version] examples: 2.6.0, 2.6.1, etc"
 echo "[arch] examples: x86, x86_64, arm64, etc"
-echo "[out_dir] examples: D:\out_msi"
+echo "[aspia_src_dir] examples: D:\aspia"
+echo "[aspia_bin_dir] examples: D:\aspia_bin\Release"
 goto :END
 
 :MSI
