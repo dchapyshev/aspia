@@ -82,7 +82,7 @@ jobs:
           ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
 
           # Create deb packages
-          cpack
+          cpack -C ${{ matrix.build_type }}
 
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f vcpkg4aspia/vcpkg ]; then
