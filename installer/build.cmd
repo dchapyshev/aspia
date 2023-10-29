@@ -23,8 +23,8 @@ if not exist "%TMP_DIR%" (
 echo "##################################################"
 echo "Aspia Src Dir: %ASPIA_SRC_DIR%"
 echo "Aspia Bin Dir: %ASPIA_BIN_DIR%"
-echo "Aspia Version: %VERSION%"
-echo "Aspia Arch: %ARCH%"
+echo "Aspia Version: %ASPIA_VERSION%"
+echo "Aspia Arch: %ASPIA_ARCH%"
 echo "Installer Src Dir: %SRC_DIR%"
 echo "Installer Build Dir: %TMP_DIR%"
 
