@@ -58,7 +58,7 @@ const char* columnTypeToString(int type)
 bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
 {
     int error_code = sqlite3_bind_text(
-        statement, column, text.c_str(), text.size(), SQLITE_STATIC);
+        statement, column, text.c_str(), static_cast<int>(text.size()), SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_bind_text failed: " << sqlite3_errstr(error_code)
@@ -72,7 +72,11 @@ bool writeText(sqlite3_stmt* statement, const std::string& text, int column)
 //--------------------------------------------------------------------------------------------------
 bool writeBlob(sqlite3_stmt* statement, const base::ByteArray& blob, int column)
 {
-    int error_code = sqlite3_bind_blob(statement, column, blob.data(), blob.size(), SQLITE_STATIC);
+    int error_code = sqlite3_bind_blob(statement,
+                                       column,
+                                       blob.data(),
+                                       static_cast<int>(blob.size()),
+                                       SQLITE_STATIC);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_bind_blob failed: " << sqlite3_errstr(error_code)
@@ -393,7 +397,11 @@ std::vector<base::User> DatabaseSqlite::userList() const
     const char kQuery[] = "SELECT * FROM users";
 
     sqlite3_stmt* statement;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)
@@ -431,7 +439,11 @@ bool DatabaseSqlite::addUser(const base::User& user)
         "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
 
     sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)
@@ -492,7 +504,11 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
         "(?, ?, ?, ?, ?, ?) WHERE id=?";
 
     sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)
@@ -548,7 +564,11 @@ bool DatabaseSqlite::removeUser(int64_t entry_id)
     static const char kQuery[] = "DELETE FROM users WHERE id=?";
 
     sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code);
@@ -584,7 +604,11 @@ base::User DatabaseSqlite::findUser(std::u16string_view username)
     const char kQuery[] = "SELECT * FROM users WHERE name=?";
 
     sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)
@@ -632,7 +656,11 @@ Database::ErrorCode DatabaseSqlite::hostId(
     const char kQuery[] = "SELECT * FROM hosts WHERE key=?";
 
     sqlite3_stmt* statement;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)
@@ -684,7 +712,11 @@ bool DatabaseSqlite::addHost(const base::ByteArray& keyHash)
     const char kQuery[] = "INSERT INTO hosts ('id', 'key') VALUES (NULL, ?)";
 
     sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, std::size(kQuery), &statement, nullptr);
+    int error_code = sqlite3_prepare(db_,
+                                     kQuery,
+                                     static_cast<int>(std::size(kQuery)),
+                                     &statement,
+                                     nullptr);
     if (error_code != SQLITE_OK)
     {
         LOG(LS_ERROR) << "sqlite3_prepare failed: " << sqlite3_errstr(error_code)

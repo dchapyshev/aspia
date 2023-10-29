@@ -150,7 +150,7 @@ std::filesystem::path Process::filePath() const
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (!GetModuleFileNameExW(process_.get(), nullptr, buffer, std::size(buffer)))
+    if (!GetModuleFileNameExW(process_.get(), nullptr, buffer, static_cast<DWORD>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
         return std::filesystem::path();
@@ -164,7 +164,7 @@ std::u16string Process::fileName() const
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    if (GetProcessImageFileNameW(process_.get(), buffer, std::size(buffer)))
+    if (GetProcessImageFileNameW(process_.get(), buffer, static_cast<DWORD>(std::size(buffer))))
     {
         PLOG(LS_ERROR) << "GetProcessImageFileNameW failed";
         return std::u16string();
