@@ -24,16 +24,13 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [win11]
-        arch: [x86, x64]
+        os: [ubuntu20.04]
+        arch: [x64]
         build_type: [release, debug]
         include:
-          - os: win11
-            arch: x86
-            triplet: x86-windows-static
-          - os: win11
+          - os: ubuntu20.04
             arch: x64
-            triplet: x64-windows-static
+            triplet: x64-linux
 
     steps:
       # Step 1
@@ -50,33 +47,30 @@ jobs:
           path: vcpkg4aspia
 
       # Step 3
-      # On Windows runners, let's ensure to have the Developer Command Prompt
-      # environment setup correctly. As used here the Developer Command Prompt
-      # created is targeting x86 and using the default the Windows SDK.
-      - name: Set MSVC x86/x64 parameters
-        uses: ilammy/msvc-dev-cmd@v1
-        if: matrix.arch != 'amd64_arm64'
-        with:
-          arch: ${{ matrix.arch }}
-          toolset: 14.29
-
-      # Step 4
-      - name: Dependencies, Build, Tests (Windows/PowerShell)
+      - name: Dependencies, Build, Tests (Linux/Bash)
         env:
           # This vars used inside CMake
-          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg\bincache-${{ matrix.triplet }}
+          VCPKG_DEFAULT_BINARY_CACHE: /opt/vcpkg/bincache-${{ matrix.triplet }}
           VCPKG_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
-          VCPKG_DOWNLOADS: C:\vcpkg\downloads
+          VCPKG_DOWNLOADS: /opt/vcpkg/downloads
         run: |
-          # Reuired to prevent override by MSVC for e.g. on Win
-          $env:VCPKG_ROOT=$env:VCPKG_ROOT_PROJECT
-          Get-ChildItem env:
+          export VCPKG_ROOT=$VCPKG_ROOT_PROJECT
+          env
 
-          if (!$env:VCPKG_TRIPLET) { echo "VCPKG_TRIPLET is empty"; exit 1; }
+          if [ -z "${{ matrix.triplet }}" ]; then
+            echo "VCPKG_TRIPLET is empty"
+            exit 1
+          fi
 
-          New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE
-          New-Item -ItemType Directory -Force -Path $env:VCPKG_DOWNLOADS
+          # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
+          if [ -f $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak ]; then
+            echo "Restore vcpkg executable"
+            cp $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak vcpkg/vcpkg
+          fi
+          
+          mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+          mkdir -p $VCPKG_DOWNLOADS
 
           # Build vcpkg dependencies
           cmake --preset ninja-multi-vcpkg-ci
@@ -86,6 +80,12 @@ jobs:
 
           # Run tests
           ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+          
+          # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
+          if [ -f vcpkg/vcpkg ]; then
+            echo "Backup vcpkg executable"
+            cp vcpkg/vcpkg $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak
+          fi
 
       # Step 5
       - name: Upload Artifacts
