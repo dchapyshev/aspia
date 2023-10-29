@@ -79,7 +79,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%TMP_DIR%\aspia-console-en-us.msi" Package 1033,1031,1040,1043,1046,1049,1058,2052,1028,0
 copy %TMP_DIR%\aspia-console-en-us.msi %ASPIA_BIN_DIR%
-ren %TMP_DIR%\aspia-console-en-us.msi aspia-console-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
+ren %ASPIA_BIN_DIR%\aspia-console-en-us.msi aspia-console-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Client"
@@ -118,7 +118,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%TMP_DIR%\aspia-client-en-us.msi" Package 1033,1031,1040,1043,1046,1049,1058,2052,1028,0
 copy %TMP_DIR%\aspia-client-en-us.msi %ASPIA_BIN_DIR%
-ren %TMP_DIR%\aspia-client-en-us.msi aspia-client-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
+ren %ASPIA_BIN_DIR%\aspia-client-en-us.msi aspia-client-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Host"
@@ -157,21 +157,21 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 
 cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs" "%TMP_DIR%\aspia-host-en-us.msi" Package 1033,1031,1040,1043,1046,1049,1058,2052,1028,0
 copy %TMP_DIR%\aspia-host-en-us.msi %ASPIA_BIN_DIR%
-ren %TMP_DIR%\aspia-host-en-us.msi aspia-host-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
+ren %ASPIA_BIN_DIR%\aspia-host-en-us.msi aspia-host-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Router"
 "%WIX%\bin\candle" -out "%TMP_DIR%\\" -ext WixUtilExtension -ext WixUIExtension router.wxs
 "%WIX%\bin\light" -sval -out "%TMP_DIR%\aspia-router.msi" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\router.en-us.wxl "%TMP_DIR%\router.wixobj"
 copy %TMP_DIR%\aspia-router.msi %ASPIA_BIN_DIR%
-ren %TMP_DIR%\aspia-router.msi aspia-router-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
+ren %ASPIA_BIN_DIR%\aspia-router.msi aspia-router-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Relay"
 "%WIX%\bin\candle" -out "%TMP_DIR%\\" -ext WixUtilExtension -ext WixUIExtension relay.wxs
 "%WIX%\bin\light" -sval -out "%TMP_DIR%\aspia-relay.msi" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\relay.en-us.wxl "%TMP_DIR%\relay.wixobj"
 copy %TMP_DIR%\aspia-relay.msi %ASPIA_BIN_DIR%
-ren %TMP_DIR%\aspia-relay.msi aspia-relay-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
+ren %ASPIA_BIN_DIR%\aspia-relay.msi aspia-relay-%ASPIA_VERSION%-%ASPIA_ARCH%.msi
 
 rem Restore working directory
 popd
