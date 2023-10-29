@@ -53,7 +53,7 @@ namespace {
 const size_t kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const size_t kDefaultMaxLogFileAge = 14; // 14 days.
 
-LoggingSeverity g_min_log_level = LOG_LS_WARNING;
+LoggingSeverity g_min_log_level = LOG_LS_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 size_t g_max_log_file_size = kDefaultMaxLogFileSize;
@@ -68,7 +68,7 @@ std::mutex g_log_file_lock;
 //--------------------------------------------------------------------------------------------------
 const char* severityName(LoggingSeverity severity)
 {
-    static const char* const kLogSeverityNames[] = { "I", "W", "E", "F" };
+    static const char* const kLogSeverityNames[] = { "I", "E", "F" };
 
     static_assert(LOG_LS_NUMBER == std::size(kLogSeverityNames));
 
@@ -183,14 +183,14 @@ std::ostream* g_swallow_stream;
 
 //--------------------------------------------------------------------------------------------------
 LoggingSettings::LoggingSettings()
-    : min_log_level(LOG_LS_WARNING),
+    : min_log_level(LOG_LS_ERROR),
       max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
     std::string log_level_string;
     if (Environment::get("ASPIA_LOG_LEVEL", &log_level_string))
     {
-        LoggingSeverity log_level = LOG_LS_WARNING;
+        LoggingSeverity log_level = LOG_LS_ERROR;
         if (stringToInt(log_level_string, &log_level))
         {
             log_level = std::max(log_level, LOG_LS_INFO);

@@ -57,6 +57,7 @@ public:
 
     bool save();
     bool saveAs();
+    void reloadAll();
 
     bool isRouterEnabled() const;
     std::optional<client::RouterConfig> routerConfig() const;

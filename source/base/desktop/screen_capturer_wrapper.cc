@@ -56,7 +56,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     // If the monitor is turned off, this call will turn it on.
     if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED))
     {
-        PLOG(LS_WARNING) << "SetThreadExecutionState failed";
+        PLOG(LS_ERROR) << "SetThreadExecutionState failed";
     }
 
     wchar_t desktop[100] = { 0 };
@@ -77,7 +77,7 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
                 // Do the keyboard event.
                 if (!SendInput(1, &input, sizeof(input)))
                 {
-                    PLOG(LS_WARNING) << "SendInput failed";
+                    PLOG(LS_ERROR) << "SendInput failed";
                 }
             };
 
@@ -87,11 +87,11 @@ ScreenCapturerWrapper::ScreenCapturerWrapper(ScreenCapturer::Type preferred_type
     }
     else
     {
-        LOG(LS_WARNING) << "Unable to get name of desktop";
+        LOG(LS_ERROR) << "Unable to get name of desktop";
     }
 #endif // defined(OS_WIN)
 
-    selectCapturer();
+    selectCapturer(ScreenCapturer::Error::SUCCEEDED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Screen capturer not initialized";
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return;
     }
 
@@ -115,20 +115,20 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     {
         if (resolution.isEmpty())
         {
-            LOG(LS_WARNING) << "Empty resolution";
+            LOG(LS_ERROR) << "Empty resolution";
         }
         else
         {
             if (!resizer_)
             {
-                LOG(LS_WARNING) << "No desktop resizer";
+                LOG(LS_ERROR) << "No desktop resizer";
             }
             else
             {
                 LOG(LS_INFO) << "Change resolution for screen " << screen_id << " to: " << resolution;
                 if (!resizer_->setResolution(screen_id, resolution))
                 {
-                    LOG(LS_WARNING) << "setResolution failed";
+                    LOG(LS_ERROR) << "setResolution failed";
                     return;
                 }
             }
@@ -225,11 +225,7 @@ void ScreenCapturerWrapper::captureFrame()
 
             case ScreenCapturer::Error::PERMANENT:
             {
-                ++permanent_error_count_;
-
-                LOG(LS_WARNING) << "Permanent error detected (" << permanent_error_count_ << ")";
-                selectCapturer();
-
+                selectCapturer(ScreenCapturer::Error::PERMANENT);
                 delegate_->onScreenCaptureError(error);
             }
             return;
@@ -238,10 +234,6 @@ void ScreenCapturerWrapper::captureFrame()
                 NOTREACHED();
                 break;
         }
-    }
-    else
-    {
-        permanent_error_count_ = 0;
     }
 
     const MouseCursor* mouse_cursor = nullptr;
@@ -287,7 +279,7 @@ void ScreenCapturerWrapper::enableWallpaper(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -300,7 +292,7 @@ void ScreenCapturerWrapper::enableEffects(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -313,7 +305,7 @@ void ScreenCapturerWrapper::enableFontSmoothing(bool enable)
     }
     else
     {
-        LOG(LS_WARNING) << "Desktop environment not initialized";
+        LOG(LS_ERROR) << "Desktop environment not initialized";
     }
 }
 
@@ -328,7 +320,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 {
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Screen capturer not initialized";
+        LOG(LS_ERROR) << "Screen capturer not initialized";
         return ScreenCapturer::kInvalidScreenId;
     }
 
@@ -346,7 +338,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
     }
     else
     {
-        LOG(LS_WARNING) << "ScreenCapturer::screenList failed";
+        LOG(LS_ERROR) << "ScreenCapturer::screenList failed";
     }
 
     LOG(LS_INFO) << "Primary screen NOT found";
@@ -354,7 +346,7 @@ ScreenCapturer::ScreenId ScreenCapturerWrapper::defaultScreen()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::selectCapturer()
+void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
 
@@ -388,13 +380,10 @@ void ScreenCapturerWrapper::selectCapturer()
         }
     };
 
-    static const int kMaxPermanentErrorCount = 5;
-
-    if (permanent_error_count_ >= kMaxPermanentErrorCount)
+    if (last_error == ScreenCapturer::Error::PERMANENT)
     {
-        // Skip other capturer types and using GDI capturer.
-        LOG(LS_INFO) << "Number of permanent errors has been exceeded. Reset to GDI capturer";
-        permanent_error_count_ = 0;
+        LOG(LS_INFO) << "Permanent error. Reset to GDI capturer";
+        screen_capturer_.reset();
     }
     else if (preferred_type_ == ScreenCapturer::Type::WIN_DXGI ||
              preferred_type_ == ScreenCapturer::Type::DEFAULT)
@@ -430,7 +419,7 @@ void ScreenCapturerWrapper::selectCapturer()
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
     {
-        LOG(LS_WARNING) << "Unable to create X11 screen capturer";
+        LOG(LS_ERROR) << "Unable to create X11 screen capturer";
         return;
     }
 #elif defined(OS_MAC)
@@ -478,7 +467,7 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         }
         else
         {
-            LOG(LS_WARNING) << "Desktop environment not initialized";
+            LOG(LS_ERROR) << "Desktop environment not initialized";
         }
     }
 #endif // defined(OS_WIN)

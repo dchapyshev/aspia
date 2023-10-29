@@ -70,7 +70,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
             return true;
         }
 
-        PLOG(LS_WARNING) << "WTSQueryUserToken failed";
+        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
         return false;
     }
 
@@ -83,7 +83,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                              sizeof(elevation_type),
                              &returned_length))
     {
-        PLOG(LS_WARNING) << "GetTokenInformation failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -101,7 +101,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
                                      sizeof(linked_token_info),
                                      &returned_length))
             {
-                PLOG(LS_WARNING) << "GetTokenInformation failed";
+                PLOG(LS_ERROR) << "GetTokenInformation failed";
                 return false;
             }
 
@@ -120,7 +120,7 @@ bool createLoggedOnUserToken(DWORD session_id, base::win::ScopedHandle* token_ou
     DWORD ui_access = 1;
     if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
     {
-        PLOG(LS_WARNING) << "SetTokenInformation failed";
+        PLOG(LS_ERROR) << "SetTokenInformation failed";
         return false;
     }
 
@@ -140,7 +140,7 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
-        PLOG(LS_WARNING) << "CreateEnvironmentBlock failed";
+        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
         return false;
     }
 
@@ -160,32 +160,32 @@ bool createProcessWithToken(HANDLE token, const base::CommandLine& command_line)
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_WARNING) << "CreateProcessAsUserW failed";
+        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
         if (!DestroyEnvironmentBlock(environment))
         {
-            PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+            PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
         }
         return false;
     }
 
     if (!SetPriorityClass(process_info.hProcess, NORMAL_PRIORITY_CLASS))
     {
-        PLOG(LS_WARNING) << "SetPriorityClass failed";
+        PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 
     if (!CloseHandle(process_info.hThread))
     {
-        PLOG(LS_WARNING) << "CloseHandle failed";
+        PLOG(LS_ERROR) << "CloseHandle failed";
     }
 
     if (!CloseHandle(process_info.hProcess))
     {
-        PLOG(LS_WARNING) << "CloseHandle failed";
+        PLOG(LS_ERROR) << "CloseHandle failed";
     }
 
     if (!DestroyEnvironmentBlock(environment))
     {
-        PLOG(LS_WARNING) << "DestroyEnvironmentBlock failed";
+        PLOG(LS_ERROR) << "DestroyEnvironmentBlock failed";
     }
 
     return true;
@@ -221,7 +221,7 @@ bool UserSessionManager::start(Delegate* delegate)
 
     if (ipc_server_)
     {
-        LOG(LS_WARNING) << "IPC server already exists";
+        LOG(LS_ERROR) << "IPC server already exists";
         return false;
     }
 
@@ -236,7 +236,7 @@ bool UserSessionManager::start(Delegate* delegate)
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_for_ui, this))
     {
-        LOG(LS_WARNING) << "Failed to start IPC server for UI";
+        LOG(LS_ERROR) << "Failed to start IPC server for UI";
         return false;
     }
 
@@ -355,7 +355,7 @@ void UserSessionManager::onHostIdChanged(const std::string& session_name, base::
         }
     }
 
-    LOG(LS_WARNING) << "Session '" << session_name << "' NOT found";
+    LOG(LS_ERROR) << "Session '" << session_name << "' NOT found";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -483,7 +483,7 @@ void UserSessionManager::onClientSession(std::unique_ptr<ClientSession> client_s
 
     if (!user_session_found)
     {
-        LOG(LS_WARNING) << "User session with id " << session_id << " not found";
+        LOG(LS_ERROR) << "User session with id " << session_id << " not found";
     }
 }
 
@@ -511,7 +511,7 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
     std::filesystem::path reference_path;
     if (!base::BasePaths::currentExecDir(&reference_path))
     {
-        LOG(LS_WARNING) << "currentExecDir failed";
+        LOG(LS_ERROR) << "currentExecDir failed";
         return;
     }
 
@@ -526,7 +526,7 @@ void UserSessionManager::onNewConnection(std::unique_ptr<base::IpcChannel> chann
     base::SessionId session_id = channel->peerSessionId();
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_WARNING) << "Invalid session id";
+        LOG(LS_ERROR) << "Invalid session id";
         return;
     }
 
@@ -599,20 +599,20 @@ void UserSessionManager::startSessionProcess(
 #if defined(OS_WIN)
     if (session_id == base::kInvalidSessionId)
     {
-        LOG(LS_WARNING) << "An attempt was detected to start a process in a INVALID session";
+        LOG(LS_ERROR) << "An attempt was detected to start a process in a INVALID session";
         return;
     }
 
     if (session_id == base::kServiceSessionId)
     {
-        LOG(LS_WARNING) << "An attempt was detected to start a process in a SERVICES session";
+        LOG(LS_ERROR) << "An attempt was detected to start a process in a SERVICES session";
         return;
     }
 
     base::win::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(LS_WARNING) << "Failed to get user token (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Failed to get user token (sid: " << session_id << ")";
         return;
     }
 
@@ -629,7 +629,7 @@ void UserSessionManager::startSessionProcess(
     base::win::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(LS_WARNING) << "Unable to get session info (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Unable to get session info (sid: " << session_id << ")";
         return;
     }
 
@@ -650,7 +650,7 @@ void UserSessionManager::startSessionProcess(
     std::filesystem::path file_path;
     if (!base::BasePaths::currentExecDir(&file_path))
     {
-        LOG(LS_WARNING) << "Failed to get current exec directory (sid: " << session_id << ")";
+        LOG(LS_ERROR) << "Failed to get current exec directory (sid: " << session_id << ")";
         return;
     }
 
@@ -661,7 +661,7 @@ void UserSessionManager::startSessionProcess(
 
     if (!createProcessWithToken(user_token, command_line))
     {
-        LOG(LS_WARNING) << "Failed to start process with user token (sid: " << session_id
+        LOG(LS_ERROR) << "Failed to start process with user token (sid: " << session_id
                         << " cmd: " << command_line.commandLineString() << ")";
     }
 #elif defined(OS_LINUX)
@@ -669,14 +669,14 @@ void UserSessionManager::startSessionProcess(
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(LS_WARNING) << "No X11 sessions";
+        LOG(LS_ERROR) << "No X11 sessions";
         return;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(LS_WARNING) << "Unable to open pipe";
+        LOG(LS_ERROR) << "Unable to open pipe";
         return;
     }
 
@@ -697,7 +697,7 @@ void UserSessionManager::startSessionProcess(
                 std::filesystem::path file_path;
                 if (!base::BasePaths::currentExecDir(&file_path))
                 {
-                    LOG(LS_WARNING) << "Failed to get current exec directory (sid: " << session_id << ")";
+                    LOG(LS_ERROR) << "Failed to get current exec directory (sid: " << session_id << ")";
                     return;
                 }
 

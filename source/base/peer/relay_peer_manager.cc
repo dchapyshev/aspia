@@ -56,7 +56,7 @@ void RelayPeerManager::onRelayConnectionReady(std::unique_ptr<TcpChannel> channe
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 
     cleanup();

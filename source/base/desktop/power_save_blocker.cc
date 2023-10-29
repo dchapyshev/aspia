@@ -39,13 +39,13 @@ HANDLE createPowerRequest(POWER_REQUEST_TYPE type, const std::wstring_view& desc
     win::ScopedHandle handle(PowerCreateRequest(&context));
     if (!handle.isValid())
     {
-        PLOG(LS_WARNING) << "PowerCreateRequest failed";
+        PLOG(LS_ERROR) << "PowerCreateRequest failed";
         return INVALID_HANDLE_VALUE;
     }
 
     if (!PowerSetRequest(handle, type))
     {
-        PLOG(LS_WARNING) << "PowerSetRequest failed";
+        PLOG(LS_ERROR) << "PowerSetRequest failed";
         return INVALID_HANDLE_VALUE;
     }
 
@@ -59,13 +59,13 @@ void deletePowerRequest(POWER_REQUEST_TYPE type, HANDLE handle)
     win::ScopedHandle request_handle(handle);
     if (!request_handle.isValid())
     {
-        LOG(LS_WARNING) << "Invalid handle for power request";
+        LOG(LS_ERROR) << "Invalid handle for power request";
         return;
     }
 
     if (!PowerClearRequest(request_handle, type))
     {
-        PLOG(LS_WARNING) << "PowerClearRequest failed";
+        PLOG(LS_ERROR) << "PowerClearRequest failed";
     }
 }
 

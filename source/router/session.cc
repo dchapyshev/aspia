@@ -182,7 +182,7 @@ void Session::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& bu
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
     }
 }
 
@@ -195,7 +195,7 @@ void Session::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 

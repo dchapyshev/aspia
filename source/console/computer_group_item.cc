@@ -21,6 +21,7 @@
 #include "console/computer_factory.h"
 
 #include <QApplication>
+#include <QCollator>
 
 namespace console {
 
@@ -30,7 +31,7 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
     : QTreeWidgetItem(parent_item),
       computer_group_(computer_group)
 {
-    setIcon(0, QIcon(QStringLiteral(":/img/folder.png")));
+    setIcon(0, QIcon(":/img/folder.png"));
     updateItem();
 
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
@@ -224,6 +225,31 @@ proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ComputerGroupItem::operator<(const QTreeWidgetItem& other) const
+{
+    switch (treeWidget()->sortColumn())
+    {
+        case COLUMN_INDEX_NAME:
+        {
+            QString this_group_name = text(COLUMN_INDEX_NAME);
+            QString other_group_name = other.text(COLUMN_INDEX_NAME);
+
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(this_group_name, other_group_name) <= 0;
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return QTreeWidgetItem::operator<(other);
 }
 
 } // namespace console

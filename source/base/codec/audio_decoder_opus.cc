@@ -83,9 +83,9 @@ bool AudioDecoderOpus::resetForPacket(const proto::AudioPacket& packet)
 
         if (channels_ <= 0 || channels_ > 2 || sampling_rate_ != kSamplingRate)
         {
-            LOG(LS_WARNING) << "Unsupported OPUS parameters: "
-                            << channels_ << " channels with "
-                            << sampling_rate_ << " samples per second.";
+            LOG(LS_ERROR) << "Unsupported OPUS parameters: "
+                          << channels_ << " channels with "
+                          << sampling_rate_ << " samples per second.";
             return false;
         }
     }
@@ -101,14 +101,14 @@ std::unique_ptr<proto::AudioPacket> AudioDecoderOpus::decode(const proto::AudioP
 {
     if (packet.encoding() != proto::AUDIO_ENCODING_OPUS)
     {
-        LOG(LS_WARNING) << "Received an audio packet with encoding "
-                        << packet.encoding() << " when an OPUS packet was expected.";
+        LOG(LS_ERROR) << "Received an audio packet with encoding "
+                      << packet.encoding() << " when an OPUS packet was expected.";
         return nullptr;
     }
 
     if (packet.data_size() > kMaxFramesPerPacket)
     {
-        LOG(LS_WARNING) << "Received an packet with too many frames.";
+        LOG(LS_ERROR) << "Received an packet with too many frames.";
         return nullptr;
     }
 

@@ -114,36 +114,50 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 {
-    UpdateInfo update_info = UpdateInfo::fromXml(result);
-    if (!update_info.isValid())
+    if (result.empty())
     {
+        LOG(LS_ERROR) << "Error while retrieving update information";
+
         ui->label_available->setText(tr("Unknown"));
         ui->edit_description->setText(tr("Error retrieving update information."));
     }
     else
     {
-        base::Version current_version(
-            ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
-        base::Version new_version = update_info.version();
+        const base::Version& current_version = base::Version::currentShort();
 
-        if (new_version > current_version)
+        update_info_ = UpdateInfo::fromXml(result);
+        if (!update_info_.isValid())
         {
-            ui->label_available->setText(QString::fromStdString(new_version.toString(3)));
-            ui->edit_description->setText(QString::fromStdString(update_info.description()));
-            ui->label_url->setText(makeUrl(QString::fromStdString(update_info.url())));
+            LOG(LS_INFO) << "No updates available";
 
-#if defined(OS_WIN)
-            ui->button_update->setEnabled(true);
-#endif // defined(OS_WIN)
-        }
-        else
-        {
             ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
             ui->edit_description->setText(tr("No updates available."));
         }
-    }
+        else
+        {
+            const base::Version& update_version = update_info_.version();
 
-    update_info_ = update_info;
+            if (update_version > current_version)
+            {
+                LOG(LS_INFO) << "New version available: " << update_version.toString();
+
+                ui->label_available->setText(QString::fromStdString(update_version.toString(3)));
+                ui->edit_description->setText(QString::fromStdString(update_info_.description()));
+                ui->label_url->setText(makeUrl(QString::fromStdString(update_info_.url())));
+
+#if defined(OS_WIN)
+                ui->button_update->setEnabled(true);
+#endif // defined(OS_WIN)
+            }
+            else
+            {
+                LOG(LS_INFO) << "New version less then current: " << update_version.toString();
+
+                ui->label_available->setText(QString::fromStdString(current_version.toString(3)));
+                ui->edit_description->setText(tr("No updates available."));
+            }
+        }
+    }
 
     QTimer::singleShot(0, this, [this]()
     {
@@ -154,6 +168,8 @@ void UpdateDialog::onUpdateCheckedFinished(const base::ByteArray& result)
 //--------------------------------------------------------------------------------------------------
 void UpdateDialog::onUpdateNow()
 {
+    LOG(LS_INFO) << "ACTION: Update now";
+
 #if defined(OS_WIN)
     QString message1 = tr("An update will be downloaded. After the download is complete, the "
                           "application will automatically close.");
@@ -218,7 +234,11 @@ void UpdateDialog::onUpdateNow()
                 else
                 {
                     // If the update fails, delete the temporary file.
-                    QFile::remove(file.fileName());
+                    QString file_name = file.fileName();
+                    if (!QFile::remove(file_name))
+                    {
+                        LOG(LS_ERROR) << "Unable to remove file: " << file_name.toStdString();
+                    }
                 }
             }
         }
@@ -234,7 +254,7 @@ void UpdateDialog::initialize()
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
 
-    base::Version current_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
+    const base::Version& current_version = base::Version::currentShort();
 
     ui->label_current->setText(QString::fromStdString(current_version.toString(3)));
 }

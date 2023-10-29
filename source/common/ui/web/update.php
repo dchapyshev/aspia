@@ -59,19 +59,20 @@ function getUpdates($mysqli, $package_id, $version)
     }
 
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    echo "<update>";
 
     if ($result->num_rows != 0)
     {
+        echo "<update>";
+
         // There is an update available.
         $row = $result->fetch_array();
 
         echo "<version>".$row['target_version']."</version>";
         echo "<description>".$row['description']."</description>";
         echo "<url>".$row['url']."</url>";
-    }
 
-    echo "</update>";
+        echo "</update>";
+    }
 
     $result->close();
 }

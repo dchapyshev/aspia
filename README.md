@@ -1,8 +1,12 @@
 Aspia
 =====
-Remote desktop and file transfer tool.
+Remote desktop, file transfer and system information tool.
 
 With Aspia, you can create your own NAT traversal infrastructure (using Router and Relay servers) with connection by ID or use direct connections. Aspia supports many features. Among them, detailed information about the system, audio, text chat.
+
+|Build Status|
+|:--:|
+|[![Build status](https://github.com/dchapyshev/aspia/actions/workflows/windows.yml/badge.svg?branch=master)](https://github.com/dchapyshev/aspia/actions/workflows/windows.yml) [![Build status](https://github.com/dchapyshev/aspia/actions/workflows/linux.yml/badge.svg?branch=master)](https://github.com/dchapyshev/aspia/actions/workflows/linux.yml)|
 
 Currently supported
 -------------------
@@ -26,8 +30,9 @@ Currently supported
 
 System requirements
 -------------------
-- x86 or x86_64 CPU with SSE2 support
-- Windows 7/2008 R2 or higher, Debian 11/Ubuntu 20.04 Linux, MacOSX
+- Windows 7/2008 R2 or higher (x86 or x86_64 CPU)
+- Debian 11/Ubuntu 20.04 Linux (x86_64 CPU)
+- MacOSX (x86_64 or ARM CPU)
 
 Night builds
 ------------

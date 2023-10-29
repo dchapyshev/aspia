@@ -1,0 +1,3 @@
+[submodule "vcpkg4aspia"]
+	path = vcpkg4aspia
+	url = git@github.com:dchapyshev/vcpkg4aspia.git

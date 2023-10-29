@@ -279,7 +279,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     std::filesystem::path dir_path = databaseDirectory();
     if (dir_path.empty())
     {
-        LOG(LS_WARNING) << "Invalid directory path";
+        LOG(LS_ERROR) << "Invalid directory path";
         return nullptr;
     }
 
@@ -289,8 +289,8 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     {
         if (!std::filesystem::is_directory(dir_status))
         {
-            LOG(LS_WARNING) << "Unable to create directory for database. Need to delete file '"
-                            << dir_path << "'";
+            LOG(LS_ERROR) << "Unable to create directory for database. Need to delete file '"
+                          << dir_path << "'";
             return nullptr;
         }
     }
@@ -298,8 +298,8 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     {
         if (!std::filesystem::create_directories(dir_path, error_code))
         {
-            LOG(LS_WARNING) << "Unable to create directory for database: "
-                            << base::utf16FromLocal8Bit(error_code.message());
+            LOG(LS_ERROR) << "Unable to create directory for database: "
+                          << base::utf16FromLocal8Bit(error_code.message());
             return nullptr;
         }
     }
@@ -307,13 +307,13 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
     std::filesystem::path file_path = filePath();
     if (file_path.empty())
     {
-        LOG(LS_WARNING) << "Invalid file path";
+        LOG(LS_ERROR) << "Invalid file path";
         return nullptr;
     }
 
     if (std::filesystem::exists(file_path, error_code))
     {
-        LOG(LS_WARNING) << "Database file already exists";
+        LOG(LS_ERROR) << "Database file already exists";
         return nullptr;
     }
 
@@ -355,7 +355,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
     std::filesystem::path file_path = filePath();
     if (file_path.empty())
     {
-        LOG(LS_WARNING) << "Invalid file path";
+        LOG(LS_ERROR) << "Invalid file path";
         return nullptr;
     }
 
@@ -367,8 +367,8 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
     int error_code = sqlite3_open(file_path_utf8.c_str(), &db);
     if (error_code != SQLITE_OK)
     {
-        LOG(LS_WARNING) << "sqlite3_open failed: " << sqlite3_errstr(error_code)
-                        << " (" << error_code << ")";
+        LOG(LS_ERROR) << "sqlite3_open failed: " << sqlite3_errstr(error_code)
+                      << " (" << error_code << ")";
         return nullptr;
     }
 

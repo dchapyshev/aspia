@@ -83,7 +83,7 @@ void SessionHost::onSessionMessageReceived(uint8_t /* channel_id */, const base:
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled message from host";
+        LOG(LS_ERROR) << "Unhandled message from host";
     }
 }
 
@@ -200,7 +200,7 @@ void SessionHost::readResetHostId(const proto::ResetHostId& reset_host_id)
         }
     }
 
-    LOG(LS_WARNING) << "Host ID " << host_id << " NOT found in list";
+    LOG(LS_ERROR) << "Host ID " << host_id << " NOT found in list";
 }
 
 } // namespace router

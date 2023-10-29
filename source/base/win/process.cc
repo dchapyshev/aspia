@@ -38,7 +38,7 @@ bool createToken(const wchar_t* privilege_name, win::ScopedHandle* token_out)
     win::ScopedHandle privileged_token;
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_WARNING) << "copyProcessToken failed";
+        LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -49,14 +49,14 @@ bool createToken(const wchar_t* privilege_name, win::ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, privilege_name, &state.Privileges[0].Luid))
     {
-        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -88,21 +88,21 @@ Process::Process(std::shared_ptr<TaskRunner> task_runner, ProcessId process_id)
     ScopedHandle privileged_token;
     if (!createToken(SE_DEBUG_NAME, &privileged_token))
     {
-        LOG(LS_WARNING) << "createToken failed";
+        LOG(LS_ERROR) << "createToken failed";
         return;
     }
 
     ScopedImpersonator impersonator;
     if (!impersonator.loggedOnUser(privileged_token))
     {
-        LOG(LS_WARNING) << "loggedOnUser failed";
+        LOG(LS_ERROR) << "loggedOnUser failed";
         return;
     }
 
     ScopedHandle process(OpenProcess(PROCESS_ALL_ACCESS, TRUE, process_id));
     if (!process.isValid())
     {
-        PLOG(LS_WARNING) << "OpenProcess failed";
+        PLOG(LS_ERROR) << "OpenProcess failed";
         return;
     }
 
@@ -152,7 +152,7 @@ std::filesystem::path Process::filePath() const
 
     if (!GetModuleFileNameExW(process_.get(), nullptr, buffer, std::size(buffer)))
     {
-        PLOG(LS_WARNING) << "GetModuleFileNameExW failed";
+        PLOG(LS_ERROR) << "GetModuleFileNameExW failed";
         return std::filesystem::path();
     }
 
@@ -166,7 +166,7 @@ std::u16string Process::fileName() const
 
     if (GetProcessImageFileNameW(process_.get(), buffer, std::size(buffer)))
     {
-        PLOG(LS_WARNING) << "GetProcessImageFileNameW failed";
+        PLOG(LS_ERROR) << "GetProcessImageFileNameW failed";
         return std::u16string();
     }
 
@@ -186,7 +186,7 @@ SessionId Process::sessionId() const
 
     if (!ProcessIdToSessionId(processId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
         return kInvalidSessionId;
     }
 
@@ -200,7 +200,7 @@ int Process::exitCode() const
 
     if (!GetExitCodeProcess(process_.get(), &exit_code))
     {
-        PLOG(LS_WARNING) << "GetExitCodeProcess failed";
+        PLOG(LS_ERROR) << "GetExitCodeProcess failed";
         return 0;
     }
 
@@ -212,13 +212,13 @@ void Process::kill()
 {
     if (!process_.isValid())
     {
-        LOG(LS_WARNING) << "Invalid process handle";
+        LOG(LS_ERROR) << "Invalid process handle";
         return;
     }
 
     if (!TerminateProcess(process_, 0))
     {
-        LOG(LS_WARNING) << "TerminateProcess failed";
+        LOG(LS_ERROR) << "TerminateProcess failed";
     }
 }
 
@@ -227,7 +227,7 @@ void Process::terminate()
 {
     if (!process_.isValid())
     {
-        LOG(LS_WARNING) << "Invalid process handle";
+        LOG(LS_ERROR) << "Invalid process handle";
         return;
     }
 
@@ -235,7 +235,7 @@ void Process::terminate()
 
     if (!EnumWindows(terminateEnumProc, static_cast<LPARAM>(process_id)))
     {
-        PLOG(LS_WARNING) << "EnumWindows failed";
+        PLOG(LS_ERROR) << "EnumWindows failed";
     }
 
     if (!thread_.isValid())
@@ -243,7 +243,7 @@ void Process::terminate()
         ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, process_id));
         if (!snapshot.isValid())
         {
-            PLOG(LS_WARNING) << "CreateToolhelp32Snapshot failed";
+            PLOG(LS_ERROR) << "CreateToolhelp32Snapshot failed";
             return;
         }
 
@@ -258,7 +258,7 @@ void Process::terminate()
             {
                 if (!PostThreadMessageW(entry.th32ThreadID, WM_CLOSE, 0, 0))
                 {
-                    PLOG(LS_WARNING) << "PostThreadMessageW failed";
+                    PLOG(LS_ERROR) << "PostThreadMessageW failed";
                 }
             }
         }
@@ -267,7 +267,7 @@ void Process::terminate()
     {
         if (!PostThreadMessageW(GetThreadId(thread_), WM_CLOSE, 0, 0))
         {
-            PLOG(LS_WARNING) << "PostThreadMessageW failed";
+            PLOG(LS_ERROR) << "PostThreadMessageW failed";
         }
     }
 }

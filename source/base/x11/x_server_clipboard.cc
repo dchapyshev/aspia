@@ -47,7 +47,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     int xfixes_error_base;
     if (!XFixesQueryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
     {
-        LOG(LS_WARNING) << "X server does not support XFixes";
+        LOG(LS_ERROR) << "X server does not support XFixes";
         return;
     }
 

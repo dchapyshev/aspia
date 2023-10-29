@@ -213,7 +213,7 @@ bool TcpChannel::setKeepAlive(bool enable, const Seconds& interval, const Second
 {
     if (enable && keep_alive_timer_)
     {
-        LOG(LS_WARNING) << "Keep alive already active";
+        LOG(LS_ERROR) << "Keep alive already active";
         return false;
     }
 
@@ -341,16 +341,16 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(LS_WARNING) << "Asio error: " << utf16FromLocal8Bit(error_code.message())
-                    << " (" << error_code.value() << ")";
+    LOG(LS_ERROR) << "Asio error: " << utf16FromLocal8Bit(error_code.message())
+                  << " (" << error_code.value() << ")";
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Connection finished with error " << errorToString(error_code)
-                    << " from: " << location.toString();
+    LOG(LS_ERROR) << "Connection finished with error " << errorToString(error_code)
+                  << " from: " << location.toString();
 
     disconnect();
 

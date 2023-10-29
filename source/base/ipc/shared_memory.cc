@@ -129,13 +129,13 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
         INVALID_HANDLE_VALUE, nullptr, protect, high, low, asWide(path)));
     if (!file.isValid())
     {
-        PLOG(LS_WARNING) << "CreateFileMappingW failed";
+        PLOG(LS_ERROR) << "CreateFileMappingW failed";
         return false;
     }
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        LOG(LS_WARNING) << "Already exists shared memory: " << path;
+        LOG(LS_ERROR) << "Already exists shared memory: " << path;
         return false;
     }
 
@@ -143,7 +143,7 @@ bool createFileMapping(SharedMemory::Mode mode, int id, size_t size, win::Scoped
         file, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, nullptr);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "SetSecurityInfo failed: " << SystemError::toString(error_code);
+        LOG(LS_ERROR) << "SetSecurityInfo failed: " << SystemError::toString(error_code);
         return false;
     }
 
@@ -161,7 +161,7 @@ bool openFileMapping(SharedMemory::Mode mode, int id, win::ScopedHandle* out)
     win::ScopedHandle file(OpenFileMappingW(desired_access, FALSE, asWide(createFilePath(id))));
     if (!file.isValid())
     {
-        PLOG(LS_WARNING) << "OpenFileMappingW failed";
+        PLOG(LS_ERROR) << "OpenFileMappingW failed";
         return false;
     }
 
@@ -179,7 +179,7 @@ bool mapViewOfFile(SharedMemory::Mode mode, HANDLE file, void** memory)
     *memory = MapViewOfFile(file, desired_access, 0, 0, 0);
     if (!*memory)
     {
-        PLOG(LS_WARNING) << "MapViewOfFile failed";
+        PLOG(LS_ERROR) << "MapViewOfFile failed";
         return false;
     }
 
@@ -224,7 +224,7 @@ SharedMemory::~SharedMemory()
     struct stat info;
     if (fstat(handle_.get(), &info) != 0)
     {
-        PLOG(LS_WARNING) << "fstat failed";
+        PLOG(LS_ERROR) << "fstat failed";
     }
     else
     {
@@ -234,7 +234,7 @@ SharedMemory::~SharedMemory()
     std::string name = base::local8BitFromUtf16(createFilePath(id_));
     if (shm_unlink(name.c_str()) == -1)
     {
-        PLOG(LS_WARNING) << "shm_unlink failed";
+        PLOG(LS_ERROR) << "shm_unlink failed";
     }
 #endif // defined(OS_LINUX)
 }
@@ -292,7 +292,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
         fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
         if (fd == -1)
         {
-            PLOG(LS_WARNING) << "shm_open failed";
+            PLOG(LS_ERROR) << "shm_open failed";
             continue;
         }
 
@@ -301,13 +301,13 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
 
     if (fd == -1)
     {
-        LOG(LS_WARNING) << "Unable to create shared memory";
+        LOG(LS_ERROR) << "Unable to create shared memory";
         return nullptr;
     }
 
     if (ftruncate(fd, size) == -1)
     {
-        PLOG(LS_WARNING) << "ftruncate failed";
+        PLOG(LS_ERROR) << "ftruncate failed";
         return nullptr;
     }
 
@@ -318,7 +318,7 @@ std::unique_ptr<SharedMemory> SharedMemory::create(
     void* memory = mmap(nullptr, size, protection, MAP_SHARED, fd, 0);
     if (!memory)
     {
-        PLOG(LS_WARNING) << "mmap failed";
+        PLOG(LS_ERROR) << "mmap failed";
         return nullptr;
     }
 
@@ -365,14 +365,14 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
     int fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
     if (fd == -1)
     {
-        PLOG(LS_WARNING) << "shm_open failed";
+        PLOG(LS_ERROR) << "shm_open failed";
         return nullptr;
     }
 
     struct stat info;
     if (fstat(fd, &info) != 0)
     {
-        PLOG(LS_WARNING) << "Unable to get shared memory size";
+        PLOG(LS_ERROR) << "Unable to get shared memory size";
         return nullptr;
     }
 
@@ -383,7 +383,7 @@ std::unique_ptr<SharedMemory> SharedMemory::open(
     void* memory = mmap(nullptr, info.st_size, protection, MAP_SHARED, fd, 0);
     if (!memory)
     {
-        PLOG(LS_WARNING) << "mmap failed";
+        PLOG(LS_ERROR) << "mmap failed";
         return nullptr;
     }
 

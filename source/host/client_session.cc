@@ -162,8 +162,8 @@ void ClientSession::onTcpConnected()
 //--------------------------------------------------------------------------------------------------
 void ClientSession::onTcpDisconnected(base::NetworkChannel::ErrorCode error_code)
 {
-    LOG(LS_WARNING) << "Client disconnected with error: "
-                    << base::NetworkChannel::errorToString(error_code);
+    LOG(LS_ERROR) << "Client disconnected with error: "
+                  << base::NetworkChannel::errorToString(error_code);
 
     state_ = State::FINISHED;
     delegate_->onClientSessionFinished();
@@ -182,7 +182,7 @@ void ClientSession::onTcpMessageReceived(uint8_t channel_id, const base::ByteArr
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
     }
 }
 
@@ -199,7 +199,7 @@ void ClientSession::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 

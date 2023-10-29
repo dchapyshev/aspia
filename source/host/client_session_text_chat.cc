@@ -80,7 +80,7 @@ void ClientSessionTextChat::onReceived(uint8_t /* channel_id */, const base::Byt
 
     if (!base::parse(buffer, &text_chat))
     {
-        LOG(LS_WARNING) << "Unable to parse system info request";
+        LOG(LS_ERROR) << "Unable to parse system info request";
         return;
     }
 

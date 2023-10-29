@@ -12,11 +12,12 @@ Windows
 
    2.3. **ATL/MFC** libraries should be selected when installing.
 
-   2.4. **English language pack** (required for vcpkg).
+   2.4. **English language pack** (Required for vcpkg; Only English language should be installed, without any other).
 
 3. Download and install [CMake](https://cmake.org/download) (version >= 3.17.0).
-4. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
-5. In vcpkg, you need to install the following libraries (use triplet **x86-windows-static** in all cases):
+4. Download and install [Git](https://git-scm.com/downloads).
+5. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
+6. In vcpkg, you need to install the following libraries (use triplet **x86-windows-static** in all cases):
 * asio
 * curl
 * gtest
@@ -31,7 +32,7 @@ Windows
 * rapidjson
 * sqlite3
 * zstd
-6. Go to the directory with source code (root directory) and run the following commands:
+7. Go to the directory with source code (root directory) and run the following commands:
    **<br/>mkdir build
    <br/>cd build
    <br/>cmake ..\ -G "Visual Studio 16 2019" -A Win32 -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static**
@@ -39,7 +40,7 @@ Windows
 
    You can also use CMake GUI for these purposes.
    <br/>After these actions, the **aspia.sln** file will be generated in directory "build".
-7. Open **aspia.sln** in Visual Studio and build the project.
+8. Open **aspia.sln** in Visual Studio and build the project.
 
 Linux
 -----
@@ -71,12 +72,12 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * libxcb-image0-dev
 * libxcb-shm0-dev
 * libxcb-icccm4-dev
-* libxcb-sync0-dev
+* libxcb-sync-dev
 * libxcb-xfixes0-dev
 * libxcb-shape0-dev
 * libxcb-randr0-dev
 * libxcb-render-util0-dev
-* libxcb-xinerama-dev
+* libxcb-xinerama0-dev
 * libxcb-util-dev
 * libxkbcommon-dev
 * libxkbcommon-x11-dev
@@ -91,6 +92,9 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * nasm
 * gcc
 * g++
+* git
+* cmake
+* curl
 * qtcreator
 3. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
 * asio

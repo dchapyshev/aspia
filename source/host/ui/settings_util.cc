@@ -79,8 +79,8 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     std::error_code error_code;
     if (!std::filesystem::exists(source_path, error_code))
     {
-        LOG(LS_WARNING) << "Source settings file does't exist ("
-                        << base::utf16FromLocal8Bit(error_code.message()) << ")";
+        LOG(LS_ERROR) << "Source settings file does't exist ("
+                      << base::utf16FromLocal8Bit(error_code.message()) << ")";
 
         if (!silent)
         {
@@ -97,8 +97,8 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
         uintmax_t file_size = std::filesystem::file_size(source_path, error_code);
         if (error_code)
         {
-            LOG(LS_WARNING) << "Failed to get settings file size ("
-                            << base::utf16FromLocal8Bit(error_code.message()) << ")";
+            LOG(LS_ERROR) << "Failed to get settings file size ("
+                          << base::utf16FromLocal8Bit(error_code.message()) << ")";
         }
 
         LOG(LS_INFO) << "Source settings file exist (" << file_size << " bytes)";
@@ -107,7 +107,7 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
     base::JsonSettings::Map settings_map;
     if (!base::JsonSettings::readFile(source_path, settings_map))
     {
-        LOG(LS_WARNING) << "Failed to read source file: " << source_path;
+        LOG(LS_ERROR) << "Failed to read source file: " << source_path;
 
         if (!silent)
         {
@@ -153,7 +153,7 @@ bool SettingsUtil::copySettings(const std::filesystem::path& source_path,
 
     if (!base::JsonSettings::writeFile(target_path, settings_map))
     {
-        LOG(LS_WARNING) << "Failed to write destination file: " << target_path;
+        LOG(LS_ERROR) << "Failed to write destination file: " << target_path;
 
         if (!silent)
         {

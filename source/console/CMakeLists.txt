@@ -72,6 +72,8 @@ list(APPEND SOURCE_CONSOLE
     fast_connect_dialog.cc
     fast_connect_dialog.h
     fast_connect_dialog.ui
+    import_export_util.cc
+    import_export_util.h
     main_window.cc
     main_window.h
     main_window.ui

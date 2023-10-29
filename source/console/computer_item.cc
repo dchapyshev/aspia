@@ -22,6 +22,7 @@
 #include "base/strings/unicode.h"
 #include "console/computer_group_item.h"
 
+#include <QCollator>
 #include <QDateTime>
 
 namespace console {
@@ -36,7 +37,7 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     computer_id_ = computer_id;
     ++computer_id;
 
-    setIcon(0, QIcon(QStringLiteral(":/img/computer.png")));
+    setIcon(0, QIcon(":/img/computer.png"));
     updateItem();
 }
 
@@ -132,6 +133,19 @@ bool ComputerItem::operator<(const QTreeWidgetItem& other) const
 {
     switch (treeWidget()->sortColumn())
     {
+        case COLUMN_INDEX_NAME:
+        {
+            QString this_computer_name = text(COLUMN_INDEX_NAME);
+            QString other_computer_name = other.text(COLUMN_INDEX_NAME);
+
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(this_computer_name, other_computer_name) <= 0;
+        }
+        break;
+
         case COLUMN_INDEX_CREATED:
         {
             const ComputerItem* other_item = dynamic_cast<const ComputerItem*>(&other);

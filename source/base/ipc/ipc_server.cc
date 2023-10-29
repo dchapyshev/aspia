@@ -143,7 +143,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
                          &security_attributes));
     if (!handle.isValid())
     {
-        PLOG(LS_WARNING) << "CreateNamedPipeW failed";
+        PLOG(LS_ERROR) << "CreateNamedPipeW failed";
         return false;
     }
 
@@ -188,16 +188,16 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     acceptor_->open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "acceptor_->open failed: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->open failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
     acceptor_->bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "acceptor_->bind failed: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->bind failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
@@ -209,8 +209,8 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, std::u16string_vi
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(LS_WARNING) << "acceptor_->listen failed: "
-                        << base::utf16FromLocal8Bit(error_code.message());
+        LOG(LS_ERROR) << "acceptor_->listen failed: "
+                      << base::utf16FromLocal8Bit(error_code.message());
         return false;
     }
 
@@ -379,15 +379,15 @@ void IpcServer::onNewConnection(size_t index, std::unique_ptr<IpcChannel> channe
     }
     else
     {
-        LOG(LS_WARNING) << "No delegate";
+        LOG(LS_ERROR) << "No delegate";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
-    LOG(LS_WARNING) << "Error in IPC server with name: " << channel_name_
-                    << " (" << location.toString() << ")";
+    LOG(LS_ERROR) << "Error in IPC server with name: " << channel_name_
+                  << " (" << location.toString() << ")";
 
     if (delegate_)
     {
@@ -395,7 +395,7 @@ void IpcServer::onErrorOccurred(const Location& location)
     }
     else
     {
-        LOG(LS_WARNING) << "No delegate";
+        LOG(LS_ERROR) << "No delegate";
     }
 }
 

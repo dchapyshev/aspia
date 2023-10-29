@@ -48,7 +48,7 @@ void Service::onStart()
     server_ = std::make_unique<Server>(task_runner); 
     if (!server_->start())
     {
-        LOG(LS_WARNING) << "Unable to start server. Service not started";
+        LOG(LS_ERROR) << "Unable to start server. Service not started";
         task_runner->postQuit();
         return;
     }

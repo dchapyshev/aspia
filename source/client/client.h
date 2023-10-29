@@ -52,9 +52,6 @@ public:
     // The method must be called before calling method start().
     void setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy);
 
-    // Returns the version of the current client.
-    static base::Version version();
-
     Config config() const { return config_; }
 
 protected:

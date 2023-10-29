@@ -316,7 +316,7 @@ void InotifyReaderThreadDelegate::run()
         int poll_result = HANDLE_EINTR(poll(fdarray.data(), fdarray.size(), -1));
         if (poll_result < 0)
         {
-            DPLOG(LS_WARNING) << "poll failed";
+            DPLOG(LS_ERROR) << "poll failed";
             return;
         }
 
@@ -325,7 +325,7 @@ void InotifyReaderThreadDelegate::run()
         int ioctl_result = HANDLE_EINTR(ioctl(inotify_fd_, FIONREAD, &buffer_size));
         if (ioctl_result != 0)
         {
-            DPLOG(LS_WARNING) << "ioctl failed";
+            DPLOG(LS_ERROR) << "ioctl failed";
             return;
         }
 
@@ -333,7 +333,7 @@ void InotifyReaderThreadDelegate::run()
         ssize_t bytes_read = HANDLE_EINTR(read(inotify_fd_, &buffer[0], buffer_size));
         if (bytes_read < 0)
         {
-            DPLOG(LS_WARNING) << "read from inotify fd failed";
+            DPLOG(LS_ERROR) << "read from inotify fd failed";
             return;
         }
 
@@ -865,7 +865,7 @@ bool FilePathWatcherImpl::addWatchForBrokenSymlink(const std::filesystem::path& 
         // TODO(craig) Symlinks only work if the parent directory for the target exist. Ideally we
         // should make sure we've watched all the components of the symlink path for changes.
         // See crbug.com/91561 for details.
-        DPLOG(LS_WARNING) << "Watch failed for "  << dir_name;
+        DPLOG(LS_ERROR) << "Watch failed for "  << dir_name;
         return true;
     }
     watch_entry->watch = watch;

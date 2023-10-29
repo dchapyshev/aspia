@@ -67,7 +67,7 @@ void ClientTextChat::onSessionMessageReceived(
     proto::TextChat text_chat;
     if (!base::parse(buffer, &text_chat))
     {
-        LOG(LS_WARNING) << "Unable to parse text chat message";
+        LOG(LS_ERROR) << "Unable to parse text chat message";
         return;
     }
 

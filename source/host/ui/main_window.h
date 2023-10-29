@@ -77,11 +77,13 @@ private slots:
     void onExit();
     void onSettingsChanged();
     void onKillSession(uint32_t session_id);
+    void onOneTimeSessionsChanged();
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void updateStatusBar();
     void updateTrayIconTooltip();
+    uint32_t calcOneTimeSessions();
 
     Ui::MainWindow ui;
 

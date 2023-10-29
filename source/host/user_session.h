@@ -156,7 +156,8 @@ private:
     int password_length_ = 0;
     std::chrono::milliseconds password_expire_interval_ { 0 };
     base::WaitableTimer password_expire_timer_;
-    std::string password_;
+    std::string one_time_password_;
+    uint32_t one_time_sessions_ = 0;
 
     bool connection_confirmation_ = false;
     SystemSettings::NoUserAction no_user_action_ = SystemSettings::NoUserAction::ACCEPT;

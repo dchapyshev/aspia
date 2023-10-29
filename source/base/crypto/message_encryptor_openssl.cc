@@ -100,7 +100,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, iv_.data()) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptInit_ex failed";
+        LOG(LS_ERROR) << "EVP_EncryptInit_ex failed";
         return false;
     }
 
@@ -110,7 +110,7 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                           reinterpret_cast<uint8_t*>(out) + kTagSize, &length,
                           reinterpret_cast<const uint8_t*>(in), static_cast<int>(in_size)) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptUpdate failed";
+        LOG(LS_ERROR) << "EVP_EncryptUpdate failed";
         return false;
     }
 
@@ -118,13 +118,13 @@ bool MessageEncryptorOpenssl::encrypt(const void* in, size_t in_size, void* out)
                             reinterpret_cast<uint8_t*>(out) + kTagSize + length,
                             &length) != 1)
     {
-        LOG(LS_WARNING) << "EVP_EncryptFinal_ex failed";
+        LOG(LS_ERROR) << "EVP_EncryptFinal_ex failed";
         return false;
     }
 
     if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_GET_TAG, kTagSize, out) != 1)
     {
-        LOG(LS_WARNING) << "EVP_CIPHER_CTX_ctrl failed";
+        LOG(LS_ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;
     }
 

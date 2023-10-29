@@ -541,7 +541,7 @@ void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& mes
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled task manager message";
+        LOG(LS_ERROR) << "Unhandled task manager message";
     }
 }
 
@@ -867,9 +867,9 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
 
     if (process_list.process_size() != ui.tree_processes->topLevelItemCount())
     {
-        LOG(LS_WARNING) << "Number of processes mismatch (expected: "
-                        << process_list.process_size() << " actual: "
-                        << ui.tree_processes->topLevelItemCount() << ")";
+        LOG(LS_ERROR) << "Number of processes mismatch (expected: "
+                      << process_list.process_size() << " actual: "
+                      << ui.tree_processes->topLevelItemCount() << ")";
     }
 
     setProcessCount(process_list.process_size());

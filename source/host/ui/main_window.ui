@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>258</width>
-    <height>194</height>
+    <height>201</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -249,7 +249,7 @@ border-radius: 2px;
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
+            <iconset resource="../../client/resources/client.qrc">
              <normaloff>:/img/arrow-circle-double.png</normaloff>:/img/arrow-circle-double.png</iconset>
            </property>
           </widget>
@@ -287,7 +287,7 @@ text-decoration: underline;
           <string>Router is disabled</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../../client/resources/client.qrc">
            <normaloff>:/img/cross-script.png</normaloff>:/img/cross-script.png</iconset>
          </property>
         </widget>
@@ -316,7 +316,7 @@ text-decoration: underline;
      <x>0</x>
      <y>0</y>
      <width>258</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">
@@ -336,7 +336,7 @@ text-decoration: underline;
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="menu_view">
     <property name="title">
      <string>View</string>
     </property>
@@ -345,7 +345,7 @@ text-decoration: underline;
       <string>Language</string>
      </property>
      <property name="icon">
-      <iconset resource="resources.qrc">
+      <iconset resource="../../client/resources/client.qrc">
        <normaloff>:/img/locale.png</normaloff>:/img/locale.png</iconset>
      </property>
     </widget>
@@ -353,13 +353,24 @@ text-decoration: underline;
     <addaction name="separator"/>
     <addaction name="action_show_icons_in_menus"/>
    </widget>
+   <widget class="QMenu" name="menu_access">
+    <property name="title">
+     <string>Access</string>
+    </property>
+    <addaction name="action_desktop_manage"/>
+    <addaction name="action_desktop_view"/>
+    <addaction name="action_file_transfer"/>
+    <addaction name="action_system_info"/>
+    <addaction name="action_text_chat"/>
+   </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menuView"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_access"/>
    <addaction name="menu_help"/>
   </widget>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../../client/resources/client.qrc">
      <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
    </property>
    <property name="text">
@@ -368,7 +379,7 @@ text-decoration: underline;
   </action>
   <action name="action_help">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../../client/resources/client.qrc">
      <normaloff>:/img/lifebuoy.png</normaloff>:/img/lifebuoy.png</iconset>
    </property>
    <property name="text">
@@ -380,7 +391,7 @@ text-decoration: underline;
   </action>
   <action name="action_about">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../../client/resources/client.qrc">
      <normaloff>:/img/about.png</normaloff>:/img/about.png</iconset>
    </property>
    <property name="text">
@@ -389,7 +400,7 @@ text-decoration: underline;
   </action>
   <action name="action_settings">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../../client/resources/client.qrc">
      <normaloff>:/img/settings.png</normaloff>:/img/settings.png</iconset>
    </property>
    <property name="text">
@@ -409,8 +420,64 @@ text-decoration: underline;
     <string>Show icons in menus</string>
    </property>
   </action>
+  <action name="action_desktop_manage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Desktop Manage</string>
+   </property>
+  </action>
+  <action name="action_desktop_view">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Desktop View</string>
+   </property>
+  </action>
+  <action name="action_file_transfer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>File Transfer</string>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>System Information</string>
+   </property>
+  </action>
+  <action name="action_text_chat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Text Chat</string>
+   </property>
+  </action>
  </widget>
  <resources>
+  <include location="../../client/resources/client.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>

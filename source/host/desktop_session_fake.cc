@@ -49,7 +49,7 @@ void DesktopSessionFake::start()
     }
     else
     {
-        LOG(LS_WARNING) << "Invalid delegate";
+        LOG(LS_ERROR) << "Invalid delegate";
     }
 }
 

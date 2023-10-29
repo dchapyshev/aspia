@@ -33,6 +33,7 @@ public:
     void start();
     void stop();
     void updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void setOneTimeSessions(uint32_t sessions);
     void killClient(uint32_t id);
     void connectConfirmation(uint32_t id, bool accept);
     void setVoiceChat(bool enable);
@@ -101,6 +102,20 @@ void UserSessionAgentProxy::Impl::updateCredentials(
 
     if (agent_)
         agent_->updateCredentials(request_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgentProxy::Impl::setOneTimeSessions(uint32_t sessions)
+{
+    if (!io_task_runner_->belongsToCurrentThread())
+    {
+        io_task_runner_->postTask(
+            std::bind(&Impl::setOneTimeSessions, shared_from_this(), sessions));
+        return;
+    }
+
+    if (agent_)
+        agent_->setOneTimeSessions(sessions);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,10 +237,15 @@ void UserSessionAgentProxy::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgentProxy::updateCredentials(
-    proto::internal::CredentialsRequest::Type request_type)
+void UserSessionAgentProxy::updateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
     impl_->updateCredentials(request_type);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgentProxy::setOneTimeSessions(uint32_t sessions)
+{
+    impl_->setOneTimeSessions(sessions);
 }
 
 //--------------------------------------------------------------------------------------------------

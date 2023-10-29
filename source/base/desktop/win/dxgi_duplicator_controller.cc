@@ -65,8 +65,8 @@ bool DxgiDuplicatorController::isCurrentSessionSupported()
 
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        LOG(LS_WARNING) << "Failed to retrieve current session Id, current binary may not have "
-                           "required priviledge";
+        LOG(LS_ERROR) << "Failed to retrieve current session Id, current binary may not have "
+                         "required priviledge";
         return false;
     }
 
@@ -103,8 +103,8 @@ bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
 
     if (!result)
     {
-        LOG(LS_WARNING) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
-                           "accurate or out of date";
+        LOG(LS_ERROR) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
+                         "accurate or out of date";
     }
 
     return result;
@@ -176,8 +176,8 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     {
         if (succeeded_duplications_ == 0 && !isCurrentSessionSupported())
         {
-            LOG(LS_WARNING) << "Current binary is running in session 0. DXGI components cannot be "
-                               "initialized";
+            LOG(LS_ERROR) << "Current binary is running in session 0. DXGI components cannot be "
+                             "initialized";
             return Result::UNSUPPORTED_SESSION;
         }
 
@@ -213,16 +213,21 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
         }
     }
 
-    if (monitor_id >= doScreenCount())
+    int screen_count = doScreenCount();
+    if (monitor_id >= screen_count)
     {
         // It's a user error to provide a |monitor_id| larger than screen count. We do not need to
         // deinitialize.
+        LOG(LS_ERROR) << "Invalid monitor id:" << monitor_id
+                        << " (screen count=" << screen_count << ")";
         return Result::INVALID_MONITOR_ID;
     }
 
     // If the |monitor_id| is valid, but doDuplicateAll() or doDuplicateOne failed, something must
     // be wrong from capturer APIs. We should deinitialize().
     deinitialize();
+
+    LOG(LS_ERROR) << "Unable to duplicate frame";
     return Result::DUPLICATION_FAILED;
 }
 
@@ -265,7 +270,7 @@ bool DxgiDuplicatorController::doInitialize()
     std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
     {
-        LOG(LS_WARNING) << "No D3dDevice found";
+        LOG(LS_ERROR) << "No D3dDevice found";
         return false;
     }
 
@@ -287,7 +292,7 @@ bool DxgiDuplicatorController::doInitialize()
         DxgiAdapterDuplicator::ErrorCode error_code = duplicator.initialize();
         if (error_code != ErrorCode::SUCCESS)
         {
-            LOG(LS_WARNING) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
+            LOG(LS_ERROR) << "Failed to initialize DxgiAdapterDuplicator on adapter " << i;
 
             if (error_code == ErrorCode::CRITICAL_ERROR)
             {
@@ -310,7 +315,7 @@ bool DxgiDuplicatorController::doInitialize()
 
     if (duplicators_.empty())
     {
-        LOG(LS_WARNING) << "Cannot initialize any DxgiAdapterDuplicator instance";
+        LOG(LS_ERROR) << "Cannot initialize any DxgiAdapterDuplicator instance";
     }
 
     return !duplicators_.empty();

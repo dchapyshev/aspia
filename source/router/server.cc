@@ -82,7 +82,7 @@ bool Server::start()
 {
     if (server_)
     {
-        LOG(LS_WARNING) << "Server already started";
+        LOG(LS_ERROR) << "Server already started";
         return false;
     }
 

@@ -20,6 +20,7 @@
 #define BASE_DESKTOP_PIXEL_FORMAT_H
 
 #include <cstdint>
+#include <ostream>
 
 namespace base {
 
@@ -71,15 +72,27 @@ public:
     static PixelFormat RGB111();
 
     uint8_t bitsPerPixel() const { return bits_per_pixel_; }
+    void setBitsPerPixel(uint8_t bits_per_pixel) { bits_per_pixel_ = bits_per_pixel; }
+
     uint8_t bytesPerPixel() const { return bytes_per_pixel_; }
 
     uint16_t redMax() const { return red_max_; }
+    void setRedMax(uint16_t red_max) { red_max_ = red_max; }
+
     uint16_t greenMax() const { return green_max_; }
+    void setGreenMax(uint16_t green_max) { green_max_ = green_max; }
+
     uint16_t blueMax() const { return blue_max_; }
+    void setBlueMax(uint16_t blue_max) { blue_max_ = blue_max; }
 
     uint8_t redShift() const { return red_shift_; }
+    void setRedShift(uint8_t red_shift) { red_shift_ = red_shift; }
+
     uint8_t greenShift() const { return green_shift_; }
+    void setGreenShift(uint8_t green_shift) { green_shift_ = green_shift; }
+
     uint8_t blueShift() const { return blue_shift_; }
+    void setBlueShift(uint8_t blue_shift) { blue_shift_ = blue_shift; }
 
     bool isValid() const;
     void clear();
@@ -102,6 +115,8 @@ private:
     uint8_t green_shift_ = 0;
     uint8_t blue_shift_ = 0;
 };
+
+std::ostream& operator<<(std::ostream& stream, const PixelFormat& pixel_format);
 
 } // namespace base
 

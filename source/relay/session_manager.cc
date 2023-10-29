@@ -164,7 +164,7 @@ void SessionManager::disconnectSession(uint64_t session_id)
         }
     }
 
-    LOG(LS_WARNING) << "Session with id " << session_id << " not found";
+    LOG(LS_ERROR) << "Session with id " << session_id << " not found";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,12 +214,12 @@ void SessionManager::onPendingSessionReady(
         }
         else
         {
-            LOG(LS_WARNING) << "Failed to decrypt shared secret. Connection will be completed";
+            LOG(LS_ERROR) << "Failed to decrypt shared secret. Connection will be completed";
         }
     }
     else
     {
-        LOG(LS_WARNING) << "Key with id " << message.key_id() << " NOT found!";
+        LOG(LS_ERROR) << "Key with id " << message.key_id() << " NOT found!";
     }
 
     // The key was not found in the pool.

@@ -90,7 +90,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
             return true;
         }
 
-        LOG(LS_WARNING) << "Wrong packet size";
+        LOG(LS_ERROR) << "Wrong packet size";
         return false;
     }
 
@@ -105,7 +105,7 @@ bool FileDepacketizer::writeNextPacket(const proto::FilePacket& packet)
     file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
-        LOG(LS_WARNING) << "Unable to write file";
+        LOG(LS_ERROR) << "Unable to write file";
         return false;
     }
 

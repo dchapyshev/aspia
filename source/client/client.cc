@@ -125,7 +125,7 @@ void Client::stop()
     }
     else
     {
-        LOG(LS_WARNING) << "Client already stopped";
+        LOG(LS_ERROR) << "Client already stopped";
     }
 }
 
@@ -133,13 +133,6 @@ void Client::stop()
 void Client::setStatusWindow(std::shared_ptr<StatusWindowProxy> status_window_proxy)
 {
     status_window_proxy_ = std::move(status_window_proxy);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-base::Version Client::version()
-{
-    return base::Version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,7 +152,7 @@ void Client::sendMessage(uint8_t channel_id, const google::protobuf::MessageLite
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "sendMessage called but channel not initialized";
+        LOG(LS_ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
@@ -171,7 +164,7 @@ int64_t Client::totalRx() const
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "totalRx called but channel not initialized";
+        LOG(LS_ERROR) << "totalRx called but channel not initialized";
         return 0;
     }
 
@@ -183,7 +176,7 @@ int64_t Client::totalTx() const
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "totalTx called but channel not initialized";
+        LOG(LS_ERROR) << "totalTx called but channel not initialized";
         return 0;
     }
 
@@ -195,7 +188,7 @@ int Client::speedRx()
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "speedRx called but channel not initialized";
+        LOG(LS_ERROR) << "speedRx called but channel not initialized";
         return 0;
     }
 
@@ -207,7 +200,7 @@ int Client::speedTx()
 {
     if (!channel_)
     {
-        LOG(LS_WARNING) << "speedTx called but channel not initialized";
+        LOG(LS_ERROR) << "speedTx called but channel not initialized";
         return 0;
     }
 
@@ -243,7 +236,7 @@ void Client::onTcpMessageReceived(uint8_t channel_id, const base::ByteArray& buf
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled incoming message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled incoming message from channel: " << channel_id;
     }
 }
 
@@ -260,7 +253,7 @@ void Client::onTcpMessageWritten(uint8_t channel_id, size_t pending)
     }
     else
     {
-        LOG(LS_WARNING) << "Unhandled outgoing message from channel: " << channel_id;
+        LOG(LS_ERROR) << "Unhandled outgoing message from channel: " << channel_id;
     }
 }
 
@@ -322,12 +315,11 @@ void Client::startAuthentication()
                 channel_->setChannelIdSupport(true);
             }
 
-            base::Version client_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
-                                         ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+            const base::Version& client_version = base::Version::currentFull();
             if (host_version > client_version)
             {
-                LOG(LS_WARNING) << "Version mismatch (host: " << host_version.toString()
-                                << " client: " << client_version.toString();
+                LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
+                              << " client: " << client_version.toString();
                 status_window_proxy_->onVersionMismatch(host_version, client_version);
             }
             else

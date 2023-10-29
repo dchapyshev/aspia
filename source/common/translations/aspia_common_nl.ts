@@ -430,62 +430,63 @@
         <translation>Annuleer update controle. Een ogenblik geduld aub.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="120"/>
+        <location filename="../ui/update_dialog.cc" line="121"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="121"/>
+        <location filename="../ui/update_dialog.cc" line="122"/>
         <source>Error retrieving update information.</source>
         <translation>Er is een probleem opgetreden bij het downloaden van de update informatie.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="142"/>
+        <location filename="../ui/update_dialog.cc" line="134"/>
+        <location filename="../ui/update_dialog.cc" line="157"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="158"/>
+        <location filename="../ui/update_dialog.cc" line="174"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>De update wordt gedownload. Nadat de download voltooid is zal de applicatie automatisch sluiten.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="160"/>
+        <location filename="../ui/update_dialog.cc" line="176"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle verbonden sessies worden afgesloten. Er kan geen verbinding gemaakt worden tot de update voltooid is.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="162"/>
+        <location filename="../ui/update_dialog.cc" line="178"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle onopgeslagen data zal verloren gaan.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="163"/>
+        <location filename="../ui/update_dialog.cc" line="179"/>
         <source>Continue?</source>
         <translation>Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="166"/>
+        <location filename="../ui/update_dialog.cc" line="182"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="171"/>
+        <location filename="../ui/update_dialog.cc" line="187"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="172"/>
+        <location filename="../ui/update_dialog.cc" line="188"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="180"/>
+        <location filename="../ui/update_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="197"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Er is een probleem opgetreden bij het installeren van de update: %1</translation>
     </message>

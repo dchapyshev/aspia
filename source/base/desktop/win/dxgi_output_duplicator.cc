@@ -154,8 +154,8 @@ bool DxgiOutputDuplicator::duplicateOutput()
                 continue;
             }
 
-            LOG(LS_WARNING) << "Failed to duplicate output from IDXGIOutput1, error "
-                            << error.ErrorMessage() << ", with code " << error.Error();
+            LOG(LS_ERROR) << "Failed to duplicate output from IDXGIOutput1, error "
+                          << error.ErrorMessage() << ", with code " << error.Error();
             return false;
         }
         else
@@ -262,8 +262,8 @@ bool DxgiOutputDuplicator::duplicate(
                                                            shape_info);
         if (FAILED(hr.Error()))
         {
-            LOG(LS_WARNING) << "Failed to capture cursor, error "
-                            << error.ErrorMessage() << ", code " << error.Error();
+            LOG(LS_ERROR) << "Failed to capture cursor, error "
+                          << error.ErrorMessage() << ", code " << error.Error();
             buffer->clear();
         }
     }

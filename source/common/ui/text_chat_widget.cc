@@ -149,7 +149,7 @@ void TextChatWidget::readStatus(const proto::TextChatStatus& status)
         break;
 
         default:
-            LOG(LS_WARNING) << "Unhandled status code: " << static_cast<int>(status.status());
+            LOG(LS_ERROR) << "Unhandled status code: " << static_cast<int>(status.status());
             return;
     }
 

@@ -324,20 +324,20 @@ int hostServiceMain(int argc, wchar_t* argv[])
     }
     else
     {
-        PLOG(LS_WARNING) << "GlobalMemoryStatusEx failed";
+        PLOG(LS_ERROR) << "GlobalMemoryStatusEx failed";
     }
 
     DWORD session_id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
     else
     {
         base::win::SessionInfo session_info(session_id);
         if (!session_info.isValid())
         {
-            LOG(LS_WARNING) << "Unable to get session info";
+            LOG(LS_ERROR) << "Unable to get session info";
         }
         else
         {
@@ -354,7 +354,7 @@ int hostServiceMain(int argc, wchar_t* argv[])
     DWORD username_size = sizeof(username) / sizeof(username[0]);
     if (!GetUserNameW(username, &username_size))
     {
-        PLOG(LS_WARNING) << "GetUserNameW failed";
+        PLOG(LS_ERROR) << "GetUserNameW failed";
     }
 
     LOG(LS_INFO) << "Running as user: '" << username << "'";

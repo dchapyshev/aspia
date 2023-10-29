@@ -41,7 +41,7 @@ UserEnumerator::UserEnumerator()
                                    nullptr);
     if (error_code != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetUserEnum failed: " << SystemError(error_code).toString();
+        LOG(LS_ERROR) << "NetUserEnum failed: " << SystemError(error_code).toString();
         return;
     }
 }
@@ -118,7 +118,7 @@ std::vector<std::pair<std::string, std::string>> UserEnumerator::groups() const
                                              &total_entries);
     if (error_code != NERR_Success)
     {
-        LOG(LS_WARNING) << "NetUserGetLocalGroups failed: " << SystemError(error_code).toString();
+        LOG(LS_ERROR) << "NetUserGetLocalGroups failed: " << SystemError(error_code).toString();
         return {};
     }
 

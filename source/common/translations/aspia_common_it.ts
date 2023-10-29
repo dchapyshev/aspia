@@ -419,62 +419,63 @@
         <translation>Interruzione controllo aggiornamenti in corso. Attendere.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="120"/>
+        <location filename="../ui/update_dialog.cc" line="121"/>
         <source>Unknown</source>
         <translation>Sconosciuto</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="121"/>
+        <location filename="../ui/update_dialog.cc" line="122"/>
         <source>Error retrieving update information.</source>
         <translation>Errore durante il recupero delle informazioni di aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="142"/>
+        <location filename="../ui/update_dialog.cc" line="134"/>
+        <location filename="../ui/update_dialog.cc" line="157"/>
         <source>No updates available.</source>
         <translation>Nessun aggiornamento disponibile.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="158"/>
+        <location filename="../ui/update_dialog.cc" line="174"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>L&apos;aggiornamento sarà scaricato. Al completamento dello scaricamento, l&apos;applicazione si chiuderà automaticamente.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="160"/>
+        <location filename="../ui/update_dialog.cc" line="176"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Tutte le sessioni connesse verranno chiuse. Non è possibile stabilire una connessione fino a quanto l&apos;aggiornamento sarà completato.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="162"/>
+        <location filename="../ui/update_dialog.cc" line="178"/>
         <source>All unsaved data will be lost.</source>
         <translation>Tutti i dati non salvati andranno perduti.</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="163"/>
+        <location filename="../ui/update_dialog.cc" line="179"/>
         <source>Continue?</source>
         <translation>Continuo?</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="166"/>
+        <location filename="../ui/update_dialog.cc" line="182"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="171"/>
+        <location filename="../ui/update_dialog.cc" line="187"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="172"/>
+        <location filename="../ui/update_dialog.cc" line="188"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="180"/>
+        <location filename="../ui/update_dialog.cc" line="196"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/update_dialog.cc" line="181"/>
+        <location filename="../ui/update_dialog.cc" line="197"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Si è verificato un errore durante l&apos;installazione dell&apos;aggiornamento: %1</translation>
     </message>

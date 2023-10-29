@@ -63,7 +63,7 @@ public:
 
 private:
     ScreenCapturer::ScreenId defaultScreen();
-    void selectCapturer();
+    void selectCapturer(ScreenCapturer::Error last_error);
     void switchToInputDesktop();
 
     SharedMemoryFactory* shared_memory_factory_ = nullptr;
@@ -75,7 +75,6 @@ private:
 #endif // defined(OS_WIN)
 
     int screen_count_ = 0;
-    int permanent_error_count_ = 0;
     ScreenCapturer::ScreenId last_screen_id_ = ScreenCapturer::kInvalidScreenId;
     Point last_cursor_pos_;
     bool enable_cursor_position_ = false;

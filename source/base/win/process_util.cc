@@ -73,7 +73,7 @@ bool createProcess(const std::filesystem::path& program,
 
     if (!ShellExecuteExW(&sei))
     {
-        PLOG(LS_WARNING) << "ShellExecuteExW failed";
+        PLOG(LS_ERROR) << "ShellExecuteExW failed";
         return false;
     }
 
@@ -89,7 +89,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.recieve()))
     {
-        PLOG(LS_WARNING) << "OpenProcessToken failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -100,7 +100,7 @@ bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->recieve()))
     {
-        PLOG(LS_WARNING) << "DuplicateTokenEx failed";
+        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
         return false;
     }
 
@@ -116,7 +116,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!copyProcessToken(desired_access, &privileged_token))
     {
-        LOG(LS_WARNING) << "copyProcessToken failed";
+        LOG(LS_ERROR) << "copyProcessToken failed";
         return false;
     }
 
@@ -127,14 +127,14 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_WARNING) << "LookupPrivilegeValueW failed";
+        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
         return false;
     }
 
     // Enable the SE_TCB_NAME privilege.
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0, nullptr, nullptr))
     {
-        PLOG(LS_WARNING) << "AdjustTokenPrivileges failed";
+        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
         return false;
     }
 
@@ -148,7 +148,7 @@ bool isProcessStartedFromService()
     ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
     if (!snapshot.isValid())
     {
-        PLOG(LS_WARNING) << "CreateToolhelp32Snapshot failed";
+        PLOG(LS_ERROR) << "CreateToolhelp32Snapshot failed";
         return false;
     }
 
@@ -157,7 +157,7 @@ bool isProcessStartedFromService()
 
     if (!Process32FirstW(snapshot, &entry))
     {
-        PLOG(LS_WARNING) << "Process32FirstW failed";
+        PLOG(LS_ERROR) << "Process32FirstW failed";
         return false;
     }
 
@@ -174,14 +174,14 @@ bool isProcessStartedFromService()
             }
             else
             {
-                PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+                PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
                 break;
             }
         }
 
         if (!Process32NextW(snapshot, &entry))
         {
-            PLOG(LS_WARNING) << "Process32NextW failed";
+            PLOG(LS_ERROR) << "Process32NextW failed";
             break;
         }
     }

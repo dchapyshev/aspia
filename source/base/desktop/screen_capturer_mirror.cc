@@ -76,7 +76,7 @@ bool ScreenCapturerMirror::isSupported()
 
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
         return false;
     }
 
@@ -162,7 +162,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
         desktop_dc_.getDC(nullptr);
         if (!desktop_dc_.isValid())
         {
-            LOG(LS_WARNING) << "Unable to get desktop DC";
+            LOG(LS_ERROR) << "Unable to get desktop DC";
             return nullptr;
         }
     }
@@ -185,7 +185,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
                 curr_cursor_info_.hCursor = LoadCursorW(nullptr, IDC_ARROW);
                 if (!curr_cursor_info_.hCursor)
                 {
-                    PLOG(LS_WARNING) << "LoadCursorW failed";
+                    PLOG(LS_ERROR) << "LoadCursorW failed";
                     return nullptr;
                 }
             }
@@ -205,7 +205,7 @@ const MouseCursor* ScreenCapturerMirror::captureCursor()
     }
     else
     {
-        PLOG(LS_WARNING) << "GetCursorInfo failed";
+        PLOG(LS_ERROR) << "GetCursorInfo failed";
     }
 
     return nullptr;
@@ -268,7 +268,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
     Rect desktop_rect = ScreenCaptureUtils::fullScreenRect();
     if (desktop_rect.isEmpty())
     {
-        LOG(LS_WARNING) << "Failed to get desktop rect";
+        LOG(LS_ERROR) << "Failed to get desktop rect";
         return Error::TEMPORARY;
     }
 
@@ -281,7 +281,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
     Rect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
     if (screen_rect.isEmpty())
     {
-        LOG(LS_WARNING) << "Failed to get screen rect";
+        LOG(LS_ERROR) << "Failed to get screen rect";
         return Error::PERMANENT;
     }
 
@@ -296,7 +296,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
         helper_ = createHelper(screen_rect);
         if (!helper_)
         {
-            LOG(LS_WARNING) << "Failed to create mirror helper";
+            LOG(LS_ERROR) << "Failed to create mirror helper";
             return Error::PERMANENT;
         }
 
@@ -317,7 +317,7 @@ ScreenCapturerMirror::Error ScreenCapturerMirror::prepareCaptureResources()
 
         if (!frame_)
         {
-            LOG(LS_WARNING) << "Failed to create frame";
+            LOG(LS_ERROR) << "Failed to create frame";
             return Error::PERMANENT;
         }
 

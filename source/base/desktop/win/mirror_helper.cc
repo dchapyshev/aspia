@@ -74,8 +74,8 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
                                   KEY_ALL_ACCESS | KEY_WOW64_64KEY);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to open registry key for device: "
-                        << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(LS_ERROR) << "Unable to open registry key for device: "
+                      << base::SystemError::toString(static_cast<DWORD>(status));
         return false;
     }
 
@@ -90,7 +90,7 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
         {
             if (attached != 0)
             {
-                LOG(LS_WARNING) << "Mirror driver is already attached by another application";
+                LOG(LS_ERROR) << "Mirror driver is already attached by another application";
             }
         }
     }
@@ -98,8 +98,8 @@ bool MirrorHelper::attachToDesktop(std::wstring_view key_path, bool attach)
     status = device_key.writeValue(kAttachToDesktop, static_cast<DWORD>(!!attach));
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Unable to set value for registry key: "
-                        << base::SystemError::toString(static_cast<DWORD>(status));
+        LOG(LS_ERROR) << "Unable to set value for registry key: "
+                      << base::SystemError::toString(static_cast<DWORD>(status));
         return false;
     }
 

@@ -45,7 +45,7 @@ void FileTransferAgent::start(std::u16string_view channel_id)
 
     if (!channel_->connect(channel_id))
     {
-        LOG(LS_WARNING) << "Connection failed";
+        LOG(LS_ERROR) << "Connection failed";
         return;
     }
 
@@ -68,7 +68,7 @@ void FileTransferAgent::onIpcMessageReceived(const base::ByteArray& buffer)
 
     if (!base::parse(buffer, &request_))
     {
-        LOG(LS_WARNING) << "Unable to parse message";
+        LOG(LS_ERROR) << "Unable to parse message";
         return;
     }
 

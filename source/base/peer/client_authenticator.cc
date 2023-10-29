@@ -375,7 +375,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
 
     if (!SrpMath::verify_B_mod_N(B_, N_))
     {
-        LOG(LS_WARNING) << "Invalid B or N";
+        LOG(LS_ERROR) << "Invalid B or N";
         return false;
     }
 
@@ -384,7 +384,7 @@ bool ClientAuthenticator::readServerKeyExchange(const ByteArray& buffer)
     BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
     if (!key.isValid())
     {
-        LOG(LS_WARNING) << "Empty encryption key generated";
+        LOG(LS_ERROR) << "Empty encryption key generated";
         return false;
     }
 

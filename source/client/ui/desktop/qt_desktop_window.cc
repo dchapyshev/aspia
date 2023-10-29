@@ -337,7 +337,7 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
 
     if (base::contains(extensions_list, common::kRemoteUpdateExtension))
     {
-        if (Client::version() > peer_version_)
+        if (base::Version::currentFull() > peer_version_)
             toolbar_->enableRemoteUpdate(true);
     }
 
@@ -401,7 +401,7 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
         }
         else
         {
-            LOG(LS_WARNING) << "Unknown flag '" << name << "' with value: " << value;
+            LOG(LS_ERROR) << "Unknown flag '" << name << "' with value: " << value;
         }
     }
 }
@@ -1041,7 +1041,7 @@ void QtDesktopWindow::onPasteKeystrokes()
     }
     else
     {
-        LOG(LS_WARNING) << "QApplication::clipboard failed";
+        LOG(LS_ERROR) << "QApplication::clipboard failed";
     }
 }
 

@@ -187,12 +187,11 @@ void Router::onTcpConnected()
                 channel_->setChannelIdSupport(true);
             }
 
-            base::Version client_version(ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR,
-                                         ASPIA_VERSION_PATCH, GIT_COMMIT_COUNT);
+            const base::Version& client_version = base::Version::currentFull();
             if (router_version > client_version)
             {
-                LOG(LS_WARNING) << "Version mismatch (router: " << router_version.toString()
-                                << " client: " << client_version.toString();
+                LOG(LS_ERROR) << "Version mismatch (router: " << router_version.toString()
+                              << " client: " << client_version.toString();
                 window_proxy_->onVersionMismatch(router_version, client_version);
             }
             else

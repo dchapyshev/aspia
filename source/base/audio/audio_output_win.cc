@@ -86,7 +86,7 @@ bool AudioOutputWin::start()
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
-        LOG(LS_WARNING) << "Failed to prepare output endpoint with silence";
+        LOG(LS_ERROR) << "Failed to prepare output endpoint with silence";
     }
 
     num_frames_written_ = endpoint_buffer_size_frames_;
@@ -124,7 +124,7 @@ bool AudioOutputWin::stop()
 
     if (!is_active_)
     {
-        DLOG(LS_WARNING) << "No output stream is active";
+        DLOG(LS_ERROR) << "No output stream is active";
         releaseCOMObjects();
         is_initialized_ = false;
         return true;
@@ -331,7 +331,7 @@ bool AudioOutputWin::handleDataRequest()
     UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
     if (num_requested_frames == 0)
     {
-        DLOG(LS_WARNING) << "Audio thread is signaled but no new audio samples are needed";
+        DLOG(LS_ERROR) << "Audio thread is signaled but no new audio samples are needed";
         return true;
     }
 
@@ -458,7 +458,7 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
 {
     if (is_restarting_)
     {
-        DLOG(LS_WARNING) << "Ignoring since restart is already active";
+        DLOG(LS_ERROR) << "Ignoring since restart is already active";
         return S_OK;
     }
 

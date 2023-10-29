@@ -85,7 +85,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, static_cast<DWORD>(screen_id), &device, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplayDevicesW failed";
+        PLOG(LS_ERROR) << "EnumDisplayDevicesW failed";
         return;
     }
 
@@ -95,7 +95,7 @@ DesktopResizerWin::Screen::Screen(ScreenId screen_id)
 
     if (!EnumDisplaySettingsExW(device.DeviceName, ENUM_CURRENT_SETTINGS, &current_mode, 0))
     {
-        PLOG(LS_WARNING) << "EnumDisplaySettingsExW failed";
+        PLOG(LS_ERROR) << "EnumDisplaySettingsExW failed";
         return;
     }
 
@@ -140,15 +140,15 @@ bool DesktopResizerWin::Screen::setResolution(const Size& resolution)
     DEVMODEW mode;
     if (!modeForResolution(resolution, &mode))
     {
-        LOG(LS_WARNING) << "Specified mode " << resolution << " for screen "
-                        << screen_id_ << " not found";
+        LOG(LS_ERROR) << "Specified mode " << resolution << " for screen "
+                      << screen_id_ << " not found";
         return false;
     }
 
     LONG result = ChangeDisplaySettingsExW(name_.c_str(), &mode, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
         return false;
     }
 
@@ -163,7 +163,7 @@ void DesktopResizerWin::Screen::restoreResolution()
     LONG result = ChangeDisplaySettingsExW(name_.c_str(), nullptr, nullptr, 0, nullptr);
     if (result != DISP_CHANGE_SUCCESSFUL)
     {
-        LOG(LS_WARNING) << "ChangeDisplaySettingsW failed: " << result;
+        LOG(LS_ERROR) << "ChangeDisplaySettingsW failed: " << result;
     }
 }
 
@@ -228,9 +228,9 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
             candidate_mode.dmDisplayFrequency == current_mode.dmDisplayFrequency;
         if (best_mode_matches_current_frequency && !candidate_mode_matches_current_frequency)
         {
-            LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
-                         << candidate_mode.dmPelsHeight
-                         << ": mode matching current frequency already found.";
+            //LOG(LS_INFO) << "Ignoring mode " << candidate_mode.dmPelsWidth << "x"
+            //             << candidate_mode.dmPelsHeight
+            //             << ": mode matching current frequency already found.";
             return;
         }
     }
@@ -246,7 +246,7 @@ DesktopResizerWin::DesktopResizerWin()
     ScreenCapturer::ScreenList screen_list;
     if (!ScreenCaptureUtils::screenList(&screen_list))
     {
-        LOG(LS_WARNING) << "ScreenCaptureUtils::screenList failed";
+        LOG(LS_ERROR) << "ScreenCaptureUtils::screenList failed";
         return;
     }
 
@@ -266,7 +266,7 @@ std::vector<Size> DesktopResizerWin::supportedResolutions(ScreenId screen_id)
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return {};
     }
 
@@ -279,7 +279,7 @@ bool DesktopResizerWin::setResolution(ScreenId screen_id, const Size& resolution
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return false;
     }
 
@@ -292,7 +292,7 @@ void DesktopResizerWin::restoreResolution(ScreenId screen_id)
     auto screen = screens_.find(screen_id);
     if (screen == screens_.end())
     {
-        LOG(LS_WARNING) << "Specified screen not found: " << screen_id;
+        LOG(LS_ERROR) << "Specified screen not found: " << screen_id;
         return;
     }
 

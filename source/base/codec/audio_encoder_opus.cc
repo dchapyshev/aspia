@@ -122,9 +122,9 @@ bool AudioEncoderOpus::resetForPacket(const proto::AudioPacket& packet)
 
         if (channels_ <= 0 || channels_ > 2 || !isSupportedSampleRate(sampling_rate_))
         {
-            LOG(LS_WARNING) << "Unsupported OPUS parameters: "
-                            << channels_ << " channels with "
-                            << sampling_rate_ << " samples per second.";
+            LOG(LS_ERROR) << "Unsupported OPUS parameters: "
+                          << channels_ << " channels with "
+                          << sampling_rate_ << " samples per second.";
             return false;
         }
 
@@ -173,7 +173,7 @@ bool AudioEncoderOpus::setBitrate(int bitrate)
             break;
 
         default:
-            LOG(LS_WARNING) << "Invalid bitrate value: " << bitrate;
+            LOG(LS_ERROR) << "Invalid bitrate value: " << bitrate;
             return false;
     }
 

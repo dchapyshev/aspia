@@ -36,5 +36,7 @@
         <file>folder.png</file>
         <file>main.ico</file>
         <file>broom.png</file>
+        <file>export.png</file>
+        <file>import.png</file>
     </qresource>
 </RCC>

@@ -116,7 +116,7 @@ Application::Application(int& argc, char* argv[])
     DWORD id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &id))
     {
-        PLOG(LS_WARNING) << "ProcessIdToSessionId failed";
+        PLOG(LS_ERROR) << "ProcessIdToSessionId failed";
     }
     QString session_id = QString::number(id);
 #else

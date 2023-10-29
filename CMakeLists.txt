@@ -16,7 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.17.0)
+cmake_minimum_required(VERSION 3.21.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -25,6 +25,23 @@ project(aspia)
 set(ASPIA_VERSION_MAJOR 2)
 set(ASPIA_VERSION_MINOR 6)
 set(ASPIA_VERSION_PATCH 0)
+
+if ("$ENV{VCPKG_ROOT}" STREQUAL "")
+    message(FATAL_ERROR "VCPKG_ROOT not defined")
+endif()
+
+# On CI installed dir could be outside of vcpkg root
+if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
+    set(VCPKG_INSTALLED_DIR $ENV{VCPKG_ROOT}/installed)
+    message(STATUS "VCPKG_INSTALLED_DIR -> redefine: ${VCPKG_INSTALLED_DIR}")
+else()
+    set(VCPKG_INSTALLED_DIR $ENV{VCPKG_INSTALLED_DIR})
+    message(STATUS "VCPKG_INSTALLED_DIR -> external: ${VCPKG_INSTALLED_DIR}")
+endif()
+
+if ("$ENV{VCPKG_TRIPLET}" STREQUAL "")
+    message(FATAL_ERROR "VCPKG_TRIPLET not defined")
+endif()
 
 add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
                 -DASPIA_VERSION_MINOR=${ASPIA_VERSION_MINOR}

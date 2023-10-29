@@ -157,7 +157,7 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::VideoPacket* packet)
         translator_ = PixelTranslator::create(PixelFormat::ARGB(), target_format_);
         if (!translator_)
         {
-            LOG(LS_WARNING) << "Unsupported pixel format";
+            LOG(LS_ERROR) << "Unsupported pixel format";
             return false;
         }
     }
@@ -214,7 +214,7 @@ bool VideoEncoderZstd::setCompressRatio(int compression_ratio)
 {
     if (compression_ratio > ZSTD_maxCLevel() || compression_ratio < 1)
     {
-        LOG(LS_WARNING) << "Invalid compression ratio: " << compression_ratio;
+        LOG(LS_ERROR) << "Invalid compression ratio: " << compression_ratio;
         return false;
     }
 

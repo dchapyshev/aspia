@@ -76,7 +76,7 @@ BOOL ScopedClipboard::empty()
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return FALSE;
     }
 
@@ -88,7 +88,7 @@ void ScopedClipboard::setData(UINT format, HANDLE mem)
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return;
     }
 
@@ -101,7 +101,7 @@ HANDLE ScopedClipboard::data(UINT format) const
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        DLOG(LS_ERROR) << "Clipboard is not open";
         return nullptr;
     }
 

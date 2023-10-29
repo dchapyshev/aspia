@@ -54,7 +54,7 @@ void ClientSessionSystemInfo::onReceived(uint8_t /* channel_id */, const base::B
 
     if (!base::parse(buffer, &request))
     {
-        LOG(LS_WARNING) << "Unable to parse system info request";
+        LOG(LS_ERROR) << "Unable to parse system info request";
         return;
     }
 

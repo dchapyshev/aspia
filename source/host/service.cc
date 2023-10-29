@@ -93,17 +93,17 @@ void Service::onStart()
 #if defined(OS_WIN)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
     {
-        PLOG(LS_WARNING) << "SetPriorityClass failed";
+        PLOG(LS_ERROR) << "SetPriorityClass failed";
     }
 
     if (!base::win::SafeModeUtil::setSafeMode(false))
     {
-        LOG(LS_WARNING) << "Failed to turn off boot in safe mode";
+        LOG(LS_ERROR) << "Failed to turn off boot in safe mode";
     }
 
     if (!base::win::SafeModeUtil::setSafeModeService(kHostServiceName, false))
     {
-        LOG(LS_WARNING) << "Failed to remove service from boot in Safe Mode";
+        LOG(LS_ERROR) << "Failed to remove service from boot in Safe Mode";
     }
 #endif // defined(OS_WIN)
 

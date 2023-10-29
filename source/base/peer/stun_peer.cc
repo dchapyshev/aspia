@@ -206,12 +206,12 @@ void StunPeer::onErrorOccurred(const base::Location& location, const std::error_
 {
     if (error_code)
     {
-        LOG(LS_WARNING) << "Error occurred: " << base::utf16FromLocal8Bit(error_code.message())
-                        << " (from: " << location.toString() << ")";
+        LOG(LS_ERROR) << "Error occurred: " << base::utf16FromLocal8Bit(error_code.message())
+                      << " (from: " << location.toString() << ")";
     }
     else
     {
-        LOG(LS_WARNING) << "Error occurred (from: " << location.toString() << ")";
+        LOG(LS_ERROR) << "Error occurred (from: " << location.toString() << ")";
     }
 
     if (delegate_)

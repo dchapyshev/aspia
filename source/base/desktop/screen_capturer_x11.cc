@@ -174,7 +174,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
             selected_monitor_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory());
         if (!frame)
         {
-            LOG(LS_WARNING) << "Unable to create frame";
+            LOG(LS_ERROR) << "Unable to create frame";
             return nullptr;
         }
 
@@ -212,7 +212,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
         x_image = XFixesGetCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_WARNING) << "XFixesGetCursorImage failed";
+            LOG(LS_ERROR) << "XFixesGetCursorImage failed";
             return nullptr;
         }
     }
@@ -344,7 +344,7 @@ bool ScreenCapturerX11::init()
     // Default source set here so that selected_monitor_rect_ is sized correctly.
     if (!selectScreen(kFullDesktopScreenId))
     {
-        LOG(LS_WARNING) << "Unable select screen";
+        LOG(LS_ERROR) << "Unable select screen";
     }
 
     LOG(LS_INFO) << "X11 screen capturer is initialized!";

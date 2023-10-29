@@ -81,7 +81,7 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 {
     if (pool_.empty())
     {
-        LOG(LS_WARNING) << "Empty key pool";
+        LOG(LS_ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
@@ -100,7 +100,7 @@ std::optional<SharedKeyPool::Credentials> SharedKeyPool::Impl::takeCredentials()
 
     if (preffered_relay == pool_.end())
     {
-        LOG(LS_WARNING) << "Empty key pool";
+        LOG(LS_ERROR) << "Empty key pool";
         return std::nullopt;
     }
 
