@@ -90,7 +90,7 @@ jobs:
       # Step 5
       - name: Build MSI packages
         run: |
-          installer/build.cmd 2.6.0 matrix.arch ${{ github.workspace }} ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}
+          installer/build.cmd 2.6.0 ${{ matrix.arch }} ${{ github.workspace }} ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}
         shell: cmd
         working-directory: ${{ github.workspace }}
 
