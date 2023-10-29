@@ -12,7 +12,10 @@
     "protobuf",
     "qt5-base",
     "qt5-translations",
-    "qt5-winextras",
+    {
+      "name": "qt5-winextras",
+      "platform": "windows"
+    },
     "rapidjson"
   ]
 }
