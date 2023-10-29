@@ -199,8 +199,8 @@ std::string userNameByHandle(HANDLE process)
 
     wchar_t domain_buffer[128] = {0};
     wchar_t user_buffer[128] = {0};
-    DWORD user_buffer_size = std::size(user_buffer);
-    DWORD domain_buffer_size = std::size(domain_buffer);
+    DWORD user_buffer_size = static_cast<DWORD>(std::size(user_buffer));
+    DWORD domain_buffer_size = static_cast<DWORD>(std::size(domain_buffer));
     SID_NAME_USE sid_type;
 
     if (!LookupAccountSidW(nullptr, token_user->User.Sid,
@@ -219,7 +219,7 @@ std::string userNameByHandle(HANDLE process)
 std::string filePathByHandle(HANDLE process)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
-    DWORD buffer_size = std::size(buffer);
+    DWORD buffer_size = static_cast<DWORD>(std::size(buffer));
 
     if (!QueryFullProcessImageNameW(process, 0, buffer, &buffer_size))
     {
