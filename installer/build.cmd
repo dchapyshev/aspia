@@ -12,14 +12,9 @@ if "%ASPIA_ARCH%" == "" ( goto :USAGE )
 if "%ASPIA_SRC_DIR%" == "" ( goto :USAGE )
 if "%ASPIA_BIN_DIR%" == "" ( goto :USAGE )
 
-set TMP_DIR=%ASPIA_BIN_DIR%\temp
+set TMP_DIR=%ASPIA_BIN_DIR%
 set SRC_DIR=%ASPIA_SRC_DIR%\installer
 set EN_US_POSTFIX=%ASPIA_VERSION%-%ASPIA_ARCH%
-
-if not exist "%TMP_DIR%" (
-    echo "Output directory does not exist. Create it."
-    mkdir %TMP_DIR%
-)
 
 echo "##################################################"
 echo "Aspia Src Dir: %ASPIA_SRC_DIR%"

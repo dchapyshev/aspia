@@ -100,6 +100,6 @@ jobs:
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.msi
+            ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*-${{ matrix.arch }}.msi
           if-no-files-found: error
           retention-days: 7
