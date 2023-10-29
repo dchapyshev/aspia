@@ -19,6 +19,7 @@
 #include "base/strings/string_number_conversions.h"
 
 #include "base/strings/string_printf.h"
+#include "build/build_config.h"
 
 #include <gtest/gtest.h>
 
@@ -29,6 +30,18 @@
 #include <cstddef>
 #include <cstdio>
 #include <limits>
+
+#include <inttypes.h>
+
+#if !defined(PRIuS)
+#if defined(OS_WIN)
+#define PRIuS "Iu"
+#elif defined(OS_POSIX)
+#define PRIuS "zu"
+#else
+#warning Unsupported OS
+#endif
+#endif // !defined(PRIuS)
 
 namespace base {
 
@@ -95,7 +108,7 @@ TEST(StringNumberConversionsTest, Uint64ToString)
 TEST(StringNumberConversionsTest, SizeTToString)
 {
     size_t size_t_max = std::numeric_limits<size_t>::max();
-    std::string size_t_max_string = stringPrintf("%Iu", size_t_max);
+    std::string size_t_max_string = stringPrintf("%" PRIuS, size_t_max);
 
     static const struct
     {

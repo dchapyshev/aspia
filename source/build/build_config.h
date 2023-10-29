@@ -35,6 +35,7 @@
 
 #if defined(OS_LINUX) || defined(OS_MAC)
 #define OS_POSIX 1
+#define OS_UNIX 1
 #endif
 
 // Compiler detection. Note: clang masquerades as GCC on POSIX and as MSVC on Windows.
