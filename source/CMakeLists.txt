@@ -25,8 +25,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 list(APPEND CMAKE_AUTORCC_OPTIONS -compress 9 -threshold 5)
 
-add_definitions(-DUSE_PCG_GENERATOR)
-
 if(NOT Qt5LinguistTools_FOUND)
     message(WARNING "Qt5 linguist tools not found. Internationalization support will be disabled.")
     add_definitions(-DI18L_DISABLED)
@@ -109,12 +107,20 @@ set(CMAKE_CXX_STANDARD 17)
 
 if (MSVC)
     # C++ compliller flags.
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /MP /arch:SSE2")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /MP")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 /MP")
 
     # C compiller flags.
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /MP /arch:SSE2")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /MP")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /W3 /MP")
+
+    if (${CMAKE_CL_64} EQUAL 0)
+        message(STATUS "x86 compiller detected")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /arch:SSE2")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /arch:SSE2")
+    else()
+        message(STATUS "x64 compiller detected")
+    endif()
 
     # Linker flags.
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /IGNORE:4099")

@@ -19,12 +19,8 @@
 #include "base/guid.h"
 
 #include "base/endian_util.h"
-#include "base/logging.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include "third_party/pcg-cpp/pcg_random.hpp"
-#endif // defined(USE_PCG_GENERATOR)
-
+#include <chrono>
 #include <random>
 
 namespace base {
@@ -158,11 +154,7 @@ Guid Guid::create()
     uint64_t seed = static_cast<uint64_t>(
         std::chrono::high_resolution_clock::now().time_since_epoch().count());
 
-#if defined(USE_PCG_GENERATOR)
-    pcg64_fast engine(seed);
-#else // defined(USE_PCG_GENERATOR)
     std::mt19937_64 engine(seed);
-#endif
 
     std::uniform_int_distribution<uint64_t> uniform_distance(
         std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max());

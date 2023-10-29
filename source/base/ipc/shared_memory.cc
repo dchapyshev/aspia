@@ -23,10 +23,6 @@
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include "third_party/pcg-cpp/pcg_random.hpp"
-#endif // defined(USE_PCG_GENERATOR)
-
 #include <atomic>
 #include <cstring>
 #include <random>
@@ -49,13 +45,8 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 int randomInt()
 {
-#if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> device;
-    pcg32_fast engine(device);
-#else // defined(USE_PCG_GENERATOR)
     std::random_device device;
     std::mt19937 engine(device());
-#endif
 
     std::uniform_int_distribution<> distance(0, std::numeric_limits<int>::max());
     return distance(engine);

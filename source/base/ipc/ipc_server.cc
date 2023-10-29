@@ -26,10 +26,6 @@
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
-#if defined(USE_PCG_GENERATOR)
-#include "third_party/pcg-cpp/pcg_random.hpp"
-#endif // defined(USE_PCG_GENERATOR)
-
 #if defined(OS_WIN)
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
@@ -298,13 +294,8 @@ std::u16string IpcServer::createUniqueId()
 #error Not implemented
 #endif
 
-#if defined(USE_PCG_GENERATOR)
-    pcg_extras::seed_seq_from<std::random_device> device;
-    pcg32_fast engine(device);
-#else // defined(USE_PCG_GENERATOR)
     std::random_device device;
     std::mt19937 engine(device());
-#endif
 
     std::uniform_int_distribution<uint32_t> distance(0, std::numeric_limits<uint32_t>::max());
 
