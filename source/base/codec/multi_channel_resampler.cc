@@ -47,7 +47,7 @@ MultiChannelResampler::MultiChannelResampler(int channels,
     }
 
     // Setup the wrapped AudioBus for channel data.
-    wrapped_resampler_audio_bus_->set_frames(request_size);
+    wrapped_resampler_audio_bus_->set_frames(static_cast<int>(request_size));
 
     // Allocate storage for all channels except the first, which will use the
     // |destination| provided to ProvideInput() directly.

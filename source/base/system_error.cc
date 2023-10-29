@@ -73,8 +73,8 @@ std::string SystemError::toString(Code code)
     constexpr int kErrorMessageBufferSize = 256;
     wchar_t msgbuf[kErrorMessageBufferSize];
 
-    DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                               nullptr, code, 0, msgbuf, std::size(msgbuf), nullptr);
+    DWORD len = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
+                               code, 0, msgbuf, static_cast<DWORD>(std::size(msgbuf)), nullptr);
     if (len)
     {
         std::wstring msg = collapseWhitespace(msgbuf, true) + stringPrintf(L" (0x%lX)", code);

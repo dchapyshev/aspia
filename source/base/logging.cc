@@ -264,7 +264,7 @@ std::filesystem::path execFilePath()
 
 #if defined(OS_WIN)
     wchar_t buffer[MAX_PATH] = { 0 };
-    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, std::size(buffer));
+    GetModuleFileNameExW(GetCurrentProcess(), nullptr, buffer, static_cast<DWORD>(std::size(buffer)));
     exec_file_path = buffer;
 #elif defined(OS_LINUX)
     char buffer[PATH_MAX] = { 0 };
@@ -472,7 +472,7 @@ LogMessage::~LogMessage()
     {
         std::scoped_lock lock(g_log_file_lock);
 
-        if (g_log_file.tellp() >= g_max_log_file_size)
+        if (static_cast<size_t>(g_log_file.tellp()) >= g_max_log_file_size)
         {
             // The maximum size of the log file has been exceeded. Close the current log file and
             // create a new one.

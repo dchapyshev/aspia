@@ -188,7 +188,7 @@ void AudioOutputWin::threadRun()
     {
         // Wait for a close-down event, stream-switch event or a new render event.
         DWORD wait_result = WaitForMultipleObjects(
-            std::size(wait_array), wait_array, false, INFINITE);
+            static_cast<DWORD>(std::size(wait_array)), wait_array, false, INFINITE);
         switch (wait_result)
         {
             case WAIT_OBJECT_0 + 0:

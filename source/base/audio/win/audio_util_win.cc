@@ -326,7 +326,7 @@ bool isMMCSSSupported()
     static const wchar_t* const kAvrtDLL = L"%WINDIR%\\system32\\Avrt.dll";
     wchar_t path[MAX_PATH] = { 0 };
 
-    ExpandEnvironmentStringsW(kAvrtDLL, path, std::size(path));
+    ExpandEnvironmentStringsW(kAvrtDLL, path, static_cast<DWORD>(std::size(path)));
     return (LoadLibraryExW(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH) != nullptr);
 }
 

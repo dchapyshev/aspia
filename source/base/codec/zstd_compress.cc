@@ -32,7 +32,7 @@ const uint32_t kMaxDataSize = 64 * 1024 * 1024; // 64 MB
 template <class T>
 T compressT(const T& source, int compress_level)
 {
-    uint32_t source_data_size = source.size();
+    uint32_t source_data_size = static_cast<uint32_t>(source.size());
     if (!source_data_size || source_data_size > kMaxDataSize)
     {
         LOG(LS_ERROR) << "Invalid source data size: " << source_data_size;
