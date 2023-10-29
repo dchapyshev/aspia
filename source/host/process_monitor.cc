@@ -495,8 +495,8 @@ bool ProcessMonitor::updateSnapshot()
             NtQuerySystemInformationFunc nt_query_system_information_func =
                 reinterpret_cast<NtQuerySystemInformationFunc>(nt_query_system_info_func_);
 
-            NTSTATUS status = nt_query_system_information_func(
-                SystemProcessInformation, snapshot_.data(), snapshot_.size(), nullptr);
+            NTSTATUS status = nt_query_system_information_func(SystemProcessInformation,
+                snapshot_.data(), static_cast<DWORD>(snapshot_.size()), nullptr);
             if (NT_SUCCESS(status))
                 return true;
 
