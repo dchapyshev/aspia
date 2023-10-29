@@ -66,7 +66,7 @@ jobs:
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak ]; then
             echo "Restore vcpkg executable"
-            cp $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak vcpkg/vcpkg
+            cp $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak vcpkg4aspia/vcpkg
           fi
           
           mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
@@ -84,7 +84,7 @@ jobs:
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f vcpkg/vcpkg ]; then
             echo "Backup vcpkg executable"
-            cp vcpkg/vcpkg $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak
+            cp vcpkg4aspia/vcpkg $VCPKG_DEFAULT_BINARY_CACHE/vcpkg.bak
           fi
 
       # Step 5
