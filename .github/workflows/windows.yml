@@ -88,15 +88,18 @@ jobs:
           ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
 
       # Step 5
+      - name: Build MSI packages
+        run: |
+          installer/build.cmd "2.6.0" "matrix.arch" "${{ github.workspace }}" "${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}"
+        shell: cmd
+        working-directory: ${{ github.workspace }}
+
+      # Step 6
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*
-            !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.lib
-            !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.exp
-            !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.manifest
-            !${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/aspia_base_tests*
+            ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/${{ matrix.build_type }}/*.msi
           if-no-files-found: error
           retention-days: 7
