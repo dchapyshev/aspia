@@ -138,7 +138,7 @@ if (APPLE)
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_console_ICON})
 
     add_custom_command(TARGET aspia_console POST_BUILD
-        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "${CMAKE_BINARY_DIR}/Aspia Console.app"
+        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/Aspia Console.app"
         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         COMMENT "Signing..."
         VERBATIM)
