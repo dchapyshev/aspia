@@ -230,46 +230,48 @@ set(CPACK_PACKAGE_VERSION_PATCH "${ASPIA_VERSION_PATCH}")
 # Host
 #--------------------------------------------------------------------------------------------------
 
-install(TARGETS
-    aspia_host_core
-    aspia_host_service
-    aspia_host
-    aspia_desktop_agent
-    aspia_file_transfer_agent
-        BUNDLE DESTINATION . COMPONENT host
-        RUNTIME DESTINATION bin COMPONENT host
-        LIBRARY DESTINATION lib COMPONENT host)
-set(CPACK_COMPONENT_HOST_NAME "aspia-host")
-set(CPACK_COMPONENT_HOST_DISPLAY_NAME "Aspia Host")
-set(CPACK_COMPONENT_HOST_DESCRIPTION "Remote desktop software.")
-
 if (LINUX)
-    # Desktop file.
-    install(FILES host/linux/aspia-host.desktop
-        DESTINATION share/applications COMPONENT host)
+    install(TARGETS
+        aspia_host_core
+        aspia_host_service
+        aspia_host
+        aspia_desktop_agent
+        aspia_file_transfer_agent
+            BUNDLE DESTINATION . COMPONENT host
+            RUNTIME DESTINATION bin COMPONENT host
+            LIBRARY DESTINATION lib COMPONENT host)
+    set(CPACK_COMPONENT_HOST_NAME "aspia-host")
+    set(CPACK_COMPONENT_HOST_DISPLAY_NAME "Aspia Host")
+    set(CPACK_COMPONENT_HOST_DESCRIPTION "Remote desktop software.")
 
-    # Host icons.
-    install(FILES host/linux/icons/16x16/aspia_host.png
-        DESTINATION share/icons/hicolor/16x16/apps COMPONENT host)
-    install(FILES host/linux/icons/24x24/aspia_host.png
-        DESTINATION share/icons/hicolor/24x24/apps COMPONENT host)
-    install(FILES host/linux/icons/32x32/aspia_host.png
-        DESTINATION share/icons/hicolor/32x32/apps COMPONENT host)
-    install(FILES host/linux/icons/48x48/aspia_host.png
-        DESTINATION share/icons/hicolor/48x48/apps COMPONENT host)
-    install(FILES host/linux/icons/64x64/aspia_host.png
-        DESTINATION share/icons/hicolor/64x64/apps COMPONENT host)
+    if (LINUX)
+        # Desktop file.
+        install(FILES host/linux/aspia-host.desktop
+            DESTINATION share/applications COMPONENT host)
 
-    # Service file.
-    install(FILES host/linux/aspia-host-service.service
-        DESTINATION lib/systemd/system COMPONENT host)
+        # Host icons.
+        install(FILES host/linux/icons/16x16/aspia_host.png
+            DESTINATION share/icons/hicolor/16x16/apps COMPONENT host)
+        install(FILES host/linux/icons/24x24/aspia_host.png
+            DESTINATION share/icons/hicolor/24x24/apps COMPONENT host)
+        install(FILES host/linux/icons/32x32/aspia_host.png
+            DESTINATION share/icons/hicolor/32x32/apps COMPONENT host)
+        install(FILES host/linux/icons/48x48/aspia_host.png
+            DESTINATION share/icons/hicolor/48x48/apps COMPONENT host)
+        install(FILES host/linux/icons/64x64/aspia_host.png
+            DESTINATION share/icons/hicolor/64x64/apps COMPONENT host)
 
-    set(CPACK_DEBIAN_HOST_FILE_NAME
-        "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
-endif()
+        # Service file.
+        install(FILES host/linux/aspia-host-service.service
+            DESTINATION lib/systemd/system COMPONENT host)
 
-if (APPLE)
-    set(CPACK_DMG_HOST_FILE_NAME "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}")
+        set(CPACK_DEBIAN_HOST_FILE_NAME
+            "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+    endif()
+
+    if (APPLE)
+        set(CPACK_DMG_HOST_FILE_NAME "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}")
+    endif()
 endif()
 
 #--------------------------------------------------------------------------------------------------
