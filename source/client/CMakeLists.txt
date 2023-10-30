@@ -375,7 +375,7 @@ if (APPLE)
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_client_ICON})
 
     add_custom_command(TARGET aspia_client POST_BUILD
-        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "./Aspia Client.app"
+        COMMAND ${CODESIGN_BIN} --force --sign "Developer ID Application" -v "Aspia Client.app"
         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         COMMENT "Signing..."
         VERBATIM)
