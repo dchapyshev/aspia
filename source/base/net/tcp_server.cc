@@ -222,7 +222,7 @@ uint16_t TcpServer::port() const
 bool TcpServer::isValidListenInterface(std::u16string_view interface)
 {
     asio::error_code error_code;
-    asio::ip::make_address_v4(base::local8BitFromUtf16(interface), error_code);
+    asio::ip::make_address(base::local8BitFromUtf16(interface), error_code);
     if (error_code)
     {
         LOG(LS_ERROR) << "Invalid interface address: "
