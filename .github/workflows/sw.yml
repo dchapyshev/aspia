@@ -29,7 +29,7 @@ jobs:
 
   linux:
     runs-on: ubuntu-22.04
-    container: fedora:38
+    container: fedora:latest
     steps:
     - uses: actions/checkout@v1
     - name: prepare
