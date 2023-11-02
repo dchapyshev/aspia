@@ -172,15 +172,16 @@ cd vcpkg4aspia
 ./bootstrap-vcpkg.sh
 ```
 8. Install libraries in vcpkg.
-If you are building on an Intel-based version of MacOS, then the installation command looks like:
+
+If you are building on an **Intel**-based version of MacOS for **x86_64**, then the installation command looks like:
 ```bash
 ./vcpkg install <library_name>:x64-osx
 ```
-If you are building on an ARM-based version of MacOS for ARM, then the installation command looks like:
+If you are building on an **ARM**-based version of MacOS for **ARM**, then the installation command looks like:
 ```bash
 ./vcpkg install <library_name>:arm64-osx
 ```
-If you are building on an ARM-based version of MacOS for x86_64, then the installation command looks like:
+If you are building on an **ARM**-based version of MacOS for **x86_64**, then the installation command looks like:
 ```bash
 arch -arch x86_64 ./vcpkg install <library_name> --triplet=x64-osx --host-triplet=x64-osx
 ```
