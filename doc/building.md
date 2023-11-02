@@ -17,11 +17,9 @@ Windows
 3. Download and install [CMake](https://cmake.org/download) (version >= 3.21.0).
 4. Download and install [Git](https://git-scm.com/downloads).
 5. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository). To do this, go to the directory where you want to install and run the commands:
-```
+```bash
 git clone https://github.com/dchapyshev/vcpkg4aspia.git
-
 cd vcpkg4aspia
-
 ./bootstrap-vcpkg.sh
 ```
 6. In vcpkg, you need to install the following libraries (use triplet **x86-windows-static** or **x64-windows-static** in all cases; for example: **./vcpkg install asio:x86-windows-static**):
@@ -40,7 +38,7 @@ cd vcpkg4aspia
 * sqlite3
 * zstd
 7. Go to the directory with source code (root directory) and run the following commands:
-```
+```bash
 mkdir build
 cd build
 cmake ..\ -G "Visual Studio 16 2019" -A Win32 -DCMAKE_TOOLCHAIN_FILE=<vcpkg_path>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=<triplet_name>
@@ -56,11 +54,9 @@ Linux
 The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have a different distribution kit or its version, then additional steps may be required.
 1. Install [QtCreator](https://download.qt.io/official_releases/online_installers/).
 2. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository). To do this, go to the directory where you want to install and run the commands:
-```
+```bash
 git clone https://github.com/dchapyshev/vcpkg4aspia.git
-
 cd vcpkg4aspia
-
 ./bootstrap-vcpkg.sh
 ```
 3. Install the following packages in your package manager (**packages must be installed before installing vcpkg and its packages**):
@@ -142,7 +138,7 @@ MacOS
 3. Open **Xcode** and agree to install **additional components**.
 4. Install [brew](https://brew.sh).
 5. Install packages in **brew**:
-```
+```bash
 brew install cmake
 brew install autoconf
 brew install autoconf-archive
@@ -155,24 +151,22 @@ brew install ninja
 ```
 6. Install [QtCreator](https://download.qt.io/official_releases/online_installers/).
 7. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository). To do this, go to the directory where you want to install and run the commands:
-```
+```bash
 git clone https://github.com/dchapyshev/vcpkg4aspia.git
-
 cd vcpkg4aspia
-
 ./bootstrap-vcpkg.sh
 ```
 8. Install libraries in vcpkg.
 If you are building on an Intel-based version of MacOS, then the installation command looks like:
-```
+```bash
 ./vcpkg install <library_name>:x64-osx
 ```
 If you are building on an ARM-based version of MacOS for ARM, then the installation command looks like:
-```
+```bash
 ./vcpkg install <library_name>:arm64-osx
 ```
 If you are building on an ARM-based version of MacOS for x86_64, then the installation command looks like:
-```
+```bash
 arch -arch x86_64 ./vcpkg install <library_name> --triplet=x64-osx --host-triplet=x64-osx
 ```
 List of libraries to install:
