@@ -36,13 +36,13 @@ function getDownloadUrl($mysqli, $release_id, $package, $arch)
     return $row["url"];
 }
 
-function getUpdates($mysqli, $package, $source_version, $arch)
+function getUpdates($mysqli, $package, $version, $arch)
 {
-    $sql = "SELECT release_id FROM updates WHERE source_version = '$source_version'";
+    $sql = "SELECT release_id FROM updates WHERE version = '$version'";
     if (!$result = $mysqli->query($sql))
         die('Failed to execute database query: '.$mysqli->error);
 
-    if ($result->num_rows != 0)
+    if ($result->num_rows == 0)
         die('No updates available');
 
     $row = $result->fetch_array();
@@ -50,13 +50,15 @@ function getUpdates($mysqli, $package, $source_version, $arch)
 
     $release_id = $row["release_id"];
 
-    $url = getDownloadUrl($release_id, $package, $arch);
+    $url = getDownloadUrl($mysqli, $release_id, $package, $arch);
+    if (empty($url))
+        die('Empty URL for download');
 
     $sql = "SELECT version, description FROM releases WHERE id = '$release_id'";
     if (!$result = $mysqli->query($sql))
         die('Failed to execute database query: '.$mysqli->error);
 
-    if ($result->num_rows != 0)
+    if ($result->num_rows == 0)
         die('No releases available');
 
     $row = $result->fetch_array();
@@ -65,22 +67,15 @@ function getUpdates($mysqli, $package, $source_version, $arch)
     $target_version = $row["version"];
     $description = $row["description"];
 
-    if ($result->num_rows != 0)
-    {
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        echo "<update>";
+    if (empty($target_version))
+        die('Empty target version');
 
-        // There is an update available.
-        $row = $result->fetch_array();
-
-        echo "<version>".$target_version."</version>";
-        echo "<description>".$description."</description>";
-        echo "<url>".$url."</url>";
-
-        echo "</update>";
-    }
-
-    $result->close();
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    echo "<update>";
+    echo "<version>".$target_version."</version>";
+    echo "<description>".$description."</description>";
+    echo "<url>".$url."</url>";
+    echo "</update>";
 }
 
 function doWork()
