@@ -96,7 +96,7 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 * cmake
 * curl
 * qtcreator
-3. In vcpkg, you need to install the following libraries (use triplet **x64-linux** in all cases):
+3. In vcpkg, you need to install the following libraries:
 * asio
 * curl
 * gtest
@@ -114,6 +114,42 @@ The build for Linux was tested only in Ubuntu 20.04 and Debian 11.0. If you have
 4. Open **QtCreator -> Tools -> Options -> Kits -> Qt Versions**. Click the Add button and specify the path to **<vcpkg_path>/installed/x64-linux/tools/qt5/bin/qmake**.
 5. Open **QtCreator -> Tools -> Options -> Kits -> Kits**. Click the Add button. Enter a display name for the profile, specify the compilers (gcc/g++), and the Qt profile you added earlier.
 6. Open **CMakeLists.txt** from the Aspia root directory in QtCreator and configure the build using the previously added profile.
+
+MacOS
+-----
+1. Install **Xcode** from AppStore.
+2. Execute command in terminal: **xcode-select --install**
+3. Open **Xcode** and agree to install **additional components**.
+4. Install [brew](https://brew.sh).
+5. Install packages in **brew**:
+* brew install cmake
+* brew install autoconf
+* brew install autoconf-archive
+* brew install automake
+* brew install nasm
+* brew install pkg-config
+* brew install wget
+* brew install curl
+* brew install ninja
+6. Download and install [vcpkg4aspia](https://github.com/dchapyshev/vcpkg4aspia) (forked from Microsoft repository).
+7. In vcpkg, you need to install the following libraries:
+* asio
+* curl
+* gtest
+* icu
+* libvpx
+* libyuv
+* openssl
+* opus
+* protobuf
+* qt5-base
+* qt5-translations
+* rapidjson
+* sqlite3
+* zstd
+8. Open **QtCreator -> Tools -> Options -> Kits -> Qt Versions**. Click the Add button and specify the path to **<vcpkg_path>/installed/<arch>/tools/qt5/bin/qmake**.
+9. Open **QtCreator -> Tools -> Options -> Kits -> Kits**. Click the Add button. Enter a display name for the profile, specify the compilers, and the Qt profile you added earlier.
+10. Open **CMakeLists.txt** from the Aspia root directory in QtCreator and configure the build using the previously added profile.
 
 Alternative instructions (SW build system)
 ------------------------------------------
