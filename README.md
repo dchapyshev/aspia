@@ -34,11 +34,6 @@ System requirements
 - Debian 11/Ubuntu 20.04 Linux (x86_64 CPU)
 - MacOSX (x86_64 or ARM CPU)
 
-Night builds
-------------
-Nightly builds are [available](https://files.aspia.org/nightly) for Windows, MacOSX, Linux.
-Please note that nightly builds are not a release and may contain bugs.
-
 Contacts
 --------
 E-Mail: dmitry@aspia.ru
