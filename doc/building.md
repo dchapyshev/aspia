@@ -12,7 +12,7 @@ Windows
 
    2.3. **ATL/MFC** libraries should be selected when installing.
 
-   2.4. **English language pack** (Required for vcpkg; Only English language should be installed, without any other).
+   2.4. **English language pack** (Required for vcpkg; **Only English language should be installed, without any other**).
 
 3. Download and install [CMake](https://cmake.org/download) (version >= 3.21.0).
 4. Download and install [Git](https://git-scm.com/downloads).
