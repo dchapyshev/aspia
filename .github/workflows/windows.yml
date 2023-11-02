@@ -9,7 +9,10 @@ on:
       - 'LICENSE.md'
       - 'CONTRIBUTING.md'
       - 'CODE_OF_CONDUCT.md'
-      - 'doc'
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
