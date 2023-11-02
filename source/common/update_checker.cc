@@ -23,6 +23,7 @@
 #include "base/version.h"
 #include "base/memory/byte_array.h"
 #include "base/net/curl_util.h"
+#include "build/build_config.h"
 
 namespace common {
 
@@ -113,6 +114,32 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, base::ByteArra
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
+    std::string os;
+
+#if defined(OS_WIN)
+    os = "windows";
+#elif defined(OS_LINUX)
+    os = "linux";
+#elif defined(OS_MAC)
+    os = "macosx";
+#else
+#error Unknown OS
+#endif
+
+    std::string arch;
+
+#if defined(ARCH_CPU_X86_64)
+    arch = "x86_64";
+#elif defined(ARCH_CPU_X86)
+    arch = "x86";
+#elif defined(ARCH_CPU_ARMEL)
+    arch = "arm";
+#elif defined(ARCH_CPU_ARM64)
+    arch = "arm64";
+#else
+#error Unknown architecture
+#endif
+
     const base::Version& version = base::Version::currentShort();
 
     std::string url(update_server_);
@@ -120,6 +147,18 @@ void UpdateChecker::run()
     url += "package=" + package_name_;
     url += '&';
     url += "version=" + version.toString(3);
+
+    if (!os.empty())
+    {
+        url += '&';
+        url += "os=" + os;
+    }
+
+    if (!arch.empty())
+    {
+        url += '&';
+        url += "arch=" + arch;
+    }
 
     LOG(LS_INFO) << "Start checking for updates. Url: " << url;
 
