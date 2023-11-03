@@ -96,6 +96,21 @@ Desktop Desktop::threadDesktop()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+std::vector<std::wstring> Desktop::desktopList(HWINSTA winsta)
+{
+    std::vector<std::wstring> list;
+
+    if (!EnumDesktopsW(winsta, enumDesktopProc, reinterpret_cast<LPARAM>(&list)))
+    {
+        PLOG(LS_ERROR) << "EnumDesktopsW failed";
+        return {};
+    }
+
+    return list;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Desktop::name(wchar_t* name, DWORD length) const
 {
     if (!desktop_)
@@ -169,6 +184,27 @@ Desktop& Desktop::operator=(Desktop&& other) noexcept
     other.desktop_ = nullptr;
 
     return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
+{
+    std::vector<std::wstring>* list = reinterpret_cast<std::vector<std::wstring>*>(lparam);
+    if (!list)
+    {
+        LOG(LS_ERROR) << "Invalid desktop list pointer";
+        return FALSE;
+    }
+
+    if (!desktop)
+    {
+        LOG(LS_ERROR) << "Invalid desktop name";
+        return FALSE;
+    }
+
+    list->emplace_back(desktop);
+    return TRUE;
 }
 
 } // namespace base
