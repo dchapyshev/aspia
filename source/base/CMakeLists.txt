@@ -711,6 +711,8 @@ if (WIN32)
         win/user_group_enumerator.h
         win/video_adapter_enumerator.cc
         win/video_adapter_enumerator.h
+        win/window_station.cc
+        win/window_station.h
         win/windows_version.cc
         win/windows_version.h)
 
