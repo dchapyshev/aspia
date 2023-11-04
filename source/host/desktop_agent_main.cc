@@ -30,6 +30,7 @@
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
 #include "base/win/session_info.h"
+#include "base/win/window_station.h"
 
 #include <dxgi.h>
 #include <d3d11.h>
@@ -161,6 +162,35 @@ void desktopAgentMain(int argc, const char* const* argv)
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+
+    std::optional<std::wstring> process_window_station =
+        base::WindowStation::forCurrentProcess().name();
+    if (process_window_station.has_value())
+    {
+        LOG(LS_INFO) << "Process WindowStation: " << process_window_station.value();
+    }
+
+    LOG(LS_INFO) << "Window Stations";
+    LOG(LS_INFO) << "#####################################################";
+    for (const auto& window_station_name : base::WindowStation::windowStationList())
+    {
+        std::wstring desktops;
+
+        base::WindowStation window_station = base::WindowStation::open(window_station_name.data());
+        if (window_station.isValid())
+        {
+            std::vector<std::wstring> list = base::Desktop::desktopList(window_station.get());
+
+            for (size_t i = 0; i < list.size(); ++i)
+            {
+                desktops += list[i];
+                if ((i + 1) != list.size())
+                    desktops += L", ";
+            }
+        }
+
+        LOG(LS_INFO) << window_station_name << " (desktops: " << desktops << ")";
+    }
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";
