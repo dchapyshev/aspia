@@ -369,6 +369,16 @@ list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/geometry_unittest.cc
     desktop/region_unittest.cc)
 
+if (APPLE)
+    list(APPEND SOURCE_BASE_DESKTOP_MAC
+        desktop/mac/frame_cgimage.mm
+        desktop/mac/frame_cgimage.h
+        desktop/mac/frame_iosurface.mm
+        desktop/mac/frame_iosurface.h
+        desktop/mac/frame_provider.mm
+        desktop/mac/frame_provider.h)
+endif()
+
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
         desktop/win/bitmap_info.h
@@ -476,7 +486,8 @@ if (APPLE)
         mac/app_nap_blocker.mm
         mac/app_nap_blocker.h
         mac/nsstring_conversions.mm
-        mac/nsstring_conversions.h)
+        mac/nsstring_conversions.h
+        mac/scoped_cftyperef.h)
 endif()
 
 list(APPEND SOURCE_BASE_MEMORY
@@ -758,6 +769,7 @@ endif()
 
 if (APPLE)
     source_group(mac FILES ${SOURCE_BASE_MAC})
+    source_group(desktop\\mac FILES ${SOURCE_BASE_DESKTOP_MAC})
 endif()
 
 add_library(aspia_base STATIC
@@ -768,6 +780,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_CODEC}
     ${SOURCE_BASE_CRYPTO}
     ${SOURCE_BASE_DESKTOP}
+    ${SOURCE_BASE_DESKTOP_MAC}
     ${SOURCE_BASE_DESKTOP_WIN}
     ${SOURCE_BASE_DESKTOP_X11}
     ${SOURCE_BASE_FILES}
