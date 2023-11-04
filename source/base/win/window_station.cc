@@ -117,17 +117,17 @@ bool WindowStation::setProcessWindowStation()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::wstring> WindowStation::name()
+std::wstring WindowStation::name()
 {
     if (!winsta_)
-        return std::nullopt;
+        return std::wstring();
 
     wchar_t buffer[128] = { 0 };
 
     if (!GetUserObjectInformationW(winsta_, UOI_NAME, buffer, sizeof(buffer), nullptr))
     {
         PLOG(LS_ERROR) << "GetUserObjectInformationW failed";
-        return std::nullopt;
+        return std::wstring();
     }
 
     return buffer;

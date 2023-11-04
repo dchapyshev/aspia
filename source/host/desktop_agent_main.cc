@@ -162,15 +162,9 @@ void desktopAgentMain(int argc, const char* const* argv)
     LOG(LS_INFO) << "Running as user: '" << username << "'";
     LOG(LS_INFO) << "Active console session ID: " << WTSGetActiveConsoleSessionId();
     LOG(LS_INFO) << "Computer name: '" << base::SysInfo::computerName() << "'";
+    LOG(LS_INFO) << "Process WindowStation: " << base::WindowStation::forCurrentProcess().name();
 
-    std::optional<std::wstring> process_window_station =
-        base::WindowStation::forCurrentProcess().name();
-    if (process_window_station.has_value())
-    {
-        LOG(LS_INFO) << "Process WindowStation: " << process_window_station.value();
-    }
-
-    LOG(LS_INFO) << "Window Stations";
+    LOG(LS_INFO) << "WindowStation list";
     LOG(LS_INFO) << "#####################################################";
     for (const auto& window_station_name : base::WindowStation::windowStationList())
     {
@@ -191,6 +185,7 @@ void desktopAgentMain(int argc, const char* const* argv)
 
         LOG(LS_INFO) << window_station_name << " (desktops: " << desktops << ")";
     }
+    LOG(LS_INFO) << "#####################################################";
 
     LOG(LS_INFO) << "Environment variables";
     LOG(LS_INFO) << "#####################################################";

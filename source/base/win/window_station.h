@@ -23,7 +23,6 @@
 
 #include <Windows.h>
 
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -43,7 +42,7 @@ public:
     bool isValid() const;
     HWINSTA get() const;
     bool setProcessWindowStation();
-    std::optional<std::wstring> name();
+    std::wstring name();
     void close();
 
     WindowStation& operator=(WindowStation&& other) noexcept;
