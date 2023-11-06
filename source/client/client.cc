@@ -309,7 +309,7 @@ void Client::startAuthentication()
             channel_->setListener(this);
 
             const base::Version& host_version = authenticator_->peerVersion();
-            if (host_version >= base::Version(2, 6, 0))
+            if (host_version >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);

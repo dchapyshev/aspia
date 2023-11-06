@@ -68,8 +68,8 @@ public:
     State state() const { return state_; }
     uint32_t id() const { return id_; }
 
-    void setVersion(const base::Version& version);
-    const base::Version& version() const { return version_; }
+    void setClientVersion(const base::Version& version);
+    const base::Version& clientVersion() const { return version_; }
 
     void setUserName(std::string_view username);
     const std::string& userName() const { return username_; }
