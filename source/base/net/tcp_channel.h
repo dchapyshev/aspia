@@ -98,8 +98,8 @@ public:
 
     // Enables or disables sending keep alive packets.
     bool setKeepAlive(bool enable,
-                      const Seconds& interval = Seconds(45),
-                      const Seconds& timeout = Seconds(15));
+                      const Seconds& interval = Seconds(60),
+                      const Seconds& timeout = Seconds(30));
 
     void setChannelIdSupport(bool enable);
     bool hasChannelIdSupport() const;
