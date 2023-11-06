@@ -86,6 +86,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui.combobox_update_check_freq->addItem(tr("Once a week"), 7);
     ui.combobox_update_check_freq->addItem(tr("Once a month"), 30);
 
+    connect(ui.combobox_update_check_freq, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int /* index */)
+    {
+        setConfigChanged(true);
+    });
+
     connect(ui.checkbox_auto_update, &QCheckBox::toggled, this, [this](bool checked)
     {
         setConfigChanged(true);
