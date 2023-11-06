@@ -83,9 +83,14 @@ OnlineCheckerDirect::Instance::Instance(
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::~Instance()
 {
+    timer_.stop();
     finish_callback_ = nullptr;
-    channel_->setListener(nullptr);
-    channel_.reset();
+
+    if (channel_)
+    {
+        channel_->setListener(nullptr);
+        channel_.reset();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,6 +170,10 @@ void OnlineCheckerDirect::Instance::onTcpMessageWritten(
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(bool online)
 {
+    timer_.stop();
+    if (channel_)
+        channel_->setListener(nullptr);
+
     if (finish_callback_)
     {
         finish_callback_(computer_id_, online);
