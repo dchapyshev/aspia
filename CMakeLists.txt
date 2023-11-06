@@ -24,7 +24,7 @@ project(aspia)
 
 set(ASPIA_VERSION_MAJOR 2)
 set(ASPIA_VERSION_MINOR 6)
-set(ASPIA_VERSION_PATCH 0)
+set(ASPIA_VERSION_PATCH 1)
 
 if ("$ENV{VCPKG_ROOT}" STREQUAL "")
     message(FATAL_ERROR "VCPKG_ROOT not defined")
