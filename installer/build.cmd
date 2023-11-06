@@ -15,11 +15,16 @@ if "%ASPIA_BIN_DIR%" == "" ( goto :USAGE )
 set SRC_DIR=%ASPIA_SRC_DIR%\installer
 set EN_US_POSTFIX=%ASPIA_VERSION%-%ASPIA_ARCH%
 
+if "%ASPIA_ARCH%" == "x86_64" ( set CANDLE_ARCH=x64 )
+if "%ASPIA_ARCH%" == "x64" ( set CANDLE_ARCH=x64 )
+if "%ASPIA_ARCH%" == "x86" ( set CANDLE_ARCH=x86 )
+
 echo "##################################################"
 echo "Aspia Src Dir: %ASPIA_SRC_DIR%"
 echo "Aspia Bin Dir: %ASPIA_BIN_DIR%"
 echo "Aspia Version: %ASPIA_VERSION%"
 echo "Aspia Arch: %ASPIA_ARCH%"
+echo "Candle Arch: %CANDLE_ARCH%"
 echo "Installer Src Dir: %SRC_DIR%"
 
 goto :MSI
@@ -39,7 +44,7 @@ pushd %SRC_DIR%
 echo "##################################################"
 echo "Creating MSI packages for Aspia Console"
 set CONSOLE_EN_US_MSI=%ASPIA_BIN_DIR%\aspia-console-%EN_US_POSTFIX%.msi
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -ext WixUtilExtension -ext WixUIExtension console.wxs
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension console.wxs
 "%WIX%\bin\light" -sval -out "%CONSOLE_EN_US_MSI%" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\console.en-us.wxl "%ASPIA_BIN_DIR%\console.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-console-de-de.msi" -cultures:de-de -ext WixUtilExtension -ext WixUIExtension -loc translations\console.de-de.wxl "%ASPIA_BIN_DIR%\console.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-console-it-it.msi" -cultures:it-it -ext WixUtilExtension -ext WixUIExtension -loc translations\console.it-it.wxl "%ASPIA_BIN_DIR%\console.wixobj"
@@ -77,7 +82,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"
 echo "##################################################"
 echo "Creating MSI packages for Aspia Client"
 set CLIENT_EN_US_MSI=%ASPIA_BIN_DIR%\aspia-client-%EN_US_POSTFIX%.msi
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -ext WixUtilExtension -ext WixUIExtension client.wxs
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension client.wxs
 "%WIX%\bin\light" -sval -out "%CLIENT_EN_US_MSI%" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\client.en-us.wxl "%ASPIA_BIN_DIR%\client.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-client-de-de.msi" -cultures:de-de -ext WixUtilExtension -ext WixUIExtension -loc translations\client.de-de.wxl "%ASPIA_BIN_DIR%\client.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-client-it-it.msi" -cultures:it-it -ext WixUtilExtension -ext WixUIExtension -loc translations\client.it-it.wxl "%ASPIA_BIN_DIR%\client.wixobj"
@@ -115,7 +120,7 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"
 echo "##################################################"
 echo "Creating MSI packages for Aspia Host"
 set HOST_EN_US_MSI=%ASPIA_BIN_DIR%\aspia-host-%EN_US_POSTFIX%.msi
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -ext WixUtilExtension -ext WixUIExtension host.wxs
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension host.wxs
 "%WIX%\bin\light" -sval -out "%HOST_EN_US_MSI%" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\host.en-us.wxl "%ASPIA_BIN_DIR%\host.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-host-de-de.msi" -cultures:de-de -ext WixUtilExtension -ext WixUIExtension -loc translations\host.de-de.wxl "%ASPIA_BIN_DIR%\host.wixobj"
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-host-it-it.msi" -cultures:it-it -ext WixUtilExtension -ext WixUIExtension -loc translations\host.it-it.wxl "%ASPIA_BIN_DIR%\host.wixobj"
@@ -152,12 +157,12 @@ cscript "%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Router"
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -ext WixUtilExtension -ext WixUIExtension router.wxs
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension router.wxs
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-router-%ASPIA_VERSION%-%ASPIA_ARCH%.msi" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\router.en-us.wxl "%ASPIA_BIN_DIR%\router.wixobj"
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Relay"
-"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -ext WixUtilExtension -ext WixUIExtension relay.wxs
+"%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension relay.wxs
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-relay-%ASPIA_VERSION%-%ASPIA_ARCH%.msi" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\relay.en-us.wxl "%ASPIA_BIN_DIR%\relay.wixobj"
 
 rem Restore working directory

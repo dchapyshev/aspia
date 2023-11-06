@@ -27,7 +27,7 @@
     <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
-        <Directory Id="ProgramFilesFolder">
+        <Directory Id="$(var.Program_Files)">
             <Directory Id="VendorProgramFilesFolder" Name="Aspia">
                 <Directory Id="INSTALLLOCATION" Name="Relay" />
             </Directory>
