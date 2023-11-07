@@ -54,7 +54,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const Size& size,
 
     bmi.header.biSize      = sizeof(bmi.header);
     bmi.header.biBitCount  = format.bitsPerPixel();
-    bmi.header.biSizeImage = buffer_size;
+    bmi.header.biSizeImage = static_cast<DWORD>(buffer_size);
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = size.width();
     bmi.header.biHeight    = -size.height();
