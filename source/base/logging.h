@@ -99,7 +99,11 @@ enum LoggingDestination
 
 #if defined(OS_WIN)
     // On Windows, use a file next to the exe.
+#if defined(NDEBUG)
     LOG_DEFAULT = LOG_TO_FILE
+#else
+    LOG_DEFAULT = LOG_TO_ALL
+#endif
 #elif defined(OS_POSIX)
     LOG_DEFAULT = LOG_TO_STDOUT
 #endif
