@@ -34,8 +34,9 @@ OnlineChecker::OnlineChecker(std::shared_ptr<base::TaskRunner> ui_task_runner)
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::~OnlineChecker()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(LS_INFO) << "Dtor BEGIN";
     io_thread_.stop();
+    LOG(LS_INFO) << "Dtor END";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,6 +123,8 @@ void OnlineChecker::onBeforeThreadRunning()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::onAfterThreadRunning()
 {
+    LOG(LS_INFO) << "I/O thread stopping...";
+
     delegate_ = nullptr;
     direct_checker_.reset();
     router_checker_.reset();

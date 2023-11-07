@@ -33,8 +33,7 @@
 namespace client {
 
 class OnlineChecker
-    : public std::enable_shared_from_this<OnlineChecker>,
-      public base::Thread::Delegate,
+    : public base::Thread::Delegate,
       public OnlineCheckerDirect::Delegate,
       public OnlineCheckerRouter::Delegate
 {
