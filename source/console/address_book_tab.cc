@@ -678,7 +678,11 @@ void AddressBookTab::startOnlineChecker()
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::stopOnlineChecker()
 {
-    online_checker_.reset();
+    if (online_checker_)
+    {
+        LOG(LS_INFO) << "Destory online checker";
+        online_checker_.reset();
+    }
 
     for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
     {
@@ -920,9 +924,16 @@ void AddressBookTab::onOnlineCheckerResult(int computer_id, bool online)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::onOnlineCheckerFinished()
 {
+    LOG(LS_INFO) << "Online checked finished";
+
     QTimer::singleShot(0, this, [this]()
     {
-        online_checker_.reset();
+        if (online_checker_)
+        {
+            LOG(LS_INFO) << "Destory online checked";
+            online_checker_.reset();
+        }
+
         emit sig_updateStateForComputers(false);
     });
 }
@@ -997,7 +1008,11 @@ void AddressBookTab::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
-    online_checker_.reset();
+    if (online_checker_)
+    {
+        LOG(LS_INFO) << "Destroy online checker";
+        online_checker_.reset();
+    }
 
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)
         std::unique_ptr<QTreeWidgetItem> item_deleter(ui.tree_computer->takeTopLevelItem(i));
