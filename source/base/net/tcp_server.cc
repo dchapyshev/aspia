@@ -233,6 +233,9 @@ uint16_t TcpServer::port() const
 // static
 bool TcpServer::isValidListenInterface(std::u16string_view interface)
 {
+    if (interface.empty())
+        return true;
+
     asio::error_code error_code;
     asio::ip::make_address(base::local8BitFromUtf16(interface), error_code);
     if (error_code)
