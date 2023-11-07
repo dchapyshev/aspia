@@ -62,6 +62,7 @@ private:
     FinishCallback finish_callback_;
     std::unique_ptr<base::TcpChannel> channel_;
     base::WaitableTimer timer_;
+    bool finished_ = false;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -83,8 +84,8 @@ OnlineCheckerDirect::Instance::Instance(
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::~Instance()
 {
+    finished_ = true;
     timer_.stop();
-    finish_callback_ = nullptr;
 
     if (channel_)
     {
@@ -170,19 +171,16 @@ void OnlineCheckerDirect::Instance::onTcpMessageWritten(
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(bool online)
 {
+    if (finished_)
+        return;
+
+    finished_ = true;
+
     timer_.stop();
     if (channel_)
         channel_->setListener(nullptr);
 
-    if (finish_callback_)
-    {
-        finish_callback_(computer_id_, online);
-        finish_callback_ = nullptr;
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid callback";
-    }
+    finish_callback_(computer_id_, online);
 }
 
 //--------------------------------------------------------------------------------------------------
