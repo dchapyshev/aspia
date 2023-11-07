@@ -34,6 +34,24 @@
 
 namespace base {
 
+namespace {
+
+std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+{
+    std::string str;
+
+    for (auto it = endpoints.begin(); it != endpoints.end();)
+    {
+        str += it->endpoint().address().to_string();
+        if (++it != endpoints.end())
+            str += ", ";
+    }
+
+    return str;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel()
     : proxy_(new TcpChannelProxy(MessageLoop::current()->taskRunner(), this)),
@@ -110,9 +128,14 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
     if (connected_ || !resolver_)
         return;
 
-    resolver_->async_resolve(local8BitFromUtf16(address), std::to_string(port),
-        [this](const std::error_code& error_code,
-               const asio::ip::tcp::resolver::results_type& endpoints)
+    std::string host = local8BitFromUtf16(address);
+    std::string service = std::to_string(port);
+
+    LOG(LS_INFO) << "Start resolving for " << host << ":" << service;
+
+    resolver_->async_resolve(host, service,
+        [this, host](const std::error_code& error_code,
+                     const asio::ip::tcp::resolver::results_type& endpoints)
     {
         if (error_code)
         {
@@ -120,9 +143,21 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
             return;
         }
 
+        LOG(LS_INFO) << "Resolved endpoints for '" << host << "': " << endpointsToString(endpoints);
+
         asio::async_connect(socket_, endpoints,
-            [this](const std::error_code& error_code,
-                   const asio::ip::tcp::endpoint& /* endpoint */)
+            [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
+        {
+            if (error_code == asio::error::operation_aborted)
+            {
+                // If more than one address for a host was resolved, then we return false and cancel
+                // attempts to connect to all addresses.
+                return false;
+            }
+
+            return true;
+        },
+            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
             if (error_code)
             {
@@ -130,6 +165,8 @@ void TcpChannel::connect(std::u16string_view address, uint16_t port)
                 return;
             }
 
+            LOG(LS_INFO) << "Connected to endpoint: " << endpoint.address().to_string()
+                         << ":" << endpoint.port();
             connected_ = true;
 
             if (listener_)
@@ -307,22 +344,25 @@ bool TcpChannel::setWriteBufferSize(size_t size)
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::disconnect()
 {
-    if (!connected_)
-        return;
-
+    LOG(LS_INFO) << "Disconnect";
     connected_ = false;
 
-    std::error_code ignored_code;
-
-    socket_.cancel(ignored_code);
-    socket_.close(ignored_code);
+    if (socket_.is_open())
+    {
+        std::error_code ignored_code;
+        socket_.cancel(ignored_code);
+        socket_.close(ignored_code);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     if (error_code == asio::error::operation_aborted)
+    {
+        LOG(LS_INFO) << "Operation aborted (from: " << location.toString() << ")";
         return;
+    }
 
     ErrorCode error = ErrorCode::UNKNOWN;
 
