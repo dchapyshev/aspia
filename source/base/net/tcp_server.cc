@@ -79,17 +79,29 @@ void TcpServer::Impl::start(std::u16string_view listen_interface, uint16_t port,
 
     DCHECK(delegate_);
 
+    LOG(LS_INFO) << "Listen interface: "
+                 << (listen_interface_.empty() ? u"ANY" : listen_interface_) << ":" << port;
+
+    asio::ip::address listen_address;
     asio::error_code error_code;
-    asio::ip::address listen_address =
-        asio::ip::make_address(base::local8BitFromUtf16(listen_interface), error_code);
-    if (error_code)
+
+    if (!listen_interface_.empty())
     {
-        LOG(LS_ERROR) << "Invalid listen address: " << listen_interface.data()
-                      << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
-        return;
+        listen_address = asio::ip::make_address(
+            base::local8BitFromUtf16(listen_interface), error_code);
+        if (error_code)
+        {
+            LOG(LS_ERROR) << "Invalid listen address: " << listen_interface_
+                          << " (" << base::utf16FromLocal8Bit(error_code.message()) << ")";
+            return;
+        }
+    }
+    else
+    {
+        listen_address = asio::ip::address_v6::any();
     }
 
-    asio::ip::tcp::endpoint endpoint(listen_address, port);
+    asio::ip::tcp::endpoint endpoint(listen_address, port_);
     acceptor_ = std::make_unique<asio::ip::tcp::acceptor>(io_context_);
 
     acceptor_->open(endpoint.protocol(), error_code);

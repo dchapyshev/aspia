@@ -105,7 +105,7 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start(u"0.0.0.0", settings_.tcpPort(), this);
+    server_->start(u"", settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
     {
