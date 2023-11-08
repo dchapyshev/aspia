@@ -61,6 +61,21 @@ void serializePixelFormat(const base::PixelFormat& from, proto::PixelFormat* to)
     to->set_blue_shift(from.blueShift());
 }
 
+const char* videoEncodingToString(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+    case proto::VIDEO_ENCODING_ZSTD:
+        return "VIDEO_ENCODING_ZSTD";
+    case proto::VIDEO_ENCODING_VP8:
+        return "VIDEO_ENCODING_VP8";
+    case proto::VIDEO_ENCODING_VP9:
+        return "VIDEO_ENCODING_VP9";
+    default:
+        return "Unknown";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -285,8 +300,12 @@ void ComputerDialogDesktop::saveSettings(
 //--------------------------------------------------------------------------------------------------
 void ComputerDialogDesktop::onCodecChanged(int item_index)
 {
-    bool has_pixel_format =
-        (ui.combo_codec->itemData(item_index).toInt() == proto::VIDEO_ENCODING_ZSTD);
+    proto::VideoEncoding encoding =
+        static_cast<proto::VideoEncoding>(ui.combo_codec->itemData(item_index).toInt());
+
+    LOG(LS_INFO) << "[ACTION] Video encoding changed: " << videoEncodingToString(encoding);
+
+    bool has_pixel_format = (encoding == proto::VIDEO_ENCODING_ZSTD);
 
     ui.label_color_depth->setEnabled(has_pixel_format);
     ui.combobox_color_depth->setEnabled(has_pixel_format);
@@ -299,6 +318,7 @@ void ComputerDialogDesktop::onCodecChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void ComputerDialogDesktop::onCompressionRatioChanged(int value)
 {
+    LOG(LS_INFO) << "[ACTION] Compression ratio changed: " << value;
     ui.label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 

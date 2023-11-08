@@ -141,6 +141,7 @@ ComputerGroupDialog::~ComputerGroupDialog()
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event";
     settings_.setComputerGroupDialogGeometry(saveGeometry());
     QDialog::closeEvent(event);
 }
@@ -180,6 +181,8 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (!saveChanges())
             return;
 
@@ -187,6 +190,7 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 
@@ -225,6 +229,7 @@ bool ComputerGroupDialog::saveChanges()
     QString name = ui.edit_name->text();
     if (name.length() > kMaxNameLength)
     {
+        LOG(LS_ERROR) << "Too long name: " << name.length();
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", kMaxNameLength));
         ui.edit_name->setFocus();
@@ -233,6 +238,7 @@ bool ComputerGroupDialog::saveChanges()
     }
     else if (name.length() < kMinNameLength)
     {
+        LOG(LS_ERROR) << "Name can not be empty";
         showError(tr("Name can not be empty."));
         ui.edit_name->setFocus();
         return false;
@@ -241,6 +247,7 @@ bool ComputerGroupDialog::saveChanges()
     QString comment = ui.edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
+        LOG(LS_ERROR) << "Too long comment: " << comment.length();
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", kMaxCommentLength));
         ui.edit_comment->setFocus();

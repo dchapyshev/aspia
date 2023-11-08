@@ -145,6 +145,7 @@ ComputerDialog::~ComputerDialog()
 //--------------------------------------------------------------------------------------------------
 void ComputerDialog::closeEvent(QCloseEvent* event)
 {
+    LOG(LS_INFO) << "Close event";
     settings_.setComputerDialogGeometry(saveGeometry());
     settings_.setComputerDialogState(ui.splitter->saveState());
     QDialog::closeEvent(event);
@@ -192,6 +193,8 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (!saveChanges())
             return;
 
@@ -199,6 +202,7 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

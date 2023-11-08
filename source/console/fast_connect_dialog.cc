@@ -149,6 +149,9 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
     state_.session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
 
+    LOG(LS_INFO) << "[ACTION] Session type changed: "
+                 << common::sessionTypeToString(state_.session_type);
+
     if (ui.checkbox_use_session_params->isChecked())
     {
         ui.button_session_config->setEnabled(false);
@@ -171,6 +174,8 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
 //--------------------------------------------------------------------------------------------------
 void FastConnectDialog::sessionConfigButtonPressed()
 {
+    LOG(LS_INFO) << "[ACTION] Session config button pressed";
+
     proto::SessionType session_type = static_cast<proto::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
@@ -210,10 +215,13 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Cancel)
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
         close();
         return;
     }
+
+    LOG(LS_INFO) << "[ACTION] Accepted by user";
 
     QComboBox* combo_address = ui.combo_address;
     QString current_address = combo_address->currentText();
@@ -230,6 +238,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (host_id_entered && !router_config_.has_value())
     {
+        LOG(LS_ERROR) << "Router not configured";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Connection by ID is specified but the router is not configured. "
@@ -250,6 +259,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!address.isValid())
         {
+            LOG(LS_ERROR) << "Invalid address entered";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("An invalid computer address was entered."),
@@ -344,10 +354,12 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(client_config))
     {
+        LOG(LS_ERROR) << "Unable to connect";
         session_window->close();
     }
     else
     {
+        LOG(LS_INFO) << "Close fast connect dialog";
         accept();
         close();
     }
