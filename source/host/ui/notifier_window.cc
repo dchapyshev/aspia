@@ -242,6 +242,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onVoiceChat()
 {
+    LOG(LS_INFO) << "[ACTION] Voice chat";
     is_voice_chat_ = !is_voice_chat_;
     emit sig_voiceChat(is_voice_chat_);
 }
@@ -249,6 +250,7 @@ void NotifierWindow::onVoiceChat()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onTextChat()
 {
+    LOG(LS_INFO) << "[ACTION] Text chat";
     emit sig_textChat();
 }
 
@@ -256,6 +258,8 @@ void NotifierWindow::onTextChat()
 void NotifierWindow::onLockMouse()
 {
     is_mouse_locked_ = !is_mouse_locked_;
+
+    LOG(LS_INFO) << "[ACTION] Lock mouse: " << is_mouse_locked_;
 
     QString icon;
     QString tooltip;
@@ -282,6 +286,8 @@ void NotifierWindow::onLockKeyboard()
 {
     is_keyboard_locked_ = !is_keyboard_locked_;
 
+    LOG(LS_INFO) << "[ACTION] Lock keyboard: " << is_keyboard_locked_;
+
     QString icon;
     QString tooltip;
 
@@ -307,6 +313,8 @@ void NotifierWindow::onPause()
 {
     is_paused_ = !is_paused_;
 
+    LOG(LS_INFO) << "[ACTION] Pause: " << is_paused_;
+
     QString icon;
     QString tooltip;
 
@@ -330,6 +338,8 @@ void NotifierWindow::onPause()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::onStop()
 {
+    LOG(LS_INFO) << "[ACTION] Stop";
+
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
@@ -427,9 +437,15 @@ void NotifierWindow::moveEvent(QMoveEvent* event)
 void NotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
+    {
+        LOG(LS_INFO) << "[ACTION] Hide";
         hideNotifier();
+    }
     else
+    {
+        LOG(LS_INFO) << "[ACTION] Show";
         showNotifier();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

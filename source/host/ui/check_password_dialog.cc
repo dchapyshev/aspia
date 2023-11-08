@@ -60,6 +60,8 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         QString password = ui.edit_pass->text();
 
         if (!SystemSettings::isValidPassword(password.toStdString()))
@@ -79,6 +81,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 
