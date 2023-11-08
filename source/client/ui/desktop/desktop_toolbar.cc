@@ -112,6 +112,11 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     if (!is_pinned)
         hide_timer_->start(0);
 
+#if defined(OS_MAC)
+    // MacOS has its own button to maximize the window to full screen.
+    ui.action_fullscreen->setVisible(false);
+#endif // defined(OS_MAC)
+
     showFullScreenButtons(false);
     adjustSize();
 }
