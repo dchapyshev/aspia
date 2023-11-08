@@ -513,38 +513,38 @@
 <context>
     <name>host::ChangePasswordDialog</name>
     <message>
-        <location filename="../change_password_dialog.cc" line="94"/>
-        <location filename="../change_password_dialog.cc" line="105"/>
-        <location filename="../change_password_dialog.cc" line="124"/>
-        <location filename="../change_password_dialog.cc" line="134"/>
-        <location filename="../change_password_dialog.cc" line="145"/>
-        <location filename="../change_password_dialog.cc" line="155"/>
+        <location filename="../change_password_dialog.cc" line="96"/>
+        <location filename="../change_password_dialog.cc" line="107"/>
+        <location filename="../change_password_dialog.cc" line="126"/>
+        <location filename="../change_password_dialog.cc" line="136"/>
+        <location filename="../change_password_dialog.cc" line="147"/>
+        <location filename="../change_password_dialog.cc" line="157"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="95"/>
+        <location filename="../change_password_dialog.cc" line="97"/>
         <source>Password cannot be empty.</source>
         <translation>LA password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="125"/>
+        <location filename="../change_password_dialog.cc" line="127"/>
         <source>You must enter your old password.</source>
         <translation>Devi inserire la tua vecchia password.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="135"/>
+        <location filename="../change_password_dialog.cc" line="137"/>
         <source>You entered an incorrect old password.</source>
         <translation>Hia inserito la vecchia password sbagliata.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="146"/>
+        <location filename="../change_password_dialog.cc" line="148"/>
         <source>New password cannot be empty.</source>
         <translation>Nuova password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="106"/>
-        <location filename="../change_password_dialog.cc" line="156"/>
+        <location filename="../change_password_dialog.cc" line="108"/>
+        <location filename="../change_password_dialog.cc" line="158"/>
         <source>The passwords entered do not match.</source>
         <translation>Le passwords inserite non coincidono.</translation>
     </message>
@@ -557,12 +557,12 @@
 <context>
     <name>host::CheckPasswordDialog</name>
     <message>
-        <location filename="../check_password_dialog.cc" line="70"/>
+        <location filename="../check_password_dialog.cc" line="72"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../check_password_dialog.cc" line="71"/>
+        <location filename="../check_password_dialog.cc" line="73"/>
         <source>You entered an incorrect password.</source>
         <translation>Hai inserito una password sbagliata.</translation>
     </message>
@@ -575,136 +575,136 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="402"/>
-        <location filename="../config_dialog.cc" line="558"/>
-        <location filename="../config_dialog.cc" line="617"/>
+        <location filename="../config_dialog.cc" line="414"/>
+        <location filename="../config_dialog.cc" line="580"/>
+        <location filename="../config_dialog.cc" line="646"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="403"/>
+        <location filename="../config_dialog.cc" line="415"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Sei sicuro di voler eliminare l&apos;utente &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="544"/>
+        <location filename="../config_dialog.cc" line="563"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="553"/>
-        <location filename="../config_dialog.cc" line="612"/>
+        <location filename="../config_dialog.cc" line="575"/>
+        <location filename="../config_dialog.cc" line="641"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>La configurazione del servizio è cambiata. Affinchè le modifiche possano essere applicate, è necessario riavviare il servizio. Riavvio il servizio adesso?</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="579"/>
+        <location filename="../config_dialog.cc" line="603"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="599"/>
+        <location filename="../config_dialog.cc" line="628"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Non è stato possibile salvare la configurazione. Assicurarsi di avere sufficienti diritti di scrittura.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="488"/>
-        <location filename="../config_dialog.cc" line="525"/>
-        <location filename="../config_dialog.cc" line="602"/>
-        <location filename="../config_dialog.cc" line="638"/>
-        <location filename="../config_dialog.cc" line="651"/>
-        <location filename="../config_dialog.cc" line="932"/>
-        <location filename="../config_dialog.cc" line="956"/>
-        <location filename="../config_dialog.cc" line="976"/>
-        <location filename="../config_dialog.cc" line="986"/>
-        <location filename="../config_dialog.cc" line="1007"/>
-        <location filename="../config_dialog.cc" line="1017"/>
+        <location filename="../config_dialog.cc" line="505"/>
+        <location filename="../config_dialog.cc" line="542"/>
+        <location filename="../config_dialog.cc" line="631"/>
+        <location filename="../config_dialog.cc" line="667"/>
+        <location filename="../config_dialog.cc" line="680"/>
+        <location filename="../config_dialog.cc" line="966"/>
+        <location filename="../config_dialog.cc" line="991"/>
+        <location filename="../config_dialog.cc" line="1012"/>
+        <location filename="../config_dialog.cc" line="1023"/>
+        <location filename="../config_dialog.cc" line="1045"/>
+        <location filename="../config_dialog.cc" line="1056"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="826"/>
-        <location filename="../config_dialog.cc" line="861"/>
+        <location filename="../config_dialog.cc" line="856"/>
+        <location filename="../config_dialog.cc" line="891"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="870"/>
+        <location filename="../config_dialog.cc" line="900"/>
         <source>Started</source>
         <translation>Avviato</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="871"/>
+        <location filename="../config_dialog.cc" line="901"/>
         <source>Stop</source>
         <translation>Arresta</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="876"/>
+        <location filename="../config_dialog.cc" line="906"/>
         <source>Not started</source>
         <translation>Non avviato</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="877"/>
-        <location filename="../config_dialog.cc" line="884"/>
-        <location filename="../config_dialog.cc" line="897"/>
+        <location filename="../config_dialog.cc" line="907"/>
+        <location filename="../config_dialog.cc" line="914"/>
+        <location filename="../config_dialog.cc" line="927"/>
         <source>Start</source>
         <translation>Avvia</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="883"/>
+        <location filename="../config_dialog.cc" line="913"/>
         <source>Installed</source>
         <translation>Installato</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="894"/>
+        <location filename="../config_dialog.cc" line="924"/>
         <source>Not installed</source>
         <translation>Non installato</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="821"/>
-        <location filename="../config_dialog.cc" line="896"/>
+        <location filename="../config_dialog.cc" line="851"/>
+        <location filename="../config_dialog.cc" line="926"/>
         <source>Install</source>
         <translation>Installa</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="933"/>
+        <location filename="../config_dialog.cc" line="967"/>
         <source>The service could not be installed.</source>
         <translation>Non è stato possibile installare il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="957"/>
+        <location filename="../config_dialog.cc" line="992"/>
         <source>The service could not be removed.</source>
         <translation>Non è stato possibile rimuovere il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="977"/>
-        <location filename="../config_dialog.cc" line="1008"/>
+        <location filename="../config_dialog.cc" line="1013"/>
+        <location filename="../config_dialog.cc" line="1046"/>
         <source>Could not access the service.</source>
         <translation>Non riesco ad accedere al servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="987"/>
+        <location filename="../config_dialog.cc" line="1024"/>
         <source>The service could not be started.</source>
         <translation>Non è stato possibile avviare il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1018"/>
+        <location filename="../config_dialog.cc" line="1057"/>
         <source>The service could not be stopped.</source>
         <translation>Non è stato possibile arrestare il servizio.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="639"/>
+        <location filename="../config_dialog.cc" line="668"/>
         <source>Incorrect router address entered.</source>
         <translation>Hai inserito un indirizzo di ruoter non valido.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="652"/>
+        <location filename="../config_dialog.cc" line="681"/>
         <source>Incorrect router public key entered.</source>
         <translation>Hai inserito una chiave pubblica non valida.</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="544"/>
-        <location filename="../config_dialog.cc" line="579"/>
+        <location filename="../config_dialog.cc" line="563"/>
+        <location filename="../config_dialog.cc" line="603"/>
         <source>JSON-files (*.json)</source>
         <translation></translation>
     </message>
@@ -714,8 +714,8 @@
         <translation>Predefinito</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="489"/>
-        <location filename="../config_dialog.cc" line="526"/>
+        <location filename="../config_dialog.cc" line="506"/>
+        <location filename="../config_dialog.cc" line="543"/>
         <source>An error occurred while processing the password.</source>
         <translation>Si è verificato un errore elaborando la password.</translation>
     </message>
@@ -805,7 +805,7 @@
         <translation>Rifiuta connessione</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="901"/>
+        <location filename="../config_dialog.cc" line="931"/>
         <source>Current service state: %1</source>
         <translation>Stato attuale del servizio: %1</translation>
     </message>
@@ -835,16 +835,16 @@
         <translation>Una volta al mese</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="407"/>
-        <location filename="../config_dialog.cc" line="562"/>
-        <location filename="../config_dialog.cc" line="621"/>
+        <location filename="../config_dialog.cc" line="419"/>
+        <location filename="../config_dialog.cc" line="584"/>
+        <location filename="../config_dialog.cc" line="650"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="408"/>
-        <location filename="../config_dialog.cc" line="563"/>
-        <location filename="../config_dialog.cc" line="622"/>
+        <location filename="../config_dialog.cc" line="420"/>
+        <location filename="../config_dialog.cc" line="585"/>
+        <location filename="../config_dialog.cc" line="651"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -998,32 +998,32 @@
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="266"/>
+        <location filename="../notifier_window.cc" line="270"/>
         <source>Unlock mouse</source>
         <translation>Sblocca il mouse</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="271"/>
+        <location filename="../notifier_window.cc" line="275"/>
         <source>Lock mouse</source>
         <translation>Blocca il mouse</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="291"/>
+        <location filename="../notifier_window.cc" line="297"/>
         <source>Unlock keyboard</source>
         <translation>Sblocca la tastiera</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="296"/>
+        <location filename="../notifier_window.cc" line="302"/>
         <source>Lock keyboard</source>
         <translation>Blocca la tastiera</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="316"/>
+        <location filename="../notifier_window.cc" line="324"/>
         <source>Resume</source>
         <translation>Riprendi</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="321"/>
+        <location filename="../notifier_window.cc" line="329"/>
         <source>Pause</source>
         <translation>Sospendi</translation>
     </message>
@@ -1031,27 +1031,27 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="146"/>
-        <location filename="../user_dialog.cc" line="158"/>
-        <location filename="../user_dialog.cc" line="173"/>
-        <location filename="../user_dialog.cc" line="184"/>
-        <location filename="../user_dialog.cc" line="206"/>
-        <location filename="../user_dialog.cc" line="226"/>
+        <location filename="../user_dialog.cc" line="149"/>
+        <location filename="../user_dialog.cc" line="162"/>
+        <location filename="../user_dialog.cc" line="178"/>
+        <location filename="../user_dialog.cc" line="190"/>
+        <location filename="../user_dialog.cc" line="212"/>
+        <location filename="../user_dialog.cc" line="233"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="159"/>
+        <location filename="../user_dialog.cc" line="163"/>
         <source>The username you entered already exists.</source>
         <translation>Nome utente inserito esiste già.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="174"/>
+        <location filename="../user_dialog.cc" line="179"/>
         <source>The passwords you entered do not match.</source>
         <translation>Le passwords inserite non coincidono.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="185"/>
+        <location filename="../user_dialog.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>La passowrd non può essere vuota e più lunga di %n caratteri.</numerusform>
@@ -1059,12 +1059,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="196"/>
+        <location filename="../user_dialog.cc" line="202"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non rispetta i criteri di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="199"/>
+        <location filename="../user_dialog.cc" line="205"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere caratteri maiuscoli e minuscoli, numeri e non può essere inferiore a %n caratreri.</numerusform>
@@ -1072,22 +1072,22 @@
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="203"/>
+        <location filename="../user_dialog.cc" line="209"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="227"/>
+        <location filename="../user_dialog.cc" line="234"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="282"/>
+        <location filename="../user_dialog.cc" line="291"/>
         <source>Double-click to change</source>
         <translation>Doppio-click per cambiare</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="147"/>
+        <location filename="../user_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e caratteri _, -, .</translation>
     </message>
@@ -1097,12 +1097,12 @@
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="210"/>
+        <location filename="../user_dialog.cc" line="216"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="211"/>
+        <location filename="../user_dialog.cc" line="217"/>
         <source>No</source>
         <translation>No</translation>
     </message>
