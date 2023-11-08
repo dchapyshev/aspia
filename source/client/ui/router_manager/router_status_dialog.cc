@@ -18,6 +18,8 @@
 
 #include "client/ui/router_manager/router_status_dialog.h"
 
+#include "base/logging.h"
+
 #include <QAbstractButton>
 #include <QPushButton>
 
@@ -27,6 +29,7 @@ namespace client {
 RouterStatusDialog::RouterStatusDialog(QWidget* parent)
     : QDialog(parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
@@ -45,7 +48,10 @@ RouterStatusDialog::RouterStatusDialog(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterStatusDialog::~RouterStatusDialog() = default;
+RouterStatusDialog::~RouterStatusDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void RouterStatusDialog::setStatus(const QString& message)

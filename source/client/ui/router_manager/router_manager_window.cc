@@ -309,6 +309,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
       window_proxy_(std::make_shared<RouterWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
     ui->setupUi(this);
 
     ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
@@ -424,6 +425,8 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 RouterManagerWindow::~RouterManagerWindow()
 {
+    LOG(LS_INFO) << "Dtor";
+
     ClientSettings settings;
     settings.setRouterManagerState(saveState());
 
@@ -433,6 +436,8 @@ RouterManagerWindow::~RouterManagerWindow()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 {
+    LOG(LS_INFO) << "Connecting to router";
+
     peer_address_ = QString::fromStdU16String(router_config.address);
     peer_port_ = router_config.port;
 
@@ -442,6 +447,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 
     connect(status_dialog_, &RouterStatusDialog::sig_canceled, [this]()
     {
+        LOG(LS_INFO) << "Connection canceled";
         router_proxy_.reset();
         close();
     });
@@ -461,6 +467,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::onConnected(const base::Version& peer_version)
 {
+    LOG(LS_INFO) << "Connected to router";
     status_dialog_->hide();
 
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
@@ -1295,10 +1302,15 @@ void RouterManagerWindow::addUser()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::modifyUser()
 {
+    LOG(LS_INFO) << "[ACTION] Modify user";
+
     QTreeWidget* tree_users = ui->tree_users;
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(tree_users->currentItem());
     if (!tree_item)
+    {
+        LOG(LS_INFO) << "No selected item";
         return;
+    }
 
     std::vector<std::u16string> users;
 
@@ -1318,18 +1330,25 @@ void RouterManagerWindow::modifyUser()
             router_proxy_->modifyUser(dialog.user().serialize());
         }
     }
+
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::deleteUser()
 {
+    LOG(LS_INFO) << "[ACTION] Delete user";
+
     UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
     if (!tree_item)
+    {
+        LOG(LS_INFO) << "No selected item";
         return;
+    }
 
     int64_t entry_id = tree_item->user.entry_id;
     if (entry_id == 1)
     {
+        LOG(LS_INFO) << "Unable to delete built-in user";
         QMessageBox::warning(this, tr("Warning"), tr("You cannot delete a built-in user."));
         return;
     }
@@ -1345,11 +1364,16 @@ void RouterManagerWindow::deleteUser()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
         if (router_proxy_)
         {
             beforeRequest();
             router_proxy_->deleteUser(entry_id);
         }
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
     }
 }
 
@@ -1391,6 +1415,8 @@ void RouterManagerWindow::afterRequest()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveHostsToFile()
 {
+    LOG(LS_INFO) << "[ACTION] Save hosts to file";
+
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
                                                      tr("Save File"),
@@ -1398,11 +1424,15 @@ void RouterManagerWindow::saveHostsToFile()
                                                      tr("JSON files (*.json)"),
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(LS_INFO) << "No selected path";
         return;
+    }
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
+        LOG(LS_INFO) << "Unable to open file: " << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1453,6 +1483,7 @@ void RouterManagerWindow::saveHostsToFile()
     int64_t written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
+        LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
@@ -1464,6 +1495,8 @@ void RouterManagerWindow::saveHostsToFile()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveRelaysToFile()
 {
+    LOG(LS_INFO) << "[ACTION] Save relays to file";
+
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
                                                      tr("Save File"),
@@ -1471,11 +1504,15 @@ void RouterManagerWindow::saveRelaysToFile()
                                                      tr("JSON files (*.json)"),
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(LS_INFO) << "No selected path";
         return;
+    }
 
     QFile file(file_path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
+        LOG(LS_INFO) << "Unable to open file: " << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not open file for writing."),
@@ -1545,6 +1582,7 @@ void RouterManagerWindow::saveRelaysToFile()
     int64_t written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
     {
+        LOG(LS_INFO) << "Unable to write file: " << file.errorString().toStdString();
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Unable to write file."),
