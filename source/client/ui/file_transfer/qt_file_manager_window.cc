@@ -222,6 +222,9 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
         refresh();
         activateWindow();
         setFocus();
+
+        ui->local_panel->setEnabled(true);
+        ui->remote_panel->setEnabled(true);
     });
 
     common::FileTask::Target target;
@@ -235,6 +238,9 @@ void QtFileManagerWindow::removeItems(FilePanel* sender, const FileRemover::Task
         DCHECK_EQ(sender, ui->remote_panel);
         target = common::FileTask::Target::REMOTE;
     }
+
+    ui->local_panel->setEnabled(false);
+    ui->remote_panel->setEnabled(false);
 
     file_control_proxy_->remove(target, remove_dialog_->windowProxy(), items);
 }
@@ -297,7 +303,13 @@ void QtFileManagerWindow::transferItems(FileTransfer::Type type,
         refresh();
         activateWindow();
         setFocus();
+
+        ui->local_panel->setEnabled(true);
+        ui->remote_panel->setEnabled(true);
     });
+
+    ui->local_panel->setEnabled(false);
+    ui->remote_panel->setEnabled(false);
 
     file_control_proxy_->transfer(
         transfer_dialog_->windowProxy(),
