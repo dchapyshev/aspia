@@ -2582,74 +2582,74 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="315"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="330"/>
         <source>Resolution selection</source>
         <translation type="unfinished">Selezione risoluzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="360"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="375"/>
         <source>Stop recording</source>
         <translation type="unfinished">Arresta registrazione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="365"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="380"/>
         <source>Start recording</source>
         <translation type="unfinished">Avvia registrazione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="493"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="508"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="523"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="538"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="553"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="568"/>
         <source>Confirmation</source>
         <translation type="unfinished">Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="494"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="509"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler spegnere il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="497"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="512"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="527"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="542"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="557"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="572"/>
         <source>Yes</source>
         <translation type="unfinished">Sì</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="498"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="558"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="509"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="524"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="524"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="539"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished">Sei sicuro di voler riavviare il computer remoto in Modalità Sicura ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="539"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="554"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">Sei sicuro di voler chiudere la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="554"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="569"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="642"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Scale</source>
         <translation type="unfinished">Scala</translation>
     </message>
@@ -2657,22 +2657,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="519"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="539"/>
         <source>The session was paused by a remote user</source>
         <translation>La sessione è stata messa in pausa dell&apos;utente remoto</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="523"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="543"/>
         <source>The session is temporarily unavailable</source>
         <translation>La sessione è temporaneamente indisponibile</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="527"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="547"/>
         <source>The session is permanently unavailable</source>
         <translation>La sessione è permanentemente indisponibile</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="531"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="551"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Errore durante la ricezione dello stream video: %1</translation>
     </message>
@@ -2979,34 +2979,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="301"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="302"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="310"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="955"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="302"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="303"/>
         <source>There are no supported video encodings.</source>
         <translation>Non ci sono codifiche video supportate.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="310"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="311"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>La modalità di codifica video attiva non è supportata dall&apos;host. Per cortesia selezionare un codifica video diversa.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="931"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="933"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="933"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="935"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="953"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="955"/>
         <source>Could not save image</source>
         <translation>Non è stato possibile salvare l&apos;immagine</translation>
     </message>
