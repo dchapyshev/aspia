@@ -106,12 +106,31 @@ bool isModifierKey(int key)
            key == Qt::Key_Shift || key == Qt::Key_Meta;
 }
 
+const char* applicationStateToString(Qt::ApplicationState state)
+{
+    switch (state)
+    {
+        case Qt::ApplicationSuspended:
+            return "ApplicationSuspended";
+        case Qt::ApplicationHidden:
+            return "ApplicationHidden";
+        case Qt::ApplicationInactive:
+            return "ApplicationInactive";
+        case Qt::ApplicationActive:
+            return "ApplicationActive";
+        default:
+            return "Unknown";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopWidget::DesktopWidget(QWidget* parent)
     : QWidget(parent)
 {
+    LOG(LS_INFO) << "Ctor";
+
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -123,7 +142,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [=](Qt::ApplicationState state)
     {
-        LOG(LS_ERROR) << "Application state changed: " << state;
+        LOG(LS_ERROR) << "Application state changed: " << applicationStateToString(state);
         if (state != Qt::ApplicationActive)
         {
             releaseKeyboardButtons();
@@ -135,6 +154,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopWidget::~DesktopWidget()
 {
+    LOG(LS_INFO) << "Dtor";
     enableKeyHooks(false);
 }
 

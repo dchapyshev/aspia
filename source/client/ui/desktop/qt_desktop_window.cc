@@ -116,6 +116,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &QtDesktopWindow::scaleDesktop);
     connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
     {
+        LOG(LS_INFO) << "Minimize from full screen";
         is_minimized_from_full_screen_ = true;
         showMinimized();
     });
@@ -651,6 +652,7 @@ void QtDesktopWindow::showEvent(QShowEvent *event)
 {
     if (is_minimized_from_full_screen_)
     {
+        LOG(LS_INFO) << "Restore to full screen";
         is_minimized_from_full_screen_ = false;
         showFullScreen();
     }

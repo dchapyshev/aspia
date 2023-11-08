@@ -36,6 +36,8 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent),
       session_type_(session_type)
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
 
     hide_timer_ = new QTimer(this);
@@ -116,6 +118,8 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopToolBar::~DesktopToolBar()
 {
+    LOG(LS_INFO) << "Dtor";
+
     DesktopSettings settings;
     settings.setScale(scale_);
     settings.setAutoScrolling(ui.action_autoscroll->isChecked());
@@ -129,8 +133,9 @@ DesktopToolBar::~DesktopToolBar()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableScreenSelect(bool /* enable */)
+void DesktopToolBar::enableScreenSelect(bool enable)
 {
+    LOG(LS_INFO) << "enableScreenSelect: " << enable;
     // By default, we disable the monitor selection menu. Selection will be enabled when receiving
     // a list of monitors.
     updateSize();
@@ -139,6 +144,8 @@ void DesktopToolBar::enableScreenSelect(bool /* enable */)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePowerControl(bool enable)
 {
+    LOG(LS_INFO) << "enablePowerControl: " << enable;
+
     ui.action_power_control->setVisible(enable);
     ui.action_power_control->setEnabled(enable);
 
@@ -173,6 +180,7 @@ void DesktopToolBar::enablePowerControl(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableSystemInfo(bool enable)
 {
+    LOG(LS_INFO) << "enableSystemInfo: " << enable;
     ui.action_system_info->setVisible(enable);
     ui.action_system_info->setEnabled(enable);
     updateSize();
@@ -181,6 +189,7 @@ void DesktopToolBar::enableSystemInfo(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTextChat(bool enable)
 {
+    LOG(LS_INFO) << "enableTextChat: " << enable;
     ui.action_text_chat->setVisible(enable);
     ui.action_text_chat->setEnabled(enable);
     updateSize();
@@ -189,6 +198,7 @@ void DesktopToolBar::enableTextChat(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableRemoteUpdate(bool enable)
 {
+    LOG(LS_INFO) << "enableRemoteUpdate: " << enable;
     ui.action_update->setVisible(enable);
     ui.action_update->setEnabled(enable);
     updateSize();
@@ -197,6 +207,7 @@ void DesktopToolBar::enableRemoteUpdate(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTaskManager(bool enable)
 {
+    LOG(LS_INFO) << "enableTaskManager: " << enable;
     ui.action_task_manager->setVisible(enable);
     ui.action_task_manager->setEnabled(enable);
     updateSize();
@@ -205,6 +216,7 @@ void DesktopToolBar::enableTaskManager(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableVideoPauseFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableVideoPauseFeature: " << enable;
     ui.action_pause_video->setVisible(enable);
     ui.action_pause_video->setEnabled(enable);
 }
@@ -212,6 +224,7 @@ void DesktopToolBar::enableVideoPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableAudioPauseFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableAudioPauseFeature: " << enable;
     ui.action_pause_audio->setVisible(enable);
     ui.action_pause_audio->setEnabled(enable);
 }
@@ -219,6 +232,7 @@ void DesktopToolBar::enableAudioPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableCtrlAltDelFeature: " << enable;
     ui.action_cad->setVisible(enable);
     ui.action_cad->setEnabled(enable);
     updateSize();
@@ -227,6 +241,7 @@ void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
+    LOG(LS_INFO) << "enablePasteAsKeystrokesFeature: " << enable;
     ui.action_paste_clipboard_as_keystrokes->setEnabled(enable);
 }
 
