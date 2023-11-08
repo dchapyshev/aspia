@@ -33,6 +33,7 @@
 #endif // defined(OS_LINUX)
 
 #if defined(OS_MAC)
+#include <Carbon/Carbon.h>
 #include <CoreGraphics/CGEventSource.h>
 #endif // defined(OS_MAC)
 
@@ -617,6 +618,35 @@ void DesktopWidget::enableKeyHooks(bool enable)
         keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
     else
         keyboard_hook_.reset();
+#elif defined(OS_MAC)
+    if (enable)
+    {
+        const CGEventMask keyboard_mask =
+            CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventKeyUp);
+
+        event_tap_ = CGEventTapCreate(kCGHIDEventTap,
+                                      kCGHeadInsertEventTap,
+                                      kCGEventTapOptionDefault,
+                                      keyboard_mask,
+                                      keyboardFilterProc,
+                                      this);
+        if (!event_tap_)
+        {
+            LOG(LS_ERROR) << "CGEventTapCreate failed";
+            return;
+        }
+
+        CFRunLoopSourceRef run_loop_source =
+            CFMachPortCreateRunLoopSource(kCFAllocatorDefault, event_tap_.get(), 0);
+
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), run_loop_source, kCFRunLoopCommonModes);
+        CGEventTapEnable(event_tap_.get(), true);
+    }
+    else
+    {
+        if (event_tap_)
+            CGEventTapEnable(event_tap_.get(), false);
+    }
 #else
     Q_UNUSED(enable)
 #endif
@@ -716,5 +746,40 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
     return CallNextHookEx(nullptr, code, wparam, lparam);
 }
 #endif // defined(OS_WIN)
+
+#if defined(OS_MAC)
+//--------------------------------------------------------------------------------------------------
+// static
+CGEventRef DesktopWidget::keyboardFilterProc(
+    CGEventTapProxy /* proxy */, CGEventType type, CGEventRef event, void* user_info)
+{
+    DesktopWidget* self_widget = reinterpret_cast<DesktopWidget*>(user_info);
+    DesktopWidget* focus_widget = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
+
+    if (self_widget && focus_widget && self_widget == focus_widget &&
+        self_widget->enable_key_sequenses_)
+    {
+        uint32_t flags = ((type == kCGEventKeyDown) ? proto::KeyEvent::PRESSED : 0);
+        flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
+        flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+
+        CGKeyCode key_code = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
+
+        uint32_t usb_keycode = common::KeycodeConverter::nativeKeycodeToUsbKeycode(
+            static_cast<int>(key_code));
+        if (usb_keycode != common::KeycodeConverter::invalidUsbKeycode())
+        {
+            self_widget->executeKeyEvent(usb_keycode, flags);
+            return nullptr;
+        }
+        else
+        {
+            LOG(LS_ERROR) << "Unable to convert key code: " << key_code;
+        }
+    }
+
+    return event;
+}
+#endif // defined(OS_MAC)
 
 } // namespace client

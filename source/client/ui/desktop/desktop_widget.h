@@ -27,6 +27,11 @@
 #include "base/win/scoped_user_object.h"
 #endif // defined(OS_WIN)
 
+#if defined(OS_MAC)
+#include "base/mac/scoped_cftyperef.h"
+#include <CoreGraphics/CGEventTypes.h>
+#endif // defined(OS_MAC)
+
 #include <QEvent>
 #include <QPainter>
 #include <QPointer>
@@ -97,6 +102,12 @@ private:
     static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
     base::win::ScopedHHOOK keyboard_hook_;
 #endif // defined(OS_WIN)
+
+#if defined(OS_MAC)
+    static CGEventRef keyboardFilterProc(
+        CGEventTapProxy proxy, CGEventType type, CGEventRef event, void* user_info);
+    base::ScopedCFTypeRef<CFMachPortRef> event_tap_;
+#endif // defined(OS_MAC)
 
     QPointer<QTimer> error_timer_;
     proto::VideoErrorCode last_error_code_ = proto::VIDEO_ERROR_CODE_OK;
