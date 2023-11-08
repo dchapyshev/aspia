@@ -2927,22 +2927,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="518"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="519"/>
         <source>The session was paused by a remote user</source>
         <translation>Сессия приостановлена удаленным пользователем</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="522"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="523"/>
         <source>The session is temporarily unavailable</source>
         <translation>Сессия временно недоступна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="526"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="527"/>
         <source>The session is permanently unavailable</source>
         <translation>Сессия недоступна</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_widget.cc" line="530"/>
+        <location filename="../ui/desktop/desktop_widget.cc" line="531"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Ошибка при получении видео-потока: %1</translation>
     </message>
