@@ -64,7 +64,7 @@ bool isNumLockActivated()
     return (state & 2) != 0;
 #elif defined(OS_MAC)
     // Without NumLock.
-    return false;
+    return true;
 #else
 #warning Platform support not implemented
     return false;
