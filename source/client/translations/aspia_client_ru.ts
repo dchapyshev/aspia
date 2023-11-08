@@ -2852,42 +2852,19 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="331"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="336"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="376"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="381"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="381"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="386"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="509"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="524"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="539"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="554"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="569"/>
-        <source>Confirmation</source>
-        <translation>Подтверждение</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="510"/>
-        <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
-    </message>
-    <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="513"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="528"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="543"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="558"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
-        <source>Yes</source>
-        <translation>Да</translation>
     </message>
     <message>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="514"/>
@@ -2895,31 +2872,54 @@
         <location filename="../ui/desktop/desktop_toolbar.cc" line="544"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="559"/>
         <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="515"/>
+        <source>Are you sure you want to shutdown the remote computer?</source>
+        <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="533"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="548"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="563"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="519"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="534"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="549"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="564"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="579"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="525"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="530"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="540"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="545"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="560"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="570"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="575"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="658"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="663"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
