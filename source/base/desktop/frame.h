@@ -30,6 +30,8 @@ class SharedMemoryBase;
 class Frame
 {
 public:
+    static const float kStandardDPI;
+
     virtual ~Frame() = default;
 
     SharedMemoryBase* sharedMemory() const { return shared_memory_; }
@@ -50,6 +52,12 @@ public:
 
     void setTopLeft(const Point& top_left) { top_left_ = top_left; }
     const Point& topLeft() const { return top_left_; }
+
+    void setDpi(const Point& dpi) { dpi_ = dpi; }
+    const Point& dpi() const { return dpi_; }
+
+    float scaleFactor() const;
+    Rect rect() const;
 
     void setCapturerType(uint32_t capturer_type) { capturer_type_ = capturer_type; }
     uint32_t capturerType() const { return capturer_type_; }

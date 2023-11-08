@@ -87,6 +87,7 @@ MacDisplayConfiguration getConfigurationForScreen(NSScreen* screen)
 
     // Determine if the display is built-in or external.
     display_config.is_builtin = CGDisplayIsBuiltin(display_config.id);
+    display_config.is_primary_ = CGDisplayIsMain(display_config.id);
 
     return display_config;
 }

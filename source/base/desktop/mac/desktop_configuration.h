@@ -52,6 +52,9 @@ struct MacDisplayConfiguration
 
     // Display type, built-in or external.
     bool is_builtin = false;
+
+    // Display primary or not.
+    bool is_primary_ = false;
 };
 
 typedef std::vector<MacDisplayConfiguration> MacDisplayConfigurations;
