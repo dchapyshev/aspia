@@ -19,6 +19,7 @@
 #include "client/ui/desktop/desktop_toolbar.h"
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "client/ui/desktop/desktop_settings.h"
 #include "client/ui/desktop/record_settings_dialog.h"
 #include "client/ui/desktop/select_screen_action.h"
@@ -757,8 +758,17 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::showFullScreenButtons(bool show)
 {
+    // MacOS does not have the ability to minimize a window from full screen mode. Therefore, for
+    // MacOS we disable the minimize button from full screen mode.
+    // For more info see: https://bugreports.qt.io/browse/QTBUG-62991
+#if defined(OS_MAC)
+    ui.action_minimize->setVisible(false);
+    ui.action_minimize->setEnabled(false);
+#else
     ui.action_minimize->setVisible(show);
     ui.action_minimize->setEnabled(show);
+#endif
+
     ui.action_close->setVisible(show);
     ui.action_close->setEnabled(show);
 
