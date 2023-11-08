@@ -18,6 +18,7 @@
 
 #include "client/ui/desktop/statistics_dialog.h"
 
+#include "base/logging.h"
 #include "base/desktop/screen_capturer.h"
 
 #include <QTimer>
@@ -29,6 +30,8 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
       duration_(0, 0)
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
     ui.tree->resizeColumnToContents(0);
 
@@ -38,7 +41,10 @@ StatisticsDialog::StatisticsDialog(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-StatisticsDialog::~StatisticsDialog() = default;
+StatisticsDialog::~StatisticsDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setMetrics(const DesktopWindow::Metrics& metrics)

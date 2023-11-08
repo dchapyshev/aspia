@@ -470,6 +470,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     connect(ui.action_end_task, &QAction::triggered, this, &TaskManagerWindow::onEndProcess);
     connect(ui.action_update, &QAction::triggered, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] Update";
         sendProcessListRequest(proto::task_manager::ProcessListRequest::RESET_CACHE);
         sendServiceListRequest();
         sendUserListRequest();
@@ -678,6 +679,8 @@ void TaskManagerWindow::onUserContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onEndProcess()
 {
+    LOG(LS_INFO) << "[ACTION] End process";
+
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
     if (current_item)
     {
@@ -692,30 +695,57 @@ void TaskManagerWindow::onEndProcess()
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Accepted by user";
             sendEndProcessRequest(current_item->processId());
         }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Rejected by user";
+        }
+    }
+    else
+    {
+        LOG(LS_INFO) << "No selected item";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onStartService()
 {
+    LOG(LS_INFO) << "[ACTION] Start service";
+
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
     if (current_item)
+    {
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_START);
+    }
+    else
+    {
+        LOG(LS_INFO) << "No selected item";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onStopService()
 {
+    LOG(LS_INFO) << "[ACTION] Stop service";
+
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
     if (current_item)
+    {
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_STOP);
+    }
+    else
+    {
+        LOG(LS_INFO) << "No selected item";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onDisconnectUser()
 {
+    LOG(LS_INFO) << "[ACTION] Disconnect user";
+
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
@@ -730,8 +760,13 @@ void TaskManagerWindow::onDisconnectUser()
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
                 current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_DISCONNECT);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Rejected by user";
         }
     }
 }
@@ -739,6 +774,8 @@ void TaskManagerWindow::onDisconnectUser()
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onLogoffUser()
 {
+    LOG(LS_INFO) << "[ACTION] Logoff user";
+
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
@@ -753,8 +790,13 @@ void TaskManagerWindow::onLogoffUser()
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
                 current_item->sessionId(), proto::task_manager::UserRequest::COMMAND_LOGOFF);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Rejected by user";
         }
     }
 }
