@@ -1164,32 +1164,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="112"/>
+        <location filename="../computer_dialog_desktop.cc" line="127"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="113"/>
+        <location filename="../computer_dialog_desktop.cc" line="128"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="114"/>
+        <location filename="../computer_dialog_desktop.cc" line="129"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="115"/>
+        <location filename="../computer_dialog_desktop.cc" line="130"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="116"/>
+        <location filename="../computer_dialog_desktop.cc" line="131"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="302"/>
+        <location filename="../computer_dialog_desktop.cc" line="322"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1197,7 +1197,7 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="133"/>
+        <location filename="../computer_dialog_general.cc" line="135"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
@@ -1205,17 +1205,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="141"/>
+        <location filename="../computer_dialog_general.cc" line="144"/>
         <source>Name can not be empty.</source>
         <translation>O nome não pode estar vazio.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="151"/>
+        <location filename="../computer_dialog_general.cc" line="155"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="161"/>
+        <location filename="../computer_dialog_general.cc" line="166"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
@@ -1223,12 +1223,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="178"/>
+        <location filename="../computer_dialog_general.cc" line="184"/>
         <source>An invalid computer address was entered.</source>
         <translation>Foi inserido um endereço de computador inválido.</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="217"/>
+        <location filename="../computer_dialog_general.cc" line="224"/>
         <source>Warning</source>
         <translation>Alterta</translation>
     </message>
@@ -1261,7 +1261,7 @@
         <translation type="unfinished">Visualizar</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="228"/>
+        <location filename="../computer_group_dialog.cc" line="233"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
@@ -1269,12 +1269,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="236"/>
+        <location filename="../computer_group_dialog.cc" line="242"/>
         <source>Name can not be empty.</source>
         <translation>O nome não pode estar vazio.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="244"/>
+        <location filename="../computer_group_dialog.cc" line="251"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
@@ -1282,7 +1282,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="206"/>
+        <location filename="../computer_group_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
@@ -1290,32 +1290,32 @@
 <context>
     <name>console::ComputerGroupDialogDesktop</name>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="128"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="143"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="129"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="144"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="130"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="145"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="131"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="146"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="132"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="147"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="318"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="338"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1344,7 +1344,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="101"/>
+        <location filename="../computer_group_dialog_general.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
     </message>
@@ -1360,7 +1360,7 @@
         <translation type="obsolete">Foi inserido um endereço de computador inválido.</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="140"/>
+        <location filename="../computer_group_dialog_general.cc" line="142"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1393,18 +1393,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="234"/>
-        <location filename="../fast_connect_dialog.cc" line="254"/>
+        <location filename="../fast_connect_dialog.cc" line="243"/>
+        <location filename="../fast_connect_dialog.cc" line="264"/>
         <source>Warning</source>
         <translation>Alerta</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="235"/>
+        <location filename="../fast_connect_dialog.cc" line="244"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="255"/>
+        <location filename="../fast_connect_dialog.cc" line="265"/>
         <source>An invalid computer address was entered.</source>
         <translation>Foi inserido um endereço de computador inválido.</translation>
     </message>

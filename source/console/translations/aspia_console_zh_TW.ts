@@ -1156,32 +1156,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="112"/>
+        <location filename="../computer_dialog_desktop.cc" line="127"/>
         <source>True color (32 bit)</source>
         <translation>全彩 (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="113"/>
+        <location filename="../computer_dialog_desktop.cc" line="128"/>
         <source>High color (16 bit)</source>
         <translation>高彩 (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="114"/>
+        <location filename="../computer_dialog_desktop.cc" line="129"/>
         <source>256 colors (8 bit)</source>
         <translation>256 色 (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="115"/>
+        <location filename="../computer_dialog_desktop.cc" line="130"/>
         <source>64 colors (6 bit)</source>
         <translation>64 色 (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="116"/>
+        <location filename="../computer_dialog_desktop.cc" line="131"/>
         <source>8 colors (3 bit)</source>
         <translation>8 色 (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="302"/>
+        <location filename="../computer_dialog_desktop.cc" line="322"/>
         <source>Compression ratio: %1</source>
         <translation>壓縮率：%1</translation>
     </message>
@@ -1189,36 +1189,36 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="133"/>
+        <location filename="../computer_dialog_general.cc" line="135"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="141"/>
+        <location filename="../computer_dialog_general.cc" line="144"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="151"/>
+        <location filename="../computer_dialog_general.cc" line="155"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>使用者名稱不能為空且只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="161"/>
+        <location filename="../computer_dialog_general.cc" line="166"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="178"/>
+        <location filename="../computer_dialog_general.cc" line="184"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="217"/>
+        <location filename="../computer_dialog_general.cc" line="224"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1226,26 +1226,26 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="228"/>
+        <location filename="../computer_group_dialog.cc" line="233"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="236"/>
+        <location filename="../computer_group_dialog.cc" line="242"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="244"/>
+        <location filename="../computer_group_dialog.cc" line="251"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="206"/>
+        <location filename="../computer_group_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1278,32 +1278,32 @@
 <context>
     <name>console::ComputerGroupDialogDesktop</name>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="128"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="143"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished">全彩 (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="129"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="144"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished">高彩 (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="130"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="145"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished">256 色 (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="131"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="146"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished">64 色 (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="132"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="147"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished">8 色 (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="318"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="338"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">壓縮率：%1</translation>
     </message>
@@ -1321,7 +1321,7 @@
         <translation type="obsolete">名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="101"/>
+        <location filename="../computer_group_dialog_general.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1336,7 +1336,7 @@
         <translation type="obsolete">輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="140"/>
+        <location filename="../computer_group_dialog_general.cc" line="142"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
@@ -1364,18 +1364,18 @@
         <translation>輸入的位址列表將被清除。是否繼續？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="234"/>
-        <location filename="../fast_connect_dialog.cc" line="254"/>
+        <location filename="../fast_connect_dialog.cc" line="243"/>
+        <location filename="../fast_connect_dialog.cc" line="264"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="235"/>
+        <location filename="../fast_connect_dialog.cc" line="244"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="255"/>
+        <location filename="../fast_connect_dialog.cc" line="265"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
