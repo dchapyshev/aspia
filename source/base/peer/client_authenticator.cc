@@ -438,6 +438,7 @@ bool ClientAuthenticator::readSessionChallenge(const ByteArray& buffer)
     LOG(LS_INFO) << "Server Name: " << challenge->computer_name();
     LOG(LS_INFO) << "Server OS: " << challenge->os_name();
     LOG(LS_INFO) << "Server CPU Cores: " << challenge->cpu_cores();
+    LOG(LS_INFO) << "Server Arch: " << challenge->arch();
 
     return true;
 }
@@ -457,6 +458,18 @@ void ClientAuthenticator::sendSessionResponse()
     response->set_os_name(SysInfo::operatingSystemName());
     response->set_computer_name(SysInfo::computerName());
     response->set_cpu_cores(static_cast<uint32_t>(SysInfo::processorThreads()));
+
+#if defined(ARCH_CPU_X86)
+    response->set_arch("x86");
+#elif defined(ARCH_CPU_X86_64)
+    response->set_arch("x86_64");
+#elif defined(ARCH_CPU_ARMEL)
+    response->set_arch("arm");
+#elif defined(ARCH_CPU_ARM64)
+    response->set_arch("arm64");
+#else
+    response->set_arch(std::string());
+#endif
 
     LOG(LS_INFO) << "Sending: SessionResponse";
     sendMessage(*response);

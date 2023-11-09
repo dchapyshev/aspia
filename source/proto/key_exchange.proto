@@ -114,6 +114,7 @@ message SessionChallenge
     uint32 cpu_cores     = 3;
     string os_name       = 4;
     string computer_name = 5;
+    string arch          = 6;
 }
 
 // Client to server.
@@ -124,4 +125,5 @@ message SessionResponse
     uint32 cpu_cores     = 3;
     string os_name       = 4;
     string computer_name = 5;
+    string arch          = 6;
 }
