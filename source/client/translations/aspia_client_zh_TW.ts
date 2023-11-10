@@ -3040,7 +3040,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="302"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="310"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="972"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -3055,17 +3055,17 @@
         <translation>主機不支援目前的視訊編碼。請指定其他視訊編碼。</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="939"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="950"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="941"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="952"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="972"/>
         <source>Could not save image</source>
         <translation>無法儲存影像</translation>
     </message>
