@@ -2649,7 +2649,7 @@
         <translation type="unfinished">Se iscuro di voler bloccare la sessione utente sul computer remoto ?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="761"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="762"/>
         <source>Scale</source>
         <translation type="unfinished">Scala</translation>
     </message>
@@ -2733,79 +2733,79 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="459"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="466"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="96"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="103"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Non sono riuscito ad acquisire l&apos;elenco dei dischi: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="112"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="119"/>
         <source>Failed to get list of files: %1</source>
         <translation>Non sono riuscito ad acquisire l&apos;elenco dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="144"/>
         <source>Failed to create directory: %1</source>
         <translation>Non sono riuscito a creare la cartella: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="156"/>
         <source>Failed to rename item: %1</source>
         <translation>Non sono riuscito a rinominare l&apos;elemento: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="276"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="283"/>
         <source>%1 object(s) selected</source>
         <translation>%1 oggetto/i selezionato/i</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="296"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="315"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="303"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="322"/>
         <source>Folder name can not be empty.</source>
         <translation>Il nome della cartella non può essere vuoto.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="302"/>
-        <location filename="../ui/file_transfer/file_panel.cc" line="321"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="309"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="328"/>
         <source>Name contains invalid characters.</source>
         <translation>Il contiene dei caratteri non validi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="342"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="349"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Invia\tF11</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="343"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="350"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Elimina\tElimina</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="353"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="360"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Crea Cartella</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="418"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="425"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="419"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="426"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Sei sicuro di voler cancellare gli elementi selezionati ?</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="422"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="429"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_panel.cc" line="423"/>
+        <location filename="../ui/file_transfer/file_panel.cc" line="430"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -2813,42 +2813,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="53"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="55"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="106"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="110"/>
         <source>Deleting: %1</source>
         <translation>Cancellazione: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="137"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="141"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Si è verificato un errore durante l&apos;acquisizione della lista dei files: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="142"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="146"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Non sono riuscito a cancellare &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="149"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="153"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="157"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="161"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="160"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="164"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="163"/>
+        <location filename="../ui/file_transfer/file_remove_dialog.cc" line="167"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
@@ -2856,122 +2856,122 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="52"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="54"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="114"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="118"/>
         <source>Current Task: Copying items.</source>
         <translation>Attività Corrente: Copia elementi.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="128"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="132"/>
         <source>From: %1</source>
         <translation>Da: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="133"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="137"/>
         <source>To: %1</source>
         <translation>A: %1</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="173"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="177"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="185"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="189"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="188"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="192"/>
         <source>Skip All</source>
         <translation>Salta Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="191"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="195"/>
         <source>Replace</source>
         <translation>Sostituisci</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="194"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="198"/>
         <source>Replace All</source>
         <translation>Sostituisci Tutti</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="197"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="201"/>
         <source>Abort</source>
         <translation>Interrompi</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="350"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="354"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="355"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="359"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="360"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="364"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="365"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="369"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="370"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="374"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="158"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="162"/>
         <source>Speed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="275"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="279"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>Attività Corrente: Interruzione trasferimento dei files.</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="290"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="294"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>Si è verificato un errore durante la generazione della coda di copia dei files</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="295"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="299"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare la cartella &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="303"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="307"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a creare il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="310"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="314"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito ad aprire il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="317"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="321"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a scrivere il file &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="324"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="328"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Non sono riuscito a leggere &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="331"/>
+        <location filename="../ui/file_transfer/file_transfer_dialog.cc" line="335"/>
         <source>Unknown error type while copying files</source>
         <translation>Errore sconosciuto durante la copia dei files</translation>
     </message>
@@ -2979,34 +2979,34 @@
 <context>
     <name>client::QtDesktopWindow</name>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="302"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="310"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="303"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="309"/>
         <source>There are no supported video encodings.</source>
         <translation>Non ci sono codifiche video supportate.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="311"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="318"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>La modalità di codifica video attiva non è supportata dall&apos;host. Per cortesia selezionare un codifica video diversa.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="939"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="946"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="941"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="948"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>Non è stato possibile salvare l&apos;immagine</translation>
     </message>
@@ -3014,22 +3014,22 @@
 <context>
     <name>client::QtFileManagerWindow</name>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="53"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="55"/>
         <source>Local Computer</source>
         <translation>Computer Locale</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="54"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="56"/>
         <source>Remote Computer</source>
         <translation>Computer Remoto</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="91"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="94"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="92"/>
+        <location filename="../ui/file_transfer/qt_file_manager_window.cc" line="95"/>
         <source>Session error: %1</source>
         <translation>Errore sessione: %1</translation>
     </message>
@@ -3037,142 +3037,142 @@
 <context>
     <name>client::QtSystemInfoWindow</name>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="143"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="145"/>
         <source>Summary</source>
         <translation>Riepilogo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="151"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="153"/>
         <source>Hardware</source>
         <translation>Hardware</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="156"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="158"/>
         <source>Devices</source>
         <translation>Dispositivi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="162"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="164"/>
         <source>Video Adapters</source>
         <translation>Schede Video</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="168"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="170"/>
         <source>Monitors</source>
         <translation>Monitors</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="174"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="176"/>
         <source>Printers</source>
         <translation>Stampanti</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="180"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="182"/>
         <source>Power Options</source>
         <translation>Opzioni Risparmio Energia</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="194"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="196"/>
         <source>Software</source>
         <translation>Software</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="199"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="201"/>
         <source>Applications</source>
         <translation>Applicazioni</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="205"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="207"/>
         <source>Drivers</source>
         <translation>Drivers</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="211"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="213"/>
         <source>Services</source>
         <translation>Servizi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="217"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="219"/>
         <source>Processes</source>
         <translation>Processi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="280"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="282"/>
         <source>Operating System</source>
         <translation>Sistema Operativo</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="285"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="287"/>
         <source>Environment Variables</source>
         <translation>Variabili Ambiente</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="291"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="293"/>
         <source>Event Logs</source>
         <translation>Registro Eventi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="223"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="225"/>
         <source>Licenses</source>
         <translation>Licenze</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="237"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="239"/>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="242"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="244"/>
         <source>Network Adapters</source>
         <translation>Schede di Rete</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="248"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="250"/>
         <source>Routes</source>
         <translation>Percorsi</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="254"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="256"/>
         <source>Connections</source>
         <translation>Connessioni</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="260"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="262"/>
         <source>Network Shares</source>
         <translation>Condivisioni di Rete</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="266"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="268"/>
         <source>Open Files</source>
         <translation>Files Aperti</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="297"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="299"/>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="303"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="305"/>
         <source>User Groups</source>
         <translation>Gruppi Utente</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="330"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="332"/>
         <source>HTML File</source>
         <translation>File HTML</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="332"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="334"/>
         <source>HTML File (*.html)</source>
         <translation>HTML File (*.html)</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="343"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="345"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../ui/sys_info/qt_system_info_window.cc" line="344"/>
+        <location filename="../ui/sys_info/qt_system_info_window.cc" line="346"/>
         <source>Failed to save file: %1</source>
         <translation>Non sono riuscito a salvare il file: %1</translation>
     </message>
