@@ -710,12 +710,22 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
         if (event->type() == QEvent::Wheel)
         {
             QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
-            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
 
-            desktop_->doMouseEvent(wheel_event->type(),
-                                   wheel_event->buttons(),
-                                   pos,
-                                   wheel_event->angleDelta());
+            // High-resolution mice or touchpads may generate small mouse wheel angles (eg 2
+            // degrees). We accumulate the rotation angle until it becomes 120 degrees.
+            wheel_angle_ += wheel_event->angleDelta();
+
+            if (wheel_angle_.y() >= QWheelEvent::DefaultDeltasPerStep ||
+                wheel_angle_.y() <= -QWheelEvent::DefaultDeltasPerStep)
+            {
+                QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
+
+                desktop_->doMouseEvent(wheel_event->type(),
+                                       wheel_event->buttons(),
+                                       pos,
+                                       wheel_angle_);
+                wheel_angle_ = QPoint(0, 0);
+            }
             return true;
         }
     }

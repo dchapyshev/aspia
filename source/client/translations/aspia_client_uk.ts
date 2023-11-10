@@ -3192,7 +3192,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -3207,17 +3207,17 @@
         <translation>Обране кодування відео не підтримується хостом. Будь ласка, оберіть інше кодування відео.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="946"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="948"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Could not save image</source>
         <translation>Неможливо зберегти зображення</translation>
     </message>

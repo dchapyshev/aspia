@@ -3142,7 +3142,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -3157,17 +3157,17 @@
         <translation type="unfinished">De huidige video encoding wordt niet ondersteund door de host. Specificeer AUB een andere encoding.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="946"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
         <source>Save File</source>
         <translation type="unfinished">Bestand Opslaan</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="948"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Afbeelding (*.png);;BMP Afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Could not save image</source>
         <translation type="unfinished">Kon het bestand niet opslaan</translation>
     </message>

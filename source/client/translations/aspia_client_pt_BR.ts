@@ -3118,7 +3118,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Warning</source>
         <translation>Atenção</translation>
     </message>
@@ -3133,17 +3133,17 @@
         <translation>A codificação de vídeo atual não é compatível com o host. Especifique uma codificação de vídeo diferente.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="946"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="948"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>

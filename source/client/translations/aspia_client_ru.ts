@@ -3293,7 +3293,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="308"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="317"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -3308,17 +3308,17 @@
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="946"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="956"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="948"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="958"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="979"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="989"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
