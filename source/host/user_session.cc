@@ -835,6 +835,16 @@ void UserSession::onScreenListChanged(const proto::ScreenList& list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onScreenTypeChanged(const proto::ScreenType& type)
+{
+    LOG(LS_INFO) << "Screen type changed (type: " << type.type() << " name: " << type.name()
+                 << " sid: " << session_id_ << ")";
+
+    for (const auto& client : desktop_clients_)
+        static_cast<ClientSessionDesktop*>(client.get())->setScreenType(type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     for (const auto& client : desktop_clients_)

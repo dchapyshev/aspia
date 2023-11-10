@@ -400,6 +400,17 @@ void ClientSessionDesktop::setScreenList(const proto::ScreenList& list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientSessionDesktop::setScreenType(const proto::ScreenType& type)
+{
+    outgoing_message_->Clear();
+    proto::DesktopExtension* extension = outgoing_message_->mutable_extension();
+    extension->set_name(common::kScreenTypeExtension);
+    extension->set_data(type.SerializeAsString());
+
+    sendMessage(proto::HOST_CHANNEL_ID_SESSION, base::serialize(*outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::injectClipboardEvent(const proto::ClipboardEvent& event)
 {
     if (sessionType() == proto::SESSION_TYPE_DESKTOP_MANAGE)

@@ -414,6 +414,12 @@ void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void QtDesktopWindow::setScreenType(const proto::ScreenType& screen_type)
+{
+    toolbar_->setScreenType(screen_type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     base::Frame* frame = desktop_->desktopFrame();

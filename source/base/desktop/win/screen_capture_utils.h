@@ -48,6 +48,9 @@ public:
     // The number of visible display monitors on a desktop.
     static int screenCount();
 
+    // Returns screen type.
+    static ScreenCapturer::ScreenType screenType();
+
 private:
     DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
 };

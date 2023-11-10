@@ -47,6 +47,7 @@ public:
     void enablePasteAsKeystrokesFeature(bool enable);
 
     void setScreenList(const proto::ScreenList& screen_list);
+    void setScreenType(const proto::ScreenType& screen_type);
     void startRecording(bool enable);
 
     int scale() const { return scale_; }
@@ -113,6 +114,7 @@ private:
 
     const proto::SessionType session_type_;
     bool is_recording_started_ = false;
+    bool is_remote_update_enabled_ = false;
 
     QSize current_resolution_;
     int64_t current_screen_id_ = -1;

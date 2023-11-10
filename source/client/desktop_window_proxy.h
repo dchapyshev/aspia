@@ -48,6 +48,7 @@ public:
 
     void setCapabilities(const proto::DesktopCapabilities& capabilities);
     void setScreenList(const proto::ScreenList& screen_list);
+    void setScreenType(const proto::ScreenType& screen_type);
     void setCursorPosition(const proto::CursorPosition& cursor_position);
     void setSystemInfo(const proto::system_info::SystemInfo& system_info);
     void setTaskManager(const proto::task_manager::HostToClient& message);

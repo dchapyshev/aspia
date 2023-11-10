@@ -240,6 +240,7 @@ void DesktopToolBar::enableTextChat(bool enable)
 void DesktopToolBar::enableRemoteUpdate(bool enable)
 {
     LOG(LS_INFO) << "enableRemoteUpdate: " << enable;
+    is_remote_update_enabled_ = enable;
     ui.action_update->setVisible(enable);
     ui.action_update->setEnabled(enable);
     updateSize();
@@ -405,6 +406,21 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
     }
 
     updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopToolBar::setScreenType(const proto::ScreenType& screen_type)
+{
+    if (is_remote_update_enabled_)
+    {
+        bool show_update_button = screen_type.type() == proto::ScreenType::TYPE_DESKTOP;
+
+        LOG(LS_INFO) << "Show update button: " << show_update_button
+                     << " (type=" << screen_type.type() << " name=" << screen_type.name() << ")";
+
+        ui.action_update->setVisible(show_update_button);
+        updateSize();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

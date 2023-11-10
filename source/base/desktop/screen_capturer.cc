@@ -30,6 +30,12 @@ ScreenCapturer::ScreenCapturer(Type type)
 }
 
 //--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenType ScreenCapturer::screenType()
+{
+    return ScreenType::UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
 {
     shared_memory_factory_ = shared_memory_factory;
@@ -66,6 +72,28 @@ const char* ScreenCapturer::typeToString(Type type)
 
         case Type::MACOSX:
             return "MACOSX";
+
+        default:
+            return "UNKNOWN";
+        }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char *ScreenCapturer::screenTypeToString(ScreenType screen_type)
+{
+    switch (screen_type)
+    {
+        case ScreenType::DESKTOP:
+            return "DESKTOP";
+
+        case ScreenType::LOCK:
+            return "LOCK";
+
+        case ScreenType::LOGIN:
+            return "LOGIN";
+
+        case ScreenType::OTHER:
+            return "OTHER";
 
         default:
             return "UNKNOWN";
