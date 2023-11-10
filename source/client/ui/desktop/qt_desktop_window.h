@@ -148,6 +148,8 @@ private:
     bool disable_feature_lock_at_disconnect_ = false;
     bool disable_feature_block_input_ = false;
 
+    QPoint wheel_angle_;
+
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };
 
