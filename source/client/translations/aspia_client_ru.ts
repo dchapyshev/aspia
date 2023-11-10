@@ -2852,74 +2852,74 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="371"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="372"/>
         <source>Resolution selection</source>
         <translation>Выбор разрешения</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="418"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="434"/>
         <source>Stop recording</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="423"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="439"/>
         <source>Start recording</source>
         <translation>Начать запись</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="557"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="620"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="573"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="594"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="615"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="636"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="558"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="574"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="561"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="582"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="603"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="624"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="645"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="577"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="598"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="619"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="640"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="661"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="562"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="583"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="604"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="625"/>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="646"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="578"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="599"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="620"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="641"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="662"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="579"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="595"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="600"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="616"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="621"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="637"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="642"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="658"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/desktop_toolbar.cc" line="745"/>
+        <location filename="../ui/desktop/desktop_toolbar.cc" line="761"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -3293,7 +3293,7 @@
     <message>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="302"/>
         <location filename="../ui/desktop/qt_desktop_window.cc" line="310"/>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="955"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -3308,17 +3308,17 @@
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="933"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="939"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="935"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="941"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../ui/desktop/qt_desktop_window.cc" line="955"/>
+        <location filename="../ui/desktop/qt_desktop_window.cc" line="961"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
