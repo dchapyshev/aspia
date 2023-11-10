@@ -57,6 +57,7 @@ QString parentPath(const QString& path)
 FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     FileItemDelegate* delegate = static_cast<FileItemDelegate*>(ui.list->itemDelegate());
@@ -86,6 +87,12 @@ FilePanel::FilePanel(QWidget* parent)
     });
 
     ui.list->setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
+FilePanel::~FilePanel()
+{
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------

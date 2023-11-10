@@ -80,6 +80,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
       desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     setMinimumSize(400, 300);
 
     desktop_ = new DesktopWidget(this);
@@ -265,6 +267,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 //--------------------------------------------------------------------------------------------------
 QtDesktopWindow::~QtDesktopWindow()
 {
+    LOG(LS_INFO) << "Dtor";
     desktop_window_proxy_->dettach();
 }
 
@@ -296,8 +299,11 @@ void QtDesktopWindow::showWindow(
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::configRequired()
 {
+    LOG(LS_INFO) << "Config required";
+
     if (!(video_encodings_ & common::kSupportedVideoEncodings))
     {
+        LOG(LS_INFO) << "No supported video encodings";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("There are no supported video encodings."),
@@ -306,6 +312,7 @@ void QtDesktopWindow::configRequired()
     }
     else
     {
+        LOG(LS_INFO) << "Current video encoding not supported by host";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The current video encoding is not supported by the host. "
@@ -941,11 +948,17 @@ void QtDesktopWindow::takeScreenshot()
                                                      tr("PNG Image (*.png);;BMP Image (*.bmp)"),
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(LS_INFO) << "[ACTION] File path not selected";
         return;
+    }
 
     FrameQImage* frame = static_cast<FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
+    {
+        LOG(LS_INFO) << "No desktop frame";
         return;
+    }
 
     const char* format = nullptr;
 
@@ -955,10 +968,20 @@ void QtDesktopWindow::takeScreenshot()
         format = "BMP";
 
     if (!format)
+    {
+        LOG(LS_INFO) << "File format not selected";
         return;
+    }
 
     if (!frame->constImage().save(file_path, format))
+    {
+        LOG(LS_ERROR) << "Unable to save image";
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Image saved to file: " << file_path.toStdString();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

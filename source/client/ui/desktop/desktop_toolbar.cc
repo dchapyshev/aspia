@@ -738,6 +738,7 @@ void DesktopToolBar::onMenuHide()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onShowRecordSettings()
 {
+    LOG(LS_INFO) << "[ACTION] Record settings";
     RecordSettingsDialog(this).exec();
 }
 
@@ -791,7 +792,11 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_send_key_combinations, &QAction::triggered,
-                this, &DesktopToolBar::sig_keyCombinationsChanged);
+                this, [this](bool enable)
+        {
+            LOG(LS_INFO) << "[ACTION] Send key combinations changed: " << enable;
+            emit sig_keyCombinationsChanged(enable);
+        });
     }
 
     connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
@@ -845,9 +850,21 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
         emit sig_scaleChanged();
     });
 
-    connect(ui.action_pause_video, &QAction::triggered, this, &DesktopToolBar::sig_videoPauseChanged);
-    connect(ui.action_pause_audio, &QAction::triggered, this, &DesktopToolBar::sig_audioPauseChanged);
-    connect(ui.action_screenshot, &QAction::triggered, this, &DesktopToolBar::sig_takeScreenshot);
+    connect(ui.action_pause_video, &QAction::triggered, this, [this](bool enable)
+    {
+        LOG(LS_INFO) << "[ACTION] Video pause changed: " << enable;
+        emit sig_videoPauseChanged(enable);
+    });
+    connect(ui.action_pause_audio, &QAction::triggered, this, [this](bool enable)
+    {
+        LOG(LS_INFO) << "[ACTION] Audio pause changed: " << enable;
+        emit sig_audioPauseChanged(enable);
+    });
+    connect(ui.action_screenshot, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Take screenshot";
+        emit sig_takeScreenshot();
+    });
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
 

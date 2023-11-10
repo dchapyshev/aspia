@@ -44,6 +44,8 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
       transfer_window_proxy_(std::make_shared<FileTransferWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
@@ -77,6 +79,8 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FileTransferDialog::~FileTransferDialog()
 {
+    LOG(LS_INFO) << "Dtor";
+
     transfer_window_proxy_->dettach();
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

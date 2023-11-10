@@ -42,6 +42,8 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
       file_manager_window_proxy_(
           std::make_shared<FileManagerWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui->setupUi(this);
 
     FileManagerSettings settings;
@@ -59,6 +61,7 @@ QtFileManagerWindow::QtFileManagerWindow(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 QtFileManagerWindow::~QtFileManagerWindow()
 {
+    LOG(LS_INFO) << "Dtor";
     file_manager_window_proxy_->dettach();
 }
 
