@@ -99,6 +99,20 @@ void DesktopWindowProxy::setScreenList(const proto::ScreenList& screen_list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindowProxy::setScreenType(const proto::ScreenType& screen_type)
+{
+    if (!ui_task_runner_->belongsToCurrentThread())
+    {
+        ui_task_runner_->postTask(
+            std::bind(&DesktopWindowProxy::setScreenType, shared_from_this(), screen_type));
+        return;
+    }
+
+    if (desktop_window_)
+        desktop_window_->setScreenType(screen_type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindowProxy::setCursorPosition(const proto::CursorPosition& cursor_position)
 {
     if (!ui_task_runner_->belongsToCurrentThread())

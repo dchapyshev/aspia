@@ -112,7 +112,7 @@ void ClientSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setVersion(const base::Version& version)
+void ClientSession::setClientVersion(const base::Version& version)
 {
     version_ = version;
 }

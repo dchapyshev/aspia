@@ -31,13 +31,15 @@ const char kSystemInfoExtension[] = "system_info";
 const char kTaskManagerExtension[] = "task_manager";
 const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
+const char kScreenTypeExtension[] = "screen_type";
 
 #if defined(OS_WIN)
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;task_manager;video_pause;audio_pause";
+    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;"
+    "task_manager;video_pause;audio_pause;screen_type";
 
 const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;system_info;video_recording;video_pause;audio_pause";
+    "select_screen;preferred_size;system_info;video_recording;video_pause;audio_pause;screen_type";
 #else
 const char kSupportedExtensionsForManage[] =
     "select_screen;preferred_size;video_recording;video_pause;audio_pause";

@@ -80,6 +80,8 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
       desktop_window_proxy_(std::make_shared<DesktopWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     setMinimumSize(400, 300);
 
     desktop_ = new DesktopWidget(this);
@@ -116,6 +118,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
     connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &QtDesktopWindow::scaleDesktop);
     connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
     {
+        LOG(LS_INFO) << "Minimize from full screen";
         is_minimized_from_full_screen_ = true;
         showMinimized();
     });
@@ -264,6 +267,7 @@ QtDesktopWindow::QtDesktopWindow(proto::SessionType session_type,
 //--------------------------------------------------------------------------------------------------
 QtDesktopWindow::~QtDesktopWindow()
 {
+    LOG(LS_INFO) << "Dtor";
     desktop_window_proxy_->dettach();
 }
 
@@ -295,8 +299,11 @@ void QtDesktopWindow::showWindow(
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::configRequired()
 {
+    LOG(LS_INFO) << "Config required";
+
     if (!(video_encodings_ & common::kSupportedVideoEncodings))
     {
+        LOG(LS_INFO) << "No supported video encodings";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("There are no supported video encodings."),
@@ -305,6 +312,7 @@ void QtDesktopWindow::configRequired()
     }
     else
     {
+        LOG(LS_INFO) << "Current video encoding not supported by host";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The current video encoding is not supported by the host. "
@@ -410,6 +418,12 @@ void QtDesktopWindow::setCapabilities(const proto::DesktopCapabilities& capabili
 void QtDesktopWindow::setScreenList(const proto::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
+}
+
+//--------------------------------------------------------------------------------------------------
+void QtDesktopWindow::setScreenType(const proto::ScreenType& screen_type)
+{
+    toolbar_->setScreenType(screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -651,6 +665,7 @@ void QtDesktopWindow::showEvent(QShowEvent *event)
 {
     if (is_minimized_from_full_screen_)
     {
+        LOG(LS_INFO) << "Restore to full screen";
         is_minimized_from_full_screen_ = false;
         showFullScreen();
     }
@@ -695,12 +710,22 @@ bool QtDesktopWindow::eventFilter(QObject* object, QEvent* event)
         if (event->type() == QEvent::Wheel)
         {
             QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
-            QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
 
-            desktop_->doMouseEvent(wheel_event->type(),
-                                   wheel_event->buttons(),
-                                   pos,
-                                   wheel_event->angleDelta());
+            // High-resolution mice or touchpads may generate small mouse wheel angles (eg 2
+            // degrees). We accumulate the rotation angle until it becomes 120 degrees.
+            wheel_angle_ += wheel_event->angleDelta();
+
+            if (wheel_angle_.y() >= QWheelEvent::DefaultDeltasPerStep ||
+                wheel_angle_.y() <= -QWheelEvent::DefaultDeltasPerStep)
+            {
+                QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPosition().toPoint());
+
+                desktop_->doMouseEvent(wheel_event->type(),
+                                       wheel_event->buttons(),
+                                       pos,
+                                       wheel_angle_);
+                wheel_angle_ = QPoint(0, 0);
+            }
             return true;
         }
     }
@@ -933,11 +958,17 @@ void QtDesktopWindow::takeScreenshot()
                                                      tr("PNG Image (*.png);;BMP Image (*.bmp)"),
                                                      &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(LS_INFO) << "[ACTION] File path not selected";
         return;
+    }
 
     FrameQImage* frame = static_cast<FrameQImage*>(desktop_->desktopFrame());
     if (!frame)
+    {
+        LOG(LS_INFO) << "No desktop frame";
         return;
+    }
 
     const char* format = nullptr;
 
@@ -947,10 +978,20 @@ void QtDesktopWindow::takeScreenshot()
         format = "BMP";
 
     if (!format)
+    {
+        LOG(LS_INFO) << "File format not selected";
         return;
+    }
 
     if (!frame->constImage().save(file_path, format))
+    {
+        LOG(LS_ERROR) << "Unable to save image";
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
+    }
+    else
+    {
+        LOG(LS_INFO) << "Image saved to file: " << file_path.toStdString();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

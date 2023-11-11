@@ -55,6 +55,63 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
         ((1.0 - kAlpha) * static_cast<double>(last_avg_size)));
 }
 
+//--------------------------------------------------------------------------------------------------
+const char* audioEncodingToString(proto::AudioEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::AUDIO_ENCODING_OPUS:
+            return "AUDIO_ENCODING_OPUS";
+
+        case proto::AUDIO_ENCODING_RAW:
+            return "AUDIO_ENCODING_RAW";
+
+        default:
+            return "AUDIO_ENCODING_UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* videoEncodingToString(proto::VideoEncoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::VIDEO_ENCODING_VP8:
+            return "VIDEO_ENCODING_VP8";
+
+        case proto::VIDEO_ENCODING_VP9:
+            return "VIDEO_ENCODING_VP9";
+
+        case proto::VIDEO_ENCODING_ZSTD:
+            return "VIDEO_ENCODING_ZSTD";
+
+        default:
+            return "VIDEO_ENCODING_UNKNOWN";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const char* videoErrorCodeToString(proto::VideoErrorCode error_code)
+{
+    switch (error_code)
+    {
+        case proto::VIDEO_ERROR_CODE_OK:
+            return "VIDEO_ERROR_CODE_OK";
+
+        case proto::VIDEO_ERROR_CODE_TEMPORARY:
+            return "VIDEO_ERROR_CODE_TEMPORARY";
+
+        case proto::VIDEO_ERROR_CODE_PERMANENT:
+            return "VIDEO_ERROR_CODE_PERMANENT";
+
+        case proto::VIDEO_ERROR_CODE_PAUSED:
+            return "VIDEO_ERROR_CODE_PAUSED";
+
+        default:
+            return "VIDEO_ERROR_CODE_UNKNOWN";
+    }
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -515,7 +572,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
     proto::VideoErrorCode error_code = packet.error_code();
     if (error_code != proto::VIDEO_ERROR_CODE_OK)
     {
-        LOG(LS_ERROR) << "Video error detected: " << error_code;
+        LOG(LS_ERROR) << "Video error detected: " << videoErrorCodeToString(error_code);
         desktop_window_proxy_->setFrameError(error_code);
         return;
     }
@@ -525,7 +582,7 @@ void ClientDesktop::readVideoPacket(const proto::VideoPacket& packet)
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
 
-        LOG(LS_INFO) << "Video encoding changed to: " << video_encoding_;
+        LOG(LS_INFO) << "Video encoding changed to: " << videoEncodingToString(video_encoding_);
     }
 
     if (!video_decoder_)
@@ -612,7 +669,7 @@ void ClientDesktop::readAudioPacket(const proto::AudioPacket& packet)
         audio_decoder_ = base::AudioDecoder::create(packet.encoding());
         audio_encoding_ = packet.encoding();
 
-        LOG(LS_INFO) << "Audio encoding changed to: " << audio_encoding_;
+        LOG(LS_INFO) << "Audio encoding changed to: " << audioEncodingToString(audio_encoding_);
     }
 
     if (!audio_decoder_)
@@ -735,6 +792,21 @@ void ClientDesktop::readExtension(const proto::DesktopExtension& extension)
         }
 
         desktop_window_proxy_->setScreenList(screen_list);
+    }
+    else if (extension.name() == common::kScreenTypeExtension)
+    {
+        proto::ScreenType screen_type;
+
+        if (!screen_type.ParseFromString(extension.data()))
+        {
+            LOG(LS_ERROR) << "Unable to parse screen type extension data";
+            return;
+        }
+
+        LOG(LS_INFO) << "Screen type received (type=" << screen_type.type()
+                     << " name=" << screen_type.name() << ")";
+
+        desktop_window_proxy_->setScreenType(screen_type);
     }
     else if (extension.name() == common::kSystemInfoExtension)
     {

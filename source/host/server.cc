@@ -105,7 +105,7 @@ void Server::start()
     addFirewallRules();
 
     server_ = std::make_unique<base::TcpServer>();
-    server_->start(u"0.0.0.0", settings_.tcpPort(), this);
+    server_->start(u"", settings_.tcpPort(), this);
 
     if (settings_.isRouterEnabled())
     {
@@ -196,17 +196,17 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 {
     LOG(LS_INFO) << "New client session";
 
-    if (session_info.version >= base::Version(2, 6, 0))
-    {
-        LOG(LS_INFO) << "Using channel id support";
+    bool channel_id_support = (session_info.version >= base::Version::kVersion_2_6_0);
+    if (channel_id_support)
         session_info.channel->setChannelIdSupport(true);
-    }
+
+    LOG(LS_INFO) << "Channel ID supported: " << (channel_id_support ? "YES" : "NO");
 
     const base::Version& host_version = base::Version::currentFull();
     if (host_version > session_info.version)
     {
         LOG(LS_ERROR) << "Version mismatch (host: " << host_version.toString()
-                      << " client: " << session_info.version.toString();
+                      << " client: " << session_info.version.toString() << ")";
     }
 
     std::unique_ptr<ClientSession> session = ClientSession::create(
@@ -216,7 +216,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     if (session)
     {
-        session->setVersion(session_info.version);
+        session->setClientVersion(session_info.version);
         session->setComputerName(session_info.computer_name);
         session->setUserName(session_info.user_name);
     }

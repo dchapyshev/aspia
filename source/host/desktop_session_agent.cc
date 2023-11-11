@@ -439,6 +439,41 @@ void DesktopSessionAgent::onCursorPositionChanged(const base::Point& position)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::onScreenTypeChanged(
+    base::ScreenCapturer::ScreenType type, const std::string& name)
+{
+    outgoing_message_->Clear();
+
+    proto::ScreenType* screen_type = outgoing_message_->mutable_screen_type();
+    screen_type->set_name(name);
+
+    switch (type)
+    {
+        case base::ScreenCapturer::ScreenType::DESKTOP:
+            screen_type->set_type(proto::ScreenType::TYPE_DESKTOP);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOCK:
+            screen_type->set_type(proto::ScreenType::TYPE_LOCK);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOGIN:
+            screen_type->set_type(proto::ScreenType::TYPE_LOGIN);
+            break;
+
+        case base::ScreenCapturer::ScreenType::OTHER:
+            screen_type->set_type(proto::ScreenType::TYPE_OTHER);
+            break;
+
+        default:
+            screen_type->set_type(proto::ScreenType::TYPE_UNKNOWN);
+            break;
+    }
+
+    channel_->send(base::serialize(*outgoing_message_));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionAgent::onBeforeThreadRunning()
 {
     LOG(LS_INFO) << "UI thread starting";

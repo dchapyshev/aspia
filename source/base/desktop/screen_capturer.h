@@ -54,6 +54,15 @@ public:
         TEMPORARY = 2
     };
 
+    enum class ScreenType
+    {
+        UNKNOWN = 0,
+        DESKTOP = 1,
+        LOGIN   = 2,
+        LOCK    = 3,
+        OTHER   = 4
+    };
+
     using ScreenId = intptr_t;
 
     static const ScreenId kFullDesktopScreenId = -1;
@@ -82,11 +91,14 @@ public:
     virtual const Frame* captureFrame(Error* error) = 0;
     virtual const MouseCursor* captureCursor() = 0;
     virtual Point cursorPosition() = 0;
+    virtual ScreenType screenType();
 
     void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     SharedMemoryFactory* sharedMemoryFactory() const;
 
     static const char* typeToString(Type type);
+    static const char* screenTypeToString(ScreenType screen_type);
+
     Type type() const;
 
 protected:

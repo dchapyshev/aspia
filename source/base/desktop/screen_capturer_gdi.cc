@@ -203,6 +203,12 @@ Point ScreenCapturerGdi::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenType ScreenCapturerGdi::screenType()
+{
+    return ScreenCaptureUtils::screenType();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerGdi::reset()
 {
     // Release GDI resources otherwise SetThreadDesktop will fail.

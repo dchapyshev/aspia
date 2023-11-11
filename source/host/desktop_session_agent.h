@@ -77,6 +77,7 @@ protected:
                           const base::MouseCursor* mouse_cursor) override;
     void onScreenCaptureError(base::ScreenCapturer::Error error) override;
     void onCursorPositionChanged(const base::Point& position) override;
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const std::string& name) override;
 
     // base::Thread::Delegate implementation.
     void onBeforeThreadRunning() override;

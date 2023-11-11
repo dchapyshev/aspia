@@ -78,15 +78,25 @@ int main(int argc, char *argv[])
 
     if (application.isRunning())
     {
+        LOG(LS_INFO) << "Application already running";
+
         if (file_path.isEmpty())
+        {
+            LOG(LS_INFO) << "File path is empty. Activate window";
             application.activateWindow();
+        }
         else
+        {
+            LOG(LS_INFO) << "Open file: " << file_path;
             application.openFile(file_path);
+        }
 
         return 0;
     }
     else
     {
+        LOG(LS_INFO) << "Application not running yet";
+
         console_window.reset(new console::MainWindow(file_path));
 
         QObject::connect(&application, &console::Application::sig_windowActivated,

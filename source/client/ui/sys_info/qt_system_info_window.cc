@@ -94,6 +94,8 @@ QtSystemInfoWindow::QtSystemInfoWindow(QWidget* parent)
       system_info_window_proxy_(
           std::make_shared<SystemInfoWindowProxy>(qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui->setupUi(this);
 
     QList<int> sizes;

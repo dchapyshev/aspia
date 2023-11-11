@@ -18,6 +18,7 @@
 
 #include "client/ui/router_manager/router_user_dialog.h"
 
+#include "base/logging.h"
 #include "base/peer/user.h"
 #include "base/strings/string_util.h"
 
@@ -35,6 +36,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
       user_(user),
       users_(users)
 {
+    LOG(LS_INFO) << "Ctor";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
@@ -91,7 +93,10 @@ RouterUserDialog::RouterUserDialog(const base::User& user,
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterUserDialog::~RouterUserDialog() = default;
+RouterUserDialog::~RouterUserDialog()
+{
+    LOG(LS_INFO) << "Dtor";
+}
 
 //--------------------------------------------------------------------------------------------------
 const base::User& RouterUserDialog::user() const
@@ -133,6 +138,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidUserName(username))
         {
+            LOG(LS_ERROR) << "Invalid user name: " << username;
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The user name can not be empty and can contain only alphabet"
@@ -148,6 +154,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             if (base::compareCaseInsensitive(username, users_[i]) == 0)
             {
+                LOG(LS_ERROR) << "User name already exists: " << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),
@@ -161,6 +168,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.edit_password->text() != ui.edit_password_retry->text())
         {
+            LOG(LS_INFO) << "Passwords do not match";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The passwords you entered do not match."),
@@ -175,6 +183,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isValidPassword(password))
         {
+            LOG(LS_INFO) << "Invalid password";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Password can not be empty and should not exceed %n characters.",

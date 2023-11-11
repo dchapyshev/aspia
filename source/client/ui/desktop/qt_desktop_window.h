@@ -66,6 +66,7 @@ public:
     void configRequired() override;
     void setCapabilities(const proto::DesktopCapabilities& capabilities) override;
     void setScreenList(const proto::ScreenList& screen_list) override;
+    void setScreenType(const proto::ScreenType& screen_type) override;
     void setCursorPosition(const proto::CursorPosition& cursor_position) override;
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) override;
     void setTaskManager(const proto::task_manager::HostToClient& message) override;
@@ -146,6 +147,8 @@ private:
     bool disable_feature_clear_clipboard_ = false;
     bool disable_feature_lock_at_disconnect_ = false;
     bool disable_feature_block_input_ = false;
+
+    QPoint wheel_angle_;
 
     DISALLOW_COPY_AND_ASSIGN(QtDesktopWindow);
 };

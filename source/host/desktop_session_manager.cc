@@ -233,6 +233,12 @@ void DesktopSessionManager::onScreenListChanged(const proto::ScreenList& list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionManager::onScreenTypeChanged(const proto::ScreenType& type)
+{
+    delegate_->onScreenTypeChanged(type);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionManager::onClipboardEvent(const proto::ClipboardEvent& event)
 {
     delegate_->onClipboardEvent(event);

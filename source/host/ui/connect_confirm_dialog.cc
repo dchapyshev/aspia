@@ -99,12 +99,12 @@ void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Yes)
     {
-        LOG(LS_INFO) << "'Yes' button clicked";
+        LOG(LS_INFO) << "[ACTION] 'Yes' button clicked";
         accept();
     }
     else
     {
-        LOG(LS_INFO) << "'No' button clicked";
+        LOG(LS_INFO) << "[ACTION] 'No' button clicked";
         reject();
     }
 

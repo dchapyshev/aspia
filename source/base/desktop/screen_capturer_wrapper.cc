@@ -24,6 +24,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/ipc/shared_memory_factory.h"
+#include "base/strings/unicode.h"
 
 #if defined(OS_WIN)
 #include "base/desktop/screen_capturer_dxgi.h"
@@ -434,12 +435,15 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
         LOG(LS_INFO) << "Restore selected screen: " << last_screen_id_;
         selectScreen(last_screen_id_, Size());
     }
+
+    checkScreenType();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::switchToInputDesktop()
 {
     DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
 #if defined(OS_WIN)
     // Switch to the desktop receiving user input if different from the current one.
     Desktop input_desktop(Desktop::inputDesktop());
@@ -469,6 +473,44 @@ void ScreenCapturerWrapper::switchToInputDesktop()
         {
             LOG(LS_ERROR) << "Desktop environment not initialized";
         }
+
+        checkScreenType();
+    }
+#endif // defined(OS_WIN)
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenCapturerWrapper::checkScreenType()
+{
+    DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
+
+#if defined(OS_WIN)
+    if (!screen_capturer_)
+        return;
+
+    ScreenCapturer::ScreenType screen_type = screen_capturer_->screenType();
+    if (screen_type != last_screen_type_)
+    {
+        LOG(LS_INFO) << "Screen type changed from "
+                     << ScreenCapturer::screenTypeToString(last_screen_type_) << " to "
+                     << ScreenCapturer::screenTypeToString(screen_type);
+
+        Desktop desktop = Desktop::threadDesktop();
+
+        wchar_t name[128] = { 0 };
+        desktop.name(name, sizeof(name));
+
+        std::string screen_name = base::utf8FromWide(name);
+        if (screen_name.empty())
+            screen_name = "unknown";
+
+        delegate_->onScreenTypeChanged(screen_type, screen_name);
+        last_screen_type_ = screen_type;
+    }
+    else
+    {
+        LOG(LS_INFO) << "Screen type not changed: "
+                     << ScreenCapturer::screenTypeToString(last_screen_type_);
     }
 #endif // defined(OS_WIN)
 }

@@ -86,6 +86,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui.combobox_update_check_freq->addItem(tr("Once a week"), 7);
     ui.combobox_update_check_freq->addItem(tr("Once a month"), 30);
 
+    connect(ui.combobox_update_check_freq, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int /* index */)
+    {
+        setConfigChanged(true);
+    });
+
     connect(ui.checkbox_auto_update, &QCheckBox::toggled, this, [this](bool checked)
     {
         setConfigChanged(true);
@@ -347,6 +353,8 @@ void ConfigDialog::onCurrentUserChanged(
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onAddUser()
 {
+    LOG(LS_INFO) << "[ACTION] Add user";
+
     QStringList exist_names;
 
     for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
@@ -363,9 +371,14 @@ void ConfigDialog::onAddUser()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onModifyUser()
 {
+    LOG(LS_INFO) << "[ACTION] Modify user";
+
     UserTreeItem* current_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!current_item)
+    {
+        LOG(LS_INFO) << "No selected item";
         return;
+    }
 
     QString current_name = current_item->text(0);
     QStringList exist_names;
@@ -388,9 +401,14 @@ void ConfigDialog::onModifyUser()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onDeleteUser()
 {
+    LOG(LS_INFO) << "[ACTION] Delete user";
+
     UserTreeItem* user_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
+    {
+        LOG(LS_INFO) << "No selected item";
         return;
+    }
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
@@ -403,8 +421,13 @@ void ConfigDialog::onDeleteUser()
 
     if (message_box.exec() == QMessageBox::Yes)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
         delete user_item;
         setConfigChanged(true);
+    }
+    else
+    {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
     }
 
     if (ui.tree_users->topLevelItemCount() <= 0)
@@ -534,10 +557,15 @@ void ConfigDialog::onChangePassClicked()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onImport()
 {
+    LOG(LS_INFO) << "[ACTION] Import settings";
+
     QString file_path =
         QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("JSON-files (*.json)"));
     if (file_path.isEmpty())
+    {
+        LOG(LS_INFO) << "No selected file path";
         return;
+    }
 
     if (SettingsUtil::importFromFile(file_path.toStdU16String(), false, this))
     {
@@ -569,10 +597,15 @@ void ConfigDialog::onImport()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onExport()
 {
+    LOG(LS_INFO) << "[ACTION] Export settings";
+
     QString file_path =
         QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("JSON-files (*.json)"));
     if (file_path.isEmpty())
+    {
+        LOG(LS_INFO) << "No selected file path";
         return;
+    }
 
     SettingsUtil::exportToFile(file_path.toStdU16String(), false, this);
 }
@@ -585,6 +618,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     if (isConfigChanged() && (standard_button == QDialogButtonBox::Ok ||
                               standard_button == QDialogButtonBox::Apply))
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         SystemSettings settings;
 
         if (!settings.isWritable())
@@ -705,6 +740,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else if (standard_button == QDialogButtonBox::Cancel)
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 
@@ -914,7 +950,10 @@ bool ConfigDialog::installService()
     std::filesystem::path service_file_path;
 
     if (!base::BasePaths::currentExecDir(&service_file_path))
+    {
+        LOG(LS_ERROR) << "BasePaths::currentExecDir failed";
         return false;
+    }
 
     service_file_path.append(kHostServiceFileName);
 
@@ -922,6 +961,7 @@ bool ConfigDialog::installService()
         kHostServiceName, kHostServiceDisplayName, service_file_path);
     if (!controller.isValid())
     {
+        LOG(LS_INFO) << "Unable to install service";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The service could not be installed."),
@@ -946,6 +986,7 @@ bool ConfigDialog::removeService()
 #if defined(OS_WIN)
     if (!base::win::ServiceController::remove(kHostServiceName))
     {
+        LOG(LS_ERROR) << "Unable to remove service";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("The service could not be removed."),
@@ -966,6 +1007,7 @@ bool ConfigDialog::startService()
     base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
+        LOG(LS_ERROR) << "Unable to open service";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not access the service."),
@@ -976,6 +1018,7 @@ bool ConfigDialog::startService()
     {
         if (!controller.start())
         {
+            LOG(LS_ERROR) << "Unable to start serivce";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The service could not be started."),
@@ -997,6 +1040,7 @@ bool ConfigDialog::stopService()
     base::win::ServiceController controller = base::win::ServiceController::open(kHostServiceName);
     if (!controller.isValid())
     {
+        LOG(LS_ERROR) << "Unable to open service";
         QMessageBox::warning(this,
                              tr("Warning"),
                              tr("Could not access the service."),
@@ -1007,6 +1051,7 @@ bool ConfigDialog::stopService()
     {
         if (!controller.stop())
         {
+            LOG(LS_ERROR) << "Unable to stop service";
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("The service could not be stopped."),

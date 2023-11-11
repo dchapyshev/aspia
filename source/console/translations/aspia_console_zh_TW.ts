@@ -1057,43 +1057,43 @@
         <translation>您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1041"/>
+        <location filename="../address_book_tab.cc" line="1056"/>
         <source>Save Address Book</source>
         <translation>儲存通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1043"/>
+        <location filename="../address_book_tab.cc" line="1058"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1053"/>
+        <location filename="../address_book_tab.cc" line="1068"/>
         <source>Unable to create or open address book file.</source>
         <translation>無法建立或開啟通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1066"/>
+        <location filename="../address_book_tab.cc" line="1081"/>
         <source>Unable to write address book file.</source>
         <translation>無法寫入通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1096"/>
+        <location filename="../address_book_tab.cc" line="1111"/>
         <source>Root Group</source>
         <translation>根群組</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1108"/>
         <location filename="../address_book_tab.cc" line="1123"/>
+        <location filename="../address_book_tab.cc" line="1138"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1110"/>
+        <location filename="../address_book_tab.cc" line="1125"/>
         <source>Could not open address book</source>
         <translation>無法開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="1125"/>
+        <location filename="../address_book_tab.cc" line="1140"/>
         <source>Failed to save address book</source>
         <translation>儲存通訊錄失敗</translation>
     </message>
@@ -1110,12 +1110,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="908"/>
+        <location filename="../address_book_tab.cc" line="912"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../address_book_tab.cc" line="913"/>
+        <location filename="../address_book_tab.cc" line="917"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1156,32 +1156,32 @@
 <context>
     <name>console::ComputerDialogDesktop</name>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="112"/>
+        <location filename="../computer_dialog_desktop.cc" line="127"/>
         <source>True color (32 bit)</source>
         <translation>全彩 (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="113"/>
+        <location filename="../computer_dialog_desktop.cc" line="128"/>
         <source>High color (16 bit)</source>
         <translation>高彩 (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="114"/>
+        <location filename="../computer_dialog_desktop.cc" line="129"/>
         <source>256 colors (8 bit)</source>
         <translation>256 色 (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="115"/>
+        <location filename="../computer_dialog_desktop.cc" line="130"/>
         <source>64 colors (6 bit)</source>
         <translation>64 色 (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="116"/>
+        <location filename="../computer_dialog_desktop.cc" line="131"/>
         <source>8 colors (3 bit)</source>
         <translation>8 色 (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_desktop.cc" line="302"/>
+        <location filename="../computer_dialog_desktop.cc" line="322"/>
         <source>Compression ratio: %1</source>
         <translation>壓縮率：%1</translation>
     </message>
@@ -1189,36 +1189,36 @@
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="133"/>
+        <location filename="../computer_dialog_general.cc" line="135"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="141"/>
+        <location filename="../computer_dialog_general.cc" line="144"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="151"/>
+        <location filename="../computer_dialog_general.cc" line="155"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>使用者名稱不能為空且只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_dialog_general.cc" line="161"/>
+        <location filename="../computer_dialog_general.cc" line="166"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="178"/>
+        <location filename="../computer_dialog_general.cc" line="184"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../computer_dialog_general.cc" line="217"/>
+        <location filename="../computer_dialog_general.cc" line="224"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1226,26 +1226,26 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="228"/>
+        <location filename="../computer_group_dialog.cc" line="233"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="236"/>
+        <location filename="../computer_group_dialog.cc" line="242"/>
         <source>Name can not be empty.</source>
         <translation>名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../computer_group_dialog.cc" line="244"/>
+        <location filename="../computer_group_dialog.cc" line="251"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog.cc" line="206"/>
+        <location filename="../computer_group_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1278,32 +1278,32 @@
 <context>
     <name>console::ComputerGroupDialogDesktop</name>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="128"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="143"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished">全彩 (32 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="129"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="144"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished">高彩 (16 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="130"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="145"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished">256 色 (8 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="131"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="146"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished">64 色 (6 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="132"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="147"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished">8 色 (3 bit)</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_desktop.cc" line="318"/>
+        <location filename="../computer_group_dialog_desktop.cc" line="338"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished">壓縮率：%1</translation>
     </message>
@@ -1321,7 +1321,7 @@
         <translation type="obsolete">名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="101"/>
+        <location filename="../computer_group_dialog_general.cc" line="102"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1336,7 +1336,7 @@
         <translation type="obsolete">輸入的電腦位址無效。</translation>
     </message>
     <message>
-        <location filename="../computer_group_dialog_general.cc" line="140"/>
+        <location filename="../computer_group_dialog_general.cc" line="142"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
@@ -1364,18 +1364,18 @@
         <translation>輸入的位址列表將被清除。是否繼續？</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="234"/>
-        <location filename="../fast_connect_dialog.cc" line="254"/>
+        <location filename="../fast_connect_dialog.cc" line="243"/>
+        <location filename="../fast_connect_dialog.cc" line="264"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="235"/>
+        <location filename="../fast_connect_dialog.cc" line="244"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
-        <location filename="../fast_connect_dialog.cc" line="255"/>
+        <location filename="../fast_connect_dialog.cc" line="265"/>
         <source>An invalid computer address was entered.</source>
         <translation>輸入的電腦位址無效。</translation>
     </message>
@@ -1399,12 +1399,12 @@
     <name>console::MainWindow</name>
     <message>
         <location filename="../main_window.cc" line="201"/>
-        <location filename="../main_window.cc" line="520"/>
-        <location filename="../main_window.cc" line="530"/>
-        <location filename="../main_window.cc" line="541"/>
         <location filename="../main_window.cc" line="590"/>
-        <location filename="../main_window.cc" line="602"/>
-        <location filename="../main_window.cc" line="1517"/>
+        <location filename="../main_window.cc" line="601"/>
+        <location filename="../main_window.cc" line="613"/>
+        <location filename="../main_window.cc" line="667"/>
+        <location filename="../main_window.cc" line="680"/>
+        <location filename="../main_window.cc" line="1660"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -1415,8 +1415,8 @@
     </message>
     <message>
         <location filename="../main_window.cc" line="282"/>
-        <location filename="../main_window.cc" line="553"/>
-        <location filename="../main_window.cc" line="609"/>
+        <location filename="../main_window.cc" line="626"/>
+        <location filename="../main_window.cc" line="688"/>
         <source>Information</source>
         <translation>詳細資訊</translation>
     </message>
@@ -1426,138 +1426,138 @@
         <translation>通訊錄「%1」已經開啟。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="312"/>
+        <location filename="../main_window.cc" line="315"/>
         <source>Open Address Book</source>
         <translation>開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="314"/>
+        <location filename="../main_window.cc" line="317"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="509"/>
+        <location filename="../main_window.cc" line="575"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="511"/>
-        <location filename="../main_window.cc" line="581"/>
+        <location filename="../main_window.cc" line="577"/>
+        <location filename="../main_window.cc" line="654"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="521"/>
+        <location filename="../main_window.cc" line="591"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="531"/>
+        <location filename="../main_window.cc" line="602"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="579"/>
+        <location filename="../main_window.cc" line="652"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="591"/>
+        <location filename="../main_window.cc" line="668"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="603"/>
+        <location filename="../main_window.cc" line="681"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="610"/>
+        <location filename="../main_window.cc" line="689"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="646"/>
-        <location filename="../main_window.cc" line="1382"/>
+        <location filename="../main_window.cc" line="734"/>
+        <location filename="../main_window.cc" line="1525"/>
         <source>Aspia Console</source>
         <translation>Aspia Console</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="817"/>
-        <location filename="../main_window.cc" line="1157"/>
-        <location filename="../main_window.cc" line="1242"/>
+        <location filename="../main_window.cc" line="954"/>
+        <location filename="../main_window.cc" line="1300"/>
+        <location filename="../main_window.cc" line="1385"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="818"/>
-        <location filename="../main_window.cc" line="1243"/>
+        <location filename="../main_window.cc" line="955"/>
+        <location filename="../main_window.cc" line="1386"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通訊錄「%1」已修改。是否儲存變更？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1051"/>
+        <location filename="../main_window.cc" line="1194"/>
         <source>Close other tabs</source>
         <translation>關閉其他分頁。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1058"/>
+        <location filename="../main_window.cc" line="1201"/>
         <source>Close tab</source>
         <translation>關閉分頁</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1059"/>
-        <location filename="../main_window.cc" line="1064"/>
+        <location filename="../main_window.cc" line="1202"/>
+        <location filename="../main_window.cc" line="1207"/>
         <source>Pin tab</source>
         <translation>釘選分頁</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1158"/>
+        <location filename="../main_window.cc" line="1301"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打開的通訊錄清單將被清除。是否繼續？</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1195"/>
+        <location filename="../main_window.cc" line="1338"/>
         <source>Hide</source>
         <translation>隱藏</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1210"/>
+        <location filename="../main_window.cc" line="1353"/>
         <source>Show</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="1518"/>
+        <location filename="../main_window.cc" line="1661"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="822"/>
-        <location filename="../main_window.cc" line="1161"/>
-        <location filename="../main_window.cc" line="1247"/>
+        <location filename="../main_window.cc" line="959"/>
+        <location filename="../main_window.cc" line="1304"/>
+        <location filename="../main_window.cc" line="1390"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="542"/>
+        <location filename="../main_window.cc" line="614"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="554"/>
+        <location filename="../main_window.cc" line="627"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="823"/>
-        <location filename="../main_window.cc" line="1162"/>
-        <location filename="../main_window.cc" line="1248"/>
+        <location filename="../main_window.cc" line="960"/>
+        <location filename="../main_window.cc" line="1305"/>
+        <location filename="../main_window.cc" line="1391"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main_window.cc" line="824"/>
-        <location filename="../main_window.cc" line="1249"/>
+        <location filename="../main_window.cc" line="961"/>
+        <location filename="../main_window.cc" line="1392"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

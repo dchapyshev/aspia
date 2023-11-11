@@ -45,9 +45,10 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
       remover_window_proxy_(std::make_shared<FileRemoveWindowProxy>(
           qt_base::Application::uiTaskRunner(), this))
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
-    setModal(true);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
@@ -73,6 +74,8 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 FileRemoveDialog::~FileRemoveDialog()
 {
+    LOG(LS_INFO) << "Dtor";
+
     remover_window_proxy_->dettach();
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

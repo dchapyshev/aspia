@@ -25,6 +25,10 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
+// static
+const float Frame::kStandardDPI = 96.0;
+
+//--------------------------------------------------------------------------------------------------
 Frame::Frame(const Size& size,
              const PixelFormat& format,
              int stride,
@@ -66,6 +70,30 @@ void Frame::copyPixelsFrom(const uint8_t* src_buffer, int src_stride, const Rect
 void Frame::copyPixelsFrom(const Frame& src_frame, const Point& src_pos, const Rect& dest_rect)
 {
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
+}
+
+//--------------------------------------------------------------------------------------------------
+float Frame::scaleFactor() const
+{
+    float scale = 1.0f;
+
+#if defined(OS_MAC)
+    // At least on Windows the logical and physical pixel are the same
+    // See http://crbug.com/948362.
+    if (dpi() != Point(0, 0) && dpi().x() == dpi().y())
+        scale = dpi().x() / kStandardDPI;
+#endif
+
+    return scale;
+}
+
+//--------------------------------------------------------------------------------------------------
+Rect Frame::rect() const
+{
+    const float scale = scaleFactor();
+    // Only scale the size.
+    return Rect::makeXYWH(topLeft().x(), topLeft().y(),
+                          size().width() / scale, size().height() / scale);
 }
 
 //--------------------------------------------------------------------------------------------------

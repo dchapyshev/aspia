@@ -19,6 +19,7 @@
 #include "client/ui/desktop/desktop_toolbar.h"
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "client/ui/desktop/desktop_settings.h"
 #include "client/ui/desktop/record_settings_dialog.h"
 #include "client/ui/desktop/select_screen_action.h"
@@ -36,6 +37,8 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     : QFrame(parent),
       session_type_(session_type)
 {
+    LOG(LS_INFO) << "Ctor";
+
     ui.setupUi(this);
 
     hide_timer_ = new QTimer(this);
@@ -67,16 +70,49 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     ui.action_pause_video->setChecked(settings.pauseVideoWhenMinimizing());
     ui.action_pause_audio->setChecked(settings.pauseAudioWhenMinimizing());
 
-    connect(ui.action_settings, &QAction::triggered, this, &DesktopToolBar::sig_settingsButton);
+    connect(ui.action_settings, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Settings button clicked";
+        emit sig_settingsButton();
+    });
+
     connect(ui.action_autosize, &QAction::triggered, this, &DesktopToolBar::onAutosizeButton);
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopToolBar::onFullscreenButton);
-    connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopToolBar::sig_autoScrollChanged);
-    connect(ui.action_update, &QAction::triggered, this, &DesktopToolBar::sig_startRemoteUpdate);
-    connect(ui.action_system_info, &QAction::triggered, this, &DesktopToolBar::sig_startSystemInfo);
-    connect(ui.action_task_manager, &QAction::triggered, this, &DesktopToolBar::sig_startTaskManager);
-    connect(ui.action_statistics, &QAction::triggered, this, &DesktopToolBar::sig_startStatistics);
-    connect(ui.action_minimize, &QAction::triggered, this, &DesktopToolBar::sig_minimizeSession);
-    connect(ui.action_close, &QAction::triggered, this, &DesktopToolBar::sig_closeSession);
+    connect(ui.action_autoscroll, &QAction::triggered, this, [this](bool enabled)
+    {
+        LOG(LS_INFO) << "[ACTION] Auto-scroll changed: " << enabled;
+        emit sig_autoScrollChanged(enabled);
+    });
+    connect(ui.action_update, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Remote update requested";
+        emit sig_startRemoteUpdate();
+    });
+    connect(ui.action_system_info, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] System info requested";
+        emit sig_startSystemInfo();
+    });
+    connect(ui.action_task_manager, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Task manager requested";
+        emit sig_startTaskManager();
+    });
+    connect(ui.action_statistics, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Statistics requested";
+        emit sig_startStatistics();
+    });
+    connect(ui.action_minimize, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Minimize session";
+        emit sig_minimizeSession();
+    });
+    connect(ui.action_close, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Close session";
+        emit sig_closeSession();
+    });
 
     createAdditionalMenu(session_type);
 
@@ -92,11 +128,13 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
 
     connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] File transfer requested";
         emit sig_startSession(proto::SESSION_TYPE_FILE_TRANSFER);
     });
 
     connect(ui.action_text_chat, &QAction::triggered, this, [this]()
     {
+        LOG(LS_INFO) << "[ACTION] Text chat requested";
         emit sig_startSession(proto::SESSION_TYPE_TEXT_CHAT);
     });
 
@@ -109,6 +147,11 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
     if (!is_pinned)
         hide_timer_->start(0);
 
+#if defined(OS_MAC)
+    // MacOS has its own button to maximize the window to full screen.
+    ui.action_fullscreen->setVisible(false);
+#endif // defined(OS_MAC)
+
     showFullScreenButtons(false);
     adjustSize();
 }
@@ -116,6 +159,8 @@ DesktopToolBar::DesktopToolBar(proto::SessionType session_type, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopToolBar::~DesktopToolBar()
 {
+    LOG(LS_INFO) << "Dtor";
+
     DesktopSettings settings;
     settings.setScale(scale_);
     settings.setAutoScrolling(ui.action_autoscroll->isChecked());
@@ -129,8 +174,9 @@ DesktopToolBar::~DesktopToolBar()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableScreenSelect(bool /* enable */)
+void DesktopToolBar::enableScreenSelect(bool enable)
 {
+    LOG(LS_INFO) << "enableScreenSelect: " << enable;
     // By default, we disable the monitor selection menu. Selection will be enabled when receiving
     // a list of monitors.
     updateSize();
@@ -139,6 +185,8 @@ void DesktopToolBar::enableScreenSelect(bool /* enable */)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePowerControl(bool enable)
 {
+    LOG(LS_INFO) << "enablePowerControl: " << enable;
+
     ui.action_power_control->setVisible(enable);
     ui.action_power_control->setEnabled(enable);
 
@@ -173,6 +221,7 @@ void DesktopToolBar::enablePowerControl(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableSystemInfo(bool enable)
 {
+    LOG(LS_INFO) << "enableSystemInfo: " << enable;
     ui.action_system_info->setVisible(enable);
     ui.action_system_info->setEnabled(enable);
     updateSize();
@@ -181,6 +230,7 @@ void DesktopToolBar::enableSystemInfo(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTextChat(bool enable)
 {
+    LOG(LS_INFO) << "enableTextChat: " << enable;
     ui.action_text_chat->setVisible(enable);
     ui.action_text_chat->setEnabled(enable);
     updateSize();
@@ -189,6 +239,8 @@ void DesktopToolBar::enableTextChat(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableRemoteUpdate(bool enable)
 {
+    LOG(LS_INFO) << "enableRemoteUpdate: " << enable;
+    is_remote_update_enabled_ = enable;
     ui.action_update->setVisible(enable);
     ui.action_update->setEnabled(enable);
     updateSize();
@@ -197,6 +249,7 @@ void DesktopToolBar::enableRemoteUpdate(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTaskManager(bool enable)
 {
+    LOG(LS_INFO) << "enableTaskManager: " << enable;
     ui.action_task_manager->setVisible(enable);
     ui.action_task_manager->setEnabled(enable);
     updateSize();
@@ -205,6 +258,7 @@ void DesktopToolBar::enableTaskManager(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableVideoPauseFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableVideoPauseFeature: " << enable;
     ui.action_pause_video->setVisible(enable);
     ui.action_pause_video->setEnabled(enable);
 }
@@ -212,6 +266,7 @@ void DesktopToolBar::enableVideoPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableAudioPauseFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableAudioPauseFeature: " << enable;
     ui.action_pause_audio->setVisible(enable);
     ui.action_pause_audio->setEnabled(enable);
 }
@@ -219,6 +274,7 @@ void DesktopToolBar::enableAudioPauseFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
+    LOG(LS_INFO) << "enableCtrlAltDelFeature: " << enable;
     ui.action_cad->setVisible(enable);
     ui.action_cad->setEnabled(enable);
     updateSize();
@@ -227,6 +283,7 @@ void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
+    LOG(LS_INFO) << "enablePasteAsKeystrokesFeature: " << enable;
     ui.action_paste_clipboard_as_keystrokes->setEnabled(enable);
 }
 
@@ -352,8 +409,25 @@ void DesktopToolBar::setScreenList(const proto::ScreenList& screen_list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::setScreenType(const proto::ScreenType& screen_type)
+{
+    if (is_remote_update_enabled_)
+    {
+        bool show_update_button = screen_type.type() == proto::ScreenType::TYPE_DESKTOP;
+
+        LOG(LS_INFO) << "Show update button: " << show_update_button
+                     << " (type=" << screen_type.type() << " name=" << screen_type.name() << ")";
+
+        ui.action_update->setVisible(show_update_button);
+        updateSize();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::startRecording(bool enable)
 {
+    LOG(LS_INFO) << "[ACTION] Start recording: " << enable;
+
     if (enable)
     {
         ui.action_start_recording->setIcon(QIcon(":/img/control-stop.png"));
@@ -454,6 +528,8 @@ void DesktopToolBar::onHideTimer()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onFullscreenButton(bool checked)
 {
+    LOG(LS_INFO) << "[ACTION] Full screen button clicked: " << checked;
+
     if (checked)
         ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-actual.png"));
     else
@@ -467,6 +543,8 @@ void DesktopToolBar::onFullscreenButton(bool checked)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onAutosizeButton()
 {
+    LOG(LS_INFO) << "[ACTION] Autosize button clicked";
+
     if (ui.action_fullscreen->isChecked())
     {
         ui.action_fullscreen->setIcon(QIcon(":/img/application-resize-full.png"));
@@ -481,6 +559,7 @@ void DesktopToolBar::onAutosizeButton()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onCtrlAltDel()
 {
+    LOG(LS_INFO) << "[ACTION] Ctrl+Alt+Del button clicked";
     emit sig_keyCombination(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
@@ -489,6 +568,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
 {
     if (action == ui.action_shutdown)
     {
+        LOG(LS_INFO) << "[ACTION] Shutdown";
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
                                 tr("Are you sure you want to shutdown the remote computer?"),
@@ -499,11 +579,17 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Shutdown accepted by user";
             emit sig_powerControl(proto::PowerControl::ACTION_SHUTDOWN);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Shutdown rejected by user";
         }
     }
     else if (action == ui.action_reboot)
     {
+        LOG(LS_INFO) << "[ACTION] Reboot";
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
                                 tr("Are you sure you want to reboot the remote computer?"),
@@ -514,11 +600,17 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Reboot accepted by user";
             emit sig_powerControl(proto::PowerControl::ACTION_REBOOT);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Reboot rejected by user";
         }
     }
     else if (action == ui.action_reboot_safe_mode)
     {
+        LOG(LS_INFO) << "[ACTION] Reboot (safe mode)";
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
                                 tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
@@ -529,11 +621,17 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Reboot (safe mode) accepted by user";
             emit sig_powerControl(proto::PowerControl::ACTION_REBOOT_SAFE_MODE);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Reboot (safe mode) rejected by user";
         }
     }
     else if (action == ui.action_logoff)
     {
+        LOG(LS_INFO) << "[ACTION] Logoff";
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
                                 tr("Are you sure you want to end the user session on the remote computer?"),
@@ -544,11 +642,17 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Logoff accepted by user";
             emit sig_powerControl(proto::PowerControl::ACTION_LOGOFF);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Logoff rejected by user";
         }
     }
     else if (action == ui.action_lock)
     {
+        LOG(LS_INFO) << "[ACTION] Lock";
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
                                 tr("Are you sure you want to lock the user session on the remote computer?"),
@@ -559,7 +663,12 @@ void DesktopToolBar::onPowerControl(QAction* action)
 
         if (message_box.exec() == QMessageBox::Yes)
         {
+            LOG(LS_INFO) << "[ACTION] Lock accepted by user";
             emit sig_powerControl(proto::PowerControl::ACTION_LOCK);
+        }
+        else
+        {
+            LOG(LS_INFO) << "[ACTION] Lock rejected by user";
         }
     }
 }
@@ -570,7 +679,14 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
     QSize resolution = action->data().toSize();
 
     if (resolution == current_resolution_)
+    {
+        LOG(LS_INFO) << "Resolution not changed: "
+                     << resolution.width() << "x" << resolution.height();
         return;
+    }
+
+    LOG(LS_INFO) << "[ACTION] Resolution selected: "
+                 << resolution.width() << "x" << resolution.height();
 
     proto::Screen screen;
     screen.set_id(current_screen_id_);
@@ -584,6 +700,9 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 void DesktopToolBar::onChangeScreenAction(QAction* action)
 {
     const proto::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
+
+    LOG(LS_INFO) << "[ACTION] Screen selected (id=" << screen.id() << " title="
+                 << screen.title() << ")";
 
     proto::Screen out_screen;
     out_screen.set_id(screen.id());
@@ -619,6 +738,7 @@ void DesktopToolBar::onMenuHide()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onShowRecordSettings()
 {
+    LOG(LS_INFO) << "[ACTION] Record settings";
     RecordSettingsDialog(this).exec();
 }
 
@@ -672,7 +792,11 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
     if (session_type == proto::SESSION_TYPE_DESKTOP_MANAGE)
     {
         connect(ui.action_send_key_combinations, &QAction::triggered,
-                this, &DesktopToolBar::sig_keyCombinationsChanged);
+                this, [this](bool enable)
+        {
+            LOG(LS_INFO) << "[ACTION] Send key combinations changed: " << enable;
+            emit sig_keyCombinationsChanged(enable);
+        });
     }
 
     connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
@@ -726,9 +850,21 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
         emit sig_scaleChanged();
     });
 
-    connect(ui.action_pause_video, &QAction::triggered, this, &DesktopToolBar::sig_videoPauseChanged);
-    connect(ui.action_pause_audio, &QAction::triggered, this, &DesktopToolBar::sig_audioPauseChanged);
-    connect(ui.action_screenshot, &QAction::triggered, this, &DesktopToolBar::sig_takeScreenshot);
+    connect(ui.action_pause_video, &QAction::triggered, this, [this](bool enable)
+    {
+        LOG(LS_INFO) << "[ACTION] Video pause changed: " << enable;
+        emit sig_videoPauseChanged(enable);
+    });
+    connect(ui.action_pause_audio, &QAction::triggered, this, [this](bool enable)
+    {
+        LOG(LS_INFO) << "[ACTION] Audio pause changed: " << enable;
+        emit sig_audioPauseChanged(enable);
+    });
+    connect(ui.action_screenshot, &QAction::triggered, this, [this]()
+    {
+        LOG(LS_INFO) << "[ACTION] Take screenshot";
+        emit sig_takeScreenshot();
+    });
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
 
@@ -742,8 +878,17 @@ void DesktopToolBar::createAdditionalMenu(proto::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::showFullScreenButtons(bool show)
 {
+    // MacOS does not have the ability to minimize a window from full screen mode. Therefore, for
+    // MacOS we disable the minimize button from full screen mode.
+    // For more info see: https://bugreports.qt.io/browse/QTBUG-62991
+#if defined(OS_MAC)
+    ui.action_minimize->setVisible(false);
+    ui.action_minimize->setEnabled(false);
+#else
     ui.action_minimize->setVisible(show);
     ui.action_minimize->setEnabled(show);
+#endif
+
     ui.action_close->setVisible(show);
     ui.action_close->setEnabled(show);
 

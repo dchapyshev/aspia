@@ -101,6 +101,13 @@ void OnlineCheckerRouter::onTcpConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
+            const base::Version& router_version = authenticator_->peerVersion();
+            if (router_version >= base::Version::kVersion_2_6_0)
+            {
+                LOG(LS_INFO) << "Using channel id support";
+                channel_->setChannelIdSupport(true);
+            }
+
             // Now the session will receive incoming messages.
             channel_->resume();
 

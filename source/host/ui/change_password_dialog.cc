@@ -33,7 +33,7 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
       mode_(mode)
 {
-    LOG(LS_INFO) << "ChangePasswordDialog Ctor (" << static_cast<int>(mode) << ")";
+    LOG(LS_INFO) << "Ctor (" << static_cast<int>(mode) << ")";
     ui.setupUi(this);
 
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
@@ -62,7 +62,7 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::~ChangePasswordDialog()
 {
-    LOG(LS_INFO) << "ChangePasswordDialog Dtor";
+    LOG(LS_INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,6 +83,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (mode_ == Mode::CREATE_NEW_PASSWORD)
         {
             QString new_password = ui.edit_new_pass->text();
@@ -165,6 +167,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 

@@ -513,38 +513,38 @@
 <context>
     <name>host::ChangePasswordDialog</name>
     <message>
-        <location filename="../change_password_dialog.cc" line="94"/>
-        <location filename="../change_password_dialog.cc" line="105"/>
-        <location filename="../change_password_dialog.cc" line="124"/>
-        <location filename="../change_password_dialog.cc" line="134"/>
-        <location filename="../change_password_dialog.cc" line="145"/>
-        <location filename="../change_password_dialog.cc" line="155"/>
+        <location filename="../change_password_dialog.cc" line="96"/>
+        <location filename="../change_password_dialog.cc" line="107"/>
+        <location filename="../change_password_dialog.cc" line="126"/>
+        <location filename="../change_password_dialog.cc" line="136"/>
+        <location filename="../change_password_dialog.cc" line="147"/>
+        <location filename="../change_password_dialog.cc" line="157"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="95"/>
+        <location filename="../change_password_dialog.cc" line="97"/>
         <source>Password cannot be empty.</source>
         <translation>密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="106"/>
-        <location filename="../change_password_dialog.cc" line="156"/>
+        <location filename="../change_password_dialog.cc" line="108"/>
+        <location filename="../change_password_dialog.cc" line="158"/>
         <source>The passwords entered do not match.</source>
         <translation>輸入的兩次密碼不符。</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="125"/>
+        <location filename="../change_password_dialog.cc" line="127"/>
         <source>You must enter your old password.</source>
         <translation>您必須輸入您的舊密碼。</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="135"/>
+        <location filename="../change_password_dialog.cc" line="137"/>
         <source>You entered an incorrect old password.</source>
         <translation>您輸入了不正確的舊密碼。</translation>
     </message>
     <message>
-        <location filename="../change_password_dialog.cc" line="146"/>
+        <location filename="../change_password_dialog.cc" line="148"/>
         <source>New password cannot be empty.</source>
         <translation>新密碼不能為空。</translation>
     </message>
@@ -557,12 +557,12 @@
 <context>
     <name>host::CheckPasswordDialog</name>
     <message>
-        <location filename="../check_password_dialog.cc" line="70"/>
+        <location filename="../check_password_dialog.cc" line="72"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../check_password_dialog.cc" line="71"/>
+        <location filename="../check_password_dialog.cc" line="73"/>
         <source>You entered an incorrect password.</source>
         <translation>您輸入了不正確的舊密碼。</translation>
     </message>
@@ -575,237 +575,237 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../config_dialog.cc" line="133"/>
+        <location filename="../config_dialog.cc" line="139"/>
         <source>On reboot</source>
         <translation>重開機時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="134"/>
+        <location filename="../config_dialog.cc" line="140"/>
         <source>Every 5 minutes</source>
         <translation>每 5 分鐘</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="135"/>
+        <location filename="../config_dialog.cc" line="141"/>
         <source>Every 30 minutes</source>
         <translation>每 30 分鐘</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="136"/>
+        <location filename="../config_dialog.cc" line="142"/>
         <source>Every 1 hour</source>
         <translation>每 1 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="137"/>
+        <location filename="../config_dialog.cc" line="143"/>
         <source>Every 6 hours</source>
         <translation>每 6 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="138"/>
+        <location filename="../config_dialog.cc" line="144"/>
         <source>Every 12 hours</source>
         <translation>每 12 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="139"/>
+        <location filename="../config_dialog.cc" line="145"/>
         <source>Every 24 hours</source>
         <translation>每 24 小時</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="147"/>
+        <location filename="../config_dialog.cc" line="153"/>
         <source>Letters and digits</source>
         <translation>字母及數字</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="150"/>
+        <location filename="../config_dialog.cc" line="156"/>
         <source>Letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="152"/>
+        <location filename="../config_dialog.cc" line="158"/>
         <source>Digits</source>
         <translation>數字</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="169"/>
+        <location filename="../config_dialog.cc" line="175"/>
         <source>Never</source>
         <translation>永不</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="170"/>
+        <location filename="../config_dialog.cc" line="176"/>
         <source>15 seconds</source>
         <translation>15 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="171"/>
+        <location filename="../config_dialog.cc" line="177"/>
         <source>30 seconds</source>
         <translation>30 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="172"/>
+        <location filename="../config_dialog.cc" line="178"/>
         <source>45 seconds</source>
         <translation>45 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="173"/>
+        <location filename="../config_dialog.cc" line="179"/>
         <source>60 seconds</source>
         <translation>60 秒</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="181"/>
+        <location filename="../config_dialog.cc" line="187"/>
         <source>Accept connection</source>
         <translation>接受連線</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="183"/>
+        <location filename="../config_dialog.cc" line="189"/>
         <source>Reject connection</source>
         <translation>拒絕連線</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="240"/>
+        <location filename="../config_dialog.cc" line="246"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="396"/>
-        <location filename="../config_dialog.cc" line="552"/>
-        <location filename="../config_dialog.cc" line="611"/>
+        <location filename="../config_dialog.cc" line="414"/>
+        <location filename="../config_dialog.cc" line="580"/>
+        <location filename="../config_dialog.cc" line="646"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="397"/>
+        <location filename="../config_dialog.cc" line="415"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您確定要刪除使用者「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="482"/>
-        <location filename="../config_dialog.cc" line="519"/>
-        <location filename="../config_dialog.cc" line="596"/>
-        <location filename="../config_dialog.cc" line="632"/>
-        <location filename="../config_dialog.cc" line="645"/>
-        <location filename="../config_dialog.cc" line="926"/>
-        <location filename="../config_dialog.cc" line="950"/>
-        <location filename="../config_dialog.cc" line="970"/>
-        <location filename="../config_dialog.cc" line="980"/>
-        <location filename="../config_dialog.cc" line="1001"/>
-        <location filename="../config_dialog.cc" line="1011"/>
+        <location filename="../config_dialog.cc" line="505"/>
+        <location filename="../config_dialog.cc" line="542"/>
+        <location filename="../config_dialog.cc" line="631"/>
+        <location filename="../config_dialog.cc" line="667"/>
+        <location filename="../config_dialog.cc" line="680"/>
+        <location filename="../config_dialog.cc" line="966"/>
+        <location filename="../config_dialog.cc" line="991"/>
+        <location filename="../config_dialog.cc" line="1012"/>
+        <location filename="../config_dialog.cc" line="1023"/>
+        <location filename="../config_dialog.cc" line="1045"/>
+        <location filename="../config_dialog.cc" line="1056"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="483"/>
-        <location filename="../config_dialog.cc" line="520"/>
+        <location filename="../config_dialog.cc" line="506"/>
+        <location filename="../config_dialog.cc" line="543"/>
         <source>An error occurred while processing the password.</source>
         <translation>處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="538"/>
+        <location filename="../config_dialog.cc" line="563"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="538"/>
-        <location filename="../config_dialog.cc" line="573"/>
+        <location filename="../config_dialog.cc" line="563"/>
+        <location filename="../config_dialog.cc" line="603"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="547"/>
-        <location filename="../config_dialog.cc" line="606"/>
+        <location filename="../config_dialog.cc" line="575"/>
+        <location filename="../config_dialog.cc" line="641"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>服務配置已更改。要使變更生效，您必須重新啟動服務。是否現在重啟服務？</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="573"/>
+        <location filename="../config_dialog.cc" line="603"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="593"/>
+        <location filename="../config_dialog.cc" line="628"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>無法寫入配置。請確認您有足夠的寫入權限。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="633"/>
+        <location filename="../config_dialog.cc" line="668"/>
         <source>Incorrect router address entered.</source>
         <translation>輸入了不正確的路由器位址。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="646"/>
+        <location filename="../config_dialog.cc" line="681"/>
         <source>Incorrect router public key entered.</source>
         <translation>輸入了不正確的公開金鑰。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="815"/>
-        <location filename="../config_dialog.cc" line="890"/>
+        <location filename="../config_dialog.cc" line="851"/>
+        <location filename="../config_dialog.cc" line="926"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="820"/>
-        <location filename="../config_dialog.cc" line="855"/>
+        <location filename="../config_dialog.cc" line="856"/>
+        <location filename="../config_dialog.cc" line="891"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="864"/>
+        <location filename="../config_dialog.cc" line="900"/>
         <source>Started</source>
         <translation>已啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="865"/>
+        <location filename="../config_dialog.cc" line="901"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="870"/>
+        <location filename="../config_dialog.cc" line="906"/>
         <source>Not started</source>
         <translation>未啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="871"/>
-        <location filename="../config_dialog.cc" line="878"/>
-        <location filename="../config_dialog.cc" line="891"/>
+        <location filename="../config_dialog.cc" line="907"/>
+        <location filename="../config_dialog.cc" line="914"/>
+        <location filename="../config_dialog.cc" line="927"/>
         <source>Start</source>
         <translation>啟動</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="877"/>
+        <location filename="../config_dialog.cc" line="913"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="888"/>
+        <location filename="../config_dialog.cc" line="924"/>
         <source>Not installed</source>
         <translation>未安裝</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="895"/>
+        <location filename="../config_dialog.cc" line="931"/>
         <source>Current service state: %1</source>
         <translation>目前服務狀態：%1</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="927"/>
+        <location filename="../config_dialog.cc" line="967"/>
         <source>The service could not be installed.</source>
         <translation>無法安裝服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="951"/>
+        <location filename="../config_dialog.cc" line="992"/>
         <source>The service could not be removed.</source>
         <translation>無法移除服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="971"/>
-        <location filename="../config_dialog.cc" line="1002"/>
+        <location filename="../config_dialog.cc" line="1013"/>
+        <location filename="../config_dialog.cc" line="1046"/>
         <source>Could not access the service.</source>
         <translation>無法存取服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="981"/>
+        <location filename="../config_dialog.cc" line="1024"/>
         <source>The service could not be started.</source>
         <translation>無法啟動服務。</translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="1012"/>
+        <location filename="../config_dialog.cc" line="1057"/>
         <source>The service could not be stopped.</source>
         <translation>無法停止服務。</translation>
     </message>
@@ -835,16 +835,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="401"/>
-        <location filename="../config_dialog.cc" line="556"/>
-        <location filename="../config_dialog.cc" line="615"/>
+        <location filename="../config_dialog.cc" line="419"/>
+        <location filename="../config_dialog.cc" line="584"/>
+        <location filename="../config_dialog.cc" line="650"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../config_dialog.cc" line="402"/>
-        <location filename="../config_dialog.cc" line="557"/>
-        <location filename="../config_dialog.cc" line="616"/>
+        <location filename="../config_dialog.cc" line="420"/>
+        <location filename="../config_dialog.cc" line="585"/>
+        <location filename="../config_dialog.cc" line="651"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -996,32 +996,32 @@
         <translation>中斷連線</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="266"/>
+        <location filename="../notifier_window.cc" line="270"/>
         <source>Unlock mouse</source>
         <translation>解鎖滑鼠</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="271"/>
+        <location filename="../notifier_window.cc" line="275"/>
         <source>Lock mouse</source>
         <translation>鎖定滑鼠</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="291"/>
+        <location filename="../notifier_window.cc" line="297"/>
         <source>Unlock keyboard</source>
         <translation>解鎖鍵盤</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="296"/>
+        <location filename="../notifier_window.cc" line="302"/>
         <source>Lock keyboard</source>
         <translation>鎖定鍵盤</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="316"/>
+        <location filename="../notifier_window.cc" line="324"/>
         <source>Resume</source>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../notifier_window.cc" line="321"/>
+        <location filename="../notifier_window.cc" line="329"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
@@ -1029,61 +1029,61 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../user_dialog.cc" line="146"/>
-        <location filename="../user_dialog.cc" line="158"/>
-        <location filename="../user_dialog.cc" line="173"/>
-        <location filename="../user_dialog.cc" line="184"/>
-        <location filename="../user_dialog.cc" line="206"/>
-        <location filename="../user_dialog.cc" line="226"/>
+        <location filename="../user_dialog.cc" line="149"/>
+        <location filename="../user_dialog.cc" line="162"/>
+        <location filename="../user_dialog.cc" line="178"/>
+        <location filename="../user_dialog.cc" line="190"/>
+        <location filename="../user_dialog.cc" line="212"/>
+        <location filename="../user_dialog.cc" line="233"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="147"/>
+        <location filename="../user_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation>使用者名稱不能為空，只能包含字母字元、數字和_、-、.、@ 字元。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="159"/>
+        <location filename="../user_dialog.cc" line="163"/>
         <source>The username you entered already exists.</source>
         <translation>您輸入的使用者名稱已存在。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="174"/>
+        <location filename="../user_dialog.cc" line="179"/>
         <source>The passwords you entered do not match.</source>
         <translation>您輸入的密碼不符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="185"/>
+        <location filename="../user_dialog.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="196"/>
+        <location filename="../user_dialog.cc" line="202"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../user_dialog.cc" line="199"/>
+        <location filename="../user_dialog.cc" line="205"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="203"/>
+        <location filename="../user_dialog.cc" line="209"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="227"/>
+        <location filename="../user_dialog.cc" line="234"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>建立或修改使用者時出現未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="282"/>
+        <location filename="../user_dialog.cc" line="291"/>
         <source>Double-click to change</source>
         <translation>點選兩次以修改</translation>
     </message>
@@ -1093,12 +1093,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="210"/>
+        <location filename="../user_dialog.cc" line="216"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../user_dialog.cc" line="211"/>
+        <location filename="../user_dialog.cc" line="217"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>

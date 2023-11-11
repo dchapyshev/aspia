@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/task_runner.h"
 #include "base/waitable_timer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/key_exchange.pb.h"
@@ -53,7 +54,7 @@ protected:
     void onTcpMessageWritten(uint8_t channel_id, size_t pending) override;
 
 private:
-    void onFinished(bool online);
+    void onFinished(const base::Location& location, bool online);
 
     const int computer_id_;
     const std::u16string address_;
@@ -62,6 +63,7 @@ private:
     FinishCallback finish_callback_;
     std::unique_ptr<base::TcpChannel> channel_;
     base::WaitableTimer timer_;
+    bool finished_ = false;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -76,16 +78,21 @@ OnlineCheckerDirect::Instance::Instance(
     timer_.start(kTimeout, [this]()
     {
         LOG(LS_INFO) << "Timeout for computer: " << computer_id_;
-        onFinished(false);
+        onFinished(FROM_HERE, false);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::Instance::~Instance()
 {
-    finish_callback_ = nullptr;
-    channel_->setListener(nullptr);
-    channel_.reset();
+    finished_ = true;
+    timer_.stop();
+
+    if (channel_)
+    {
+        channel_->setListener(nullptr);
+        channel_.reset();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +130,7 @@ void OnlineCheckerDirect::Instance::onTcpDisconnected(
     base::NetworkChannel::ErrorCode /* error_code */)
 {
     LOG(LS_INFO) << "Connection aborted for computer: " << computer_id_;
-    onFinished(false);
+    onFinished(FROM_HERE, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,7 +150,7 @@ void OnlineCheckerDirect::Instance::onTcpMessageReceived(
         case proto::ENCRYPTION_CHACHA20_POLY1305:
         {
             LOG(LS_INFO) << "Message received for computer: " << computer_id_;
-            onFinished(true);
+            onFinished(FROM_HERE, true);
         }
         break;
 
@@ -163,17 +170,20 @@ void OnlineCheckerDirect::Instance::onTcpMessageWritten(
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onFinished(bool online)
+void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, bool online)
 {
-    if (finish_callback_)
-    {
-        finish_callback_(computer_id_, online);
-        finish_callback_ = nullptr;
-    }
-    else
-    {
-        LOG(LS_ERROR) << "Invalid callback";
-    }
+    LOG(LS_INFO) << "Finished from: " << location.toString();
+
+    if (finished_)
+        return;
+
+    finished_ = true;
+
+    timer_.stop();
+    if (channel_)
+        channel_->setListener(nullptr);
+
+    finish_callback_(computer_id_, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -263,6 +273,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
         {
             if (it->get()->computerId() == computer_id)
             {
+                task_runner_->deleteSoon(std::move(*it));
                 work_queue_.erase(it);
                 break;
             }

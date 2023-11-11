@@ -16,7 +16,7 @@
 }*/
 
 void build(Solution &s) {
-    auto &aspia = s.addProject("aspia", "2.6.0");
+    auto &aspia = s.addProject("aspia", "2.7.0");
     aspia += Git("https://github.com/dchapyshev/aspia", "v{v}");
 
     constexpr auto cppstd = cpp17;
@@ -41,6 +41,7 @@ void build(Solution &s) {
         t -= ".*/linux/.*"_rr;
         t -= ".*_pulse.*"_rr;
         t -= ".*_mac.*"_rr;
+        t -= ".*/mac/.*"_rr;
         t -= ".*_posix.*"_rr;
         t -= ".*_x11.*"_rr;
         t -= ".*/x11/.*"_rr;
@@ -50,6 +51,7 @@ void build(Solution &s) {
             t += ".*/win/.*"_rr;
         } else if (t.getBuildSettings().TargetOS.isApple()) {
             t += ".*_mac.*"_rr;
+            t += ".*/mac/.*"_rr;
         } else         {
             t += ".*_pulse.*"_rr;
             t += ".*_linux.*"_rr;

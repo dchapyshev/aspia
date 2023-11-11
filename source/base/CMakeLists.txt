@@ -371,6 +371,10 @@ list(APPEND SOURCE_BASE_DESKTOP_TESTS
 
 if (APPLE)
     list(APPEND SOURCE_BASE_DESKTOP_MAC
+        desktop/mac/desktop_configuration_monitor.cc
+        desktop/mac/desktop_configuration_monitor.h
+        desktop/mac/desktop_configuration.mm
+        desktop/mac/desktop_configuration.h
         desktop/mac/frame_cgimage.mm
         desktop/mac/frame_cgimage.h
         desktop/mac/frame_iosurface.mm

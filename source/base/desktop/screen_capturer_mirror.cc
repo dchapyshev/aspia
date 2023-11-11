@@ -220,6 +220,12 @@ Point ScreenCapturerMirror::cursorPosition()
 }
 
 //--------------------------------------------------------------------------------------------------
+ScreenCapturer::ScreenType ScreenCapturerMirror::screenType()
+{
+    return ScreenCaptureUtils::screenType();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenCapturerMirror::reset()
 {
     desktop_dc_.close();

@@ -350,7 +350,7 @@ void Server::onNewSession(base::ServerAuthenticatorManager::SessionInfo&& sessio
 
     LOG(LS_INFO) << "New session: " << sessionTypeToString(session_type) << " (" << address << ")";
 
-    if (session_info.version >= base::Version(2, 6, 0))
+    if (session_info.version >= base::Version::kVersion_2_6_0)
     {
         LOG(LS_INFO) << "Using channel id support";
         session_info.channel->setChannelIdSupport(true);

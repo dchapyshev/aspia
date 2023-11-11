@@ -135,6 +135,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
+        LOG(LS_INFO) << "[ACTION] Accepted by user";
+
         if (account_changed_)
         {
             std::u16string username = ui.edit_username->text().toStdU16String();
@@ -142,6 +144,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!base::User::isValidUserName(username))
             {
+                LOG(LS_ERROR) << "Invalid user name: " << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The user name can not be empty and can contain only alphabet"
@@ -154,6 +157,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
+                LOG(LS_ERROR) << "User name already exists: " << username;
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The username you entered already exists."),
@@ -169,6 +173,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (password != ui.edit_password_repeat->text().toStdU16String())
 #endif
             {
+                LOG(LS_ERROR) << "Passwords do not match";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("The passwords you entered do not match."),
@@ -180,6 +185,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             if (!base::User::isValidPassword(password))
             {
+                LOG(LS_ERROR) << "Invalid password";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Password can not be empty and should not exceed %n characters.",
@@ -222,6 +228,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             user_ = base::User::create(username, password);
             if (!user_.isValid())
             {
+                LOG(LS_ERROR) << "Unable to create user";
                 QMessageBox::warning(this,
                                      tr("Warning"),
                                      tr("Unknown internal error when creating or modifying a user."),
@@ -249,6 +256,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        LOG(LS_INFO) << "[ACTION] Rejected by user";
         reject();
     }
 
@@ -258,6 +266,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void UserDialog::setAccountChanged(bool changed)
 {
+    LOG(LS_INFO) << "[ACTION] Account changed";
     account_changed_ = changed;
 
     ui.edit_password->setEnabled(changed);

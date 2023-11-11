@@ -32,6 +32,8 @@ namespace base {
 class Version
 {
 public:
+    static const Version& kVersion_2_6_0;
+
     // The only thing you can legally do to a default constructed Version object is assign to it.
     Version();
 

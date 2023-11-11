@@ -144,7 +144,7 @@ void RouterController::onTcpConnected()
             channel_ = authenticator_->takeChannel();
             channel_->setListener(this);
 
-            if (authenticator_->peerVersion() >= base::Version(2, 6, 0))
+            if (authenticator_->peerVersion() >= base::Version::kVersion_2_6_0)
             {
                 LOG(LS_INFO) << "Using channel id support";
                 channel_->setChannelIdSupport(true);

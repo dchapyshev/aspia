@@ -34,6 +34,7 @@ extern const char kSystemInfoExtension[];
 extern const char kTaskManagerExtension[];
 extern const char kVideoPauseExtension[];
 extern const char kAudioPauseExtension[];
+extern const char kScreenTypeExtension[];
 
 extern const char kSupportedExtensionsForManage[];
 extern const char kSupportedExtensionsForView[];

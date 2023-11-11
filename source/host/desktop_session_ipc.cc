@@ -279,6 +279,10 @@ void DesktopSessionIpc::onIpcMessageReceived(const base::ByteArray& buffer)
         last_screen_list_.reset(incoming_message_->release_screen_list());
         delegate_->onScreenListChanged(*last_screen_list_);
     }
+    else if (incoming_message_->has_screen_type())
+    {
+        delegate_->onScreenTypeChanged(incoming_message_->screen_type());
+    }
     else if (incoming_message_->has_shared_buffer())
     {
         switch (incoming_message_->shared_buffer().type())

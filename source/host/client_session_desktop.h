@@ -63,6 +63,7 @@ public:
     void setVideoErrorCode(proto::VideoErrorCode error_code);
     void setCursorPosition(const proto::CursorPosition& cursor_position);
     void setScreenList(const proto::ScreenList& list);
+    void setScreenType(const proto::ScreenType& type);
     void injectClipboardEvent(const proto::ClipboardEvent& event);
 
     const DesktopSession::Config& desktopSessionConfig() const { return desktop_session_config_; }

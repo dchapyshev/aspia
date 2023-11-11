@@ -32,7 +32,7 @@ class FilePanel : public QWidget
 
 public:
     explicit FilePanel(QWidget* parent = nullptr);
-    ~FilePanel() override = default;
+    ~FilePanel() override;
 
     void onDriveList(proto::FileError error_code, const proto::DriveList& drive_list);
     void onFileList(proto::FileError error_code, const proto::FileList& file_list);
