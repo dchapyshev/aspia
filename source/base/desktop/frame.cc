@@ -91,9 +91,15 @@ float Frame::scaleFactor() const
 Rect Frame::rect() const
 {
     const float scale = scaleFactor();
+
+    const Point& frame_top_left = topLeft();
+    const Size& frame_size = size();
+
     // Only scale the size.
-    return Rect::makeXYWH(topLeft().x(), topLeft().y(),
-                          size().width() / scale, size().height() / scale);
+    return Rect::makeXYWH(frame_top_left.x(),
+                          frame_top_left.y(),
+                          int32_t(float(frame_size.width()) / scale),
+                          int32_t(float(frame_size.height()) / scale));
 }
 
 //--------------------------------------------------------------------------------------------------
