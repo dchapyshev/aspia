@@ -119,16 +119,34 @@ std::u16string TcpChannel::peerAddress() const
     if (!socket_.is_open())
         return std::u16string();
 
-    asio::ip::address address = socket_.remote_endpoint().address();
-    if (address.is_v4())
+    try
     {
-        asio::ip::address ipv4_address = address.to_v4();
-        return utf16FromLocal8Bit(ipv4_address.to_string());
+        asio::ip::address address = socket_.remote_endpoint().address();
+        if (address.is_v4())
+        {
+            asio::ip::address_v4 ipv4_address = address.to_v4();
+            return utf16FromLocal8Bit(ipv4_address.to_string());
+        }
+        else
+        {
+            asio::ip::address_v6 ipv6_address = address.to_v6();
+            if (ipv6_address.is_v4_mapped())
+            {
+                asio::ip::address_v4 ipv4_address =
+                    asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
+                return utf16FromLocal8Bit(ipv4_address.to_string());
+            }
+            else
+            {
+                return utf16FromLocal8Bit(ipv6_address.to_string());
+            }
+        }
     }
-    else
+    catch (const std::error_code& error_code)
     {
-        asio::ip::address ipv6_address = address.to_v6();
-        return utf16FromLocal8Bit(ipv6_address.to_string());
+        LOG(LS_ERROR) << "Unable to get peer address: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return std::u16string();
     }
 }
 
