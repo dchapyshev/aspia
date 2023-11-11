@@ -119,7 +119,17 @@ std::u16string TcpChannel::peerAddress() const
     if (!socket_.is_open())
         return std::u16string();
 
-    return utf16FromLocal8Bit(socket_.remote_endpoint().address().to_string());
+    asio::ip::address address = socket_.remote_endpoint().address();
+    if (address.is_v4())
+    {
+        asio::ip::address ipv4_address = address.to_v4();
+        return utf16FromLocal8Bit(ipv4_address.to_string());
+    }
+    else
+    {
+        asio::ip::address ipv6_address = address.to_v6();
+        return utf16FromLocal8Bit(ipv6_address.to_string());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
