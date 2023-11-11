@@ -142,17 +142,7 @@ int main(int argc, const char* const* argv)
     }
     else
     {
-        std::unique_ptr<base::MessageLoop> message_loop =
-            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
-
-        std::unique_ptr<relay::Controller> controller =
-            std::make_unique<relay::Controller>(message_loop->taskRunner());
-
-        controller->start();
-        message_loop->run();
-
-        controller.reset();
-        message_loop.reset();
+        relay::Service().exec();
     }
 }
 #endif

@@ -304,17 +304,7 @@ int main(int argc, const char* const* argv)
     }
     else
     {
-        std::unique_ptr<base::MessageLoop> message_loop =
-            std::make_unique<base::MessageLoop>(base::MessageLoop::Type::ASIO);
-
-        std::unique_ptr<router::Server> server =
-            std::make_unique<router::Server>(message_loop->taskRunner());
-
-        server->start();
-        message_loop->run();
-
-        server.reset();
-        message_loop.reset();
+        router::Service().exec();
     }
 }
 #endif
