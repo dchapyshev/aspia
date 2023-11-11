@@ -35,6 +35,24 @@
 
 namespace base {
 
+namespace {
+
+std::string endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
+{
+    std::string str;
+
+    for (auto it = endpoints.begin(); it != endpoints.end();)
+    {
+        str += it->endpoint().address().to_string();
+        if (++it != endpoints.end())
+            str += ", ";
+    }
+
+    return str;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RelayPeer::RelayPeer()
     : io_context_(MessageLoop::current()->pumpAsio()->ioContext()),
@@ -81,20 +99,27 @@ void RelayPeer::start(const proto::ConnectionOffer& offer, Delegate* delegate)
             return;
         }
 
+        LOG(LS_INFO) << "Resolved endpoints: " << endpointsToString(endpoints);
         LOG(LS_INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
                             [this](const std::error_code& error_code,
-                                   const asio::ip::tcp::endpoint& /* endpoint */)
+                                   const asio::ip::tcp::endpoint& endpoint)
         {
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
+                {
                     onErrorOccurred(FROM_HERE, error_code);
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "Operation aborted";
+                }
                 return;
             }
 
-            LOG(LS_INFO) << "Connected";
+            LOG(LS_INFO) << "Connected to: " << endpoint.address().to_string();
             onConnected();
         });
     });
@@ -117,7 +142,13 @@ void RelayPeer::onConnected()
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
+            {
                 onErrorOccurred(FROM_HERE, error_code);
+            }
+            else
+            {
+                LOG(LS_ERROR) << "Operation aborted";
+            }
             return;
         }
 
@@ -133,7 +164,13 @@ void RelayPeer::onConnected()
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
+                {
                     onErrorOccurred(FROM_HERE, error_code);
+                }
+                else
+                {
+                    LOG(LS_ERROR) << "Operation aborted";
+                }
                 return;
             }
 
