@@ -25,11 +25,11 @@
 #include "build/version.h"
 #include "router/database_factory_sqlite.h"
 #include "router/database.h"
+#include "router/service.h"
 #include "router/settings.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "router/service.h"
 #include "router/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"

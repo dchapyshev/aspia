@@ -20,11 +20,11 @@
 #include "base/scoped_logging.h"
 #include "base/files/base_paths.h"
 #include "build/version.h"
+#include "relay/service.h"
 #include "relay/settings.h"
 
 #if defined(OS_WIN)
 #include "base/win/mini_dump_writer.h"
-#include "relay/service.h"
 #include "relay/win/service_util.h"
 #else
 #include "base/crypto/scoped_crypto_initializer.h"
