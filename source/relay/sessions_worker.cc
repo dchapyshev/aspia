@@ -78,8 +78,15 @@ void SessionsWorker::onBeforeThreadRunning()
     self_task_runner_ = thread_->taskRunner();
     DCHECK(self_task_runner_);
 
+    std::error_code error_code;
     asio::ip::address listen_address =
-        asio::ip::make_address_v4(base::local8BitFromUtf16(listen_interface_));
+        asio::ip::make_address(base::local8BitFromUtf16(listen_interface_), error_code);
+    if (error_code)
+    {
+        LOG(LS_ERROR) << "Unable to get listen address: "
+                      << base::utf16FromLocal8Bit(error_code.message());
+        return;
+    }
 
     session_manager_ = std::make_unique<SessionManager>(
         self_task_runner_, listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_,
