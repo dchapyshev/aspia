@@ -17,7 +17,7 @@
 //
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/scoped_logging.h"
 #include "base/files/base_paths.h"
 #include "build/version.h"
 #include "relay/settings.h"
@@ -78,7 +78,7 @@ void showHelp()
 int wmain()
 {
     base::installFailureHandler(L"aspia_relay");
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -115,14 +115,13 @@ int wmain()
         relay::Service().exec();
     }
 
-    base::shutdownLogging();
     return 0;
 }
 #else
 //--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -155,8 +154,5 @@ int main(int argc, const char* const* argv)
         controller.reset();
         message_loop.reset();
     }
-
-    crypto_initializer.reset();
-    base::shutdownLogging();
 }
 #endif

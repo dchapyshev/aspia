@@ -17,7 +17,7 @@
 //
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/scoped_logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
@@ -232,7 +232,7 @@ void showHelp()
 int wmain()
 {
     base::installFailureHandler(L"aspia_router");
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(0, nullptr); // On Windows ignores arguments.
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -273,14 +273,13 @@ int wmain()
         router::Service().exec();
     }
 
-    base::shutdownLogging();
     return 0;
 }
 #else
 //--------------------------------------------------------------------------------------------------
 int main(int argc, const char* const* argv)
 {
-    base::initLogging();
+    base::ScopedLogging logging;
 
     base::CommandLine::init(argc, argv);
     base::CommandLine* command_line = base::CommandLine::forCurrentProcess();
@@ -317,8 +316,5 @@ int main(int argc, const char* const* argv)
         server.reset();
         message_loop.reset();
     }
-
-    crypto_initializer.reset();
-    base::shutdownLogging();
 }
 #endif
