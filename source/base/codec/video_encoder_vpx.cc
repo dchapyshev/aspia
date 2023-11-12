@@ -260,7 +260,10 @@ bool VideoEncoderVPX::setMinQuantizer(uint32_t min_quantizer)
     }
 
     if (config_.rc_min_quantizer == min_quantizer)
+    {
+        LOG(LS_INFO) << "Quantizer value not changed";
         return true;
+    }
 
     config_.rc_min_quantizer = min_quantizer;
 
@@ -290,7 +293,10 @@ bool VideoEncoderVPX::setMaxQuantizer(uint32_t max_quantizer)
     }
 
     if (config_.rc_max_quantizer == max_quantizer)
+    {
+        LOG(LS_INFO) << "Quantizer value not changed";
         return true;
+    }
 
     config_.rc_max_quantizer = max_quantizer;
 
