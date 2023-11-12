@@ -18,6 +18,7 @@
 
 #include "client/client_main.h"
 
+#include "base/sys_info.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"
@@ -404,6 +405,9 @@ int clientMain(int argc, char* argv[])
     LOG(LS_INFO) << "Git branch: " << GIT_CURRENT_BRANCH;
     LOG(LS_INFO) << "Git commit: " << GIT_COMMIT_HASH;
 #endif
+    LOG(LS_INFO) << "OS: " << base::SysInfo::operatingSystemName()
+                 << " (version: " << base::SysInfo::operatingSystemVersion()
+                 <<  " arch: " << base::SysInfo::operatingSystemArchitecture() << ")";
     LOG(LS_INFO) << "Qt version: " << QT_VERSION_STR;
     LOG(LS_INFO) << "Command line: " << application.arguments();
 
