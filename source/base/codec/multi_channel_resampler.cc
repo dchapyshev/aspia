@@ -98,7 +98,7 @@ void MultiChannelResampler::Resample(int frames, AudioBus* audio_bus)
             // since they all buffer in the same way and are processing the same
             // number of frames.
             resamplers_[i]->Resample(
-                frames_this_time, audio_bus->channel(i) + output_frames_ready_);
+                frames_this_time, audio_bus->channel(static_cast<int>(i)) + output_frames_ready_);
         }
 
         output_frames_ready_ += frames_this_time;
