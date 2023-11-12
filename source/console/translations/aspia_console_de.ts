@@ -442,17 +442,17 @@
 <context>
     <name>Console</name>
     <message>
-        <location filename="../main.cc" line="65"/>
+        <location filename="../main.cc" line="70"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="68"/>
+        <location filename="../main.cc" line="73"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cc" line="69"/>
+        <location filename="../main.cc" line="74"/>
         <source>The file to open.</source>
         <translation type="unfinished"></translation>
     </message>
