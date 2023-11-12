@@ -176,6 +176,7 @@ void DesktopWidget::setDesktopFrameError(proto::VideoErrorCode error_code)
     if (last_error_code_ == error_code)
         return;
 
+    LOG(LS_INFO) << "Video error detected: " << error_code;
     last_error_code_ = error_code;
 
     if (error_timer_)

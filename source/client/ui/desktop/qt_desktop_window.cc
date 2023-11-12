@@ -18,7 +18,6 @@
 
 #include "client/ui/desktop/qt_desktop_window.h"
 
-#include "base/logging.h"
 #include "base/stl_util.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/strings/string_split.h"
@@ -36,6 +35,7 @@
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
 #include "qt_base/application.h"
+#include "qt_base/qt_logging.h"
 
 #if defined(OS_WIN)
 #include "base/win/windows_version.h"
@@ -291,13 +291,15 @@ std::unique_ptr<Client> QtDesktopWindow::createClient()
 void QtDesktopWindow::showWindow(
     std::shared_ptr<DesktopControlProxy> desktop_control_proxy, const base::Version& peer_version)
 {
+    LOG(LS_INFO) << "Show window";
+
     desktop_control_proxy_ = std::move(desktop_control_proxy);
     peer_version_ = peer_version;
 
     show();
     activateWindow();
 
-    toolbar_->enableTextChat(peer_version_ >= base::Version(2, 4, 0));
+    toolbar_->enableTextChat(peer_version_ >= base::Version::kVersion_2_4_0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,6 +504,7 @@ void QtDesktopWindow::setFrame(
     const base::Size& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = QSize(screen_size.width(), screen_size.height());
+    LOG(LS_INFO) << "Screen size changed: " << screen_size_;
 
     bool has_old_frame = desktop_->desktopFrame() != nullptr;
 
@@ -517,7 +520,10 @@ void QtDesktopWindow::setFrame(
         // start recording.
         DesktopSettings settings;
         if (settings.recordSessions())
+        {
+            LOG(LS_INFO) << "Auto-recording enabled";
             toolbar_->startRecording(true);
+        }
     }
 }
 
@@ -697,11 +703,19 @@ void QtDesktopWindow::focusOutEvent(QFocusEvent* event)
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::closeEvent(QCloseEvent* /* event */)
 {
+    LOG(LS_INFO) << "Close event";
+
     if (system_info_)
+    {
+        LOG(LS_INFO) << "Close System Info window";
         system_info_->close();
+    }
 
     if (task_manager_)
+    {
+        LOG(LS_INFO) << "Close Task Manager window";
         task_manager_->close();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -905,6 +919,8 @@ void QtDesktopWindow::onKeyEvent(const proto::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::changeSettings()
 {
+    LOG(LS_INFO) << "Create desktop config dialog";
+
     DesktopConfigDialog* dialog = new DesktopConfigDialog(
         session_type_, desktop_config_, video_encodings_, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -929,6 +945,8 @@ void QtDesktopWindow::changeSettings()
 //--------------------------------------------------------------------------------------------------
 void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config)
 {
+    LOG(LS_INFO) << "Desktop config changed";
+
     desktop_config_ = desktop_config;
     desktop_control_proxy_->setDesktopConfig(desktop_config);
 
@@ -941,7 +959,10 @@ void QtDesktopWindow::onConfigChanged(const proto::DesktopConfig& desktop_config
 void QtDesktopWindow::autosizeWindow()
 {
     if (screen_size_.isEmpty())
+    {
+        LOG(LS_INFO) << "Empty screen size";
         return;
+    }
 
     QScreen* current_screen = window()->screen();
     QRect local_screen_rect = current_screen->availableGeometry();
@@ -952,6 +973,11 @@ void QtDesktopWindow::autosizeWindow()
     {
         QSize remote_screen_size = scaledSize(screen_size_, toolbar_->scale());
 
+        LOG(LS_INFO) << "Show normal (screen_size=" << screen_size_
+                     << " local_screen_rect=" << local_screen_rect
+                     << " window_size=" << window_size
+                     << " remote_screen_size=" << remote_screen_size
+                     << ")";
         showNormal();
 
         resize(remote_screen_size);
@@ -960,6 +986,10 @@ void QtDesktopWindow::autosizeWindow()
     }
     else
     {
+        LOG(LS_INFO) << "Show maximized (screen_size=" << screen_size_
+                     << " local_screen_rect=" << local_screen_rect
+                     << " window_size=" << window_size
+                     << ")";
         showMaximized();
     }
 }
@@ -1023,6 +1053,7 @@ void QtDesktopWindow::scaleDesktop()
     QSize target_size(size());
 
     int scale = toolbar_->scale();
+
     if (scale != -1)
         target_size = scaledSize(source_size, scale);
 
@@ -1031,7 +1062,8 @@ void QtDesktopWindow::scaleDesktop()
     if (resize_timer_->isActive())
         resize_timer_->stop();
 
-    LOG(LS_INFO) << "Starting resize timer";
+    LOG(LS_INFO) << "Starting resize timer (scale=" << scale << " size=" << size()
+                 << " target_size=" << target_size << ")";
     resize_timer_->start(std::chrono::milliseconds(500));
 }
 
@@ -1044,7 +1076,7 @@ void QtDesktopWindow::onResizeTimer()
     if (current_screen)
         desktop_size *= current_screen->devicePixelRatio();
 
-    LOG(LS_INFO) << "Resize timer: " << desktop_size.width() << "x" << desktop_size.height();
+    LOG(LS_INFO) << "Resize timer timeout (desktop_size=" << desktop_size << ")";
 
     desktop_control_proxy_->setPreferredSize(desktop_size.width(), desktop_size.height());
     resize_timer_->stop();
